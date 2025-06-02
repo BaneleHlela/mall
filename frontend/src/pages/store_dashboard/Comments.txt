@@ -1,0 +1,24 @@
+Colleborate
+Total sales
+Sales perfomance
+
+Status
+Top products
+Top services
+View products 
+View services 
+Orders
+Bookings
+Calender
+Layouts
+Update store settings.
+Update working hours.
+Top products
+Store visits (include average time?)
+Mark store as closed. 
+FavoritedBy?
+refunds
+team
+
+
+ratings

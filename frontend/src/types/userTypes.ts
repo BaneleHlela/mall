@@ -1,0 +1,30 @@
+export interface User {
+    _id: string; 
+    firstName: string; 
+    lastName: string; 
+    email: string; 
+    mobile?: string; 
+    password: string; 
+    role: string; 
+    avatar: string;
+    stores: string[];
+    isBlocked: boolean;
+    cart: string[];
+    address: string[];
+    wishlist: string[];
+    favoriteStore?: string[];
+    refreshToken?: string;
+    createdAt: string;
+    updatedAt: string;
+    isVerified?: string;
+}
+  
+export interface UserState {
+user: User | null;
+isAuthenticated: boolean;
+isLoading: boolean;
+isCheckingAuth: boolean;
+error: string | null;
+message: string | null;
+}
+  
