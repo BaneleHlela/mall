@@ -1,9 +1,11 @@
 import FirstServices from "./first/FirstServices"
 
-const Services = () => {
+
+
+const StoreServices = () => {
   return (
     <FirstServices />
   )
 }
 
-export default Services
+export default StoreServices;

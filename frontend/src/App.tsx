@@ -4,7 +4,7 @@ import Home from "./pages/home/Home";
 import authRoutes from "./routes/authRoutes";
 import Scribbler from "./components/Scibbler";
 import Layouts from "./pages/layout_editor/Layouts";
-import StorePage from "./pages/StorePage";
+import StorePage from "./pages/store/StorePage";
 import Menubar from "./components/the_mall/menubar/Menubar";
 import MyStores from "./pages/my_stores/MyStores";
 import Search from "./pages/my_stores/Search";
@@ -25,7 +25,7 @@ const App: React.FC = () => {
           <Route path="/my-stores" element={<MyStores />} />
           <Route path="/search" element={<Search />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/scribbler" element={<Scribbler />} />
+          <Route path="/scribbler/*" element={<Scribbler />} />
           <Route path="/layouts/*" element={<Layouts />} />
           <Route path="/dashboard/:storeId/*" element={<StoreDashboard />} />
           <Route path="/layouts/my-layouts" element={<MyLayouts />} />

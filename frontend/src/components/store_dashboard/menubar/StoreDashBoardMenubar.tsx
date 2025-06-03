@@ -7,7 +7,7 @@ interface Props {
 
 const StoreDashBoardMenubar = ({ storeId }: Props) => {
   return (
-    <div className="w-[20vw] h-screen bg-blue-400">
+    <div className="w-[20vw] h-screen bg-blue-400 flex justify-end">
       <Link to={`/dashboard/${storeId}`}>
         <ChartArea />
       </Link>

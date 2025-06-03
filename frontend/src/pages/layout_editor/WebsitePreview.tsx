@@ -3,9 +3,10 @@ import { useDispatch } from 'react-redux';
 import { setInitialLayout } from '../../features/layouts/layoutSettingsSlice';
 import Menubar from '../../components/store_layout/menubars/Menubar';
 import { Route, Routes } from 'react-router-dom';
-import StoreHome from '../store/StoreHome';
-import StorePackages from '../store/StorePackages';
-import StoreServices from '../store/StoreServices';
+import StoreHome from '../store/home/StoreHome';
+import StorePackages from '../store/packages/StorePackagesPage';
+import StoreServices from '../store_dashboard/supporting_pages/StoreServices';
+
 
 const WebsitePreview = () => {
   const dispatch = useDispatch();

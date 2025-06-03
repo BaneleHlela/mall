@@ -159,6 +159,7 @@ export const getUserBookings = async (req, res) => {
 export const getAvailableBookingTimes = async (req, res) => {
   try {
     const { storeId } = req.params;
+    console.log(req.query);
     const { serviceId, staffId, date } = req.query;
 
     if (!storeId || !serviceId || !date) {
@@ -199,8 +200,7 @@ export const getAvailableBookingTimes = async (req, res) => {
       'services.date': date,
       ...(staffId && { 'services.staff': staffId }),
     }).populate('services.service');
-    console.log(date)
-    console.log('Bookings found:', bookings.length, bookings);
+
     const bookedTimes = [];
 
     bookings.forEach((booking) => {

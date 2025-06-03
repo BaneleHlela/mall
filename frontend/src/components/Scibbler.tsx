@@ -1,10 +1,10 @@
-import Footer from "./store_layout/sections/footer/Footer";
+import StorePage from "../pages/store/StorePage";
 
 function Scribbler() {
 
 
   return (
-    <Footer />
+    <StorePage />
   );
 }
 
