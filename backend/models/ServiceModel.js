@@ -14,7 +14,7 @@ const serviceSchema = new mongoose.Schema({
     required: true,
   },
   duration: {
-    type: String, // E.g., "30 minutes", "1 hour"
+    type: Number, // (in minutes)
     required: true,
   },
   store: {

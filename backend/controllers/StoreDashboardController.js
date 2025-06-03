@@ -1,6 +1,7 @@
 import expressAsyncHandler from "express-async-handler";
 import StoreLayout from "../models/StoreLayout.js";
-import Store from "../models/StoreModel.js";
+import Store from "../models/storeModel.js";
+import Booking from "../models/BookingModel.js";
 
 // Fetch layouts by storeId
 export const getLayoutsByStore = expressAsyncHandler(async (req, res) => {
@@ -82,3 +83,4 @@ export const linkLayoutToStore = async (req, res) => {
       res.status(500).json({ message: "Server error." });
   }
 };
+

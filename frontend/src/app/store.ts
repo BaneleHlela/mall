@@ -5,7 +5,7 @@ import layoutSettingsReducer from "../features/layouts/layoutSettingsSlice.ts";
 import layoutReducer from "../features/layouts/layoutSlice";
 import storeReducer from "../features/stores/storeSlice";
 import storeAdminReducer from "../features/store_admin/storeAdminSlice";
-
+import serviceReducer from "../features/services/servicesSlice.ts";
 
 
 export const store = configureStore({
@@ -16,6 +16,7 @@ export const store = configureStore({
         layoutSettings: layoutSettingsReducer,
         stores: storeReducer,
         storeAdmin: storeAdminReducer,
+        services: serviceReducer,
     },
 });
 

@@ -5,6 +5,11 @@ const operationTimesSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  sunday: {
+    start: { type: String, default: "07:00" },
+    end: { type: String, default: "17:00" },
+    closed: { type: Boolean, default: false },
+  },
   monday: {
     start: { type: String, default: "07:00" },
     end: { type: String, default: "17:00" },
@@ -26,6 +31,11 @@ const operationTimesSchema = new mongoose.Schema({
     closed: { type: Boolean, default: false },
   },
   friday: {
+    start: { type: String, default: "07:00" },
+    end: { type: String, default: "17:00" },
+    closed: { type: Boolean, default: false },
+  },
+  saturday: {
     start: { type: String, default: "07:00" },
     end: { type: String, default: "17:00" },
     closed: { type: Boolean, default: false },

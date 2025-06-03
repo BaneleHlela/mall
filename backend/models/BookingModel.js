@@ -32,8 +32,9 @@ const bookingSchema = mongoose.Schema(
           required: false,
         },
         staff: {
-          type: String,
-          required: false,
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+          required: true,
         },
       },
     ],
