@@ -42,6 +42,7 @@ export const createStore = createAsyncThunk<Store, Omit<Store, 'id'>>(
 );
 
 
+
 export const fetchStores = createAsyncThunk<Store[], string | undefined>(
   'stores/fetchStores',
   async (searchTerm) => {
@@ -112,6 +113,49 @@ export const deleteStoreLogo = createAsyncThunk<string, { storeId: string }>(
   }
 );
 
+export const uploadStoreGalleryImage = createAsyncThunk<
+  string, // returns the uploaded image URL
+  { storeId: string; imageFile: File }
+>(
+  'stores/uploadStoreGalleryImage',
+  async ({ storeId, imageFile }, thunkAPI) => {
+    try {
+      const formData = new FormData();
+      formData.append('image', imageFile);
+
+      const response = await axios.put(`${API_URL}/${storeId}/gallery`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      return response.data.url;
+    } catch (error) {
+      console.error('Error uploading gallery image:', error);
+      return thunkAPI.rejectWithValue('Failed to upload gallery image');
+    }
+  }
+);
+
+export const deleteStoreGalleryImage = createAsyncThunk<
+  string, // returns the imageUrl of the deleted image
+  { storeId: string; imageUrl: string }
+>(
+  'stores/deleteStoreGalleryImage',
+  async ({ storeId, imageUrl }, thunkAPI) => {
+    try {
+      await axios.delete(`${API_URL}/${storeId}/gallery`, {
+        data: { imageUrl },
+      });
+
+
+      return imageUrl;
+    } catch (error) {
+      console.error('Error deleting gallery image:', error);
+      return thunkAPI.rejectWithValue('Failed to delete gallery image');
+    }
+  }
+);
+
+
 
 // --- Slice ---
 const storeSlice = createSlice({
@@ -180,7 +224,37 @@ const storeSlice = createSlice({
       .addCase(fetchStoresByOwner.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || 'Failed to fetch stores by owner';
-      })   
+      })
+      
+      // Upload gallery image
+      .addCase(uploadStoreGalleryImage.fulfilled, (state, action) => {
+        const url = action.payload;
+        const storeId = state.currentStore?._id;
+        if (storeId && state.myStoresById[storeId]) {
+          state.myStoresById[storeId].images?.push({ url });
+        }
+        if (storeId && state.currentStore) {
+          state.currentStore.images?.push({ url });
+        }
+      })
+
+      // Delete gallery image
+      .addCase(deleteStoreGalleryImage.fulfilled, (state, action) => {
+        const imageUrl = action.payload;
+        const storeId = state.currentStore?._id;
+
+        const removeImage = (store: Store) => {
+          store.images = store.images?.filter(img => img.url !== imageUrl) || [];
+        };
+
+        if (storeId && state.myStoresById[storeId]) {
+          removeImage(state.myStoresById[storeId]);
+        }
+        if (storeId && state.currentStore) {
+          removeImage(state.currentStore);
+        }
+      })
+
   },
 });
 

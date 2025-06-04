@@ -11,7 +11,7 @@ const serviceSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
-    required: true,
+    required: false,
   },
   duration: {
     type: Number, // (in minutes)

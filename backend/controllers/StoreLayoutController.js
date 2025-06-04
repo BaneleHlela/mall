@@ -21,7 +21,7 @@ export const createLayoutConfig = async (req, res) => {
       await uploadToUploads(screenshotBuffer, fileName);
   
       // Save public URL in MongoDB
-      const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza69/${fileName}`;
+      const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${fileName}`;
       layout.imageUrl = publicUrl;
       await layout.save();
   

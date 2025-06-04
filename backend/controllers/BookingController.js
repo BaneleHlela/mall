@@ -159,7 +159,6 @@ export const getUserBookings = async (req, res) => {
 export const getAvailableBookingTimes = async (req, res) => {
   try {
     const { storeId } = req.params;
-    console.log(req.query);
     const { serviceId, staffId, date } = req.query;
 
     if (!storeId || !serviceId || !date) {
@@ -168,7 +167,6 @@ export const getAvailableBookingTimes = async (req, res) => {
 
     const selectedDate = new Date(date);
     const dayKey = selectedDate.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase(); // e.g. 'monday'
-
     // Fetch Store and Service
     const store = await Store.findById(storeId);
     const service = await Service.findById(serviceId);
@@ -189,17 +187,22 @@ export const getAvailableBookingTimes = async (req, res) => {
     const end = timeStringToDate(selectedDate, dayConfig.end);
     const allSlots = [];
 
+
     while (addMinutes(start, duration) <= end) {
       allSlots.push(formatTime(start));
       start = addMinutes(start, 30);
     }
 
+
     // Get bookings for that date
     const bookings = await Booking.find({
       store: storeId,
-      'services.date': date,
+      'services.0.date': new Date(date),
       ...(staffId && { 'services.staff': staffId }),
     }).populate('services.service');
+    
+    // console.log('Bookings for date:', bookings);
+    console.log(new Date (date))
 
     const bookedTimes = [];
 
@@ -223,7 +226,8 @@ export const getAvailableBookingTimes = async (req, res) => {
 
     const availableSlots = allSlots.filter((slot) => !bookedTimes.includes(slot));
 
-    return res.status(200).json({ [date]: availableSlots });
+    //return res.status(200).json({ [date]: availableSlots });
+    return res.status(200).json({ [date]: bookings });
   } catch (err) {
     console.error('Error in getAvailableBookingTimes:', err);
     return res.status(500).json({ message: 'Internal server error' });

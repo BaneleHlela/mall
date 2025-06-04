@@ -1,11 +1,11 @@
 import { Storage } from "@google-cloud/storage";
 
 const storage = new Storage({
-    projectId: "the-mall-440813",
-    keyFilename: "C:/Users/banel/Desktop/the_mall/secrets/the-mall-440813-25bf86cf94b3.json"
+    projectId: "mall-461908",
+    keyFilename: "C:/Users/banel/Desktop/the_mall/secrets/mall-461908-71caa5f1648a.json", 
 });
 
-export const uploadsBucket = storage.bucket("the-mall-uploads-giza69");
+export const uploadsBucket = storage.bucket("the-mall-uploads-giza");
 
 
 export const uploadToUploads = async (fileBuffer, destFileName) => {

@@ -84,7 +84,7 @@ export const getStorePackages = asyncHandler(async (req, res) => {
 });
 
 
-export const deletePackage = asyncHandler(async (req, res) => {
+export const softDeletePackage = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const pkg = await Package.findById(id);
@@ -101,3 +101,41 @@ export const deletePackage = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'Package deleted (soft)', id: pkg._id });
   
 });
+
+
+export const deletePackage = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const pkg = await Package.findById(id);
+
+  if (!pkg) {
+    res.status(404);
+    throw new Error('Package not found');
+  }
+
+  await pkg.deleteOne();
+
+  res.status(200).json({ message: 'Package permanently deleted', id: pkg._id });
+});
+
+
+export const getPackageById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const pkg = await Package.findById(id).populate('store', 'name'); // Optional: populate store name
+
+  if (!pkg) {
+    res.status(404);
+    throw new Error('Package not found');
+  }
+
+  res.status(200).json(pkg);
+});
+
+
+export const getAllPackages = asyncHandler(async (req, res) => {
+  const packages = await Package.find().populate('store', 'name');
+
+  res.status(200).json(packages);
+});
+

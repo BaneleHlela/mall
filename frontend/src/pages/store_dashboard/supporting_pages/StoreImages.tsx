@@ -1,7 +1,8 @@
+import UploadStoreImage from "../../../components/store_dashboard/UploadStoreImage"
 
 const StoreImages = () => {
   return (
-    <div>StoreImages</div>
+    <UploadStoreImage />
   )
 }
 

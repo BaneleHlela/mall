@@ -91,7 +91,11 @@ const storeSchema = new mongoose.Schema(
     images: [{
       category: {
         type: String,
-        default: ""
+        required: false,
+      },
+      description: {
+        type: String,
+        required: false,
       },
       url: {
         type: String,

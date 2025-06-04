@@ -12,13 +12,23 @@ const initialState: StoreAdmin = {
     error: null,
 }
 
-export const editStore = createAsyncThunk<Store, { storeId: string; updatedStore: Omit<Store, 'id'> }>(
-    'store_admin/editStore',
-    async ({ storeId, updatedStore }) => {
-      const response = await axios.put(`${API_URL}/edit/${storeId}`, updatedStore);
-      return response.data;
+export const editStore = createAsyncThunk<
+  Store,
+  { storeId: string; updatedStore: Omit<Store, 'id'> }
+>(
+  'store_admin/editStore',
+  async ({ storeId, updatedStore }, thunkAPI) => {
+    console.log(updatedStore)
+    try {
+      const response = await axios.put(`${STORE_URL}/edit/${storeId}`, updatedStore);
+      return response.data; // should be the updated store
+    } catch (error) {
+      console.error('Error editing store:', error);
+      return thunkAPI.rejectWithValue('Failed to edit store');
     }
+  }
 );
+
 
 export const deleteStore = createAsyncThunk<string, string>(
     'store_admin/deleteStore',

@@ -9,6 +9,11 @@ export interface TeamMember {
   member: Types.ObjectId; 
   role: "owner" | "manager" | "staff" | "viewer"; 
 }
+export interface Image {
+  category?: string; 
+  description?: string; 
+  url?: string; 
+}
 
 export interface Store {
   _id?: string; 
@@ -21,4 +26,5 @@ export interface Store {
   about: string;
   team: TeamMember[]; 
   updatedAt?: Date; 
+  images?: Image[];
 }

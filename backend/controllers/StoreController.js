@@ -157,7 +157,7 @@ export const uploadStoreLogo = expressAsyncHandler(async (req, res) => {
 
     // Delete old logo if it exists
     if (store.logo && store.logo.url) {
-      const oldFilePath = store.logo.url.split(`the-mall-uploads-giza69/`)[1]
+      const oldFilePath = store.logo.url.split(`the-mall-uploads-giza/`)[1]
       try {
         await uploadsBucket.file(oldFilePath).delete();
         console.log(`Old logo deleted: ${oldFilePath}`);
@@ -170,7 +170,7 @@ export const uploadStoreLogo = expressAsyncHandler(async (req, res) => {
     const destination = `stores/${storeId}/logo/${Date.now()}_${fileName}`;
     await uploadToUploads(file.buffer, destination);
 
-    const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza69/${destination}`;
+    const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${destination}`;
 
     // Update store document
     store.logo = { url: publicUrl };
@@ -194,7 +194,7 @@ export const deleteStoreLogo = expressAsyncHandler(async (req, res) => {
     }
 
     if (store.logo && store.logo.url) {
-      const oldFilePath = store.logo.url.split(`the-mall-uploads-giza69/`)[1]; // Important: split correctly
+      const oldFilePath = store.logo.url.split(`the-mall-uploads-giza/`)[1]; // Important: split correctly
       try {
         await uploadsBucket.file(oldFilePath).delete();
         console.log(`Old logo deleted: ${oldFilePath}`);
@@ -213,3 +213,106 @@ export const deleteStoreLogo = expressAsyncHandler(async (req, res) => {
     res.status(500).json({ message: "Failed to delete logo" });
   }
 });
+
+
+export const getStoreImages = expressAsyncHandler(async (req, res) => {
+  const { storeId } = req.params;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 4;
+  const skip = (page - 1) * limit;  // determines how many images to skip before selecting results
+
+  const store = await Store.findById(storeId).select('images');
+
+  if (!store) return res.status(404).send({ error: 'Store not found' });
+
+  const paginatedImages = store.images.slice(skip, skip + limit);
+  const hasMore = store.images.length > skip + limit;
+
+  res.send({
+    images: paginatedImages,
+    hasMore,
+  });
+});
+
+// Upload store gallery image
+export const uploadStoreGalleryImage = expressAsyncHandler(async (req, res) => {
+  try {
+    const { storeId } = req.params;
+    const file = req.file;
+    const fileName = req.body.fileName || file.originalname;
+
+    if (!file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const store = await Store.findById(storeId);
+    if (!store) {
+      return res.status(404).json({ message: "Store not found" });
+    }
+
+    // Upload new image to the bucket
+    const destination = `stores/${storeId}/images/${fileName}`;
+    await uploadToUploads(file.buffer, destination);
+
+    const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${destination}`;
+
+    // Add new image entry to store.images
+    store.images.push({
+      url: publicUrl,
+      // category and description will be added later
+    });
+
+    await store.save();
+
+    res.status(200).json({
+      message: "Image uploaded successfully",
+      url: publicUrl,
+    });
+  } catch (error) {
+    console.error("Upload gallery image error:", error);
+    res.status(500).json({ message: "Failed to upload gallery image" });
+  }
+});
+
+// Delete store gallery image
+export const deleteStoreGalleryImage = expressAsyncHandler(async (req, res) => {
+  try {
+    const { storeId } = req.params;
+    const { imageUrl } = req.body;
+
+    if (!imageUrl) {
+      return res.status(400).json({ message: "Missing image URL" });
+    }
+
+    const store = await Store.findById(storeId);
+    if (!store) {
+      return res.status(404).json({ message: "Store not found" });
+    }
+
+    // Find the image in the array
+    const imageIndex = store.images.findIndex(img => img.url === imageUrl);
+    if (imageIndex === -1) {
+      return res.status(404).json({ message: "Image not found in store gallery" });
+    }
+
+    // Delete from GCS
+    const filePath = imageUrl.split(`the-mall-uploads-giza/`)[1];
+    try {
+      await uploadsBucket.file(filePath).delete();
+      console.log(`Image deleted from GCS: ${filePath}`);
+    } catch (error) {
+      console.error("Error deleting image from GCS:", error.message);
+      return res.status(500).json({ message: "Failed to delete image from storage" });
+    }
+
+    // Remove from store.images
+    store.images.splice(imageIndex, 1);
+    await store.save();
+
+    res.status(200).json({ message: "Gallery image deleted successfully" });
+  } catch (error) {
+    console.error("Delete gallery image error:", error);
+    res.status(500).json({ message: "Failed to delete gallery image" });
+  }
+});
+

@@ -21,7 +21,7 @@ const App: React.FC = () => {
         {/* <Menubar />  */}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/stores/:storeId" element={<StorePage />} />
+          <Route path="/stores/:storeId/*" element={<StorePage />} />
           <Route path="/my-stores" element={<MyStores />} />
           <Route path="/search" element={<Search />} />
           <Route path="/profile" element={<Profile />} />
