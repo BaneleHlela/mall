@@ -85,9 +85,9 @@ const productSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-// Generate slug from title
-function createSlug(title) {
-  return title
+// Generate slug from name
+function createSlug(name) {
+  return name
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .trim()
@@ -97,7 +97,7 @@ function createSlug(title) {
 
 productSchema.pre('save', function (next) {
   if (!this.slug) {
-    this.slug = createSlug(this.title);
+    this.slug = createSlug(this.name);
   }
   next();
 });

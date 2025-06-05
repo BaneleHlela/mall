@@ -1,3 +1,4 @@
+import { defaultFirstHeroConfig } from "./sections/hero/defaultFirstHeroConfig"
 
 export const defaultMenubarConfig = {
     topbar: {
@@ -30,6 +31,7 @@ export const defaultLayoutConfig = {
       text: "",
     },
     menubar: defaultMenubarConfig,
+    hero: defaultFirstHeroConfig,
     header: {
       // You can define structure here if needed later
     },

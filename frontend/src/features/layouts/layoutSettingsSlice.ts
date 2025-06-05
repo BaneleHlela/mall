@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { Layout, Menubar } from "../../types/layoutTypes"; 
-import { defaultLayoutConfig } from '../../utils/defaults/defaultLayoutConfig.ts';
+import { defaultLayoutConfig } from '../../utils/defaults/defaultLayoutConfig';
 
 
 
@@ -13,8 +13,11 @@ const layoutSettingsSlice = createSlice({
   name: 'layoutSettings',
   initialState,
   reducers: {
-    setInitialLayout: (state, action: PayloadAction<Layout>) => {
-      return action.payload;
+    setInitialLayout: (state, action: PayloadAction<any>) => {
+      return {
+        ...state,
+        ...action.payload,
+      };
     },
     updateSetting: (state, action: PayloadAction<{ field: string; value: any }>) => {
       const {field, value} = action.payload;

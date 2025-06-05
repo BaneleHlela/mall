@@ -18,6 +18,8 @@ import storeDashboardRoutes from "./routes/storeDashboardRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import packageRoutes from "./routes/packageRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
+import donationRoutes from "./routes/donationRoutes.js";
 
 
 import "./config/passportConfig.js";
@@ -71,6 +73,8 @@ app.use("/api/store-dashboard", storeDashboardRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/packages", packageRoutes);
+app.use('/api/products', productRoutes);
+app.use("/api/donations", donationRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

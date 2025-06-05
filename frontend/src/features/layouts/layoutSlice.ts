@@ -6,6 +6,7 @@ import type { RootState } from "../../app/store.ts";
 
 const initialState: LayoutState = {
     activeLayout: null,
+    layoutSettings: null,
     layouts: [],
     status: "idle",
     error: null,
@@ -15,10 +16,17 @@ const API_URL = 'http://localhost:5000';
 
 // Async thunks for layout actions
 
-export const getLayout = createAsyncThunk('layouts/getLayout', async (layoutId: string) => {
-    const response = await axios.get(`${API_URL}/api/layouts/${layoutId}`);
-    return response.data;
-});
+export const getLayout = createAsyncThunk(
+    "layouts/getLayout",
+    async (layoutId: string, thunkAPI) => {
+      try {
+        const response = await axios.get(`/api/layouts/${layoutId}`);
+        return response.data;
+      } catch (error: any) {
+        return thunkAPI.rejectWithValue(error.response?.data || "Fetch failed");
+      }
+    }
+);
 
 export const createLayout = createAsyncThunk('layouts/createLayout', async (layoutConfig: Layout) => {
     const response = await axios.post(`${API_URL}/api/layouts`, layoutConfig);
@@ -91,6 +99,7 @@ const layoutSlice = createSlice({
             .addCase(getLayout.fulfilled, (state, action: PayloadAction<Layout>) => {
                 state.status = "succeeded";
                 state.activeLayout = action.payload;
+                state.layoutSettings = action.payload;
             })
             .addCase(getLayout.rejected, (state, action) => {
                 state.status = "failed";

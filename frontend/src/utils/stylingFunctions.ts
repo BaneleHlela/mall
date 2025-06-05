@@ -19,4 +19,19 @@ export const getTextStyles = (text: TextSettings) => {
   return styles;
 };
 
-
+export const getDivAnimation = (transition: string | undefined) => {
+  switch (transition) {
+    case "upToDown":
+      return { initial: { y: "-100%", opacity: 0 }, exit: { y: "-100%", opacity: 0 } };
+    case "downToUp":
+      return { initial: { y: "100%", opacity: 0 }, exit: { y: "100%", opacity: 0 } };
+    case "leftToRight":
+      return { initial: { x: "-100%", opacity: 0 }, exit: { x: "-100%", opacity: 0 } };
+    case "rightToLeft":
+      return { initial: { x: "100%", opacity: 0 }, exit: { x: "100%", opacity: 0 } };
+      case "fade":
+      return { initial: { opacity: 0 }, exit: { opacity: 0 } };
+    default:
+      return { initial: { y: "-100%", opacity: 0 }, exit: { y: "-100%", opacity: 0 } }; // fallback
+  }
+};

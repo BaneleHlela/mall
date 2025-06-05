@@ -1,12 +1,14 @@
 import { motion } from "framer-motion"
 import MenubarSettings from "./menubar/MenubarSettings";
+import SectionSettings from "./sections/SectionSettings";
 
 const LayoutSettings= () => {
   return (
     <motion.div 
-      className="h-screen w-[25vw] bg-orange-300"
+      className="ml-5 h-screen w-[25vw] bg-orange-300"
     >
-      <MenubarSettings />
+      {/* <MenubarSettings /> */}
+      <SectionSettings />
     </motion.div>
   )
 }

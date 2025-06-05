@@ -15,4 +15,5 @@ export interface EditorProps {
     objectPath: string;
     settings: any; 
     handleSettingChange: (field: string, value: any) => void;
+    allow?: string[];
 }

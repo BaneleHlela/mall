@@ -14,7 +14,7 @@ const WebsiteBuilderContent: React.FC = () => {
   const sizeMap = {
     mobile: { width: 412, height: 840, scale: 0.8 },
     tablet: { width: 775, height: 1024, scale: 0.8 },
-    desktop: { width: 1080, height: 720, scale: 1 },
+    desktop: { width: 1920, height: 1080, scale: 1 },
   };
 
   const { width, height, scale } = sizeMap[device];

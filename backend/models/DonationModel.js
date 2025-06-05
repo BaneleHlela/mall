@@ -4,11 +4,10 @@ const donationSchema = new mongoose.Schema({
     donor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User", // Reference to the user making the donation
-        required: true,
     },
     recipient: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Store", // Reference to the store, organization, or individual receiving the donation
+        ref: "Store", // Reference to the store or organization receiving the donation
         required: true,
     },
     amount: {
@@ -24,6 +23,9 @@ const donationSchema = new mongoose.Schema({
     isAnonymous: {
         type: Boolean,
         default: false, // Whether the donor wants to remain anonymous
+    },
+    category: {
+        type: String,
     },
     status: {
         type: String,

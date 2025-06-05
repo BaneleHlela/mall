@@ -5,7 +5,6 @@ import TextEditor from "../../text/TextEditor";
 
 const FirstMenubarSettings = () => {
     const settings = useSelector((state: any) => state.layoutSettings);
-    console.log(settings?.menubar?.sidebar?.text?.fontFamily)
     const dispatch = useDispatch();
     const handleSettingChange = (field: string, value: any) => {
         dispatch(updateSetting({ field, value }));
@@ -16,6 +15,7 @@ const FirstMenubarSettings = () => {
             <TextEditor 
                 objectPath="menubar.topbar.text" 
                 handleSettingChange={handleSettingChange}
+                settings={settings}
             /> 
             <p className=""
                 style={{
