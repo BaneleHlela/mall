@@ -4,6 +4,7 @@ import About from "../../../../components/store_layout/sections/about/About";
 import Footer from "../../../../components/store_layout/sections/footer/Footer";
 import Gallery from "../../../../components/store_layout/sections/gallery/Gallery";
 import Hero from "../../../../components/store_layout/sections/hero/Hero";
+import BookWithCalendar from "../../../../components/store_layout/sections/book_with_calender/BookWithCalendar";
 
 const StoreHome = () => {
   const location = useLocation();
@@ -22,7 +23,7 @@ const StoreHome = () => {
     <div>
         <Hero />
         <About id="about"/>
-        {/* <BookWithCalender /> */}
+        <BookWithCalendar />
         <Gallery />
         <Footer id="footer" />
     </div>

@@ -155,6 +155,23 @@ export const deleteStoreGalleryImage = createAsyncThunk<
   }
 );
 
+export const fetchStoreImages = createAsyncThunk<
+  { storeId: string; images: { url: string }[] },
+  string
+>(
+  'stores/fetchStoreImages',
+  async (storeId, thunkAPI) => {
+    try {
+      const response = await axios.get(`${API_URL}/${storeId}/gallery`);
+      return { storeId, images: response.data };
+    } catch (error) {
+      console.error('Error fetching store gallery images:', error);
+      return thunkAPI.rejectWithValue('Failed to fetch gallery images');
+    }
+  }
+);
+
+
 
 
 // --- Slice ---
@@ -167,6 +184,9 @@ const storeSlice = createSlice({
     },
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
+    },
+    setCurrentStore: (state, action: PayloadAction<Store | null>) => {
+      state.currentStore = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -255,9 +275,35 @@ const storeSlice = createSlice({
         }
       })
 
+      // Fetch Store Images
+      .addCase(fetchStoreImages.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchStoreImages.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const { storeId, images } = action.payload;
+
+        if (state.storesById[storeId]) {
+          state.storesById[storeId].images = images;
+        }
+
+        if (state.myStoresById[storeId]) {
+          state.myStoresById[storeId].images = images;
+        }
+
+        if (state.currentStore && state.currentStore._id === storeId) {
+          state.currentStore.images = images;
+        }
+      })
+      .addCase(fetchStoreImages.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })      
+
   },
 });
 
-export const { setLoading, setError } = storeSlice.actions;
+export const { setLoading, setError,  setCurrentStore } = storeSlice.actions;
 
 export default storeSlice.reducer;

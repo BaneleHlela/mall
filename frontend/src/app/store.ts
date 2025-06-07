@@ -8,6 +8,7 @@ import storeAdminReducer from "../features/store_admin/storeAdminSlice";
 import serviceReducer from "../features/services/servicesSlice.ts";
 import productReducer from "../features/products/productsSlice.ts";
 import packageReducer from "../features/packages/packagesSlice.ts";
+import bookingReducer from "../features/bookings/bookingsSlice.ts"; 
 
 
 export const store = configureStore({
@@ -18,6 +19,7 @@ export const store = configureStore({
         layoutSettings: layoutSettingsReducer,
         stores: storeReducer,
         storeAdmin: storeAdminReducer,
+        booking: bookingReducer,
         services: serviceReducer,
         products: productReducer,
         packages: packageReducer,

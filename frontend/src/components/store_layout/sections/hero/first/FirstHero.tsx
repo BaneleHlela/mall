@@ -81,18 +81,19 @@ const FirstHero = () => {
           <motion.div
             {...getDivAnimation(settings.image.animation || "leftToright")}
             animate={{ y: 0, x: 0, opacity: 1 }}
-            transition={{duration: 0.5, ease: "easeInOut"}}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
             style={{
-              border: ".8vw solid #fff", 
+              border: ".8vw solid #fff",
             }}
-            className="absolute serpia top-[10vh] left-[10vw] w-[52vw] h z-10 overflow-hidden"
+            className="absolute top-[5vh] left-[10vw] w-[50vw] h-[40vw] z-10 overflow-hidden"
           >
             <img
               src={settings.image.url || model}
               alt="Model showcasing the service"
-              className="w-full h-auto object-cover"
+              className="w-full h-full object-cover"
             />
           </motion.div>
+
 
           {/* Text Box */}
           <motion.div
@@ -104,7 +105,7 @@ const FirstHero = () => {
               border: ".8vw solid #fff",
               backgroundColor: settings.textBox.backgroundColor || "grey", 
             }} 
-            className="absolute w-[25vw] h-[25vw] top-[13vw] left-[50vw] z-20 bg-stone-300 overflow-hidden"
+            className="absolute w-[25vw] h-[25vw] top-[10vw] left-[50vw] z-20 bg-stone-300 overflow-hidden"
           >
               <div
                 style = {{
@@ -143,30 +144,11 @@ const FirstHero = () => {
           <div>
 
             </div>
-            {/* <h2 className="text-[2.2vw] text-gray-700">
-              WE CHANGE
-              <br />
-              THE WORLD
-              <br />
-              <span className="font-bold text-black">ONE EYEBROW</span>
-              <br />
-              AT A TIME
-            </h2>
-            <div className="flex flex-row items-center">
-              <a
-                href="#"
-                className="text-[1vw] text-sm underline text-gray-800"
-                aria-label="Book an appointment"
-              >
-                Book an appointment
-              </a>
-              <ArrowRight className="ml-2" size={44} color="gray"/>
-            </div>   */}
           </motion.div>
         </div>
         <motion.div
           {...getDivAnimation(settings.pattern.animation || "leftToright")}
-          animate={{ y: 0, x: 0, opacity: .2 }}
+          animate={{ y: 0, x: 0, opacity: 1 }}
           transition={{duration: 0.5, ease: "easeInOut"}}
           className="absolute bottom-[2vh] left-0 w-[45vw] h-[20vh] z-11 overflow-hidden"
         >

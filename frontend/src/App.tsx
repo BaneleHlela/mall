@@ -18,7 +18,7 @@ const App: React.FC = () => {
     <div className="bg-stone-50 min-h-screen flex justify-center items-center">
       
       <Router>
-        {/* <Menubar />  */}
+        <Menubar /> 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/stores/:storeId/*" element={<StorePage />} />

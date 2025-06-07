@@ -26,5 +26,8 @@ export interface Store {
   about: string;
   team: TeamMember[]; 
   updatedAt?: Date; 
-  images?: Image[];
+  images?: {
+    images: Image[];
+    hasMore?: boolean;
+  }
 }

@@ -1,5 +1,6 @@
 import { useAppSelector, useAppDispatch } from "../../../../../app/hooks";
 import { updateSetting } from "../../../../../features/layouts/layoutSettingsSlice";
+import StoreLayoutImageSettings from "../../../extras/StoreLayoutImageSettings";
 import TextEditor from "../../../text/TextEditor";
 import DivAnimationSettings from "../../background/DivAnimationSettings";
 
@@ -39,6 +40,10 @@ const FirstHeroSettings = () => {
       {/* Hero Image */}
       <div className="space-y-2">
         <h3 className="font-semibold">Hero Image</h3>
+        <StoreLayoutImageSettings
+          value={settings?.hero?.image?.url || ""}
+          onChange={(val) => handleSettingChange("hero.image.url", val)}
+        />
         <input
           type="text"
           value={settings?.hero?.image?.url || ""}

@@ -4,7 +4,7 @@ type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 function ReactCalendar({ value, onChange }: { value: Value; onChange: (value: Value) => void }) {
-  console.log(value);
+  
   return (
     <div>
       <style>

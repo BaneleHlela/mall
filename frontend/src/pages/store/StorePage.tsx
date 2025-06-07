@@ -5,16 +5,24 @@ import Menubar from '../../components/store_layout/menubars/Menubar';
 import StoreHome from './home/StoreHome';
 import StoreServices from './services/StoreServices';
 import StorePackagesPage from './packages/StorePackagesPage';
+import { useEffect } from 'react';
+import { setCurrentStore } from '../../features/stores/storeSlice';
+import { useAppDispatch } from '../../app/hooks';
 
 
 const StorePage = () => {
-  // const { storeId } = useParams<{ storeId: string }>();
-  // const store = useSelector((state: RootState) => state.stores.storesById[storeId]);
+  const { storeId } = useParams<{ storeId: string }>();
+  const dispatch = useAppDispatch();
+  const store = useSelector((state: RootState) => state.stores.storesById[storeId as string]);
+  
+  useEffect(() => {
+    dispatch(setCurrentStore(store || null));
+  }, [store]);
 
 
-  // if (!store) {
-  //   return <div className="p-6 text-red-500">Store not found.</div>;
-  // }
+  if (!store) {
+    return <div className="p-6 text-red-500">Store not found.</div>;
+  }
 
   return (
     <div className="h-screen w-screen bg-stone-200">
