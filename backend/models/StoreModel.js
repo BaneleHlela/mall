@@ -78,7 +78,7 @@ const storeSchema = new mongoose.Schema(
     },
     trades: {
       type: Number,
-      default: 4,
+      default: 4, //1 for product, 2 for services, 3 for packages, 4 for products and services, 5 for products and packages, 
     },
     categories: [{
       type: Array,

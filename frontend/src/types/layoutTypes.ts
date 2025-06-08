@@ -22,6 +22,7 @@ export interface Layout {
     store?: Types.ObjectId | null,
     menubar?: Menubar;
     hero?: any;
+    bookWithCalendar?: any;
 }
 
 export type SectionProps = {

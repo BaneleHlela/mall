@@ -28,6 +28,17 @@ const serviceSchema = new mongoose.Schema({
   images: [{
     type: String,
   }],
+  performers: [{
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User', // Reference to the User model
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+  }],
   category: {
     type: String
   },

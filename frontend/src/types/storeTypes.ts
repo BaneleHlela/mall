@@ -20,6 +20,7 @@ export interface Store {
   description: string;
   name: string;
   logo: Logo;
+  trades: number;
   slogan: string;
   departments: string[]; 
   layouts: Types.ObjectId[]; 

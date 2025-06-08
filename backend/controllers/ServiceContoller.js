@@ -11,11 +11,27 @@ export const createService = async (req, res) => {
       thumbnail,
       images,
       category,
+      performers, // Added performers
     } = req.body;
-
+    
     // Validate required fields
     if (!name || !description || !price || !duration || !store) {
       return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    // Validate performers if provided
+    if (performers && !Array.isArray(performers)) {
+      return res.status(400).json({ message: 'Performers must be an array' });
+    }
+
+    if (performers) {
+      for (const performer of performers) {
+        if (!performer.user || !performer.name) {
+          return res.status(400).json({
+            message: 'Each performer must have a user (ObjectId) and a name',
+          });
+        }
+      }
     }
 
     const service = new Service({
@@ -27,6 +43,7 @@ export const createService = async (req, res) => {
       thumbnail,
       images,
       category,
+      performers, // Include performers in the service object
     });
 
     await service.save();
@@ -41,15 +58,7 @@ export const createService = async (req, res) => {
 
 export const updateService = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    // Find the service by ID
-    const service = await Service.findById(id);
-    if (!service) {
-      return res.status(404).json({ message: 'Service not found' });
-    }
-
-    // Update fields from request body
+    const serviceId = req.params.id;
     const {
       name,
       description,
@@ -59,9 +68,17 @@ export const updateService = async (req, res) => {
       thumbnail,
       images,
       category,
+      performers, // Added performers
     } = req.body;
 
-    // Only update if provided
+    // Find the service by ID
+    const service = await Service.findById(serviceId);
+
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found' });
+    }
+
+    // Update fields if provided
     if (name) service.name = name;
     if (description) service.description = description;
     if (price) service.price = price;
@@ -70,6 +87,23 @@ export const updateService = async (req, res) => {
     if (thumbnail) service.thumbnail = thumbnail;
     if (images) service.images = images;
     if (category) service.category = category;
+
+    // Validate and update performers if provided
+    if (performers) {
+      if (!Array.isArray(performers)) {
+        return res.status(400).json({ message: 'Performers must be an array' });
+      }
+
+      for (const performer of performers) {
+        if (!performer.user || !performer.name) {
+          return res.status(400).json({
+            message: 'Each performer must have a user (ObjectId) and a name',
+          });
+        }
+      }
+
+      service.performers = performers; // Update performers
+    }
 
     await service.save();
 

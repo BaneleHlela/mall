@@ -1,9 +1,9 @@
 import Booking from '../models/BookingModel.js';
-import Store from '../models/storeModel.js';
+import Store from '../models/StoreModel.js';
 import Service from '../models/ServiceModel.js';
 import { addMinutes, timeStringToDate, formatTime } from '../utils/helperFunctions.js';
 
-export const makeBooking = async (req, res ) => {
+export const makeBooking = async (req, res) => {
   try {
     const userId = req.user?.id || req.user?._id;
     const { store, services } = req.body;
@@ -16,10 +16,22 @@ export const makeBooking = async (req, res ) => {
       return res.status(400).json({ message: 'Missing required fields or services array is empty' });
     }
 
-    // Validate each service entry
+    const now = new Date();
+
     for (const s of services) {
       if (!s.service || !s.date || !s.time) {
         return res.status(400).json({ message: 'Each service must have service, date, and time' });
+      }
+
+      // Combine date and time into a Date object
+      const bookingDateTime = new Date(`${s.date}T${s.time}:00`);
+
+      if (isNaN(bookingDateTime.getTime())) {
+        return res.status(400).json({ message: 'Invalid date or time format in services' });
+      }
+
+      if (bookingDateTime < now) {
+        return res.status(400).json({ message: 'Cannot book a service in the past' });
       }
     }
 
@@ -210,18 +222,22 @@ export const getAvailableBookingTimes = async (req, res) => {
     // console.log(new Date (date))
 
     const bookedTimes = [];
-
+    
     bookings.forEach((booking) => {
       booking.services.forEach((svc) => {
-        if (
-          new Date(svc.date).toDateString() === selectedDate.toDateString() &&
-          (!staffId || (svc.staff && svc.staff.toString() === staffId))
-        ) {
+        const isSameDate = new Date(svc.date).toDateString() === selectedDate.toDateString();
+        const hasMatchingPerformer = !staffId || (
+          svc.service.performers &&
+          svc.service.performers.some((performer) => performer.user?.toString() === staffId)
+        );
+        if (isSameDate && hasMatchingPerformer) {
           const serviceStart = timeStringToDate(selectedDate, svc.time);
           
-          const bookedDur = svc.service?.duration >= 40 ? 60 : Math.ceil(svc.service?.duration / 30) * 30;
-          console.log(svc.service?.duration)
-          // console.log('Service Start:', serviceStart, 'for booking:', svc.service.name, "Duration:", bookedDur);
+          const bookedDur = svc.service?.duration >= 40
+            ? 60
+            : Math.ceil(svc.service?.duration / 30) * 30;
+    
+    
           let blockTime = new Date(serviceStart);
           for (let i = 0; i < bookedDur; i += 30) {
             bookedTimes.push(formatTime(blockTime));
@@ -230,7 +246,7 @@ export const getAvailableBookingTimes = async (req, res) => {
         }
       });
     });
-
+    
     const availableSlots = allSlots.filter((slot) => !bookedTimes.includes(slot));
 
     return res.status(200).json({ [date]: availableSlots });

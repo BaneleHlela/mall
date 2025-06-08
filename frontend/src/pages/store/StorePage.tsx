@@ -8,6 +8,7 @@ import StorePackagesPage from './packages/StorePackagesPage';
 import { useEffect } from 'react';
 import { setCurrentStore } from '../../features/stores/storeSlice';
 import { useAppDispatch } from '../../app/hooks';
+import { fetchStoreServices } from '../../features/services/servicesSlice';
 
 
 const StorePage = () => {
@@ -22,6 +23,11 @@ const StorePage = () => {
 
   if (!store) {
     return <div className="p-6 text-red-500">Store not found.</div>;
+  }
+
+  //Fetch products or services.
+  if (store.trades === 2 ) {
+    dispatch(fetchStoreServices(storeId as string));
   }
 
   return (

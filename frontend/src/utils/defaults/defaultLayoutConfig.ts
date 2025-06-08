@@ -1,3 +1,4 @@
+import { defaultFirstBookWithCalandarConfig } from "./sections/book_with_calendar/defaultFirstBookWithCalandarConfig";
 import { defaultFirstHeroConfig } from "./sections/hero/defaultFirstHeroConfig"
 
 export const defaultMenubarConfig = {
@@ -32,9 +33,7 @@ export const defaultLayoutConfig = {
     },
     menubar: defaultMenubarConfig,
     hero: defaultFirstHeroConfig,
-    header: {
-      // You can define structure here if needed later
-    },
+    bookWithCalendar: defaultFirstBookWithCalandarConfig,
     footer: {
       // You can define structure here if needed later
     },
