@@ -16,7 +16,10 @@ const Menubar = () => {
       <Link to="/layouts/build">
         <LayoutDashboard size={32} />
       </Link>
-      <Link to="/login">
+      <Link to="/profile">
+        <CircleUser size={32} />
+      </Link>
+      <Link to="/scribbler">
         <CircleUser size={32} />
       </Link>
     </nav>

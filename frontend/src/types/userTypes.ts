@@ -11,6 +11,12 @@ export interface User {
     isBlocked: boolean;
     cart: string[];
     address: string[];
+    locations?: Array<{
+        nickname: string;   
+        lat: number;   
+        lng: number  
+        address: string; 
+    }>;
     wishlist: string[];
     favoriteStore?: string[];
     refreshToken?: string;

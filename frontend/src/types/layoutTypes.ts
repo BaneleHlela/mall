@@ -17,6 +17,7 @@ export interface Menubar {
 
 
 export interface Layout {
+    footer: any;
     name?: string;
     _id?: string;
     store?: Types.ObjectId | null,

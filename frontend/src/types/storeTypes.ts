@@ -27,6 +27,12 @@ export interface Store {
   about: string;
   team: TeamMember[]; 
   updatedAt?: Date; 
+  locations?: Array<{
+    nickname: string;   
+    lat: number;   
+    lng: number  
+    address: string; 
+}>;
   images?: {
     images: Image[];
     hasMore?: boolean;

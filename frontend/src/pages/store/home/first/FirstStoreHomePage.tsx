@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import About from "../../../../components/store_layout/sections/about/About";
-import Footer from "../../../../components/store_layout/sections/footer/Footer";
+import About from "../../../../components/store_layout/sections/about/StoreAboutSection";
+import Footer from "../../../../components/store_layout/sections/footer/StoreFooterSection";
 import Gallery from "../../../../components/store_layout/sections/gallery/Gallery";
 import Hero from "../../../../components/store_layout/sections/hero/Hero";
 import BookWithCalendar from "../../../../components/store_layout/sections/book_with_calender/BookWithCalendar";
@@ -23,7 +23,7 @@ const StoreHome = () => {
     <div>
         <Hero />
         <About id="about"/>
-        <BookWithCalendar />
+        {/* <BookWithCalendar /> */}
         <Gallery />
         <Footer id="footer" />
     </div>

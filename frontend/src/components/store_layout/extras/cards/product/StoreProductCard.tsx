@@ -1,7 +1,17 @@
+import FirstStoreProductCard from "./first/FirstStoreProductCard";
 
-const StoreProductCard = () => {
+export interface StoreProductCardProps {
+  image: string;
+  name: string;
+  description: string;
+  price: number | string;
+}
+
+const StoreProductCard: React.FC<StoreProductCardProps> = ({ image, name, description, price }) => {
   return (
-    <div>StoreProductCard</div>
+    <div>
+      <FirstStoreProductCard image={image} name={name} description={description} price={price} />
+    </div>
   )
 }
 

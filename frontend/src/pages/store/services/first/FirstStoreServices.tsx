@@ -1,4 +1,4 @@
-import Footer from "../../../../components/store_layout/sections/footer/Footer"
+import Footer from "../../../../components/store_layout/sections/footer/StoreFooterSection"
 import Services from "../../../../components/store_layout/sections/services/StoreServices"
 
 const FirstStoreServices = () => {

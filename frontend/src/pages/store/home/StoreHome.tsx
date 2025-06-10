@@ -1,11 +1,11 @@
-import FirstStoreHomePage from "./first/FirstStoreHomePage";
+import SecondStoreHomePage from "./second/SecondStoreHomePage";
 
 const StoreHome = () => {
   const type = "first" 
   if (type === "first") {
     return (
       <div>
-        <FirstStoreHomePage />
+        <SecondStoreHomePage/>
       </div>
     );
   }

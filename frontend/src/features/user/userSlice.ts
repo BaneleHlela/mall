@@ -110,7 +110,7 @@ export const updateUser = createAsyncThunk(
     "user/updateUser",
     async (userData: Partial<User>, thunkAPI) => {
       try {
-        const response = await axios.put(`${API_URL}/update`, userData);
+        const response = await axios.put(`${API_URL}/edit-user`, userData);
         return response.data as User;
       } catch (err: any) {
         return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to update user");

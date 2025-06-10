@@ -19,6 +19,18 @@ export const getTextStyles = (text: TextSettings) => {
   return styles;
 };
 
+export const getBorderStyles = (border: { width?: string; style?: string; color?: string; radius?: string }) => {
+  const styles: React.CSSProperties = {};
+
+  if (border.width) styles.borderWidth = border.width;
+  if (border.style) styles.borderStyle = border.style;
+  if (border.color) styles.borderColor = border.color;
+  if (border.radius) styles.borderRadius = border.radius;
+
+  return styles;
+};
+
+
 export const getDivAnimation = (transition: string | undefined) => {
   switch (transition) {
     case "upToDown":
