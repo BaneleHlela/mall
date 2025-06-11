@@ -10,4 +10,4 @@ function SecondStoreHomePage() {
   )
 }
 
-export default SecondStoreHomePage
+export default SecondStoreHomePage;

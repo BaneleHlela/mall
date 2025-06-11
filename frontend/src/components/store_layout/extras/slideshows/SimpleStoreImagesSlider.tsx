@@ -56,7 +56,6 @@ const SimpleStoreImagesSlider: React.FC<SlideshowProps> = ({ images, height = "5
             src={src}
             alt={`Slide ${idx}`}
             className="w-full h-full object-cover flex-shrink-0"
-            style={{ width: "100%", height: "100%" }}
           />
         ))}
       </div>

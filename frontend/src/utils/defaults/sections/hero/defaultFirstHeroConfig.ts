@@ -1,5 +1,5 @@
 export const defaultFirstHeroConfig = {
-    name: "default-first-hero",
+    variation: "firstHero",
     background: {
         colorA: "#ffffff",
         colorB: "#f0f0f0",

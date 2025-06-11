@@ -39,10 +39,16 @@ const storeSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "StoreLayout"
     }],
+    locations: [{
+			nickname: {type: String},
+			lat: Number,
+			lng: Number,
+			address: String,
+		}],
     about: {
       type: String,
       required: [true, "Store description is required"],
-    },
+    }, //Converting to an array of strings
     team: [{
       member: {
           type: mongoose.Schema.Types.ObjectId,

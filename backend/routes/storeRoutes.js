@@ -23,7 +23,7 @@ router.post('/add', protectRoute, addStore);
 router.get("/my-stores", protectRoute, getStoresByOwner);
 router.get("/:storeId", getStore);
 router.get('/', getStores);
-router.put('/edit/:storeId', protectRoute, editStore);
+router.put('/edit/:storeId', /*protectRoute,*/ editStore);
 
 router.put("/:storeId/logo", uploadSingleFile("logo"), uploadStoreLogo);
 router.delete('/:storeId/logo', deleteStoreLogo);

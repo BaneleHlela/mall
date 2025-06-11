@@ -1,12 +1,22 @@
 import React, { useRef, useEffect } from "react";
+import { getBorderStyles } from "../../../../utils/stylingFunctions";
+import type { Border } from "../../../../types/layoutTypes";
 
 interface ImageSliderProps {
-  images: string[]; 
-  width: string; 
-  height: string; 
+  images: string[];
+  width: string;
+  height: string;
+  margin:string;
+  border: Border;
 }
 
-const AlwaysMovingImageSlider: React.FC<ImageSliderProps> = ({ images, width, height }) => {
+const AlwaysMovingImageSlider: React.FC<ImageSliderProps> = ({
+  images,
+  width,
+  height,
+  margin = "5px",
+  border = {width: "5px", color: "solid", style: "white", radius: "0"}
+}) => {
   const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -38,9 +48,9 @@ const AlwaysMovingImageSlider: React.FC<ImageSliderProps> = ({ images, width, he
             key={idx}
             src={src}
             alt={`Slide ${idx}`}
-            style={{
-              width: width,
-              height: height,
+            style={{ 
+              ...getBorderStyles(border),
+              width, height, margin: margin 
             }}
             className="m-1 h-auto object-cover flex-shrink-0 border-4 border-white"
           />

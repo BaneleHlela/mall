@@ -3,7 +3,7 @@ import { House, LayoutDashboard, Store, Search, CircleUser } from "lucide-react"
 
 const Menubar = () => {
   return (
-    <nav className="fixed top-0 left-0 h-screen w-[60px] bg-orange-500 flex flex-col items-center justify-between pt-[10vh] pb-[10vh]">
+    <nav className="hidden lg:fixed top-0 left-0 h-screen w-[60px] bg-orange-500 flex flex-col items-center justify-between pt-[10vh] pb-[10vh]">
       <Link to="/">
         <House size={32} />
       </Link>

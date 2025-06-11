@@ -4,11 +4,10 @@ import { getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunc
 
 const FirstStoreFooterSection = ({id}: SectionProps) => {
   const settings = useAppSelector((state) => state.layoutSettings.footer);
-  console.log(settings.title.text.style)
   return (
     <>
       {/* Desktop */}
-      <div className="hidden lg:block h-[100vh] w-[75vw] min-w-[1080px] bg-black" id={id}>
+      <div className="hidden lg:block h-full w-full min-w-[1080px] bg-black" id={id}>
         {/* Heading and Book an appointment online */}
         <div
           style={{
@@ -93,7 +92,7 @@ const FirstStoreFooterSection = ({id}: SectionProps) => {
           //...getTextStyles(),
           backgroundColor: settings.backgroundColor,
         }}
-        className="w-[100vw] h-[200vh] bg-black md:hidden"
+        className="w-full h-[200vh] bg-black md:hidden"
       >
         {/* Heading, address, Contact and Opening Hours */}
         <div
@@ -191,7 +190,7 @@ const FirstStoreFooterSection = ({id}: SectionProps) => {
         </div> */}
         {/* Email send, copyright, and social */}
         <div
-          className="h-[100vh] w-[100vw] p-6"
+          className="h-[100vh] w-full p-1"
         > 
           {/* Email send */}
           <div 

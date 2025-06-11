@@ -9,6 +9,7 @@ import serviceReducer from "../features/services/servicesSlice.ts";
 import productReducer from "../features/products/productsSlice.ts";
 import packageReducer from "../features/packages/packagesSlice.ts";
 import bookingReducer from "../features/bookings/bookingsSlice.ts"; 
+import categoryReducer from "../features/categories/categorySlice.ts";
 
 
 export const store = configureStore({
@@ -23,6 +24,7 @@ export const store = configureStore({
         services: serviceReducer,
         products: productReducer,
         packages: packageReducer,
+        categories: categoryReducer,
     },
 });
 

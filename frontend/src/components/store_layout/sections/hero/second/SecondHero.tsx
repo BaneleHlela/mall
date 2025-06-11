@@ -1,37 +1,83 @@
 import SimpleStoreImagesSlider from "../../../extras/slideshows/SimpleStoreImagesSlider";
-import image1 from "../../../../../assets/another_black_woman.png";
-import image2 from "../../../../../assets/black_woman.png";
-import image3 from "../../../../../assets/brushstroke.png";
-import image4 from "../../../../../assets/brushstroke2.png";
-import image5 from "../../../../../assets/diagonal_pattern.png";
-import image6 from "../../../../../assets/logo.png";
 import AlwaysMovingImageSlider from "../../../extras/slideshows/AlwaysMovinStoreImageSlider";
 import StopAndGoImageSlider from "../../../extras/slideshows/StopAndGoImageSlider";
+import { useAppSelector } from "../../../../../app/hooks";
 
-const images = [ image1, image2, image3, image4, image5, image6 ]
 
 const SecondHero = () => {
+  const settings = useAppSelector((state) => state.layoutSettings.hero);
+const images = settings.images;
+
+const getSmallSlider = (variation: string, images: string[], height: string, width: string, margin: string, border: any) => {
+    if (variation === "stopAndGo") {
+      return (
+        <StopAndGoImageSlider
+          images={images}
+          height={height}
+          width={width}
+          margin={margin}
+          border={border}
+        />
+      );
+    } else if (variation === "alwaysMoving") {
+      return (
+        <AlwaysMovingImageSlider
+          images={images}
+          height={height}
+          width={width}
+          margin={margin}
+          border={border}
+        />
+      );
+    }
+    return null; // Return null if no valid variation is found
+  };
+
   return (
-    <div
-        
-        className="h-full w-screen bg-blue-800"
+    <div 
+      style={{
+        backgroundColor: settings.backgroundColor,
+      }}
+      className="h-full w-full bg-blue-800"
     >
-        {/* Mobile */}
-        <div
-          className="h-[50vh] w-full p-6"
-        >
-          {/* Main images */}
-          <div className="h-[70%] w-full bg-pink-300 flex flex-col justify-center">
-            <SimpleStoreImagesSlider images={images} height="80%" width="100%" />
-          </div>
-          {/* Sub images */}
-          <div className="h-[30%] w-full bg-amber-900">
-            <StopAndGoImageSlider images={images} height="25vw" width="25vw" />
-          </div>
-          
+      {/* Mobile */}
+      <div className="h-[50vh] w-full md:hidden">
+        {/* Main images */}
+        <div className="h-[70%] w-full flex flex-col justify-center">
+          <SimpleStoreImagesSlider images={images} height="80%" width="100%" />
         </div>
+        {/* Sub images */}
+        <div className="h-[30%] w-full flex flex-col justify-center">
+          {getSmallSlider(
+            settings.smallSlider.variation,
+            images,
+            "25vw",
+            "25vw",
+            settings.smallSlider.margin.mobile,
+            settings.smallSlider.border
+          )}
+        </div>
+      </div>
+      {/* Desktop */}
+      <div className="hidden lg:block h-[100vh] w-full pt-10">
+        {/* Main images */}
+        <div className="h-[70%] w-full">
+          <SimpleStoreImagesSlider images={images} height="95%" width="100%" />
+        </div>
+        {/* Sub images */}
+        <div className="h-[30%] w-full flex flex-col justify-center">
+          {getSmallSlider(
+            settings.smallSlider.variation,
+            images,
+            "25vh",
+            "25vh",
+            settings.smallSlider.margin.desktop,
+            settings.smallSlider.border
+          )}
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default SecondHero
+export default SecondHero;

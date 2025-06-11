@@ -9,7 +9,7 @@ import Menubar from '../../../../components/store_layout/menubars/Menubar';
 import StoreHome from '../../home/StoreHome';
 import StorePackagesPage from '../../packages/StorePackagesPage';
 import StoreServices from '../../services/StoreServices';
-import type { Store } from '@reduxjs/toolkit';
+import type { Store } from '../../../../types/storeTypes'; 
 
 const FirstStorePage = () => {
   const { storeId } = useParams<{ storeId: string }>();
@@ -24,6 +24,7 @@ const FirstStorePage = () => {
           setLoading(true);
           const result = await dispatch(fetchStoreById(storeId)).unwrap(); // Fetch store and unwrap the result
           setStore(result); // Set the fetched store in local state
+          setCurrentStore(result); // Update the global store state
         } catch (error) {
           console.error("Failed to fetch store:", error);
           setStore(null); // Handle error by setting store to null

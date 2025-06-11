@@ -190,21 +190,42 @@ export const userLoginStatus = expressAsyncHandler(async (req, res) => {
 });
 
 // Update a user
-export const updateUser = expressAsyncHandler( async (req, res) => {
-    const { _id } = req.user;
-    try {
-        const updateUser = await User.findByIdAndUpdate(_id, {
-            firstname: req.body?.firstname,
-            lastname: req.body?.lastname,
-            email: req.body?.email,
-            mobile: req.body?.mobile
-        }, {
-            new: true,
-        });
-        res.json(updateUser)
-    } catch (error) {
-        throw new Error(error)
+export const updateUser = expressAsyncHandler(async (req, res) => {
+  const { _id } = req.user;
+
+  try {
+    const user = await User.findById(_id);
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
     }
+
+    // Update basic fields if provided
+    if (req.body.firstname) user.firstname = req.body.firstname;
+    if (req.body.lastname) user.lastname = req.body.lastname;
+    if (req.body.email) user.email = req.body.email;
+    if (req.body.mobile) user.mobile = req.body.mobile;
+
+    // Append new locations if provided
+    if (req.body.locations && Array.isArray(req.body.locations)) {
+      req.body.locations.forEach((loc) => {
+        if (loc.lat && loc.lng && loc.address) {
+          user.locations.push({
+            nickname: loc.nickname || '',
+            lat: loc.lat,
+            lng: loc.lng,
+            address: loc.address,
+          });
+        }
+      });
+    }
+
+    const updatedUser = await user.save();
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500);
+    throw new Error(error.message || "Failed to update user");
+  }
 });
 
 // Delete a user

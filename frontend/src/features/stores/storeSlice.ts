@@ -179,14 +179,14 @@ const storeSlice = createSlice({
   name: 'stores',
   initialState,
   reducers: {
+    setCurrentStore: (state, action: PayloadAction<Store | null>) => {
+        state.currentStore = action.payload;
+    },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
-    },
-    setCurrentStore: (state, action: PayloadAction<Store | null>) => {
-      state.currentStore = action.payload;
     },
   },
   extraReducers: (builder) => {

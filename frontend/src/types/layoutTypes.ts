@@ -15,8 +15,16 @@ export interface Menubar {
     sidebar?: {}
 }
 
+export interface Border {
+    width?: string,
+    style?: string,
+    color?: string,
+    radius?: string,
+}
+
 
 export interface Layout {
+    backgroundColor: string | undefined;
     footer: any;
     name?: string;
     _id?: string;
@@ -24,6 +32,8 @@ export interface Layout {
     menubar?: Menubar;
     hero?: any;
     bookWithCalendar?: any;
+    about: any;
+    menu: any;
 }
 
 export type SectionProps = {

@@ -65,23 +65,43 @@ export const getStores = expressAsyncHandler(async (req, res) => {
 
 // Edit store information
 export const editStore = expressAsyncHandler(async (req, res) => {
-    const { storeId } = req.params;
+  const { storeId } = req.params;
+
+  const store = await Store.findById(storeId);
+
+  if (!store) {
+    res.status(404);
+    throw new Error("Store not found");
+  }
+
+  // Merge locations
+  if (req.body.locations && Array.isArray(req.body.locations)) {
+    req.body.locations.forEach((loc) => {
+      if (loc.lat && loc.lng && loc.address) {
+        store.locations.push({
+          nickname: loc.nickname || '',
+          lat: loc.lat,
+          lng: loc.lng,
+          address: loc.address,
+        });
+      }
+    });
+  }
+  console.log(store.locations)
   
-    const store = await Store.findById(storeId);
-  
-    if (!store) {
-      res.status(404);
-      throw new Error("Store not found");
-    }
-  
-    // Update the store with the entire body of the request
-    await Store.findByIdAndUpdate(storeId, req.body, { new: true });
-  
-    // Find the updated store and populate the layouts field
-    const updatedStore = await Store.findById(storeId).populate('layouts');
-  
-    res.status(200).json(updatedStore);
+  // Update other fields manually
+  // const { name, description, ...rest } = req.body;
+  // if (name) store.name = name;
+  // if (description) store.description = description;
+  // Object.assign(store, rest); // Optional: update other top-level fields if needed
+
+  await store.save();
+
+  const updatedStore = await Store.findById(storeId).populate("layouts");
+
+  res.status(200).json(updatedStore);
 });
+
   
 
 // Delete a store

@@ -1,25 +1,54 @@
 import React from 'react';
+import { getTextStyles } from '../../../../../../utils/stylingFunctions';
 
-interface StoreMenuCardProps {
+export interface StoreMenuCardProps {
   image: string;
   name: string;
   description: string;
   price: number;
+  storeCardStyle: {
+    itemNameText?: any;
+    itemPriceText?: any;
+    itemDescriptionText?: any;
+  },
 }
 
-const FirstStoreMenuCard: React.FC<StoreMenuCardProps> = ({ image, name, description, price }) => {
+const FirstStoreMenuCard: React.FC<StoreMenuCardProps> = ({ image, name, description, price, storeCardStyle }) => {
   return (
-    <div className="overflow-hidden">
-      <img
-        src={image}
-        alt={name}
-        className="w-[100%] h-[100%vw] max-w-[375px] max-h-[375px] object-cover"
-      />
+    <div className="text-center mt-1 mb-1 overflow-hidden">
+      <div className="w-full flex justify-center">
+        <img
+          src={image}
+          alt={name}
+          className="w-[100%] h-[37vh] max-w-[375px] max-h-[375px] object-cover"
+        />
+      </div>
+      
       <div className="p-4">
-        <h2 className="text-center text-xl font-bold text-gray-800 mb-2">{name}</h2>
-        <p className="text-center text-gray-600 text-sm">{description}</p>
+        <h2 
+          style={{
+            ...getTextStyles(storeCardStyle.itemNameText),
+          }}
+          className="text-center"
+        >
+          {name}
+        </h2>
+        <p
+          style={{
+            ...getTextStyles(storeCardStyle.itemDescriptionText),
+          }} 
+          className=""
+        >
+          {description}
+        </p>
         <div className="mt-4 text-center">
-          <span className="text-lg font-semibold text-gray-900">{price}</span>
+          <span
+            style={{
+              ...getTextStyles(storeCardStyle.itemPriceText),
+            }} 
+            className="">
+              R{price}.00
+          </span>
         </div>
       </div>
     </div>

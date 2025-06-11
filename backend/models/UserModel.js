@@ -46,6 +46,12 @@ const userSchema = new mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Store',
 		}],
+		locations: [{
+			nickname: {type: String},
+			lat: Number,
+			lng: Number,
+			address: String,
+		}],
 		address: [{type: mongoose.Schema.Types.ObjectId, ref: "Address"}],
     	wishlist: [{type: mongoose.Schema.Types.ObjectId, ref: "Product"}],
 		isBlocked: {

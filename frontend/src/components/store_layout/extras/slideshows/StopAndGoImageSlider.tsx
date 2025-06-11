@@ -1,26 +1,37 @@
 import React, { useRef, useEffect, useState } from "react";
+import type { Border } from "../../../../types/layoutTypes";
+import { getBorderStyles } from "../../../../utils/stylingFunctions";
 
-interface ImageSliderWithPropsProps {
+interface ImageSliderProps {
   images: string[];
   width: string;
   height: string;
+  margin:string;
+  border: Border
 }
 
-const StopAndGoImageSlider: React.FC<ImageSliderWithPropsProps> = ({
+const StopAndGoImageSlider: React.FC<ImageSliderProps> = ({
   images,
   width,
   height,
+  margin = "5px",
+  border = {width: "5px", color: "solid", style: "white", radius: "0"}
 }) => {
   const [offset, setOffset] = useState(0);
   const [transitionEnabled, setTransitionEnabled] = useState(true);
+  const [replicatedImages, setReplicatedImages] = useState([...images, ...images, ...images]); // Initialize with the original images
   const sliderRef = useRef<HTMLDivElement>(null);
 
-    //   const imageWidthPx = parseInt(width);
   const imageWidthPx = parseInt("100");
-  const totalImages = images.length;
 
-  // Duplicate images to enable seamless loop
-  const replicatedImages = [...images, ...images, ...images];
+  useEffect(() => {
+    // Add more images to the replicatedImages array every 3 seconds
+    const interval = setInterval(() => {
+      setReplicatedImages((prevImages) => [...prevImages, ...images]); // Append the original images
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [images]); // Dependency ensures it uses the latest images array
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,7 +42,7 @@ const StopAndGoImageSlider: React.FC<ImageSliderWithPropsProps> = ({
   }, []);
 
   const handleTransitionEnd = () => {
-    if (offset === totalImages) {
+    if (offset === replicatedImages.length) {
       // Disable transition to reset instantly
       setTransitionEnabled(false);
       setOffset(0);
@@ -63,8 +74,11 @@ const StopAndGoImageSlider: React.FC<ImageSliderWithPropsProps> = ({
             key={idx}
             src={src}
             alt={`Slide ${idx}`}
-            style={{ width, height }}
-            className="m-1 h-auto object-cover flex-shrink-0 border-6 border-white"
+            style={{ 
+              ...getBorderStyles(border),
+              width, height, margin: margin 
+            }}
+            className="h-auto object-cover flex-shrink-0"
           />
         ))}
       </div>

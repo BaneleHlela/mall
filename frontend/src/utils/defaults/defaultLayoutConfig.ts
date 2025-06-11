@@ -1,6 +1,11 @@
+import { defaultSecondStoreAboutConfig } from "./sections/about/defaultSecondStoreAboutSectionConfig";
 import { defaultFirstBookWithCalandarConfig } from "./sections/book_with_calendar/defaultFirstBookWithCalandarConfig";
 import { defaultFirstFooterConfig } from "./sections/footer/defaultFirstFooterConfig";
-import { defaultFirstHeroConfig } from "./sections/hero/defaultFirstHeroConfig"
+import { defaultFirstHeroConfig } from "./sections/hero/defaultFirstHeroConfig";
+import { defaultSecondHeroConfig } from "./sections/hero/defaultSecondHeroConfig";
+import { defaultFirstStoreMenuSectionConfig } from "./sections/menu/defaultFirstStoreMenuSectionConfig";
+
+
 
 export const defaultMenubarConfig = {
   topbar: {
@@ -28,6 +33,7 @@ export const defaultMenubarConfig = {
 export const defaultLayoutConfig = {
     name: "Default Store Layout",
     description: "",
+    backgroundColor: "#f9d195",
     image: {
       url: "",
       text: "",
@@ -37,8 +43,10 @@ export const defaultLayoutConfig = {
       secondary: "Roboto",
       accent: "Savate"
     },
+    about: defaultSecondStoreAboutConfig,
     menubar: defaultMenubarConfig,
-    hero: defaultFirstHeroConfig,
+    menu: defaultFirstStoreMenuSectionConfig,
+    hero: defaultSecondHeroConfig,
     bookWithCalendar: defaultFirstBookWithCalandarConfig,
     footer: defaultFirstFooterConfig,
 };

@@ -1,21 +1,22 @@
 import React from 'react';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setCategory } from '../features/categories/categorySlice';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { setCategory } from '../../../../../features/categories/categorySlice';
+import type { FirstStoreCategorySelectorProps } from '../CategorySelector';
 
-const categories = ['All Services', 'Brow Treatment', 'Lashes Treatment'];
 
-const CategorySelector: React.FC = () => {
+
+const FirstStoreCategorySelector: React.FC<FirstStoreCategorySelectorProps> = ({ categories }) => {
   const dispatch = useAppDispatch();
   const selectedCategory = useAppSelector(state => state.categories.selectedCategory);
 
   return (
-    <div className="bg-green-100 py-4">
+    <div className="">
       <div className="flex justify-center space-x-10 border-b border-gray-300">
         {categories.map((category) => (
           <button
             key={category}
             onClick={() => dispatch(setCategory(category))}
-            className={`relative pb-2 text-lg font-medium transition-colors duration-300 ${
+            className={`relative capitalize pb-2 text-lg font-medium transition-colors duration-300 ${
               selectedCategory === category
                 ? 'text-black'
                 : 'text-gray-500 hover:text-black'
@@ -32,4 +33,4 @@ const CategorySelector: React.FC = () => {
   );
 };
 
-export default CategorySelector;
+export default FirstStoreCategorySelector;
