@@ -34,6 +34,7 @@ export interface Layout {
     bookWithCalendar?: any;
     about: any;
     menu: any;
+    order: any;
 }
 
 export type SectionProps = {

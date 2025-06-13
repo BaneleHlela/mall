@@ -104,6 +104,22 @@ export const updateStockAndSoldCount = createAsyncThunk(
   }
 );
 
+// Fetch products by store ID with optional category filter
+export const fetchStoreProducts = createAsyncThunk(
+  'products/fetchStoreProducts',
+  async ({ storeId, category }: { storeId: string; category?: string }, thunkAPI) => {
+    try {
+      const url = category
+        ? `${API_BASE}/store/${storeId}?category=${category}`
+        : `${API_BASE}/store/${storeId}`;
+      const res = await axios.get(url);
+      return res.data as Product[];
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to fetch store products');
+    }
+  }
+);
+
 // 🧩 Slice
 
 const productSlice = createSlice({
@@ -152,11 +168,34 @@ const productSlice = createSlice({
           state.products[index] = action.payload;
         }
       })
-
       // Delete
       .addCase(deleteProduct.fulfilled, (state, action: PayloadAction<string>) => {
         state.products = state.products.filter(p => p._id !== action.payload);
-      });
+      })
+        
+      // Update stock and sold count
+      .addCase(updateStockAndSoldCount.fulfilled, (state, action: PayloadAction<Product[]>) => {
+        action.payload.forEach(updatedProduct => {
+          const index = state.products.findIndex(p => p._id === updatedProduct._id);
+          if (index !== -1) {
+            state.products[index] = updatedProduct;
+          }
+        });
+      })
+
+      // Fetch store products
+      .addCase(fetchStoreProducts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchStoreProducts.fulfilled, (state, action: PayloadAction<Product[]>) => {
+        state.loading = false;
+        state.products = action.payload;
+      })
+      .addCase(fetchStoreProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
   },
 });
 

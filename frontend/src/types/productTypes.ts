@@ -1,9 +1,11 @@
 export interface Product {
     _id: string;
     name: string;
+    description: string;
     price: number;
     stockQuantity: number;
     sold: number;
+    images: string[];
 }
 
 export interface  StockUpdatePayload {

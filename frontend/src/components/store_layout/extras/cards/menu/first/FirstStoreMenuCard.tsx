@@ -15,7 +15,7 @@ export interface StoreMenuCardProps {
 
 const FirstStoreMenuCard: React.FC<StoreMenuCardProps> = ({ image, name, description, price, storeCardStyle }) => {
   return (
-    <div className="text-center mt-1 mb-1 overflow-hidden">
+    <div className="text-center mt-1 mb-1 overflow-hidden hover:scale-105">
       <div className="w-full flex justify-center">
         <img
           src={image}

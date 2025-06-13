@@ -14,7 +14,7 @@ const FirstStoreProductCard: React.FC<StoreProductCardProps> = ({ image, name, d
         <h3 className="text-lg font-bold text-gray-900">{name}</h3>
         <p className="text-sm text-gray-600 mt-1">{description}</p>
         <div className="mt-3 text-right">
-          <span className="text-base font-semibold text-gray-800">${price}</span>
+          <span className="text-base font-semibold text-gray-800">R{price}</span>
         </div>
       </div>
     </div>

@@ -1,35 +1,27 @@
-import React from 'react';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setCategory } from '../features/categories/categorySlice';
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { fetchStoreProducts } from "../features/products/productsSlice";
 
-const categories = ['All Services', 'Brow Treatment', 'Lashes Treatment'];
 
-const CategorySelector: React.FC = () => {
+const StoreProducts = () => {
   const dispatch = useAppDispatch();
-  const selectedCategory = useAppSelector(state => state.categories.selectedCategory);
+  const { products, loading, error } = useAppSelector((state) => state.products);
+
+  const fetchProducts = () => {
+    dispatch(fetchStoreProducts({ storeId: '684c15bca0f98a1d13a7ff00', category: 'cupcakes' }));
+  };
 
   return (
-    <div className="bg-green-100 py-4">
-      <div className="flex justify-center space-x-10 border-b border-gray-300">
-        {categories.map((category) => (
-          <button
-            key={category}
-            onClick={() => dispatch(setCategory(category))}
-            className={`relative pb-2 text-lg font-medium transition-colors duration-300 ${
-              selectedCategory === category
-                ? 'text-black'
-                : 'text-gray-500 hover:text-black'
-            }`}
-          >
-            {category}
-            {selectedCategory === category && (
-              <span className="absolute left-0 bottom-0 w-full h-[2px] bg-black" />
-            )}
-          </button>
+    <div>
+      <button onClick={fetchProducts}>Fetch Store Products</button>
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
+      <ul>
+        {products.map((product) => (
+          <li key={product._id}>{product.name}</li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 };
 
-export default CategorySelector;
+export default StoreProducts;

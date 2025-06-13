@@ -24,6 +24,10 @@ export interface Store {
   slogan: string;
   departments: string[]; 
   layouts: Types.ObjectId[]; 
+  categories: {
+    products: string[]; 
+    services: string[]; 
+  };
   about: string;
   team: TeamMember[]; 
   updatedAt?: Date; 
@@ -32,9 +36,49 @@ export interface Store {
     lat: number;   
     lng: number  
     address: string; 
-}>;
+  }>;
   images?: {
     images: Image[];
     hasMore?: boolean;
   }
+  operationTimes?: OperationTimes;
+}
+
+export interface OperationTimes {
+  alwaysOpen: boolean;
+  sunday: {
+    start: string;
+    end: string;
+    closed: boolean;
+  };
+  monday: {
+    start: string;
+    end: string;
+    closed: boolean;
+  };
+  tuesday: {
+    start: string;
+    end: string;
+    closed: boolean;
+  };
+  wednesday: {
+    start: string;
+    end: string;
+    closed: boolean;
+  };
+  thursday: {
+    start: string;
+    end: string;
+    closed: boolean;
+  };
+  friday: {
+    start: string;
+    end: string;
+    closed: boolean;
+  };
+  saturday: {
+    start: string;
+    end: string;
+    closed: boolean;
+  };
 }

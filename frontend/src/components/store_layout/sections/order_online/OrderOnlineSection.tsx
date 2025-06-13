@@ -1,9 +1,9 @@
-import FirstOrderOnlineSection from "./first/FirstOrderOnlineSection"
+import FirstStoreOrderOnlineSection from "./first/FirstStoreOrderOnlineSection"
 
 const OrderOnlineSection = () => {
   return (
-    <FirstOrderOnlineSection ></FirstOrderOnlineSection>
+    <FirstStoreOrderOnlineSection ></FirstStoreOrderOnlineSection>
   )
 }
 
-export default OrderOnlineSection
+export default OrderOnlineSection;

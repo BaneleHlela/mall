@@ -4,6 +4,7 @@ import { defaultFirstFooterConfig } from "./sections/footer/defaultFirstFooterCo
 import { defaultFirstHeroConfig } from "./sections/hero/defaultFirstHeroConfig";
 import { defaultSecondHeroConfig } from "./sections/hero/defaultSecondHeroConfig";
 import { defaultFirstStoreMenuSectionConfig } from "./sections/menu/defaultFirstStoreMenuSectionConfig";
+import { defaultFirstStoreOrderOnlineCongig } from "./sections/order_online/defualtFirstStoreOrderOnlineConfig";
 
 
 
@@ -48,6 +49,7 @@ export const defaultLayoutConfig = {
     menu: defaultFirstStoreMenuSectionConfig,
     hero: defaultSecondHeroConfig,
     bookWithCalendar: defaultFirstBookWithCalandarConfig,
+    order: defaultFirstStoreOrderOnlineCongig,
     footer: defaultFirstFooterConfig,
 };
   

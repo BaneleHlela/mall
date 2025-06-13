@@ -86,10 +86,16 @@ const storeSchema = new mongoose.Schema(
       type: Number,
       default: 4, //1 for product, 2 for services, 3 for packages, 4 for products and services, 5 for products and packages, 
     },
-    categories: [{
-      type: Array,
-      default: []
-    }],
+    categories: {
+      products: {
+        type: [String],
+        default: [],
+      },
+      services: {
+        type: [String],
+        default: [],
+      },
+    },
     operationTimes: {
       type: operationTimesSchema,
       default: () => ({}), // Default to an empty object

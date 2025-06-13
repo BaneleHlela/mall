@@ -1,5 +1,5 @@
 import expressAsyncHandler from 'express-async-handler';
-import  Store  from '../models/storeModel.js';
+import  Store  from '../models/StoreModel.js';
 import { sendStoreCreatedEmail } from '../emails/email.js';
 import { uploadToUploads } from '../config/gcsClient.js';
 
@@ -87,14 +87,18 @@ export const editStore = expressAsyncHandler(async (req, res) => {
       }
     });
   }
-  console.log(store.locations)
-  
-  // Update other fields manually
-  // const { name, description, ...rest } = req.body;
-  // if (name) store.name = name;
-  // if (description) store.description = description;
-  // Object.assign(store, rest); // Optional: update other top-level fields if needed
 
+  // Update categories
+  if (req.body.categories) {
+    if (req.body.categories.products && Array.isArray(req.body.categories.products)) {
+      store.categories.products = req.body.categories.products; // Update products
+    }
+    if (req.body.categories.services && Array.isArray(req.body.categories.services)) {
+      store.categories.services = req.body.categories.services; // Update services
+    }
+  }
+
+  // Save the updated store
   await store.save();
 
   const updatedStore = await Store.findById(storeId).populate("layouts");

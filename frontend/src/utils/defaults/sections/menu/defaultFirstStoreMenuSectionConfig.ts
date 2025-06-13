@@ -1,12 +1,6 @@
 export const defaultFirstStoreMenuSectionConfig = {
     variation: "firstStoreMenuSection",
     backgroundColor: "white",
-    images: [
-        "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100115.png",
-        "https://storage.cloud.google.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100136.png",
-        "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100200.png",
-        "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100200.png",  
-    ],
     text: {
         menuText:{
             input: "Our Delicious Menu",

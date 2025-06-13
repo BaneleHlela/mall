@@ -1,5 +1,6 @@
 import Product from '../models/productModel.js';
 import asyncHandler from 'express-async-handler'; 
+import mongoose from 'mongoose';
 
 // Create product
 export const createProduct = asyncHandler(async (req, res) => {
@@ -9,10 +10,45 @@ export const createProduct = asyncHandler(async (req, res) => {
 
 // Get product by ID
 export const getProductById = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id).populate('store');
+  const product = await Product.findById(req.params.id);
   if (!product) throw new Error('Product not found');
   res.status(200).json(product);
 });
+
+
+// Get store products with optional category filter
+export const getStoreProducts =asyncHandler(async (req, res) => {
+  const { storeId } = req.params; 
+  const { category } = req.query; 
+
+  // Validate storeId
+  if (!storeId || !mongoose.Types.ObjectId.isValid(storeId)) {
+    res.status(400);
+    throw new Error("Invalid Store ID");
+  }
+
+
+  // Convert storeId to ObjectId
+  const storeObjectId = new mongoose.Types.ObjectId(storeId);
+
+  // Build the query object
+  const query = { store: storeObjectId }; // Filter by store ObjectId
+  if (category) {
+    query.category = category; // Add category filter if provided
+  }
+
+  console.log(query);
+  try {
+    // Fetch products based on the query
+    const products = await Product.find(query);
+
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500);
+    throw new Error("Failed to fetch store products");
+  }
+});
+
 
 // Get product by slug
 export const getProductBySlug = asyncHandler(async (req, res) => {

@@ -1,12 +1,33 @@
 import FirstStoreMenuCard from "../../../extras/cards/menu/first/FirstStoreMenuCard";
-import { useAppSelector } from "../../../../../app/hooks";
+import { useAppSelector, useAppDispatch } from "../../../../../app/hooks";
 import { getTextStyles } from "../../../../../utils/stylingFunctions";
 import CategorySelector from "../../../extras/category_selector/CategorySelector";
+import { useEffect } from "react";
+import { fetchStoreProducts } from "../../../../../features/products/productsSlice";
 
 
 const FirstStoreMenuSection = ({}) => {
+  const dispatch = useAppDispatch();
   const settings = useAppSelector((state) => state.layoutSettings.menu);
-  const images = settings.images;
+  const store = useAppSelector((state) => state.stores.currentStore);
+  const storeId = store ? store._id : null;
+  
+  const selectedCategory = useAppSelector((state) => state.categories.selectedCategory);
+  const products = useAppSelector((state) => state.products.products);
+  
+  useEffect(() => {
+    if (storeId) {
+      if (selectedCategory === "all") {
+        // Fetch all store products
+        dispatch(fetchStoreProducts({ storeId }));
+      } else {
+        // Fetch products filtered by category
+         dispatch(fetchStoreProducts({ storeId, category: selectedCategory }));
+      }
+    }
+  }, [storeId, selectedCategory, dispatch]);
+  
+  
   return (
     <div 
       style={{
@@ -15,7 +36,7 @@ const FirstStoreMenuSection = ({}) => {
       className="w-full flex flex-row justify-center"
     >
       {/* Mobile */}
-      <div className="md:hidden">
+      <div className="w-full md:hidden">
         {/* Menu (replacing "flavors") */}
         <div 
           style={{
@@ -25,23 +46,27 @@ const FirstStoreMenuSection = ({}) => {
         {/* Category */}
         <div 
           style={{
-            ...getTextStyles(settings.text.categoryText.mobile),
+            ...getTextStyles(settings.text.categoryText.desktop),
           }}
-          className="text-center"
+          className="w-full overflow-hidden bg-white text-center"
         >
-            Cupcakes
+            <CategorySelector categories={store?.categories.products || []} />
         </div>
         {/* Render a StoreMenuCard for each image */}
-        {images.map((image: string, index: string) => (
-          <FirstStoreMenuCard
-            key={index} // Use index as the key
-            storeCardStyle={settings.storeCard}
-            image={image}
-            price={9}
-            name={`Cupcake ${index + 1}`} // Dynamically generate name
-            description={`Delicious cupcake ${index + 1}`} // Dynamically generate description
-          />
-        ))}
+        {products.length > 0 ? (
+            products.map((product) => (
+              <FirstStoreMenuCard
+                key={product._id}
+                storeCardStyle={settings.storeCard}
+                name={product.name}
+                price={product.price}
+                image={product.images && product.images.length > 0 ? product.images[0] : ''} // Display the first image or an empty string if no images exist
+                description={product.description}
+              />
+            ))
+          ) : (
+            <p className="text-center text-gray-500 mt-4 mb-4">No product found matching this category.</p>
+          )}
       </div>
       {/* Desktop */}
       <div className="hidden w-full lg:block p-12">
@@ -61,20 +86,24 @@ const FirstStoreMenuSection = ({}) => {
           }}
           className="text-center"
         >
-            <CategorySelector categories={["this", "that", "this and that"]} />
+            <CategorySelector categories={store?.categories.products || []} />
         </div>
-        {/* Items grid */}
-        <div className="grid grid-cols-3 gap-6 mt-6 justify-center">
-          {images.map((image: string, index: string) => (
-            <FirstStoreMenuCard
-              key={index}
-              storeCardStyle={settings.storeCard}
-              image={image}
-              price={9}
-              name={`Cupcake ${index + 1}`} // Dynamically generate name
-              description={`Delicious cupcake ${index + 1}`} // Dynamically generate description
-            />
-          ))}
+        {/* Render a StoreMenuCard for each image */}
+        <div className="grid grid-cols-2 gap-4 mt-4">
+          {products.length > 0 ? (
+            products.map((product) => (
+              <FirstStoreMenuCard
+                key={product._id}
+                storeCardStyle={settings.storeCard}
+                name={product.name}
+                price={product.price}
+                image={product.images && product.images.length > 0 ? product.images[0] : ''} // Display the first image or an empty string if no images exist
+                description={product.description}
+              />
+            ))
+          ) : (
+            <p className="text-center text-gray-500 mt-4">No product found matching this category.</p>
+          )}
         </div>
       </div>
     </div>

@@ -11,7 +11,7 @@ const FirstStoreCategorySelector: React.FC<FirstStoreCategorySelectorProps> = ({
 
   return (
     <div className="">
-      <div className="flex justify-center space-x-10 border-b border-gray-300">
+      <div className="flex justify-between border-b border-gray-300">
         {categories.map((category) => (
           <button
             key={category}

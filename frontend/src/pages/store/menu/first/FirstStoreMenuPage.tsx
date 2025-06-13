@@ -8,7 +8,7 @@ const FirstStoreMenuPage = () => {
   console.log(store);
   return (
     <div>
-        <StoreMenuSection ></StoreMenuSection>
+        <StoreMenuSection/>
         <StoreFooterSection />
     </div>
   )

@@ -11,9 +11,13 @@ const productSchema = new mongoose.Schema({
     ref: 'Store',
     required: true,
   },
-  slug: {
+  description: {
     type: String,
     required: true,
+  },
+  slug: {
+    type: String,
+    // required: true,
     unique: true,
   },
   description: {
@@ -33,7 +37,7 @@ const productSchema = new mongoose.Schema({
   },
   stockQuantity: {
     type: Number,
-    required: true,
+    // required: true,
     min: 0,
   },
   sold: {
@@ -45,27 +49,27 @@ const productSchema = new mongoose.Schema({
     {
       size: {
         type: String,
-        enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL'], // Optional
-        required: true,
+        enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL'], 
+        //required: true,
       },
       color: {
         type: String,
-        required: true,
+        // required: true,
       },
       quantity: {
         type: Number,
-        required: true,
+        //required: true,
         min: 0,
       },
     },
   ],
   brand: {
     type: String,
-    required: true,
+    // required: true,
   },
   images: {
     type: [String],
-    required: true,
+    // required: true,
   },
   category: {
     type:  String,
@@ -74,10 +78,10 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Review',
   }],
-  isFeatured: {
-    type: Boolean,
-    default: false,
-  },
+  // isFeatured: {
+  //   type: Boolean,
+  //   default: false,
+  // },
   tags: {
     type: [String], 
   },
