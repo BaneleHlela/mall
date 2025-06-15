@@ -8,6 +8,7 @@ export const defaultFirstStoreMenuSectionConfig = {
                 mobile: {
                     fontSize: "2rem",
                     fontWeight: "bold",
+                    fontFamily: "Patrick Hand",
                     color: "#67bece",
                 },
                 desktop: {
@@ -45,5 +46,8 @@ export const defaultFirstStoreMenuSectionConfig = {
             fontSize: "0.875rem",
             color: "#4b5563", 
         },
+    },
+    categorySelector: {
+        fontFamily: "Patrick Hand"
     },
 }

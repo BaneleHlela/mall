@@ -5,14 +5,22 @@ export interface StoreProductCardProps {
   name: string;
   description: string;
   price: number | string;
+  style: any;
+  onClick?: () => void; // Optional click handler
 }
 
-const StoreProductCard: React.FC<StoreProductCardProps> = ({ image, name, description, price }) => {
+const StoreProductCard: React.FC<StoreProductCardProps> = ({ image, name, description, price, style, onClick }) => {
   return (
-    <div>
-      <FirstStoreProductCard image={image} name={name} description={description} price={price} />
+    <div onClick={onClick} className="cursor-pointer"> {/* Add onClick and cursor-pointer */}
+      <FirstStoreProductCard
+        image={image}
+        name={name}
+        description={description}
+        price={price}
+        style={style}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default StoreProductCard
+export default StoreProductCard;

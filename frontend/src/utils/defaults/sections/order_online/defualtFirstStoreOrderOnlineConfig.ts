@@ -1,3 +1,5 @@
+import { defaultFirstStoreProductModal } from "../../extras/defaultFirstStoreProductModal";
+
 export const defaultFirstStoreOrderOnlineCongig = {
     variation: "firstOrderOnline",
     backgroundColor: "white",
@@ -11,11 +13,13 @@ export const defaultFirstStoreOrderOnlineCongig = {
             mobile: {
                 fontSize: "2rem",
                 fontWeight: "bold",
+                fontFamily: "Patrick Hand",
                 color: "#1f2937",
             },
             desktop: {
                 fontSize: "2.5rem",
                 fontWeight: "bold",
+                fontFamily: "Patrick Hand",
                 color: "#1f2937",
             },
         },
@@ -24,18 +28,30 @@ export const defaultFirstStoreOrderOnlineCongig = {
         input: "You can order online! Browse our menu items and choose what you’d like to order from us.",
         style: {
             mobile: {
-                fontSize: "1rem",
+                fontSize: "1.1rem",
                 color: "#4b5563",
+                fontFamily: "Patrick Hand",
             },
             desktop: {
-                fontSize: "1.25rem",
+                fontSize: "1.35rem",
                 color: "#4b5563",
+                fontFamily: "Patrick Hand",
             },
         },
     },
     acceptingOrdersButton: {
-        borderColor: "#54aeff",
-        fontFamily: "Open Sans",
+        fontFamily: "Patrick Hand",
     },
-
+    categorySelector: {
+        fontFamily: "Patrick Hand"
+    },
+    productCard: {
+        border: {
+            width: "2px",
+            color: "grey",
+        },
+        fontFamily: "Patrick Hand",
+        textCenter: false
+    },
+    productModal: defaultFirstStoreProductModal,
 }

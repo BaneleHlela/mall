@@ -10,7 +10,8 @@ import productReducer from "../features/products/productsSlice.ts";
 import packageReducer from "../features/packages/packagesSlice.ts";
 import bookingReducer from "../features/bookings/bookingsSlice.ts"; 
 import categoryReducer from "../features/categories/categorySlice.ts";
-
+import cartReducer from "../features/cart/cartSlice.ts";
+import reviewReducer from "../features/reviews/reviewSlice.ts";
 
 export const store = configureStore({
     reducer: {
@@ -25,6 +26,8 @@ export const store = configureStore({
         products: productReducer,
         packages: packageReducer,
         categories: categoryReducer,
+        cart: cartReducer,
+        reviews: reviewReducer,
     },
 });
 

@@ -23,7 +23,6 @@ const AcceptingOrdersButton: React.FC<AcceptingOrdersButtonProps> = ({ operation
     const currentDay = getCurrentDay();
     const currentTime = new Date().toLocaleTimeString("en-US", { hour12: false }); // Format: HH:mm
     const daySchedule = operationTimes ? operationTimes[currentDay as keyof OperationTimes] : undefined;
-    console.log(daySchedule);
     
     if (typeof daySchedule === "object" && daySchedule?.closed) {
       return false;
@@ -39,10 +38,9 @@ const AcceptingOrdersButton: React.FC<AcceptingOrdersButtonProps> = ({ operation
     return (
         <div
             style={{
-                borderColor: style.borderColor || "grey",
                 backgroundColor: style.backgroundColor || "white",
             }}
-            className="flex flex-row justify-between w-fit px-4 py-2 rounded-4xl text-black border-1 border-blue-400 hover:bg-green-600 transition-colors duration-300"
+            className="flex flex-row justify-between w-fit px-4 py-2 rounded-4xl text-black border-1 border-green-400 hover:bg-green-600 transition-colors duration-300"
         >   
             <CircleSmall color={"green"} />
             <p className="ml-2">Accepting Orders</p>
@@ -52,10 +50,9 @@ const AcceptingOrdersButton: React.FC<AcceptingOrdersButtonProps> = ({ operation
   return (
     <div
         style={{
-            borderColor: style.borderColor || "grey",
             backgroundColor: style.backgroundColor || "white",
         }}
-        className="flex flex-row justify-between w-fit px-4 py-2 rounded-4xl text-black border-1 border-blue-400 hover:bg-green-600 transition-colors duration-300"
+        className="flex flex-row justify-between w-fit px-4 py-2 rounded-4xl text-black border-1 border-red-400 hover:bg-red-600 transition-colors duration-300"
     >   
         <CircleSmall color={"red"} />
         <p className="ml-2">Store Closed</p>

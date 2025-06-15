@@ -27,7 +27,6 @@ const FirstStoreMenuSection = ({}) => {
     }
   }, [storeId, selectedCategory, dispatch]);
   
-  
   return (
     <div 
       style={{
@@ -50,7 +49,7 @@ const FirstStoreMenuSection = ({}) => {
           }}
           className="w-full overflow-hidden bg-white text-center"
         >
-            <CategorySelector categories={store?.categories.products || []} />
+            <CategorySelector style={settings.categorySelector} categories={store?.categories.products || []} />
         </div>
         {/* Render a StoreMenuCard for each image */}
         {products.length > 0 ? (
@@ -86,7 +85,7 @@ const FirstStoreMenuSection = ({}) => {
           }}
           className="text-center"
         >
-            <CategorySelector categories={store?.categories.products || []} />
+            <CategorySelector style={settings.categorySelector} categories={store?.categories.products || []} />
         </div>
         {/* Render a StoreMenuCard for each image */}
         <div className="grid grid-cols-2 gap-4 mt-4">

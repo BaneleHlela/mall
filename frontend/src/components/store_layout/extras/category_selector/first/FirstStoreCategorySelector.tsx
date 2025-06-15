@@ -5,13 +5,18 @@ import type { FirstStoreCategorySelectorProps } from '../CategorySelector';
 
 
 
-const FirstStoreCategorySelector: React.FC<FirstStoreCategorySelectorProps> = ({ categories }) => {
+const FirstStoreCategorySelector: React.FC<FirstStoreCategorySelectorProps> = ({ categories, style }) => {
   const dispatch = useAppDispatch();
   const selectedCategory = useAppSelector(state => state.categories.selectedCategory);
 
   return (
     <div className="">
-      <div className="flex justify-between border-b border-gray-300">
+      <div 
+        style={{
+          fontFamily: style.fontFamily,
+        }}
+        className="flex justify-between border-b border-gray-300 ml-1 mr-1"
+      >
         {categories.map((category) => (
           <button
             key={category}

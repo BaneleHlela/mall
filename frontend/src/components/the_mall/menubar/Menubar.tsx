@@ -1,9 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { House, LayoutDashboard, Store, Search, CircleUser } from "lucide-react";
+import { motion } from "framer-motion";
+
+// Utility function to check if the current route should hide the nav
+const shouldHideNav = (hiddenRoutes: string[], currentPath: string): boolean => {
+  return hiddenRoutes.some((route) => currentPath.includes(route));
+};
 
 const Menubar = () => {
+  const location = useLocation(); // Get the current route
+  const hiddenRoutes = ["dashboard"]; // Add routes that should hide the nav
+
+  const isHidden = shouldHideNav(hiddenRoutes, location.pathname); // Determine if the nav should be hidden
+
   return (
-    <nav className="hidden lg:fixed top-0 left-0 h-screen w-[60px] bg-orange-500 flex flex-col items-center justify-between pt-[10vh] pb-[10vh]">
+    <motion.nav
+      initial={{ y: isHidden ? 100 : 0 }}
+      animate={{ y: isHidden ? 100 : 0 }}
+      transition={{ type: "spring", stiffness: 120, damping: 17 }}
+      className="fixed bottom-0 h-[5.5vh] w-screen bg-gray-800 text-stone-200 shadow-sm flex flex-row items-center justify-between pt-3 pb-3 pl-[20px] pr-[20px] z-100"
+    >
       <Link to="/">
         <House size={32} />
       </Link>
@@ -16,13 +32,13 @@ const Menubar = () => {
       <Link to="/layouts/build">
         <LayoutDashboard size={32} />
       </Link>
-      <Link to="/profile">
+      <Link to="/stores/684c15bca0f98a1d13a7ff00/order-online">
         <CircleUser size={32} />
       </Link>
-      <Link to="/scribbler">
+      {/* <Link to="/scribbler">
         <CircleUser size={32} />
-      </Link>
-    </nav>
+      </Link> */}
+    </motion.nav>
   );
 };
 

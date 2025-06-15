@@ -15,8 +15,7 @@ import MyLayouts from "./pages/store_dashboard/supporting_pages/StoreLayouts";
 const App: React.FC = () => {
   
   return (
-    <div className="bg-stone-50 min-h-screen flex justify-center items-center">
-      
+    <div className="relative bg-stone-50 h-screen w-screen flex justify-center items-center overflow-x-clip">  
       <Router>
         <Menubar /> 
         <Routes>

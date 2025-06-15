@@ -6,19 +6,13 @@ const reviewSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  anonymous: {
+    type: Boolean, 
+    default: false
+  },
   store: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Store',
-    required: false,
-  },
-  product: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
-    required: false,
-  },
-  service: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Service',
     required: false,
   },
   rating: {

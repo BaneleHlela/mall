@@ -56,7 +56,7 @@ const SecondStorePage = () => {
       style={{
         backgroundColor: settings.backgroundColor,
       }}
-      className="w-screen h-full p-4 lg:w-[65vw] lg:p-0 lg:bg-[#f9d195]"
+      className="w-screen h-full p-4 overflow-y-scroll overflow-x-clip lg:w-[65vw] lg:p-0 lg:bg-[#f9d195]"
     >
         <Routes>
             <Route path="/" element={<StoreHome />} />

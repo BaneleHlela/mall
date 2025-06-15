@@ -20,6 +20,8 @@ import serviceRoutes from "./routes/serviceRoutes.js";
 import packageRoutes from "./routes/packageRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import donationRoutes from "./routes/donationRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
 
 
 import "./config/passportConfig.js";
@@ -75,6 +77,8 @@ app.use("/api/services", serviceRoutes);
 app.use("/api/packages", packageRoutes);
 app.use('/api/products', productRoutes);
 app.use("/api/donations", donationRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

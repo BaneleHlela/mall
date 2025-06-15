@@ -1,27 +1,9 @@
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { fetchStoreProducts } from "../features/products/productsSlice";
+import FirstStoreReviewCard from './store_layout/extras/cards/review/first/FirstStoreReviewCard'
 
-
-const StoreProducts = () => {
-  const dispatch = useAppDispatch();
-  const { products, loading, error } = useAppSelector((state) => state.products);
-
-  const fetchProducts = () => {
-    dispatch(fetchStoreProducts({ storeId: '684c15bca0f98a1d13a7ff00', category: 'cupcakes' }));
-  };
-
+const Scibbler = () => {
   return (
-    <div>
-      <button onClick={fetchProducts}>Fetch Store Products</button>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
-      <ul>
-        {products.map((product) => (
-          <li key={product._id}>{product.name}</li>
-        ))}
-      </ul>
-    </div>
-  );
-};
+    <FirstStoreReviewCard reviewerName='Banele Hlela' review='Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.' rating={5}/>
+  )
+}
 
-export default StoreProducts;
+export default Scibbler

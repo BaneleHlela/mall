@@ -12,6 +12,8 @@ import StoreSettings from "./supporting_pages/StoreSettings";
 import StoreImages from "./supporting_pages/StoreImages";
 import { setStore } from "../../features/store_admin/storeAdminSlice";
 import { useEffect } from "react";
+import StoreOverview from "./supporting_pages/StoreOverview";
+import StoreDashboardTopbar from "../../components/store_dashboard/menubar/StoreDashboardTopbar";
 
 const StoreDashboard = () => {
     const dispatch = useAppDispatch();
@@ -32,9 +34,9 @@ const StoreDashboard = () => {
 
     return (
         <div className="h-screen w-screen flex flex-row">
-            <StoreDashBoardMenubar storeId={store._id}/>
+            <StoreDashBoardMenubar store={store}/>
             <Routes>
-                <Route path="/" element={<p>Store {store._id} Dashboard</p>} />
+                <Route path="/" element={<StoreOverview store={store} />} />
                 <Route path="/layouts" element={<StoreLayouts />} />
                 <Route path="/team" element={<StoreTeam />} />
                 <Route path="/products" element={<StoreProducts />} />

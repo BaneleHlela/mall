@@ -23,8 +23,16 @@ export interface Border {
 }
 
 
+export interface Fonts {
+    primary?: string;
+    secondary?: string;
+    tertiary?: string;
+}
+  
+
 export interface Layout {
     backgroundColor: string | undefined;
+    fonts: Fonts;
     footer: any;
     name?: string;
     _id?: string;
@@ -35,6 +43,7 @@ export interface Layout {
     about: any;
     menu: any;
     order: any;
+    reviews: any;
 }
 
 export type SectionProps = {

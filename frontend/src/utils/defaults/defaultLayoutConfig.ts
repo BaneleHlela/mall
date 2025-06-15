@@ -1,10 +1,10 @@
 import { defaultSecondStoreAboutConfig } from "./sections/about/defaultSecondStoreAboutSectionConfig";
 import { defaultFirstBookWithCalandarConfig } from "./sections/book_with_calendar/defaultFirstBookWithCalandarConfig";
 import { defaultFirstFooterConfig } from "./sections/footer/defaultFirstFooterConfig";
-import { defaultFirstHeroConfig } from "./sections/hero/defaultFirstHeroConfig";
 import { defaultSecondHeroConfig } from "./sections/hero/defaultSecondHeroConfig";
 import { defaultFirstStoreMenuSectionConfig } from "./sections/menu/defaultFirstStoreMenuSectionConfig";
 import { defaultFirstStoreOrderOnlineCongig } from "./sections/order_online/defualtFirstStoreOrderOnlineConfig";
+import { defaultFirstStoreReviewsConfig } from "./sections/reviews/defaultFirstStoreReviewsConfig";
 
 
 
@@ -31,18 +31,19 @@ export const defaultMenubarConfig = {
   },
 }
 
+
 export const defaultLayoutConfig = {
     name: "Default Store Layout",
     description: "",
     backgroundColor: "#f9d195",
+    fonts: {
+      primary: "Open Sans",
+      secondary: "Patrick Hand",
+      tertiary: "Knewave"
+    },
     image: {
       url: "",
       text: "",
-    },
-    fontFamilies: {
-      primary: "Open Sans",
-      secondary: "Roboto",
-      accent: "Savate"
     },
     about: defaultSecondStoreAboutConfig,
     menubar: defaultMenubarConfig,
@@ -50,6 +51,7 @@ export const defaultLayoutConfig = {
     hero: defaultSecondHeroConfig,
     bookWithCalendar: defaultFirstBookWithCalandarConfig,
     order: defaultFirstStoreOrderOnlineCongig,
+    reviews: defaultFirstStoreReviewsConfig,
     footer: defaultFirstFooterConfig,
 };
   
