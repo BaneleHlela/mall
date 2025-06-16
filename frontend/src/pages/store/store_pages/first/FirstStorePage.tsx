@@ -5,7 +5,7 @@ import { fetchStoreById } from '../../../../features/stores/storeSlice'; // Impo
 import type { RootState } from '../../../../app/store';
 import { useEffect, useState } from 'react';
 import { useParams, Routes, Route } from 'react-router-dom';
-import Menubar from '../../../../components/store_layout/menubars/Menubar';
+import Menubar from '../../../../components/store_layout/menubars/StoreMenubar';
 import StoreHome from '../../home/StoreHome';
 import StorePackagesPage from '../../packages/StorePackagesPage';
 import StoreServices from '../../services/StoreServices';

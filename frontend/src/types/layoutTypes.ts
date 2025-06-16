@@ -37,7 +37,7 @@ export interface Layout {
     name?: string;
     _id?: string;
     store?: Types.ObjectId | null,
-    menubar?: Menubar;
+    menubar?: any;
     hero?: any;
     bookWithCalendar?: any;
     about: any;

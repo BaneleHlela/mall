@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setInitialLayout } from '../../features/layouts/layoutSettingsSlice';
-import Menubar from '../../components/store_layout/menubars/Menubar';
+import Menubar from '../../components/store_layout/menubars/StoreMenubar';
 import { Route, Routes } from 'react-router-dom';
 import StoreHome from '../store/home/StoreHome';
 import StorePackages from '../store/packages/StorePackagesPage';

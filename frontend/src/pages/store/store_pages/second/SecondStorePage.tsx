@@ -10,6 +10,7 @@ import type { Store } from "../../../../types/storeTypes";
 import { useState, useEffect } from "react"
 import { fetchStoreServices } from "../../../../features/services/servicesSlice"
 import { fetchStoreById, setCurrentStore } from "../../../../features/stores/storeSlice"
+import StoreMenubar from "../../../../components/store_layout/menubars/StoreMenubar"
 
 const SecondStorePage = () => {
   const settings = useAppSelector((state) => state.layoutSettings);
@@ -58,6 +59,7 @@ const SecondStorePage = () => {
       }}
       className="w-screen h-full p-4 overflow-y-scroll overflow-x-clip lg:w-[65vw] lg:p-0 lg:bg-[#f9d195]"
     >
+        <StoreMenubar />
         <Routes>
             <Route path="/" element={<StoreHome />} />
             <Route path="/about" element={<StoreAboutPage />} />

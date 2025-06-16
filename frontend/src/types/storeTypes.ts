@@ -14,6 +14,10 @@ export interface Image {
   description?: string; 
   url?: string; 
 }
+export interface Socials {
+  platform: "facebook" | "twitter" | "instagram" | "linkedin" | "pinterest" | "youtube" | "whatsapp" | "phone";
+  url: string;
+}
 
 export interface Store {
   _id?: string; 
@@ -31,6 +35,7 @@ export interface Store {
   about: string;
   team: TeamMember[]; 
   updatedAt?: Date; 
+  socials?: Socials[];  
   locations?: Array<{
     nickname: string;   
     lat: number;   

@@ -1,3 +1,4 @@
+import { defaultFirstStoreMenubarConfig } from "./menubars/defaultFirstStoreMenubarConfig";
 import { defaultSecondStoreAboutConfig } from "./sections/about/defaultSecondStoreAboutSectionConfig";
 import { defaultFirstBookWithCalandarConfig } from "./sections/book_with_calendar/defaultFirstBookWithCalandarConfig";
 import { defaultFirstFooterConfig } from "./sections/footer/defaultFirstFooterConfig";
@@ -46,7 +47,7 @@ export const defaultLayoutConfig = {
       text: "",
     },
     about: defaultSecondStoreAboutConfig,
-    menubar: defaultMenubarConfig,
+    menubar: defaultFirstStoreMenubarConfig,
     menu: defaultFirstStoreMenuSectionConfig,
     hero: defaultSecondHeroConfig,
     bookWithCalendar: defaultFirstBookWithCalandarConfig,

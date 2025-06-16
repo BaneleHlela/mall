@@ -66,7 +66,8 @@ const FirstStoreReviewsSection = () => {
             ...getBorderStyles(settings.addReviewBtn.border),
             ...getTextStyles(settings.text.addReviewBtn),
           }}
-          className={`${settings.addReviewBtn.fullWidth && "w-full"} p-3 pl-4 pr-4`}>
+          className={`${settings.addReviewBtn.fullWidth && "w-full"} p-3 pl-4 pr-4`}
+        >
           Add Review
         </button>
       </div>
