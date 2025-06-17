@@ -18,7 +18,7 @@ const Menubar = () => {
       initial={{ y: isHidden ? 100 : 0 }}
       animate={{ y: isHidden ? 100 : 0 }}
       transition={{ type: "spring", stiffness: 120, damping: 17 }}
-      className="fixed bottom-0 h-[5.5vh] w-screen bg-gray-800 text-stone-200 shadow-sm flex flex-row items-center justify-between pt-3 pb-3 pl-[20px] pr-[20px] z-100"
+      className="fixed bottom-0 h-[5.5vh] w-screen text-gray-900 bg-stone-50 shadow-sm flex flex-row items-center justify-between pt-3 pb-3 pl-[20px] pr-[20px] z-100"
     >
       <Link to="/">
         <House size={32} />

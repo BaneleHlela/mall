@@ -12,10 +12,7 @@ export interface CartItem {
 export  interface Cart {
     _id: string;
     user: string;
-    store: {
-      _id: string;
-      name: string;
-    };
+    store: string;
     items: CartItem[];
     totalPrice: number;
 }

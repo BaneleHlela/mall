@@ -75,7 +75,7 @@ export const getUserCart = async (req, res) => {
     }
 
     // Find the cart(s) for the user (and optionally the store)
-    const carts = await Cart.find(query).populate("items.product");
+    const carts = await Cart.find(query);
 
     if (!carts || carts.length === 0) {
       return res.status(404).json({

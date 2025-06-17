@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ShoppingCart, ShoppingBag, ShoppingBasket } from "lucide-react";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaCartPlus, FaCartShopping } from "react-icons/fa6";
@@ -6,6 +6,8 @@ import { IoCartOutline } from "react-icons/io5";
 import { TbPaperBag } from "react-icons/tb";
 import { GiBeachBag } from "react-icons/gi";
 import { LiaShoppingBagSolid } from "react-icons/lia";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
+import { getUserCart } from "../../../../features/cart/cartSlice";
 
 interface StoreCartProps {
   style: {
@@ -38,6 +40,25 @@ interface StoreCartProps {
 }
 
 const StoreCart: React.FC<StoreCartProps> = ({ style }) => {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user);
+  const cart = useAppSelector((state) => state.cart.cart);
+  const store = useAppSelector((state) => state.stores.currentStore);
+  const storeId = store?._id as string;
+
+  // Fetch cart if user is logged in
+  useEffect(() => {
+    if (user) {
+      dispatch(getUserCart({}));
+    }
+  }, [user, dispatch]);
+
+  // Find the cart for the selected store
+  const selectedStoreCart = cart?.find((c) => c.store == storeId);
+  
+  // Calculate total quantity for the selected store's cart
+  const totalQuantity = selectedStoreCart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+
   const renderIcon = () => {
     switch (style.variation) {
       case "default":
@@ -89,7 +110,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ style }) => {
           color: style.count.color,
         }}
       >
-        9
+        {totalQuantity}
       </div>
     </div>
   );

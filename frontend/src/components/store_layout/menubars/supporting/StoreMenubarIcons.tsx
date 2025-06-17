@@ -6,7 +6,7 @@ import {
     FaLinkedin, 
     FaPinterest, 
     FaYoutube, 
-    FaPhone 
+    FaPhoneAlt 
 } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
 import { getBorderStyles } from "../../../../utils/stylingFunctions";
@@ -58,7 +58,7 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({style}) => {
             case "whatsapp":
                 return <FaWhatsapp size={style.size + 5} color={style.color} />;
             case "phone":
-                return <FaPhone size={style.size} color={style.color} />;
+                return <FaPhoneAlt size={style.size} color={style.color} />;
             default:
                 return null; 
         }
@@ -79,7 +79,7 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({style}) => {
                 padding: style.background.padding,
                 backgroundColor: style.background.backgroundColor,
             }}
-            className="w-fit flex flex-row justify-center gap-2 "
+            className={`${!style.display && "hidden"} w-fit flex flex-row justify-center gap-2`}
         >
             {socials
                 ?.filter((social) => style.show.includes(social.platform)) // Filter socials based on `show`

@@ -7,6 +7,10 @@ const API_URL = "http://localhost:5000/api/reviews";
 interface ReviewState {
   reviews: Review[];
   selectedReview: Review | null;
+  store: {
+    averageRating: number;
+    numberOfRatings: number;
+  };
   isLoading: boolean;
   error: string | null;
   message: string | null;
@@ -14,6 +18,10 @@ interface ReviewState {
 
 const initialState: ReviewState = {
   reviews: [],
+  store: {
+    averageRating: 0,
+    numberOfRatings: 0,
+  },
   selectedReview: null,
   isLoading: false,
   error: null,
@@ -100,6 +108,20 @@ export const deleteReview = createAsyncThunk(
   }
 );
 
+export const getStoreRatingStats = createAsyncThunk(
+  "review/getStoreRatingStats",
+  async (storeId: string, thunkAPI) => {
+    try {
+      const response = await axios.get(`${API_URL}/rating-stats/${storeId}`, {
+        withCredentials: true,
+      });
+      return response.data; // Expecting { averageRating, numberOfRatings }
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to fetch store rating stats");
+    }
+  }
+);
+
 // --- Slice ---
 
 const reviewSlice = createSlice({
@@ -168,6 +190,25 @@ const reviewSlice = createSlice({
         state.message = "Review deleted successfully";
       })
       .addCase(deleteReview.rejected, (state, action) => {
+        state.error = action.payload as string;
+      })
+
+      //Get store rating stats
+      .addCase(getStoreRatingStats.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getStoreRatingStats.fulfilled, (state, action: PayloadAction<{ averageRating: number; numberOfRatings: number }>) => {
+        state.isLoading = false;
+        state.error = null;
+        state.message = "Store rating stats fetched successfully";
+        state.reviews = []; // Clear reviews if needed
+        state.selectedReview = null; // Reset selected review
+        state.store.averageRating = action.payload.averageRating;
+        state.store.numberOfRatings = action.payload.numberOfRatings;
+      })
+      .addCase(getStoreRatingStats.rejected, (state, action) => {
+        state.isLoading = false;
         state.error = action.payload as string;
       });
   },

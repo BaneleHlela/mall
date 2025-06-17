@@ -47,3 +47,44 @@ export const getDivAnimation = (transition: string | undefined) => {
       return { initial: { y: "-100%", opacity: 0 }, exit: { y: "-100%", opacity: 0 } }; // fallback
   }
 };
+
+export const getSidebarAnimation = (transition: string | undefined) => {
+  switch (transition) {
+    case "leftToRight":
+      return { 
+        initial: { x: "-100%", opacity: 0 }, 
+        animate: { x: "0%", opacity: 1 }, 
+        exit: { x: "-100%", opacity: 0 } 
+      };
+    case "rightToLeft":
+      return { 
+        initial: { x: "100%", opacity: 0 }, 
+        animate: { x: "0%", opacity: 1 }, 
+        exit: { x: "100%", opacity: 0 } 
+      };
+    case "upToDown":
+      return { 
+        initial: { y: "-100%", opacity: 0 }, 
+        animate: { y: "0%", opacity: 1 }, 
+        exit: { y: "-100%", opacity: 0 } 
+      };
+    case "downToUp":
+      return { 
+        initial: { y: "100%", opacity: 0 }, 
+        animate: { y: "0%", opacity: 1 }, 
+        exit: { y: "100%", opacity: 0 } 
+      };
+    case "fade":
+      return { 
+        initial: { opacity: 0 }, 
+        animate: { opacity: 1 }, 
+        exit: { opacity: 0 } 
+      };
+    default:
+      return { 
+        initial: { x: "-100%", opacity: 0 }, 
+        animate: { x: "0%", opacity: 1 }, 
+        exit: { x: "-100%", opacity: 0 } 
+      }; // fallback
+  }
+};

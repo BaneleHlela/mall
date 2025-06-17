@@ -1,5 +1,6 @@
 import Review from "../models/ReviewModel.js";
 import asyncHandler from "express-async-handler";
+import mongoose from "mongoose";
 
 export const createReview = asyncHandler(async (req, res) => {
     const { store, rating, comment, anonymous = false } = req.body;
@@ -98,7 +99,34 @@ export const getAllReviews = asyncHandler(async (req, res) => {
   
     res.json(reviews);
 });
+
+
+export const getStoreRatingStats = asyncHandler(async (req, res) => {
+  const { storeId } = req.params;
   
+  // Aggregate ratings and count
+  const stats = await Review.aggregate([
+    { $match: { store: new mongoose.Types.ObjectId(storeId) } }, // Ensure storeId is an ObjectId
+    {
+      $group: {
+        _id: null, // Group all reviews together
+        averageRating: { $avg: "$rating" }, // Calculate average rating
+        numberOfRatings: { $sum: 1 }, // Count total number of ratings
+      },
+    },
+  ]);
+
+
+  if (!stats || stats.length === 0) {
+    res.status(404);
+    throw new Error("No reviews found for this store.");
+  }
+
+  res.json({
+    averageRating: stats[0].averageRating.toFixed(2), // Format average rating to 2 decimal places
+    numberOfRatings: stats[0].numberOfRatings,
+  });
+});
   
   
   

@@ -1,8 +1,11 @@
 import { defaultFirstStoreMenubarConfig } from "./menubars/defaultFirstStoreMenubarConfig";
+import { defaultPupularStoreMenubarConfig } from "./menubars/defaultPopularStoreMenubarConfig";
 import { defaultSecondStoreAboutConfig } from "./sections/about/defaultSecondStoreAboutSectionConfig";
 import { defaultFirstBookWithCalandarConfig } from "./sections/book_with_calendar/defaultFirstBookWithCalandarConfig";
 import { defaultFirstFooterConfig } from "./sections/footer/defaultFirstFooterConfig";
+import { defaultFourthStoreHeroConfig } from "./sections/hero/defaultFourthStoreHeroConfig";
 import { defaultSecondHeroConfig } from "./sections/hero/defaultSecondHeroConfig";
+import { defaultThirdStoreHeroConfig } from "./sections/hero/defaultThirdStoreHeroConfig";
 import { defaultFirstStoreMenuSectionConfig } from "./sections/menu/defaultFirstStoreMenuSectionConfig";
 import { defaultFirstStoreOrderOnlineCongig } from "./sections/order_online/defualtFirstStoreOrderOnlineConfig";
 import { defaultFirstStoreReviewsConfig } from "./sections/reviews/defaultFirstStoreReviewsConfig";
@@ -36,7 +39,7 @@ export const defaultMenubarConfig = {
 export const defaultLayoutConfig = {
     name: "Default Store Layout",
     description: "",
-    backgroundColor: "#f9d195",
+    backgroundColor: "white",
     fonts: {
       primary: "Open Sans",
       secondary: "Patrick Hand",
@@ -46,10 +49,11 @@ export const defaultLayoutConfig = {
       url: "",
       text: "",
     },
+    practice: defaultFourthStoreHeroConfig,
     about: defaultSecondStoreAboutConfig,
-    menubar: defaultFirstStoreMenubarConfig,
+    menubar: defaultPupularStoreMenubarConfig,
     menu: defaultFirstStoreMenuSectionConfig,
-    hero: defaultSecondHeroConfig,
+    hero: defaultThirdStoreHeroConfig,
     bookWithCalendar: defaultFirstBookWithCalandarConfig,
     order: defaultFirstStoreOrderOnlineCongig,
     reviews: defaultFirstStoreReviewsConfig,

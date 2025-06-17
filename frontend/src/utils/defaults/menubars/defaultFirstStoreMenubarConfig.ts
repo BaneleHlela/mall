@@ -2,7 +2,7 @@ export const defaultFirstStoreMenubarConfig = {
     background: {
         height: {
             mobile: "250px",
-            desktop: "300px",
+            desktop: "450px",
         },
         color: "#f9d195",
         shadow: true,
@@ -100,9 +100,32 @@ export const defaultFirstStoreMenubarConfig = {
                     color: "brown",
                 },
             }
+        },
+        links: {
+            text: {
+                fontFamily: "Open Sans",
+                color: "brown",
+                fontSize: "1.2em",
+                fontWeight: "bold",
+                letterSpacing: "0px",
+            },
+            background: {
+                backgroundColor:  "white",
+                border: {
+                    width: "5px",
+                    style: "solid",
+                    color: "lightblue",
+                    redius: "0x"
+                },
+                padding: {
+                    x: "5px",
+                    y: "0px",
+                }
+            },
         }
     },
     sidebar: {
+        animation: "fade",
         backgroundColor: "#f9d195",
         logo: {
             display: false,       

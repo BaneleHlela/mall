@@ -11,6 +11,8 @@ import { useState, useEffect } from "react"
 import { fetchStoreServices } from "../../../../features/services/servicesSlice"
 import { fetchStoreById, setCurrentStore } from "../../../../features/stores/storeSlice"
 import StoreMenubar from "../../../../components/store_layout/menubars/StoreMenubar"
+import {noScrollbarsClassName} from "react-remove-scroll-bar";
+import PopularStoreMenubar from "../../../../components/store_layout/menubars/popular/PopularStoreMenubar"
 
 const SecondStorePage = () => {
   const settings = useAppSelector((state) => state.layoutSettings);
@@ -56,10 +58,13 @@ const SecondStorePage = () => {
     <div 
       style={{
         backgroundColor: settings.backgroundColor,
+        scrollbarWidth: "none", // Hide scrollbar in Firefox
       }}
-      className="w-screen h-full p-4 overflow-y-scroll overflow-x-clip lg:w-[65vw] lg:p-0 lg:bg-[#f9d195]"
+      className={` w-screen h-screen flex flex-row justify-center`}
     >
-        <StoreMenubar />
+      <div className={`${noScrollbarsClassName} w-screen h-full p-4 overflow-y-scroll overflow-x-clip lg:w-[65vw] lg:p-0`}>
+        {/* <StoreMenubar /> */}
+        <PopularStoreMenubar />
         <Routes>
             <Route path="/" element={<StoreHome />} />
             <Route path="/about" element={<StoreAboutPage />} />
@@ -68,6 +73,7 @@ const SecondStorePage = () => {
             <Route path="/contact" element={<StoreContactPage />} />
             <Route path="/reviews" element={<FirstStoreReviewsPage />} />
         </Routes>
+      </div>
     </div>
   )
 }

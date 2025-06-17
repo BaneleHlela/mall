@@ -28,7 +28,6 @@ const storeSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: [true, "Store description name is required"],
     },
     contact: contactSchema,
     departments: [{
@@ -38,6 +37,15 @@ const storeSchema = new mongoose.Schema(
     layouts: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "StoreLayout"
+    }],
+    socials: [{
+      platform: {
+        type: String,
+        enum: ['facebook', 'twitter', 'instagram', 'linkedin', 'pinterest', 'youtube', "whatsapp", "phone"],
+      }, 
+      url: {
+        type: String,
+      },
     }],
     locations: [{
 			nickname: {type: String},

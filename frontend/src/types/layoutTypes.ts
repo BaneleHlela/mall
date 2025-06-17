@@ -31,6 +31,7 @@ export interface Fonts {
   
 
 export interface Layout {
+    practice: any;
     backgroundColor: string | undefined;
     fonts: Fonts;
     footer: any;

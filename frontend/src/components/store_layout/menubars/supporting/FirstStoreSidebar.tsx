@@ -1,14 +1,13 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../../../app/hooks";
-import { getBorderStyles, getTextStyles } from "../../../../utils/stylingFunctions";
+import { getBorderStyles, getSidebarAnimation, getTextStyles } from "../../../../utils/stylingFunctions";
 import StoreMenubarIcons from "./StoreMenubarIcons";
-
 
   
 const FirstStoreSidebar = ({ isOpen, onClose, storeId }: { isOpen: boolean; onClose: () => void; storeId: string }) => {
     const style = useAppSelector(state => state.layoutSettings.menubar.sidebar);
-    
+
     const navLinks = [
         { to: `/stores/${storeId}/`, label: "home" },
         { to: `/stores/${storeId}/about`, label: "about" },
@@ -19,7 +18,10 @@ const FirstStoreSidebar = ({ isOpen, onClose, storeId }: { isOpen: boolean; onCl
 
     return (
     isOpen && (
-        <motion.div 
+        <motion.div
+            {...getSidebarAnimation(style.animation || "leftToright")}
+            animate={{ y: 0, x: 0, opacity: 1 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }} 
             style={{
                 backgroundColor: style.backgroundColor,
             }}
@@ -55,7 +57,7 @@ const FirstStoreSidebar = ({ isOpen, onClose, storeId }: { isOpen: boolean; onCl
             </ul>
             {/* SocialIcons */}
             <div className="w-full flex flex-row justify-center mb-5">
-                <StoreMenubarIcons style={style.sidebar.icons}/>
+                <StoreMenubarIcons style={style.icons}/>
             </div>
         </motion.div>
     )

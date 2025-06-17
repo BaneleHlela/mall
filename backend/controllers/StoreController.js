@@ -88,6 +88,17 @@ export const editStore = expressAsyncHandler(async (req, res) => {
     });
   }
 
+  // Update socials
+  if (req.body.socials && Array.isArray(req.body.socials)) {
+    store.socials = req.body.socials.filter((social) => {
+      return (
+        social.platform &&
+        ['facebook', 'twitter', 'instagram', 'linkedin', 'pinterest', 'youtube', 'whatsapp', 'phone'].includes(social.platform) &&
+        social.url
+      );
+    });
+  }
+
   // Update categories
   if (req.body.categories) {
     if (req.body.categories.products && Array.isArray(req.body.categories.products)) {

@@ -1,4 +1,3 @@
-import React from 'react'
 import SecondStoreMenubar from './second/SecondStoreMenubar'
 
 const StoreMenubar = () => {

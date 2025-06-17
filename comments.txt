@@ -1,4 +1,4 @@
 Packages
 
-server: express dotenv mongoose jsonwebtoken bcryptjs ioredis cookie-parser nodemon cors passport passport-facebook passport-google-oauth20 @google-cloud/storage
+server: express dotenv mongoose jsonwebtoken bcryptjs ioredis cookie-parser nodemon cors passport passport-facebook passport-google-oauth20 @google-cloud/storage hamburger-react
 client: lucide-react axios hamburger-react react-hot-toast react-redux react-router-dom zustand react-query

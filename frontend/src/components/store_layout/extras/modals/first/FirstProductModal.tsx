@@ -26,7 +26,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, onClose, style }) 
             style={{ 
                 ...getTextStyles(style.text.rest)
             }}
-            className="fixed inset-0 w-screen h-screen bg-opacity-50 flex items-center justify-center z-50 overflow-scroll"
+            className="fixed inset-0 w-screen h-screen bg-opacity-50 flex items-center justify-center z-100 overflow-scroll"
         >
             <div className="relative h-full w-full max-w-[900px] bg-white shadow-md">
                 {/* Exit Icon */}

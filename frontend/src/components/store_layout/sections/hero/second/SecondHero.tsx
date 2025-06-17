@@ -43,7 +43,7 @@ const getSmallSlider = (variation: string, images: string[], height: string, wid
       {/* Mobile */}
       <div className="h-[50vh] w-full md:hidden">
         {/* Main images */}
-        <div className="h-[70%] w-full flex flex-col justify-center">
+        <div className="h-[70%] w-full flex flex-col justify-center ">
           <SimpleStoreImagesSlider images={images} height="80%" width="100%" />
         </div>
         {/* Sub images */}
@@ -59,7 +59,7 @@ const getSmallSlider = (variation: string, images: string[], height: string, wid
         </div>
       </div>
       {/* Desktop */}
-      <div className="hidden lg:block h-[100vh] w-full pt-10">
+      <div className="hidden lg:block h-[100vh] w-full">
         {/* Main images */}
         <div className="h-[70%] w-full">
           <SimpleStoreImagesSlider images={images} height="95%" width="100%" />

@@ -1,6 +1,10 @@
 import express from "express";
 import { protectRoute } from "../middlewares/authMiddleware.js";
-import { createReview, deleteReview, getAllReviews, getReviewById, getStoreReviews, updateReview } from "../controllers/ReviewController.js";
+import { 
+    createReview, deleteReview, getAllReviews, 
+    getReviewById, getStoreReviews, updateReview,
+    getStoreRatingStats, 
+} from "../controllers/ReviewController.js";
 
 const router = express.Router();
 
@@ -11,5 +15,6 @@ router.get("/:id", getReviewById);
 router.put("/:id", protectRoute, updateReview)
 router.delete("/:id", protectRoute, deleteReview);
 router.get("/", getAllReviews);
+router.get('/rating-stats/:storeId', getStoreRatingStats);
 
 export default router;
