@@ -4,6 +4,7 @@ import { getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunc
 
 const FirstStoreFooterSection = ({id}: SectionProps) => {
   const settings = useAppSelector((state) => state.layoutSettings.footer);
+  
   return (
     <>
       {/* Desktop */}

@@ -22,6 +22,7 @@ import productRoutes from "./routes/productRoutes.js";
 import donationRoutes from "./routes/donationRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
+import emailRoutes from "./routes/emailRoutes.js";
 
 
 import "./config/passportConfig.js";
@@ -79,6 +80,7 @@ app.use('/api/products', productRoutes);
 app.use("/api/donations", donationRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/email", emailRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

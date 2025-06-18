@@ -1,7 +1,7 @@
 import type { SectionProps } from "../../../../types/layoutTypes"
 import SecondStoreAboutSection from "./second/SecondStoreAboutSection";
 
-const AboutSection = ({id}: SectionProps) => {
+const StoreAboutSection = ({id}: SectionProps) => {
   let type = "secondAbout";
 
   if (type === "secondAbout") {
@@ -11,4 +11,4 @@ const AboutSection = ({id}: SectionProps) => {
   }
 }
 
-export default AboutSection
+export default StoreAboutSection;

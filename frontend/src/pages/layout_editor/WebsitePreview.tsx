@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { setInitialLayout } from '../../features/layouts/layoutSettingsSlice';
 import Menubar from '../../components/store_layout/menubars/StoreMenubar';
 import { Route, Routes } from 'react-router-dom';
-import StoreHome from '../store/home/StoreHome';
-import StorePackages from '../store/packages/StorePackagesPage';
+import StoreHome from '../store/supporting/home/StoreHomePage';
+import StorePackages from '../store/supporting/packages/StorePackagesPage';
 import StoreServices from '../store_dashboard/supporting_pages/StoreServices';
 
 

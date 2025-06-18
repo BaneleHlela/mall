@@ -1,0 +1,11 @@
+export { default as StoreHomePage } from "./home/StoreHomePage";
+export { default as StoreAboutPage } from "./about/StoreAboutPage";
+export { default as StoreServicesPage } from "./services/StoreServicesPage";
+export { default as StoreGalleryPage } from "./gallery/StoreGalleryPage";
+export { default as StoreBookPage } from "./book/StoreBookPage";
+export { default as StoreContactPage } from "./contact/StoreContactPage";
+export { default as StoreEventsPage } from "./events/StoreEventsPage";
+export { default as StoreMenuPage } from "./menu/StoreMenuPage";
+export { default as StoreReviewsPage } from "./reviews/StoreReviewsPage";
+export { default as StoreProductsPage } from "./products/StoreProductsPage";
+export { default as StorePackagesPage } from "./packages/StorePackagesPage";

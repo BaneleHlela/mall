@@ -2,9 +2,8 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import About from "../../../../components/store_layout/sections/about/StoreAboutSection";
 import Footer from "../../../../components/store_layout/sections/footer/StoreFooterSection";
-import Gallery from "../../../../components/store_layout/sections/gallery/Gallery";
-import Hero from "../../../../components/store_layout/sections/hero/Hero";
-import BookWithCalendar from "../../../../components/store_layout/sections/book_with_calender/BookWithCalendar";
+import Gallery from "../../../../components/store_layout/sections/gallery/StoreGallerySection";
+import Hero from "../../../../components/store_layout/sections/hero/StoreHeroSection";
 
 const StoreHome = () => {
   const location = useLocation();
@@ -30,4 +29,4 @@ const StoreHome = () => {
   )
 }
 
-export default StoreHome
+export default StoreHome;

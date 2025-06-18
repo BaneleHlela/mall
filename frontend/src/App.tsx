@@ -4,7 +4,7 @@ import Home from "./pages/home/Home";
 import authRoutes from "./routes/authRoutes";
 import Scribbler from "./components/Scibbler";
 import Layouts from "./pages/layout_editor/Layouts";
-import StorePage from "./pages/store/store_pages/StorePage";
+import StorePage from "./pages/store/StorePage";
 import Menubar from "./components/the_mall/menubar/Menubar";
 import MyStores from "./pages/my_stores/MyStores";
 import Search from "./pages/my_stores/Search";

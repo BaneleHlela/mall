@@ -2,11 +2,15 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import { getStoreRatingStats } from "../../../../../features/reviews/reviewSlice";
 import { getTextStyles } from "../../../../../utils/stylingFunctions";
+import StoreOverallReviewsCard from "../../../extras/cards/store/StoreOverallReviewsCard";
+import SendEmailForm from "../../../extras/forms/SendEmailForm";
 
 const FourthStoreHeroSection = () => {
   const dispatch = useAppDispatch();
   const style = useAppSelector(state => state.layoutSettings.practice);
   const store = useAppSelector((state) => state.stores.currentStore);
+  const ratingStats = useAppSelector((state) => state.reviews.ratingStats);
+
   useEffect(() => {
     if (store?._id) {
       dispatch(getStoreRatingStats(store._id));
@@ -22,10 +26,10 @@ const FourthStoreHeroSection = () => {
           <img src="" alt="" />
         </div>
         {/* Mobile */}
-        <div className="p-6 lg:hidden">
+        <div className="p-6 space-y-5 lg:hidden">
           {/* text */}
           <div
-            className="flex flex-col justify-center w-full h-[20vh] bg-white mt-10"
+            className="flex flex-col justify-center w-full h-[20vh] bg-white mt-10 "
           >
             <p
               style={{
@@ -48,8 +52,13 @@ const FourthStoreHeroSection = () => {
 
           </div>
           {/* Reviews summary */}
-          <div className="w-full h-[20vh] bg-white mt-5">
-
+          <div className={`
+                flex flex-row justify-center w-full h-fit
+                ${style.reviewsCard.placement === "right" && "justify-end"}
+                ${style.reviewsCard.placement === "left" && "justify-start"}
+                ${style.reviewsCard.placement === "center" && "justify-center"}
+            `}>
+              <StoreOverallReviewsCard stats={ratingStats} style={style.reviewsCard}/>
           </div>
           {/* Email us */}
           <div className="w-full h-[90vh] bg-white mt-5">
@@ -59,10 +68,10 @@ const FourthStoreHeroSection = () => {
         {/* desktop */}
         <div className="hidden lg:flex flex-row w-full h-[100vh] justify-between">
           {/* Text and review */}
-          <div className="h-full w-[57%] flex flex-col justify-between">
+          <div className="h-full w-[57%] flex flex-col justify-center p-4 space-y-5">
             {/* Text */}
             <div 
-              className="flex flex-col justify-center h-full w-full p-4"
+              className="flex flex-col justify-center h-fit w-full"
             >
               <p
                 style={{
@@ -84,13 +93,18 @@ const FourthStoreHeroSection = () => {
               </p>
             </div>
             {/* Reviews */}
-            <div className="h-[25vh] w-full bg-white">
-              
+            <div className={`
+                flex flex-row justify-center w-full h-fit
+                ${style.reviewsCard.placement === "right" && "justify-end"}
+                ${style.reviewsCard.placement === "left" && "justify-start"}
+                ${style.reviewsCard.placement === "center" && "justify-center"}
+            `}>
+              <StoreOverallReviewsCard stats={ratingStats} style={style.reviewsCard}/>
             </div>
           </div>
-          {/* Email us */}
-          <div className="w-[43%]">
-
+          {/* Form */}
+          <div className="flex flex-col justify-end w-[43%] h-full bg-white">
+              <SendEmailForm />
           </div>
         </div>
     </div>

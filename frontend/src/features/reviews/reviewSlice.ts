@@ -7,7 +7,7 @@ const API_URL = "http://localhost:5000/api/reviews";
 interface ReviewState {
   reviews: Review[];
   selectedReview: Review | null;
-  store: {
+  ratingStats: {
     averageRating: number;
     numberOfRatings: number;
   };
@@ -18,7 +18,7 @@ interface ReviewState {
 
 const initialState: ReviewState = {
   reviews: [],
-  store: {
+  ratingStats: {
     averageRating: 0,
     numberOfRatings: 0,
   },
@@ -204,8 +204,8 @@ const reviewSlice = createSlice({
         state.message = "Store rating stats fetched successfully";
         state.reviews = []; // Clear reviews if needed
         state.selectedReview = null; // Reset selected review
-        state.store.averageRating = action.payload.averageRating;
-        state.store.numberOfRatings = action.payload.numberOfRatings;
+        state.ratingStats.averageRating = action.payload.averageRating;
+        state.ratingStats.numberOfRatings = action.payload.numberOfRatings;
       })
       .addCase(getStoreRatingStats.rejected, (state, action) => {
         state.isLoading = false;

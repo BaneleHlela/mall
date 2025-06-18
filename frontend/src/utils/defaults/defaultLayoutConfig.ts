@@ -38,6 +38,34 @@ export const defaultMenubarConfig = {
 
 export const defaultLayoutConfig = {
     name: "Default Store Layout",
+    routes: {
+      home: {
+        name: "Home",
+        url: "/",
+        exact: true,
+        contains: ["hero", "about", "menu", "order", "reviews", "footer"],
+      },
+      about: {
+        name: "About Us",
+        url: "/about",
+        contains: ["about", "footer"],
+      },
+      menu: {
+        name: "Menu",
+        url: "/menu",
+        contains: ["menu", "footer"],
+      },
+      order: {
+        name: "Order Online",
+        url: "/order",
+        contains: [ "order", "footer"],
+      },
+      reviews: {
+        name: "Reviews",
+        url: "/reviews",
+        contains: [ "reviews", "footer" ],
+      },
+    },
     description: "",
     backgroundColor: "white",
     fonts: {

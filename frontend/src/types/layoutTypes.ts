@@ -31,6 +31,7 @@ export interface Fonts {
   
 
 export interface Layout {
+    routes: Routes;
     practice: any;
     backgroundColor: string | undefined;
     fonts: Fonts;
@@ -50,3 +51,37 @@ export interface Layout {
 export type SectionProps = {
     id?: string;
 };
+
+export interface Route {
+    name: string;
+    url: string;
+    exact?: boolean; // Optional, as not all routes may require exact matching
+    contains: Array<
+      | "hero"
+      | "about"
+      | "services"
+      | "gallery"
+      | "book"
+      | "contact"
+      | "events"
+      | "menu"
+      | "reviews"
+      | "products"
+      | "packages"
+      | "footer"
+    >; 
+  }
+  
+  export interface Routes {
+    home?: Route;
+    about?: Route;
+    services?: Route;
+    gallery?: Route;
+    book?: Route;
+    contact?: Route;
+    events?: Route;
+    menu?: Route;
+    reviews?: Route;
+    products?: Route;
+    packages?: Route;
+  }

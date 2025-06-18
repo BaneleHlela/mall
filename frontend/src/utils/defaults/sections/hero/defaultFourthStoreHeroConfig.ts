@@ -36,5 +36,45 @@ export const defaultFourthStoreHeroConfig = {
                 textShadow: true,
             }
         },
+    },
+    reviewsCard: {
+        placement: "left",
+        background: {
+            backgroundColor: "#005003",
+            height: {
+                mobile: "200px",
+                desktop: "250px",
+            },
+            border: {
+                width: "0px",
+                color: "black",
+                style: "solid",
+                radius: "15px",
+            }
+        },
+        starsDisplay: {
+            type: "sharp",
+            color: "white",
+            size: "22px",
+        },
+        text: {
+            fontFamily: "Open Sans",
+            color: "white",
+            fontWeight: "bold",
+            totalRatings: {
+                mobile: {
+                    fontSize: "3em",
+                },
+                desktop: {
+                    fontSize: "5em",
+                },
+            },
+            comment: {
+                input: "Reviews",
+                style: {
+                    fontSize: "1.2em",
+                },
+            }
+        }
     }
 };

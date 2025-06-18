@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { fetchStoreById, setCurrentStore } from "../../../features/stores/storeSlice";
 import { fetchStoreServices } from "../../../features/services/servicesSlice";
 import type { Store } from "../../../types/storeTypes";
-import ThirdStorePage from "./third/ThirdStorePage";
+import { TbLoader3 } from "react-icons/tb";
 
 const StorePage = () => {
   const settings = useAppSelector((state) => state.layoutSettings);
@@ -20,7 +20,7 @@ const StorePage = () => {
       const fontsToLoad = Object.values(settings.fonts).filter(Boolean); // Get all non-empty font values
       WebFont.load({
         google: {
-          families: fontsToLoad, // Load fonts dynamically
+          families: fontsToLoad, 
         },
       });
     }
@@ -55,7 +55,7 @@ const StorePage = () => {
   }, [store, storeId, dispatch]);
 
   if (loading) {
-    return <div className="p-6 text-gray-500">Loading store...</div>;
+    return <TbLoader3  size={45} className='animate-spin mx-auto'/>;
   }
 
   if (!store) {
@@ -66,11 +66,11 @@ const StorePage = () => {
     <div 
       style={{
         backgroundColor: settings.backgroundColor,
-        scrollbarWidth: "none", // Hide scrollbar in Firefox
+        scrollbarWidth: "none", 
       }}
       className={`w-screen h-screen flex flex-row justify-center`}
     >
-      <ThirdStorePage />
+      I am here
     </div>
   );
 };

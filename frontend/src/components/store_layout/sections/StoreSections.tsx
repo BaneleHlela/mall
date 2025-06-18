@@ -1,0 +1,12 @@
+export { default as StoreHeroSection } from "./hero/StoreHeroSection";
+export { default as StoreAboutSection } from "./about/StoreAboutSection";
+export { default as StoreServicesSection } from "./services/StoreServicesSection";
+export { default as StoreGallerySection } from "./gallery/StoreGallerySection";
+export { default as StoreBookSection } from "./book/StoreBookSection";
+export { default as StoreContactSection } from "./contact/StoreContactSection";
+export { default as StoreFooterSection } from "./footer/StoreFooterSection";
+export { default as StoreEventsSection } from "./events/StoreEventsSection";
+export { default as StoreMenuSection } from "./menu/StoreMenu";
+export { default as StoreReviewsSection } from "./store_reviews/StoreReviewsSection";
+export { default as StoreProductsSection } from "./products/StoreProductsSection";
+export { default as StorePackagesSection } from "./packages/StorePackagesSection";

@@ -108,3 +108,4 @@ export const sendStoreCreatedEmail = async (email, name, storeName, dashboardURL
 export const sendStoreIsLiveEmail = async () => {
 
 };
+

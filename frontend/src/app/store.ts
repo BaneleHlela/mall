@@ -12,6 +12,7 @@ import bookingReducer from "../features/bookings/bookingsSlice.ts";
 import categoryReducer from "../features/categories/categorySlice.ts";
 import cartReducer from "../features/cart/cartSlice.ts";
 import reviewReducer from "../features/reviews/reviewSlice.ts";
+import emailReducer from "../features/emails/emailSlice.ts";
 
 export const store = configureStore({
     reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
         categories: categoryReducer,
         cart: cartReducer,
         reviews: reviewReducer,
+        email: emailReducer, 
     },
 });
 
