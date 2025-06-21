@@ -19,7 +19,8 @@ import StoreOrderOnlinePage from "./supporting/order_online/StoreOrderOnlinePage
 
 const StorePage = () => {
   const settings = useAppSelector((state) => state.layoutSettings);
-  const { storeId } = useParams<{ storeId: string }>();
+  // const { storeId } = useParams<{ storeId: string }>();
+  const  storeId  = "684c15bca0f98a1d13a7ff00" ;
   const dispatch = useAppDispatch();
   const [store, setStore] = useState<StoreType | null>(null); // Local state for the store
   const [loading, setLoading] = useState<boolean>(true); // Loading state
@@ -95,7 +96,7 @@ const StorePage = () => {
       }}
       className={`w-screen h-screen flex flex-row justify-center`}
     >
-      <div className={`w-screen h-full p-4 overflow-y-scroll overflow-x-clip lg:w-[65vw] lg:p-0`}>
+      <div className={`w-screen h-full p-4 overflow-y-scroll hide-scrollbar overflow-x-clip lg:w-[65vw] lg:p-0`}>
         <PopularStoreMenubar />
         <Routes>
         {Object.values(routes).map((route) => (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Home from "./pages/home/Home";
 import authRoutes from "./routes/authRoutes";
@@ -11,9 +11,25 @@ import Search from "./pages/my_stores/Search";
 import Profile from "./pages/profile/Profile";
 import StoreDashboard from "./pages/store_dashboard/StoreDashboard";
 import MyLayouts from "./pages/store_dashboard/supporting_pages/StoreLayouts";
+import { useDispatch } from "react-redux";
+import { setInitialLayout } from "./features/layouts/layoutSettingsSlice";
 
 const App: React.FC = () => {
-  
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.layoutSettings) {
+        dispatch(setInitialLayout(event.data.layoutSettings));
+        localStorage.setItem("layoutSettings", JSON.stringify(event.data.layoutSettings));
+        console.log("📩 Received layoutSettings via postMessage");
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [dispatch]);
+
   return (
     <div className="relative bg-stone-50 h-screen w-screen flex justify-center items-center overflow-x-clip">  
       <Router>

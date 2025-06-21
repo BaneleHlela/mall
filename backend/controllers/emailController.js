@@ -30,14 +30,14 @@ export const sendEmail = asyncHandler(async (req, res) => {
     html: `
         <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">
           <p>Dear Recipient,</p>
-          <p>${message}</p>
-          <p>Kind regards,<br>${firstName} ${lastName}</p>
+          <p>This is to confirm that your exam was submitted. Do not reply to this email</p>
+          <p>Kind regards,
           
           <p style="margin-top: 30px;">
             <a href="tel:${phone}" 
               style="display: inline-block; padding: 10px 20px; background-color: #007BFF; color: white; 
                       text-decoration: none; border-radius: 5px; font-weight: bold;">
-              Call Me  (${phone})
+              Track here
             </a>
           </p>
         </div>

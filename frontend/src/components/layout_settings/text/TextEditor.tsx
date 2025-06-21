@@ -1,7 +1,7 @@
 import type { EditorProps } from "../../../types/layoutSettingsType";
 import { getSetting } from "../../../utils/helperFunctions";
-import GoogleFontsSelector from "./GoogleFontsSelector";
-
+import SubSettingsContainer from "../extras/SubSettingsContainer";
+import UseLayoutFonts from "../extras/UseLayoutFonts";
 
 
 const TextEditor: React.FC<EditorProps> = ({
@@ -12,25 +12,6 @@ const TextEditor: React.FC<EditorProps> = ({
 }) => {
     const isAllowed = (key: string) => !allow || allow.includes(key);
 
-
-    const isFontLoaded = (font: string) => {
-        return Array.from(document.styleSheets).some((styleSheet) =>
-          styleSheet.href?.includes(font.replace(/ /g, "+"))
-        );
-    };
-      
-    const handleFontSelect = (font: string) => {
-    handleSettingChange(`${objectPath}.fontFamily`, font);
-    
-    if (!isFontLoaded(font)) {
-        const link = document.createElement("link");
-        link.href = `https://fonts.googleapis.com/css2?family=${font.replace(/ /g, "+")}&display=swap`;
-        link.rel = "stylesheet";
-        document.head.appendChild(link);
-    }
-    };
-    
-
     const handleChange =
         (field: string) =>
         (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -40,9 +21,17 @@ const TextEditor: React.FC<EditorProps> = ({
     return (
         <div>
           {isAllowed("fontFamily") && (
-            <GoogleFontsSelector onFontSelect={handleFontSelect} />
+            <div className="flex flex-col">
+              <SubSettingsContainer name={"Font Family"} SettingsComponent={
+                <UseLayoutFonts
+                  objectPath={objectPath}
+                  handleSettingChange={handleSettingChange}
+                />} 
+              />             
+            </div>
           )}
-      
+
+          {/* Use Layouts Fonts Here  */}
           {isAllowed("color") && (
             <div className="flex items-center gap-2">
               <label className="w-32">Color</label>

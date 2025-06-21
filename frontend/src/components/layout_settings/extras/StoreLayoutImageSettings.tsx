@@ -36,10 +36,10 @@ const StoreLayoutImageSettings: React.FC<StoreLayoutImageSettingsProps> = ({
         </select>
       </div>
 
-      {mode === "upload" && (
+      {/* {mode === "upload" && (
         <UploadStoreImage
         />
-      )}
+      )} */}
 
       {mode === "gallery" && (
         <button

@@ -1,1 +1,32 @@
 @import "tailwindcss";
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+  
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+  
+
+/* Thin grey scrollbar */
+.thin-scrollbar {
+  scrollbar-width: thin;             /* Firefox */
+  scrollbar-color: #ccc transparent; /* Firefox */
+}
+
+/* For Chrome, Edge, and Safari */
+.thin-scrollbar::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}

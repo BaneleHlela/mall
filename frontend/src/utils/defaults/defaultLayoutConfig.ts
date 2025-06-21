@@ -43,7 +43,7 @@ export const defaultLayoutConfig = {
         name: "Home",
         url: "/",
         exact: true,
-        contains: ["hero", "about", "menu", "order", "reviews", "footer"],
+        contains: ["hero", "about", "order", "reviews", "footer"],
       },
       about: {
         name: "About Us",
@@ -67,7 +67,7 @@ export const defaultLayoutConfig = {
       },
     },
     description: "",
-    backgroundColor: "white",
+    backgroundColor: "#f9d195",
     fonts: {
       primary: "Open Sans",
       secondary: "Patrick Hand",
@@ -81,7 +81,7 @@ export const defaultLayoutConfig = {
     about: defaultSecondStoreAboutConfig,
     menubar: defaultPupularStoreMenubarConfig,
     menu: defaultFirstStoreMenuSectionConfig,
-    hero: defaultThirdStoreHeroConfig,
+    hero: defaultSecondHeroConfig,
     bookWithCalendar: defaultFirstBookWithCalandarConfig,
     order: defaultFirstStoreOrderOnlineCongig,
     reviews: defaultFirstStoreReviewsConfig,

@@ -9,6 +9,7 @@ import { getBorderStyles, getTextStyles } from '../../../../utils/stylingFunctio
 import type { Store } from '../../../../types/storeTypes'
 
 const MobileTopBar = ({settings, store, isOpen, setOpen }: {settings: any, store: Store | null, isOpen: boolean, setOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
+    console.log(settings.topbar.desktop.links.text.fontFamily)
     return (
         <>
             {/* === Mobile === */}
@@ -173,7 +174,6 @@ const MobileTopBar = ({settings, store, isOpen, setOpen }: {settings: any, store
 
 const DesktopTopBar = ({ settings, store, links }: { settings: any, store: Store | null, links: { to: string; label: string }[] }) => {
     const { order } = settings.topbar.desktop;
-    console.log(order[0] === "logo");
 
     const renderComponent = (type: string, index: number) => {
         switch (type) {
@@ -202,7 +202,7 @@ const DesktopTopBar = ({ settings, store, links }: { settings: any, store: Store
                         className='w-full h-full flex flex-col justify-center'
                         key={`links-${index}`}
                     >
-                        <ul className="hidden md:flex flex-row justify-center text-center capitalize space-x-1">
+                        <ul className="hidden lg:flex flex-row justify-center text-center capitalize space-x-0">
                             {links.map(({ to, label }) => (
                                 <li
                                     key={label}
@@ -210,6 +210,7 @@ const DesktopTopBar = ({ settings, store, links }: { settings: any, store: Store
                                     style={{
                                         ...getBorderStyles(settings.topbar.desktop.links.background.border),
                                         ...getTextStyles(settings.topbar.desktop.links.text),
+                                        fontFamily: settings.topbar.desktop.links.text.fontFamily,
                                         backgroundColor: settings.topbar.desktop.links.background.backgroundColor,
                                         padding: `${settings.topbar.desktop.links.background.padding.x} ${settings.topbar.desktop.links.background.padding.y}`,
                                     }}

@@ -1,13 +1,18 @@
+import { useAppSelector } from "../../../app/hooks";
 import FirstMenubarSettings from "./first/FirstMenubarSettings";
+import PopularStoreMenubarSettings from "./popular/PopularStoreMenubarSettings";
 
 const MenubarSettings = () => {
-  const layoutType = "firstmenubar";
-  if (layoutType === "firstmenubar") {
+  const { variation, topbar } = useAppSelector((state) => state.layoutSettings.menubar );
+  console.log(topbar.desktop.links.text);
+  if (variation === "popular") {
     return (
-        <FirstMenubarSettings/>
+        <PopularStoreMenubarSettings/>
     )
   }
-    return (
+  
+  
+  return (
     <div>MenubarSettings</div>
   )
 }

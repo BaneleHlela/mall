@@ -1,87 +1,180 @@
 import React, { useEffect, useRef, useState } from 'react';
-import LayoutSettings from '../../components/layout_settings/LayoutSettings.tsx';
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../app/store.ts';
-import TopBar from '../../components/layout_settings/topbar/TopBar.tsx';
 import { useParams } from 'react-router-dom';
+import { IoPower } from 'react-icons/io5';
+import { useAppSelector } from '../../app/hooks.ts';
+import LayoutSettings from '../../components/layout_settings/LayoutSettings.tsx';
+import TopBar from '../../components/layout_settings/topbar/TopBar.tsx';
 
+const sizeMap = {
+  mobile: { width: 412, height: 840, scale: 0.75 },
+  tablet: { width: 775, height: 1024, scale: 0.62 },
+  desktop: { width: 1920, height: 1080, scale: 0.55 },
+};
+
+const deviceStyles = {
+  mobile: {
+    borderTop: '10px solid #171616',
+    borderLeft: '10px solid #171616',
+    borderRight: '10px solid #171616',
+    borderBottom: '40px solid #171616',
+    boxShadow: '5px 5px 25px 25px rgba(0, 0, 0, 0.1)',
+    borderRadius: '20px',
+    padding: '0px',
+  },
+  tablet: {
+    borderTop: '15px solid #171616',
+    borderLeft: '15px solid #171616',
+    borderRight: '15px solid #171616',
+    borderBottom: '60px solid #171616',
+    boxShadow: '20px 20px 100px rgba(0, 0, 0, 0.21)',
+    borderRadius: '30px',
+    padding: '0px',
+  },
+  desktop: {
+    borderTop: '18px solid #171616',
+    borderLeft: '18px solid #171616',
+    borderRight: '18px solid #171616',
+    borderBottom: '60px solid #171616',
+    boxShadow: '20px 20px 100px rgba(0, 0, 0, 0.21)',
+    borderRadius: '10px 10px 5px 5px',
+    padding: '0px',
+  },
+};
 
 const WebsiteBuilderContent: React.FC = () => {
   const [device, setDevice] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [zoom, setZoom] = useState(sizeMap[device].scale);
 
-  const layoutId = useParams<{layoutId: string}>()
-
-  const sizeMap = {
-    mobile: { width: 412, height: 840, scale: 0.8 },
-    tablet: { width: 775, height: 1024, scale: 0.8 },
-    desktop: { width: 1920, height: 1080, scale: 1 },
-  };
-
-  const { width, height, scale } = sizeMap[device];
-  const [zoom, setZoom] = useState(scale); // start with device scale
-
-  useEffect(() => {
-    setZoom(sizeMap[device].scale);
-  }, [device]
-  );
-
-  
-  const settings = useSelector((state: RootState) => state.layoutSettings);
+  const fonts = useAppSelector((state) => state.layoutSettings.fonts);
 
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const layoutId = useParams<{ layoutId: string }>().layoutId;
+
+  const settings = useAppSelector((state) => state.layoutSettings);
+  const { width, height, scale } = sizeMap[device];
 
   useEffect(() => {
-    const handleIframeLoad = () => {
-      if (iframeRef.current?.contentWindow) {
-        iframeRef.current.contentWindow.postMessage(
-          { layoutSettings: settings },
-          '*'
-        );
+    setZoom(scale);
+  }, [device]);
+
+  useEffect(() => {
+    const iframe = iframeRef.current;
+  
+    const sendSettings = () => {
+      if (iframe?.contentWindow) {
+        iframe.contentWindow.postMessage({ layoutSettings: settings }, '*');
       }
     };
-
-    const iframe = iframeRef.current;
-    if (iframe) {
-      iframe.addEventListener('load', handleIframeLoad);
-    }
-
+  
+    iframe?.addEventListener('load', sendSettings); // resend after navigation
+  
     return () => {
-      if (iframe) {
-        iframe.removeEventListener('load', handleIframeLoad);
-      }
+      iframe?.removeEventListener('load', sendSettings);
     };
   }, [settings]);
-
-
-
-
+  
 
   return (
-    <div className="h-screen w-screen max-h-screen">
-      {/* Topbar */}
-      <TopBar setDevice={setDevice}  zoom={zoom} setZoom={setZoom} />
+    <div className="h-screen w-screen overflow-hidden bg-stone-100 font-[Outfit]">
+      <TopBar setDevice={setDevice} zoom={zoom} setZoom={setZoom} />
 
       <div className="website-builder h-[93vh] flex flex-row">
-        {/* Settings section */}
         <LayoutSettings />
-        {/* Store page */}
-        <div className="overflow-auto relative w-full max-h-full flex flex-row items-center justify-center p-0">
-          <iframe
-            // key={JSON.stringify(settings)}
-            ref={iframeRef}
-            src={`/layouts/preview/${layoutId}`}
-            title="Responsive Preview"
+        <div className="overflow-auto relative w-full max-h-full flex flex-row items-center justify-center">
+          <div
+            className="relative"
             style={{
               transform: `scale(${zoom})`,
               transformOrigin: 'center',
               width,
               height,
-              border: '1px solid gray',
-              backgroundColor: '#d0e6ff',
               aspectRatio: `${width}/${height}`,
-              overflow: 'hidden'
+              ...deviceStyles[device],
             }}
-          />
+          >
+            {/* Mobile Extras */}
+            {device === 'mobile' && (
+              <>
+                <div style={{
+                  position: 'absolute', top: '10px', left: '50%',
+                  transform: 'translateX(-50%)', width: '15px', height: '15px',
+                  borderRadius: '50%', backgroundColor: '#000', zIndex: 10
+                }} />
+                <div style={{
+                  position: 'absolute', top: '140px', right: '-18px',
+                  transform: 'translateX(-50%)', width: '8px', height: '95px',
+                  borderRadius: '5px', backgroundColor: '#000', zIndex: 10
+                }} />
+                <div style={{
+                  position: 'absolute', top: '250px', right: '-18px',
+                  transform: 'translateX(-50%)', width: '8px', height: '35px',
+                  borderRadius: '5px', backgroundColor: '#000', zIndex: 10
+                }} />
+              </>
+            )}
+
+            {/* Tablet Extras */}
+            {device === 'tablet' && (
+              <>
+                <div style={{
+                  position: 'absolute', bottom: '-48px', left: '50%',
+                  transform: 'translateX(-50%)', width: '40px', height: '40px',
+                  borderRadius: '50%', background: 'rgba(255, 255, 255, 0.2)',
+                  backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)', zIndex: 10
+                }} />
+                <div style={{
+                  position: 'absolute', top: '140px', right: '-22px',
+                  transform: 'translateX(-50%)', width: '10px', height: '95px',
+                  borderRadius: '5px', backgroundColor: '#000', zIndex: 10
+                }} />
+                <div style={{
+                  position: 'absolute', top: '250px', left: '-14px',
+                  transform: 'translateX(-50%)', width: '8px', height: '55px',
+                  borderRadius: '5px', backgroundColor: '#000', zIndex: 10
+                }} />
+              </>
+            )}
+
+            {/* Desktop Extras */}
+            {device === 'desktop' && (
+              <>
+                <div style={{
+                  position: 'absolute', bottom: '-50px', right: '75px',
+                  transform: 'translateX(-50%)', borderRadius: '3px',
+                  backgroundColor: '#000', zIndex: 10
+                }}>
+                  <IoPower color="white" size={32} />
+                </div>
+                <div style={{
+                  position: 'absolute', bottom: '-58px', right: '-25px',
+                  transform: 'translateX(-50%)', width: '8px', height: '60px',
+                  borderRadius: '3px', backgroundColor: '#000', zIndex: 10
+                }} />
+                <div style={{
+                  position: 'absolute', bottom: '-58px', left: '-18px',
+                  transform: 'translateX(-50%)', width: '8px', height: '60px',
+                  borderRadius: '3px', backgroundColor: '#000', zIndex: 10
+                }} />
+              </>
+            )}
+
+            <iframe
+              key={JSON.stringify(fonts)}
+              ref={iframeRef}
+              src={`/layouts/preview/${layoutId}/*`}
+              title="Responsive Preview"
+              className="relative"
+              style={{
+                width: '100%',
+                height: '100%',
+                backgroundColor: '#d0e6ff',
+                overflow: 'hidden',
+                border: 'none',
+                borderRadius: '8px',
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

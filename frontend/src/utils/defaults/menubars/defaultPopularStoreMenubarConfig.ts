@@ -1,10 +1,11 @@
 export const defaultPupularStoreMenubarConfig = {
+    variation: "popular",
     background: {
         height: {
             mobile: "110px",
             desktop: "120px",
         },
-        color: "white",
+        color: "#f9d195",
         shadow: true,
         bottomBorder: {
             width: "3px",
@@ -15,7 +16,7 @@ export const defaultPupularStoreMenubarConfig = {
     cart: {
         variation: "shoppingbagsolid",
         size: 42,
-        color: "#6c4d37",
+        color: "black",
         background: {
             padding: "0px",
             backgroundColor: "",
@@ -39,6 +40,7 @@ export const defaultPupularStoreMenubarConfig = {
         shadow: true,
     },
     topbar: {
+        sticky: true,
         icons: {
             show: ["phone", "twitter", "whatsapp"],
         },
@@ -149,7 +151,7 @@ export const defaultPupularStoreMenubarConfig = {
             hamburger: {
                 variation: "rotate",
                 size: 32,
-                color: "#6c4d37",
+                color: "black",
                 background: {
                     padding: "0px",
                     backgroundColor: "",

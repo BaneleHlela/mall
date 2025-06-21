@@ -40,18 +40,21 @@ const FirstStoreReviewsSection = () => {
       {isLoading && <p>Loading reviews...</p>}
       {error && <p className="text-red-500">{error}</p>}
       {reviews.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {reviews.map((review) => (
-            <StoreReviewCard
-              key={review._id}
-              reviewerName={`${review.user.firstName} ${review.user.lastName}`}
-              review={review.comment}
-              rating={review.rating}
-              anonymous={review.anonymous || false}
-              style={settings.reviewCard}
-            />
-          ))}
+        <div className="flex flex-row justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {reviews.map((review) => (
+              <StoreReviewCard
+                key={review._id}
+                reviewerName={`${review.user.firstName} ${review.user.lastName}`}
+                review={review.comment}
+                rating={review.rating}
+                anonymous={review.anonymous || false}
+                style={settings.reviewCard}
+              />
+            ))}
+          </div>
         </div>
+        
       ) : (
         <p>No reviews found for this store.</p>
       )}

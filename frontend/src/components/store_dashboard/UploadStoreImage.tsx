@@ -10,7 +10,8 @@ interface UploadStoreImageProps {
 
 const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeId }) => {
   const dispatch = useAppDispatch();
-  const currentStoreId = useAppSelector((state: RootState) => state.storeAdmin.store._id);
+  // const currentStoreId = useAppSelector((state: RootState) => state.storeAdmin.store._id);
+  const currentStoreId = "684c15bca0f98a1d13a7ff00";
   const currentImages = useAppSelector((state: RootState) => state.storeAdmin.store.images) || [];
 
   const [imageFile, setImageFile] = useState<File | null>(null);

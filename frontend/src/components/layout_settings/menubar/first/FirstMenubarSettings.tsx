@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { updateSetting } from "../../../../features/layouts/layoutSettingsSlice";
 import TextEditor from "../../text/TextEditor";
+import SettingsContainer from "../../SettingsContainer";
 
 
 const FirstMenubarSettings = () => {
@@ -11,7 +12,7 @@ const FirstMenubarSettings = () => {
     };
 
     return (
-        <>
+        <div className="p-4">
             <TextEditor 
                 objectPath="menubar.topbar.text" 
                 handleSettingChange={handleSettingChange}
@@ -22,9 +23,14 @@ const FirstMenubarSettings = () => {
                     fontFamily: settings?.menubar?.topbar?.text?.fontFamily,
                 }}
             >
-                Did I work?
+                <SettingsContainer
+                    name="Pages & Sections"
+                    options={["replace"]}
+                    SettingsComponent={<> </>}
+                    onOptionClick={(option) => console.log(`${option} clicked`)}
+                />
             </p>
-        </>
+        </div>
     )
 };
 

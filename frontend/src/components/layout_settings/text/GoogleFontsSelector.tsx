@@ -9,12 +9,12 @@ interface Font {
 
 interface GoogleFontsSelectorProps {
   onFontSelect: (font: string) => void;
+  selectedFont: string;
 }
-
-const GoogleFontsSelector: React.FC<GoogleFontsSelectorProps> = ({ onFontSelect }) => {
+const GoogleFontsSelector: React.FC<GoogleFontsSelectorProps> = ({ onFontSelect, selectedFont }) => {
   const [fonts, setFonts] = useState<Font[]>([]);
   const [search, setSearch] = useState<string>('');
-
+  
   useEffect(() => {
     const fetchFonts = async () => {
       try {
@@ -32,45 +32,49 @@ const GoogleFontsSelector: React.FC<GoogleFontsSelectorProps> = ({ onFontSelect 
   }, []);
 
   const handleFontChange = (font: string) => {
-    const fontUrl = `https://fonts.googleapis.com/css2?family=${font.replace(/ /g, '+')}&display=swap`;
-  
-    // Create link
+    const fontUrl = `https://fonts.googleapis.com/css2?family=${font.replace(
+      /\s+/g,
+      '+'
+    )}&display=swap`;
+
     const link = document.createElement('link');
     link.href = fontUrl;
     link.rel = 'stylesheet';
     document.head.appendChild(link);
-  
+
     // Wait for font to load before applying it
     document.fonts.load(`1rem "${font}"`).then(() => {
       onFontSelect(font);
+      setSearch(''); // Clear the search input after selecting a font
     });
-    console.log(document.fonts)
   };
 
   return (
-    <div className="font-selector">
+    <div className="relative w-[50%]"> {/* Added relative positioning */}
       <input
         type="text"
-        placeholder="Search fonts..."
+        placeholder={`${selectedFont ||  "Search fonts..."}`}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="mb-2 p-1 border"
+        className="px-1 py-[1.5px] border rounded-[7px] w-full"
       />
-      <select
-        onChange={(e) => handleFontChange(e.target.value)}
-        className="p-2 border"
-      >
-        <option value="">Select a font</option>
-        {fonts
-          .filter((font) =>
-            font.family.toLowerCase().includes(search.toLowerCase())
-          )
-          .map((font) => (
-            <option key={font.family} value={font.family}>
-              {font.family}
-            </option>
-          ))}
-      </select>
+      {search && (
+        <select
+          onChange={(e) => handleFontChange(e.target.value)}
+          className="absolute top-full left-0 p-2 border hide-scrollbar rounded-[7px] w-full bg-white shadow-md z-10" // Absolute positioning
+          size={4} // Show 4 visible options
+        >
+          {fonts
+            .filter((font) =>
+              font.family.toLowerCase().includes(search.toLowerCase())
+            )
+            .map((font) => (
+              <option key={font.family} value={font.family}>
+                {font.family}
+              </option>
+            ))}
+        </select>
+      )}
     </div>
   );
 };
