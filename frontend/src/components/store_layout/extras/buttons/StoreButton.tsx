@@ -43,7 +43,7 @@ const StoreButton: React.FC<StoreButtonProps> = ({ style }) => {
         ...getTextStyles(style.style.text),
         ...getBackgroundStyles(style.style.background),
       }}
-      className='flex flex-col justify-center w-[100%]'
+      className='flex flex-col justify-center w-full hover:scale-102'
     >
       {style.style.text.input}
     </button>

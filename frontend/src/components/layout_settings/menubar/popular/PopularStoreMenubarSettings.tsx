@@ -3,6 +3,7 @@ import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice'
 import BackgroundEditor from '../../background/BackgroundEditor';
 import SubSettingsContainer from '../../extras/SubSettingsContainer'
 import IconsOrButtonSettings from './supporting/IconsOrButtonSettings';
+import SidebarSettings from './supporting/SidebarSettings';
 import TopbarSettings from './supporting/TopbarSettings';
 
 const PopularStoreMenubarSettings = () => {
@@ -39,7 +40,10 @@ const PopularStoreMenubarSettings = () => {
             name="Topbar" 
             SettingsComponent={<TopbarSettings />}
           />
-          <SubSettingsContainer name="Sidebar" SettingsComponent={<>Pop</>}/>
+          <SubSettingsContainer 
+            name="Sidebar" 
+            SettingsComponent={<SidebarSettings />}
+          />
       </div>
     )
 }

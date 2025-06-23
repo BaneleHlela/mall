@@ -9,6 +9,7 @@ import TextEditor from "../../../text/TextEditor";
 import CartSettings from "../../CartSettings";
 import DesktopTopbarSettings from "./DesktopTopbarSettings";
 import IconsSettingsHandler from "./IconsSettingsHandler";
+import MobileTopbarSettings from "./MobileTopbarSettings";
 
 const TopbarSettings = () => {
     const settings = useAppSelector((state: any) => state.layoutSettings);
@@ -57,13 +58,7 @@ const TopbarSettings = () => {
             />
             <SubSettingsContainer
                 name="Mobile"
-                SettingsComponent={<></>}
-            />
-            <TextEditor 
-                objectPath="menubar.topbar.desktop.links.text" 
-                handleSettingChange={handleSettingChange}
-                settings={settings}
-                responsiveSize={false}
+                SettingsComponent={<MobileTopbarSettings />}
             />
         </div>
     )

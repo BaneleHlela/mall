@@ -7,11 +7,12 @@ import LogoSettings from './LogoSettings';
 import MenubarLinksSettings from './MenubarLinksSettings';
 import IconsSettingsHandler from './IconsSettingsHandler';
 import StoreButtonSettings from '../../../extras/StoreButtonSettings';
+import OptionsToggler from '../../../supporting/OptionsToggler';
+import HamburgerSettings from './HamburgerSettings';
 
-const DesktopTopbarSettings: React.FC = () => {
+const MobileTopbarSettings: React.FC = () => {
     const dispatch = useAppDispatch();
     const settings = useAppSelector((state) => state.layoutSettings);
-    const order = settings.menubar.topbar.desktop.order;
 
     const handleSettingChange = (field: string, value: any) => {
         dispatch(updateSetting({ field, value }));
@@ -19,25 +20,25 @@ const DesktopTopbarSettings: React.FC = () => {
     
     return (
         <div className="space-y-1 px-2 py-1">
-            <div className="flex flex-col items-center text-center border rounded py-1">
-                <p className="">Order</p>
-                <OrderDnD 
-                    order={order} 
-                    objectPath="menubar.topbar.desktop.order"
-                />
-            </div>
+            <OptionsToggler
+                label="Hamburger First"
+                options={['true', 'false']}
+                value={String(settings.menubar.topbar.mobile.hamburgerFirst)}
+                onChange={(value) => handleSettingChange('menubar.topbar.mobile.hamburgerFirst', value === "true")}
+            />
+            <OptionsToggler
+                label="Display"
+                options={['logo', 'extras']}
+                value={settings.menubar.topbar.mobile.display}
+                onChange={(value) => handleSettingChange('menubar.topbar.mobile.display', value)}
+            />
             <SubSettingsContainer
                 name="Logo Settings"
-                SettingsComponent={<LogoSettings 
+                SettingsComponent={
+                <LogoSettings 
                     objectPath='menubar.topbar.mobile.logo'
                     device="mobile"
                 />}
-            />
-            <SubSettingsContainer
-                name="Links Settings"
-                SettingsComponent={
-                    <MenubarLinksSettings type="desktop" />
-                }
             />
             <SubSettingsContainer
                     name="Icons"
@@ -45,21 +46,27 @@ const DesktopTopbarSettings: React.FC = () => {
                     <IconsSettingsHandler 
                         settings={settings} 
                         handleSettingChange={handleSettingChange} 
-                        objectPath="menubar.topbar.desktop.extras.icons"
+                        objectPath="menubar.topbar.mobile.extras.icons"
                     />}
             />
             <SubSettingsContainer
                 name="Button"
                 SettingsComponent={
                     <StoreButtonSettings
-                        objectPath="menubar.topbar.desktop.extras.button"
+                        objectPath="menubar.topbar.mobile.extras.button"
                         settings={settings}
                     />
                 }
             />
-            {/* Add other desktop topbar settings here */}
+            <SubSettingsContainer
+                name="Hamburger"
+                SettingsComponent={
+                    <HamburgerSettings
+                    />
+                }
+            />
         </div>
     )
 }
 
-export default DesktopTopbarSettings;
+export default MobileTopbarSettings;

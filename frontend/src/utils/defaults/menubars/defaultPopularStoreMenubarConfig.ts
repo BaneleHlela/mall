@@ -215,7 +215,8 @@ export const defaultPupularStoreMenubarConfig = {
             iconsFirst: false,
         },
         mobile: {
-            hamburgerFirst: true,
+            hamburgerFirst: true, 
+            display: "extras",
             logo: {
                 use: "logo",
                 background: {
@@ -240,6 +241,59 @@ export const defaultPupularStoreMenubarConfig = {
                     fontWeight: "bold",
                     letterSpacing: "0px",
                 }
+            },
+            extras: {
+                button: {
+                    function: "bookNow",
+                    style: {
+                        text: {
+                            input: "Get a quote",
+                            fontFamily: "Open Sans",
+                            color: "brown",
+                            fontSize: "1.2em",
+                            fontWeight: "bold",
+                            letterSpacing: "0px",
+                        },
+                        background: {
+                            height: "10px",
+                            width: "190px",
+                            color: "#f9d195",
+                            shadow: true,
+                            border: {
+                                width: "3px",
+                                style: "solid",
+                                color: "black",
+                                radius: "0px",
+                            },
+                            padding: {
+                                x: "0.8rem",
+                                y: "50px",
+                            }
+                        }
+                    }
+                },
+                icons: {
+                    size: 22,
+                    color: "#6c4d37",
+                    background: {
+                        padding: "0px",
+                        backgroundColor: "",
+                        border: {
+                            width: "0px",
+                            style: "solid",
+                            color: "brown",
+                        },
+                    },
+                    iconBackground: {
+                        padding: "0px",
+                        backgroundColor: "",
+                        border: {
+                            width: "0px",
+                            style: "solid",
+                            color: "brown",
+                        },
+                    }
+                },
             },
             icons: {
                 display: false,
@@ -270,8 +324,11 @@ export const defaultPupularStoreMenubarConfig = {
                 size: 32,
                 color: "black",
                 background: {
-                    padding: "0px",
-                    backgroundColor: "",
+                    padding: {
+                        x: "0px",
+                        y: "0px",
+                    },
+                    color: "",
                     border: {
                         width: "0px",
                         style: "solid",
@@ -286,10 +343,7 @@ export const defaultPupularStoreMenubarConfig = {
     },
     sidebar: {
         animation: "fade",
-        backgroundColor: "#f9d195",
-        logo: {
-            display: false,       
-        },
+        display: "icons",
         links: {
             alignment: "center",
             text: {
@@ -300,7 +354,10 @@ export const defaultPupularStoreMenubarConfig = {
                 letterSpacing: "0px",
             },
             background: {
-                padding: "10px",
+                padding: {
+                    x: "10px",
+                    y: "10px"
+                },
                 border: {
                     width: "0px",
                     style: "solid",
@@ -309,8 +366,6 @@ export const defaultPupularStoreMenubarConfig = {
             },
         },
         icons: {
-            display: true,
-            show: ["phone", "twitter", "whatsapp"],
             size: 32,
             color: "#6c4d37",
             background: {
@@ -331,7 +386,36 @@ export const defaultPupularStoreMenubarConfig = {
                     color: "brown",
                 },
             }
-        }
+        },
+        button: {
+            function: "bookNow",
+            style: {
+                text: {
+                    input: "Get a quote",
+                    fontFamily: "Open Sans",
+                    color: "brown",
+                    fontSize: "1.2em",
+                    fontWeight: "bold",
+                    letterSpacing: "0px",
+                },
+                background: {
+                    height: "10px",
+                    width: "190px",
+                    color: "#f9d195",
+                    shadow: true,
+                    border: {
+                        width: "3px",
+                        style: "solid",
+                        color: "black",
+                        radius: "0px",
+                    },
+                    padding: {
+                        x: "0.8rem",
+                        y: "50px",
+                    }
+                }
+            }
+        },
     }
 }
 

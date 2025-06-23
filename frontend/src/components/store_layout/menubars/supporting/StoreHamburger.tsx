@@ -14,6 +14,7 @@ import {
   Spin,
   Rotate,
 } from "hamburger-react";
+import { getBackgroundStyles } from "../../../../utils/stylingFunctions";
 
 interface StoreHamburgerProps {
   style: {
@@ -22,7 +23,7 @@ interface StoreHamburgerProps {
     color: string;
     direction: "left" | "right";
     background: {
-      padding: string;
+      padding: any;
       backgroundColor: string;
       border: {
         width: string;
@@ -81,12 +82,9 @@ const StoreHamburger: React.FC<StoreHamburgerProps> = ({ style, toggled, toggle 
   return (
     <div
       style={{
-        padding: style.background.padding,
-        backgroundColor: style.background.backgroundColor,
-        border: `${style.background.border.width} ${style.background.border.style} ${style.background.border.color}`,
-        borderRadius: style.background.border.radius,
+        ...getBackgroundStyles(style.background),
       }}
-      className={`z-100 relative cursor-pointer ${style.shadow ? "shadow-sm" : ""}`}
+      className={`flex flex-col justify-center z-100 relative cursor-pointer ${style.shadow ? "shadow-sm" : ""}`}
     >
       {renderIcon()}
     </div>

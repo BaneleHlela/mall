@@ -168,19 +168,6 @@ const TextEditor: React.FC<EditorProps> = ({
               }
             />
           )}
-      
-          {/* {isAllowed("textShadow") && (
-            <div className="flex items-center gap-2">
-              <label className="w-32">Text Shadow</label>
-              <input
-                type="text"
-                value={getSetting("textShadow", settings, objectPath) || "none"}
-                onChange={handleChange("textShadow")}
-                className="border rounded-md px-2 py-1 w-full"
-                placeholder="e.g., 2px 2px 5px rgba(0,0,0,0.3)"
-              />
-            </div>
-          )} */}
         </div>
       );
       

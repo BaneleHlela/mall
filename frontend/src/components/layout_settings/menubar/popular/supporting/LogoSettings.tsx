@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useAppSelector, useAppDispatch } from '../../../../../app/hooks';
 import { updateSetting } from '../../../../../features/layouts/layoutSettingsSlice';
@@ -8,10 +7,19 @@ import BackgroundEditor from '../../../background/BackgroundEditor';
 import SubSettingsContainer from '../../../extras/SubSettingsContainer';
 import LogoControl from '../../../logo/LogoControl';
 
-const LogoSettings: React.FC = () => {
+interface LogoSettingsProps {
+  objectPath: string;
+  device: 'desktop' | 'mobile';
+}
+
+const LogoSettings: React.FC<LogoSettingsProps> = ({ objectPath, device }) => {
   const dispatch = useAppDispatch();
-  const logoSettings = useAppSelector((state) => state.layoutSettings.menubar.topbar.desktop.logo);
   const settings = useAppSelector((state) => state.layoutSettings);
+  const logoSettings = useAppSelector((state) => 
+    device === 'mobile' 
+      ? state.layoutSettings.menubar.topbar.mobile.logo
+      : state.layoutSettings.menubar.topbar.desktop.logo
+  );
   
   const handleSettingChange = (field: string, value: any) => {
     dispatch(updateSetting({ field, value }));
@@ -23,7 +31,7 @@ const LogoSettings: React.FC = () => {
         label="Logo Type"
         options={['logo', 'text']}
         value={logoSettings.use}
-        onChange={(value) => handleSettingChange('menubar.topbar.desktop.logo.use', value)}
+        onChange={(value) => handleSettingChange(`${objectPath}.use`, value)}
       />
 
       {logoSettings.use === 'logo' && (
@@ -33,7 +41,7 @@ const LogoSettings: React.FC = () => {
         name="Background"
         SettingsComponent={
           <BackgroundEditor
-            objectPath="menubar.topbar.desktop.logo.background"
+            objectPath={`${objectPath}.background`}
             settings={settings}
             handleSettingChange={handleSettingChange}
             allow={['padding', 'color', 'border', "height", "width"]}
@@ -47,7 +55,7 @@ const LogoSettings: React.FC = () => {
           name="Text"
           SettingsComponent={
             <TextEditor
-              objectPath="menubar.topbar.desktop.logo.text"
+              objectPath={`${objectPath}.text`}
               settings={settings}
               handleSettingChange={handleSettingChange}
               allow={['input', 'fontFamily', 'color', 'fontSize', 'weight', 'letterSpacing']}

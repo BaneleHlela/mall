@@ -22,7 +22,7 @@ const MobileTopBar: React.FC<{
     
         
         return (
-          <div className='w-fit h-full pl-1 pr-1 flex flex-col justify-center'>
+          <div className='w-fit h-fit pl-1 pr-1 flex flex-col justify-center'>
             {logoSettings.use === 'logo' && store?.logo?.url ? (
               <img
                 style={{ 
@@ -75,7 +75,7 @@ const MobileTopBar: React.FC<{
     <div className="flex flex-row w-full justify-between h-full lg:hidden">
       <div className={`w-[50%] flex flex-col h-full  ${settings.topbar.mobile.hamburgerFirst ? "items-end" : "items-start"}`}>
         {!settings.topbar.mobile.hamburgerFirst ? (
-          !settings.topbar.mobile.icons.display ? renderLogo() : renderIcons()
+          settings.topbar.mobile.display === "logo" ? renderLogo() : renderIcons()
         ) : (
           <div className='w-full h-full flex flex-col justify-center'>
             {renderHamburgerAndCart()}
@@ -84,7 +84,7 @@ const MobileTopBar: React.FC<{
       </div>
       <div className={`w-[50%] flex flex-col h-full  ${settings.topbar.mobile.hamburgerFirst ? "items-end" : "items-start"}`}>
         {settings.topbar.mobile.hamburgerFirst ? (
-          !settings.topbar.mobile.icons.display ? renderLogo() : renderIcons()
+          settings.topbar.mobile.display === "logo" ? renderLogo() : renderIcons()
         ) : (
           <div className='w-full h-full flex flex-col justify-center'>
             {renderHamburgerAndCart()}
