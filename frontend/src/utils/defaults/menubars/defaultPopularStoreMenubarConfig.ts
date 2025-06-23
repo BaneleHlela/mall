@@ -1,16 +1,40 @@
 export const defaultPupularStoreMenubarConfig = {
     variation: "popular",
+    extras: {
+        include: "icons",
+        button: {
+            function: "bookNow",
+        },
+        icons: {
+            number: 3,
+            platforms: {
+                first: "whatsapp",
+                second: "phone",
+                third: "twitter",
+            }
+        }
+    },
+    include: "button",
     background: {
         height: {
+            mobile: "110px",
+            desktop: "120px", // Sometimes without responsive handlers
+        },
+        width: {
             mobile: "110px",
             desktop: "120px",
         },
         color: "#f9d195",
         shadow: true,
-        bottomBorder: {
+        border: {
             width: "3px",
             style: "solid",
             color: "black",
+            radius: "0px",
+        },
+        padding: {
+            x: "1px",
+            y: "1px",
         }
     },
     cart: {
@@ -18,7 +42,10 @@ export const defaultPupularStoreMenubarConfig = {
         size: 42,
         color: "black",
         background: {
-            padding: "0px",
+            padding: {
+                x: "0px",
+                y: "0px" 
+            },
             backgroundColor: "",
             border: {
                 width: "0px",
@@ -37,7 +64,6 @@ export const defaultPupularStoreMenubarConfig = {
             }, 
             scale: 1.3,
         },
-        shadow: true,
     },
     topbar: {
         sticky: true,
@@ -47,19 +73,33 @@ export const defaultPupularStoreMenubarConfig = {
         desktop: {
             order: [ "logo", "links", "icons", ],
             logo: {
-                scale: .5,
-                width: "250px",
-                height: "auto",
-                padding: "0px",
-                backgroundColor: "",
-                border: {
-                    width: "0px",
-                    style: "solid",
-                    color: "brown",
+                use: "logo",
+                background: {
+                    width: "180px",
+                    height: "auto",
+                    padding: {
+                        x: "0px",
+                        y: "0px",
+                    },
+                    color: "",
+                    border: {
+                        width: "0px",
+                        style: "solid",
+                        color: "brown",
+                    },
                 },
+                text: {
+                    input: "Popular Store",
+                    fontFamily: "Open Sans",
+                    color: "brown",
+                    fontSize: "1.2em",
+                    fontWeight: "bold",
+                    letterSpacing: "0px",
+                }
             },
             links: {
                 text: {
+                    position: "center",
                     fontFamily: "Open Sans",
                     color: "brown",
                     fontSize: "1.2em",
@@ -67,7 +107,7 @@ export const defaultPupularStoreMenubarConfig = {
                     letterSpacing: "0px",
                 },
                 background: {
-                    backgroundColor:  "",
+                    color:  "",
                     border: {
                         width: "0px",
                         style: "solid",
@@ -80,14 +120,75 @@ export const defaultPupularStoreMenubarConfig = {
                     }
                 },
             },
+            extras: {
+                include: "icons",
+                button: {
+                    function: "bookNow",
+                    style: {
+                        text: {
+                            input: "Get a quote",
+                            fontFamily: "Open Sans",
+                            color: "brown",
+                            fontSize: "1.2em",
+                            fontWeight: "bold",
+                            letterSpacing: "0px",
+                        },
+                        background: {
+                            height: "10px",
+                            width: "190px",
+                            color: "#f9d195",
+                            shadow: true,
+                            border: {
+                                width: "3px",
+                                style: "solid",
+                                color: "black",
+                                radius: "0px",
+                            },
+                            padding: {
+                                x: "0.8rem",
+                                y: "50px",
+                            }
+                        }
+                    }
+                },
+                icons: {
+                    number: 3,
+                    platforms: {
+                        first: "whatsapp",
+                        second: "phone",
+                        third: "twitter",
+                    },
+                    size: 22,
+                    color: "#6c4d37",
+                    background: {
+                        color: "",
+                        border: {
+                            width: "0px",
+                            style: "solid",
+                            color: "brown",
+                        },
+                    },
+                    iconBackground: {
+                        padding: {
+                            x: "0px",
+                            y: "0px"
+                        },
+                        backgroundColor: "",
+                        border: {
+                            width: "0px",
+                            style: "solid",
+                            color: "brown",
+                        },
+                    }
+                }
+            },
             icons: {
                 display: true,
                 show: ["phone", "twitter", "whatsapp"],
                 size: 22,
                 color: "#6c4d37",
                 background: {
-                    padding: "0px",
-                    backgroundColor: "",
+                    color: "",
                     border: {
                         width: "0px",
                         style: "solid",
@@ -95,7 +196,10 @@ export const defaultPupularStoreMenubarConfig = {
                     },
                 },
                 iconBackground: {
-                    padding: "0px",
+                    padding: {
+                        x: "0px",
+                        y: "0px"
+                    },
                     backgroundColor: "",
                     border: {
                         width: "0px",
@@ -105,7 +209,7 @@ export const defaultPupularStoreMenubarConfig = {
                 }
             },
             iconsCart: {
-                iconsFirst: false,
+                iconsFirst: true,
                 spaceX: "10px"
             },
             iconsFirst: false,
@@ -113,16 +217,29 @@ export const defaultPupularStoreMenubarConfig = {
         mobile: {
             hamburgerFirst: true,
             logo: {
-                scale: .8,
-                width: "150px",
-                height: "auto",
-                padding: "0px",
-                backgroundColor: "",
-                border: {
-                    width: "0px",
-                    style: "solid",
-                    color: "brown",
+                use: "logo",
+                background: {
+                    width: "180px",
+                    height: "auto",
+                    padding: {
+                        x: "0px",
+                        y: "0px",
+                    },
+                    color: "",
+                    border: {
+                        width: "0px",
+                        style: "solid",
+                        color: "brown",
+                    },
                 },
+                text: {
+                    input: "Popular Store",
+                    fontFamily: "Open Sans",
+                    color: "brown",
+                    fontSize: "1.2em",
+                    fontWeight: "bold",
+                    letterSpacing: "0px",
+                }
             },
             icons: {
                 display: false,

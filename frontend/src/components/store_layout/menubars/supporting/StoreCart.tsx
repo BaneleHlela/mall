@@ -16,7 +16,7 @@ interface StoreCartProps {
     color: string;
     background: {
       padding: string;
-      backgroundColor: string;
+      color: string;
       border: {
         width: string;
         style: string;
@@ -79,7 +79,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ style }) => {
         return <TbPaperBag size={style.size} color={style.color} />;
       case "beachbag":
         return <GiBeachBag size={style.size} color={style.color} />;
-      case "shoppingbagsolid":
+      case "shoppingbag":
         return <LiaShoppingBagSolid size={style.size} color={style.color} />;
       default:
         return <FaShoppingCart size={style.size} color={style.color} />; 
@@ -91,7 +91,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ style }) => {
     <div
       style={{
         padding: style.background.padding,
-        backgroundColor: style.background.backgroundColor,
+        backgroundColor: style.background.color,
         border: `${style.background.border.width} ${style.background.border.style} ${style.background.border.color}`,
         borderRadius: style.background.border.radius,
       }}
@@ -103,11 +103,10 @@ const StoreCart: React.FC<StoreCartProps> = ({ style }) => {
         className={`absolute bottom-0 right-0 text-[9px] pl-1 pr-1 rounded-[100%]
           ${style.shadow && "shadow-sm"}`}
         style={{
-          backgroundColor: style.count.backgroundColor,
-          border: `${style.count.border.width} ${style.count.border.style} ${style.count.border.color}`,
-          transform: `scale(${style.count.scale})`,
+          backgroundColor: "black",
+          transform: `scale(1.3)`,
           transformOrigin: "bottom right",
-          color: style.count.color,
+          color: "white",
         }}
       >
         {totalQuantity}

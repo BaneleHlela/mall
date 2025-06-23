@@ -16,6 +16,7 @@ import {
 import PopularStoreMenubar from "../../components/store_layout/menubars/popular/PopularStoreMenubar";
 import StoreHome from "./supporting/home/StoreHomePage";
 import StoreOrderOnlinePage from "./supporting/order_online/StoreOrderOnlinePage";
+import { getBackgroundStyles } from "../../utils/stylingFunctions";
 
 const StorePage = () => {
   const settings = useAppSelector((state) => state.layoutSettings);
@@ -90,13 +91,17 @@ const StorePage = () => {
 
   return (
     <div 
-      style={{
-        backgroundColor: settings.backgroundColor,
-        scrollbarWidth: "none", 
-      }}
       className={`w-screen h-screen flex flex-row justify-center`}
+      style={{
+        backgroundColor: settings.background.color,
+      }}
     >
-      <div className={`w-screen h-full p-4 overflow-y-scroll hide-scrollbar overflow-x-clip lg:w-[65vw] lg:p-0`}>
+      <div 
+        style={{
+          ...getBackgroundStyles(settings.background),
+          width: window.innerWidth >= 1024 ? settings.background?.width?.desktop : settings.background?.width?.mobile, // Apply width for large screens
+        }}
+        className={`w-screen h-full overflow-y-scroll hide-scrollbar overflow-x-clip`}>
         <PopularStoreMenubar />
         <Routes>
         {Object.values(routes).map((route) => (

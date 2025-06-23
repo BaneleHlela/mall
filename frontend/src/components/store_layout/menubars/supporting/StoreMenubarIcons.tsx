@@ -1,4 +1,3 @@
-import { useAppSelector } from "../../../../app/hooks";
 import { 
     FaFacebook, 
     FaWhatsapp, 
@@ -9,7 +8,8 @@ import {
     FaPhoneAlt 
 } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
-import { getBorderStyles } from "../../../../utils/stylingFunctions";
+import { getBackgroundStyles, getBorderStyles } from "../../../../utils/stylingFunctions";
+import { useAppSelector } from "../../../../app/hooks";
 
 interface StoreMenubarIconsProps {
     style: {
@@ -18,8 +18,11 @@ interface StoreMenubarIconsProps {
       size: number;
       color: string;
       background: {
-        padding: string;
-        backgroundColor: string;
+        padding: {
+            x: string;
+            y: string;
+        };
+        color: string;
         border: {
           width: string;
           style: string;
@@ -27,8 +30,11 @@ interface StoreMenubarIconsProps {
         };
       };
       iconBackground: {
-        padding: string;
-        backgroundColor: string;
+        padding: {
+            x: string;
+            y: string;
+        };
+        color: string;
         border: {
           width: string;
           style: string;
@@ -37,10 +43,17 @@ interface StoreMenubarIconsProps {
       };
     };
 }
+export const socials = [
+    { platform: 'whatsapp', url: 'https://wa.me/0797604204', _id: '68502c4db7cdd894b89e9602' },
+    { platform: 'phone', url: 'tel:0797604204', _id: '68502c4db7cdd894b89e9603' },
+    { platform: 'twitter', url: 'https://x.com/Skipfornow__1', _id: '68502c4db7cdd894b89e9604' },
+];
+
 
 const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({style}) => {
     const socials = useAppSelector((state) => state.stores?.currentStore?.socials);
-
+    const platforms = useAppSelector((state) => state.layoutSettings.menubar.extras.icons.platforms);
+    
     const renderIcon = (platform: string) => {
         switch (platform) {
             case "facebook":
@@ -71,32 +84,35 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({style}) => {
           window.location.href = url; // Handle phone or email links
         }
     };
+    const platformOrder = [platforms.first, platforms.second, platforms.third];
 
     return (
         <div 
             style={{
                 ...getBorderStyles(style.background.border),
                 padding: style.background.padding,
-                backgroundColor: style.background.backgroundColor,
+                ...getBackgroundStyles(style.background)
             }}
-            className={`${!style.display && "hidden"} w-fit flex flex-row justify-center gap-2`}
+            className={`w-fit flex flex-row justify-center gap-2`}
         >
-            {socials
-                ?.filter((social) => style.show.includes(social.platform)) // Filter socials based on `show`
-                .map((social) => (
+            {platformOrder.map((platform) => {
+                const social = socials?.find(s => s.platform === platform);
+                if (!social) return <>Null</>;
+
+                return (
                 <div
-                    key={social.platform}
+                    key={platform}
                     style={{
-                    padding: style.iconBackground.padding,
-                    backgroundColor: style.iconBackground.backgroundColor,
+                    ...getBackgroundStyles(style.iconBackground),
                     border: `${style.iconBackground.border.width} ${style.iconBackground.border.style} ${style.iconBackground.border.color}`,
                     }}
                     className="flex items-center justify-between rounded-full"
                     onClick={() => handleRedirect(social.url)}
                 >
-                    {renderIcon(social.platform)}
+                    {renderIcon(platform)}
                 </div>
-            ))}
+                );
+            })}
         </div>
     );
 }

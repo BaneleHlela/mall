@@ -86,7 +86,7 @@ const StoreHamburger: React.FC<StoreHamburgerProps> = ({ style, toggled, toggle 
         border: `${style.background.border.width} ${style.background.border.style} ${style.background.border.color}`,
         borderRadius: style.background.border.radius,
       }}
-      className={`relative cursor-pointer ${style.shadow ? "shadow-sm" : ""}`}
+      className={`z-100 relative cursor-pointer ${style.shadow ? "shadow-sm" : ""}`}
     >
       {renderIcon()}
     </div>

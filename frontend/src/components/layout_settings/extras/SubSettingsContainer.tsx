@@ -15,7 +15,10 @@ const SubSettingsContainer: React.FC<SubSettingsContainerProps> = ({
 
   return (
     <>
-      <div className="w-full h-[45px]">
+      <div
+        onClick={() => setIsSettingsOpen((prev) => !prev)} 
+        className="w-full h-[45px]"
+      >
         {/* Header */}
         <div
           className={`flex flex-row justify-between w-full h-full border border-black text-black shadow-md pl-2 bg-stone-50

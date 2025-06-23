@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import type { BackgroundSettings } from './layoutSettingsType';
 
 
 export interface LayoutState {
@@ -33,7 +34,7 @@ export interface Fonts {
 export interface Layout {
     routes: Routes;
     practice: any;
-    backgroundColor: string | undefined;
+    background: BackgroundSettings;
     fonts: Fonts;
     footer: any;
     name?: string;

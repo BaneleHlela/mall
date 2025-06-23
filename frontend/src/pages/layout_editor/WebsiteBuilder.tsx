@@ -4,6 +4,9 @@ import { IoPower } from 'react-icons/io5';
 import { useAppSelector } from '../../app/hooks.ts';
 import LayoutSettings from '../../components/layout_settings/LayoutSettings.tsx';
 import TopBar from '../../components/layout_settings/topbar/TopBar.tsx';
+import { useAppDispatch } from '../../app/hooks.ts';
+import { fetchStoreById, setCurrentStore } from '../../features/stores/storeSlice';
+import { TbLoader3 } from "react-icons/tb";
 
 const sizeMap = {
   mobile: { width: 412, height: 840, scale: 0.75 },
@@ -42,10 +45,15 @@ const deviceStyles = {
 };
 
 const WebsiteBuilderContent: React.FC = () => {
+  const dispatch = useAppDispatch();
   const [device, setDevice] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const [zoom, setZoom] = useState(sizeMap[device].scale);
+  const [loading, setLoading] = useState<boolean>(true);
+  const store = useAppSelector((state) => state.stores.currentStore);
 
   const fonts = useAppSelector((state) => state.layoutSettings.fonts);
+  const storeId = "684c15bca0f98a1d13a7ff00"; // Hardcoded store ID
+
 
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const layoutId = useParams<{ layoutId: string }>().layoutId;
@@ -57,6 +65,25 @@ const WebsiteBuilderContent: React.FC = () => {
     setZoom(scale);
   }, [device]);
 
+  useEffect(() => {
+    const fetchStore = async () => {
+      if (storeId) {
+        try {
+          setLoading(true);
+          const result = await dispatch(fetchStoreById(storeId)).unwrap();
+          dispatch(setCurrentStore(result));
+        } catch (error) {
+          console.error("Failed to fetch store:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+  
+    fetchStore();
+  }, [dispatch, storeId]);
+  
+  // iframe.contentWindow.postMessage({ layoutSettings: settings, store }, '*');
   useEffect(() => {
     const iframe = iframeRef.current;
   
@@ -72,7 +99,14 @@ const WebsiteBuilderContent: React.FC = () => {
       iframe?.removeEventListener('load', sendSettings);
     };
   }, [settings]);
+
+  if (loading) {
+    return <TbLoader3 size={45} className='animate-spin mx-auto'/>;
+  }
   
+  if (!store) {
+    return <div className="p-6 text-red-500">Store not found.</div>;
+  }
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-stone-100 font-[Outfit]">

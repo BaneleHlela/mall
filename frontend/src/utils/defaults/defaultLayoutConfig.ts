@@ -67,7 +67,13 @@ export const defaultLayoutConfig = {
       },
     },
     description: "",
-    backgroundColor: "#f9d195",
+    background: {
+      color: "#f9d195",
+      width: {
+        desktop: "65vw",
+        mobile: "100vw",
+      },
+    },
     fonts: {
       primary: "Open Sans",
       secondary: "Patrick Hand",

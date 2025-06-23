@@ -7,7 +7,7 @@ import StoreMenubarIcons from "./StoreMenubarIcons";
   
 const FirstStoreSidebar = ({ isOpen, onClose, storeId }: { isOpen: boolean; onClose: () => void; storeId: string }) => {
     const style = useAppSelector(state => state.layoutSettings.menubar.sidebar);
-
+    const { color: backgroundColor } = useAppSelector(state => state.layoutSettings.menubar.background);
     const navLinks = [
         { to: `/stores/${storeId}/`, label: "home" },
         { to: `/stores/${storeId}/about`, label: "about" },
@@ -23,16 +23,16 @@ const FirstStoreSidebar = ({ isOpen, onClose, storeId }: { isOpen: boolean; onCl
             animate={{ y: 0, x: 0, opacity: 1 }}
             transition={{ duration: 0.3, ease: "easeInOut" }} 
             style={{
-                backgroundColor: style.backgroundColor,
+                backgroundColor: backgroundColor,
             }}
-            className="fixed pb-5 h-screen w-screen flex flex-col justify-between bg-orange-100 z-100 top-0 right-0 lg:hidden"
+            className="fixed pb-5 h-screen w-screen flex flex-col justify-between bg-orange-100 z-50 top-0 right-0 lg:hidden"
         >
             <div className="h-[20%] w-full">
             </div>
             {/* Logo */}
             {style.logo.display && (
                 <div className="h-fit w-full bg-amber-900">
-                    lOGO HERE
+                    LOGO HERE
                 </div>
             )}
             {/* Navigation links */}

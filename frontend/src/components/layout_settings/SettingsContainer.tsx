@@ -21,11 +21,14 @@ const SettingsContainer: React.FC<SettingsContainerProps> = ({
 
   return (
     <>
-        <div className="w-full h-[45px]">
+        <div 
+            onClick={() => setIsSettingsOpen(prev => !prev)}
+            className="w-full h-[45px]"
+        >
         {/* Header */}
         <div
             className={`flex flex-row justify-between w-full h-full border border-black text-white shadow-sm pl-2 bg-black 
-            ${isSettingsOpen ? 'rounded-t-sm' : 'rounded-sm'}`}
+            ${isSettingsOpen ? 'rounded-t-sm' : 'rounded-sm'} hover:bg-gray-900`}
         >
             <div className="flex flex-col justify-center text-[18px]">
             {name}
@@ -74,7 +77,7 @@ const SettingsContainer: React.FC<SettingsContainerProps> = ({
         </div>
         {/* Sliding Settings Component */}
         <motion.div
-            className={`w-full border border-black rounded-b-sm shadow-md  overflow-hidden -mt-1 overflow-y-scroll hide-scrollbar`} 
+            className={`w-full border border-black rounded-b-sm shadow-md  overflow-hidden -mt-1 max-h-[480px] overflow-y-scroll hide-scrollbar`} 
             initial={{ height: 0, opacity: 0 }}
             animate={{
                 height: isSettingsOpen ? "auto" : 0,

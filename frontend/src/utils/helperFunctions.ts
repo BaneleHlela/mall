@@ -1,13 +1,13 @@
 
 export const getSetting = (key: string, settings: any, objectPath: string) => {
-    try {
-      return objectPath
-        .split(".")
-        .reduce((current, prop) => current?.[prop], settings)?.[key];
-    } catch {
-      return undefined;
-    }
+  try {
+    const path = [...objectPath.split("."), ...key.split(".")];
+    return path.reduce((current, prop) => current?.[prop], settings);
+  } catch {
+    return undefined;
+  }
 };
+
 
 export const convertTo12HourFormat = (time: string): string => {
   const [hours, minutes] = time.split(":").map(Number);

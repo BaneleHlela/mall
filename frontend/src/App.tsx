@@ -22,7 +22,7 @@ const App: React.FC = () => {
       if (event.data?.layoutSettings) {
         dispatch(setInitialLayout(event.data.layoutSettings));
         localStorage.setItem("layoutSettings", JSON.stringify(event.data.layoutSettings));
-        console.log("📩 Received layoutSettings via postMessage");
+        //console.log("📩 Received layoutSettings via postMessage");
       }
     };
 
