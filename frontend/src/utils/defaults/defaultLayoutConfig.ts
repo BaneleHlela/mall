@@ -38,6 +38,7 @@ export const defaultMenubarConfig = {
 
 export const defaultLayoutConfig = {
     name: "Default Store Layout",
+    routeOrder: ["home", "about", "menu", "products", "reviews"],
     routes: {
       home: {
         name: "Home",
@@ -55,10 +56,10 @@ export const defaultLayoutConfig = {
         url: "/menu",
         contains: ["menu", "footer"],
       },
-      order: {
+      products: {
         name: "Order Online",
-        url: "/order",
-        contains: [ "order", "footer"],
+        url: "/products",
+        contains: [ "products", "footer"],
       },
       reviews: {
         name: "Reviews",

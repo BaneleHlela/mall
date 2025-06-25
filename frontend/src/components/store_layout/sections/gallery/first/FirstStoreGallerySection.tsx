@@ -11,7 +11,7 @@ const FirstStoreGallerySection = ({ storeId }: { storeId: string }) => {
   const [images, setImages] = useState<Image[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const limit = 4;
+  const limit = 5;
 
   useEffect(() => {
     const fetchImages = async () => {

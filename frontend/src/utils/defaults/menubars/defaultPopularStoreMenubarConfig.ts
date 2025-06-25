@@ -295,30 +295,6 @@ export const defaultPupularStoreMenubarConfig = {
                     }
                 },
             },
-            icons: {
-                display: false,
-                show: ["phone", "twitter", "whatsapp"],
-                size: 22,
-                color: "#6c4d37",
-                background: {
-                    padding: "0px",
-                    backgroundColor: "",
-                    border: {
-                        width: "0px",
-                        style: "solid",
-                        color: "brown",
-                    },
-                },
-                iconBackground: {
-                    padding: "0px",
-                    backgroundColor: "",
-                    border: {
-                        width: "0px",
-                        style: "solid",
-                        color: "brown",
-                    },
-                }
-            },
             hamburger: {
                 variation: "rotate",
                 size: 32,

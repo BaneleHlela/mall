@@ -26,7 +26,7 @@ const FirstStoreSidebar = ({ isOpen, onClose, storeId }: { isOpen: boolean; onCl
             style={{
                 backgroundColor: backgroundColor,
             }}
-            className="fixed pb-5 h-screen w-screen flex flex-col justify-between bg-orange-100 z-50 right-0 lg:hidden"
+            className="fixed pb-5 h-screen w-screen flex flex-col justify-between z-50 right-0 lg:hidden"
         >
             <div className="h-[20%] w-full">
             </div>
@@ -50,7 +50,7 @@ const FirstStoreSidebar = ({ isOpen, onClose, storeId }: { isOpen: boolean; onCl
                             ...getBackgroundStyles(style.links.background),
                         }}
                         key={label} className={`
-                                flex flex-col justify-center capitalize hover:scale-102 bg-white
+                                flex flex-col justify-center capitalize hover:scale-102
                                 ${style.links.alignment === "left" && "text-left"}
                                 ${style.links.alignment === "right" && "text-right"}
                                 ${style.links.alignment === "center" && "text-center"}
@@ -64,8 +64,7 @@ const FirstStoreSidebar = ({ isOpen, onClose, storeId }: { isOpen: boolean; onCl
             </ul>
             {/* SocialIcons */}
             <div className="w-full flex flex-row justify-center mb-5">
-                {style.display === "icons" && <StoreMenubarIcons style={style.icons}/>}
-                
+                {style.display === "icons" && <StoreMenubarIcons style={style.icons}/>}        
                 {style.display === "button" && <StoreButton style={style.button} /> }
             </div>
         </motion.div>

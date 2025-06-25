@@ -114,20 +114,22 @@ export const deleteStoreLogo = createAsyncThunk<string, { storeId: string }>(
 );
 
 export const uploadStoreGalleryImage = createAsyncThunk<
-  string, // returns the uploaded image URL
-  { storeId: string; imageFile: File }
+  { url: string; description: string; category: string },
+  { storeId: string; imageFile: File; description: string; category: string }
 >(
   'stores/uploadStoreGalleryImage',
-  async ({ storeId, imageFile }, thunkAPI) => {
+  async ({ storeId, imageFile, description, category }, thunkAPI) => {
     try {
       const formData = new FormData();
       formData.append('image', imageFile);
+      formData.append('description', description);
+      formData.append('category', category);
 
       const response = await axios.put(`${API_URL}/${storeId}/gallery`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      return response.data.url;
+      return response.data;
     } catch (error) {
       console.error('Error uploading gallery image:', error);
       return thunkAPI.rejectWithValue('Failed to upload gallery image');
@@ -155,21 +157,33 @@ export const deleteStoreGalleryImage = createAsyncThunk<
   }
 );
 
+
+
 export const fetchStoreImages = createAsyncThunk<
-  { storeId: string; images: { url: string }[] },
-  string
+  { storeId: string; images: { url: string }[]; hasMore: boolean },  // Added `hasMore`
+  { storeId: string; page: number; limit: number }  // Accept `page` and `limit` as parameters
 >(
   'stores/fetchStoreImages',
-  async (storeId, thunkAPI) => {
+  async ({ storeId, page, limit }, thunkAPI) => {
     try {
-      const response = await axios.get(`${API_URL}/${storeId}/gallery`);
-      return { storeId, images: response.data };
+      // Make the request with pagination parameters
+      const response = await axios.get(`${API_URL}/${storeId}/gallery`, {
+        params: { page, limit }
+      });
+
+      // Assuming the response contains the images and a `hasMore` boolean
+      return {
+        storeId,
+        images: response.data.images,  // Ensure your backend returns an array of images
+        hasMore: response.data.hasMore // Make sure your backend provides this field
+      };
     } catch (error) {
       console.error('Error fetching store gallery images:', error);
       return thunkAPI.rejectWithValue('Failed to fetch gallery images');
     }
   }
 );
+
 
 
 
@@ -276,31 +290,33 @@ const storeSlice = createSlice({
       })
 
       // Fetch Store Images
-      .addCase(fetchStoreImages.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
       .addCase(fetchStoreImages.fulfilled, (state, action) => {
         state.isLoading = false;
-        const { storeId, images } = action.payload;
-
+        const { storeId, images, hasMore } = action.payload;
+      
+        // Append the new images to the existing images in the store
         if (state.storesById[storeId]) {
-          state.storesById[storeId].images = images;
+          state.storesById[storeId].images = [
+            ...(state.storesById[storeId].images || []),  // Existing images (or an empty array if none)
+            ...images.filter(img => !state.storesById[storeId].images.some(existingImg => existingImg.url === img.url)),  // Only append new images
+          ];
         }
-
+      
         if (state.myStoresById[storeId]) {
-          state.myStoresById[storeId].images = images;
+          state.myStoresById[storeId].images = [
+            ...(state.myStoresById[storeId].images || []),
+            ...images.filter(img => !state.myStoresById[storeId].images.some(existingImg => existingImg.url === img.url)), // Prevent duplicates
+          ];
         }
-
+      
         if (state.currentStore && state.currentStore._id === storeId) {
-          state.currentStore.images = images;
+          state.currentStore.images = [
+            ...(state.currentStore.images || []),
+            ...images.filter(img => !state.currentStore.images.some(existingImg => existingImg.url === img.url)), // Prevent duplicates
+          ];
+          state.currentStore.hasMore = hasMore; // Set hasMore flag
         }
       })
-      .addCase(fetchStoreImages.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload as string;
-      })      
-
   },
 });
 

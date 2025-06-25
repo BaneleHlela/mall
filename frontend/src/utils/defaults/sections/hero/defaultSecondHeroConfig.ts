@@ -1,5 +1,6 @@
 export const defaultSecondHeroConfig = {
-    variation: "secondHero",
+    variation: "heroWithSlidingImages",
+    topMargin: "20px",
     backgroundColor: "#f9d195", //#f9d195
     images: [
         "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100115.png",

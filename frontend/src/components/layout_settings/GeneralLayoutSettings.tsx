@@ -1,4 +1,3 @@
-import React from 'react'
 import LayoutFontsSelector from './extras/LayoutFontsSelector'
 import SubSettingsContainer from './extras/SubSettingsContainer'
 import BackgroundEditor from './background/BackgroundEditor'
@@ -26,6 +25,7 @@ const GeneralLayoutSettings = () => {
             handleSettingChange={handleSettingChange}
             settings={settings}
             allow={["width", "color"]}
+            widthUnit='vw'
             responsiveSize={true}
           />
         </div>

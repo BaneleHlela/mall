@@ -14,7 +14,6 @@ import {
   StoreMenuPage, StoreReviewsPage 
 } from "./supporting/StorePagesCentral";
 import PopularStoreMenubar from "../../components/store_layout/menubars/popular/PopularStoreMenubar";
-import StoreHome from "./supporting/home/StoreHomePage";
 import StoreOrderOnlinePage from "./supporting/order_online/StoreOrderOnlinePage";
 import { getBackgroundStyles } from "../../utils/stylingFunctions";
 
@@ -75,7 +74,7 @@ const StorePage = () => {
   }
 
   const routeComponents: { [key: string]: React.ReactNode } = {
-    "/": <StoreHome />,
+    "/": <StoreHomePage />,
     "/about": <StoreAboutPage />,
     "/menu": <StoreMenuPage />,
     "/order-online": <StoreOrderOnlinePage />,

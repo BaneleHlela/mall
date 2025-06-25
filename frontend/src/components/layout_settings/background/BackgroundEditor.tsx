@@ -8,8 +8,9 @@ import SubSettingsContainer from "../extras/SubSettingsContainer";
 import BorderEditor from "./BorderEditor";
 
 interface BackgroundEditorProps extends EditorProps {
-  responsiveSize?: boolean; // NEW: Optional prop
-  unit?: string;
+  responsiveSize?: boolean;
+  heightUnit?: string;
+  widthUnit?: string;
 }
 
 const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
@@ -17,11 +18,11 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
   settings,
   handleSettingChange,
   allow,
-  responsiveSize = false, 
-  unit = "px",
+  responsiveSize = false,
+  heightUnit = "px",
+  widthUnit = "px",
 }) => {
   const isAllowed = (key: string) => !allow || allow.includes(key);
-
 
   const handleChange =
     (field: string) =>
@@ -29,13 +30,20 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
       handleSettingChange(`${objectPath}.${field}`, e.target.value);
   };
 
-  const createSliderChangeHandler = (field: string) => (newVal: number) => {
+  const createSliderChangeHandler = (field: string, unit: string) => (newVal: number) => {
     const event = {
       target: Object.assign(document.createElement("input"), {
         value: `${newVal}${unit}`,
       }),
     } as React.ChangeEvent<HTMLInputElement>;
     handleChange(field)(event);
+  };
+
+  const getSliderProps = (unit: string) => {
+    if (unit === 'vw' || unit === 'vh') {
+      return { min: 1, max: 100, step: 1 };
+    }
+    return { min: 0, max: 500, step: 1 };
   };
 
   return (
@@ -52,10 +60,10 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
         <OptionsToggler
           label="Shadow"
           options={["true", "false"]}
-          value={String(getSetting("shadow", settings, objectPath))} // Convert value to boolean
+          value={String(getSetting("shadow", settings, objectPath))}
           onChange={(newValue) =>
             handleChange("shadow")({
-              target: { value: newValue === "true" } as unknown as HTMLInputElement, // Convert newValue to boolean
+              target: { value: newValue === "true" } as unknown as HTMLInputElement,
             } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
           }
         />
@@ -68,28 +76,25 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
             <SettingsSlider
               label="Height (Mobile)"
               value={parseInt(getSetting("height.mobile", settings, objectPath) || "110")}
-              unit={unit}
-              min={0}
-              max={500}
-              onChange={createSliderChangeHandler("height.mobile")}
+              unit={heightUnit}
+              {...getSliderProps(heightUnit)}
+              onChange={createSliderChangeHandler("height.mobile", heightUnit)}
             />
             <SettingsSlider
               label="Height (Desktop)"
               value={parseInt(getSetting("height.desktop", settings, objectPath) || "120")}
-              unit={unit}
-              min={0}
-              max={500}
-              onChange={createSliderChangeHandler("height.desktop")}
+              unit={heightUnit}
+              {...getSliderProps(heightUnit)}
+              onChange={createSliderChangeHandler("height.desktop", heightUnit)}
             />
           </>
         ) : (
           <SettingsSlider
             label="Height"
             value={parseInt(getSetting("height", settings, objectPath) || "120")}
-            unit={unit}
-            min={0}
-            max={500}
-            onChange={createSliderChangeHandler("height")}
+            unit={heightUnit}
+            {...getSliderProps(heightUnit)}
+            onChange={createSliderChangeHandler("height", heightUnit)}
           />
         ))}
 
@@ -100,31 +105,25 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
             <SettingsSlider
               label="Width (Mobile)"
               value={parseInt(getSetting("width.mobile", settings, objectPath) || "10")}
-              unit={unit}
-              min={10}
-              step={1}
-              max={500}
-              onChange={createSliderChangeHandler("width.mobile")}
+              unit={widthUnit}
+              {...getSliderProps(widthUnit)}
+              onChange={createSliderChangeHandler("width.mobile", widthUnit)}
             />
             <SettingsSlider
               label="Width (Desktop)"
               value={parseInt(getSetting("width.desktop", settings, objectPath) || "20")}
-              unit={unit}
-              min={10}
-              step={1}
-              max={500}
-              onChange={createSliderChangeHandler("width.desktop")}
+              unit={widthUnit}
+              {...getSliderProps(widthUnit)}
+              onChange={createSliderChangeHandler("width.desktop", widthUnit)}
             />
           </>
         ) : (
           <SettingsSlider
             label="Width"
             value={parseInt(getSetting("width", settings, objectPath) || "95")}
-            unit={unit}
-            min={0}
-            step={1}
-            max={500}
-            onChange={createSliderChangeHandler("width")}
+            unit={widthUnit}
+            {...getSliderProps(widthUnit)}
+            onChange={createSliderChangeHandler("width", widthUnit)}
           />
         ))}
 
@@ -134,20 +133,20 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
           <SettingsSlider
             label="Padding Y"
             value={parseInt(getSetting("padding.y", settings, objectPath) || "50")}
-            unit={unit}
+            unit="px"
             min={0}
             max={100}
             step={1}
-            onChange={createSliderChangeHandler("padding.y")}
+            onChange={createSliderChangeHandler("padding.y", "px")}
           />
           <SettingsSlider
             label="Padding X"
             value={parseInt(getSetting("padding.x", settings, objectPath) || "50")}
-            unit={unit}
+            unit="px"
             min={0}
             max={100}
             step={1}
-            onChange={createSliderChangeHandler("padding.x")}
+            onChange={createSliderChangeHandler("padding.x", "px")}
           />
         </>
       )}

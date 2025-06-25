@@ -33,13 +33,14 @@ export interface Fonts {
 
 export interface Layout {
     routes: Routes;
+    routeOrder: string[]; 
     practice: any;
     background: BackgroundSettings;
     fonts: Fonts;
     footer: any;
     name?: string;
     _id?: string;
-    store?: Types.ObjectId | null,
+    store?: Types.ObjectId | null;
     menubar?: any;
     hero?: any;
     bookWithCalendar?: any;
@@ -48,6 +49,7 @@ export interface Layout {
     order: any;
     reviews: any;
 }
+  
 
 export type SectionProps = {
     id?: string;
@@ -57,23 +59,26 @@ export interface Route {
     name: string;
     url: string;
     exact?: boolean; // Optional, as not all routes may require exact matching
-    contains: Array<
-      | "hero"
-      | "about"
-      | "services"
-      | "gallery"
-      | "book"
-      | "contact"
-      | "events"
-      | "menu"
-      | "reviews"
-      | "products"
-      | "packages"
-      | "footer"
-    >; 
-  }
+    contains: string[],
+    // contains: Array<
+    // | "hero"
+    // | "about"
+    // | "services"
+    // | "gallery"
+    // | "book"
+    // | "contact"
+    // | "events"
+    // | "menu"
+    // | "reviews"
+    // | "products"
+    // | "packages"
+    // | "footer"
+    // | "order" 
+    // >;
+
+}
   
-  export interface Routes {
+export interface Routes {
     home?: Route;
     about?: Route;
     services?: Route;
@@ -85,4 +90,4 @@ export interface Route {
     reviews?: Route;
     products?: Route;
     packages?: Route;
-  }
+}

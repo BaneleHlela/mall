@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { IoArrowBack } from 'react-icons/io5';
+import { IoIosArrowRoundBack } from 'react-icons/io';
 
 interface SlidingPanelProps {
   isOpen: boolean;
@@ -17,12 +17,12 @@ const SlidingPanel: React.FC<SlidingPanelProps> = ({ isOpen, onClose, title, chi
       transition={{ type: 'tween', duration: 0.3 }}
       className="absolute top-0 right-0 w-full h-full bg-white overflow-y-auto"
     >
-      <div className="p-4">
+      <div className="p-2">
         <div className="flex items-center mb-4">
           <button onClick={onClose} className="mr-2">
-            <IoArrowBack size={24} />
+            <IoIosArrowRoundBack className="text-[200%]"/>
           </button>
-          <h2 className="text-xl font-bold">{title}</h2>
+          <h2 className="text-xl font-[500]">{title}</h2>
         </div>
         {children}
       </div>

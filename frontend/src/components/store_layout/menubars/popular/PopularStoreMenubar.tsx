@@ -196,6 +196,7 @@ const DesktopTopBar: React.FC<{
 const PopularStoreMenubar: React.FC = () => {
   const settings = useAppSelector((state) => state.layoutSettings.menubar)
   const store = useAppSelector((state) => state.stores.currentStore);
+  const { routes, routeOrder } = useAppSelector((state) => state.layoutSettings);
   const storeId = store?._id as string;
   const [isOpen, setOpen] = useState(false)
 
@@ -205,13 +206,15 @@ const PopularStoreMenubar: React.FC = () => {
       : settings.background.height.mobile
   };
 
-  const links = [
-    { to: `/stores/${storeId}/`, label: "home" },
-    { to: `/stores/${storeId}/about`, label: "about" },
-    { to: `/stores/${storeId}/menu`, label: "menu" },
-    { to: `/stores/${storeId}/order-online`, label: "order online" },
-    { to: `/stores/${storeId}/reviews`, label: "reviews" },
-  ];
+
+  
+  const links = routeOrder // @ts-ignore
+    .filter((key) => routes[key])  // @ts-ignore
+    .map((key) => ({ // @ts-ignore
+    to: `/stores/${storeId}${routes[key].url === "/" ? "" : routes[key].url}`, // @ts-ignore
+    label: routes[key].name.toLowerCase(),
+  })); 
+
 
   return (
     <nav

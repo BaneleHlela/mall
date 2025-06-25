@@ -1,10 +1,16 @@
 import React from 'react'
 import HeroSettings from './hero/HeroSettings'
+import { useAppSelector } from '../../../app/hooks';
 
 const SectionSettings = () => {
+  const routes = useAppSelector((state) => state.layoutSettings.routes);
+  
   return (
-    <HeroSettings ></HeroSettings>
+    <div className="h-[80vh] w-full bg-pink-600 overflow-x-clip overflow-y-scroll hide-scrollbar">
+      here
+    </div>
   )
 }
 
-export default SectionSettings
+export default SectionSettings;
+{/* <HeroSettings ></HeroSettings> */}

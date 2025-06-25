@@ -33,20 +33,22 @@ const StoreDashboard = () => {
     }
 
     return (
-        <div className="h-screen w-screen flex flex-row">
+        <div className="h-screen w-screen flex flex-row overflow-clip">
             <StoreDashBoardMenubar store={store}/>
-            <Routes>
-                <Route path="/" element={<StoreOverview store={store} />} />
-                <Route path="/layouts" element={<StoreLayouts />} />
-                <Route path="/team" element={<StoreTeam />} />
-                <Route path="/products" element={<StoreProducts />} />
-                <Route path="/services" element={<StoreServices />} />
-                <Route path="/orders" element={<StoreOrders />} />
-                <Route path="/bookings" element={<StoreBookings />} />
-                <Route path="/images" element={<StoreImages />} /> 
-                <Route path="/settings" element={<StoreSettings />} />
-            </Routes>
-            
+            <div className="flex flex-col w-full">
+                <StoreDashboardTopbar />
+                <Routes>
+                    <Route path="/" element={<StoreOverview store={store} />} />
+                    <Route path="/layouts" element={<StoreLayouts />} />
+                    <Route path="/team" element={<StoreTeam />} />
+                    <Route path="/products" element={<StoreProducts />} />
+                    <Route path="/services" element={<StoreServices />} />
+                    <Route path="/orders" element={<StoreOrders />} />
+                    <Route path="/bookings" element={<StoreBookings />} />
+                    <Route path="/images" element={<StoreImages />} /> 
+                    <Route path="/settings" element={<StoreSettings />} />
+                </Routes>
+            </div>
         </div>
     )
 }

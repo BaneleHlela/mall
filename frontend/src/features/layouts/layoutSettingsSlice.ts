@@ -1,12 +1,13 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { Layout, Menubar } from "../../types/layoutTypes"; 
+import type { Layout } from "../../types/layoutTypes"; 
 import { defaultLayoutConfig } from '../../utils/defaults/defaultLayoutConfig';
 
 
 
 // Define the initial state using that type
 const initialState: Layout = {
-  ...defaultLayoutConfig
+  ...defaultLayoutConfig,
+  routeOrder: ["home", "about", "menu", "products", "reviews"],
 };
 
 const layoutSettingsSlice = createSlice({
@@ -35,9 +36,12 @@ const layoutSettingsSlice = createSlice({
           current = current[key];
         }
       })
-    }
+    },
+    updateRouteOrder: (state, action) => {
+      state.routeOrder = action.payload;
+    },
   },
 });
 
-export const { updateSetting, setInitialLayout } = layoutSettingsSlice.actions;
+export const { updateSetting, setInitialLayout, updateRouteOrder } = layoutSettingsSlice.actions;
 export default layoutSettingsSlice.reducer;

@@ -253,7 +253,7 @@ export const deleteStoreLogo = expressAsyncHandler(async (req, res) => {
 export const getStoreImages = expressAsyncHandler(async (req, res) => {
   const { storeId } = req.params;
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 4;
+  const limit = parseInt(req.query.limit) || 5;
   const skip = (page - 1) * limit;  // determines how many images to skip before selecting results
 
   const store = await Store.findById(storeId).select('images');
@@ -273,8 +273,11 @@ export const getStoreImages = expressAsyncHandler(async (req, res) => {
 export const uploadStoreGalleryImage = expressAsyncHandler(async (req, res) => {
   try {
     const { storeId } = req.params;
+    const { description } = req.body;
     const file = req.file;
     const fileName = req.body.fileName || file.originalname;
+
+    console.log(storeId)
 
     if (!file) {
       return res.status(400).json({ message: "No file uploaded" });
@@ -294,7 +297,7 @@ export const uploadStoreGalleryImage = expressAsyncHandler(async (req, res) => {
     // Add new image entry to store.images
     store.images.push({
       url: publicUrl,
-      // category and description will be added later
+      description: description || '',
     });
 
     await store.save();
@@ -302,6 +305,7 @@ export const uploadStoreGalleryImage = expressAsyncHandler(async (req, res) => {
     res.status(200).json({
       message: "Image uploaded successfully",
       url: publicUrl,
+      description,
     });
   } catch (error) {
     console.error("Upload gallery image error:", error);
