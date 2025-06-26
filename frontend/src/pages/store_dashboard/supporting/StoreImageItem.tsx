@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { IoMdClose } from "react-icons/io";
+import type { Image } from '../../../types/storeTypes';
+import { TbLoader3 } from 'react-icons/tb';
+import { useAppSelector } from '../../../app/hooks';
 
 interface StoreImageItemProps {
-  img: {
-    url: string;
-    _id: string;
-  };
-  onView: (url: string) => void;
+  img: Image;
   onDelete: (id: string) => void;
   onUse: (url: string) => void;
 }
 
-const StoreImageItem: React.FC<StoreImageItemProps> = ({ img, onView, onDelete, onUse }) => {
+const StoreImageItem: React.FC<StoreImageItemProps> = ({ img, onDelete, onUse }) => {
+  const isLoading = useAppSelector((state) => state.storeAdmin.isLoading);
   const [showOptions, setShowOptions] = useState(false);
   const link = window.location.href; 
   const [showPopup, setShowPopup] = useState(false);  
@@ -25,14 +25,14 @@ const StoreImageItem: React.FC<StoreImageItemProps> = ({ img, onView, onDelete, 
       <img
         src={img.url}
         alt={`Store Image`}
-        className="w-full h-full object-contain rounded-lg aspect-square"
+        className="w-full h-full object-cover rounded-sm aspect-square"
       />
       {showOptions && (
         <div className="absolute top-0 left-0 w-full h-full rounded  flex flex-col justify-center items-center space-y-2 py-5 z-10">
           {link.includes("layouts") && (
             <button 
                 onClick={() => onUse(img.url)}
-                className="w-[150px] border border-black text-white bg-gray-800 px-2 py-2 rounded-[22px] hover:scale-102"
+                className="w-[55%] border border-black text-white bg-gray-800 px-2 py-2 rounded-[22px] hover:scale-102"
             >
                 Select
             </button>
@@ -42,13 +42,16 @@ const StoreImageItem: React.FC<StoreImageItemProps> = ({ img, onView, onDelete, 
                 onClick={() => onDelete(img._id)}
                 className="w-[55%] border border-black text-white bg-gray-800 hover:bg-gray-700 px-2 py-2 rounded-[22px] hover:scale-102 "
               >
-                Delete
+                {isLoading ? (
+                      <TbLoader3 size={20} className="animate-spin mx-auto" />
+                    ) : "Delete"
+                }
               </button>
            )}
           
           <button 
             onClick={() => setShowPopup(true)}
-            className="w-[150px] border border-black text-black px-2 py-2 rounded-[22px] hover:scale-102 hover:bg-gray-700 hover:text-stone-200"
+            className="w-[55%] border border-black text-black px-2 py-2 rounded-[22px] hover:scale-102 hover:bg-gray-700 hover:text-stone-200"
           >
             View
           </button>

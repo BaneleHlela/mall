@@ -1,14 +1,23 @@
 // SimpleStoreImagesSlideshow.tsx
 
 import React, { useState, useEffect, useRef } from 'react';
+import { getBorderStyles } from '../../../../utils/stylingFunctions';
 
 export interface SlideshowProps {
   images: string[];
   height?: string;
   width?: string;
+  style: {
+    border: {
+      width: string;
+      style: string;
+      color: string;
+      radius: string;
+    };
+  };
 }
 
-const SimpleStoreImagesSlider: React.FC<SlideshowProps> = ({ images, height = "50vh", width = "50vw" }) => {
+const SimpleStoreImagesSlider: React.FC<SlideshowProps> = ({ images, height = "50vh", width = "50vw", style }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
 
@@ -42,6 +51,7 @@ const SimpleStoreImagesSlider: React.FC<SlideshowProps> = ({ images, height = "5
       style={{
         height: height,
         width: width,
+        ...getBorderStyles(style.border),
       }}
       className="relative overflow-hidden"
     >

@@ -4,11 +4,11 @@ import StopAndGoImageSlider from "../../../extras/slideshows/StopAndGoImageSlide
 import { useAppSelector } from "../../../../../app/hooks";
 
 
-const SecondHero = () => {
+const HeroWithSlidingImages = () => {
   const settings = useAppSelector((state) => state.layoutSettings.hero);
-const images = settings.images;
+  const images = settings.images;
 
-const getSmallSlider = (variation: string, images: string[], height: string, width: string, margin: string, border: any) => {
+  const getSmallSlider = (variation: string, images: string[], height: string, width: string, margin: string, border: any) => {
     if (variation === "stopAndGo") {
       return (
         <StopAndGoImageSlider
@@ -36,15 +36,15 @@ const getSmallSlider = (variation: string, images: string[], height: string, wid
   return (
     <div 
       style={{
-        backgroundColor: settings.backgroundColor,
+        backgroundColor: settings.background.color,
       }}
       className="h-full w-full bg-blue-800"
     >
       {/* Mobile */}
-      <div className="h-[50vh] w-full md:hidden">
+      <div className="h-[50vh] w-full lg:hidden">
         {/* Main images */}
         <div className="h-[70%] w-full flex flex-col justify-center ">
-          <SimpleStoreImagesSlider images={images} height="80%" width="100%" />
+          <SimpleStoreImagesSlider images={images} height="80%" width="100%" style={settings.largeSlider}/>
         </div>
         {/* Sub images */}
         <div className="h-[30%] w-full flex flex-col justify-center">
@@ -62,7 +62,7 @@ const getSmallSlider = (variation: string, images: string[], height: string, wid
       <div className="hidden lg:block h-[100vh] w-full">
         {/* Main images */}
         <div className="h-[70%] w-full">
-          <SimpleStoreImagesSlider images={images} height="95%" width="100%" />
+          <SimpleStoreImagesSlider images={images} height="95%" width="100%" style={settings.largeSlider}/>
         </div>
         {/* Sub images */}
         <div className="h-[30%] w-full flex flex-col justify-center">
@@ -80,4 +80,4 @@ const getSmallSlider = (variation: string, images: string[], height: string, wid
   );
 }
 
-export default SecondHero;
+export default HeroWithSlidingImages;

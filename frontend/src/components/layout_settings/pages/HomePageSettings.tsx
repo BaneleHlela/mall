@@ -88,7 +88,7 @@ const HomePageSettings = () => {
   };
 
   return (
-    <div className="w-full h-[80vh] space-y-4">
+    <div className="w-full h-[80vh] space-y-2">
       <div className="relative px-4 flex justify-center">
         <button
           onClick={() => setDropdownOpen(!dropdownOpen)}

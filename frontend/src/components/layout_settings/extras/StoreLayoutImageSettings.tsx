@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import UploadStoreImage from "../../../components/store_dashboard/UploadStoreImage";
 import { useAppSelector } from "../../../app/hooks";
 
 interface StoreLayoutImageSettingsProps {
@@ -15,7 +14,7 @@ const StoreLayoutImageSettings: React.FC<StoreLayoutImageSettingsProps> = ({
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
   const images =
-    useAppSelector((state) => state.storeAdmin.store?.images?.images) || [];
+    useAppSelector((state) => state.storeAdmin.store?.images) || [];
 
   const handleGalleryImageClick = (url: string) => {
     onChange(url);

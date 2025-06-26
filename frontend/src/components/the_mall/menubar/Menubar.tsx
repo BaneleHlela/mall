@@ -29,7 +29,7 @@ const Menubar = () => {
       <Link to="/my-stores">
         <Store size={32} />
       </Link>
-      <Link to="/layouts/build">
+      <Link to="/login">
         <LayoutDashboard size={32} />
       </Link>
       <Link to="/stores/684c15bca0f98a1d13a7ff00/order-online">

@@ -18,7 +18,7 @@ const AlwaysMovingImageSlider: React.FC<ImageSliderProps> = ({
   border = {width: "5px", color: "solid", style: "white", radius: "0"}
 }) => {
   const trackRef = useRef<HTMLDivElement>(null);
-
+  
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;

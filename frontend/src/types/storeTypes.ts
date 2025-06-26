@@ -10,9 +10,11 @@ export interface TeamMember {
   role: "owner" | "manager" | "staff" | "viewer"; 
 }
 export interface Image {
+  _id: string;
   category?: string; 
   description?: string; 
-  url?: string; 
+  url: string; 
+  hasMore?: boolean;
 }
 export interface Socials {
   platform: "facebook" | "twitter" | "instagram" | "linkedin" | "pinterest" | "youtube" | "whatsapp" | "phone";
@@ -42,10 +44,7 @@ export interface Store {
     lng: number  
     address: string; 
   }>;
-  images?: {
-    images: Image[];
-    hasMore?: boolean;
-  }
+  images?: Image[];
   operationTimes?: OperationTimes;
 }
 

@@ -28,10 +28,14 @@ const StopAndGoImageSlider: React.FC<ImageSliderProps> = ({
     // Add more images to the replicatedImages array every 3 seconds
     const interval = setInterval(() => {
       setReplicatedImages((prevImages) => [...prevImages, ...images]); // Append the original images
-    }, 3000);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [images]); // Dependency ensures it uses the latest images array
+
+  useEffect(() => {
+    setReplicatedImages([...images]); 
+  }, [images])
 
   useEffect(() => {
     const interval = setInterval(() => {

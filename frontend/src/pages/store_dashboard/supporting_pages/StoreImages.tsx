@@ -1,20 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UploadStoreImage from "../../../components/store_dashboard/UploadStoreImage";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { fetchStoreImages } from "../../../features/stores/storeSlice";
+import { deleteStoreGalleryImage, fetchStoreImages } from "../../../features/stores/storeSlice";
 import StoreImageItem from "../supporting/StoreImageItem";
 import { IoIosArrowDown } from "react-icons/io"; // Import the arrow icon
+import type { Image } from "../../../types/storeTypes";
 
-const StoreImages = () => {
+interface StoreImagesProps {
+  onImageSelect: (imageUrl: string) => void;
+}
+
+const StoreImages: React.FC<StoreImagesProps> = ({onImageSelect}) => {
   const dispatch = useAppDispatch();
 
   const currentStore = useAppSelector((state) => state.storeAdmin.store);
-  const images = currentStore?.images || [];
+  const images: Image[] = currentStore?.images || [];
   const isLoading = useAppSelector((state) => state.stores.isLoading);
   const [page, setPage] = useState(1); // Keep track of the current page
   const [hasMore, setHasMore] = useState(true); // Track if there are more images to load
   const limit = 5; // Number of images per page
-  console.log(hasMore)
+
   useEffect(() => {
     if (currentStore?._id) {
       dispatch(fetchStoreImages({ storeId: currentStore._id, page, limit })).then((res: any) => {
@@ -23,19 +28,26 @@ const StoreImages = () => {
     }
   }, [dispatch, currentStore?._id, page]);
 
-  const handleViewImage = (url: string) => {
-    // Implement view functionality (e.g., open in a modal)
-    console.log("Viewing image:", url);
+
+  const handleDeleteImage = (imageUrl: string) => {
+    if (currentStore?._id) {
+      dispatch(deleteStoreGalleryImage({ storeId: currentStore._id, imageUrl }))
+        .unwrap()
+        .then(() => {
+          console.log("Image deleted successfully:", imageUrl);
+          // Update local state
+          //const updatedImages = images.filter(img => img.url !== imageUrl);
+          // You'll need to create a new action to update the store's images
+          //dispatch(updateStoreImages(updatedImages));
+        })
+        .catch((error) => {
+          console.error("Failed to delete image:", error);
+        });
+    }
   };
 
-  const handleDeleteImage = (id: string) => {
-    // Implement delete functionality
-    console.log("Deleting image with id:", id);
-  };
-
-  const handleUseImage = (url: string) => {
-    // Implement use functionality
-    console.log("Using image:", url);
+  const handleSelectImage = (url: string) => {
+    onImageSelect(url); // Call the parent function to handle image selection
   };
 
   const loadMoreImages = () => {
@@ -44,7 +56,7 @@ const StoreImages = () => {
 
   return (
     <div className="h-full w-full m-1 rounded-xl bg-white shadow-md p-2">
-      <div className="h-[25%] items-start w-full">
+      <div className="h-fit flex flex-row justify-center w-full">
         <UploadStoreImage />
       </div>
 
@@ -55,13 +67,12 @@ const StoreImages = () => {
         {isLoading && <p>Loading images...</p>}
 
         <div className="grid grid-cols-2 gap-2 py-2 md:grid-cols-3 lg:grid-cols-5 auto-rows-fr">          
-          {images.map((img) => (
+          {images.map((img: Image) => (
             <StoreImageItem
               key={img._id}
               img={img}
-              onView={handleViewImage}
-              onDelete={handleDeleteImage}
-              onUse={handleUseImage}
+              onDelete={() => handleDeleteImage(img.url)}
+              onUse={handleSelectImage}
             />
           ))}
         </div>
@@ -83,3 +94,4 @@ const StoreImages = () => {
 };
 
 export default StoreImages;
+

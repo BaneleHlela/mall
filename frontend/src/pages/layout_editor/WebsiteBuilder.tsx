@@ -7,6 +7,7 @@ import TopBar from '../../components/layout_settings/topbar/TopBar.tsx';
 import { useAppDispatch } from '../../app/hooks.ts';
 import { fetchStoreById, setCurrentStore } from '../../features/stores/storeSlice';
 import { TbLoader3 } from "react-icons/tb";
+import { setStore } from '../../features/store_admin/storeAdminSlice.ts';
 
 const sizeMap = {
   mobile: { width: 412, height: 840, scale: 0.75 },
@@ -72,6 +73,8 @@ const WebsiteBuilderContent: React.FC = () => {
           setLoading(true);
           const result = await dispatch(fetchStoreById(storeId)).unwrap();
           dispatch(setCurrentStore(result));
+          console.log("Store fetched:", result);
+          dispatch(setStore(result));
         } catch (error) {
           console.error("Failed to fetch store:", error);
         } finally {

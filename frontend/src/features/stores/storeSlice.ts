@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import type { Store } from '../../types/storeTypes';
+import type { Store, Image } from '../../types/storeTypes';
 
 const API_URL = 'http://localhost:5000/api/stores'; // Adjust this based on your setup
 
@@ -109,30 +109,6 @@ export const deleteStoreLogo = createAsyncThunk<string, { storeId: string }>(
     } catch (error) {
       console.error('Error deleting store logo:', error);
       throw new Error('Failed to delete store logo');
-    }
-  }
-);
-
-export const uploadStoreGalleryImage = createAsyncThunk<
-  { url: string; description: string; category: string },
-  { storeId: string; imageFile: File; description: string; category: string }
->(
-  'stores/uploadStoreGalleryImage',
-  async ({ storeId, imageFile, description, category }, thunkAPI) => {
-    try {
-      const formData = new FormData();
-      formData.append('image', imageFile);
-      formData.append('description', description);
-      formData.append('category', category);
-
-      const response = await axios.put(`${API_URL}/${storeId}/gallery`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
-      return response.data;
-    } catch (error) {
-      console.error('Error uploading gallery image:', error);
-      return thunkAPI.rejectWithValue('Failed to upload gallery image');
     }
   }
 );
@@ -260,18 +236,6 @@ const storeSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch stores by owner';
       })
       
-      // Upload gallery image
-      .addCase(uploadStoreGalleryImage.fulfilled, (state, action) => {
-        const url = action.payload;
-        const storeId = state.currentStore?._id;
-        if (storeId && state.myStoresById[storeId]) {
-          state.myStoresById[storeId].images?.push({ url });
-        }
-        if (storeId && state.currentStore) {
-          state.currentStore.images?.push({ url });
-        }
-      })
-
       // Delete gallery image
       .addCase(deleteStoreGalleryImage.fulfilled, (state, action) => {
         const imageUrl = action.payload;

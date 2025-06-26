@@ -24,7 +24,7 @@ export const defaultPupularStoreMenubarConfig = {
             mobile: "110px",
             desktop: "120px",
         },
-        color: "#f9d195",
+        color: "white",
         shadow: true,
         border: {
             width: "3px",

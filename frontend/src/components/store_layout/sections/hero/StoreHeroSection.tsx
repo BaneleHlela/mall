@@ -1,12 +1,18 @@
+import { useAppSelector } from '../../../../app/hooks';
 import FirstHero from './first/FirstHero'
-import SecondHero from './second/SecondHero';
+import HeroWithSlidingImages from './second/HeroWithSlidingImages';
+import HeroWithButtonBetweenImagesSection from './third/HeroWithButtonBetweenImages';
 
 const StoreHeroSection = () => {
-  const type = "firstHero";
-  if ( type === "firstHero") {
+  const variation = useAppSelector((state) => state.layoutSettings.hero.variation);
+  if ( variation === "firstHero") {
   return (
-    <SecondHero />
+    <HeroWithSlidingImages/>
   )}
+  if ( variation === "heroWithButtonBetweenImages") {
+    return (
+      <HeroWithButtonBetweenImagesSection />
+    )}
 }
 
 export default StoreHeroSection;

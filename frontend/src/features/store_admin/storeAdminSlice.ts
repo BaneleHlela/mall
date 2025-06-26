@@ -1,6 +1,8 @@
-import { createSlice, createAsyncThunk, type PayloadAction, type Store } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { StoreAdmin } from "../../types/storeAdminTypes";
+import type { Image } from "../../types/storeTypes";
+import type { Store } from '../../types/storeTypes';
 
 const API_URL = '/api/dashboard'; 
 const STORE_URL = "http://localhost:5000/api/stores";
@@ -55,6 +57,53 @@ export const fetchStore = createAsyncThunk<Store, string>(
   }
 );
 
+export const uploadStoreGalleryImage = createAsyncThunk<
+  {
+    _id: string; url: string; description: string; category: string 
+},
+  { storeId: string; imageFile: File; description: string; category: string }
+>(
+  'stores/uploadStoreGalleryImage',
+  async ({ storeId, imageFile, description, category }, thunkAPI) => {
+    try {
+      const formData = new FormData();
+      formData.append('image', imageFile);
+      formData.append('description', description);
+      formData.append('category', category);
+
+      const response = await axios.put(`${STORE_URL}/${storeId}/gallery`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error('Error uploading gallery image:', error);
+      return thunkAPI.rejectWithValue('Failed to upload gallery image');
+    }
+  }
+);
+
+export const deleteStoreGalleryImage = createAsyncThunk<
+  string, // returns the imageUrl of the deleted image
+  { storeId: string; imageUrl: string }
+>(
+  'stores/deleteStoreGalleryImage',
+  async ({ storeId, imageUrl }, thunkAPI) => {
+    try {
+      await axios.delete(`${API_URL}/${storeId}/gallery`, {
+        data: { imageUrl },
+      });
+
+
+      return imageUrl;
+    } catch (error) {
+      console.error('Error deleting gallery image:', error);
+      return thunkAPI.rejectWithValue('Failed to delete gallery image');
+    }
+  }
+);
+
+
 
 // --- Slice ---
 
@@ -68,7 +117,8 @@ const storeAdminSlice = createSlice({
         setError: (state, action: PayloadAction<string | null>) => {
           state.error = action.payload;
         },
-        setStore: (state, action: PayloadAction<Store>) => {
+        setStore: (state, action: PayloadAction<Store | null>) => {
+          console.log(action.payload)
           state.store = action.payload;
         },
         updateStoreSetting: (state, action: PayloadAction<{ field: string; value: any }>) => {
@@ -87,6 +137,17 @@ const storeAdminSlice = createSlice({
               current = current[key];
             }
           });
+        },
+        updateStoreImages: (state, action: PayloadAction<Image[]>) => {
+          console.log(action);
+          if (state.store) {
+            state.store.images = action.payload;
+          }
+        },
+        addImageToStore: (state, action: PayloadAction<Image>) => {
+          if (state.store) {
+            state.store.images = [...(state.store.images || []), action.payload];
+          }
         },
     },
     extraReducers: (builder) => {
@@ -152,10 +213,47 @@ const storeAdminSlice = createSlice({
           .addCase(linkLayoutToStore.rejected, (state, action) => {
             state.isLoading = false;
             state.error = action.error.message || 'Failed to link layout to store';
-          });
+          })
+          // Upload gallery image
+          .addCase(uploadStoreGalleryImage.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+          })
+          .addCase(uploadStoreGalleryImage.fulfilled, (state, action: PayloadAction<Image>) => {
+            state.isLoading = false;
+            state.error = null;
+            if (state.store) {
+              state.store.images = [...(state.store.images || []), action.payload];
+            }
+          })
+          .addCase(uploadStoreGalleryImage.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.error.message || 'Failed to upload gallery image';
+          })
+
+          // Delete gallery image
+          // Add this to your existing extraReducers in storeAdminSlice
+          .addCase(deleteStoreGalleryImage.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+          })
+          .addCase(deleteStoreGalleryImage.fulfilled, (state, action: PayloadAction<string>) => {
+            state.isLoading = false;
+            state.error = null;
+            const imageUrl = action.payload;
+            
+            if (state.store && state.store.images) {
+              state.store.images = state.store.images.filter(img => img.url !== imageUrl);
+            }
+          })
+          .addCase(deleteStoreGalleryImage.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.error.message || 'Failed to delete gallery image';
+          })
+          
     }
 });
 
-export const { setLoading, setError, updateStoreSetting, setStore } = storeAdminSlice.actions;
+export const { setLoading, setError, updateStoreSetting, setStore, updateStoreImages, addImageToStore } = storeAdminSlice.actions;
 
 export default storeAdminSlice.reducer;

@@ -18,7 +18,7 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({ objectPath, s
   const handleSettingChange = (field: string, value: any) => {
     dispatch(updateSetting({ field, value }));
   };
-  const buttonFunctions = ['bookNow', 'callNow', 'getQuote'];
+  const buttonFunctions = ['bookNow', 'callNow', 'getQuote', 'orderOnline'];
 
   return (
     <div className="space-y-1 p-2 ">

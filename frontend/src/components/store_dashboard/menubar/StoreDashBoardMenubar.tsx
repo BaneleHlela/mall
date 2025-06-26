@@ -14,7 +14,7 @@ interface Props {
 
 const StoreDashBoardMenubar = ({ store }: Props) => {
   return (
-    <div className="relative pl-2 pr-2 min-w-[18vw] h-full shadow-sm bg-white flex flex-col">
+    <div className="hidden lg:flex relative pl-2 pr-2 min-w-[18vw] h-full shadow-sm bg-white flex-col">
       {/* Store name and reviews */}
       <div className="h-[13%] font-[600] font-[ubuntu] text-3xl  text-center border-b-1 border-gray-300 flex flex-col justify-center">
         {store.name}

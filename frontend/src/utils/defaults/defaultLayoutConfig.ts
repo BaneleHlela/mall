@@ -1,11 +1,9 @@
-import { defaultFirstStoreMenubarConfig } from "./menubars/defaultFirstStoreMenubarConfig";
 import { defaultPupularStoreMenubarConfig } from "./menubars/defaultPopularStoreMenubarConfig";
 import { defaultSecondStoreAboutConfig } from "./sections/about/defaultSecondStoreAboutSectionConfig";
 import { defaultFirstBookWithCalandarConfig } from "./sections/book_with_calendar/defaultFirstBookWithCalandarConfig";
 import { defaultFirstFooterConfig } from "./sections/footer/defaultFirstFooterConfig";
 import { defaultFourthStoreHeroConfig } from "./sections/hero/defaultFourthStoreHeroConfig";
-import { defaultSecondHeroConfig } from "./sections/hero/defaultSecondHeroConfig";
-import { defaultThirdStoreHeroConfig } from "./sections/hero/defaultThirdStoreHeroConfig";
+import { defaultHeroWithButtonBetweenImages } from "./sections/hero/defaultHeroWithButtonBetweenImagesConfig";
 import { defaultFirstStoreMenuSectionConfig } from "./sections/menu/defaultFirstStoreMenuSectionConfig";
 import { defaultFirstStoreOrderOnlineCongig } from "./sections/order_online/defualtFirstStoreOrderOnlineConfig";
 import { defaultFirstStoreReviewsConfig } from "./sections/reviews/defaultFirstStoreReviewsConfig";
@@ -69,9 +67,9 @@ export const defaultLayoutConfig = {
     },
     description: "",
     background: {
-      color: "#f9d195",
+      color: "white",
       width: {
-        desktop: "65vw",
+        desktop: "95vw",
         mobile: "100vw",
       },
     },
@@ -88,7 +86,7 @@ export const defaultLayoutConfig = {
     about: defaultSecondStoreAboutConfig,
     menubar: defaultPupularStoreMenubarConfig,
     menu: defaultFirstStoreMenuSectionConfig,
-    hero: defaultSecondHeroConfig,
+    hero: defaultHeroWithButtonBetweenImages,
     bookWithCalendar: defaultFirstBookWithCalandarConfig,
     order: defaultFirstStoreOrderOnlineCongig,
     reviews: defaultFirstStoreReviewsConfig,

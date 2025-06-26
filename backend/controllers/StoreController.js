@@ -1,7 +1,7 @@
 import expressAsyncHandler from 'express-async-handler';
 import  Store  from '../models/StoreModel.js';
 import { sendStoreCreatedEmail } from '../emails/email.js';
-import { uploadToUploads } from '../config/gcsClient.js';
+import { uploadToUploads, uploadsBucket } from '../config/gcsClient.js';
 
 // add store
 export const addStore = expressAsyncHandler(async (req, res) => {
@@ -277,7 +277,6 @@ export const uploadStoreGalleryImage = expressAsyncHandler(async (req, res) => {
     const file = req.file;
     const fileName = req.body.fileName || file.originalname;
 
-    console.log(storeId)
 
     if (!file) {
       return res.status(400).json({ message: "No file uploaded" });
@@ -318,6 +317,7 @@ export const deleteStoreGalleryImage = expressAsyncHandler(async (req, res) => {
   try {
     const { storeId } = req.params;
     const { imageUrl } = req.body;
+
 
     if (!imageUrl) {
       return res.status(400).json({ message: "Missing image URL" });

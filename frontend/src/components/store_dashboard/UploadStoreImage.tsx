@@ -1,25 +1,20 @@
 import React, { useState } from 'react';
-import { uploadStoreGalleryImage } from '../../features/stores/storeSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import type { RootState } from '../../app/store';
-import { editStore } from '../../features/store_admin/storeAdminSlice';
-import OptionsToggler from '../layout_settings/supporting/OptionsToggler';
+import { uploadStoreGalleryImage } from '../../features/store_admin/storeAdminSlice';
+import { TbLoader3 } from 'react-icons/tb';
 
 interface UploadStoreImageProps {
   storeId?: string;
-}
-interface StoreCategories {
-  products?: string[];
-  services?: string[];
 }
 
 const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeId }) => {
   const dispatch = useAppDispatch();
   const currentStoreId = useAppSelector((state) => state.storeAdmin.store?._id);
+  const isLoading = useAppSelector((state) => state.storeAdmin.isLoading);
   // const currentStoreId = "684c15bca0f98a1d13a7ff00";
   // const currentImages = useAppSelector((state) => state.storeAdmin?.store?.images) || [];
   
-  const categories: StoreCategories = useAppSelector((state) => state.storeAdmin.store?.categories) || {};
+  // const categories: StoreCategories = useAppSelector((state) => state.storeAdmin.store?.categories) || {};
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -62,10 +57,12 @@ const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeId }) => {
         setDescription('');
         setCategory('');
   
-        // You might want to update your local state or Redux store with the new image info
-        // This depends on how you're managing the state of uploaded images
-        // For example:
-        // dispatch(addImageToStore(uploadedImage));
+        // dispatch(addImageToStore({
+        //   _id: uploadedImage._id,
+        //   url: uploadedImage.url,
+        //   description: uploadedImage.description,
+        //   category: uploadedImage.category,
+        // }));
   
         console.log('Image uploaded successfully:', uploadedImage);
       } else {
@@ -76,13 +73,9 @@ const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeId }) => {
     }
   };
 
-  // const categoryOptions = [
-  //   ...categories.products || [],
-  //   ...categories.services || [],
-  // ];
 
   return (
-    <div className="space-y-1 border w-[250px] font-[Outfit] my-8 p-3 bg-white rounded-lg text-sm">
+    <div className="shadow space-y-1 w-[250px] font-[Outfit] my-8 p-3 bg-white rounded-lg text-sm">
       <h4 className="text-center font-semibold mb-4">Upload Store Image</h4>
 
       {/* Styled file input */}
@@ -109,22 +102,6 @@ const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeId }) => {
         />
       </div>
 
-      {/* <div className="">
-        <label className="block text-gray-700 text-center">Category:</label>
-        <input
-          type="text"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
-        />
-      </div> */}
-      {/* Category Selector using OptionsToggler
-      <OptionsToggler
-        label="Category"
-        options={categoryOptions}
-        value={category}
-        onChange={(newValue) => setCategory(newValue)}
-      /> */}
       {preview && (
         <div className="flex flex-row justify-center">
           <img
@@ -134,13 +111,17 @@ const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeId }) => {
           />
         </div>
       )}
+      
       <button
         onClick={handleUpload}
         disabled={!imageFile}
         className={`w-full py-2 rounded-md text-white font-medium transition
           ${imageFile ? 'bg-gray-800 hover:bg-gray-900' : 'bg-gray-400 cursor-not-allowed'}`}
       >
-        Upload
+        {isLoading ? (
+              <TbLoader3 size={20} className="animate-spin mx-auto" />
+            ) : "Upload"
+        }
       </button>
     </div>
   );

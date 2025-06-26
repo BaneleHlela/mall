@@ -36,7 +36,6 @@ interface StoreButtonProps {
 }
 
 const StoreButton: React.FC<StoreButtonProps> = ({ style }) => {
-  console.log(style)
   return (
     <button
       style={{
