@@ -13,6 +13,7 @@ import StoreDashboard from "./pages/store_dashboard/StoreDashboard";
 import MyLayouts from "./pages/store_dashboard/supporting_pages/StoreLayouts";
 import { useDispatch } from "react-redux";
 import { setInitialLayout } from "./features/layouts/layoutSettingsSlice";
+import Dashboard from "./pages/dashboard/Dashboard";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ const App: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div className="relative bg-stone-50 h-screen w-screen flex justify-center items-center overflow-x-clip">  
+    <div className="relative font-[Outfit] bg-stone-50 h-screen w-screen flex justify-center items-center overflow-x-clip">  
       <Router>
         <Menubar /> 
         <Routes>
@@ -44,6 +45,7 @@ const App: React.FC = () => {
           <Route path="/layouts/*" element={<Layouts />} />
           <Route path="/dashboard/:storeId/*" element={<StoreDashboard />} />
           <Route path="/layouts/my-layouts" element={<MyLayouts />} />
+          <Route path="/creators-dashboard/*" element={<Dashboard />} />
           {authRoutes}
         </Routes>
       </Router>

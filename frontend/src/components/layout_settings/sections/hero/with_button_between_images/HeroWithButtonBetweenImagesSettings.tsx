@@ -1,4 +1,5 @@
 import { getSetting } from "../../../../../utils/helperFunctions";
+import BackgroundEditor from "../../../background/BackgroundEditor";
 import StoreButtonSettings from "../../../extras/StoreButtonSettings";
 import SubSettingsContainer from "../../../extras/SubSettingsContainer";
 import ColorPicker from "../../../supporting/ColorPicker";
@@ -18,13 +19,14 @@ const HeroWithButtonBetweenImagesSettings: React.FC<HeroWithButtonBetweenImagesS
     return (
         <div className="space-y-1">
             <h3 className="font-semibold text-lg">Hero With Button Between Images Settings</h3>
-
-            <ColorPicker
-                label="Background Color"
-                value={getSetting("background.color", settings, objectPath)}
-                onChange={(value) => handleSettingChange(`${objectPath}.background.color`, value)}
-            />
-
+            <div className="border rounded-md shadow">
+              <BackgroundEditor
+                  objectPath={`${objectPath}.background`}
+                  settings={settings}
+                  handleSettingChange={handleSettingChange}
+                  allow={["color"]}
+              />
+            </div>
             <SubSettingsContainer
                 name="Top Text"
                 SettingsComponent={
@@ -52,11 +54,30 @@ const HeroWithButtonBetweenImagesSettings: React.FC<HeroWithButtonBetweenImagesS
                 name="Images"
                 SettingsComponent={
                     <>
-                        <MultipleLayoutImagesHandler
-                          objectPath={`${objectPath}.images.imageUrl`}
-                          min={2}
-                          max={2} images={images}            
+                      <div className="px-2">
+                        <OptionsToggler
+                            label="Animation (img 1)"
+                            options={["leftToRight", "rightToLeft"]}
+                            value={getSetting("images.animation.image1", settings, objectPath)}
+                            onChange={(value) => {
+                                handleSettingChange(`${objectPath}.images.animation.image1`, value);
+                            }}
                         />
+                        <OptionsToggler
+                            label="Animation (img 2)"
+                            options={["leftToRight", "rightToLeft"]}
+                            value={getSetting("images.animation.image2", settings, objectPath)}
+                            onChange={(value) => {
+                                handleSettingChange(`${objectPath}.images.animation.image2`, value);
+                            }}
+                        />
+                      </div>
+                      <MultipleLayoutImagesHandler
+                        objectPath={`${objectPath}.images.imageUrl`}
+                        min={2}
+                        max={2} 
+                        images={images}            
+                      />
                     </>
                 }
             />
@@ -64,7 +85,7 @@ const HeroWithButtonBetweenImagesSettings: React.FC<HeroWithButtonBetweenImagesS
                 name="Middle Section"
                 SettingsComponent={
                     <div
-                      className="px-2 space-y-1"
+                      className="px-2 space-y-1 py-1"
                     >
                         <ColorPicker
                             label="Background Color"
@@ -90,7 +111,7 @@ const HeroWithButtonBetweenImagesSettings: React.FC<HeroWithButtonBetweenImagesS
                           }
                         />
                         <SubSettingsContainer 
-                          name="Text"
+                          name="Button"
                           SettingsComponent={
                             <StoreButtonSettings
                                 objectPath={`${objectPath}.midDiv.button`}

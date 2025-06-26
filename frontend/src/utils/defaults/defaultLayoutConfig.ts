@@ -7,8 +7,7 @@ import { defaultHeroWithButtonBetweenImages } from "./sections/hero/defaultHeroW
 import { defaultFirstStoreMenuSectionConfig } from "./sections/menu/defaultFirstStoreMenuSectionConfig";
 import { defaultFirstStoreOrderOnlineCongig } from "./sections/order_online/defualtFirstStoreOrderOnlineConfig";
 import { defaultFirstStoreReviewsConfig } from "./sections/reviews/defaultFirstStoreReviewsConfig";
-
-
+import { defaultHeroWithImageButtonAndBox } from "./sections/hero/defaultHeroWithImagePatternAndBoxConfig";
 
 export const defaultMenubarConfig = {
   topbar: {
@@ -69,7 +68,7 @@ export const defaultLayoutConfig = {
     background: {
       color: "white",
       width: {
-        desktop: "95vw",
+        desktop: "100vw",
         mobile: "100vw",
       },
     },
@@ -86,7 +85,7 @@ export const defaultLayoutConfig = {
     about: defaultSecondStoreAboutConfig,
     menubar: defaultPupularStoreMenubarConfig,
     menu: defaultFirstStoreMenuSectionConfig,
-    hero: defaultHeroWithButtonBetweenImages,
+    hero: defaultHeroWithImageButtonAndBox,
     bookWithCalendar: defaultFirstBookWithCalandarConfig,
     order: defaultFirstStoreOrderOnlineCongig,
     reviews: defaultFirstStoreReviewsConfig,

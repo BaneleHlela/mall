@@ -1,0 +1,99 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { fetchSections, clearSections, type Section } from '../../../../features/sections/sectionSlice';
+import SectionSelectorButton from './SectionSelectorButton';
+import SectionDisplay from './SectionDisplay';
+import { IoMdClose } from "react-icons/io";
+
+
+const SectionSelector = () => {
+  const dispatch = useAppDispatch();
+  const { sections, loading, error } = useAppSelector((state) => state.sections);
+  const [selectedSection, setSelectedSection] = useState<string | null>(null);
+
+  // Initial fetch (e.g. default data)
+  useEffect(() => {
+    if (!sections.length && !selectedSection) {
+      dispatch(fetchSections());
+    }
+  }, [dispatch, sections.length, selectedSection]);
+
+  // Fetch by selected section name
+  useEffect(() => {
+    if (selectedSection) {
+      dispatch(clearSections());
+      dispatch(fetchSections({ name: selectedSection }));
+    }
+  }, [dispatch, selectedSection]);
+
+  const validSections = useMemo(() => [
+    "hero", "about", "menu", "services", "products",
+    "reviews", "gallery", "book", "contact", "events", "footer",
+  ], []);
+
+  const handleSelectSection = (variation: string) => {
+    setSelectedSection(variation);
+    console.log(`Selected Section: ${variation}`);
+  };
+
+  const handleDeleteSection = (id: string) => {
+    console.log("Delete section:", id);
+    // implement deletion logic
+  };
+
+  const handleSelectSectionVariation = (variation: string) => {
+    console.log("Selected variation:", variation);
+    // implement selection logic
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div className="h-screen w-screen bg-white overflow-clip">
+      {/* Header */}
+      <div className="relative h-[8%] w-full bg-blue-500 text-center flex flex-col justify-center text-xl text-white">
+        Replace or Add New Section
+        <div className="absolute right-5 rounded-full hover:shadow-md hover:scale-102">
+            <IoMdClose size={32} onClick={() => console.log("clicked")} />
+        </div>
+      </div>
+
+      {/* Body Layout */}
+      <div className="h-[92%] flex flex-row p-2">
+        {/* Sidebar Buttons */}
+        <div className="h-full bg-white overflow-y-auto w-[25%] border-b">
+          {validSections.map((section) => (
+            <SectionSelectorButton
+              key={section}
+              sectionName={section}
+              onSelect={handleSelectSection}
+            />
+          ))}
+        </div>
+
+        {/* Section Grid */}
+        <div className="h-full bg-stone-50 overflow-y-auto w-[75%] p-2">
+          {selectedSection && sections.length === 0 && !loading && (
+            <div className="p-4 text-center text-sm text-gray-700 italic">
+              No variations available for "{selectedSection}"
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {sections.map((section: Section) => (
+              <SectionDisplay
+                key={section._id}
+                section={section}
+                onDelete={handleDeleteSection}
+                onVariationSelect={handleSelectSectionVariation}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SectionSelector;

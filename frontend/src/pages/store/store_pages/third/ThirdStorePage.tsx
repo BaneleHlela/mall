@@ -1,6 +1,6 @@
 import { Routes } from "react-router-dom";
 import PopularStoreMenubar from "../../../../components/store_layout/menubars/popular/PopularStoreMenubar";
-import ThirdStoreHeroSection from "../../../../components/store_layout/sections/hero/third/HeroWithButtonBetweenImages";
+import ThirdStoreHeroSection from "../../../../components/store_layout/sections/hero/hero_with_button_between_images/HeroWithButtonBetweenImages";
 import FourthStoreHeroSection from "../../../../components/store_layout/sections/hero/fourth/FourthStoreHeroSection";
 
 const ThirdStorePage = () => {

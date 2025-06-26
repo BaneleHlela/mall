@@ -1,5 +1,5 @@
 import React from "react";
-import { IoSettings } from "react-icons/io5";
+import { SlOptionsVertical } from "react-icons/sl";
 
 interface SettingsContainerProps {
   name: string;
@@ -14,9 +14,9 @@ const SettingsContainer: React.FC<SettingsContainerProps> = ({ name, onOptionCli
       onDoubleClick={onOptionClick}
       onClick={onOptionClick}
     >
-      <div className="w-full h-full flex justify-between items-center px-4">
+      <div className="w-full h-full flex justify-between items-center pl-4 pr-2">
         <span>{name}</span>
-        <IoSettings className="text-[130%]" />
+        <SlOptionsVertical className="text-[130%]" />
       </div>
     </div>
   );

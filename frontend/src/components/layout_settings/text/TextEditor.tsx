@@ -168,6 +168,24 @@ const TextEditor: React.FC<EditorProps> = ({
               }
             />
           )}
+
+          {isAllowed("lineHeight") && (
+            <SettingsSlider
+              label="Line Height"
+              value={parseFloat(getSetting("lineHeight", settings, objectPath) || '1.5')}
+              unit=""
+              step={0.1}
+              min={0.5}
+              max={5}
+              onChange={(newVal) => {
+                const event = {
+                  target: Object.assign(document.createElement("input"), { value: newVal.toString() })
+                } as React.ChangeEvent<HTMLInputElement>;
+                handleChange("lineHeight")(event);
+              }}
+            />
+          )}
+
         </div>
       );
       
