@@ -164,6 +164,18 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
           }
         />
       )}
+      {/* OPACITY */}
+      {isAllowed("opacity") && (
+        <SettingsSlider
+          label="Opacity"
+          value={parseInt(getSetting("opacity", settings, objectPath) || "100")}
+          unit="%"
+          min={0}
+          max={100}
+          step={1}
+          onChange={createSliderChangeHandler("opacity", "%")}
+        />
+      )}
     </div>
   );
 };

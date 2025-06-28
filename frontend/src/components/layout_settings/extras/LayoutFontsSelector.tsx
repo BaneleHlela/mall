@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { updateSetting } from '../../../features/layouts/layoutSettingsSlice';
 import GoogleFontsSelector from '../text/GoogleFontsSelector';

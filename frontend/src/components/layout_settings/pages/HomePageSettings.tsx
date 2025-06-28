@@ -20,9 +20,23 @@ import SlidingPanel from "../supporting/SlidingPanel";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaPlus } from "react-icons/fa6";
 import HeroSettings from "../sections/hero/HeroSettings";
+import SectionSelector from "../supporting/section_selector/SectionSelector";
+import type { SectionType } from "../../../utils/defaults/sections/getSectionDefaults";
+import type { Section } from "../../../features/sections/sectionSlice";
+// Import SectionSelector if not already
+// import SectionSelector from "../supporting/SectionSelector";
 
-
-const SortableItem = ({ id, name, onClick }: { id: string; name: string; onClick: () => void }) => {
+const SortableItem = ({
+  id,
+  name,
+  onClick,
+  onReplaceClick,
+}: {
+  id: string;
+  name: string;
+  onClick: () => void;
+  onReplaceClick: (section: string) => void;
+}) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -31,7 +45,15 @@ const SortableItem = ({ id, name, onClick }: { id: string; name: string; onClick
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <SettingsContainer name={name} options={["edit"]} onOptionClick={onClick} />
+      <SettingsContainer
+        name={name}
+        options={["edit", "replace"]}
+        onClick={onClick}
+        onReplaceClick={() => onReplaceClick(id)} 
+        onOptionClick={() => {
+          console.log("option clicked");
+        }}
+      />
     </div>
   );
 };
@@ -43,6 +65,8 @@ const HomePageSettings = () => {
 
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [sectionToReplace, setSectionToReplace] = useState<SectionType | null>(null);
+  const [showSectionSelector, setShowSectionSelector] = useState(false);
 
   const validSections = [
     "hero", "about", "menu", "services", "products",
@@ -53,37 +77,61 @@ const HomePageSettings = () => {
     (section) => !(homeSections as string[]).includes(section)
   );
 
+  const handleReplaceClick = (section: SectionType) => {
+    setSectionToReplace(section);
+    setShowSectionSelector(true);
+  };
+
+  // const handleSectionSelect = (newSection: string) => {
+  //   if (sectionToReplace) {
+  //     const newSections = homeSections.map((s) => (s === sectionToReplace ? newSection : s));
+  //     dispatch(
+  //       updateSetting({
+  //         field: "routes.home.contains",
+  //         value: newSections,
+  //       })
+  //     );
+  //     setShowSectionSelector(false);
+  //     setSectionToReplace(null);
+  //   }
+  // };
+
   const handleAddSection = (section: string) => {
-    dispatch(updateSetting({
-      field: "routes.home.contains",
-      value: [...homeSections, section],
-    }));
+    dispatch(
+      updateSetting({
+        field: "routes.home.contains",
+        value: [...homeSections, section],
+      })
+    );
     setDropdownOpen(false);
   };
 
   const getSectionComponent = (section: string) => {
     switch (section) {
-      case "hero": return <HeroSettings />;
-       //case "footer": return <FooterSettings />;
-      default: return <div>No settings available.</div>;
+      case "hero":
+        return <HeroSettings />;
+      // case "footer": return <FooterSettings />;
+      default:
+        return <div>No settings available for section "{section}".</div>;
     }
   };
 
   const closePanel = () => setActivePanel(null);
 
-  // Drag n drop
   const sensors = useSensors(useSensor(PointerSensor));
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
-    if (active.id !== over?.id) {
+    if (over && active.id !== over.id) {
       const oldIndex = homeSections.indexOf(active.id);
       const newIndex = homeSections.indexOf(over.id);
       const newArray = arrayMove(homeSections, oldIndex, newIndex);
-      dispatch(updateSetting({
-        field: "routes.home.contains",
-        value: newArray,
-      }));
+      dispatch(
+        updateSetting({
+          field: "routes.home.contains",
+          value: newArray,
+        })
+      );
     }
   };
 
@@ -119,7 +167,6 @@ const HomePageSettings = () => {
         </AnimatePresence>
       </div>
 
-      {/* Drag context */}
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={homeSections} strategy={verticalListSortingStrategy}>
           {homeSections.map((section) => (
@@ -127,8 +174,9 @@ const HomePageSettings = () => {
               key={section}
               id={section}
               name={section.charAt(0).toUpperCase() + section.slice(1)}
-              onClick={() => setActivePanel(section)}
-            />
+              onClick={() => setActivePanel(section)} //@ts-ignore
+              onReplaceClick={() => handleReplaceClick(section)}
+            />          
           ))}
         </SortableContext>
       </DndContext>
@@ -145,6 +193,17 @@ const HomePageSettings = () => {
           </SlidingPanel>
         )}
       </AnimatePresence>
+
+      {showSectionSelector && sectionToReplace && (
+        <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white w-[80vw] h-[80vh] overflow-auto">
+            <SectionSelector
+              onClose={() => setShowSectionSelector(false)}
+              sectionToReplace={sectionToReplace}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

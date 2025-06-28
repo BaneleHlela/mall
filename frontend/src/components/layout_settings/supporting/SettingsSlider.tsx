@@ -17,7 +17,7 @@ const SettingsSlider: React.FC<SettingsSliderProps> = ({
   value,
   unit = "px",
   min = 8,
-  max = 72,
+  max = 110,
   step = 1,
   onChange,
 }) => {

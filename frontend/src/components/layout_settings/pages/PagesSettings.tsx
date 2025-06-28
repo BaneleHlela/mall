@@ -49,7 +49,12 @@ const SortableItem = ({
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <SettingsContainer name={name} options={["edit"]} onOptionClick={onClick} />
+      <SettingsContainer 
+        name={name} 
+        options={["edit", "delete"]} 
+        onClick={onClick} 
+        onOptionClick={()=> {}}
+      />
     </div>
   );
 };

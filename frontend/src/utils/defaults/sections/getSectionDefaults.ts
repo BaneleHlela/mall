@@ -8,7 +8,7 @@ import { defaultFirstStoreOrderOnlineCongig } from "./order_online/defualtFirstS
 import { defaultFirstStoreReviewsConfig } from "./reviews/defaultFirstStoreReviewsConfig";
 import { defaultHeroWithImageButtonAndBox } from "./hero/defaultHeroWithImagePatternAndBoxConfig";
 
-type SectionType = 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer';
+export type SectionType = 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer';
 type VariationType = string;
 
 export const getSectionDefaults = (section: SectionType, variation: VariationType) => {
@@ -19,7 +19,7 @@ export const getSectionDefaults = (section: SectionType, variation: VariationTyp
     hero: {
       fourth: defaultFourthStoreHeroConfig,
       heroWithButtonBetweenImages: defaultHeroWithButtonBetweenImages,
-      heroWithimageButtonAndBox: defaultHeroWithImageButtonAndBox,
+      heroWithImageButtonAndBox: defaultHeroWithImageButtonAndBox,
     },
     menu: {
       first: defaultFirstStoreMenuSectionConfig,

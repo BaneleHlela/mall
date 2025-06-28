@@ -4,7 +4,7 @@ import FirstHeroSettings from "./first/FirstHeroSettings"
 import HeroWithButtonBetweenImagesSettings from "./with_button_between_images/HeroWithButtonBetweenImagesSettings";
 import HeroWithImagePatternAndBoxSettings from "./with_image_pattern_and_box/HeroWithImagePatternAndBoxSettings";
 import HeroWithSlidingImages from "./with_sliding_images/HeroWithSlidingImagesSettings";
-
+import HeroWithButtonImageAndTextSettings from "./with_button_image_and_text/HeroWithButtonImageAndTextSettings";
 const HeroSettings = () => {
   const dispatch = useAppDispatch();
   const variation = useAppSelector((state) => state.layoutSettings.hero.variation);
@@ -28,6 +28,9 @@ const HeroSettings = () => {
     return <HeroWithButtonBetweenImagesSettings settings={settings} handleSettingChange={handleSettingChange}/>
   }
   
+  if (variation === "heroWithButtonImageAndText") {
+    return <HeroWithButtonImageAndTextSettings settings={settings} handleSettingChange={handleSettingChange}/>
+  }
 
   return (
     <FirstHeroSettings />

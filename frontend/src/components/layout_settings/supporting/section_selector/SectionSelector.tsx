@@ -4,9 +4,14 @@ import { fetchSections, clearSections, type Section } from '../../../../features
 import SectionSelectorButton from './SectionSelectorButton';
 import SectionDisplay from './SectionDisplay';
 import { IoMdClose } from "react-icons/io";
+import { getSectionDefaults, type SectionType } from '../../../../utils/defaults/sections/getSectionDefaults';
+import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice';
 
-
-const SectionSelector = () => {
+interface SectionSelectorProps {
+  sectionToReplace: SectionType;
+  onClose: () => void;
+}
+const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToReplace}) => {
   const dispatch = useAppDispatch();
   const { sections, loading, error } = useAppSelector((state) => state.sections);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
@@ -33,7 +38,7 @@ const SectionSelector = () => {
 
   const handleSelectSection = (variation: string) => {
     setSelectedSection(variation);
-    console.log(`Selected Section: ${variation}`);
+    console.log(`Selected Section: ${variation} `, );
   };
 
   const handleDeleteSection = (id: string) => {
@@ -41,21 +46,28 @@ const SectionSelector = () => {
     // implement deletion logic
   };
 
-  const handleSelectSectionVariation = (variation: string) => {
-    console.log("Selected variation:", variation);
-    // implement selection logic
-  };
+ 
+const handleSelectSectionVariation = (variation: string) => {
+  console.log("Selected variation:", variation, sectionToReplace);
+  const sectionDefaults = getSectionDefaults(sectionToReplace, variation);
+  console.log(sectionDefaults);
+  dispatch(updateSetting({
+    field: sectionToReplace,
+    value: sectionDefaults
+  }));
+  onClose();
+};
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="h-screen w-screen bg-white overflow-clip">
+    <div className="h-full w-full bg-white overflow-clip">
       {/* Header */}
       <div className="relative h-[8%] w-full bg-blue-500 text-center flex flex-col justify-center text-xl text-white">
         Replace or Add New Section
-        <div className="absolute right-5 rounded-full hover:shadow-md hover:scale-102">
-            <IoMdClose size={32} onClick={() => console.log("clicked")} />
+        <div className="absolute right-3 rounded-full hover:shadow-md hover:scale-102">
+            <IoMdClose size={32} onClick={onClose} />
         </div>
       </div>
 

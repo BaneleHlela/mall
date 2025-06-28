@@ -2,9 +2,10 @@ import { useAppSelector } from '../../../../app/hooks';
 import HeroWithImagePatternAndBox from './hero_with_pattern_image_and_box/HeroWithImagePatternAndBox'
 import HeroWithSlidingImages from './second/HeroWithSlidingImages';
 import HeroWithButtonBetweenImagesSection from './hero_with_button_between_images/HeroWithButtonBetweenImages';
-
+import HeroWithButtonImageAndText from './hero_with_button_image_and_text/HeroWithButtonImageAndText';
 const StoreHeroSection = () => {
   const variation = useAppSelector((state) => state.layoutSettings.hero.variation);
+  
   if ( variation === "heroWithButtonBetweenImages") {
     return (
       <HeroWithButtonBetweenImagesSection />
@@ -20,7 +21,11 @@ const StoreHeroSection = () => {
   return (
     <HeroWithSlidingImages/>
   )}
-  
+  if (variation === "heroWithButtonImageAndText") {
+    return (
+      <HeroWithButtonImageAndText/>
+    )
+  }
 }
 
 export default StoreHeroSection;

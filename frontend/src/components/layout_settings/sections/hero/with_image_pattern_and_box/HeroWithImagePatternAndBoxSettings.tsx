@@ -21,7 +21,7 @@ const HeroWithImagePatternAndBoxSettings: React.FC<HeroWithImagePatternAndBoxSet
 
     return (
         <div className="space-y-1">
-            <h3 className="font-semibold text-lg">Hero With Image, Button, and Box Settings</h3>
+            {/* <h3 className="font-semibold text-lg">Hero With Image, Button, and Box Settings</h3> */}
 
             {/* Background */}
             <div className="border rounded-md shadow">

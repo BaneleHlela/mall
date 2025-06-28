@@ -27,17 +27,20 @@ const LayoutSettings = () => {
         <SettingsContainer
           name="General"
           options={["edit"]}
-          onOptionClick={() => setActivePanel("general")}
+          onOptionClick={() => {}}
+          onClick={() => setActivePanel("general")}
         />
         <SettingsContainer
           name="Menubar"
           options={["edit"]}
-          onOptionClick={() => setActivePanel("menubar")}
+          onOptionClick={() => {}}
+          onClick={() => setActivePanel("menubar")}
         />
         <SettingsContainer
           name="Pages & Sections"
           options={["edit"]}
-          onOptionClick={() => setActivePanel("pages")}
+          onOptionClick={() => {}}
+          onClick={() => setActivePanel("pages")}
         />
       </div>
 

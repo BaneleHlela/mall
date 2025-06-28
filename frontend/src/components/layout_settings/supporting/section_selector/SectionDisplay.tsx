@@ -31,21 +31,24 @@ const SectionDisplay: React.FC<SectionDisplayProps> = ({
     >
       <div className="relative w-full aspect-[4/3] flex flex-row justify-center items-center">
         {/* Desktop image */}
-        <div className="absolute top-[10%] w-[90%] h-[60%] shadow-2xl">
+        <div className="absolute top-[10%] w-[95%] h-[60%] shadow-2xl">
           <img
             src={section.images.desktop}
             alt={section.variation}
-            className="object-cover w-full h-full rounded-sm"
+            className="object-cover rounded-[1px] w-full h-full border-3 border-white border-b-0"
           />
+          <div className="bg-white w-full h-[15%] border-t-1 border-t-gray-400 rounded-b-sm"></div>
         </div>
 
         {/* Mobile image */}
-        <div className="absolute top-[40%] w-[25%] h-[50%] shadow-2xl">
+        <div className="absolute top-[38%] w-[20%] h-[50%] shadow-2xl">
+          <div className="w-full h-2 bg-white rounded-t-lg"></div>
           <img
             src={section.images.mobile}
             alt={section.variation}
-            className="object-cover w-full h-full rounded-sm"
+            className="object-cover w-full h-full"
           />
+          <div className="w-full h-2 bg-white rounded-b-lg"></div>
         </div>
 
         {/* Overlay */}
@@ -83,7 +86,7 @@ const SectionDisplay: React.FC<SectionDisplayProps> = ({
       </div>
 
       {/* Footer with variation name */}
-      <div className="h-[45px] w-full rounded-b bg-white z-10 flex justify-center items-center">
+      <div className="px-2 leading-5 text-center h-[45px] w-full rounded-b bg-white z-10 flex justify-center items-center">
         {formatVariation(section.variation)}
       </div>
 

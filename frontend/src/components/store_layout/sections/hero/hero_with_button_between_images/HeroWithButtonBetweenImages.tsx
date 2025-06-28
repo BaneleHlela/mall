@@ -47,7 +47,7 @@ const HeroWithButtonBetweenImagesSection = () => {
             {...getDivAnimation(style.images.animation.image1 || "leftToright")}
             animate={{ y: 0, x: 0, opacity: 1 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="w-[32%] h-full"
+            className="w-[33%] h-full"
           >
             <img
               src={style.images.imageUrl[0]}
@@ -64,7 +64,7 @@ const HeroWithButtonBetweenImagesSection = () => {
             style={{
               backgroundColor: style.midDiv.backgroundColor,
             }}
-            className="w-[32%] h-full bg-pink-500 flex flex-col justify-center text-center"
+            className="w-[33%] h-full bg-pink-500 flex flex-col justify-center text-center"
           >
             <div className="w-full flex flex-row justify-center text-center">
               <div
@@ -92,7 +92,7 @@ const HeroWithButtonBetweenImagesSection = () => {
             {...getDivAnimation(style.images.animation.image2 || "leftToright")}
             animate={{ y: 0, x: 0, opacity: 1 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="w-[32%] h-full"
+            className="w-[33%] h-full"
           >
             <img
               src={style.images.imageUrl[1]}

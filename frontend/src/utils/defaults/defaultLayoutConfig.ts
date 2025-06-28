@@ -8,6 +8,7 @@ import { defaultFirstStoreMenuSectionConfig } from "./sections/menu/defaultFirst
 import { defaultFirstStoreOrderOnlineCongig } from "./sections/order_online/defualtFirstStoreOrderOnlineConfig";
 import { defaultFirstStoreReviewsConfig } from "./sections/reviews/defaultFirstStoreReviewsConfig";
 import { defaultHeroWithImageButtonAndBox } from "./sections/hero/defaultHeroWithImagePatternAndBoxConfig";
+import { defaultHeroWithButtonImageAndTextConfig } from "./sections/hero/defaultHeroWithButtonImageAndTextConfig";
 
 export const defaultMenubarConfig = {
   topbar: {
@@ -85,7 +86,7 @@ export const defaultLayoutConfig = {
     about: defaultSecondStoreAboutConfig,
     menubar: defaultPupularStoreMenubarConfig,
     menu: defaultFirstStoreMenuSectionConfig,
-    hero: defaultHeroWithImageButtonAndBox,
+    hero: defaultHeroWithButtonImageAndTextConfig,
     bookWithCalendar: defaultFirstBookWithCalandarConfig,
     order: defaultFirstStoreOrderOnlineCongig,
     reviews: defaultFirstStoreReviewsConfig,
