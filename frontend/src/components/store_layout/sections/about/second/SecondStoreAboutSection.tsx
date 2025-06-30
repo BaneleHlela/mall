@@ -7,28 +7,25 @@ const SecondStoreAboutSection = () => {
   return (
     <div 
       style={{
-        backgroundColor: settings.backgroundColor,
+        backgroundColor: settings.background.color,
         ...getTextStyles(settings.text.style)
       }}
       className="w-full "
     >
       {/* Mobile */}
       <div
-        style={{
-          ...getBorderStyles(settings.border),
-        }} 
         className="p-3 text-center md:hidden"
       >
         <h1 
           style={{
-            ...getTextStyles(settings.text.title.style.mobile)
+            ...getTextStyles(settings.text.title.style)
           }}
           className="text-2xl font-bold mb-3"
         >
           {settings.text.title.input}
         </h1>
         <img 
-          src={settings.image.url} alt="about us" 
+          src={settings.image.imageUrl} alt="about us" 
           style={{
             ...getBorderStyles(settings.image.border)
           }}
@@ -52,9 +49,6 @@ const SecondStoreAboutSection = () => {
 
       {/* Desktop */}
       <div 
-        style={{
-          ...getBorderStyles(settings.border),
-        }} 
         className="hidden lg:flex flex-row justify-between w-full h-[85vh] p-8"
       >
         {/* Image */}
@@ -64,18 +58,19 @@ const SecondStoreAboutSection = () => {
           }}
           className="h-full w-[40%]"
         >
-          <img src={settings.image.url} alt="about us" className="w-full h-full object-cover mb-3" />
+          <img src={settings.image.imageUrl} alt="about us" className="w-full h-full object-cover mb-3" />
         </div>
         {/* Text */}
         <div
           style={{
             ...getBorderStyles(settings.text.border),
           }} 
-          className="flex flex-col justify-center text-center h-full w-[58%]"
+          className=" p-4 flex flex-col justify-center text-center h-full w-[58%]"
         >
           <h1 
             style={{
-              ...getTextStyles(settings.text.title.style.desktop)
+              ...getTextStyles(settings.text.title.style),
+              fontSize: settings.text.title.style.fontSize.desktop,
             }}
             className=""
           >

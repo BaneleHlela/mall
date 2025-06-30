@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { sendEmail, resetState } from '../../../../features/emails/emailSlice';
 import { TbLoader3 } from "react-icons/tb";
+import { getBackgroundStyles, getBorderStyles, getTextStyles } from '../../../../utils/stylingFunctions';
 
 interface SendEmailFormData {
   firstName: string;
@@ -12,6 +13,7 @@ interface SendEmailFormData {
 }
 
 const SendEmailForm: React.FC = () => {
+  const style = useAppSelector((state) => state.layoutSettings.footer.sendEmailForm);
   const dispatch = useAppDispatch();
   const emailState = useAppSelector((state) => state.email);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -24,9 +26,8 @@ const SendEmailForm: React.FC = () => {
     message: '',
   });
 
-  console.log("Form Data:", formData);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -59,26 +60,68 @@ const SendEmailForm: React.FC = () => {
   
 
   return (
-    <div className="max-w-md mx-auto bg-white p-8 shadow-md rounded-lg">
-      <h2 className="text-2xl font-semibold mb-6">Get a Quote</h2>
-      <form onSubmit={handleSubmit} className="space-y-4 capitalize">
+    <div 
+      style={{
+        ...getBackgroundStyles(style.background),
+      }}
+      className=""
+    >
+      <h2 
+        style={{
+          ...getTextStyles(style.text.title),
+          fontSize: window.innerWidth < 1024 ? style.text.title.fontSize.mobile : style.text.title.fontSize.desktop,
+        }}
+        className={`w-full mb-5
+          ${style.text.title.position === 'center' && 'text-center'}
+          ${style.text.title.position === 'start' && 'text-start'}
+          ${style.text.title.position === 'end' && 'text-end'}
+          `}
+      >
+        {style.text.title.input || "Send a message"}
+      </h2>
+      <form onSubmit={handleSubmit} className="space-y-3 capitalize">
         {['firstName', 'lastName', 'email', "message", 'phone'].map((field) => (
-          <div key={field}>
+          <div key={field} 
+            style={{
+              ...getTextStyles(style.text.senderInfo),
+            }}
+          >
             <label
               htmlFor={field}
-              className="block text-sm font-medium text-gray-700"
+              className={`block
+                ${style.text.senderInfo.position === 'center' && 'text-center'}
+                ${style.text.senderInfo.position === 'start' && 'text-start'}
+                ${style.text.senderInfo.position === 'end' && 'text-end'}
+              `}
             >
               {field.replace(/([A-Z])/, ' $1')} *
             </label>
-            <input
-              type={field === 'email' ? 'email' : field === 'phone' ? 'tel' : 'text'}
-              id={field}
-              name={field}
-              value={formData[field as keyof SendEmailFormData]}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
+            {field === 'message' ? (
+              <textarea
+                id={field}
+                name={field}
+                value={formData[field as keyof SendEmailFormData]}
+                onChange={handleChange}
+                required
+                style={{
+                  ...getBorderStyles(style.background.senderInfo.border),
+                }}
+                className={`mt-1 block w-full p-2 h-[130px]`} // Larger height for message input
+              />
+            ) : (
+              <input
+                type={field === 'email' ? 'email' : field === 'phone' ? 'tel' : 'text'}
+                id={field}
+                name={field}
+                value={formData[field as keyof SendEmailFormData]}
+                onChange={handleChange}
+                required
+                style={{
+                  ...getBorderStyles(style.background.senderInfo.border),
+                }}
+                className={`mt-1 block w-full p-2`}
+              />
+            )}
           </div>
         ))}
         <div className="">
@@ -94,12 +137,24 @@ const SendEmailForm: React.FC = () => {
             <p className="text-green-600 text-sm text-center">{successMessage}</p>
           )}
         </div>
-        <button
-          type="submit"
-          className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        <div className={`
+          w-full flex flex-row mt-2 lg:mt-8
+          ${style.submitButton.position === 'center' && 'justify-center'}
+          ${style.submitButton.position === 'start' && 'justify-start'}
+          ${style.submitButton.position === 'end' && 'justify-end'}
+          `}
         >
-          {emailState.isLoading ? <TbLoader3 className='w-6 h-6 animate-spin mx-auto' /> : "Request a free quote"}
-        </button>
+          <button
+            type="submit"
+            style={{
+              ...getTextStyles(style.submitButton.text),
+              ...getBackgroundStyles(style.submitButton.background),
+            }}
+            className="text-center "
+          >
+            {emailState.isLoading ? <TbLoader3 className='w-6 h-6 animate-spin mx-auto' /> : `${style.submitButton.text.input || "Submit"} `}
+          </button>
+        </div>
       </form>
     </div>
   );

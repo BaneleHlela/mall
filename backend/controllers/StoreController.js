@@ -67,6 +67,8 @@ export const getStores = expressAsyncHandler(async (req, res) => {
 export const editStore = expressAsyncHandler(async (req, res) => {
   const { storeId } = req.params;
 
+  console.log(req.body.locations )
+
   const store = await Store.findById(storeId);
 
   if (!store) {
@@ -75,17 +77,20 @@ export const editStore = expressAsyncHandler(async (req, res) => {
   }
 
   // Merge locations
-  if (req.body.locations && Array.isArray(req.body.locations)) {
-    req.body.locations.forEach((loc) => {
-      if (loc.lat && loc.lng && loc.address) {
-        store.locations.push({
-          nickname: loc.nickname || '',
-          lat: loc.lat,
-          lng: loc.lng,
-          address: loc.address,
-        });
-      }
-    });
+  if (req.body.locations && Array.isArray(req.body.locations) && req.body.locations.length > 0) {
+    const newLocation = req.body.locations[0];
+    if (newLocation.lat && newLocation.lng && newLocation.address) {
+      store.locations = [{
+        nickname: newLocation.nickname || '',
+        lat: newLocation.lat,
+        lng: newLocation.lng,
+        address: newLocation.address,
+      }];
+    } else {
+      console.log('Invalid location data provided');
+    }
+  } else {
+    console.log('No valid locations provided');
   }
 
   // Update socials
@@ -109,12 +114,38 @@ export const editStore = expressAsyncHandler(async (req, res) => {
     }
   }
 
+  // Update contact details
+  if (req.body.contact) {
+    store.contact = store.contact || {}; // Ensure contact object exists
+    if (req.body.contact.phone) {
+        store.contact.phone = req.body.contact.phone;
+    }
+
+    if (req.body.contact.email) {
+      // You might want to add an email validation regex here
+      store.contact.email = req.body.contact.email;
+    }
+
+    if (req.body.contact.whatsapp) {
+      if (/^\+?[1-9]\d{1,14}$/.test(req.body.contact.whatsapp)) {
+        store.contact.whatsapp = req.body.contact.whatsapp;
+      } else {
+        console.log('Invalid WhatsApp number provided');
+      }
+    }
+  }
+
+  // Update OperationTimes
+  if (req.body.operationTimes) {
+    store.operationTimes = req.body.operationTimes;
+  }
+
   // Save the updated store
   await store.save();
 
-  const updatedStore = await Store.findById(storeId).populate("layouts");
+  // const updatedStore = await Store.findById(storeId).populate("layouts");
 
-  res.status(200).json(updatedStore);
+  res.status(200).json(store);
 });
 
   

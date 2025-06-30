@@ -29,7 +29,18 @@ const storeSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    contact: contactSchema,
+    contact: {
+      phone: {
+        type: String,
+      },
+      email: {
+        type: String,
+      },
+      whatsapp: {
+        type: String,
+        match: [/^\+?[1-9]\d{1,14}$/, "Please enter a valid phone number"],
+      }
+    },
     departments: [{
       type: String, 
       required: [true, "Store department is required"], 

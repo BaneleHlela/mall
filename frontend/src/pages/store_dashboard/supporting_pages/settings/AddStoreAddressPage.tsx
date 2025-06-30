@@ -7,7 +7,7 @@ import type { Store } from '../../../../types/storeTypes';
 
 
 export default function AddStoreAddressPage() {
-  const  storeId  = "6845499398b50603bb45625b";
+  const  storeId  = "684c15bca0f98a1d13a7ff00";
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -29,21 +29,20 @@ export default function AddStoreAddressPage() {
   };
 
   const handleSave = async () => {
-
-    console.log('Saving store address:', selectedLocation)
+    console.log('Saving store address:', selectedLocation);
     if (!storeId || !selectedLocation) return;
-
+  
     const updatedStore: Partial<Store> = {
       locations: [
         {
           ...selectedLocation,
-          nickname: nickname || '', // Ensure nickname is always a string
+          nickname: nickname || '',
         },
       ],
+      categories: { products: [], services: [] }, // Add this line
     };
-
-    await dispatch(editStore({ storeId, updatedStore }));
-    // navigate(`/dashboard/store/${storeId}`);
+  
+    await dispatch(editStore({ storeId, updatedStore: updatedStore as Omit<Store, "id"> }));
   };
 
   return (

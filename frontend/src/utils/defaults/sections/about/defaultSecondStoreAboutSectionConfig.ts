@@ -1,26 +1,23 @@
 export const defaultSecondStoreAboutConfig = {
-    backgroundColor: "white",
-    border: {
-        // width: "5px",
-        // style: "solid",
-        // color: "white",
-        // radius: "0",
+    variation: "aboutWithImageAndText",
+    background: {
+        color: "white",
     },
     image: {
-        url: "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100200.png",
+        imageUrl: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100200.png"],
         border: {
-            // width: "5px",
-            // style: "solid",
-            // color: "white",
-            // radius: "0",
+            width: "5px",
+            style: "solid",
+            color: "white",
+            radius: "0",
         },
     },
     text: {
         border: {
-            // width: "5px",
-            // style: "solid",
-            // color: "white",
-            // radius: "0",
+            width: "5px",
+            style: "solid",
+            color: "white",
+            radius: "0",
         },
         style: {
             fontFamily: "Roboto",
@@ -32,24 +29,15 @@ export const defaultSecondStoreAboutConfig = {
         title: {
             input: "My Story",
             style: {
-                mobile: {
-                    fontFamily: "Open Sans",
-                    fontSize: "1.6em",
-                    color: "black",
-                    fontWeight: "normal",
-                    fontStyle: "normal",
+                fontFamily: "Open Sans",
+                fontSize: {
+                    mobile: "1.6em",
+                    desktop: "3em",
                 },
-                desktop: {
-                    fontFamily: "Open Sans",
-                    fontSize: "2.2em",
-                    color: "black",
-                    fontWeight: "normal",
-                    fontStyle: "normal",
-                },
-            }
-        },
-    }
-    
-
-    
+                color: "black",
+                fontWeight: "normal",
+                fontStyle: "normal",
+            },
+        }
+    },
 };

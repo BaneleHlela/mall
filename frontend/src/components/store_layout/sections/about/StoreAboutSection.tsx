@@ -1,10 +1,11 @@
+import { useAppSelector } from "../../../../app/hooks";
 import type { SectionProps } from "../../../../types/layoutTypes"
 import SecondStoreAboutSection from "./second/SecondStoreAboutSection";
 
 const StoreAboutSection = ({id}: SectionProps) => {
-  let type = "secondAbout";
+  const variation = useAppSelector((state) => state.layoutSettings.about.variation);
 
-  if (type === "secondAbout") {
+  if (variation === "aboutWithImageAndText") {
     return (
       <SecondStoreAboutSection /*id = {id}*//>
     )

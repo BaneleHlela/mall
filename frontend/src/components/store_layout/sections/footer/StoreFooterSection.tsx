@@ -1,11 +1,11 @@
 import type { SectionProps } from "../../../../types/layoutTypes"
-import FirstStoreFooterSection from "./first/FirstStoreFooterSection";
+import FooterWithStoreDetailsFormAndButton from "./with_store_details_form_and_button/FooterWithStoreDetailsFormAndButton";
 
 const StoreFooterSection = ({id}: SectionProps) => {
   const type = "first";
   if (type === "first") {
     return (
-      <FirstStoreFooterSection id={id}/>
+      <FooterWithStoreDetailsFormAndButton id={id}/>
     )
   }
 }

@@ -38,7 +38,7 @@ export interface Store {
   team: TeamMember[]; 
   updatedAt?: Date; 
   socials?: Socials[];  
-  locations?: Array<{
+  locations: Array<{
     nickname: string;   
     lat: number;   
     lng: number  

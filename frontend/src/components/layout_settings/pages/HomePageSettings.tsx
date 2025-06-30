@@ -23,6 +23,7 @@ import HeroSettings from "../sections/hero/HeroSettings";
 import SectionSelector from "../supporting/section_selector/SectionSelector";
 import type { SectionType } from "../../../utils/defaults/sections/getSectionDefaults";
 import type { Section } from "../../../features/sections/sectionSlice";
+import AboutSettingsSection from "../sections/about/AboutSettingsSection";
 // Import SectionSelector if not already
 // import SectionSelector from "../supporting/SectionSelector";
 
@@ -110,7 +111,8 @@ const HomePageSettings = () => {
     switch (section) {
       case "hero":
         return <HeroSettings />;
-      // case "footer": return <FooterSettings />;
+      case "about": 
+      return <AboutSettingsSection />;
       default:
         return <div>No settings available for section "{section}".</div>;
     }
