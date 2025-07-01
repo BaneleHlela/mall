@@ -1,33 +1,62 @@
 import React from 'react';
 import type { StoreProductCardProps } from '../StoreProductCard';
-import { getBorderStyles } from '../../../../../../utils/stylingFunctions';
-
+import { getBackgroundStyles, getTextStyles } from '../../../../../../utils/stylingFunctions';
 
 const FirstStoreProductCard: React.FC<StoreProductCardProps> = ({ image, name, description, price, style }) => {
   return (
     <div 
       style={{
-        fontFamily: style.fontFamily,
-        ...getBorderStyles(style.border)
+        ...getBackgroundStyles(style.background)
       }}
-      className="overflow-hidden hover:scale-102">
-      <img
-        src={image}
-        alt={name}
-        className="w-full h-48 object-cover"
-      />
-      <div className="p-4">
+      className="w-full flex flex-col overflow-hidden transition-transform duration-300 hover:scale-105"
+    >
+      <div className="h-1/2 w-full">
+        <img
+          src={image}
+          alt={name}
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      <div className="h-1/2 px-2 py-2 lg:p-4 flex flex-col justify-between">
         <h3 
-          className={`text-lg font-bold text-gray-900
-            ${style.textCenter ? "text-center" : ""}
-        `}
-        >{name}</h3>
+          style={{
+            ...getTextStyles(style.text.productName)
+          }}
+          className={`runcate
+              ${style.text.productName.position === "center" && "text-center"}
+              ${style.text.productName.position === "end" && "text-end"}
+              ${style.text.productName.position === "start" && "text-start"}
+            `}
+        >
+          {name}
+        </h3>
+
         <p 
-          className={`text-sm text-gray-600 mt-1
-          ${style.textCenter ? "text-center" : ""}`} 
-        >{description}</p>
-        <div className={`mt-3 ${style.textCenter ? "text-center" : "text-right"} `}>
-          <span className="text-base font-semibold text-gray-800">R{price}</span>
+          style={{
+            ...getTextStyles(style.text.productDescription)
+          }}
+          className={`text-sm text-gray-600 mt-1 truncate'
+            ${style.text.productDescription.position === "center" && "text-center"}
+            ${style.text.productDescription.position === "end" && "text-end"}
+            ${style.text.productDescription.position === "start" && "text-start"}
+            line-clamp-1
+          `}
+        >
+          {description}
+        </p>
+
+        <div 
+          style={{
+            ...getTextStyles(style.text.productPrice)
+          }}
+          className={`text-sm text-gray-600 mt-1 truncate'
+            ${style.text.productPrice.position === "center" && "text-center"}
+            ${style.text.productPrice.position === "end" && "text-end"}
+            ${style.text.productPrice.position === "start" && "text-start"}
+          `}
+          >
+          <span className="text-base">R{price}</span>
         </div>
       </div>
     </div>

@@ -6,15 +6,12 @@ import FirstStoreReviewCard from './store_layout/extras/cards/review/first/First
 import SendEmailForm from './store_layout/extras/forms/SendEmailForm'
 import AddStoreAddressPage from '../pages/store_dashboard/supporting_pages/settings/AddStoreAddressPage'
 import MapComponent from './store_layout/extras/MapComponent'
+import GalleryWithImageSlider from './store_layout/sections/gallery/gallery_with_image_slider/GalleryWithImageSlider'
 
 const Scibbler = () => {
   return (
     <>
-      <MapComponent
-        name="Sugar and spice"
-        lat={-27.7741226}
-        lng={30.0711324}
-      />
+      <GalleryWithImageSlider/>
     </>    
   )
 }

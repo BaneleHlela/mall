@@ -72,6 +72,19 @@ const TextEditor: React.FC<EditorProps> = ({
               }
             />
           )}
+          
+          {isAllowed("position") && (
+            <OptionsToggler
+              label="Text Position"
+              options={["start", "center", "end"]}
+              value={getSetting("position", settings, objectPath) || "start"}
+              onChange={(newValue) =>
+                handleChange("position")({
+                  target: { value: newValue }
+                } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
+              }
+            />
+          )}
       
           {isAllowed("fontSize") && (
             responsiveSize ? (

@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
-import { getTextStyles } from "../../../../../utils/stylingFunctions";
+import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from "../../../../../utils/stylingFunctions";
 import AcceptingOrdersButton from "../../../extras/buttons/AcceptingOrdersButton";
 import StoreProductCard from "../../../extras/cards/product/StoreProductCard";
 import CategorySelector from "../../../extras/category_selector/CategorySelector";
 import { fetchStoreProducts } from "../../../../../features/products/productsSlice";
 import type { Product } from "../../../../../types/productTypes";
-import { X } from "lucide-react";
 import ProductModal from "../../../extras/modals/ProductModal";
 
 
 const FirstStoreProductsSection = () => {
   const dispatch = useAppDispatch();
-  const settings = useAppSelector((state) => state.layoutSettings.order);
+  const settings = useAppSelector((state) => state.layoutSettings.products);
   const store = useAppSelector((state) => state.stores.currentStore);
   const storeId = store ? store._id : null;
+  const screenWidth = window.innerWidth; 
 
   const selectedCategory = useAppSelector((state) => state.categories.selectedCategory);
   const products = useAppSelector((state) => state.products.products)
@@ -43,16 +43,15 @@ const FirstStoreProductsSection = () => {
   return (
     <div
       style={{
-        backgroundColor: settings.backgroundColor || "#f3f4f6", 
+        ...getBackgroundStyles(settings.background), 
       }}
-
+      className=""
     >
-      {/* Mobile */}
       <div className={`w-full pb-10 ${selectedProduct && "blur-sm"}`}>
         {/* Image */}
         {settings.image.display && (
           <div className="">
-            <img src={settings.image.url} alt="order-online-image" className="w-full h-[37vh] object-cover" />
+            <img src={settings.image.url} alt="order-online-image" className="w-full h-[35vh] object-cover" />
           </div>
         )}
         {/* ...rest */}
@@ -61,42 +60,69 @@ const FirstStoreProductsSection = () => {
           <div className="w-full mt-5 mb-5">
             <h1 
               style={{
-                ...getTextStyles(settings.title.style.mobile), 
+                ...getTextStyles(settings.title), 
               }}
-              className=""
+              className={`
+                  ${settings.title.position === "center" && "text-center"}
+                  ${settings.title.position === "end" && "text-end"}
+                  ${settings.title.position === "start" && "text-start"}
+                `}
             >
               {settings.title.input || "Order Now"}
             </h1>
             <p 
               style={{
-                ...getTextStyles(settings.shortDescription.style.mobile),
+                ...getTextStyles(settings.shortDescription),
               }}
-              className=""
+              className={`
+                ${settings.shortDescription.position === "center" && "text-center"}
+                ${settings.shortDescription.position === "end" && "text-end"}
+                ${settings.shortDescription.position === "start" && "text-start"}
+              `}
             >
               {settings.shortDescription.input || "You can order online! Browse our menu items and choose what you’d like to order from us."}
             </p>
           </div>
           {/* Accepting Order button (red if closed, orange if pickup only, green if both) */}
-          <div className="w-full pb-4">
-            <AcceptingOrdersButton operationTimes={store?.operationTimes} style={settings.categorySelector} />
+          <div className={`w-full flex flex-col justify-center 
+              ${settings.acceptingOrdersButton.position === "center" && "items-center"}
+              ${settings.acceptingOrdersButton.position === "end" && "items-end"}
+              ${settings.acceptingOrdersButton.position === "start" && "items-start"}
+            mb-2`}>
+            <AcceptingOrdersButton operationTimes={store?.operationTimes} style={settings.title} />
           </div>
           {/* Categories */}
-          <div className="pt-4 pb-4">
+          <div className="w-full py-4 flex flex-row justify-center">
             <CategorySelector categories={store?.categories.products || []} style={settings.categorySelector} />
           </div>
           {/* Render a StoreProductCard for each image */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div
+            style={{
+              gap: getResponsiveDimension(settings.productsDisplay.grid.gap, screenWidth),
+            }} 
+            className={`grid 
+              ${settings.productsDisplay.grid.columns.mobile === 1 && "grid-cols-1"}
+              ${settings.productsDisplay.grid.columns.mobile === 2 && "grid-cols-2"}
+              ${settings.productsDisplay.grid.columns.desktop === 3 && "lg:grid-cols-3"}
+              ${settings.productsDisplay.grid.columns.desktop === 4 && "lg:grid-cols-4"} 
+              ${settings.productsDisplay.grid.columns.desktop === 5 && "lg:grid-cols-5"} 
+              sm:grid-cols-2`
+            } 
+         >
           {products.length > 0 ? (
             products.map((product) => (
-              <StoreProductCard
-                key={product._id}
-                name={product.name}
-                price={product.price}
-                image={product.images && product.images.length > 0 ? product.images[0] : ""}
-                description={product.description}
-                style={settings.productCard}
-                onClick={() => handleProductClick(product)}
-              />
+              <div className="h-full">
+                <StoreProductCard
+                  key={product._id}
+                  name={product.name}
+                  price={product.price}
+                  image={product.images && product.images.length > 0 ? product.images[0] : ""}
+                  description={product.description}
+                  style={settings.productCard}
+                  onClick={() => handleProductClick(product)}
+                />
+              </div>
+              
             ))
           ) : (
             <p className="text-center text-gray-500 mt-4 mb-4">

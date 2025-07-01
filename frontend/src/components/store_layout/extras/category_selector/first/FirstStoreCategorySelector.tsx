@@ -2,20 +2,23 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setCategory } from '../../../../../features/categories/categorySlice';
 import type { FirstStoreCategorySelectorProps } from '../CategorySelector';
+import { getResponsiveDimension, getTextStyles } from '../../../../../utils/stylingFunctions';
 
 
 
 const FirstStoreCategorySelector: React.FC<FirstStoreCategorySelectorProps> = ({ categories, style }) => {
   const dispatch = useAppDispatch();
   const selectedCategory = useAppSelector(state => state.categories.selectedCategory);
+  const screenWidth = window.innerWidth; 
 
   return (
-    <div className="">
+    <div className="w-full ml-1 mr-1 flex flex-row justify-center">
       <div 
         style={{
-          fontFamily: style.fontFamily,
+          ...getTextStyles(style.text),
+          width: getResponsiveDimension(style.width, screenWidth),
         }}
-        className="flex justify-between border-b border-gray-300 ml-1 mr-1"
+        className="flex justify-between border-b border-gray-300 "
       >
         {categories.map((category) => (
           <button

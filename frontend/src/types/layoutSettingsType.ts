@@ -22,9 +22,9 @@ export interface EditorProps {
     responsiveSize?: boolean;
 }
 
-interface ResponsiveValue {
-  mobile?: string;
-  desktop?: string;
+export interface ResponsiveValue {
+  mobile: string;
+  desktop: string;
 }
 
 interface PaddingValue {

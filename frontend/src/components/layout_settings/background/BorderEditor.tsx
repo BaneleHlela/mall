@@ -64,12 +64,13 @@ const BorderEditor: React.FC<EditorProps> = ({
         <SettingsSlider
           label="Border Radius"
           value={parseInt(getSetting("radius", settings, objectPath) || "0")}
-          unit="px"
+          unit="%"
           min={0}
+          max={100}
           onChange={(newVal) => {
             const event = {
               target: Object.assign(document.createElement("input"), {
-                value: `${newVal}px`,
+                value: `${newVal}%`,
               }),
             } as React.ChangeEvent<HTMLInputElement>;
             handleChange("radius")(event);

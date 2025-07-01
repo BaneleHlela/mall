@@ -3,22 +3,21 @@ import { Description } from "@headlessui/react";
 export const defaultFirstStoreProductModal = {
     exitButton: {
         color: "brown",
-        backgroundColor: "white",
+        background: {
+            color: "white",
+            shadow: true,
+        },
+        
     },
     text: {
         productName: {
-            mobile: {
-                fontFamily: "Patrick Hand",
-                fontSize: "2em",
-                color: "brown",
-                fontWeight: "600",
+            fontFamily: "Patrick Hand",
+            fontSize: {
+                mobile: "2em",
+                desktop: "2.5em",	
             },
-            desktop: {
-                fontFamily: "Patrick Hand",
-                fontSize: "2.5em",
-                color: "brown",
-                fontWeight: "600",
-            }
+            color: "brown",
+            fontWeight: "600",
         },
         description: {
             fontFamily: "Patrick Hand",
@@ -41,7 +40,9 @@ export const defaultFirstStoreProductModal = {
         },
     },
     messageBox: {
+        show: true,
         titleInput: "Special request",
+        placeholder: "Sozama ngokusemandleni",
         border: {
             width: "2px",
             style: "solid",

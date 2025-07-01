@@ -1,29 +1,42 @@
 import React from "react";
 import StarDisplay from "../supporting/StarDisplay";
 import type { ReviewCardProps } from "../StoreReviewCard";
-import { getBorderStyles } from "../../../../../../utils/stylingFunctions";
+import { getBorderStyles, getTextStyles } from "../../../../../../utils/stylingFunctions";
 
 const FirstStoreReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, review, rating, anonymous, style }) => {
   return (
     <div 
         style={{
-            backgroundColor: style.backgroundColor,
-            ...getBorderStyles(style.border),
+            backgroundColor: style.background.color,
+            ...getBorderStyles(style.background.border),
         }}
-        className={`max-w-[500px] overflow-hidden hover:scale-102 p-4 bg-white
-            ${style.shadow && `shadow-md`}`}
+        className={`flex max-h-[250px] overflow-scroll hide-scrollbar lg:max-h-[400px]  flex-col justify-between hover:scale-102 p-4 bg-white
+            ${style.background.shadow && `shadow-md`}`}
     >
       {/* Top left - Stars */}
       <div className="">
-        <StarDisplay rating={rating} style={{ type: "sharp", color: "black" }} />
+        <StarDisplay rating={rating} style={{...style.stars}} />
       </div>
       {/* Middle - Review */}
-      <p className={`mt-2 text-sm text-gray-600`}>
+      <p
+        style={{
+          ...getTextStyles(style.text.comment),
+        }} 
+        className={`mt-2 text-sm text-gray-600`}
+      >
         "{review}"
       </p>
 
       {/* Bottom right - Reviewer name */}
-      <div className={`capitalize mt-3 text-right text-sm font-medium text-gray-800`}>
+      <div 
+        style={{
+          ...getTextStyles(style.text.name),
+        }} 
+        className={`capitalize mt-3
+          ${style.text.name.position === 'start' && 'text-start'}
+          ${style.text.name.position === 'center' && 'text-center'}
+          ${style.text.name.position === 'end' && 'text-end'}
+        `}>
         - {anonymous ? "Anonymous Mbumbulu" : reviewerName}
       </div>
     </div>

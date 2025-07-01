@@ -226,7 +226,7 @@ const PopularStoreMenubar: React.FC = () => {
       }}
       className={`flex flex-row justify-between
         ${settings.background.shadow ? "shadow-md" : ""} 
-        ${settings.topbar.sticky ? "sticky top-0 z-100" : ""}
+        ${settings.topbar.sticky ? "sticky top-0 z-10" : ""}
       `}
     >
         <div className="h-full w-full lg:hidden">      

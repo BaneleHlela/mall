@@ -1,7 +1,7 @@
 import { IoClose } from "react-icons/io5";
 import { useState } from "react";
 import type { ProductModalProps } from "../ProductModal";
-import { getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunctions";
+import { getBackgroundStyles, getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunctions";
 import { useAppDispatch } from "../../../../../app/hooks";
 import { addToCart } from "../../../../../features/cart/cartSlice";
 
@@ -26,14 +26,14 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, onClose, style }) 
             style={{ 
                 ...getTextStyles(style.text.rest)
             }}
-            className="fixed inset-0 w-screen h-screen bg-opacity-50 flex items-center justify-center z-100 overflow-scroll"
+            className="fixed inset-0 w-screen h-screen bg-opacity-50 flex items-center justify-center z-100 overflow-scroll hide-scrollbar"
         >
-            <div className="relative h-full w-full max-w-[900px] bg-white shadow-md">
+            <div className="relative h-full w-full lg:max-w-[50%] bg-white shadow-md">
                 {/* Exit Icon */}
                 <button
                     style={{
                         color: style.exitButton.color,
-                        backgroundColor: style.exitButton.backgroundColor
+                        ...getBackgroundStyles(style.exitButton.background)
                     }}
                     className="absolute shadow-md p-2 top-4 right-4 text-gray-500 rounded-full bg-white hover:text-gray-800"
                     onClick={onClose}
@@ -50,7 +50,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, onClose, style }) 
 
                 {/* Product Details */}
                 <div className={`pl-6 pr-6 ${style.text.textCenter ? "text-center" : ""}`}>
-                    <h2 style={{ ...getTextStyles(style.text.productName.mobile) }} className="mt-3">
+                    <h2 style={{ ...getTextStyles(style.text.productName) }} className="mt-3">
                         {product.name}
                     </h2>
                     <p style={{
@@ -59,26 +59,27 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, onClose, style }) 
                         {product.description}
                     </p>
                     {/* Special Request Message Box */}
-                    <div 
-                        style={{
-                            ...getTextStyles(style.text.rest),
-                         }}
-                        className="mt-4"
-                    >
-                        <label className="block">{style.messageBox.titleInput}</label>
-                        <textarea 
-                            value={specialRequest}
-                            onChange={(e) => setSpecialRequest(e.target.value)}
+                    {style.messageBox.show && (
+                        <div 
                             style={{
                                 ...getTextStyles(style.text.rest),
-                                ...getBorderStyles(style.messageBox.border),
                             }}
-                            className="w-full h-[13vh] p-2 mt-2"
-                            placeholder="We'll do our best to accommodate any requests when possible"
-                        />
-                    </div>
+                            className="mt-4"
+                        >
+                            <label className="block">{style.messageBox.titleInput}</label>
+                            <textarea 
+                                value={specialRequest}
+                                onChange={(e) => setSpecialRequest(e.target.value)}
+                                style={{
+                                    ...getTextStyles(style.text.rest),
+                                    ...getBorderStyles(style.messageBox.border),
+                                }}
+                                className="w-full h-[13vh] p-2 mt-2"
+                                placeholder={`${style.messageBox.placeholder || "We'll do our best to accommodate any requests when possible"} `}
+                            />
+                        </div>
+                    )}
                 </div>
-
                 {/* Quantity and add to cart */}
                 <div className="p-6">
                     {/* Quantity Updater */}

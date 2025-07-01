@@ -5,10 +5,11 @@ import { defaultFirstFooterConfig } from "./sections/footer/defaultFirstFooterCo
 import { defaultFourthStoreHeroConfig } from "./sections/hero/defaultFourthStoreHeroConfig";
 import { defaultHeroWithButtonBetweenImages } from "./sections/hero/defaultHeroWithButtonBetweenImagesConfig";
 import { defaultFirstStoreMenuSectionConfig } from "./sections/menu/defaultFirstStoreMenuSectionConfig";
-import { defaultFirstStoreOrderOnlineCongig } from "./sections/order_online/defualtFirstStoreOrderOnlineConfig";
+import { defaultFirstStoreProductsConfig } from "./sections/order_online/defualtFirstStoreProductsConfig";
 import { defaultFirstStoreReviewsConfig } from "./sections/reviews/defaultFirstStoreReviewsConfig";
 import { defaultHeroWithImageButtonAndBox } from "./sections/hero/defaultHeroWithImagePatternAndBoxConfig";
 import { defaultHeroWithButtonImageAndTextConfig } from "./sections/hero/defaultHeroWithButtonImageAndTextConfig";
+import { defaultGalleryWithImageSliderConfig } from "./sections/gallery/defaultGalleryWithImageSliderConfig";
 
 export const defaultMenubarConfig = {
   topbar: {
@@ -42,7 +43,7 @@ export const defaultLayoutConfig = {
         name: "Home",
         url: "/",
         exact: true,
-        contains: ["hero", "about", "order", "reviews", "footer"],
+        contains: ["hero", "about", "order", "gallery", "reviews", "footer",],
       },
       about: {
         name: "About Us",
@@ -85,10 +86,12 @@ export const defaultLayoutConfig = {
     practice: defaultFourthStoreHeroConfig,
     about: defaultSecondStoreAboutConfig,
     menubar: defaultPupularStoreMenubarConfig,
+    gallery: defaultGalleryWithImageSliderConfig,
     menu: defaultFirstStoreMenuSectionConfig,
     hero: defaultHeroWithButtonImageAndTextConfig,
     bookWithCalendar: defaultFirstBookWithCalandarConfig,
-    order: defaultFirstStoreOrderOnlineCongig,
+    products: defaultFirstStoreProductsConfig,
+    order: defaultFirstStoreProductsConfig,
     reviews: defaultFirstStoreReviewsConfig,
     footer: defaultFirstFooterConfig,
 };

@@ -40,7 +40,7 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
   };
 
   const getSliderProps = (unit: string) => {
-    if (unit === 'vw' || unit === 'vh') {
+    if (unit === 'vw' || unit === 'vh' || unit === "%") {
       return { min: 1, max: 100, step: 1 };
     }
     return { min: 0, max: 500, step: 1 };
@@ -150,18 +150,16 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
           />
         </>
       )}
-
-      {/* BORDER */}
-      {isAllowed("border") && (
-        <SubSettingsContainer
-          name="Border"
-          SettingsComponent={
-            <BorderEditor
-              objectPath={`${objectPath}.border`}
-              handleSettingChange={handleSettingChange}
-              settings={settings}
-            />
-          }
+      {/* margin */}
+      {isAllowed("margin") && (
+        <SettingsSlider
+          label="margin"
+          value={parseInt(getSetting("margin", settings, objectPath) || "100")}
+          unit="px"
+          min={0}
+          max={100}
+          step={1}
+          onChange={createSliderChangeHandler("margin", "px")}
         />
       )}
       {/* OPACITY */}
@@ -176,6 +174,21 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
           onChange={createSliderChangeHandler("opacity", "%")}
         />
       )}
+      {/* BORDER */}
+      {isAllowed("border") && (
+        <SubSettingsContainer
+          name="Border"
+          SettingsComponent={
+            <BorderEditor
+              objectPath={`${objectPath}.border`}
+              handleSettingChange={handleSettingChange}
+              settings={settings}
+            />
+          }
+        />
+      )}
+      
+      
     </div>
   );
 };

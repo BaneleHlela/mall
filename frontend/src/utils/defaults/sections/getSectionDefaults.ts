@@ -4,11 +4,11 @@ import { defaultFirstFooterConfig } from "./footer/defaultFirstFooterConfig";
 import { defaultFourthStoreHeroConfig } from "./hero/defaultFourthStoreHeroConfig";
 import { defaultHeroWithButtonBetweenImages } from "./hero/defaultHeroWithButtonBetweenImagesConfig";
 import { defaultFirstStoreMenuSectionConfig } from "./menu/defaultFirstStoreMenuSectionConfig";
-import { defaultFirstStoreOrderOnlineCongig } from "./order_online/defualtFirstStoreOrderOnlineConfig";
+import { defaultFirstStoreProductsConfig } from "./order_online/defualtFirstStoreProductsConfig";
 import { defaultFirstStoreReviewsConfig } from "./reviews/defaultFirstStoreReviewsConfig";
 import { defaultHeroWithImageButtonAndBox } from "./hero/defaultHeroWithImagePatternAndBoxConfig";
 
-export type SectionType = 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer';
+export type SectionType = 'products' | 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer';
 type VariationType = string;
 
 export const getSectionDefaults = (section: SectionType, variation: VariationType) => {
@@ -28,7 +28,10 @@ export const getSectionDefaults = (section: SectionType, variation: VariationTyp
       first: defaultFirstBookWithCalandarConfig,
     },
     order: {
-      first: defaultFirstStoreOrderOnlineCongig,
+      first: defaultFirstStoreProductsConfig,
+    },
+    products: {
+      first: defaultFirstStoreProductsConfig,
     },
     reviews: {
       first: defaultFirstStoreReviewsConfig,

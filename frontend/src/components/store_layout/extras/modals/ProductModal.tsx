@@ -2,7 +2,7 @@ import FirstProductModal from "./first/FirstProductModal";
 
 export interface ProductModalProps {
     product: {
-        store: string;
+        store?: string;
         _id: string;
         name: string;
         images: string[];

@@ -17,7 +17,8 @@ interface StarDisplayProps {
   style: {
     type: "sharp" | "rounded" | "playful" | "normal";
     color: string;
-    size: string | number; // Added size as a prop
+    size: string | number; 
+    position: "center" | "start" | "end";
   };
 }
 
@@ -42,7 +43,11 @@ const StarDisplay: React.FC<StarDisplayProps> = ({ rating, style }) => {
     );
   });
 
-  return <div className="flex space-x-[.5px]">{stars}</div>;
+  return <div className={`flex space-x-[.5px]
+      ${style.position === "center" && "justify-center"}
+      ${style.position === "start" && "justify-start"}
+      ${style.position === "end" && "justify-end"}
+    `}>{stars}</div>;
 };
 
 export default StarDisplay;

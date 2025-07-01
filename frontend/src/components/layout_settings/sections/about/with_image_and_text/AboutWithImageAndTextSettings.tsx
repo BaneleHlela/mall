@@ -89,12 +89,13 @@ const AboutWithImageAndTextSettings: React.FC<AboutWithImageAndTextSettingsProps
                 name="Paragraph"
                 SettingsComponent={
                 <TextEditor
-                objectPath={`${objectPath}.text.title`}
-                settings={settings}
-                handleSettingChange={handleSettingChange}
-                allow={["input", "fontFamily", "fontSize", "color", "fontWeight", "fontStyle"]}
-                responsiveSize
-            />}
+                    objectPath={`${objectPath}.text.title`}
+                    settings={settings}
+                    handleSettingChange={handleSettingChange}
+                    allow={["input", "fontFamily", "fontSize", "color", "fontWeight", "fontStyle"]}
+                    responsiveSize
+                />
+              }
             />
           </div>
         }

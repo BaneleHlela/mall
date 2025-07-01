@@ -3,27 +3,36 @@ import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
 
 export const createReview = asyncHandler(async (req, res) => {
-    const { store, rating, comment, anonymous = false } = req.body;
-  
-    const existingReview = await Review.findOne({
-      user: req.user._id,
-      store,
-    });
-  
-    if (existingReview) {
-      res.status(400);
-      throw new Error("You have already reviewed this store.");
-    }
-  
-    const review = await Review.create({
+  const { store, rating, comment, anonymous = false } = req.body;
+
+  let review = await Review.findOne({
+    user: req.user._id,
+    store,
+  });
+
+  if (review) {
+    // Update existing review
+    review.rating = rating;
+    review.comment = comment;
+    review.anonymous = anonymous;
+    review.updatedAt = Date.now();
+  } else {
+    // Create new review
+    review = new Review({
       user: req.user._id,
       store,
       rating,
       comment,
       anonymous,
     });
-  
-    res.status(201).json(review);
+  }
+
+  const savedReview = await review.save();
+
+  res.status(201).json({
+    message: review.isNew ? "Review created successfully" : "Review updated successfully",
+    review: savedReview
+  });
 });
   
 

@@ -1,18 +1,19 @@
-import type { BackgroundSettings, TextSettings } from "../types/layoutSettingsType";
+import type { BackgroundSettings, ResponsiveValue, TextSettings } from "../types/layoutSettingsType";
+
 export const getTextStyles = (text: TextSettings) => {
   if (!text) return {};
 
   const styles: any = {};
 
+  // Get current screen width
+  const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
+
   if (text.color) styles.color = text.color;
   if (text.weight) styles.fontWeight = text.weight;
 
   if (typeof text.fontSize === "object") {
-    // Responsive font sizes
-    styles.fontSize = text.fontSize.mobile; // Default to mobile
-    styles['@media (min-width: 768px)'] = {
-      fontSize: text.fontSize.desktop,
-    };
+    // Use getResponsiveDimension for responsive font sizes
+    styles.fontSize = getResponsiveDimension(text.fontSize, screenWidth);
   } else if (text.fontSize) {
     styles.fontSize = text.fontSize;
   }
@@ -52,27 +53,21 @@ export const getBackgroundStyles = (bg: BackgroundSettings = {}) => {
     styles.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.1)";
   }
 
+  // Get current screen width
+  const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
+
   // Responsive Height
   if (typeof bg.height === "object") {
-    styles.height = bg.height.mobile;
-    styles['@media (min-width: 768px)'] = {
-      ...(styles['@media (min-width: 768px)'] || {}),
-      height: bg.height.desktop,
-    };
+    styles.height = getResponsiveDimension(bg.height, screenWidth);
   } else if (bg.height) {
     styles.height = bg.height;
   }
 
   // Responsive Width
   if (typeof bg.width === "object") {
-    // Use window.innerWidth to determine screen size
-    if (window.innerWidth >= 768) {
-      styles.width = bg.width.desktop; // Apply desktop width for large screens
-    } else {
-      styles.width = bg.width.mobile; // Apply mobile width for smaller screens
-    }
+    styles.width = getResponsiveDimension(bg.width, screenWidth);
   } else if (bg.width) {
-    styles.width = bg.width; // Apply width directly if it's not an object
+    styles.width = bg.width;
   }
 
   // Padding
@@ -146,5 +141,20 @@ export const getSidebarAnimation = (transition: string | undefined) => {
         animate: { x: "0%", opacity: 1 }, 
         exit: { x: "-100%", opacity: 0 } 
       }; // fallback
+  }
+};
+
+
+export const getResponsiveDimension = (
+  dimension: ResponsiveValue,
+  screenWidth: number
+): string => {
+  // Define the breakpoint between mobile and desktop
+  const mobileBreakpoint = 768; // You can adjust this value as needed
+
+  if (screenWidth < mobileBreakpoint) {
+    return dimension.mobile;
+  } else {
+    return dimension.desktop;
   }
 };

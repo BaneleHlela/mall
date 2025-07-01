@@ -11,7 +11,7 @@ export interface StoreProductCardProps {
 
 const StoreProductCard: React.FC<StoreProductCardProps> = ({ image, name, description, price, style, onClick }) => {
   return (
-    <div onClick={onClick} className="cursor-pointer"> {/* Add onClick and cursor-pointer */}
+    <div onClick={onClick} className="cursor-pointer"> 
       <FirstStoreProductCard
         image={image}
         name={name}

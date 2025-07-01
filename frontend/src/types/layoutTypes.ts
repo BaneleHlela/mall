@@ -42,6 +42,8 @@ export interface Layout {
     _id?: string;
     store?: Types.ObjectId | null;
     menubar?: any;
+    gallery?: any;
+    products?: any;
     hero?: any;
     bookWithCalendar?: any;
     about: any;
@@ -90,4 +92,20 @@ export interface Routes {
     reviews?: Route;
     products?: Route;
     packages?: Route;
+}
+
+export interface TextProps {
+    fontFamily?: string;
+    fontWeight?: string;
+    color?: string;
+    fontSize?: string | {
+      mobile: string;
+      desktop: string;
+    };
+    textShadow?: string;
+    lineHeight?: string;
+    letterSpacing?: string;
+    textDecoration?: string;
+    textTransform?: string;
+    position?: string;
 }
