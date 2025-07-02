@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import DashboardLink from "./DashboardLink";
 import { TbSection } from "react-icons/tb";
+import { FaStore } from "react-icons/fa";
 
 
 
@@ -23,7 +24,12 @@ const DashBoardMenubar = () => {
             icon={<ChartArea size={20} className="text-blue-600"/>} 
             text="overview" 
           />
-          <DashboardLink 
+          <DashboardLink
+            linkTo={`/creators-dashboard/demo-stores`}
+            icon={<FaStore size={20} className="text-blue-600"/>}
+            text="Demo Stores" 
+          />
+          {/* <DashboardLink 
             linkTo={`/creators-dashboard/team`} 
             icon={<UsersRound size={20} className="text-blue-600"/>} 
             beta={true}
@@ -33,8 +39,8 @@ const DashBoardMenubar = () => {
           linkTo={`/creators-dashboard/orders`} 
           icon={<ClockArrowUp size={20} className="text-green-600"/>} 
           text="Orders" 
-        />
-        <DashboardLink 
+        /> */}
+        {/* <DashboardLink 
           linkTo={`/creators-dashboard/bookings`} 
           icon={<CalendarArrowUp size={20} className="text-green-600"/>} 
           text="Bookings" 
@@ -58,22 +64,22 @@ const DashBoardMenubar = () => {
           linkTo={`/creators-dashboard/packages`} 
           icon={<Package size={20} className="text-yellow-500" />} 
           text="Packages" 
-        />
-        <DashboardLink 
+        /> */}
+        {/* <DashboardLink 
           linkTo={`/creators-dashboard/layouts`} 
           icon={<LayoutDashboard size={20} className="text-red-600"/>} 
           text="Layouts" 
-        />
+        /> */}
         <DashboardLink 
           linkTo={`/creators-dashboard/sections`} 
           icon={<TbSection size={20} className="text-red-600"/>} 
           text="Sections" 
         />
-        <DashboardLink 
+        {/* <DashboardLink 
           linkTo={`/creators-dashboard/images`} 
           icon={<Images size={20} className="text-red-600"/>} 
           text="Images" 
-        />
+        /> */}
       </div>
       {/* Tools Links */}
       <div className="font-[ubuntu] absolute bottom-[10vh] left-1 w-full scale-95">

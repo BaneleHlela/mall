@@ -1,26 +1,65 @@
 import React from 'react';
+import { getBackgroundStyles, getTextStyles } from '../../../../../../utils/stylingFunctions';
+import StoreButton from '../../../buttons/StoreButton';
+import { formatDuration } from '../StoreServiceCard';
 
 interface FirstStoreServiceCardProps {
   title: string;
-  duration: string;
-  price: string;
+  duration: number; //in minutes
+  price: number;
+  style: any;
+  onClick?: () => void; 
 }
 
 const FirstStoreServiceCard: React.FC<FirstStoreServiceCardProps> = ({
   title,
   duration,
   price,
+  style,
+  onClick,
 }) => {
   return (
-    <div className="border border-black bg-[#d1dfc7] px-8 py-6 w-full h-full flex flex-col justify-between lg:min-h-[35vh]">
-      <div>
-        <h2 className="text-lg font-bold mb-3">{title}</h2>
-        <p className="mb-1">{duration}</p>
-        <p className="mb-4">{price}</p>
+    <div 
+      style={{
+        ...getBackgroundStyles(style.background),
+      }}
+      className="border border-black bg-[#d1dfc7] flex flex-col justify-between lg:min-h-[35vh]">
+      {/* Service name */}
+      <div
+        className='w-full'
+      >
+        <h2 
+          style={{
+            ...getTextStyles(style.text.serviceName),
+          }}
+          className={`
+            ${style.text.serviceName.position === "center" && "text-center"}
+            ${style.text.serviceName.position === "end" && "text-end"}
+            ${style.text.serviceName.position === "start" && "text-start"}
+          `}>{title}</h2>
       </div>
-      <button className="bg-black text-white text-sm px-4 py-2 hover:bg-gray-800 transition w-fit">
-        Make an Appointment
-      </button>
+      {/* Service Details */}
+      <div
+        style={{
+          ...getTextStyles(style.text.serviceDetails),
+        }}
+        className={`space-y-1 mb-4
+          ${style.text.serviceDetails.position === "center" && "text-center"}
+          ${style.text.serviceDetails.position === "end" && "text-end"}
+          ${style.text.serviceDetails.position === "start" && "text-start"}
+        `} 
+        >
+        <p className="">{formatDuration(duration)}</p>
+        <p className="">R{price}</p>
+      </div>
+      <div className={`flex flex-row 
+          ${style.bookButton.position === "center" && "justify-center"}
+          ${style.bookButton.position === "end" && "justify-end"}
+          ${style.bookButton.position === "start" && "justify-start"}
+        `}>
+        <StoreButton style={style.bookButton} onClick={onClick || (() => {})}/>
+      </div>
+      
     </div>
   );
 };

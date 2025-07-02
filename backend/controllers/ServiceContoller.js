@@ -1,4 +1,6 @@
 import Service from '../models/ServiceModel.js';
+import asyncHandler from 'express-async-handler'; 
+import mongoose from 'mongoose';
 
 export const createService = async (req, res) => {
   try {
@@ -115,22 +117,36 @@ export const updateService = async (req, res) => {
 };
 
 
-export const getStoreServices = async (req, res) => {
+export const getStoreServices = asyncHandler(async (req, res) => {
+  const { storeId } = req.params;
+  const { category } = req.query;
+
+  // Validate storeId
+  if (!storeId || !mongoose.Types.ObjectId.isValid(storeId)) {
+    res.status(400);
+    throw new Error("Invalid Store ID");
+  }
+
+  // Convert storeId to ObjectId
+  const storeObjectId = new mongoose.Types.ObjectId(storeId);
+
+  // Build query
+  const query = { store: storeObjectId };
+  if (category) {
+    query.category = category;
+  }
+
+  console.log('Service query:', query);
+
   try {
-    const storeId = req.params.storeId;
-
-    if (!storeId) {
-      return res.status(400).json({ message: 'Store ID is required' });
-    }
-
-    const services = await Service.find({ store: storeId }).sort({ createdAt: -1 });
-
+    const services = await Service.find(query).sort({ createdAt: -1 });
     res.status(200).json(services);
   } catch (error) {
     console.error('Error fetching store services:', error);
-    res.status(500).json({ message: 'Server error while fetching store services' });
+    res.status(500);
+    throw new Error('Failed to fetch store services');
   }
-};
+});
 
 
 export const deleteService = async (req, res) => {

@@ -7,7 +7,6 @@ import { defaultLayoutConfig } from '../../utils/defaults/defaultLayoutConfig';
 // Define the initial state using that type
 const initialState: Layout = {
   ...defaultLayoutConfig,
-  routeOrder: ["home", "about", "menu", "products", "reviews"],
 };
 
 const layoutSettingsSlice = createSlice({

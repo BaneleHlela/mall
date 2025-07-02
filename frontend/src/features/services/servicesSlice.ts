@@ -15,15 +15,24 @@ const API_BASE = 'http://localhost:5000/api/services';
 // 🔁 Thunks
 export const fetchStoreServices = createAsyncThunk(
   'services/fetchStoreServices',
-  async (storeId: string, thunkAPI) => {
+  async (
+    { storeId, category }: { storeId: string; category?: string },
+    thunkAPI
+  ) => {
     try {
-      const res = await axios.get(`${API_BASE}/store/${storeId}`);
+      const url = category
+        ? `${API_BASE}/store/${storeId}?category=${category}`
+        : `${API_BASE}/store/${storeId}`;
+      const res = await axios.get(url);
       return res.data as Service[];
     } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to fetch services');
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || 'Failed to fetch store services'
+      );
     }
   }
 );
+
 
 export const createService = createAsyncThunk(
   'services/createService',

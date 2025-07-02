@@ -19,8 +19,7 @@ import { getBackgroundStyles } from "../../utils/stylingFunctions";
 
 const StorePage = () => {
   const settings = useAppSelector((state) => state.layoutSettings);
-  // const { storeId } = useParams<{ storeId: string }>();
-  const  storeId  = "684c15bca0f98a1d13a7ff00" ;
+  const { storeId } = useParams<{ storeId: string }>();
   const dispatch = useAppDispatch();
   const [store, setStore] = useState<StoreType | null>(null); // Local state for the store
   const [loading, setLoading] = useState<boolean>(true); // Loading state
@@ -61,7 +60,7 @@ const StorePage = () => {
   // Fetch store services if applicable
   useEffect(() => {
     if (store?.trades === 2 && storeId) {
-      dispatch(fetchStoreServices(storeId)); // Fetch services if needed
+      dispatch(fetchStoreServices({ storeId })); // Fetch services if needed
     }
   }, [store, storeId, dispatch]);
 
@@ -98,7 +97,7 @@ const StorePage = () => {
       <div 
         style={{
           ...getBackgroundStyles(settings.background),
-          width: window.innerWidth >= 1024 ? settings.background?.width?.desktop : settings.background?.width?.mobile, // Apply width for large screens
+          // width: window.innerWidth >= 1024 ? settings.background?.width?.desktop : settings.background?.width?.mobile, // Apply width for large screens
         }}
         className={`w-screen h-full overflow-y-scroll hide-scrollbar overflow-x-clip`}>
         <PopularStoreMenubar />

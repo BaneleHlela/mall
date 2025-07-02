@@ -5,7 +5,8 @@ const StoreFooterSection = ({id}: SectionProps) => {
   const type = "first";
   if (type === "first") {
     return (
-      <FooterWithStoreDetailsFormAndButton id={id}/>
+      // <FooterWithStoreDetailsFormAndButton id={id}/>
+      <>Footer</>
     )
   }
 }

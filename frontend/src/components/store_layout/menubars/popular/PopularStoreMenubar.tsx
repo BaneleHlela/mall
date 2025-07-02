@@ -206,7 +206,7 @@ const PopularStoreMenubar: React.FC = () => {
       : settings.background.height.mobile
   };
 
-
+  console.log(routeOrder)
   
   const links = routeOrder // @ts-ignore
     .filter((key) => routes[key])  // @ts-ignore
@@ -214,7 +214,7 @@ const PopularStoreMenubar: React.FC = () => {
     to: `/stores/${storeId}${routes[key].url === "/" ? "" : routes[key].url}`, // @ts-ignore
     label: routes[key].name.toLowerCase(),
   })); 
-
+  console.log(links)
 
   return (
     <nav

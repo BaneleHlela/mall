@@ -29,13 +29,14 @@ interface ButtonStyle {
 }
 
 interface StoreButtonProps {
- style: {
+  onClick: () => void;
+  style: {
       function: string;
       style: ButtonStyle;
   };
 }
 
-const StoreButton: React.FC<StoreButtonProps> = ({ style }) => {
+const StoreButton: React.FC<StoreButtonProps> = ({ style, onClick }) => {
   return (
     <button
       style={{
@@ -43,6 +44,7 @@ const StoreButton: React.FC<StoreButtonProps> = ({ style }) => {
         ...getBackgroundStyles(style.style.background),
       }}
       className='flex flex-col justify-center w-full hover:scale-102'
+      onClick={onClick}
     >
       {style.style.text.input}
     </button>

@@ -10,6 +10,7 @@ import { defaultFirstStoreReviewsConfig } from "./sections/reviews/defaultFirstS
 import { defaultHeroWithImageButtonAndBox } from "./sections/hero/defaultHeroWithImagePatternAndBoxConfig";
 import { defaultHeroWithButtonImageAndTextConfig } from "./sections/hero/defaultHeroWithButtonImageAndTextConfig";
 import { defaultGalleryWithImageSliderConfig } from "./sections/gallery/defaultGalleryWithImageSliderConfig";
+import { defaultFirstStoreServicesConfig } from "./sections/services/defaultFirstStoreServicesConfig";
 
 export const defaultMenubarConfig = {
   topbar: {
@@ -37,7 +38,7 @@ export const defaultMenubarConfig = {
 
 export const defaultLayoutConfig = {
     name: "Default Store Layout",
-    routeOrder: ["home", "about", "menu", "products", "reviews"],
+    routeOrder: ["home", "about", "services", "menu", "products", "reviews"],
     routes: {
       home: {
         name: "Home",
@@ -56,7 +57,7 @@ export const defaultLayoutConfig = {
         contains: ["menu", "footer"],
       },
       products: {
-        name: "Order Online",
+        name: "Products",
         url: "/products",
         contains: [ "products", "footer"],
       },
@@ -64,6 +65,11 @@ export const defaultLayoutConfig = {
         name: "Reviews",
         url: "/reviews",
         contains: [ "reviews", "footer" ],
+      },
+      services: {
+        name: "Services",
+        url: "/services",
+        contains: [ "services", "footer" ],
       },
     },
     description: "",
@@ -77,13 +83,14 @@ export const defaultLayoutConfig = {
     fonts: {
       primary: "Open Sans",
       secondary: "Patrick Hand",
-      tertiary: "Knewave"
+      tertiary: "Bitcount Grid Double"
     },
     image: {
       url: "",
       text: "",
     },
     practice: defaultFourthStoreHeroConfig,
+    services: defaultFirstStoreServicesConfig,
     about: defaultSecondStoreAboutConfig,
     menubar: defaultPupularStoreMenubarConfig,
     gallery: defaultGalleryWithImageSliderConfig,

@@ -5,21 +5,20 @@ type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 function ReactCalendar({ value, onChange }: { value: Value; onChange: (value: Value) => void }) {
-  const settings = useAppSelector((state => state.layoutSettings.bookWithCalendar.calendar));
-  console.log(settings);
+  const style = useAppSelector((state => state.layoutSettings.bookWithCalendar.calendar));
+  console.log(style);
   return (
     <div>
       <style>
         {`
           .react-calendar {
-            width: 100%;
-            max-width: 400px;
-            background: transparent;
-            border: none;
-            font-family: ${settings.text.fontFamily}, sans-serif;
-            border-radius: none;
-            padding: .5rem;
-            color: ${settings.text.color}, black;
+            width: ${style.background.width};
+            background: ${style.background.color};
+            border: ${style.background.border.width} ${style.background.border.style} ${style.background.border.color};
+            font-family: ${style.text.fontFamily}, sans-serif;
+            border-radius: ${style.background.border.radius};
+            padding: ${style.background.padding.y} ${style.background.padding.x};
+            color: ${style.text.color}, black;
           }
           .react-calendar__navigation {
             display: flex;
@@ -34,17 +33,17 @@ function ReactCalendar({ value, onChange }: { value: Value; onChange: (value: Va
           }
 
           .react-calendar__navigation__label {
-            font-weight: ${settings.monthText.fontWeight};
-            color: ${settings.monthText.color};
-            font-size: ${settings.monthText.fontSize};
-            font-family: ${settings.monthText.fontFamily};
-            letter-spacing: ${settings.monthText.letterSpacing};
+            font-weight: ${style.monthText.fontWeight};
+            color: ${style.monthText.color};
+            font-size: ${style.monthText.fontSize};
+            font-family: ${style.monthText.fontFamily};
+            letter-spacing: ${style.monthText.letterSpacing};
           }
 
           .react-calendar__navigation__prev-button, 
           .react-calendar__navigation__next-button {
-            color: ${settings.toggleMonthIcon.color};
-            font-size: ${settings.toggleMonthIcon.fontSize};
+            color: ${style.toggleMonthIcon.color};
+            font-size: ${style.toggleMonthIcon.fontSize};
           }
 
           .react-calendar__navigation__prev2-button,
@@ -54,16 +53,16 @@ function ReactCalendar({ value, onChange }: { value: Value; onChange: (value: Va
 
           .react-calendar__month-view__weekdays {
             text-align: center;
-            font-size: ${settings.weekday.text.fontSize};
-            font-weight: ${settings.weekday.text.fontWeight};
-            text-transform: ${settings.weekday.text.textDecoration};
-            color: ${settings.weekday.text.color};
+            font-size: ${style.weekday.text.fontSize};
+            font-weight: ${style.weekday.text.fontWeight};
+            text-transform: ${style.weekday.text.textDecoration};
+            color: ${style.weekday.text.color};
             margin-bottom: 0.5rem;
           }
 
           .react-calendar__month-view__weekdays__weekday {
             padding: 0.5rem 0;
-            border-bottom: 1px solid ${settings.weekday.underlineColor.color}; 
+            border-bottom: 1px solid ${style.weekday.underlineColor.color}; 
           }
           .react-calendar__month-view__weekdays__weekday abbr {
             text-decoration: none;
@@ -74,23 +73,27 @@ function ReactCalendar({ value, onChange }: { value: Value; onChange: (value: Va
             padding: 0.5rem;
           }
           .react-calendar__tile--now {
-            background: ${settings.todayDate.backgroundColor};
-            color: ${settings.todayDate.color};
-            font-family: ${settings.todayDate.fontFamily};
-            border: ${settings.todayDate.border.width} ${settings.todayDate.border.style} ${settings.todayDate.border.color};
-            border-radius: ${settings.todayDate.border.radius};
+            background: ${style.todayDate.background.color};
+            color: ${style.todayDate.text.color};
+            font-family: ${style.todayDate.text.fontFamily};
+            font-weight: ${style.todayDate.text.fontWeight};
+            padding: ${style.todayDate.background.padding.y} ${style.todayDate.background.padding.x};;
+            border: ${style.todayDate.background.border.width} ${style.todayDate.background.border.style} ${style.todayDate.background.border.color};
+            border-radius: ${style.todayDate.background.border.radius};
           }
           
           .react-calendar__tile--active {
-            background: ${settings.selectedDate.backgroundColor};
-            color: ${settings.selectedDate.color};
-            font-family: ${settings.selectedDate.fontFamily};
-            border: ${settings.selectedDate.border.width} ${settings.selectedDate.border.style} ${settings.selectedDate.border.color};
-            border-radius: ${settings.selectedDate.border.radius};
+            background: ${style.selectedDate.background.color};
+            color: ${style.selectedDate.text.color};
+            font-family: ${style.selectedDate.text.fontFamily};
+            font-weight: ${style.selectedDate.text.fontWeight};
+            padding: ${style.selectedDate.background.padding.y} ${style.selectedDate.background.padding.x};
+            border: ${style.selectedDate.background.border.width} ${style.selectedDate.background.border.style} ${style.selectedDate.background.border.color};
+            border-radius: ${style.selectedDate.background.border.radius};
           }
 
           .react-calendar__month-view__days__day--neighboringMonth {
-            color: ${settings.neighbouringMonth.color};
+            color: ${style.neighbouringMonth.color};
           }
         `}
       </style>

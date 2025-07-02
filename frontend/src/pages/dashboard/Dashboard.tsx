@@ -2,6 +2,7 @@ import DashBoardMenubar from '../../components/dashboard/menubar/DashBoardMenuba
 import { Routes, Route } from 'react-router-dom'
 import DashboardTopbar from '../../components/dashboard/menubar/DashboardTopbar'
 import DashboardSections from './supporting/DashboardSections'
+import DashboardDemoStores from './supporting/DashboardDemoStores'
 
 const Dashboard = () => {
   return (
@@ -13,6 +14,7 @@ const Dashboard = () => {
             <DashboardTopbar />
             <Routes>
                 <Route path="/sections" element={<DashboardSections />} />
+                <Route path="/demo-stores" element={<DashboardDemoStores />} />
             </Routes>
         </div>
     </div>

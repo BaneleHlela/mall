@@ -45,10 +45,10 @@ const FirstBookWithCalendar = () => {
     if (selectedDate instanceof Date && selectedServiceId && selectedStaffId) {
         const formattedDate = format(selectedDate, "yyyy-MM-dd");
         dispatch(getAvailableBookingTimes({
-        storeId: storeId as string,
-        serviceId: selectedServiceId,
-        date: formattedDate,
-        staffId: selectedStaffId,
+            storeId: storeId as string,
+            serviceId: selectedServiceId,
+            date: formattedDate,
+            staffId: selectedStaffId,
         }));
     }
     }, [selectedDate, selectedServiceId, selectedStaffId, storeId, dispatch]);
@@ -119,7 +119,7 @@ const FirstBookWithCalendar = () => {
     console.log(note);
     return (
         <div 
-            className="relative w-[100dvw] h-[100vh] flex items-center justify-center bg-blue-900"
+            className="relative w-full h-full flex items-center justify-center bg-blue-900"
         >   
             {/* More "services" */}
             <div className="absolute top-0 h-[45dvh] w-[70dvw] bg-orange-500 z-1">

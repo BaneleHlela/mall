@@ -66,8 +66,7 @@ const storeSchema = new mongoose.Schema(
 		}],
     about: {
       type: String,
-      required: [true, "Store description is required"],
-    }, //Converting to an array of strings
+    }, 
     team: [{
       member: {
           type: mongoose.Schema.Types.ObjectId,
@@ -101,10 +100,9 @@ const storeSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
-    trades: {
-      type: Number,
-      default: 4, //1 for product, 2 for services, 3 for packages, 4 for products and services, 5 for products and packages, 
-    },
+    trades: [{
+      type: String,
+    }], // for e.g ["products", "services", "packages"] or ["none"]
     categories: {
       products: {
         type: [String],
