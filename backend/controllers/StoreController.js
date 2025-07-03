@@ -5,17 +5,17 @@ import { uploadToUploads, uploadsBucket } from '../config/gcsClient.js';
 
 // add store
 export const addStore = expressAsyncHandler(async (req, res) => {
-    const { _id, email, firstName } = req.user;
-
+    //const { _id, email, firstName } = req.user;
+  console.log(req.body,)
     // Create the store with the creator as the owner in the team
     const created = new Store({
-        team: [{ member: _id, role: "owner" }], // Assign the creator as the owner
+        //team: [{ member: _id, role: "owner" }], // Assign the creator as the owner
         ...req.body,
     });
 
     await created.save();
 
-    await sendStoreCreatedEmail(email, firstName, created.name, `http://localhost:5173/dashboard/${created._id}`)    
+    // await sendStoreCreatedEmail(email, firstName, created.name, `http://localhost:5173/dashboard/${created._id}`)    
     res.status(201).json(created);
 });
 

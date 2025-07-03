@@ -26,9 +26,6 @@ const storeSchema = new mongoose.Schema(
       type: String,
       deafult: "",
     },
-    description: {
-      type: String,
-    },
     contact: {
       phone: {
         type: String,
@@ -38,7 +35,6 @@ const storeSchema = new mongoose.Schema(
       },
       whatsapp: {
         type: String,
-        match: [/^\+?[1-9]\d{1,14}$/, "Please enter a valid phone number"],
       }
     },
     departments: [{

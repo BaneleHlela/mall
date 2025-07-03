@@ -43,7 +43,7 @@ const OptionsToggler: React.FC<OptionsTogglerProps> = ({
   return (
     <div className="flex flex-row justify-between items-center w-full h-[35px] gap-1">
         <div className="w-[50%] flex flex-row justify-between">
-            {label && <label className="w-32">{label}</label>}
+            {label && <label className="line-clamp-1 text-start">{label}</label>}
             <p className="mr-1">:</p>
         </div>
       

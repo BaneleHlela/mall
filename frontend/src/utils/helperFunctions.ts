@@ -24,3 +24,13 @@ export function formatDate(dateString: string): string {
 
   return `${day} ${month} ${year}`;
 }
+
+export const validateContact = (phone: string, email: string) => {
+  const phoneValid = /^[0-9]{10}$/.test(phone); 
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  return {
+    phoneValid,
+    emailValid
+  };
+};
+

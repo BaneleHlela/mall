@@ -82,20 +82,20 @@ export default function LocationPicker({ onLocationSelect }: any) {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto p-4 bg-white rounded-2xl shadow-lg space-y-4">
+    <div className="w-full max-w-3xl mx-auto px-4 py-2 border bg-white space-y-4">
       <div>
-        <label className="text-sm font-semibold text-gray-600 block mb-1">
-          📍 Search for a location
+        <label className="text-md font-semibold text-gray-600 block mb-2">
+          Search for a location
         </label>
         <input
           ref={autocompleteInputRef}
           type="text"
           placeholder="e.g. 123 Main Street, Madadeni"
-          className="w-full p-3 pl-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          className="w-full p-2 pl-4 border shadow-sm bg-stone-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
       </div>
 
-      <div ref={mapRef} className="w-full h-[400px] rounded-lg border border-gray-200" />
+      <div ref={mapRef} className="w-full h-[200px] lg:h-[300px]" />
     </div>
   );
 }

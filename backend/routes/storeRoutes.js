@@ -19,7 +19,7 @@ import { uploadSingleFile } from "../middlewares/uploadMiddleware.js";
 
 const router = express.Router();
 
-router.post('/add', protectRoute, addStore);
+router.post('/add', /*protectRoute,*/  addStore);
 router.get("/my-stores", protectRoute, getStoresByOwner);
 router.get("/:storeId", getStore);
 router.get('/', getStores);

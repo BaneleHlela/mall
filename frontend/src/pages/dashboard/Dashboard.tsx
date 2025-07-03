@@ -10,7 +10,7 @@ const Dashboard = () => {
         className='h-screen w-screen flex flex-row overflow-clip'
     >
         <DashBoardMenubar />
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full h-full overflow-clip">
             <DashboardTopbar />
             <Routes>
                 <Route path="/sections" element={<DashboardSections />} />

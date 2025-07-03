@@ -6,7 +6,7 @@ export interface Logo {
 }
 
 export interface TeamMember {
-  member: Types.ObjectId; 
+  member: Types.ObjectId | string; 
   role: "owner" | "manager" | "staff" | "viewer"; 
 }
 export interface Image {
