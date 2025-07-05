@@ -22,7 +22,7 @@ const MobileTopBar: React.FC<{
     
         
         return (
-          <div className='w-fit h-fit pl-1 pr-1 flex flex-col justify-center'>
+          <Link to={`/stores/${store?._id}`} className='w-fit h-full pl-1 pr-1 flex flex-col justify-center'>
             {logoSettings.use === 'logo' && store?.logo?.url ? (
               <img
                 style={{ 
@@ -40,18 +40,23 @@ const MobileTopBar: React.FC<{
                   fontFamily: logoSettings.text.fontFamily,
                   padding: `${logoSettings.background.padding.y} ${logoSettings.background.padding.x}`,
                 }}
+                className='h-full'
               >
                 {logoSettings.text.input || store?.name || 'Store Name'}
               </div>
             ) : null}
-          </div>
+          </Link>
         );
     };
 
   const renderIcons = () => (
     <div className={`w-full h-full flex row ${settings.topbar.mobile.hamburgerFirst ? "justify-end" : "justify-start"} pl-1 pr-1`}>
-      <StoreButton style={settings.topbar.mobile.extras.button}/>
-      <StoreMenubarIcons style={settings.topbar.mobile.extras.icons} />
+      {settings.extras.include === "button" && (
+        <StoreButton style={settings.topbar.mobile.extras.button}/>
+      )}
+      {settings.extras.include === "icons" && (
+        <StoreMenubarIcons style={settings.topbar.mobile.extras.icons} />
+      )}
     </div>
   );
 
@@ -60,11 +65,15 @@ const MobileTopBar: React.FC<{
       {settings.topbar.mobile.hamburgerFirst ? (
         <>
           <StoreHamburger style={settings.topbar.mobile.hamburger} toggled={isOpen} toggle={setOpen} />
-          <StoreCart style={settings.cart} />
+          {Array.isArray(store?.trades) && store?.trades.includes('products') && (
+            <StoreCart style={settings.cart} />
+          )}
         </>
       ) : (
         <>
-          <StoreCart style={settings.cart} />
+          {Array.isArray(store?.trades) && store?.trades.includes('products') && (
+            <StoreCart style={settings.cart} />
+          )}
           <StoreHamburger style={settings.topbar.mobile.hamburger} toggled={isOpen} toggle={setOpen} />
         </>
       )}
@@ -106,9 +115,8 @@ const DesktopTopBar: React.FC<{
   const renderLogo = () => {
     const logoSettings = settings.topbar.desktop.logo;
 
-    
     return (
-      <div className='w-fit h-full pl-1 pr-1 flex flex-col justify-center'>
+      <Link to={`/stores/${store?._id}`} className='w-fit h-full pl-1 pr-1 flex flex-col justify-center'>
         {logoSettings.use === 'logo' && store?.logo?.url ? (
           <img
             style={{ 
@@ -118,25 +126,28 @@ const DesktopTopBar: React.FC<{
             alt='store logo'
             className='object-cover'
           />
-        ) : logoSettings.use === 'text' ? (
+        ) : (
           <div
             style={{
               ...getBackgroundStyles(logoSettings.background),
               ...getTextStyles(logoSettings.text),
-              fontFamily: logoSettings.text.fontFamily,
-              padding: `${logoSettings.background.padding.y} ${logoSettings.background.padding.x}`,
             }}
             className='min-w-[250px]'
           >
             {logoSettings.text.input || store?.name || 'Store Name'}
           </div>
-        ) : null}
-      </div>
+        )}
+      </Link>
     );
   };
 
   const renderLinks = () => (
-    <div className='w-fit h-full flex flex-col justify-center'>
+    <div 
+      style={{
+        ...getBackgroundStyles(settings.topbar.desktop.links.allLinksBackground),
+      }}
+      className='w-fit h-full flex flex-col justify-center'
+    >
       <ul className="hidden lg:flex flex-row justify-center text-center capitalize space-x-0">
         {links.map(({ to, label }) => (
           <li
@@ -161,15 +172,27 @@ const DesktopTopBar: React.FC<{
     <div className='w-fit h-full flex flex-col justify-center'>
       {settings.topbar.desktop.iconsCart.iconsFirst ? (
         <div className="flex flex-row items-center space-x-3">
+          {settings.extras.include === "button" && (
             <StoreButton style={settings.topbar.desktop.extras.button}/>
+          )}
+          {settings.extras.include === "icons" && (
             <StoreMenubarIcons style={settings.topbar.desktop.extras.icons} />
+          )}
+          {Array.isArray(store?.trades) && store?.trades.includes('products') && (
             <StoreCart style={settings.cart} />
+          )}
         </div>
       ) : (
         <div className="flex flex-row space-x-5">
-          <StoreCart style={settings.cart} />
-          <StoreButton style={settings.topbar.desktop.extras.button}/>
-          <StoreMenubarIcons style={settings.topbar.desktop.extras.icons} />
+          {Array.isArray(store?.trades) && store?.trades.includes('products') && (
+            <StoreCart style={settings.cart} />
+          )}
+          {settings.extras.include === "button" && (
+            <StoreButton style={settings.topbar.desktop.extras.button}/>
+          )}
+          {settings.extras.include === "icons" && (
+            <StoreMenubarIcons style={settings.topbar.desktop.extras.icons} />
+          )}
         </div>
       )}
     </div>
@@ -206,7 +229,6 @@ const PopularStoreMenubar: React.FC = () => {
       : settings.background.height.mobile
   };
 
-  console.log(routeOrder)
   
   const links = routeOrder // @ts-ignore
     .filter((key) => routes[key])  // @ts-ignore
@@ -214,7 +236,6 @@ const PopularStoreMenubar: React.FC = () => {
     to: `/stores/${storeId}${routes[key].url === "/" ? "" : routes[key].url}`, // @ts-ignore
     label: routes[key].name.toLowerCase(),
   })); 
-  console.log(links)
 
   return (
     <nav
@@ -236,11 +257,11 @@ const PopularStoreMenubar: React.FC = () => {
             <DesktopTopBar settings={settings} store={store} links={links} />
         </div>
       
-      <FirstStoreSidebar
-        isOpen={isOpen}
-        onClose={() => setOpen(false)}
-        storeId={storeId}
-      />
+        <FirstStoreSidebar
+          isOpen={isOpen}
+          onClose={() => setOpen(false)}
+          links={links} // ✅ Pass the links
+        />
     </nav>
   )
 }

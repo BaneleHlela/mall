@@ -3,6 +3,8 @@ import SubSettingsContainer from '../../../extras/SubSettingsContainer'
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { updateSetting } from '../../../../../features/layouts/layoutSettingsSlice';
 import OptionsToggler from '../../../supporting/OptionsToggler';
+import ColorPicker from '../../../supporting/ColorPicker';
+import { getSetting } from '../../../../../utils/helperFunctions';
 
 const HamburgerSettings = () => {
     const dispatch = useAppDispatch();
@@ -23,22 +25,33 @@ const HamburgerSettings = () => {
     ];
 
     return (
-        <div className="space-y-1 p-2 py-1">
-            <OptionsToggler
-                label="Variation"
-                options={variations}
-                value={hamburgerSettings.variation}
-                onChange={(value) => handleSettingChange('menubar.topbar.mobile.hamburger.variation', value)}
+        <div className="space-y-1 py-1">
+            <BackgroundEditor
+                objectPath={`menubar.topbar.mobile.hamburger`}
+                settings={settings}
+                handleSettingChange={handleSettingChange}
+                allow={["color"]}
+                responsiveSize={false}
             />
-
-            {directionalVariations.includes(hamburgerSettings.variation) && (
+            <div className="px-2">
                 <OptionsToggler
-                    label="Direction"
-                    options={["left", "right"]}
-                    value={hamburgerSettings.direction}
-                    onChange={(value) => handleSettingChange('menubar.topbar.mobile.hamburger.direction', value)}
+                    label="Variation"
+                    options={variations}
+                    value={hamburgerSettings.variation}
+                    onChange={(value) => handleSettingChange('menubar.topbar.mobile.hamburger.variation', value)}
                 />
-            )}
+                {directionalVariations.includes(hamburgerSettings.variation) && (
+                    <OptionsToggler
+                        label="Direction"
+                        options={["left", "right"]}
+                        value={hamburgerSettings.direction}
+                        onChange={(value) => handleSettingChange('menubar.topbar.mobile.hamburger.direction', value)}
+                    />
+                )}
+            </div>
+            
+
+            
 
             <SubSettingsContainer
                 name="Background"

@@ -8,6 +8,7 @@ import ToggleSwitch from '../extras/ToggleSwitch';
 import LocationPicker from '../location/LocationPicker';
 import { useAppDispatch } from '../../../app/hooks';
 import { createStore } from '../../../features/stores/storeSlice';
+import StoreSuccessOverlay from './StoreSuccessOverlay';
 
 const steps = [
   'basic',
@@ -28,6 +29,7 @@ const CreateStoreForm = () => {
   const [direction, setDirection] = useState(0); 
   const [isDeptOpen, setIsDeptOpen] = useState(false);
   const [validation, setValidation] = useState({ phoneValid: true, emailValid: true });
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const [form, setForm] = useState({
     name: '',
@@ -119,12 +121,19 @@ const CreateStoreForm = () => {
     }),
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(createStore({...form, team: [{ member: '684195da0cad691799f2ee7a', role: 'owner' }]}));
+    const result = await dispatch(
+      createStore({ ...form, team: [{ member: '684195da0cad691799f2ee7a', role: 'owner' }], layouts: ["68416b1f0cad691799f2eca8"] })
+    );
+    // if successful
+    if (createStore.fulfilled.match(result)) {
+      setIsSuccess(true);
+      console.log('result')
+
+    }
   };
 
-  console.log(form)
 
   // For now, simple content based on step
   const renderStep = () => {
@@ -490,6 +499,9 @@ This will appear on your store’s About page and helps visitors connect with yo
             </div>
           </form>
         </div>
+        <AnimatePresence>
+          {isSuccess && <StoreSuccessOverlay onClose={() => setIsSuccess(false)}/>}
+        </AnimatePresence>
         {/* Background Icon */}
         <div className="absolute z-0 top-10 right-[70%] h-full w-[500px] flex flex-col justify-center opacity-10">
           <LiaStoreSolid size={700} className='mb-60 mr-80'/>

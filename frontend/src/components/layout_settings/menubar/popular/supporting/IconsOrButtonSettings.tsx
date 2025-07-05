@@ -56,7 +56,7 @@ const IconsOrButtonSettings: React.FC<EditorProps> = ({
     <div className="p-2 space-y-4">
       <OptionsToggler
         label="Show"
-        options={["icons", "buttons"]}
+        options={["icons", "button"]}
         value={currentInclude}
         onChange={(newValue) =>
           handleChange("include")({

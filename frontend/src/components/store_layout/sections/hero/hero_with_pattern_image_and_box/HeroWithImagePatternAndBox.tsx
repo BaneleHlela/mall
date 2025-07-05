@@ -25,7 +25,6 @@ const HeroWithImagePatternAndBox = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  console.log(settings.button.text.input)
 
   return (
     <>

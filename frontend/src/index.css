@@ -30,3 +30,135 @@
 .thin-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
+
+.typewriter {
+  overflow: hidden;
+  border-right: .15em solid orange;
+  white-space: pre-wrap;
+  margin: 0 auto;
+  letter-spacing: .15em;
+  animation: 
+    typing 3.5s steps(40, end),
+    blink-caret .75s step-end 8,
+    removeBorder 0s 3.5s forwards;
+  animation-fill-mode: forwards;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from { max-height: 0 }
+  to { max-height: 1000px } /* Adjust this value based on your content */
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: orange; }
+  100% { border-color: transparent; }
+}
+@keyframes removeBorder {
+  to { border-right-color: transparent; }
+}
+
+/* Fade In */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 2s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Slide In From Left */
+.slide-in-left {
+  transform: translateX(-100%);
+  animation: slideInLeft 1s ease-out forwards;
+}
+
+@keyframes slideInLeft {
+  to { transform: translateX(0); }
+}
+
+/* Slide In From Right */
+.slide-in-right {
+  transform: translateX(100%);
+  animation: slideInRight 1s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  to { transform: translateX(0); }
+}
+
+/* Slide In From Top */
+.slide-in-top {
+  transform: translateY(-100%);
+  animation: slideInTop 1s ease-out forwards;
+}
+
+@keyframes slideInTop {
+  to { transform: translateY(0); }
+}
+
+/* Slide In From Bottom */
+.slide-in-bottom {
+  transform: translateY(100%);
+  animation: slideInBottom 1s ease-out forwards;
+}
+
+@keyframes slideInBottom {
+  to { transform: translateY(0); }
+}
+
+/* Bounce In */
+.bounce-in {
+  animation: bounceIn 1s ease-out;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.1); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* Rotate In */
+.rotate-in {
+  animation: rotateIn 1s ease-out;
+}
+
+@keyframes rotateIn {
+  from { transform: rotate(-90deg); opacity: 0; }
+  to { transform: rotate(0); opacity: 1; }
+}
+
+/* Glitch Effect */
+.glitch {
+  animation: glitch 1s linear infinite;
+}
+
+@keyframes glitch {
+  2%, 64% { transform: translate(2px, 0) skew(0deg); }
+  4%, 60% { transform: translate(-2px, 0) skew(0deg); }
+  62% { transform: translate(0, 0) skew(5deg); }
+}
+
+/* Letter Spacing */
+.letter-spacing {
+  letter-spacing: -1em;
+  animation: letterSpacing 1.5s forwards;
+}
+
+@keyframes letterSpacing {
+  to { letter-spacing: 0; }
+}
+
+/* Blur In */
+.blur-in {
+  filter: blur(10px);
+  animation: blurIn 1s ease-out forwards;
+}
+
+@keyframes blurIn {
+  to { filter: blur(0); }
+}

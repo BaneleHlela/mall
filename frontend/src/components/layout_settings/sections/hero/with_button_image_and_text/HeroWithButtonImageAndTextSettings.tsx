@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { getSetting } from "../../../../../utils/helperFunctions";
 import BackgroundEditor from "../../../background/BackgroundEditor";
 import StoreButtonSettings from "../../../extras/StoreButtonSettings";
@@ -5,7 +6,9 @@ import SubSettingsContainer from "../../../extras/SubSettingsContainer";
 import MultipleLayoutImagesHandler from "../../../supporting/MultipleLayoutImagesHandler";
 import TextEditor from "../../../text/TextEditor";
 import OptionsToggler from "../../../supporting/OptionsToggler";
-import SettingsSlider from "../../../supporting/SettingsSlider";
+import FirstOrderSubSettingsContainer from "../../../FirstOrderSubSettingsContainer";
+import SlidingPanel from "../../../supporting/SlidingPanel";
+import { AnimatePresence } from "framer-motion";
 
 interface HeroWithButtonImageAndTextSettingsProps {
   settings: any;
@@ -17,11 +20,11 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
   handleSettingChange,
 }) => {
   const objectPath = "hero";
-
+  const [activePanel, setActivePanel] = useState<string | null>(null);
+  const closePanel = () => setActivePanel(null);
 
   return (
-    <div className="space-y-2">
-
+    <div className="space-y-1">
       {/* Background Settings */}
       <SubSettingsContainer
         name="Background"
@@ -55,68 +58,98 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
         }
       />
 
-      {/* Text Settings */}
-      <SubSettingsContainer
+      {/* Text Lines - Refactored */}
+      <FirstOrderSubSettingsContainer
         name="Text Lines"
-        SettingsComponent={
-          <div className="px-2 space-y-1 py-1">
-            {/* Text Width Settings */}
-            <SubSettingsContainer
-                name="Text Width"
-                SettingsComponent={
-                <div className="px-2 space-y-2">
-                    <BackgroundEditor
-                    objectPath={`${objectPath}.text`}
-                    settings={settings}
-                    handleSettingChange={handleSettingChange}
-                    allow={["width"]}
-                    widthUnit="vw"
-                    responsiveSize={true}
-                    />
-                </div>
-                }
-            />
-            {["firstLine", "secondLine", "thirdLine"].map((lineKey) => (
-              <SubSettingsContainer
-                name={lineKey}
-                SettingsComponent={
-                    <>
-                        <div className="px-2">
-                            <OptionsToggler
-                                label={`Show`}
-                                options={["true", "false"]}
-                                value={getSetting(`text.${lineKey}.show`, settings, objectPath) ? "true" : "false"}
-                                onChange={(value) =>
-                                    handleSettingChange(`${objectPath}.text.${lineKey}.show`, value === "true")
-                                }
-                            />
-                        </div>
-                        <TextEditor
-                            key={lineKey}
-                            objectPath={`${objectPath}.text.${lineKey}`}
-                            settings={settings}
-                            handleSettingChange={handleSettingChange}
-                            allow={["input", "fontFamily", "fontSize", "weight"]}
-                            responsiveSize
-                        />
-                    </>  
-                }
-            /> 
-            ))}
-          </div>
-        }
+        onClick={() => setActivePanel("textLines")}
       />
 
-      {/* Button Settings */}
-      <SubSettingsContainer
+      {/* Button - Refactored */}
+      <FirstOrderSubSettingsContainer
         name="Button"
-        SettingsComponent={
-          <StoreButtonSettings
-            objectPath={`${objectPath}.button`}
-            settings={settings}
-          />
-        }
+        onClick={() => setActivePanel("button")}
       />
+
+      {/* Sliding Panels */}
+      <AnimatePresence>
+        {activePanel === "textLines" && (
+          <SlidingPanel
+            key="textLines"
+            isOpen={true}
+            onClose={closePanel}
+            title="Text Lines"
+          >
+            <div className="px-2 space-y-1 py-1">
+              {/* Text Width Settings */}
+              <SubSettingsContainer
+                name="Text Width"
+                SettingsComponent={
+                  <div className="px-2 space-y-2">
+                    <BackgroundEditor
+                      objectPath={`${objectPath}.text`}
+                      settings={settings}
+                      handleSettingChange={handleSettingChange}
+                      allow={["width"]}
+                      widthUnit="vw"
+                      responsiveSize={true}
+                    />
+                  </div>
+                }
+              />
+
+              {/* Individual Line Settings */}
+              {["firstLine", "secondLine", "thirdLine"].map((lineKey) => (
+                <SubSettingsContainer
+                  key={lineKey}
+                  name={lineKey}
+                  SettingsComponent={
+                    <>
+                      <div className="px-2">
+                        <OptionsToggler
+                          label={`Show`}
+                          options={["true", "false"]}
+                          value={
+                            getSetting(`text.${lineKey}.show`, settings, objectPath)
+                              ? "true"
+                              : "false"
+                          }
+                          onChange={(value) =>
+                            handleSettingChange(
+                              `${objectPath}.text.${lineKey}.show`,
+                              value === "true"
+                            )
+                          }
+                        />
+                      </div>
+                      <TextEditor
+                        objectPath={`${objectPath}.text.${lineKey}`}
+                        settings={settings}
+                        handleSettingChange={handleSettingChange}
+                        allow={[ "color", "input", "fontFamily", "fontSize", "weight", "lineHeight", "animation" ]}
+                        responsiveSize
+                      />
+                    </>
+                  }
+                />
+              ))}
+            </div>
+          </SlidingPanel>
+        )}
+
+        {activePanel === "button" && (
+          <SlidingPanel
+            key="button"
+            isOpen={true}
+            onClose={closePanel}
+            title="Hero Button"
+          >
+            <StoreButtonSettings
+              objectPath={`${objectPath}.button`}
+              settings={settings}
+            />
+          </SlidingPanel>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -16,10 +16,13 @@ import {
 import PopularStoreMenubar from "../../components/store_layout/menubars/popular/PopularStoreMenubar";
 import StoreOrderOnlinePage from "./supporting/order_online/StoreOrderOnlinePage";
 import { getBackgroundStyles } from "../../utils/stylingFunctions";
+import { setInitialLayout } from "../../features/layouts/layoutSettingsSlice";
+import { getLayout } from "../../features/layouts/layoutSlice";
 
 const StorePage = () => {
   const settings = useAppSelector((state) => state.layoutSettings);
-  const { storeId } = useParams<{ storeId: string }>();
+  // const { storeId } = useParams<{ storeId: string }>();
+  const storeId = "68677942e545985b2467b130";
   const dispatch = useAppDispatch();
   const [store, setStore] = useState<StoreType | null>(null); // Local state for the store
   const [loading, setLoading] = useState<boolean>(true); // Loading state
@@ -45,6 +48,10 @@ const StorePage = () => {
           const result = await dispatch(fetchStoreById(storeId)).unwrap(); // Fetch store and unwrap the result
           setStore(result); // Set the fetched store in local state
           dispatch(setCurrentStore(result)); // Update the global store state
+          if (result?.layouts[0]) {
+            const layoutResult = await dispatch(getLayout(result.layouts[0] as string)).unwrap(); // Fetch layout and unwrap the result
+            dispatch(setInitialLayout(layoutResult)); // Update the global layout state if available
+          }
         } catch (error) {
           console.error("Failed to fetch store:", error);
           setStore(null); // Handle error by setting store to null
@@ -56,6 +63,12 @@ const StorePage = () => {
 
     fetchStore();
   }, [storeId, dispatch]);
+
+  useEffect(() => {
+    if (storeId) {
+        dispatch(fetchStoreServices({ storeId }));
+    }
+  }, [dispatch]);
 
   // Fetch store services if applicable
   useEffect(() => {

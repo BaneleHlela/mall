@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const StoreLayouts = () => {
   const dispatch = useAppDispatch();
+  const layoutSettings = useAppSelector((state: RootState) => state.layoutSettings);
   const navigate = useNavigate();
   const { storeId } = useParams<{ storeId: string }>();
   const store = useAppSelector((state: RootState) =>
@@ -20,7 +21,7 @@ const StoreLayouts = () => {
   const handleClick = async () => {
     try {
       // Create a new layout with a unique name
-      const newLayout = await dispatch(createLayout({ name: Date.now().toString() })).unwrap();
+      const newLayout = await dispatch(createLayout({ ...layoutSettings })).unwrap();
 
       // Redirect to the preview page for the new layout
       navigate(`/layouts/build/${newLayout._id}`);

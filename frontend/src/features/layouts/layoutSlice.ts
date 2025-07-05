@@ -20,7 +20,7 @@ export const getLayout = createAsyncThunk(
     "layouts/getLayout",
     async (layoutId: string, thunkAPI) => {
       try {
-        const response = await axios.get(`/api/layouts/${layoutId}`);
+        const response = await axios.get(`${API_URL}/api/layouts/${layoutId}`);
         return response.data;
       } catch (error: any) {
         return thunkAPI.rejectWithValue(error.response?.data || "Fetch failed");

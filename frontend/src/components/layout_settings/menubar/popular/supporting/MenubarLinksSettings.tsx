@@ -62,6 +62,19 @@ const MenubarLinksSettings: React.FC<MenubarLinksSettingsProps> = ({ type }) => 
                     />
                 }
             />
+            <SubSettingsContainer
+                name="Background For all links"
+                SettingsComponent={
+                    <BackgroundEditor
+                        objectPath={`${objectPath}.allLinksBackground`}
+                        settings={settings}
+                        handleSettingChange={handleSettingChange}
+                        allow={['color', 'border', 'padding', "height", "width"]}
+                        heightUnit='%'
+                        widthUnit='%'
+                    />
+                }
+            />
         </div>
     );
 };

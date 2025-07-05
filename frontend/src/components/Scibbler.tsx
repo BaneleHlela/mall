@@ -7,11 +7,12 @@ import SendEmailForm from './store_layout/extras/forms/SendEmailForm'
 import AddStoreAddressPage from '../pages/store_dashboard/supporting_pages/settings/AddStoreAddressPage'
 import MapComponent from './store_layout/extras/MapComponent'
 import GalleryWithImageSlider from './store_layout/sections/gallery/gallery_with_image_slider/GalleryWithImageSlider'
+import BookWithOpenCalender from './store_layout/sections/book/book_with_open_calender/BasicBookWithOpenCalender'
 
 const Scibbler = () => {
   return (
     <>
-      <GalleryWithImageSlider/>
+      <BookWithOpenCalender />
     </>    
   )
 }

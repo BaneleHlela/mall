@@ -173,6 +173,8 @@ export const getAvailableBookingTimes = async (req, res) => {
     const { storeId } = req.params;
     const { serviceId, staffId, date } = req.query;
 
+    console.log(req.query, storeId);
+
     if (!storeId || !serviceId || !date) {
       return res.status(400).json({ message: 'storeId, serviceId, and date are required' });
     }
@@ -185,6 +187,8 @@ export const getAvailableBookingTimes = async (req, res) => {
     if (!store || !service) {
       return res.status(404).json({ message: 'Store or Service not found' });
     }
+
+    console.log(store, service);
 
     const dayConfig = store.operationTimes?.[dayKey];
     if (!dayConfig || dayConfig.closed) {
@@ -218,7 +222,7 @@ export const getAvailableBookingTimes = async (req, res) => {
     }).populate('services.service');
 
     
-    //console.log('Bookings for date:', bookings);
+    console.log('Bookings for date:', bookings);
     // console.log(new Date (date))
 
     const bookedTimes = [];

@@ -1,5 +1,5 @@
-export const defaultSecondStoreAboutConfig = {
-    variation: "aboutWithImageAndText",
+export const defaultAboutWithImageNextToTextConfig = {
+    variation: "aboutWithImageNextToText",
     background: {
         color: "white",
     },

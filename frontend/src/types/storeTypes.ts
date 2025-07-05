@@ -29,7 +29,7 @@ export interface Store {
   trades: number;
   slogan: string;
   departments: string[]; 
-  layouts: Types.ObjectId[]; 
+  layouts: Types.ObjectId[] | string[];  
   categories: {
     products: string[]; 
     services: string[]; 
@@ -37,7 +37,11 @@ export interface Store {
   about: string;
   team: TeamMember[]; 
   updatedAt?: Date; 
-  socials?: Socials[];  
+  socials?: Socials[]; 
+  contact: {
+    phone: string;
+    email: string;
+  }, 
   locations: Array<{
     nickname: string;   
     lat: number;   

@@ -1,8 +1,7 @@
-import { get } from "mongoose";
 import { useAppSelector } from "../../../../../app/hooks";
 import { getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunctions";
 
-const SecondStoreAboutSection = () => {
+const AboutWithImageNextToText = () => {
   const settings = useAppSelector((state) => state.layoutSettings.about);
   return (
     <div 
@@ -90,4 +89,4 @@ const SecondStoreAboutSection = () => {
   );
 };
 
-export default SecondStoreAboutSection;
+export default AboutWithImageNextToText;

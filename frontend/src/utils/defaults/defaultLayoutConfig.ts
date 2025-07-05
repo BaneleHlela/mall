@@ -1,5 +1,5 @@
 import { defaultPupularStoreMenubarConfig } from "./menubars/defaultPopularStoreMenubarConfig";
-import { defaultSecondStoreAboutConfig } from "./sections/about/defaultSecondStoreAboutSectionConfig";
+import { defaultAboutWithImageNextToTextConfig } from "./sections/about/defaultAboutWithImageNextToText";
 import { defaultFirstBookWithCalandarConfig } from "./sections/book_with_calendar/defaultFirstBookWithCalandarConfig";
 import { defaultFirstFooterConfig } from "./sections/footer/defaultFirstFooterConfig";
 import { defaultFourthStoreHeroConfig } from "./sections/hero/defaultFourthStoreHeroConfig";
@@ -11,6 +11,7 @@ import { defaultHeroWithImageButtonAndBox } from "./sections/hero/defaultHeroWit
 import { defaultHeroWithButtonImageAndTextConfig } from "./sections/hero/defaultHeroWithButtonImageAndTextConfig";
 import { defaultGalleryWithImageSliderConfig } from "./sections/gallery/defaultGalleryWithImageSliderConfig";
 import { defaultFirstStoreServicesConfig } from "./sections/services/defaultFirstStoreServicesConfig";
+import { defaultBasicBookWithOpenCalendarConfig } from "./sections/book/defaultBasicBookWithOpenCalenderConfig";
 
 export const defaultMenubarConfig = {
   topbar: {
@@ -44,7 +45,7 @@ export const defaultLayoutConfig = {
         name: "Home",
         url: "/",
         exact: true,
-        contains: ["hero", "about", "order", "gallery", "reviews", "footer",],
+        contains: ["hero", "about", "gallery", "reviews", "footer",],
       },
       about: {
         name: "About Us",
@@ -91,11 +92,12 @@ export const defaultLayoutConfig = {
     },
     practice: defaultFourthStoreHeroConfig,
     services: defaultFirstStoreServicesConfig,
-    about: defaultSecondStoreAboutConfig,
+    about: defaultAboutWithImageNextToTextConfig,
     menubar: defaultPupularStoreMenubarConfig,
     gallery: defaultGalleryWithImageSliderConfig,
     menu: defaultFirstStoreMenuSectionConfig,
     hero: defaultHeroWithButtonImageAndTextConfig,
+    book: defaultBasicBookWithOpenCalendarConfig,
     bookWithCalendar: defaultFirstBookWithCalandarConfig,
     products: defaultFirstStoreProductsConfig,
     order: defaultFirstStoreProductsConfig,

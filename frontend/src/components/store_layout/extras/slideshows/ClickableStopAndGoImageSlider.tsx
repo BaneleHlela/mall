@@ -94,7 +94,7 @@ const ClickableStopAndGoImageSlider: React.FC<ImageSliderProps> = ({
                                 ...getTextStyles(style.hover.descriptionText.style),
                             }} 
                             className="absolute bottom-0 left-0 w-full text-center text-white text-sm px-3 py-2 z-20">
-                            {img.description || "No description"}
+                            {img.description || ""}
                         </div>
                         )}
                         

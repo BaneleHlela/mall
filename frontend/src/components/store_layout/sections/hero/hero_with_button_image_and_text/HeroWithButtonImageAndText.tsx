@@ -1,8 +1,13 @@
 import { useAppSelector } from "../../../../../app/hooks";
 import { getTextStyles } from "../../../../../utils/stylingFunctions";
 import StoreButton from "../../../extras/buttons/StoreButton";
+import { useStoreButtonClickHandler } from "../../../extras/buttons/useStoreButtonClickHandler";
+
 const HeroWithButtonImageAndText = () => {
     const style = useAppSelector((state) => state.layoutSettings.hero);
+    const routes = useAppSelector((state) => state.layoutSettings.routes);
+    const store = useAppSelector((state) => state.stores.currentStore);
+    const handleButtonClick = useStoreButtonClickHandler();
 
     return (
         <div
@@ -26,9 +31,8 @@ const HeroWithButtonImageAndText = () => {
                         <p 
                             style={{
                                 ...getTextStyles(style.text.firstLine),
-                                fontSize: style.text.firstLine.fontSize.desktop
                             }}
-                            className=""
+                            className={`${style.text.firstLine.animation}`}
                         >
                                 {style.text.firstLine.input}
                         </p>  
@@ -37,9 +41,8 @@ const HeroWithButtonImageAndText = () => {
                         <p 
                             style={{
                                 ...getTextStyles(style.text.secondLine),
-                                fontSize: style.text.secondLine.fontSize.desktop
                             }}
-                            className=""
+                            className={`${style.text.secondLine.animation}`}
                         >
                             {style.text.secondLine.input}
                         </p>
@@ -48,9 +51,8 @@ const HeroWithButtonImageAndText = () => {
                         <p 
                             style={{
                                 ...getTextStyles(style.text.thirdLine),
-                                fontSize: style.text.thirdLine.fontSize.desktop
                             }}
-                            className=""
+                            className={`${style.text.thirdLine.animation}`}
                         >
                             {style.text.thirdLine.input}
                         </p>
@@ -58,7 +60,16 @@ const HeroWithButtonImageAndText = () => {
                 </div>
                 {/* Button */}
                 <div className="w-full flex flex-row justify-center mt-8 z-2">
-                    <StoreButton style={style.button} />
+                    <StoreButton
+                        style={style.button}
+                        onClick={() =>
+                            handleButtonClick({
+                            type: style.button.function,
+                            routes: routes, //@ts-ignore-next-line
+                            contactNumber: store?.contact.phone,
+                            })
+                        }
+                    />
                 </div>
                 {/* Background Image */}
                 <div 
@@ -90,14 +101,14 @@ const HeroWithButtonImageAndText = () => {
                     style={{
                         width: style.text.width.mobile,
                     }}
-                    className="text-center text-wrap z-2 bg-white"
+                    className="text-center text-wrap z-2"
                 >
                     {style.text.firstLine.show && (
                         <p 
                             style={{
                                 ...getTextStyles(style.text.firstLine),
                             }}
-                            className=""
+                            className={`${style.text.firstLine.animation}`}
                         >
                             {style.text.firstLine.input}
                         </p>
@@ -107,7 +118,7 @@ const HeroWithButtonImageAndText = () => {
                             style={{
                                 ...getTextStyles(style.text.secondLine),
                             }}
-                            className=""
+                            className={`${style.text.secondLine.animation}`}
                         >
                             {style.text.secondLine.input}
                         </p>
@@ -117,7 +128,7 @@ const HeroWithButtonImageAndText = () => {
                             style={{
                                 ...getTextStyles(style.text.thirdLine),
                             }}
-                            className=""
+                            className={`${style.text.thirdLine.animation}`}
                         >
                             {style.text.thirdLine.input}
                         </p>
@@ -125,7 +136,16 @@ const HeroWithButtonImageAndText = () => {
                 </div>
                 {/* Button */}
                 <div className="w-full flex flex-row justify-center mt-5  z-2">
-                    <StoreButton style={style.button} />
+                    <StoreButton
+                        style={style.button}
+                        onClick={() =>
+                            handleButtonClick({
+                            type: style.button.function,
+                            routes: routes, //@ts-ignore-next-line
+                            contactNumber: store?.contact.phone,
+                            })
+                        }
+                    />
                 </div>
                 {/* Background Image */}
                 <div

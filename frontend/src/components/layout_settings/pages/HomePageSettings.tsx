@@ -26,6 +26,7 @@ import type { Section } from "../../../features/sections/sectionSlice";
 import AboutSettingsSection from "../sections/about/AboutSettingsSection";
 import StoreGallerySettings from "../sections/gallery/StoreGallerySettings";
 import StoreReviewsSectionSettings from "../sections/store_reviews/StoreReviewsSectionSettings";
+import BookSectionSettings from "../sections/book/BookSectionSettings";
 // Import SectionSelector if not already
 // import SectionSelector from "../supporting/SectionSelector";
 
@@ -115,10 +116,12 @@ const HomePageSettings = () => {
         return <HeroSettings />;
       case "about": 
         return <AboutSettingsSection />;
+      case 'book':
+       return <BookSectionSettings />;
       case "gallery": 
         return <StoreGallerySettings />;
       case "reviews": 
-      return <StoreReviewsSectionSettings />;
+        return <StoreReviewsSectionSettings />;
       default:
         return <div>No settings available for section "{section}".</div>;
     }

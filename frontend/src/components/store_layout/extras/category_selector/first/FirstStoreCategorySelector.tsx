@@ -10,7 +10,6 @@ const FirstStoreCategorySelector: React.FC<FirstStoreCategorySelectorProps> = ({
   const dispatch = useAppDispatch();
   const selectedCategory = useAppSelector(state => state.categories.selectedCategory);
   const screenWidth = window.innerWidth; 
-
   return (
     <div className="w-full ml-1 mr-1 flex flex-row justify-center">
       <div 
@@ -23,16 +22,15 @@ const FirstStoreCategorySelector: React.FC<FirstStoreCategorySelectorProps> = ({
         {categories.map((category) => (
           <button
             key={category}
+            style={{
+              ...getTextStyles(style.text),
+            }}
             onClick={() => dispatch(setCategory(category))}
-            className={`relative capitalize pb-2 text-lg font-medium transition-colors duration-300 ${
-              selectedCategory === category
-                ? 'text-black'
-                : 'text-gray-500 hover:text-black'
-            }`}
+            className={`relative capitalize pb-2 text-lg font-medium transition-colors duration-300`}
           >
             {category}
             {selectedCategory === category && (
-              <span className="absolute left-0 bottom-0 w-full h-[2px] bg-black" />
+              <span className="absolute left-0 bottom-0 w-full h-[3px] bg-black" />
             )}
           </button>
         ))}

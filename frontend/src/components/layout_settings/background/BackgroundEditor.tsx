@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { getSetting } from "../../../utils/helperFunctions";
 import type { EditorProps } from "../../../types/layoutSettingsType";
 import ColorPicker from "../supporting/ColorPicker";
@@ -23,13 +23,16 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
   widthUnit = "px",
 }) => {
   const isAllowed = (key: string) => !allow || allow.includes(key);
+  const [bgColor, setBgColor] = useState("#ffffff");
 
   const handleChange =
     (field: string) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       handleSettingChange(`${objectPath}.${field}`, e.target.value);
   };
-
+  const handleClear = (field: string) => () => {
+    handleSettingChange(`${objectPath}.${field}`, "transparent");
+  };
   const createSliderChangeHandler = (field: string, unit: string) => (newVal: number) => {
     const event = {
       target: Object.assign(document.createElement("input"), {
@@ -47,12 +50,13 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
   };
 
   return (
-    <div className="space-y-1 px-2 py-1">
+    <div className="space-y-1 px-2">
       {isAllowed("color") && (
         <ColorPicker
-          label="Background Color"
+          label="Color"
           value={getSetting("color", settings, objectPath)}
           onChange={handleChange("color")}
+          onClear={handleClear("color")} // 👈 added
         />
       )}
 

@@ -1,4 +1,4 @@
-import { defaultSecondStoreAboutConfig } from "./about/defaultSecondStoreAboutSectionConfig";
+import { defaultAboutWithImageNextToTextConfig } from "./about/defaultAboutWithImageNextToText";
 import { defaultFirstBookWithCalandarConfig } from "./book_with_calendar/defaultFirstBookWithCalandarConfig";
 import { defaultFirstFooterConfig } from "./footer/defaultFirstFooterConfig";
 import { defaultFourthStoreHeroConfig } from "./hero/defaultFourthStoreHeroConfig";
@@ -7,14 +7,15 @@ import { defaultFirstStoreMenuSectionConfig } from "./menu/defaultFirstStoreMenu
 import { defaultFirstStoreProductsConfig } from "./order_online/defualtFirstStoreProductsConfig";
 import { defaultFirstStoreReviewsConfig } from "./reviews/defaultFirstStoreReviewsConfig";
 import { defaultHeroWithImageButtonAndBox } from "./hero/defaultHeroWithImagePatternAndBoxConfig";
+import { defaultBasicBookWithOpenCalendarConfig } from "./book/defaultBasicBookWithOpenCalenderConfig";
 
-export type SectionType = 'products' | 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer';
+export type SectionType = 'book' | 'products' | 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer';
 type VariationType = string;
 
 export const getSectionDefaults = (section: SectionType, variation: VariationType) => {
   const defaults: Record<SectionType, Record<VariationType, any>> = {
     about: {
-      second: defaultSecondStoreAboutConfig,
+      second: defaultAboutWithImageNextToTextConfig,
     },
     hero: {
       fourth: defaultFourthStoreHeroConfig,
@@ -23,6 +24,9 @@ export const getSectionDefaults = (section: SectionType, variation: VariationTyp
     },
     menu: {
       first: defaultFirstStoreMenuSectionConfig,
+    },
+    book: {
+      basicBookWithOpenCalendar: defaultBasicBookWithOpenCalendarConfig
     },
     bookWithCalendar: {
       first: defaultFirstBookWithCalandarConfig,

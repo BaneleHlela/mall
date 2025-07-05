@@ -11,7 +11,7 @@ const LayoutFontsSelector = () => {
     };
 
     return (
-        <div className='w-full space-y-2 p-2 bg-stone-50 overflow-y-scroll hide-scrollbar'>
+        <div className='w-full space-y-2 p-2 overflow-y-scroll hide-scrollbar'>
             <div className="flex flex-row justify-between items-center">
                 <p className="font-medium">Primary:</p>
                 <GoogleFontsSelector

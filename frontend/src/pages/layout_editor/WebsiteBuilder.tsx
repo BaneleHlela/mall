@@ -8,6 +8,8 @@ import { useAppDispatch } from '../../app/hooks.ts';
 import { fetchStoreById, setCurrentStore } from '../../features/stores/storeSlice';
 import { TbLoader3 } from "react-icons/tb";
 import { setStore } from '../../features/store_admin/storeAdminSlice.ts';
+import { editLayout, getLayout } from '../../features/layouts/layoutSlice.ts';
+import { setInitialLayout } from '../../features/layouts/layoutSettingsSlice.ts';
 
 const sizeMap = {
   mobile: { width: 412, height: 840, scale: 0.75 },
@@ -53,7 +55,7 @@ const WebsiteBuilderContent: React.FC = () => {
   const store = useAppSelector((state) => state.stores.currentStore);
 
   const fonts = useAppSelector((state) => state.layoutSettings.fonts);
-  const storeId = "684c15bca0f98a1d13a7ff00"; // Hardcoded store ID
+  const storeId = "68677942e545985b2467b130"; // Hardcoded store ID
 
 
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
@@ -67,14 +69,47 @@ const WebsiteBuilderContent: React.FC = () => {
   }, [device]);
 
   useEffect(() => {
+    if (settings) {
+      const saveLayout = async () => {
+        try {
+          await dispatch(
+            editLayout({
+              layoutId: settings._id,
+              layoutConfig: settings,
+            })
+          );
+          console.log('Layout saved:', settings);
+        } catch (error) {
+          console.error('Failed to save layout:', error);
+        }
+      };
+  
+      // Save immediately
+      saveLayout();
+  
+      // Save after 5 seconds
+      const timeoutId = setTimeout(() => {
+        saveLayout();
+      }, 5000);
+  
+      // Cleanup timeout on unmount or dependency change
+      return () => clearTimeout(timeoutId);
+    }
+  }, [settings]);
+
+  useEffect(() => {
     const fetchStore = async () => {
       if (storeId) {
         try {
           setLoading(true);
           const result = await dispatch(fetchStoreById(storeId)).unwrap();
           dispatch(setCurrentStore(result));
-          console.log("Store fetched:", result);
           dispatch(setStore(result));
+          dispatch(setCurrentStore(result)); // Update the global store state
+          if (result?.layouts[0]) {
+            const layoutResult = await dispatch(getLayout(result.layouts[0] as string)).unwrap(); // Fetch layout and unwrap the result
+            dispatch(setInitialLayout(layoutResult)); // Update the global layout state if available
+          }
         } catch (error) {
           console.error("Failed to fetch store:", error);
         } finally {
@@ -87,21 +122,21 @@ const WebsiteBuilderContent: React.FC = () => {
   }, [dispatch, storeId]);
   
   // iframe.contentWindow.postMessage({ layoutSettings: settings, store }, '*');
-  useEffect(() => {
-    const iframe = iframeRef.current;
+  // useEffect(() => {
+  //   const iframe = iframeRef.current;
   
-    const sendSettings = () => {
-      if (iframe?.contentWindow) {
-        iframe.contentWindow.postMessage({ layoutSettings: settings }, '*');
-      }
-    };
+  //   const sendSettings = () => {
+  //     if (iframe?.contentWindow) {
+  //       iframe.contentWindow.postMessage({ layoutSettings: settings }, '*');
+  //     }
+  //   };
   
-    iframe?.addEventListener('load', sendSettings); // resend after navigation
+  //   iframe?.addEventListener('load', sendSettings); // resend after navigation
   
-    return () => {
-      iframe?.removeEventListener('load', sendSettings);
-    };
-  }, [settings]);
+  //   return () => {
+  //     iframe?.removeEventListener('load', sendSettings);
+  //   };
+  // }, [settings]);
 
   if (loading) {
     return <TbLoader3 size={45} className='animate-spin mx-auto'/>;
@@ -119,7 +154,7 @@ const WebsiteBuilderContent: React.FC = () => {
         <LayoutSettings />
         <div className="overflow-auto relative w-full max-h-full flex flex-row items-center justify-center">
           <div
-            className="relative"
+            className="relative bg-black"
             style={{
               transform: `scale(${zoom})`,
               transformOrigin: 'center',

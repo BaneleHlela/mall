@@ -43,6 +43,7 @@ interface StoreMenubarIconsProps {
       };
     };
 }
+
 export const socials = [
     { platform: 'whatsapp', url: 'https://wa.me/0797604204', _id: '68502c4db7cdd894b89e9602' },
     { platform: 'phone', url: 'tel:0797604204', _id: '68502c4db7cdd894b89e9603' },
@@ -97,7 +98,7 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({style}) => {
         >
             {platformOrder.map((platform) => {
                 const social = socials?.find(s => s.platform === platform);
-                if (!social) return <>Null</>;
+                if (!social) return <></>;
 
                 return (
                 <div

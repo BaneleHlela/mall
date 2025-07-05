@@ -44,7 +44,7 @@ const FirstServices = () => {
 
   return (
     <div 
-      className="min-h-screen w-full flex flex-row justify-center bg-[#d1dfc7]"
+      className="min-h-screen w-full flex flex-row justify-center"
     >
       <div 
         style={{
@@ -66,7 +66,7 @@ const FirstServices = () => {
           style={{
             gap: getResponsiveDimension(style.servicesDisplay.grid.gap, screenWidth),
           }} 
-          className={`grid 
+          className={`grid px-1 
               ${style.servicesDisplay.grid.columns.mobile === 1 && "grid-cols-1"}
               ${style.servicesDisplay.grid.columns.mobile === 2 && "grid-cols-2"}
               ${style.servicesDisplay.grid.columns.desktop === 3 && "lg:grid-cols-3"}
@@ -75,16 +75,23 @@ const FirstServices = () => {
               sm:grid-cols-2`
             }
           >
-          {services.map((service) => (
-            <FirstStoreServiceCard
-              key={service._id}
-              title={service.name}
-              duration={service.duration}
-              price={service.price}
-              style={style.serviceCard}
-              onClick={() => handleServiceClick(service)}
-            />
-          ))}
+          {/* Conditional Rendering */}
+          {services.length === 0 && selectedCategory === "all" ? (
+            <p className="text-center text-white">Store Has No Services</p>
+          ) : services.length === 0 ? (
+            <p className="text-center text-white w-full">No services matching this category</p>
+          ) : (
+            services.map((service) => (
+              <FirstStoreServiceCard
+                key={service._id}
+                title={service.name}
+                duration={service.duration}
+                price={service.price}
+                style={style.serviceCard}
+                onClick={() => handleServiceClick(service)}
+              />
+            ))
+          )}
         </div>
       </div>
       {/* Popup for BookWithCalendar */}

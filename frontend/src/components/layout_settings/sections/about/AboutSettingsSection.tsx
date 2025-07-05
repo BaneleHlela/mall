@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { updateSetting } from "../../../../features/layouts/layoutSettingsSlice";
-import AboutWithImageAndTextSettings from "./with_image_and_text/AboutWithImageAndTextSettings";
+import AboutWithImageNextToTextSettings from "./with_image_next_to_text/AboutWithImageNextToTextSettings";
 
 const AboutSettingsSection = () => {
     const dispatch = useAppDispatch();
@@ -10,9 +10,9 @@ const AboutSettingsSection = () => {
     const handleSettingChange = (field: string, value: any) => {
         dispatch(updateSetting({ field, value }));
     };
-    if (variation === "aboutWithImageAndText") {
+    if (variation === "aboutWithImageNextToText") {
         return (
-            <AboutWithImageAndTextSettings settings={settings} handleSettingChange={handleSettingChange}/>
+            <AboutWithImageNextToTextSettings settings={settings} handleSettingChange={handleSettingChange}/>
         )
     }
     return (

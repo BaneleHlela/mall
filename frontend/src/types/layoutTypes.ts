@@ -46,6 +46,7 @@ export interface Layout {
     products?: any;
     services?: any;
     hero?: any;
+    book?: any;
     bookWithCalendar?: any;
     about: any;
     menu: any;

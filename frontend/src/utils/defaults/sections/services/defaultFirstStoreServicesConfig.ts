@@ -2,6 +2,7 @@ export const defaultFirstStoreServiceCardConfig = {
 
 }
 export const defaultFirstStoreServicesConfig = {
+    variation: "firstStoreServices",
     background: {
         color: "#d1dfc7",
         width: {
@@ -53,6 +54,7 @@ export const defaultFirstStoreServicesConfig = {
         }
     },
     serviceCard: {
+        variation: "serviceCardWithButtonDurationAndPrice",
         text: {
             serviceName: {
                 position: "start",
@@ -88,7 +90,7 @@ export const defaultFirstStoreServicesConfig = {
             },
         },
         bookButton: {
-            function: "bookNow",
+            function: "book",
             position: "start",
             style: {
                 text: {

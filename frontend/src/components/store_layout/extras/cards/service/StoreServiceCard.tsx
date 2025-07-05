@@ -1,4 +1,3 @@
-import FirstStoreServiceCard from "./first/FirstStoreServiceCard";
 
 const StoreServiceCard = () => {
     

@@ -9,8 +9,9 @@ const CLIENT_URL = process.env.CLIENT_URL
 // create a new layouts configuration
 export const createLayoutConfig = async (req, res) => {
     try {
+        console.log(req.body);
       const layout = await StoreLayout.create(req.body);
-      const layoutId = layout._id.toString();
+      //const layoutId = layout._id.toString();
   
       // Generate the preview screenshot
     //   const previewUrl = `${CLIENT_URL}/layouts/preview/${layoutId}`;

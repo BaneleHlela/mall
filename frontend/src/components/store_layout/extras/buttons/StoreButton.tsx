@@ -3,6 +3,7 @@ import { getTextStyles, getBackgroundStyles } from '../../../../utils/stylingFun
 
 interface ButtonStyle {
   text: {
+    animation: string;
     input: string;
     fontFamily: string;
     color: string;
@@ -43,10 +44,12 @@ const StoreButton: React.FC<StoreButtonProps> = ({ style, onClick }) => {
         ...getTextStyles(style.style.text),
         ...getBackgroundStyles(style.style.background),
       }}
-      className='flex flex-col justify-center w-full hover:scale-102'
+      className={`flex flex-col justify-center hover:scale-102`}
       onClick={onClick}
     >
-      {style.style.text.input}
+      <p className={`${style.style.text.animation}`}>
+        {style.style.text.input}
+      </p>
     </button>
   )
 }

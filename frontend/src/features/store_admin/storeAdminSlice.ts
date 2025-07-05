@@ -118,7 +118,6 @@ const storeAdminSlice = createSlice({
           state.error = action.payload;
         },
         setStore: (state, action: PayloadAction<Store | null>) => {
-          console.log(action.payload)
           state.store = action.payload;
         },
         updateStoreSetting: (state, action: PayloadAction<{ field: string; value: any }>) => {

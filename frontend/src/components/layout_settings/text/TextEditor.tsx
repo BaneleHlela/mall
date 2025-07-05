@@ -24,9 +24,35 @@ const TextEditor: React.FC<EditorProps> = ({
         handleSettingChange(`${objectPath}.${field}`, e.target.value);
     };
 
+    const animationOptions = [
+      "none",
+      "fade-in",
+      "slide-in-left",
+      "slide-in-right",
+      "slide-in-top",
+      "slide-in-bottom",
+      "bounce-in",
+      "rotate-in",
+      "blur-in",
+      "glitch",
+      "typewriter"
+    ];
+
 
     return (
         <div className="space-y-1 px-2">
+          {isAllowed("animation") && (
+              <OptionsToggler
+                  label="Text Animation"
+                  options={animationOptions}
+                  value={getSetting("animation", settings, objectPath) || "none"}
+                  onChange={(newValue) =>
+                      handleChange("animation")({
+                          target: { value: newValue }
+                      } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
+                  }
+              />
+          )}
           {isAllowed("input") && (
             <InputHandler
               label="Custom Text"
@@ -93,6 +119,8 @@ const TextEditor: React.FC<EditorProps> = ({
                   label="Font Size (Phone)"
                   value={parseInt(getSetting("fontSize.mobile", settings, objectPath) || '16')}
                   unit="px"
+                  min={10}
+                  max={150}
                   onChange={(newVal) => {
                     const event = {
                       target: Object.assign(document.createElement("input"), { value: `${newVal}px` })
@@ -104,6 +132,8 @@ const TextEditor: React.FC<EditorProps> = ({
                   label="Font Size (PC)"
                   value={parseInt(getSetting("fontSize.desktop", settings, objectPath) || '16')}
                   unit="px"
+                  min={10}
+                  max={150}
                   onChange={(newVal) => {
                     const event = {
                       target: Object.assign(document.createElement("input"), { value: `${newVal}px` })
@@ -117,6 +147,8 @@ const TextEditor: React.FC<EditorProps> = ({
                 label="Font Size"
                 value={parseInt(getSetting("fontSize", settings, objectPath))}
                 unit="px"
+                min={10}
+                max={150}
                 onChange={(newVal) => {
                   const event = {
                     target: Object.assign(document.createElement("input"), { value: `${newVal}px` })

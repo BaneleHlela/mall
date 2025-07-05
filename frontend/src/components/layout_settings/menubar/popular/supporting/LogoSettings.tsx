@@ -58,7 +58,7 @@ const LogoSettings: React.FC<LogoSettingsProps> = ({ objectPath, device }) => {
               objectPath={`${objectPath}.text`}
               settings={settings}
               handleSettingChange={handleSettingChange}
-              allow={['input', 'fontFamily', 'color', 'fontSize', 'weight', 'letterSpacing']}
+              allow={['input', 'fontFamily', 'color', 'fontSize', 'weight', 'letterSpacing', "textDecoration", "textTransform"]}
             />
           }
         />

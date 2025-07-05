@@ -5,7 +5,7 @@ type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 function ReactCalendar({ value, onChange }: { value: Value; onChange: (value: Value) => void }) {
-  const style = useAppSelector((state => state.layoutSettings.bookWithCalendar.calendar));
+  const style = useAppSelector((state => state.layoutSettings.book.main.calendar));
   console.log(style);
   return (
     <div>
@@ -70,7 +70,14 @@ function ReactCalendar({ value, onChange }: { value: Value; onChange: (value: Va
           }
           
           .react-calendar__tile {
-            padding: 0.5rem;
+            color: ${style.date.text.color};
+            font-family: ${style.date.text.fontFamily};
+            font-weight: ${style.date.text.fontWeight};
+            font-size: ${style.date.text.fontSize};
+            background: ${style.date.background.color};
+            padding: ${style.date.background.padding.y} ${style.date.background.padding.x};
+            border: ${style.date.background.border.width} ${style.date.background.border.style} ${style.date.background.border.color};
+            border-radius: ${style.date.background.border.radius};
           }
           .react-calendar__tile--now {
             background: ${style.todayDate.background.color};

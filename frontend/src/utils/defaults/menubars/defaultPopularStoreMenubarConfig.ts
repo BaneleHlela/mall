@@ -112,13 +112,26 @@ export const defaultPupularStoreMenubarConfig = {
                         width: "0px",
                         style: "solid",
                         color: "lightblue",
-                        redius: "0x"
+                        radius: "0x"
                     },
                     padding: {
                         y: "15px",
                         x: "0px",
                     }
                 },
+                allLinksBackground: {
+                    color:  "",
+                    border: {
+                        width: "0px",
+                        style: "solid",
+                        color: "lightblue",
+                        radius: "0x"
+                    },
+                    padding: {
+                        y: "15px",
+                        x: "0px",
+                    }
+                }
             },
             extras: {
                 include: "icons",
