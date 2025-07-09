@@ -5,32 +5,39 @@ import mongoose from "mongoose";
 export const createReview = asyncHandler(async (req, res) => {
   const { store, rating, comment, anonymous = false } = req.body;
 
-  let review = await Review.findOne({
+  // let review = await Review.findOne({
+  //   user: req.user._id,
+  //   store,
+  // });
+
+  // if (review) {
+  //   // Update existing review
+  //   review.rating = rating;
+  //   review.comment = comment;
+  //   review.anonymous = anonymous;
+  //   review.updatedAt = Date.now();
+  // } else {
+  //   // Create new review
+  //   review = new Review({
+  //     user: req.user._id,
+  //     store,
+  //     rating,
+  //     comment,
+  //     anonymous,
+  //   });
+  // }
+  let review = new Review({
     user: req.user._id,
     store,
+    rating,
+    comment,
+    anonymous,
   });
-
-  if (review) {
-    // Update existing review
-    review.rating = rating;
-    review.comment = comment;
-    review.anonymous = anonymous;
-    review.updatedAt = Date.now();
-  } else {
-    // Create new review
-    review = new Review({
-      user: req.user._id,
-      store,
-      rating,
-      comment,
-      anonymous,
-    });
-  }
 
   const savedReview = await review.save();
 
   res.status(201).json({
-    message: review.isNew ? "Review created successfully" : "Review updated successfully",
+    //message: review.isNew ? "Review created successfully" : "Review updated successfully",
     review: savedReview
   });
 });

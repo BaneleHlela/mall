@@ -9,10 +9,11 @@ import {
   updateStockAndSoldCount,
   getStoreProducts
 } from '../controllers/ProductController.js';
+import { uploadProductImages } from '../middlewares/uploadMiddleware.js';
 
 const router = express.Router();
 
-router.post('/', createProduct);
+router.post('/', uploadProductImages, createProduct);
 router.get('/:id', getProductById);
 router.get("/store/:storeId", getStoreProducts);
 router.get('/', getAllProducts); 

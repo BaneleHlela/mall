@@ -1,10 +1,62 @@
-import Product from '../models/productModel.js';
+import Product from '../models/ProductModel.js';
 import asyncHandler from 'express-async-handler'; 
 import mongoose from 'mongoose';
+import { uploadToUploads } from '../config/gcsClient.js';
 
 // Create product
 export const createProduct = asyncHandler(async (req, res) => {
-  const product = await Product.create(req.body);
+  const {
+    name,
+    description,
+    price,
+    stockQuantity,
+    variations,
+    category,
+    isActive,
+    tags,
+    store, 
+  } = req.body;
+
+  const files = req.files; // array of images
+
+  if (!files || files.length === 0) {
+    return res.status(400).json({ message: 'At least one product image is required.' });
+  }
+
+  // Create slug
+  const slug = name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .substring(0, 100);
+
+  const imageUrls = [];
+
+  for (const file of files) {
+    const imageFileName = `${Date.now()}-${file.originalname}`;
+    const imagePath = `stores/${store}/products/${slug}/${imageFileName}`;
+
+    await uploadToUploads(file.buffer, imagePath);
+
+    const imageUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${imagePath}`;
+    imageUrls.push(imageUrl);
+  }
+  // Create product
+  const product = await Product.create({
+    name,
+    description,
+    price,
+    stockQuantity,
+    variations: Array.isArray(variations) ? variations : JSON.parse(variations),
+    images: imageUrls,
+    category,
+    isActive,
+    tags: Array.isArray(tags) ? tags : JSON.parse(tags),
+    slug,
+    store: new mongoose.Types.ObjectId(store),
+  });
+
   res.status(201).json(product);
 });
 

@@ -38,7 +38,7 @@ const UploadStoreSection: React.FC = () => {
     formData.append('variation', variation);
     formData.append('mobile', mobileImage);
     formData.append('desktop', desktopImage);
-
+    console.log('Uploading section:', formData);
     try {
       const result = await dispatch(uploadStoreSection(formData));
       if (uploadStoreSection.fulfilled.match(result)) {

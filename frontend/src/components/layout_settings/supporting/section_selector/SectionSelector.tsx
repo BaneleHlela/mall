@@ -8,10 +8,12 @@ import { getSectionDefaults, type SectionType } from '../../../../utils/defaults
 import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice';
 
 interface SectionSelectorProps {
-  sectionToReplace: SectionType;
+  sectionToReplace?: SectionType;
   onClose: () => void;
+  onSelect?: (sectionName: string) => void; // <-- NEW
 }
-const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToReplace}) => {
+
+const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToReplace, onSelect}) => {
   const dispatch = useAppDispatch();
   const { sections, loading, error } = useAppSelector((state) => state.sections);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
@@ -30,6 +32,14 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
       dispatch(fetchSections({ name: selectedSection }));
     }
   }, [dispatch, selectedSection]);
+  
+  useEffect(() => {
+    if (sectionToReplace) {
+      setSelectedSection(sectionToReplace);
+    } else {
+      setSelectedSection(null); // reset on "Add New Section"
+    }
+  }, [sectionToReplace]);
 
   const validSections = useMemo(() => [
     "hero", "about", "menu", "services", "products",
@@ -46,23 +56,40 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
     // implement deletion logic
   };
 
+  const extractSectionFromVariation = (variation: string): SectionType => {
+    const match = variation.match(/^[a-z]+/);
+    return (match?.[0] || 'hero') as SectionType; // fallback to "hero" if nothing matches
+  };
+  
  
-const handleSelectSectionVariation = (variation: string) => {
-  console.log("Selected variation:", variation, sectionToReplace);
-  const sectionDefaults = getSectionDefaults(sectionToReplace, variation);
-  console.log(sectionDefaults);
-  dispatch(updateSetting({
-    field: sectionToReplace,
-    value: sectionDefaults
-  }));
-  onClose();
-};
+  const handleSelectSectionVariation = (variation: string) => {
+    const section = sectionToReplace ?? extractSectionFromVariation(variation);
+    const sectionDefaults = getSectionDefaults(section, variation);
+  
+    if (sectionToReplace) {
+      // Replacing: update the section in-place
+      dispatch(updateSetting({
+        field: section,
+        value: sectionDefaults
+      }));
+    } else {
+      // Adding: use callback to parent
+      onSelect?.(section); // <-- Notify parent to insert new section key
+      dispatch(updateSetting({
+        field: section,
+        value: sectionDefaults
+      }));
+    }
+  
+    onClose();
+  };
+  
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="h-full w-full bg-white overflow-clip">
+    <div className="h-full w-full overflow-clip">
       {/* Header */}
       <div className="relative h-[8%] w-full bg-blue-500 text-center flex flex-col justify-center text-xl text-white">
         Replace or Add New Section
@@ -72,18 +99,19 @@ const handleSelectSectionVariation = (variation: string) => {
       </div>
 
       {/* Body Layout */}
-      <div className="h-[92%] flex flex-row p-2">
+      <div className="h-[92%]  w-full flex flex-row justify-center p-2">
         {/* Sidebar Buttons */}
-        <div className="h-full bg-white overflow-y-auto w-[25%] border-b">
-          {validSections.map((section) => (
-            <SectionSelectorButton
-              key={section}
-              sectionName={section}
-              onSelect={handleSelectSection}
-            />
-          ))}
-        </div>
-
+        {!sectionToReplace && (
+          <div className="h-full bg-white overflow-y-auto w-[25%] border-b">
+            {validSections.map((section) => (
+              <SectionSelectorButton
+                key={section}
+                sectionName={section}
+                onSelect={handleSelectSection}
+              />
+            ))}
+          </div>
+        )}
         {/* Section Grid */}
         <div className="h-full bg-stone-50 overflow-y-auto w-[75%] p-2">
           {selectedSection && sections.length === 0 && !loading && (

@@ -12,7 +12,7 @@ type TopBarProps = {
 
 const TopBar = ({ setDevice, zoom, setZoom }: TopBarProps) => {
   return (
-    <div className="relative h-[8vh] bg-white shadow-md flex items-center justify-center px-4">
+    <div className="relative h-[8vh] bg-stone-50 shadow-md flex items-center justify-center px-4">
       <div className="absolute left-10 flex flex-row gap-4">
         <div className="shadow-sm text-gray-700 rounded-[100%]">
           <IoIosArrowRoundBack className="text-[200%]"/>

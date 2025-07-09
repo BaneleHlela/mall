@@ -4,7 +4,7 @@ import { IoMdNotifications } from "react-icons/io";
 const StoreDashboardTopbar = () => {
   return (
     <div
-        className='font-[ubuntu] flex flex-row w-full h-[12vh] bg-white m-1 shadow-sm rounded-[8px]'
+        className='font-[ubuntu] flex flex-row w-full min-h-[12vh] bg-white m-1 shadow-sm rounded-[8px]'
     >
         {/* Title */}
         <div className="flex flex-col justify-center h-full w-[40%] rounded-[8px] pl-4">

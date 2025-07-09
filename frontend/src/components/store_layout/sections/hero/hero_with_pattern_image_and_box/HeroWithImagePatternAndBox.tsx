@@ -57,7 +57,7 @@ const HeroWithImagePatternAndBox = () => {
             <img
               src={settings.image.url[0]}
               alt="Hero Image"
-              className="w-full h-auto object-cover"
+              className="w-full h-full object-cover"
             />
           </motion.div>
           {/* Background patten */}
@@ -68,7 +68,7 @@ const HeroWithImagePatternAndBox = () => {
               <img 
                 src={settings.pattern.url[0]}
                 alt="Hero Pattern"
-                className="w-full h-auto object-cover"
+                className="w-full h-full object-cover"
               />
             </div>
           )}

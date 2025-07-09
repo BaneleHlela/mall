@@ -12,7 +12,7 @@ const LayoutSettings = () => {
 
   return (
     <motion.div
-      className="h-screen w-[25vw] bg-white z-10 flex flex-col items-center justify-start p-2 space-y-1 relative overflow-hidden"
+      className="h-screen w-[25vw] z-10 flex flex-col items-center justify-start p-2 space-y-1 relative overflow-hidden"
       style={{ boxShadow: '8px 0 8px -4px rgba(0, 0, 0, 0.1)' }}
     >
       {/* Header with vertical line */}
@@ -23,23 +23,17 @@ const LayoutSettings = () => {
         <div className="w-[80%] h-[1px] bg-gray-600"></div>
       </div>
       
-      <div className="w-full space-y-2">
+      <div className="w-full h-full space-y-1 ">
         <SettingsContainer
           name="General"
-          options={["edit"]}
-          onOptionClick={() => {}}
           onClick={() => setActivePanel("general")}
         />
         <SettingsContainer
           name="Menubar"
-          options={["edit"]}
-          onOptionClick={() => {}}
           onClick={() => setActivePanel("menubar")}
         />
         <SettingsContainer
           name="Pages & Sections"
-          options={["edit"]}
-          onOptionClick={() => {}}
           onClick={() => setActivePanel("pages")}
         />
       </div>

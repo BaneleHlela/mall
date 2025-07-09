@@ -22,25 +22,21 @@ const serviceSchema = new mongoose.Schema({
     ref: 'Store',
     required: true,
   },
-  thumbnail: {
-    type: String,
-  },
-  images: [{
-    type: String,
-  }],
   performers: [{
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User', // Reference to the User model
-      required: true,
     },
     name: {
       type: String,
-      required: true,
     },
   }],
   category: {
     type: String
+  },
+  isActive: {
+    type: Boolean,
+    default: false, 
   },
   reviews: [{
     type: mongoose.Schema.Types.ObjectId,

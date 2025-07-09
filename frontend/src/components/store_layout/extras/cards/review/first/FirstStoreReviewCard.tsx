@@ -37,7 +37,7 @@ const FirstStoreReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, review,
           ${style.text.name.position === 'center' && 'text-center'}
           ${style.text.name.position === 'end' && 'text-end'}
         `}>
-        - {anonymous ? "Anonymous Mbumbulu" : reviewerName}
+         {anonymous ? "Anonymous Mbumbulu" : reviewerName}
       </div>
     </div>
   );

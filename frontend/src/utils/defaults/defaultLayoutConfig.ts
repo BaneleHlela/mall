@@ -46,6 +46,10 @@ export const defaultLayoutConfig = {
         url: "/",
         exact: true,
         contains: ["hero", "about", "gallery", "reviews", "footer",],
+        inLinks: [{
+          section: 'about',
+          name: "About Us",
+        }],
       },
       about: {
         name: "About Us",

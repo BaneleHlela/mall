@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DndContext,
   closestCenter,
@@ -22,93 +22,132 @@ import { FaPlus } from "react-icons/fa6";
 import HeroSettings from "../sections/hero/HeroSettings";
 import SectionSelector from "../supporting/section_selector/SectionSelector";
 import type { SectionType } from "../../../utils/defaults/sections/getSectionDefaults";
-import type { Section } from "../../../features/sections/sectionSlice";
 import AboutSettingsSection from "../sections/about/AboutSettingsSection";
 import StoreGallerySettings from "../sections/gallery/StoreGallerySettings";
 import StoreReviewsSectionSettings from "../sections/store_reviews/StoreReviewsSectionSettings";
 import BookSectionSettings from "../sections/book/BookSectionSettings";
-// Import SectionSelector if not already
-// import SectionSelector from "../supporting/SectionSelector";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 const SortableItem = ({
   id,
   name,
   onClick,
   onReplaceClick,
+  onDeleteClick,
+  onRename,
+  isInMenubar,
 }: {
   id: string;
   name: string;
   onClick: () => void;
   onReplaceClick: (section: string) => void;
+  onDeleteClick: () => void;
+  onRename: (section: string, newName: string) => void;
+  isInMenubar: boolean;
 }) => {
+  const [draggable, setDraggable] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
   };
 
+  const handleDoubleClick = () => {
+    setDraggable(true);
+    setTimeout(() => setDraggable(false), 2000);
+  };
+
+  const handleRename = (newName: string) => {
+    onRename(id, newName);
+  };
+
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      onDoubleClick={handleDoubleClick}
+      {...(draggable ? attributes : {})}
+      {...(draggable ? listeners : {})}
+    >
       <SettingsContainer
         name={name}
-        options={["edit", "replace"]}
         onClick={onClick}
-        onReplaceClick={() => onReplaceClick(id)} 
-        onOptionClick={() => {
-          console.log("option clicked");
-        }}
+        onReplaceClick={() => onReplaceClick(id)}
+        onDeleteClick={onDeleteClick}
+        onRename={handleRename}
+        replaceble={true}
+        deletable={id !== "hero"}
+        renamable={isInMenubar}
       />
     </div>
   );
 };
 
+
 const HomePageSettings = () => {
   const dispatch = useAppDispatch();
   const routes = useAppSelector((state) => state.layoutSettings.routes);
   const homeSections = routes.home?.contains || [];
-
+  const MySwal = withReactContent(Swal);
+  
   const [activePanel, setActivePanel] = useState<string | null>(null);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isAddingSection, setIsAddingSection] = useState(false);
   const [sectionToReplace, setSectionToReplace] = useState<SectionType | null>(null);
   const [showSectionSelector, setShowSectionSelector] = useState(false);
 
-  const validSections = [
-    "hero", "about", "menu", "services", "products",
-    "reviews", "gallery", "book", "contact", "events", "footer",
-  ];
-
-  const unusedSections = validSections.filter(
-    (section) => !(homeSections as string[]).includes(section)
-  );
-
   const handleReplaceClick = (section: SectionType) => {
-    setSectionToReplace(section);
-    setShowSectionSelector(true);
+    setSectionToReplace(section); // Wait for this to update before showing UI
+  };
+  
+  useEffect(() => {
+    if (sectionToReplace) {
+      setShowSectionSelector(true); // only show the selector after sectionToReplace is set
+    }
+  }, [sectionToReplace]);
+
+  const handleDeleteClick = (section: string) => () => {
+    MySwal.fire({
+      title: `Delete "${section}"?`,
+      text: "This action cannot be undone.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedSections = homeSections.filter((sec) => sec !== section);
+        dispatch(updateSetting({
+          field: "routes.home.contains",
+          value: updatedSections,
+        }));
+      }
+    });
   };
 
-  // const handleSectionSelect = (newSection: string) => {
-  //   if (sectionToReplace) {
-  //     const newSections = homeSections.map((s) => (s === sectionToReplace ? newSection : s));
-  //     dispatch(
-  //       updateSetting({
-  //         field: "routes.home.contains",
-  //         value: newSections,
-  //       })
-  //     );
-  //     setShowSectionSelector(false);
-  //     setSectionToReplace(null);
-  //   }
-  // };
-
   const handleAddSection = (section: string) => {
+    if (homeSections.includes(section)) return;
+
     dispatch(
       updateSetting({
         field: "routes.home.contains",
         value: [...homeSections, section],
       })
     );
-    setDropdownOpen(false);
+    setIsAddingSection(false);
   };
+
+  const handleRename = (section: string, newName: string) => {
+    const updatedInLinks = routes.home?.inLinks?.map(link => 
+      link.section === section ? { ...link, name: newName } : link
+    );
+  
+    dispatch(updateSetting({
+      field: "routes.home.inLinks",
+      value: updatedInLinks,
+    }));
+  };
+
 
   const getSectionComponent = (section: string) => {
     switch (section) {
@@ -150,45 +189,29 @@ const HomePageSettings = () => {
     <div className="w-full h-[80vh] space-y-2">
       <div className="relative px-4 flex justify-center">
         <button
-          onClick={() => setDropdownOpen(!dropdownOpen)}
-          className="flex flex-row justify-between items-center bg-black text-white rounded-[20px] px-8 py-2 shadow-md hover:scale-103 hover:opacity-85"
+          onClick={() => setIsAddingSection(true)}
+          className="flex flex-row justify-between items-center bg-stone-50 border-2 border-white text-black rounded px-8 py-2 shadow-md hover:scale-103 hover:opacity-85"
         >
           Add New Section <FaPlus className="ml-2" size={16} />
         </button>
-        <AnimatePresence>
-          {dropdownOpen && (
-            <motion.div
-              className="absolute top-full bg-white border border-gray-300 rounded-[20px] mt-0 shadow-md z-10"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              {unusedSections.map((section) => (
-                <button
-                  key={section}
-                  className="block px-8 py-2 w-full text-left rounded-[20px] hover:bg-gray-100"
-                  onClick={() => handleAddSection(section)}
-                >
-                  {section.charAt(0).toUpperCase() + section.slice(1)}
-                </button>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
-
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={homeSections} strategy={verticalListSortingStrategy}>
-          {homeSections.map((section) => (
-            <SortableItem
-              key={section}
-              id={section}
-              name={section.charAt(0).toUpperCase() + section.slice(1)}
-              onClick={() => setActivePanel(section)} //@ts-ignore
-              onReplaceClick={() => handleReplaceClick(section)}
-            />          
-          ))}
+          {homeSections.map((section) => {
+            const inLink = routes.home?.inLinks?.find(link => link.section === section);
+            return (
+              <SortableItem
+                key={section}
+                id={section}
+                name={inLink ? inLink.name : section.charAt(0).toUpperCase() + section.slice(1)}
+                onClick={() => setActivePanel(section)} //@ts-ignore-next-line
+                onReplaceClick={() => handleReplaceClick(section)}
+                onDeleteClick={handleDeleteClick(section)}
+                onRename={handleRename}
+                isInMenubar={!!inLink}
+              />          
+            );
+          })}
         </SortableContext>
       </DndContext>
 
@@ -205,12 +228,37 @@ const HomePageSettings = () => {
         )}
       </AnimatePresence>
 
-      {showSectionSelector && sectionToReplace && (
-        <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white w-[80vw] h-[80vh] overflow-auto">
+      {(showSectionSelector || isAddingSection) && (
+        <div className="fixed inset-0 bg-[#0000001e] flex justify-center items-center z-50">
+          <div className="bg-white flex flex-row w-[80vw] h-[80vh] overflow-auto">
             <SectionSelector
-              onClose={() => setShowSectionSelector(false)}
-              sectionToReplace={sectionToReplace}
+              onClose={() => {
+                setSectionToReplace(null);
+                setShowSectionSelector(false);
+                setIsAddingSection(false);
+              }}
+              onSelect={(selectedSection) => {
+                if (sectionToReplace) {
+                  // Replace logic
+                  const updated = homeSections.map((sec) =>
+                    sec === sectionToReplace ? selectedSection : sec
+                  );
+                  dispatch(
+                    updateSetting({
+                      field: "routes.home.contains",
+                      value: updated,
+                    })
+                  );
+                } else {
+                  // Add logic
+                  handleAddSection(selectedSection);
+                }
+
+                setSectionToReplace(null);
+                setShowSectionSelector(false);
+                setIsAddingSection(false);
+              }}
+              {...(sectionToReplace ? { sectionToReplace } : {})}
             />
           </div>
         </div>

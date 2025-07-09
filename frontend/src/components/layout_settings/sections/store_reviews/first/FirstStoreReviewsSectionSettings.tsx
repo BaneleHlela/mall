@@ -28,7 +28,7 @@ const FirstStoreReviewsSectionSettings: React.FC<SectionSettingsProps> = ({
                         objectPath={`${objectPath}.text.title`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["input", "color", "fontFamily", "fontSize", "position"]}
+                        allow={["input", "color", "fontFamily", "fontSize", "position", "lineHeight", "textDecotation", "weight"]}
                         responsiveSize={true}
                     />
                 </>
@@ -37,7 +37,7 @@ const FirstStoreReviewsSectionSettings: React.FC<SectionSettingsProps> = ({
             <SubSettingsContainer
                 name="Button"
                 SettingsComponent={
-                <>
+                <div className="space-y-1 px-2 py-1">
                     <SubSettingsContainer
                         name="Background"
                         SettingsComponent={
@@ -60,43 +60,53 @@ const FirstStoreReviewsSectionSettings: React.FC<SectionSettingsProps> = ({
                             />
                         }
                     />
-                </>}
+                </div>}
             />
             <SubSettingsContainer
                 name="Review Card"
                 SettingsComponent={
-                    <>
+                    <div className="space-y-1 px-2 py-1">
                         <SubSettingsContainer
                             name="Stars"
                             SettingsComponent={
                                 <>
-                                    <OptionsToggler
-                                        label="Type"
-                                        options={["sharp", "rounded", "playful", "normal"]}
-                                        value={getSetting("stars.type", settings, `${objectPath}.reviewCard`)}
-                                        onChange={(value) =>
-                                            handleSettingChange(`${objectPath}.reviewCard.stars.type`, value)
-                                        }
+                                    <TextEditor
+                                        objectPath={`${objectPath}.reviewCard.stars`}
+                                        settings={settings}
+                                        handleSettingChange={handleSettingChange}
+                                        allow={["color"]}
                                     />
-                                    <OptionsToggler
-                                        label="position"
-                                        options={["start", "center", "end"]}
-                                        value={getSetting("stars.position", settings, `${objectPath}.reviewCard`)}
-                                        onChange={(value) =>
-                                            handleSettingChange(`${objectPath}.reviewCard.stars.position`, value)
-                                        }
-                                    />
-                                    <SettingsSlider
-                                        label="Size"
-                                        unit=""
-                                        value={parseInt(getSetting("stars.size", settings, `${objectPath}.reviewCard`)) || 20}
-                                        min={10}
-                                        max={50}
-                                        onChange={(newVal) =>
-                                            handleSettingChange(`${objectPath}.reviewCard.stars.size`, newVal)
-                                        }
-                                    />
+                                    <div className="px-2 py-1">
+                                        <OptionsToggler
+                                            label="Type"
+                                            options={["sharp", "rounded", "playful", "normal"]}
+                                            value={getSetting("stars.type", settings, `${objectPath}.reviewCard`)}
+                                            onChange={(value) =>
+                                                handleSettingChange(`${objectPath}.reviewCard.stars.type`, value)
+                                            }
+                                        />
+                                        <OptionsToggler
+                                            label="position"
+                                            options={["start", "center", "end"]}
+                                            value={getSetting("stars.position", settings, `${objectPath}.reviewCard`)}
+                                            onChange={(value) =>
+                                                handleSettingChange(`${objectPath}.reviewCard.stars.position`, value)
+                                            }
+                                        />
+                                        
+                                        <SettingsSlider
+                                            label="Size"
+                                            unit=""
+                                            value={parseInt(getSetting("stars.size", settings, `${objectPath}.reviewCard`)) || 20}
+                                            min={10}
+                                            max={50}
+                                            onChange={(newVal) =>
+                                                handleSettingChange(`${objectPath}.reviewCard.stars.size`, newVal)
+                                            }
+                                        />
+                                    </div>
                                 </>
+                                
                             }
                         />
                         <SubSettingsContainer
@@ -138,7 +148,7 @@ const FirstStoreReviewsSectionSettings: React.FC<SectionSettingsProps> = ({
                                 </div>
                             }
                         />
-                    </>
+                    </div>
                 }
             />
         </div>

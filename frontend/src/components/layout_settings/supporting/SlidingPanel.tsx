@@ -15,7 +15,7 @@ const SlidingPanel: React.FC<SlidingPanelProps> = ({ isOpen, onClose, title, chi
       initial={{ x: '100%' }}
       animate={{ x: isOpen ? 0 : '100%' }}
       transition={{ type: 'tween', duration: 0.3 }}
-      className="absolute top-0 right-0 w-full h-full bg-white overflow-y-auto"
+      className="absolute top-0 right-0 w-full h-full bg-stone-50 overflow-y-auto"
     >
       <div className="p-2">
         <div className="flex items-center mb-4">

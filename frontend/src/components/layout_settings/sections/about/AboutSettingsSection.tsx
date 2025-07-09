@@ -1,5 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { updateSetting } from "../../../../features/layouts/layoutSettingsSlice";
+import OptionsToggler from "../../supporting/OptionsToggler";
+import { handleAddSectionToLinks } from "../hero/HeroSettings";
 import AboutWithImageNextToTextSettings from "./with_image_next_to_text/AboutWithImageNextToTextSettings";
 
 const AboutSettingsSection = () => {
@@ -12,7 +14,17 @@ const AboutSettingsSection = () => {
     };
     if (variation === "aboutWithImageNextToText") {
         return (
-            <AboutWithImageNextToTextSettings settings={settings} handleSettingChange={handleSettingChange}/>
+            <div className="space-y-1">
+                <div className="px-2 py-1 border rounded">
+                    <OptionsToggler
+                        label="Add to Menubar ?"
+                        options={['yes', 'no']}
+                        value={settings.routes?.home?.inLinks?.some(link => link.section === 'about') ? 'yes' : 'no'}
+                        onChange={(option) => handleAddSectionToLinks(dispatch, settings, 'about', option)}
+                    />
+                </div>
+                <AboutWithImageNextToTextSettings settings={settings} handleSettingChange={handleSettingChange}/>
+            </div>
         )
     }
     return (

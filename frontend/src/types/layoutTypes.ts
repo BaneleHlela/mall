@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import type { BackgroundSettings } from './layoutSettingsType';
+import type { SectionType } from '../utils/defaults/sections/getSectionDefaults';
 
 
 export interface LayoutState {
@@ -64,6 +65,12 @@ export interface Route {
     url: string;
     exact?: boolean; // Optional, as not all routes may require exact matching
     contains: string[],
+    inLinks?: [
+        {
+            name: string;
+            section: SectionType;
+        }
+    ]
     // contains: Array<
     // | "hero"
     // | "about"

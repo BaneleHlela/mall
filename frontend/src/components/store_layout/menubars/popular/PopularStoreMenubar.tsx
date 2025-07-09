@@ -230,12 +230,24 @@ const PopularStoreMenubar: React.FC = () => {
   };
 
   
-  const links = routeOrder // @ts-ignore
-    .filter((key) => routes[key])  // @ts-ignore
-    .map((key) => ({ // @ts-ignore
-    to: `/stores/${storeId}${routes[key].url === "/" ? "" : routes[key].url}`, // @ts-ignore
-    label: routes[key].name.toLowerCase(),
-  })); 
+  const links = React.useMemo(() => {
+    // First, create an array of links from home.inLinks
+    const inLinksArray = (routes.home?.inLinks || []).map(link => ({
+      to: `/stores/${storeId}#${link.section}`,
+      label: link.name,
+    }));
+  
+    // Then, create an array of links from other routes
+    const routeLinks = routeOrder //@ts-ignore-next-line
+      .filter(key => routes[key] && key !== 'home') // Exclude 'home' as we're handling its sections separately
+      .map(key => ({ //@ts-ignore-next-line
+        to: `/stores/${storeId}${routes[key].url === "/" ? "" : routes[key].url}`, // @ts-ignore-next-line
+        label: routes[key].name,
+      }));
+  
+    // Combine the two arrays, with inLinks first
+    return [...inLinksArray, ...routeLinks];
+  }, [routes, routeOrder, storeId]);
 
   return (
     <nav

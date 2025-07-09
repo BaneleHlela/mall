@@ -16,6 +16,7 @@ export const getSectionDefaults = (section: SectionType, variation: VariationTyp
   const defaults: Record<SectionType, Record<VariationType, any>> = {
     about: {
       second: defaultAboutWithImageNextToTextConfig,
+      aboutWithImageNextToText: defaultAboutWithImageNextToTextConfig,
     },
     hero: {
       fourth: defaultFourthStoreHeroConfig,

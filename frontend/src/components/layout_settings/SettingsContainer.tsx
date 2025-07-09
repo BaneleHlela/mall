@@ -1,73 +1,96 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SlOptionsVertical } from "react-icons/sl";
 import { TbReplace } from "react-icons/tb";
 import { IoColorPaletteOutline } from "react-icons/io5";
+import { AiOutlineDelete } from "react-icons/ai";
 
 
 interface SettingsContainerProps {
   name: string;
-  options: string[];
   onClick: () => void;
-  onOptionClick: (option: string) => void;
   onReplaceClick?: () => void;
+  onRename?: (newName: string) => void;
+  replaceble?: boolean;
+  onRenameClick?: () => void;
+  renamable?: boolean;
+  onDeleteClick?: () => void;
+  deletable?: boolean;
 }
 
-const SettingsContainer: React.FC<SettingsContainerProps> = ({ name, options, onClick, onOptionClick, onReplaceClick }) => {
+const SettingsContainer: React.FC<SettingsContainerProps> = ({ 
+  name, 
+  onClick, 
+  onReplaceClick,
+  onDeleteClick,
+  onRename,
+  replaceble = false,
+  renamable = false,
+  deletable = false
+}) => {
   const [showOptions, setShowOptions] = useState(false);
+  const [editableName, setEditableName] = useState(name);
 
-  const toggleOptions = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowOptions(!showOptions);
-  };
+  useEffect(() => {
+    setEditableName(name);
+  }, [name]);
 
-  const handleOptionClick = (option: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    onOptionClick(option);
-    setShowOptions(false);
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditableName(e.target.value);
+    if (onRename) {
+      onRename(e.target.value);
+    }
   };
 
   return (
     <div className="relative">
-      <div 
-        className="w-full h-[45px] border border-black rounded-sm bg-black text-white shadow-sm hover:bg-gray-900 hover:scale-101 cursor-pointer"
-        
-        //onClick={onClick}
+      <div
+        className="w-full h-[60px] rounded-sm border-2 border-white text-gray-900 shadow-xl hover:bg-gray-900 hover:border-2 hover:border-white hover:text-white hover:scale-101 cursor-move"        
       >
         <div className="w-full h-full flex justify-between items-center pl-4 pr-2">
-          <span
-            onDoubleClick={onClick}
-          >{name}</span>
-          <div className="space-x-2">
+          {renamable ? (
+            <input
+              type="text"
+              value={editableName}
+              onChange={handleNameChange}
+              className="capitalize px-2 w-[50%] border-2 border-white rounded bg-transparent outline-none"
+            />
+          ) : (
+            <span
+              onClick={onClick}
+              className="capitalize"
+            >
+              {name}
+            </span>
+          )}
+          <div className="space-x-2 mt-1">
             <button 
               className="text-[135%] cursor-pointer"
             >
               <IoColorPaletteOutline
-                onDoubleClick={onClick}
+                onClick={onClick}
               />
             </button>
-            <button 
-              className="text-[130%] cursor-pointer"
-            >
-              <TbReplace
-                onDoubleClick={onReplaceClick}
-              />
-            </button>
+            {deletable && (
+              <button 
+                className="text-[135%] cursor-pointer"
+              >
+                <AiOutlineDelete
+                  onClick={onDeleteClick}
+                />
+              </button>
+            )}
+            {replaceble && (
+              <button 
+                className="text-[130%] cursor-pointer"
+              >
+                <TbReplace
+                  onDoubleClick={onReplaceClick}
+                />
+              </button>
+            )}
           </div>
         </div>
       </div>
-      {showOptions && (
-        <div className="absolute right-0 mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10">
-          {options.map((option, index) => (
-            <div 
-              key={index}
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black"
-              onClick={(e) => handleOptionClick(option, e)}
-            >
-              {option}
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 };

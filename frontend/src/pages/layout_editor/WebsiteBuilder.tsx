@@ -78,7 +78,6 @@ const WebsiteBuilderContent: React.FC = () => {
               layoutConfig: settings,
             })
           );
-          console.log('Layout saved:', settings);
         } catch (error) {
           console.error('Failed to save layout:', error);
         }

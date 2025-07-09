@@ -24,7 +24,7 @@ const FirstStoreServiceCard: React.FC<FirstStoreServiceCardProps> = ({
         style={{
           ...getBackgroundStyles(style.background),
         }}
-        className="absolute inset-0 border border-black bg-[#d1dfc7] flex flex-col justify-between p-2"
+        className="absolute inset-0 border border-black flex flex-col justify-between p-2"
       >
         {/* Service Name */}
         <div className="w-full">

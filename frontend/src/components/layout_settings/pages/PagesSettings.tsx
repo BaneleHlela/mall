@@ -22,6 +22,8 @@ import {
   updateSetting,
   updateRouteOrder,
 } from "../../../features/layouts/layoutSettingsSlice";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 // Individual settings
 import HomePageSettings from "./HomePageSettings";
@@ -36,40 +38,80 @@ const SortableItem = ({
   id,
   name,
   onClick,
+  onDeleteClick,
+  onRename,
 }: {
   id: string;
   name: string;
   onClick: () => void;
+  onDeleteClick: () => void;
+  onRename: (newName: string) => void;
 }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
+  const [draggable, setDraggable] = useState(false);
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
   };
 
+  const handleDoubleClick = () => {
+    setDraggable(true);
+    // Optional: Reset after a delay to avoid permanent draggable state
+    setTimeout(() => setDraggable(false), 2000);
+  };
+
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <SettingsContainer 
-        name={name} 
-        options={["edit", "delete"]} 
-        onClick={onClick} 
-        onOptionClick={()=> {}}
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...(draggable ? attributes : {})}
+      {...(draggable ? listeners : {})}
+      onDoubleClick={handleDoubleClick}
+    >
+      <SettingsContainer
+        name={name}
+        onClick={onClick}
+        onRename={(newName) => onRename(newName)}
+        onDeleteClick={onDeleteClick}
+        deletable={id !== "home"}
+        renamable={id !== "home"}
       />
     </div>
   );
 };
 
+
 const PagesSettings: React.FC = () => {
   const dispatch = useAppDispatch();
   const routes: Routes = useAppSelector((state) => state.layoutSettings.routes);
   const routeOrder: string[] = useAppSelector((state) => state.layoutSettings.routeOrder);
+  const MySwal = withReactContent(Swal);
 
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const closePanel = () => setActivePanel(null);
-
+  
+  const handleDeleteClick = (page: string) => {
+    MySwal.fire({ // @ts-ignore-next-line
+      title: `Delete "${routes[page]?.name || page}" page?`,
+      text: "This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const newRoutes = { ...routes }; // @ts-ignore-next-line
+        delete newRoutes[page];
+        
+        const newRouteOrder = routeOrder.filter((p) => p !== page);
+        
+        dispatch(updateSetting({ field: "routes", value: newRoutes }));
+        dispatch(updateRouteOrder(newRouteOrder));
+      }
+    });
+  };
+  
   const getSettingsComponent = (pageKey: string) => {
     switch (pageKey) {
       case "home":
@@ -122,12 +164,22 @@ const PagesSettings: React.FC = () => {
       dispatch(updateRouteOrder(newOrder));
     }
   };
+  const handleRename = (pageKey: string, newName: string) => {
+    const newRoutes = {
+      ...routes,
+      [pageKey]: { // @ts-ignore-next-line
+        ...routes[pageKey],
+        name: newName
+      }
+    };
+    dispatch(updateSetting({ field: "routes", value: newRoutes }));
+  };
 
   return (
-    <div className="w-full h-[80vh] space-y-2">
+    <div className="w-full h-[80vh] space-y-2 bg-stone-50">
       <div className="relative px-4 flex flex-row justify-center">
         <button
-          className="flex flex-row justify-between items-center bg-black text-white rounded-[20px] px-8 py-2 shadow-md hover:scale-103 hover:opacity-85"
+          className="flex flex-row justify-between items-center border-2 bg-stone-50 border-white text-black rounded px-8 py-2 shadow-md hover:scale-103 hover:opacity-85"
           onClick={() => setDropdownOpen(!dropdownOpen)}
         >
           Add New Page <FaPlus size={18} className="ml-1" />
@@ -136,7 +188,7 @@ const PagesSettings: React.FC = () => {
         <AnimatePresence>
           {dropdownOpen && (
             <motion.div
-              className="absolute top-full dropdown bg-white border border-gray-300 rounded-[20px] mt-0 shadow-md"
+              className="absolute top-full dropdown rounded bg-stone-50 border-2 border-white mt-0 shadow-md z-50" 
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
@@ -166,6 +218,8 @@ const PagesSettings: React.FC = () => {
                 id={key}
                 name={route?.name || key}
                 onClick={() => setActivePanel(key)}
+                onDeleteClick={() => handleDeleteClick(key)}
+                onRename={(newName) => handleRename(key, newName)}
               />
             );
           })}
