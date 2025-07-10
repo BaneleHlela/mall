@@ -52,10 +52,10 @@ const WebsiteBuilderContent: React.FC = () => {
   const [device, setDevice] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const [zoom, setZoom] = useState(sizeMap[device].scale);
   const [loading, setLoading] = useState<boolean>(true);
-  const store = useAppSelector((state) => state.stores.currentStore);
+  const [storeId, setStoreId] = useState<string | null>(null);
 
+  const store = useAppSelector((state) => state.stores.currentStore);
   const fonts = useAppSelector((state) => state.layoutSettings.fonts);
-  const storeId = "68677942e545985b2467b130"; // Hardcoded store ID
 
 
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
@@ -73,7 +73,7 @@ const WebsiteBuilderContent: React.FC = () => {
       const saveLayout = async () => {
         try {
           await dispatch(
-            editLayout({
+            editLayout({ // @ts-ignore-next-line
               layoutId: settings._id,
               layoutConfig: settings,
             })
@@ -97,45 +97,29 @@ const WebsiteBuilderContent: React.FC = () => {
   }, [settings]);
 
   useEffect(() => {
-    const fetchStore = async () => {
-      if (storeId) {
+    const fetchLayoutAndStore = async () => {
+      if (layoutId) {
         try {
           setLoading(true);
-          const result = await dispatch(fetchStoreById(storeId)).unwrap();
-          dispatch(setCurrentStore(result));
-          dispatch(setStore(result));
-          dispatch(setCurrentStore(result)); // Update the global store state
-          if (result?.layouts[0]) {
-            const layoutResult = await dispatch(getLayout(result.layouts[0] as string)).unwrap(); // Fetch layout and unwrap the result
-            dispatch(setInitialLayout(layoutResult)); // Update the global layout state if available
+          const layoutResult = await dispatch(getLayout(layoutId)).unwrap();
+          dispatch(setInitialLayout(layoutResult));
+          
+          if (layoutResult.store) {
+            setStoreId(layoutResult.store);
+            const storeResult = await dispatch(fetchStoreById(layoutResult.store)).unwrap();
+            dispatch(setCurrentStore(storeResult));
+            dispatch(setStore(storeResult));
           }
         } catch (error) {
-          console.error("Failed to fetch store:", error);
+          console.error("Failed to fetch layout or store:", error);
         } finally {
           setLoading(false);
         }
       }
     };
-  
-    fetchStore();
-  }, [dispatch, storeId]);
-  
-  // iframe.contentWindow.postMessage({ layoutSettings: settings, store }, '*');
-  // useEffect(() => {
-  //   const iframe = iframeRef.current;
-  
-  //   const sendSettings = () => {
-  //     if (iframe?.contentWindow) {
-  //       iframe.contentWindow.postMessage({ layoutSettings: settings }, '*');
-  //     }
-  //   };
-  
-  //   iframe?.addEventListener('load', sendSettings); // resend after navigation
-  
-  //   return () => {
-  //     iframe?.removeEventListener('load', sendSettings);
-  //   };
-  // }, [settings]);
+
+    fetchLayoutAndStore();
+  }, [dispatch, layoutId, storeId]);
 
   if (loading) {
     return <TbLoader3 size={45} className='animate-spin mx-auto'/>;

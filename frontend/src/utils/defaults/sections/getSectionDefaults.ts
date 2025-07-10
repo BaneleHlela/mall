@@ -8,8 +8,10 @@ import { defaultFirstStoreProductsConfig } from "./order_online/defualtFirstStor
 import { defaultFirstStoreReviewsConfig } from "./reviews/defaultFirstStoreReviewsConfig";
 import { defaultHeroWithImageButtonAndBox } from "./hero/defaultHeroWithImagePatternAndBoxConfig";
 import { defaultBasicBookWithOpenCalendarConfig } from "./book/defaultBasicBookWithOpenCalenderConfig";
+import { defaultGalleryWithGroupedImagesConfig } from "./gallery/defaultGalleryWithGroupedImagesConfig";
+import { defaultGalleryWithImageSliderConfig } from "./gallery/defaultGalleryWithImageSliderConfig";
 
-export type SectionType = 'book' | 'products' | 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer';
+export type SectionType = 'book' | 'products' | 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer' | 'gallery';
 type VariationType = string;
 
 export const getSectionDefaults = (section: SectionType, variation: VariationType) => {
@@ -31,6 +33,10 @@ export const getSectionDefaults = (section: SectionType, variation: VariationTyp
     },
     bookWithCalendar: {
       first: defaultFirstBookWithCalandarConfig,
+    },
+    gallery: {
+      galleryWithImageSlider: defaultGalleryWithImageSliderConfig,
+      galleryWithGroupedImages: defaultGalleryWithGroupedImagesConfig,
     },
     order: {
       first: defaultFirstStoreProductsConfig,

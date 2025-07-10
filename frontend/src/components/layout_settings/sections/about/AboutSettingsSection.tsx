@@ -8,21 +8,26 @@ const AboutSettingsSection = () => {
     const dispatch = useAppDispatch();
     const settings = useAppSelector((state) => state.layoutSettings);
     const variation = useAppSelector((state) => state.layoutSettings.about.variation);
+    const routes = useAppSelector((state) => state.layoutSettings.routes);
+    const pageSections = routes.home?.contains || [];
     
     const handleSettingChange = (field: string, value: any) => {
         dispatch(updateSetting({ field, value }));
     };
+
     if (variation === "aboutWithImageNextToText") {
         return (
             <div className="space-y-1">
-                <div className="px-2 py-1 border rounded">
-                    <OptionsToggler
-                        label="Add to Menubar ?"
-                        options={['yes', 'no']}
-                        value={settings.routes?.home?.inLinks?.some(link => link.section === 'about') ? 'yes' : 'no'}
-                        onChange={(option) => handleAddSectionToLinks(dispatch, settings, 'about', option)}
-                    />
-                </div>
+                {pageSections.includes('about') && (
+                    <div className="px-2 py-1 border rounded">
+                        <OptionsToggler
+                            label="Add to Menubar ?"
+                            options={['yes', 'no']}
+                            value={settings.routes?.home?.inLinks?.some(link => link.section === 'about') ? 'yes' : 'no'}
+                            onChange={(option) => handleAddSectionToLinks(dispatch, settings, 'about', option)}
+                        />
+                    </div>
+                )}
                 <AboutWithImageNextToTextSettings settings={settings} handleSettingChange={handleSettingChange}/>
             </div>
         )

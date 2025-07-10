@@ -8,7 +8,7 @@ const HeroWithButtonImageAndText = () => {
     const routes = useAppSelector((state) => state.layoutSettings.routes);
     const store = useAppSelector((state) => state.stores.currentStore);
     const handleButtonClick = useStoreButtonClickHandler();
-
+    console.log(style.image[0])
     return (
         <div
             className="relative flex flex-col justify-center items-center w-full h-fit"
@@ -59,7 +59,7 @@ const HeroWithButtonImageAndText = () => {
                     )}
                 </div>
                 {/* Button */}
-                <div className="w-full flex flex-row justify-center mt-8 z-2">
+                <div className="w-[400px] flex flex-row justify-center mt-8 z-2">
                     <StoreButton
                         style={style.button}
                         onClick={() =>

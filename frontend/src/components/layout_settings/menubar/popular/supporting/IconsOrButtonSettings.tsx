@@ -2,13 +2,13 @@ import React from "react";
 import { getSetting } from "../../../../../utils/helperFunctions";
 import OptionsToggler from "../../../supporting/OptionsToggler";
 import SettingsSlider from "../../../supporting/SettingsSlider";
-import { socials } from "../../../../store_layout/menubars/supporting/StoreMenubarIcons";
 import type { EditorProps } from "../../../../../types/layoutSettingsType";
+import { useAppSelector } from "../../../../../app/hooks";
 
 const MAX_ICONS = 3;
-const availablePlatforms = socials.map((item) => item.platform);
+
 const indexKeyMap = ["first", "second", "third"];
-const buttonOptions = ["call now", "get a quote", "book now"];
+const buttonOptions = ["call", "book", "subscribe", "contact", "buy"];
 
 const IconsOrButtonSettings: React.FC<EditorProps> = ({
   objectPath,
@@ -17,6 +17,8 @@ const IconsOrButtonSettings: React.FC<EditorProps> = ({
 }) => {
   const currentInclude = getSetting("include", settings, objectPath);
   const currentNumber = getSetting("icons.number", settings, objectPath) || 1;
+  const socials  = useAppSelector(state => state.stores.currentStore?.socials);
+  const availablePlatforms = socials?.map((item) => item.platform);
   const platformsObj: Record<string, string> =
     getSetting("icons.platforms", settings, objectPath) || {};
   const currentButtonFunction =
@@ -43,7 +45,7 @@ const IconsOrButtonSettings: React.FC<EditorProps> = ({
       return (
         <div key={i} className="my-2">
           <OptionsToggler
-            label={`Icon ${String.fromCharCode(65 + i)}`} // Icon A, B, C
+            label={`Icon ${String.fromCharCode(65 + i)}`} // @ts-ignore-next-line
             options={availablePlatforms}
             value={platformsObj[key] || ""}
             onChange={(val) => handlePlatformChange(i, val)}
@@ -85,7 +87,7 @@ const IconsOrButtonSettings: React.FC<EditorProps> = ({
         </div>
       )}
 
-      {currentInclude === "buttons" && (
+      {currentInclude === "button" && (
         <div className="border border-black text-black rounded-sm px-2 py-1">
           <div className="w-full text-center font-semibold mb-2">
             Button Settings

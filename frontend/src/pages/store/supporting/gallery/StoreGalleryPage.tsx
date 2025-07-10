@@ -3,7 +3,7 @@ import StoreGallerySection from "../../../../components/store_layout/sections/ga
 
 const StoreGalleryPage = () => {
   return (
-    <div>
+    <div className="w-screen flex flex-col items-center">
         <StoreGallerySection />
         <StoreFooterSection />
     </div>

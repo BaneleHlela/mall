@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { updateSetting } from "../../../../features/layouts/layoutSettingsSlice";
+import GalleryWithGroupedImagesSettings from "./with_grouped_images/GalleryWithGroupedImagesSettings";
 import GalleryWithImageSliderSettings from "./with_image_slider/GalleryWithImageSliderSettings";
 const StoreGallerySettings = () => {
     const dispatch = useAppDispatch();
@@ -13,6 +14,9 @@ const StoreGallerySettings = () => {
         return <GalleryWithImageSliderSettings settings={settings} handleSettingChange={handleSettingChange} />
     }
     
+    if (variation === "galleryWithGroupedImages") {
+        return <GalleryWithGroupedImagesSettings settings={settings} handleSettingChange={handleSettingChange} />
+    }
     return (
         <div>StoreGallerySettings</div>
     )

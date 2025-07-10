@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import FirstStoreServiceCard from '../../../extras/cards/service/first/FirstStoreServiceCard';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../../../../../utils/stylingFunctions';
@@ -13,7 +13,6 @@ const FirstServices = () => {
   const style = useAppSelector(state => state.layoutSettings.services);
   const store = useAppSelector((state) => state.stores.currentStore);
   const storeId = store ? store._id : null;
-  const screenWidth = window.innerWidth;
 
   const services = useAppSelector((state) => state.services.services)
 
@@ -64,7 +63,7 @@ const FirstServices = () => {
         </div>
         <div 
           style={{
-            gap: getResponsiveDimension(style.servicesDisplay.grid.gap, screenWidth),
+            gap: getResponsiveDimension(style.servicesDisplay.grid.gap),
           }} 
           className={`grid px-1 
               ${style.servicesDisplay.grid.columns.mobile === 1 && "grid-cols-1"}
@@ -73,8 +72,8 @@ const FirstServices = () => {
               ${style.servicesDisplay.grid.columns.desktop === 4 && "lg:grid-cols-4"} 
               ${style.servicesDisplay.grid.columns.desktop === 5 && "lg:grid-cols-5"} 
               sm:grid-cols-2`
-            }
-          >
+          }
+        >
           {/* Conditional Rendering */}
           {services.length === 0 && selectedCategory === "all" ? (
             <p className="text-center text-white">Store Has No Services</p>

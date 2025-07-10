@@ -44,7 +44,7 @@ const LogoSettings: React.FC<LogoSettingsProps> = ({ objectPath, device }) => {
             objectPath={`${objectPath}.background`}
             settings={settings}
             handleSettingChange={handleSettingChange}
-            allow={['padding', 'color', 'border', "height", "width"]}
+            allow={['padding', 'color', 'border', "width"]}
             responsiveSize={false}
           />
         }

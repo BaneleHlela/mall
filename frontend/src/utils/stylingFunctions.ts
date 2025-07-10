@@ -5,15 +5,13 @@ export const getTextStyles = (text: TextSettings) => {
 
   const styles: any = {};
 
-  // Get current screen width
-  const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
 
   if (text.color) styles.color = text.color;
   if (text.weight) styles.fontWeight = text.weight;
 
   if (typeof text.fontSize === "object") {
     // Use getResponsiveDimension for responsive font sizes
-    styles.fontSize = getResponsiveDimension(text.fontSize, screenWidth);
+    styles.fontSize = getResponsiveDimension(text.fontSize);
   } else if (text.fontSize) {
     styles.fontSize = text.fontSize;
   }
@@ -54,18 +52,17 @@ export const getBackgroundStyles = (bg: BackgroundSettings = {}) => {
   }
 
   // Get current screen width
-  const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
 
   // Responsive Height
   if (typeof bg.height === "object") {
-    styles.height = getResponsiveDimension(bg.height, screenWidth);
+    styles.height = getResponsiveDimension(bg.height);
   } else if (bg.height) {
     styles.height = bg.height;
   }
 
   // Responsive Width
   if (typeof bg.width === "object") {
-    styles.width = getResponsiveDimension(bg.width, screenWidth);
+    styles.width = getResponsiveDimension(bg.width);
   } else if (bg.width) {
     styles.width = bg.width;
   }
@@ -147,11 +144,10 @@ export const getSidebarAnimation = (transition: string | undefined) => {
 
 export const getResponsiveDimension = (
   dimension: ResponsiveValue,
-  screenWidth: number
 ): string => {
   // Define the breakpoint between mobile and desktop
   const mobileBreakpoint = 768; // You can adjust this value as needed
-
+  const screenWidth = window.innerWidth;
   if (screenWidth < mobileBreakpoint) {
     return dimension.mobile;
   } else {

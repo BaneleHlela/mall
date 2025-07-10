@@ -16,15 +16,11 @@ const ServicesPageSettings = () => {
       
       <SettingsContainer
         name="Services"
-        options={["edit"]}
-        onOptionClick={() => {}}
         onClick={() => setActivePanel("services")}
         replaceble
       />
       <SettingsContainer
         name="Footer"
-        options={["edit"]}
-        onOptionClick={() => {}}
         onClick={() => setActivePanel("Footer")}
         replaceble
       />

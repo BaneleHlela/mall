@@ -23,7 +23,7 @@ import HeroSettings from "../sections/hero/HeroSettings";
 import SectionSelector from "../supporting/section_selector/SectionSelector";
 import type { SectionType } from "../../../utils/defaults/sections/getSectionDefaults";
 import AboutSettingsSection from "../sections/about/AboutSettingsSection";
-import StoreGallerySettings from "../sections/gallery/StoreGallerySettings";
+import StoreGallerySettings from "../sections/gallery/StoreGallerySectionSettings";
 import StoreReviewsSectionSettings from "../sections/store_reviews/StoreReviewsSectionSettings";
 import BookSectionSettings from "../sections/book/BookSectionSettings";
 import Swal from 'sweetalert2';
@@ -116,10 +116,20 @@ const HomePageSettings = () => {
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
+        // Remove from homeSections
         const updatedSections = homeSections.filter((sec) => sec !== section);
+        
+        // Remove from routes.home.inLinks
+        const updatedInLinks = routes.home?.inLinks?.filter(link => link.section !== section) || [];
+  
+        // Dispatch both updates
         dispatch(updateSetting({
-          field: "routes.home.contains",
-          value: updatedSections,
+          field: "routes.home",
+          value: {
+            ...routes.home,
+            contains: updatedSections,
+            inLinks: updatedInLinks
+          },
         }));
       }
     });

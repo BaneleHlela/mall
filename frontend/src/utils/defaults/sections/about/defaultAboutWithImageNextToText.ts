@@ -21,14 +21,17 @@ export const defaultAboutWithImageNextToTextConfig = {
         },
         style: {
             fontFamily: "Roboto",
-            fontSize: "1em",
+            fontSize: {
+                mobile: "1.6em",
+                desktop: "3em",
+            },
             color: "black",
             fontWeight: "normal",
             fontStyle: "normal",
         },
         title: {
-            input: "My Story",
             style: {
+                input: "My Story",
                 fontFamily: "Open Sans",
                 fontSize: {
                     mobile: "1.6em",

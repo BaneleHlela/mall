@@ -17,7 +17,7 @@ const InputHandler: React.FC<InputHandlerProps> = ({ label, value, onChange }) =
       <div className="w-[50%] flex flex-row justify-center items-center">
         <input
           type="text"
-          value={value}
+          value={value || ""}
           onChange={(e) => onChange(e.target.value)}
           className="w-full h-[24px] px-2 py-1 border rounded-md"
         />

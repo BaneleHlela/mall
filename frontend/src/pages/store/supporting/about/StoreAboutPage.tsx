@@ -1,13 +1,19 @@
-import StoreAboutSection from "../../../../components/store_layout/sections/about/StoreAboutSection.tsx"
-import StoreFooterSection from "../../../../components/store_layout/sections/footer/StoreFooterSection.tsx"
+import React from "react";
+import { useAppSelector } from "../../../../app/hooks";
+import StoreAboutSection from "../../../../components/store_layout/sections/about/StoreAboutSection.tsx";
+import StoreFooterSection from "../../../../components/store_layout/sections/footer/StoreFooterSection.tsx";
 
 const StoreAboutPage = () => {
-    return (
-      <>
-        <StoreAboutSection />
-        <StoreFooterSection />
-      </>
-    )
-}
+  const aboutSections = useAppSelector(
+    (state) => state.layoutSettings.routes.about?.contains || []
+  );
 
-export default StoreAboutPage
+  return (
+    <>
+      <StoreAboutSection />
+      {aboutSections.includes("footer") && <StoreFooterSection />}
+    </>
+  );
+};
+
+export default StoreAboutPage;

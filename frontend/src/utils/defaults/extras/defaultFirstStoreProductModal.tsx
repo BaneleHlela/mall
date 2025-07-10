@@ -1,4 +1,3 @@
-import { Description } from "@headlessui/react";
 
 export const defaultFirstStoreProductModal = {
     exitButton: {

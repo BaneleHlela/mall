@@ -33,6 +33,7 @@ import ProductsPageSettings from "./ProductsPageSettings";
 import ReviewsPageSettings from "./ReviewsPageSettings";
 import type { Routes } from "../../../types/layoutTypes";
 import ServicesPageSettings from "./ServicesPageSettings";
+import GalleryPageSettings from "./GalleryPageSettings";
 
 const SortableItem = ({
   id,
@@ -126,7 +127,8 @@ const PagesSettings: React.FC = () => {
         return <ServicesPageSettings />;
       case "reviews":
         return <ReviewsPageSettings />;
-        
+      case "gallery":
+        return <GalleryPageSettings />;
       default:
         return <div>No settings available.</div>;
     }

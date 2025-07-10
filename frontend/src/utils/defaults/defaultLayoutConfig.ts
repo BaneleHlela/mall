@@ -12,6 +12,7 @@ import { defaultHeroWithButtonImageAndTextConfig } from "./sections/hero/default
 import { defaultGalleryWithImageSliderConfig } from "./sections/gallery/defaultGalleryWithImageSliderConfig";
 import { defaultFirstStoreServicesConfig } from "./sections/services/defaultFirstStoreServicesConfig";
 import { defaultBasicBookWithOpenCalendarConfig } from "./sections/book/defaultBasicBookWithOpenCalenderConfig";
+import { defaultGalleryWithGroupedImagesConfig } from "./sections/gallery/defaultGalleryWithGroupedImagesConfig";
 
 export const defaultMenubarConfig = {
   topbar: {
@@ -94,7 +95,7 @@ export const defaultLayoutConfig = {
       url: "",
       text: "",
     },
-    practice: defaultFourthStoreHeroConfig,
+    practice: defaultGalleryWithGroupedImagesConfig,
     services: defaultFirstStoreServicesConfig,
     about: defaultAboutWithImageNextToTextConfig,
     menubar: defaultPupularStoreMenubarConfig,

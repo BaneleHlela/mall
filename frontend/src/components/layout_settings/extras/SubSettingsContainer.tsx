@@ -21,7 +21,7 @@ const SubSettingsContainer: React.FC<SubSettingsContainerProps> = ({
       >
         {/* Header */}
         <div
-          className={`flex flex-row justify-between w-full h-full border border-black text-black shadow-md pl-2 bg-stone-50
+          className={`flex flex-row justify-between w-full h-full border-2 border-white bg-stone-50 text-black shadow-md pl-2 
           ${isSettingsOpen ? "rounded-t-sm" : "rounded-sm"}`}
         >
           <div className="flex flex-col justify-center text-[18px]">
@@ -42,7 +42,7 @@ const SubSettingsContainer: React.FC<SubSettingsContainerProps> = ({
 
       {/* Sliding Settings Component */}
       <motion.div
-        className={`w-full border border-black rounded-b-sm shadow-md overflow-hidden -mt-1`}
+        className={`w-full border-2 border-white bg-stone-100 text-black rounded-b-sm shadow-md overflow-hidden -mt-1`}
         initial={{ height: 0, opacity: 0 }}
         animate={{
           height: isSettingsOpen ? "auto" : 0,

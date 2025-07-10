@@ -42,14 +42,19 @@ const DesktopTopbarSettings: React.FC = () => {
         name="Links Settings"
         onClick={() => setActivePanel('links')}
       />
-      <FirstOrderSubSettingsContainer
-        name="Icons"
-        onClick={() => setActivePanel('icons')}
-      />
-      <FirstOrderSubSettingsContainer
-        name="Button"
-        onClick={() => setActivePanel('button')}
-      />
+      {settings.menubar.extras.include === 'icons' && (
+        <FirstOrderSubSettingsContainer
+          name="Icons"
+          onClick={() => setActivePanel('icons')}
+        />
+      )}
+
+      {settings.menubar.extras.include === 'button' && (
+        <FirstOrderSubSettingsContainer
+          name="Button"
+          onClick={() => setActivePanel('button')}
+        />
+      )}
 
       {/* Panels */}
       <AnimatePresence>
@@ -78,33 +83,33 @@ const DesktopTopbarSettings: React.FC = () => {
           </SlidingPanel>
         )}
 
-        {activePanel === 'icons' && (
-          <SlidingPanel
-            key="icons"
-            isOpen={true}
-            onClose={closePanel}
-            title="Icons Settings"
-          >
-            <IconsSettingsHandler
-              settings={settings}
-              handleSettingChange={handleSettingChange}
-              objectPath="menubar.topbar.desktop.extras.icons"
-            />
-          </SlidingPanel>
+        {activePanel === 'icons' && settings.menubar.extras.include === 'icons' && (
+            <SlidingPanel
+              key="icons"
+              isOpen={true}
+              onClose={closePanel}
+              title="Icons Settings"
+            >
+              <IconsSettingsHandler
+                settings={settings}
+                handleSettingChange={handleSettingChange}
+                objectPath="menubar.topbar.desktop.extras.icons"
+              />
+            </SlidingPanel>
         )}
 
-        {activePanel === 'button' && (
-          <SlidingPanel
-            key="button"
-            isOpen={true}
-            onClose={closePanel}
-            title="Button Settings"
-          >
-            <StoreButtonSettings
-              objectPath="menubar.topbar.desktop.extras.button"
-              settings={settings}
-            />
-          </SlidingPanel>
+        {activePanel === 'button' && settings.menubar.extras.include === 'button' && (
+            <SlidingPanel
+              key="button"
+              isOpen={true}
+              onClose={closePanel}
+              title="Button Settings"
+            >
+              <StoreButtonSettings
+                objectPath="menubar.topbar.desktop.extras.button"
+                settings={settings}
+              />
+            </SlidingPanel>
         )}
       </AnimatePresence>
     </div>

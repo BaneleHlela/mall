@@ -9,7 +9,7 @@ import FirstOrderSubSettingsContainer from '../../../FirstOrderSubSettingsContai
 import SlidingPanel from '../../../supporting/SlidingPanel';
 import { AnimatePresence } from 'framer-motion';
 
-interface SectionSettingsProps {
+export interface SectionSettingsProps {
   settings: any;
   handleSettingChange: (field: string, value: any) => void;
 }

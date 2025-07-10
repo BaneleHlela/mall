@@ -23,7 +23,7 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
       <SubSettingsContainer
         name="Background"
         SettingsComponent={
-          <div className="px-2 space-y-2">
+          <div className="px-2 space-y-1">
             <BackgroundEditor
               objectPath={`${objectPath}.background`}
               settings={settings}
@@ -38,7 +38,7 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
       <SubSettingsContainer
         name="Image"
         SettingsComponent={
-          <div className="px-2 space-y-2">
+          <div className="px-2 space-y-1 py-1">
             <MultipleLayoutImagesHandler
               objectPath={`${objectPath}.image.imageUrl`}
               min={1}
@@ -81,7 +81,7 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
                 objectPath={`${objectPath}.text.title.style`}
                 settings={settings}
                 handleSettingChange={handleSettingChange}
-                allow={["input", "fontFamily", "fontSize", "color", "weight", "fontStyle"]}
+                allow={["input", "fontFamily", "fontSize", "color", "weight", "fontStyle", "lineHeight", "textDecotation", "animation" ]}
                 responsiveSize
                 />}
             />
@@ -92,7 +92,7 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
                     objectPath={`${objectPath}.text.style`}
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={["input", "fontFamily", "fontSize", "color", "weight", "fontStyle"]}
+                    allow={["input", "fontFamily", "fontSize", "color", "weight", "fontStyle", "animation"]}
                     responsiveSize
                 />
               }

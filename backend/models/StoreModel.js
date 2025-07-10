@@ -127,6 +127,10 @@ const storeSchema = new mongoose.Schema(
         default: "",
       }
     }],
+    isDemo: {
+      type: String,
+      default: false,
+    },
   },
   {
     timestamps: true,

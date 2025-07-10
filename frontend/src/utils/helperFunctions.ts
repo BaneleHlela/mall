@@ -1,7 +1,11 @@
 
 export const getSetting = (key: string, settings: any, objectPath: string) => {
   try {
-    const path = [...objectPath.split("."), ...key.split(".")];
+    const path = [
+      ...((objectPath && objectPath.length > 0) ? objectPath.split(".") : []),
+      ...((key && key.length > 0) ? key.split(".") : [])
+    ];
+
     return path.reduce((current, prop) => current?.[prop], settings);
   } catch {
     return undefined;

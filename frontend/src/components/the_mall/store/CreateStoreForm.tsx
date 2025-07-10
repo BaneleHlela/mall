@@ -9,6 +9,8 @@ import LocationPicker from '../location/LocationPicker';
 import { useAppDispatch } from '../../../app/hooks';
 import { createStore } from '../../../features/stores/storeSlice';
 import StoreSuccessOverlay from './StoreSuccessOverlay';
+import { createLayout } from '../../../features/layouts/layoutSlice';
+import { defaultLayoutConfig } from '../../../utils/defaults/defaultLayoutConfig';
 
 const steps = [
   'basic',
@@ -20,9 +22,13 @@ const steps = [
   'about'
 ];
 
+interface CreateStoreFormProps {
+  isDemo?: boolean;
+}
+
 const defaultTime = { start: '07:00', end: '17:00', closed: false };
 
-const CreateStoreForm = () => {
+const CreateStoreForm: React.FC<CreateStoreFormProps> = ({ isDemo = false}) => {
   const dispatch = useAppDispatch();
 
   const [step, setStep] = useState(0);
@@ -120,20 +126,44 @@ const CreateStoreForm = () => {
       opacity: 0,
     }),
   };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const result = await dispatch(
-      createStore({ ...form, team: [{ member: '684195da0cad691799f2ee7a', role: 'owner' }], layouts: ["68416b1f0cad691799f2eca8"] })
-    );
-    // if successful
-    if (createStore.fulfilled.match(result)) {
-      setIsSuccess(true);
-      console.log('result')
-
+  
+  const createNewLayout = async () => {
+    try {
+      const result = await dispatch(createLayout(defaultLayoutConfig)).unwrap();
+      return result._id;
+    } catch (error) {
+      console.error('Failed to create layout:', error);
+      return null;
     }
   };
 
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Create a new layout
+    const newLayoutId = await createNewLayout();
+    
+    if (!newLayoutId) {
+      console.error('Failed to create layout. Aborting store creation.');
+      return;
+    }
+
+    const result = await dispatch(
+      createStore({
+        ...form,
+        isDemo,
+        team: [{ member: '684195da0cad691799f2ee7a', role: 'owner' }],
+        layouts: [newLayoutId], // Use the new layout ID
+      })
+    );
+    
+    // if successful
+    if (createStore.fulfilled.match(result)) {
+      setIsSuccess(true);
+      console.log('Store created successfully with new layout');
+    }
+  };
 
   // For now, simple content based on step
   const renderStep = () => {

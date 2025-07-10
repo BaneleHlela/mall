@@ -14,7 +14,6 @@ export const defaultPupularStoreMenubarConfig = {
             }
         }
     },
-    include: "button",
     background: {
         height: {
             mobile: "110px",

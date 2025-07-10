@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CreateStoreForm from "../../../components/the_mall/store/CreateStoreForm";
+import DashboardPagination from '../../../components/store_dashboard/tables/DashboardPagination';
 
 const DashboardDemoStores = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,7 +11,7 @@ const DashboardDemoStores = () => {
   return (
     <div className="w-full h-full bg-amber-300">
       {/* Add demo store button */}
-      <div className="p-4">
+      <div className="p-4 h-[10%] w-full">
         <button 
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={openModal}
@@ -19,7 +20,18 @@ const DashboardDemoStores = () => {
         </button>
       </div>
       {/* Demo stores */}
-      <div className=""></div>
+      <div className="w-full h-[80%]">
+        
+      </div>
+      {/* Pagination */}
+      <div className="h-[10%] bg-white flex justify-center items-center text-sm">
+        {/* <DashboardPagination
+          currentPage={currentPage}
+          totalItems={filteredProducts.length}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+        /> */}
+      </div>
 
       {/* Modal */}
       {isModalOpen && (
@@ -33,7 +45,7 @@ const DashboardDemoStores = () => {
                 ✕
               </button>
             </div>
-            <CreateStoreForm />
+            <CreateStoreForm isDemo={true}/>
           </div>
         </div>
       )}

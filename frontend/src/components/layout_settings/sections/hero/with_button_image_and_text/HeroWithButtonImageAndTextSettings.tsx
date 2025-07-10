@@ -47,7 +47,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
       <SubSettingsContainer
         name="Image"
         SettingsComponent={
-          <div className="px-2 space-y-2">
+          <div className="px-2 space-y-1 py-1">
             <MultipleLayoutImagesHandler
               objectPath={`${objectPath}.image`}
               min={1}
@@ -125,7 +125,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
                         objectPath={`${objectPath}.text.${lineKey}`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={[ "color", "input", "fontFamily", "fontSize", "weight", "lineHeight", "animation" ]}
+                        allow={[ "color", "input", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing" ]}
                         responsiveSize
                       />
                     </>

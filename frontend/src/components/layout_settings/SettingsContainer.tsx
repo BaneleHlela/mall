@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { SlOptionsVertical } from "react-icons/sl";
 import { TbReplace } from "react-icons/tb";
 import { IoColorPaletteOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -27,7 +26,6 @@ const SettingsContainer: React.FC<SettingsContainerProps> = ({
   renamable = false,
   deletable = false
 }) => {
-  const [showOptions, setShowOptions] = useState(false);
   const [editableName, setEditableName] = useState(name);
 
   useEffect(() => {
@@ -72,7 +70,7 @@ const SettingsContainer: React.FC<SettingsContainerProps> = ({
             </button>
             {deletable && (
               <button 
-                className="text-[135%] cursor-pointer"
+                className="text-[135%] cursor-pointer hover:text-red-600"
               >
                 <AiOutlineDelete
                   onClick={onDeleteClick}
@@ -84,7 +82,7 @@ const SettingsContainer: React.FC<SettingsContainerProps> = ({
                 className="text-[130%] cursor-pointer"
               >
                 <TbReplace
-                  onDoubleClick={onReplaceClick}
+                  onClick={onReplaceClick}
                 />
               </button>
             )}

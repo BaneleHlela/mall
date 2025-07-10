@@ -22,7 +22,7 @@ import { getLayout } from "../../features/layouts/layoutSlice";
 const StorePage = () => {
   const settings = useAppSelector((state) => state.layoutSettings);
   // const { storeId } = useParams<{ storeId: string }>();
-  const storeId = "68677942e545985b2467b130";
+  const storeId = "686e76aa96f14c28650b671d";
   const dispatch = useAppDispatch();
   const [store, setStore] = useState<StoreType | null>(null); // Local state for the store
   const [loading, setLoading] = useState<boolean>(true); // Loading state

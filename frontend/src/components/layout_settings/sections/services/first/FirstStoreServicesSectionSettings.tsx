@@ -10,6 +10,7 @@ import OptionsToggler from '../../../supporting/OptionsToggler';
 import { getSetting } from '../../../../../utils/helperFunctions';
 import SettingsSlider from '../../../supporting/SettingsSlider';
 import ServiceCardSettings from '../cards/ServiceCardSettings';
+import ResponsiveGridSettings from '../../../extras/ResponsiveGridSettings';
 
 const FirstStoreServicesSectionSettings: React.FC<SectionEditorProps> = ({
     settings,
@@ -40,79 +41,19 @@ const FirstStoreServicesSectionSettings: React.FC<SectionEditorProps> = ({
             <SubSettingsContainer
                 name="Grid"
                 SettingsComponent={
-                    <div className='px-1 space-y-2 py-1'>
-                        {/* Grid Columns */}
-                        <div className="border rounded px-1 text-center">
-                        <label className="block text-sm font-medium text-gray-700">Grid Columns</label>
-                            {/* Grid Columns for Mobile */}
-                            <div className="space-y-1">
-                                <OptionsToggler
-                                    label="Mobile"
-                                    options={["1", "2"]}
-                                    value={getSetting('mobile', settings, `${objectPath}.servicesDisplay.grid.columns`).toString()}
-                                    onChange={(value) =>
-                                        handleSettingChange(
-                                            `${objectPath}.servicesDisplay.grid.columns.mobile`,
-                                            parseInt(value)
-                                        )
-                                    }
-                                />
-                            </div>
-
-                            {/* Grid Columns for Desktop */}
-                            <div className="space-y-1">
-                                <OptionsToggler
-                                    label="Desktop"
-                                    options={["3", "4", "5"]}
-                                    value={getSetting('desktop', settings, `${objectPath}.servicesDisplay.grid.columns`).toString()}
-                                    onChange={(value) =>
-                                        handleSettingChange(
-                                            `${objectPath}.servicesDisplay.grid.columns.desktop`,
-                                            parseInt(value)
-                                        )
-                                    }
-                                />
-                            </div>
-                        </div>
-                        <div className="space-y-1 border rounded px-1 text-center">
-                            <label className="block text-sm font-medium text-gray-700">Grid Gap</label>
-                            {/* Mobile Grid Gap */}
-                            <div className="space-y-2">
-                                <SettingsSlider
-                                    label="Mobile Gap"
-                                    value={parseInt(getSetting('mobile', settings, `${objectPath}.servicesDisplay.grid.gap`))}
-                                    unit="px"
-                                    min={0}
-                                    max={50}
-                                    step={1}
-                                    onChange={(newValue) =>
-                                        handleSettingChange(
-                                        `${objectPath}.servicesDisplay.grid.gap.mobile`,
-                                        `${newValue}px`
-                                        )
-                                    }
-                                />
-                            </div>
-
-                            {/* Desktop Grid Gap */}
-                            <div className="space-y-2">
-                                <SettingsSlider
-                                    label="Desktop Gap"
-                                    value={parseInt(getSetting('desktop', settings, `${objectPath}.servicesDisplay.grid.gap`))}
-                                    unit="px"
-                                    min={0}
-                                    max={100}
-                                    step={1}
-                                    onChange={(newValue) =>
-                                        handleSettingChange(
-                                        `${objectPath}.servicesDisplay.grid.gap.desktop`,
-                                        `${newValue}px`
-                                        )
-                                    }
-                                />
-                            </div>
-                        </div>
-                    </div>
+                    <ResponsiveGridSettings
+                        objectPath={`${objectPath}.servicesDisplay.grid`}
+                        settings={settings}
+                        handleSettingChange={handleSettingChange}
+                        columnOptions={{
+                            mobile: ['1', '2'],
+                            desktop: ['3', '4', '5']
+                        }}
+                        gapRange={{
+                            mobile: { min: 0, max: 50 },
+                            desktop: { min: 0, max: 100 }
+                        }}
+                    />
                 }
             />
             <FirstOrderSubSettingsContainer
