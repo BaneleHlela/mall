@@ -38,6 +38,7 @@ export interface BackgroundSettings {
   height?: string | ResponsiveValue;
   width?: string| ResponsiveValue;
   padding?: PaddingValue;
+  opacity?: string;
   border?: {
     width?: string;
     style?: string;

@@ -13,6 +13,8 @@ import { defaultGalleryWithImageSliderConfig } from "./sections/gallery/defaultG
 import { defaultFirstStoreServicesConfig } from "./sections/services/defaultFirstStoreServicesConfig";
 import { defaultBasicBookWithOpenCalendarConfig } from "./sections/book/defaultBasicBookWithOpenCalenderConfig";
 import { defaultGalleryWithGroupedImagesConfig } from "./sections/gallery/defaultGalleryWithGroupedImagesConfig";
+import { defaultContactWithBackgroundImageTextAndSocialsConfig } from "./sections/contact/defaultContactWithBackgroundImageTextAndSocialsConfig";
+import { defaultReviewsWithBackgroungImageAndCardConfig } from "./sections/reviews/defaultReviewsWithBackgroundImageAndCardConfig";
 
 export const defaultMenubarConfig = {
   topbar: {
@@ -95,7 +97,7 @@ export const defaultLayoutConfig = {
       url: "",
       text: "",
     },
-    practice: defaultGalleryWithGroupedImagesConfig,
+    practice: defaultContactWithBackgroundImageTextAndSocialsConfig,
     services: defaultFirstStoreServicesConfig,
     about: defaultAboutWithImageNextToTextConfig,
     menubar: defaultPupularStoreMenubarConfig,
@@ -106,7 +108,8 @@ export const defaultLayoutConfig = {
     bookWithCalendar: defaultFirstBookWithCalandarConfig,
     products: defaultFirstStoreProductsConfig,
     order: defaultFirstStoreProductsConfig,
-    reviews: defaultFirstStoreReviewsConfig,
+    reviews: defaultReviewsWithBackgroungImageAndCardConfig,
+    contact: defaultContactWithBackgroundImageTextAndSocialsConfig,
     footer: defaultFirstFooterConfig,
 };
   

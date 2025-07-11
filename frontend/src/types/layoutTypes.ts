@@ -38,7 +38,6 @@ export interface Layout {
     practice: any;
     background: BackgroundSettings;
     fonts: Fonts;
-    footer: any;
     name?: string;
     _id?: string;
     store?: Types.ObjectId | null;
@@ -53,6 +52,8 @@ export interface Layout {
     menu: any;
     order: any;
     reviews: any;
+    contact: any;
+    footer: any;
 }
   
 

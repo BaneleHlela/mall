@@ -1,7 +1,9 @@
 
 const EventsPageSettings = () => {
   return (
-    <div>EventsPageSettings</div>
+    <div className="w-full h-full flex flex-col items-center">
+      
+    </div>
   )
 }
 

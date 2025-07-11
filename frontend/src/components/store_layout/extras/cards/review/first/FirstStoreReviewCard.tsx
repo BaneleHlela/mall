@@ -1,16 +1,16 @@
 import React from "react";
 import StarDisplay from "../supporting/StarDisplay";
 import type { ReviewCardProps } from "../StoreReviewCard";
-import { getBorderStyles, getTextStyles } from "../../../../../../utils/stylingFunctions";
+import { getBackgroundStyles, getTextStyles } from "../../../../../../utils/stylingFunctions";
 
 const FirstStoreReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, review, rating, anonymous, style }) => {
   return (
     <div 
         style={{
             backgroundColor: style.background.color,
-            ...getBorderStyles(style.background.border),
+            ...getBackgroundStyles(style.background),
         }}
-        className={`flex max-h-[250px] overflow-scroll hide-scrollbar lg:max-h-[400px]  flex-col justify-between hover:scale-102 p-4 bg-white
+        className={`flex max-h-[250px] overflow-clip hide-scrollbar lg:max-h-[400px]  flex-col justify-between hover:scale-102 p-4 bg-white
             ${style.background.shadow && `shadow-md`}`}
     >
       {/* Top left - Stars */}

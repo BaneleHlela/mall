@@ -50,9 +50,6 @@ export const getBackgroundStyles = (bg: BackgroundSettings = {}) => {
   if (bg.shadow === true || bg.shadow === "true") {
     styles.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.1)";
   }
-
-  // Get current screen width
-
   // Responsive Height
   if (typeof bg.height === "object") {
     styles.height = getResponsiveDimension(bg.height);
@@ -70,6 +67,11 @@ export const getBackgroundStyles = (bg: BackgroundSettings = {}) => {
   // Padding
   if (bg.padding?.x) styles.paddingLeft = styles.paddingRight = bg.padding.x;
   if (bg.padding?.y) styles.paddingTop = styles.paddingBottom = bg.padding.y;
+
+  // Opacity
+  if (bg.opacity !== undefined) {
+    styles.opacity = bg.opacity; // Convert percentage to decimal
+  }
 
   // Optional border styles
   if (bg.border) {

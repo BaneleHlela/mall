@@ -13,7 +13,9 @@ import { useAppSelector } from "../../../../app/hooks";
 
 interface StoreMenubarIconsProps {
     style: {
+      number: number;
       display: boolean;
+      platforms: any;
       show: string[];
       size: number;
       color: string;
@@ -53,7 +55,7 @@ export const socials = [
 
 const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({style}) => {
     const socials = useAppSelector((state) => state.stores?.currentStore?.socials);
-    const platforms = useAppSelector((state) => state.layoutSettings.menubar.extras.icons.platforms);
+    const platforms = style.platforms
     
     const renderIcon = (platform: string) => {
         switch (platform) {
@@ -96,22 +98,24 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({style}) => {
             }}
             className={`w-fit flex flex-row justify-center gap-2`}
         >
-            {platformOrder.map((platform) => {
+            {platformOrder
+            .slice(0, Math.min(style.number, 3)) // ✅ limit the number of icons
+            .map((platform) => {
                 const social = socials?.find(s => s.platform === platform);
-                if (!social) return <></>;
+                if (!social) return null;
 
                 return (
-                <div
-                    key={platform}
-                    style={{
-                    ...getBackgroundStyles(style.iconBackground),
-                    border: `${style.iconBackground.border.width} ${style.iconBackground.border.style} ${style.iconBackground.border.color}`,
-                    }}
-                    className="flex items-center justify-between rounded-full"
-                    onClick={() => handleRedirect(social.url)}
-                >
-                    {renderIcon(platform)}
-                </div>
+                    <div
+                        key={platform}
+                        style={{
+                            ...getBackgroundStyles(style.iconBackground),
+                            border: `${style.iconBackground.border.width} ${style.iconBackground.border.style} ${style.iconBackground.border.color}`,
+                        }}
+                        className="flex items-center justify-between rounded-full cursor-pointer"
+                        onClick={() => handleRedirect(social.url)}
+                    >
+                        {renderIcon(platform)}
+                    </div>
                 );
             })}
         </div>

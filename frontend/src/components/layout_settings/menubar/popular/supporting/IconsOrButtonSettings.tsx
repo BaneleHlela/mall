@@ -9,15 +9,23 @@ const MAX_ICONS = 3;
 
 const indexKeyMap = ["first", "second", "third"];
 const buttonOptions = ["call", "book", "subscribe", "contact", "buy"];
+//@ts-ignore
+interface Props extends EditorProps {
+  allow?: "icons" | "button";
+}
 
-const IconsOrButtonSettings: React.FC<EditorProps> = ({
+const IconsOrButtonSettings: React.FC<Props> = ({
   objectPath,
   handleSettingChange,
   settings,
+  allow,
 }) => {
   const currentInclude = getSetting("include", settings, objectPath);
   const currentNumber = getSetting("icons.number", settings, objectPath) || 1;
-  const socials  = useAppSelector(state => state.stores.currentStore?.socials);
+  const socials = useAppSelector(
+    (state) => state.stores.currentStore?.socials
+  );
+  console.log(socials);
   const availablePlatforms = socials?.map((item) => item.platform);
   const platformsObj: Record<string, string> =
     getSetting("icons.platforms", settings, objectPath) || {};
@@ -45,7 +53,7 @@ const IconsOrButtonSettings: React.FC<EditorProps> = ({
       return (
         <div key={i} className="my-2">
           <OptionsToggler
-            label={`Icon ${String.fromCharCode(65 + i)}`} // @ts-ignore-next-line
+            label={`Icon ${String.fromCharCode(65 + i)}`} //@ts-ignore
             options={availablePlatforms}
             value={platformsObj[key] || ""}
             onChange={(val) => handlePlatformChange(i, val)}
@@ -54,20 +62,24 @@ const IconsOrButtonSettings: React.FC<EditorProps> = ({
       );
     });
 
+  const showType = allow || currentInclude;
+
   return (
     <div className="p-2 space-y-4">
-      <OptionsToggler
-        label="Show"
-        options={["icons", "button"]}
-        value={currentInclude}
-        onChange={(newValue) =>
-          handleChange("include")({
-            target: { value: newValue },
-          } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
-        }
-      />
+      {!allow && (
+        <OptionsToggler
+          label="Show"
+          options={["icons", "button"]}
+          value={currentInclude}
+          onChange={(newValue) =>
+            handleChange("include")({
+              target: { value: newValue },
+            } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
+          }
+        />
+      )}
 
-      {currentInclude === "icons" && (
+      {showType === "icons" && (
         <div className="shadow-sm border border-black text-black rounded-sm px-2 py-1">
           <div className="w-full text-center font-semibold mb-2">
             Icon Settings
@@ -87,7 +99,7 @@ const IconsOrButtonSettings: React.FC<EditorProps> = ({
         </div>
       )}
 
-      {currentInclude === "button" && (
+      {showType === "button" && (
         <div className="border border-black text-black rounded-sm px-2 py-1">
           <div className="w-full text-center font-semibold mb-2">
             Button Settings

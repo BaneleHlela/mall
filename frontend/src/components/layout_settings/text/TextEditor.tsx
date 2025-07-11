@@ -5,6 +5,7 @@ import ColorPicker from "../supporting/ColorPicker";
 import InputHandler from "../supporting/InputHandler";
 import OptionsToggler from "../supporting/OptionsToggler";
 import SettingsSlider from "../supporting/SettingsSlider";
+import TextareaHandler from "../supporting/TextareaHandler";
 
 
 const TextEditor: React.FC<EditorProps> = ({
@@ -41,6 +42,28 @@ const TextEditor: React.FC<EditorProps> = ({
 
     return (
         <div className="space-y-1 px-2">
+          {isAllowed("input") && (
+            <InputHandler
+              label="Custom Text"
+              value={getSetting("input", settings, objectPath)}
+              onChange={(newValue) =>
+                handleChange("input")({
+                  target: { value: newValue },
+                } as React.ChangeEvent<HTMLInputElement>)
+              }
+            />
+          )}
+          {isAllowed("textArea") && (
+            <TextareaHandler
+              label="Custom Long Text"
+              value={getSetting("textArea", settings, objectPath)}
+              onChange={(newValue) =>
+                handleChange("textArea")({
+                  target: { value: newValue },
+                } as React.ChangeEvent<HTMLInputElement>)
+              }
+            />
+          )}
           {isAllowed("animation") && (
               <OptionsToggler
                   label="Text Animation"
@@ -52,17 +75,6 @@ const TextEditor: React.FC<EditorProps> = ({
                       } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
                   }
               />
-          )}
-          {isAllowed("input") && (
-            <InputHandler
-              label="Custom Text"
-              value={getSetting("input", settings, objectPath)}
-              onChange={(newValue) =>
-                handleChange("input")({
-                  target: { value: newValue },
-                } as React.ChangeEvent<HTMLInputElement>)
-              }
-            />
           )}
           {isAllowed("fontFamily") && (
             <OptionsToggler

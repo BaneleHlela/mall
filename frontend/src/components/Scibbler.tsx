@@ -1,12 +1,11 @@
-import React from 'react'
-import GalleryWithGroupedImages from './store_layout/sections/gallery/gallery_with_grouped_images/GalleryWithGroupedImages'
+import ContactWithBackgroundImageTextAndSocials from './store_layout/sections/contact/with_bg_image_text_and_socials/ContactWithBackgroundImageTextAndSocials'
 
 const Scibbler = () => {
   return (
-    <div>
-      <GalleryWithGroupedImages />
+    <div className='w-screen h-screen'>
+      <ContactWithBackgroundImageTextAndSocials />
     </div>
   )
 }
 
-export default Scibbler
+export default Scibbler;

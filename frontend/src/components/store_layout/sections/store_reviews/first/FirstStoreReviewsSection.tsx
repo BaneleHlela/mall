@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import { getStoreReviews } from "../../../../../features/reviews/reviewSlice";
 import StoreReviewCard from "../../../extras/cards/review/StoreReviewCard";
-import { getBackgroundStyles, getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunctions";
+import { getBackgroundStyles, getTextStyles } from "../../../../../utils/stylingFunctions";
 import AddReviewModal from "../../../../the_mall/reviews/AddReviewModal";
 
 const FirstStoreReviewsSection = () => {
