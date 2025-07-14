@@ -16,6 +16,13 @@ import StoreDashboardTopbar from "../../components/store_dashboard/menubar/Store
 import DashboardStoreProducts from "./supporting_pages/DashboardStoreProducts";
 import DashboardStorePackages from "./supporting_pages/DashboardStorePackages";
 import { fetchStoreProducts } from "../../features/products/productsSlice";
+import StoreLogoSettings from "./supporting_pages/settings/StoreLogoSettings";
+import StoreBasicSettings from "./supporting_pages/settings/StoreBasicSettings";
+import StoreTradeSettings from "./supporting_pages/settings/StoreTradeSettings";
+import StoreBusinessHoursSettings from "./supporting_pages/settings/StoreBusinessHoursSettings";
+import StoreLocationSettings from "./supporting_pages/settings/StoreLocationSettings";
+import StoreSocialSettings from "./supporting_pages/settings/StoreSocialSettings";
+import StoreAboutSettings from "./supporting_pages/settings/StoreAboutSettings";
 
 const StoreDashboard = () => {
     const dispatch = useAppDispatch();
@@ -56,6 +63,13 @@ const StoreDashboard = () => {
                     <Route path="/bookings" element={<StoreBookings />} />
                     <Route path="/images" element={<StoreImages />} /> 
                     <Route path="/settings" element={<StoreSettings />} />
+                    <Route path="/settings/logo" element={<StoreLogoSettings />} />
+                    <Route path="/settings/basic" element={<StoreBasicSettings />} />
+                    <Route path="/settings/trade" element={<StoreTradeSettings />} />
+                    <Route path="/settings/operating-hours" element={<StoreBusinessHoursSettings />} />
+                    <Route path="/settings/location" element={<StoreLocationSettings />} />
+                    <Route path="/settings/socials" element={<StoreSocialSettings />} />
+                    <Route path="/settings/about" element={<StoreAboutSettings />} />
                 </Routes>
             </div>
         </div>

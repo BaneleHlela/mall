@@ -23,10 +23,14 @@ const PopularStoreMenubarSettings = () => {
   return (
     <div className="p-2 space-y-1">
       {/* Shared Settings */}
-      <FirstOrderSubSettingsContainer
-        name="Shared Settings"
-        onClick={() => setActivePanel('sharedSettings')}
-      />
+      <div className="w-full border border-black text-black rounded-sm">
+        <BackgroundEditor
+          objectPath="menubar.background"
+          handleSettingChange={handleSettingChange}
+          settings={settings}
+          allow={['color']}
+        />
+      </div>
 
       {/* Topbar */}
       <FirstOrderSubSettingsContainer
@@ -41,29 +45,6 @@ const PopularStoreMenubarSettings = () => {
       />
 
       <AnimatePresence>
-        {activePanel === 'sharedSettings' && (
-          <SlidingPanel
-            key="sharedSettings"
-            isOpen={true}
-            onClose={closePanel}
-            title="Shared Settings"
-          >
-            <div className="w-full border border-black text-black rounded-sm">
-              <BackgroundEditor
-                objectPath="menubar.background"
-                handleSettingChange={handleSettingChange}
-                settings={settings}
-                allow={['color']}
-              />
-              <IconsOrButtonSettings
-                objectPath="menubar.extras"
-                handleSettingChange={handleSettingChange}
-                settings={settings}
-              />
-            </div>
-          </SlidingPanel>
-        )}
-
         {activePanel === 'topbar' && (
           <SlidingPanel
             key="topbar"

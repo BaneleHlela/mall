@@ -26,7 +26,8 @@ export interface Store {
   description: string;
   name: string;
   logo: Logo;
-  trades: number;
+  isDemo?: boolean;
+  trades: string[];
   slogan: string;
   departments: string[]; 
   layouts: Types.ObjectId[] | string[];  
@@ -48,6 +49,12 @@ export interface Store {
     lng: number  
     address: string; 
   }>;
+  location: {
+    nickname: string;   
+    lat: number;   
+    lng: number  
+    address: string;
+  }
   images?: Image[];
   operationTimes?: OperationTimes;
 }

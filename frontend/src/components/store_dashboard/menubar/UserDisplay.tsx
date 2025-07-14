@@ -18,7 +18,7 @@ const UserDisplay = () => {
                     alt="Profile Photo" className="h-[40px] w-[40px] border-1 rounded-[100%] mr-2 object-cover"
                 />
             </div>
-            <div className="h-full flex flex-col justify-center">
+            <div className="h-full hidden lg:flex flex-col justify-center ">
                 <p className="font-[600]">
                     {user?.lastName} {user?.firstName[0]}
                 </p>

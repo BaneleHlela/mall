@@ -44,10 +44,10 @@ const StoreButton: React.FC<StoreButtonProps> = ({ style, onClick }) => {
         ...getTextStyles(style.style.text),
         ...getBackgroundStyles(style.style.background),
       }}
-      className={`flex flex-col justify-center hover:scale-102`}
+      className={`flex flex-col justify-center items-center hover:scale-102`}
       onClick={onClick}
     >
-      <p className={`${style.style.text.animation}`}>
+      <p className={`${style.style.text.animation} flex flex-col justify-center mb-[3%]`}>
         {style.style.text.input}
       </p>
     </button>

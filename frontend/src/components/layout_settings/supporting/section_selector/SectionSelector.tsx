@@ -62,28 +62,32 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
   };
   
  
-  const handleSelectSectionVariation = (variation: string) => {
+  const handleSelectSectionVariation = async (variation: string) => {
     const section = sectionToReplace ?? extractSectionFromVariation(variation);
-    const sectionDefaults = getSectionDefaults(section, variation);
+  
+    // Await the outer function
+    let sectionDefaults = await getSectionDefaults(section, variation);
+  
+    // If the result is a function (like an async () => ...), call it and await the result
+    if (typeof sectionDefaults === 'function') {
+      sectionDefaults = await sectionDefaults();
+    }
   
     if (sectionToReplace) {
-      // Replacing: update the section in-place
       dispatch(updateSetting({
         field: section,
-        value: sectionDefaults
+        value: sectionDefaults,
       }));
     } else {
-      // Adding: use callback to parent
-      onSelect?.(section); // <-- Notify parent to insert new section key
+      onSelect?.(section);
       dispatch(updateSetting({
         field: section,
-        value: sectionDefaults
+        value: sectionDefaults,
       }));
     }
   
     onClose();
   };
-  
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;

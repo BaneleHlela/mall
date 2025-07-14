@@ -44,7 +44,7 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({ groupName, groupD
                     className="w-full object-cover cursor-pointer hover:opacity-80 transition-opacity duration-300"
                     onClick={() => setShowGrid(true)}
                 />
-                <p style={getTextStyles(textStyle)}>{groupName}</p>
+                <p style={getTextStyles(textStyle)} className='mb-5'>{groupName}</p>
             </div>
 
             {showGrid && (
@@ -55,7 +55,7 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({ groupName, groupD
                     className="fixed inset-0 overflow-auto z-50 hide-scrollbar">
                     <div className="flex justify-end">
                         <button
-                            className="mt-4 p-1 shadow bg-white text-white rounded-full hover:scale-102"
+                            className="mt-4 mr-4 p-1 shadow bg-white text-white rounded-full hover:scale-102"
                             onClick={() => setShowGrid(false)}
                         >
                             <IoMdClose className='text-3xl text-black'/>
@@ -64,7 +64,7 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({ groupName, groupD
 
                     <div className="flex flex-col items-center text-center my-4">
                         <p style={getTextStyles(textStyle)}>{groupName}</p>
-                        <p style={{...getTextStyles(style.text.description)}} className='md:w-[50%]'>{groupDescrition}</p>
+                        <p style={{...getTextStyles(style.text.description)}} className='px-2 md:w-[50%]'>{groupDescrition}</p>
                     </div>
 
                     <div

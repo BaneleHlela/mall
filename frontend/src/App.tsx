@@ -42,7 +42,7 @@ const App: React.FC = () => {
           <Route path="/search" element={<Search />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/scribbler/*" element={<Scribbler />} />
-          <Route path="/layouts/*" element={<Layouts />} />
+          <Route path="/layouts/:layoutId/*" element={<Layouts />} />
           <Route path="/dashboard/:storeId/*" element={<StoreDashboard />} />
           <Route path="/layouts/my-layouts" element={<MyLayouts />} />
           <Route path="/creators-dashboard/*" element={<Dashboard />} />

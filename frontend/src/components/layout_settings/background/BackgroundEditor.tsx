@@ -48,6 +48,15 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
     }
     return { min: 0, max: 500, step: 1 };
   };
+  const animationOptions = [
+    { value: "none", label: "None" },
+    { value: "upToDown", label: "Up to Down" },
+    { value: "downToUp", label: "Down to Up" },
+    { value: "leftToRight", label: "Left to Right" },
+    { value: "rightToLeft", label: "Right to Left" },
+    { value: "fade", label: "Fade" },
+  ];
+
 
   return (
     <div className="space-y-1 px-2">
@@ -59,6 +68,15 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
           onClear={handleClear("color")} // 👈 added
         />
       )}
+       {/* ANIMATION */}
+       {isAllowed("animation") && (
+          <OptionsToggler
+            label="Animation"
+            value={getSetting("animation", settings, objectPath) || "none"}
+            options={animationOptions.map(option => option.value)}
+            onChange={(value) => handleSettingChange(`${objectPath}.animation`, value)}
+          />
+        )}
 
       {isAllowed("shadow") && (
         <OptionsToggler

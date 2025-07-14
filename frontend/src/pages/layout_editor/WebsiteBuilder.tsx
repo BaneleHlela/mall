@@ -107,6 +107,7 @@ const WebsiteBuilderContent: React.FC = () => {
           if (layoutResult.store) {
             setStoreId(layoutResult.store);
             const storeResult = await dispatch(fetchStoreById(layoutResult.store)).unwrap();
+            console.log(storeResult);
             dispatch(setCurrentStore(storeResult));
             dispatch(setStore(storeResult));
           }
@@ -217,7 +218,7 @@ const WebsiteBuilderContent: React.FC = () => {
             <iframe
               key={JSON.stringify(fonts)}
               ref={iframeRef}
-              src={`/layouts/preview/${layoutId}/*`}
+              src={`/layouts/${layoutId}/preview/*`}
               title="Responsive Preview"
               className="relative"
               style={{

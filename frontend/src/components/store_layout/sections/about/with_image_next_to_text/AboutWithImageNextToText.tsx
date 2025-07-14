@@ -4,14 +4,13 @@ import { getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunc
 const AboutWithImageNextToText = () => {
   const settings = useAppSelector((state) => state.layoutSettings.about);
   const store = useAppSelector((state) => state.stores.currentStore);
-  console.log(store?.about)
   return (
     <div 
       style={{
         backgroundColor: settings.background.color,
         ...getTextStyles(settings.text.style)
       }}
-      className="w-full "
+      className="w-full h-fit"
     >
       {/* Mobile */}
       <div
@@ -48,7 +47,7 @@ const AboutWithImageNextToText = () => {
 
       {/* Desktop */}
       <div 
-        className="hidden lg:flex flex-row justify-between w-full h-[85vh] p-8"
+        className="hidden lg:flex flex-row justify-between w-full h-fit min-h-[85vh] p-8"
       >
         {/* Image */}
         <div 

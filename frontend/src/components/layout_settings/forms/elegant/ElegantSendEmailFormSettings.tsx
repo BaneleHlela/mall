@@ -112,7 +112,7 @@ const ElegantSendEmailFormSettings: React.FC<EmailFormSettingsProps> = ({
                 objectPath={`${objectPath}.background`}
                 settings={settings}
                 handleSettingChange={handleSettingChange}
-                allow={["color", "shadow", "border", "padding", "width", "height"]}
+                allow={["color", "animation", "shadow", "border", "padding", "width", "height"]}
                 responsiveSize
                 widthUnit="%"
                 heightUnit="vh"
@@ -128,29 +128,48 @@ const ElegantSendEmailFormSettings: React.FC<EmailFormSettingsProps> = ({
             onClose={closePanel}
             title="Submit Button"
           >
-            <div className="px-2 py-2 space-y-2">
-              <TextEditor
-                objectPath={`${objectPath}.submitButton.text`}
-                settings={settings}
-                handleSettingChange={handleSettingChange}
-                allow={[
-                  "input",
-                  "color",
-                  "fontFamily",
-                  "fontSize",
-                  "weight",
-                  "letterSpacing",
-                  "lineHeight",
-                  "textDecoration"
-                ]}
+            <div className="px-2 py-2 space-y-1">
+              {/* Position */}
+              <OptionsToggler
+                label="Position"
+                options={["start", "center", "end"]}
+                value={getSetting("submitButton.position", settings, objectPath)}
+                onChange={(value) =>  
+                  handleSettingChange(`${objectPath}.submitButton.position`, value)
+                }
               />
-              <BackgroundEditor
-                objectPath={`${objectPath}.submitButton.background`}
-                settings={settings}
-                handleSettingChange={handleSettingChange}
-                allow={["color", "shadow", "border", "padding", "width"]}
-                responsiveSize={false}
-                widthUnit="%"
+              <SubSettingsContainer
+                name="Text"
+                SettingsComponent={
+                  <TextEditor
+                    objectPath={`${objectPath}.submitButton.text`}
+                    settings={settings}
+                    handleSettingChange={handleSettingChange}
+                    allow={[
+                      "input",
+                      "color",
+                      "fontFamily",
+                      "fontSize",
+                      "weight",
+                      "letterSpacing",
+                      "lineHeight",
+                      "textDecoration"
+                    ]}
+                  />
+                }
+              />
+              <SubSettingsContainer
+                name="Background"
+                SettingsComponent={
+                  <BackgroundEditor
+                    objectPath={`${objectPath}.submitButton.background`}
+                    settings={settings}
+                    handleSettingChange={handleSettingChange}
+                    allow={["color", "shadow", "border", "padding", "width"]}
+                    responsiveSize={false}
+                    widthUnit="%"
+                  />
+                }
               />
             </div>
           </SlidingPanel>

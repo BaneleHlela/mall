@@ -8,6 +8,7 @@ import StoreButtonSettings from '../../../extras/StoreButtonSettings';
 import FirstOrderSubSettingsContainer from '../../../FirstOrderSubSettingsContainer';
 import SlidingPanel from '../../../supporting/SlidingPanel';
 import { AnimatePresence } from 'framer-motion';
+import IconsOrButtonSettings from './IconsOrButtonSettings';
 
 const SidebarSettings: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -54,7 +55,7 @@ const SidebarSettings: React.FC = () => {
             onClose={closePanel}
             title="Sidebar Links"
           >
-            <MenubarLinksSettings type="sidebar" />
+            <MenubarLinksSettings type="sidebar" allowPositioning={true}/>
           </SlidingPanel>
         )}
 
@@ -66,27 +67,11 @@ const SidebarSettings: React.FC = () => {
             onClose={closePanel}
             title="Sidebar Extras"
           >
-            <div className="px-2 space-y-2 py-1">
-              <div className="px-2">
-                <OptionsToggler
-                    label="Display"
-                    options={['icons', 'button', 'none']}
-                    value={settings.menubar.sidebar.display}
-                    onChange={(value) =>
-                    handleSettingChange('menubar.sidebar.display', value)
-                    }
-                />
-              </div>
-              <IconsSettingsHandler
-                settings={settings}
-                handleSettingChange={handleSettingChange}
-                objectPath="menubar.sidebar.icons"
-              />
-              <StoreButtonSettings
-                objectPath="menubar.sidebar.button"
-                settings={settings}
-              />
-            </div>
+            <IconsOrButtonSettings
+              objectPath="menubar.sidebar.extras"
+              handleSettingChange={handleSettingChange}
+              settings={settings}
+            />
           </SlidingPanel>
         )}
       </AnimatePresence>

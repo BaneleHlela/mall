@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { getSetting } from "../../../../../utils/helperFunctions";
 import OptionsToggler from "../../../supporting/OptionsToggler";
 import SettingsSlider from "../../../supporting/SettingsSlider";
-import type { EditorProps } from "../../../../../types/layoutSettingsType";
 import { useAppSelector } from "../../../../../app/hooks";
+import IconsSettingsHandler from "./IconsSettingsHandler";
+import StoreButtonSettings from "../../../extras/StoreButtonSettings";
+import FirstOrderSubSettingsContainer from "../../../FirstOrderSubSettingsContainer";
+import SlidingPanel from "../../../supporting/SlidingPanel";
+import { AnimatePresence } from "framer-motion";
 
 const MAX_ICONS = 3;
-
 const indexKeyMap = ["first", "second", "third"];
-const buttonOptions = ["call", "book", "subscribe", "contact", "buy"];
-//@ts-ignore
-interface Props extends EditorProps {
+
+interface Props {
+  objectPath: string;
+  settings: any;
+  handleSettingChange: any;
   allow?: "icons" | "button";
 }
 
@@ -20,17 +25,17 @@ const IconsOrButtonSettings: React.FC<Props> = ({
   settings,
   allow,
 }) => {
+  const [activePanel, setActivePanel] = useState<"icons" | "button" | null>(null);
+  const closePanel = () => setActivePanel(null);
+
   const currentInclude = getSetting("include", settings, objectPath);
   const currentNumber = getSetting("icons.number", settings, objectPath) || 1;
-  const socials = useAppSelector(
-    (state) => state.stores.currentStore?.socials
-  );
-  console.log(socials);
+  const socials = useAppSelector((state) => state.stores.currentStore?.socials);
   const availablePlatforms = socials?.map((item) => item.platform);
   const platformsObj: Record<string, string> =
     getSetting("icons.platforms", settings, objectPath) || {};
-  const currentButtonFunction =
-    getSetting("button.function", settings, objectPath) || "";
+
+  const showType = allow || currentInclude;
 
   const handleChange =
     (field: string) =>
@@ -62,59 +67,84 @@ const IconsOrButtonSettings: React.FC<Props> = ({
       );
     });
 
-  const showType = allow || currentInclude;
-
   return (
-    <div className="p-2 space-y-4">
+    <div className="space-y-2">
       {!allow && (
-        <OptionsToggler
-          label="Show"
-          options={["icons", "button"]}
-          value={currentInclude}
-          onChange={(newValue) =>
-            handleChange("include")({
-              target: { value: newValue },
-            } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
-          }
-        />
+        <div className="px-2">
+          <OptionsToggler
+            label="Show"
+            options={["icons", "button"]}
+            value={currentInclude}
+            onChange={(newValue) =>
+              handleChange("include")({
+                target: { value: newValue },
+              } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
+            }
+          />
+        </div>
+        
       )}
 
       {showType === "icons" && (
-        <div className="shadow-sm border border-black text-black rounded-sm px-2 py-1">
-          <div className="w-full text-center font-semibold mb-2">
-            Icon Settings
-          </div>
-
-          <SettingsSlider
-            label="Number of icons"
-            value={currentNumber}
-            min={1}
-            max={MAX_ICONS}
-            onChange={(newVal) =>
-              handleSettingChange(`${objectPath}.icons.number`, newVal)
-            }
-          />
-
-          {renderPlatformTogglers()}
-        </div>
+        <FirstOrderSubSettingsContainer
+          name="Icons"
+          onClick={() => setActivePanel("icons")}
+        />
       )}
 
       {showType === "button" && (
-        <div className="border border-black text-black rounded-sm px-2 py-1">
-          <div className="w-full text-center font-semibold mb-2">
-            Button Settings
-          </div>
-
-          <OptionsToggler
-            label="Button Function"
-            options={buttonOptions}
-            value={currentButtonFunction}
-            onChange={(val) =>
-              handleSettingChange(`${objectPath}.button.function`, val)
-            }
-          />
-        </div>
+        <FirstOrderSubSettingsContainer
+          name="Button"
+          onClick={() => setActivePanel("button")}
+        />
       )}
+
+      <AnimatePresence>
+        {activePanel === "icons" && (
+          <SlidingPanel
+            key="icons"
+            isOpen={true}
+            onClose={closePanel}
+            title="Icon Settings"
+          >
+            <div className="p-2 space-y-4">
+              <SettingsSlider
+                label="Number of icons"
+                value={currentNumber}
+                min={1}
+                max={MAX_ICONS}
+                onChange={(newVal) =>
+                  handleSettingChange(`${objectPath}.icons.number`, newVal)
+                }
+              />
+
+              {renderPlatformTogglers()}
+
+              <IconsSettingsHandler
+                settings={settings}
+                handleSettingChange={handleSettingChange}
+                objectPath={`${objectPath}.icons`}
+              />
+            </div>
+          </SlidingPanel>
+        )}
+
+        {activePanel === "button" && (
+          <SlidingPanel
+            key="button"
+            isOpen={true}
+            onClose={closePanel}
+            title="Button Settings"
+          >
+            <div className="p-2">
+              <StoreButtonSettings
+                objectPath={`${objectPath}.button`}
+                settings={settings}
+              />
+            </div>
+          </SlidingPanel>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

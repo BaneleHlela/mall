@@ -47,7 +47,7 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({ objectPath, s
                     objectPath={`${objectPath}.style.text`}
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={["input", "fontFamily", "color", "fontSize", "weight", "animation"]}
+                    allow={["input", "fontFamily", "color", "fontSize", "weight", "animation", "lineHeight"]}
                     responsiveSize={false}
                 />
             </div> 
@@ -61,7 +61,7 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({ objectPath, s
             objectPath={`${objectPath}.style.background`}
             settings={settings}
             handleSettingChange={handleSettingChange}
-            allow={["color", "height", "width", "shadow", "border", "padding", "shadow"]}
+            allow={["color", "height", "width", "shadow", "border", "padding", "shadow", ]}
             widthUnit='%'
             heightUnit='%'
             responsiveSize={false}

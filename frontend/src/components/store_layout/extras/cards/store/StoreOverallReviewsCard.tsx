@@ -1,4 +1,5 @@
-import { getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunctions";
+import { motion } from "framer-motion";
+import { getBackgroundStyles, getDivAnimation, getTextStyles } from "../../../../../utils/stylingFunctions";
 import StarDisplay from "../review/supporting/StarDisplay";
 
 interface StoreOverallReviewsCardProps {
@@ -11,20 +12,14 @@ interface StoreOverallReviewsCardProps {
 const StoreOverallReviewsCard: React.FC<StoreOverallReviewsCardProps> = ({stats, style}) => {
 
     return (
-        <div 
+        <motion.div 
+            {...getDivAnimation(style.background.animation || "upToDown")}
+            animate={{ y: 0, x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
             style={{
-                fontFamily: style.text.fontFamily,
-                color: style.text.color,
-                ...getBorderStyles(style.background.border),
-                backgroundColor: style.background.backgroundColor,
-                height: window.innerWidth >= 1024 
-                    ? style.background.height.desktop 
-                    : style.background.height.mobile,
-                width: window.innerWidth >= 1024 
-                    ? style.background.height.desktop 
-                    : style.background.height.mobile 
+               ...getBackgroundStyles(style.background),
             }}
-            className="flex flex-col justify-center"
+            className="flex flex-col justify-between"
         >
             <div className="flex flex-row justify-center">
                 <StarDisplay 
@@ -34,9 +29,8 @@ const StoreOverallReviewsCard: React.FC<StoreOverallReviewsCardProps> = ({stats,
             </div>
             <div 
                 style={{
-                    fontSize: window.innerWidth >= 1024 
-                        ? style.text.totalRatings.desktop.fontSize 
-                        : style.text.totalRatings.mobile.fontSize,
+                    ...getTextStyles(style.text),
+                    ...getTextStyles(style.text.totalRatings),
                 }}
                 className="text-center"
             >
@@ -44,12 +38,13 @@ const StoreOverallReviewsCard: React.FC<StoreOverallReviewsCardProps> = ({stats,
             </div>
             <div
                 style={{
-                    fontSize: style.text.comment.style.fontSize,
+                    ...getTextStyles(style.text),
+                    ...getTextStyles(style.text.comment),
                 }} 
                 className="text-center">
-                Reviews
+                {style.text.comment.input}
             </div>
-        </div>
+        </motion.div>
     )
 }
 

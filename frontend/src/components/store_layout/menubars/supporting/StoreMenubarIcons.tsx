@@ -7,6 +7,7 @@ import {
     FaYoutube, 
     FaPhoneAlt 
 } from "react-icons/fa";
+import { SiGmail } from "react-icons/si";
 import { BsTwitterX } from "react-icons/bs";
 import { getBackgroundStyles, getBorderStyles } from "../../../../utils/stylingFunctions";
 import { useAppSelector } from "../../../../app/hooks";
@@ -75,6 +76,8 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({style}) => {
                 return <FaWhatsapp size={style.size + 5} color={style.color} />;
             case "phone":
                 return <FaPhoneAlt size={style.size} color={style.color} />;
+            case "email":
+                return <SiGmail size={style.size} color={style.color} />;
             default:
                 return null; 
         }

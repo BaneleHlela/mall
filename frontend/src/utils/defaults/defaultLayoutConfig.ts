@@ -2,7 +2,7 @@ import { defaultPupularStoreMenubarConfig } from "./menubars/defaultPopularStore
 import { defaultAboutWithImageNextToTextConfig } from "./sections/about/defaultAboutWithImageNextToText";
 import { defaultFirstBookWithCalandarConfig } from "./sections/book_with_calendar/defaultFirstBookWithCalandarConfig";
 import { defaultFirstFooterConfig } from "./sections/footer/defaultFirstFooterConfig";
-import { defaultFourthStoreHeroConfig } from "./sections/hero/defaultFourthStoreHeroConfig";
+import { defaultHeroWithReviewCardAndEmailFormConfig } from "./sections/hero/defaultHeroWithReviewCardAndEmailFormConfig";
 import { defaultHeroWithButtonBetweenImages } from "./sections/hero/defaultHeroWithButtonBetweenImagesConfig";
 import { defaultFirstStoreMenuSectionConfig } from "./sections/menu/defaultFirstStoreMenuSectionConfig";
 import { defaultFirstStoreProductsConfig } from "./sections/order_online/defualtFirstStoreProductsConfig";
@@ -103,7 +103,7 @@ export const defaultLayoutConfig = {
     menubar: defaultPupularStoreMenubarConfig,
     gallery: defaultGalleryWithImageSliderConfig,
     menu: defaultFirstStoreMenuSectionConfig,
-    hero: defaultHeroWithButtonImageAndTextConfig,
+    hero: defaultHeroWithReviewCardAndEmailFormConfig,
     book: defaultBasicBookWithOpenCalendarConfig,
     bookWithCalendar: defaultFirstBookWithCalandarConfig,
     products: defaultFirstStoreProductsConfig,

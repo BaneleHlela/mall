@@ -60,6 +60,12 @@ const storeSchema = new mongoose.Schema(
 			lng: Number,
 			address: String,
 		}],
+    location: {
+			nickname: {type: String},
+			lat: Number,
+			lng: Number,
+			address: String,
+		},
     about: {
       type: String,
     }, 

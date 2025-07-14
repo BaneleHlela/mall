@@ -9,6 +9,7 @@ import HamburgerSettings from './HamburgerSettings';
 import FirstOrderSubSettingsContainer from '../../../FirstOrderSubSettingsContainer';
 import SlidingPanel from '../../../supporting/SlidingPanel';
 import { AnimatePresence } from 'framer-motion';
+import IconsOrButtonSettings from './IconsOrButtonSettings';
 
 const MobileTopbarSettings: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -39,24 +40,25 @@ const MobileTopbarSettings: React.FC = () => {
             onChange={(value) => handleSettingChange('menubar.topbar.mobile.display', value)}
         />
       </div>
-      {/* Subsettings Panels */}
-      <FirstOrderSubSettingsContainer
-        name="Logo Settings"
-        onClick={() => setActivePanel('logo')}
-      />
-      <FirstOrderSubSettingsContainer
-        name="Icons"
-        onClick={() => setActivePanel('icons')}
-      />
-      <FirstOrderSubSettingsContainer
-        name="Button"
-        onClick={() => setActivePanel('button')}
-      />
       <FirstOrderSubSettingsContainer
         name="Hamburger"
         onClick={() => setActivePanel('hamburger')}
       />
-
+      {/* Subsettings Panels */}
+      {settings.menubar.topbar.mobile.display === 'logo' && (
+          <FirstOrderSubSettingsContainer
+            name="Logo Settings"
+            onClick={() => setActivePanel('logo')}
+          />
+        )
+      }
+      {settings.menubar.topbar.mobile.display === 'extras' && (
+        <FirstOrderSubSettingsContainer
+          name="Extras"
+          onClick={() => setActivePanel('extras')}
+        />
+      )}
+      
       {/* Sliding Panels */}
       <AnimatePresence>
         {activePanel === 'logo' && (
@@ -69,21 +71,6 @@ const MobileTopbarSettings: React.FC = () => {
             <LogoSettings
               objectPath="menubar.topbar.mobile.logo"
               device="mobile"
-            />
-          </SlidingPanel>
-        )}
-
-        {activePanel === 'icons' && (
-          <SlidingPanel
-            key="icons"
-            isOpen={true}
-            onClose={closePanel}
-            title="Mobile Icons Settings"
-          >
-            <IconsSettingsHandler
-              settings={settings}
-              handleSettingChange={handleSettingChange}
-              objectPath="menubar.topbar.mobile.extras.icons"
             />
           </SlidingPanel>
         )}
@@ -112,6 +99,20 @@ const MobileTopbarSettings: React.FC = () => {
             <HamburgerSettings />
           </SlidingPanel>
         )}
+        {activePanel === "extras" && (
+        <SlidingPanel
+          key="extras"
+          isOpen={true}
+          onClose={closePanel}
+          title="Extras Settings"
+        >
+          <IconsOrButtonSettings
+            objectPath="menubar.topbar.mobile.extras"
+            handleSettingChange={handleSettingChange}
+            settings={settings}
+          />
+        </SlidingPanel>
+      )}
       </AnimatePresence>
     </div>
   );

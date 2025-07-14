@@ -8,9 +8,10 @@ import SubSettingsContainer from '../../../extras/SubSettingsContainer';
 
 interface MenubarLinksSettingsProps {
   type: 'desktop' | 'sidebar';
+  allowPositioning?: boolean;
 }
 
-const MenubarLinksSettings: React.FC<MenubarLinksSettingsProps> = ({ type }) => {
+const MenubarLinksSettings: React.FC<MenubarLinksSettingsProps> = ({ type, allowPositioning = false }) => {
     const dispatch = useAppDispatch();
     const settings = useAppSelector((state) => state.layoutSettings);
     
@@ -33,13 +34,15 @@ const MenubarLinksSettings: React.FC<MenubarLinksSettingsProps> = ({ type }) => 
             <h3 className="text-lg font-semibold text-center">
               {type === 'desktop' ? 'Menubar' : 'Sidebar'} Links Settings
             </h3>
-
-            <OptionsToggler
-                label="Links Position"
-                options={['left', 'center', 'right']}
-                value={linksSettings.alignment}
-                onChange={(value) => handleSettingChange(`${objectPath}.alignment`, value)}
-            />
+            {allowPositioning && (
+                <OptionsToggler
+                    label="Links Position"
+                    options={['left', 'center', 'right']}
+                    value={linksSettings.alignment}
+                    onChange={(value) => handleSettingChange(`${objectPath}.alignment`, value)}
+                />
+            )}
+            
             <SubSettingsContainer 
                 name="Text"
                 SettingsComponent={

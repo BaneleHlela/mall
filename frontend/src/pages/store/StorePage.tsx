@@ -19,10 +19,11 @@ import { getBackgroundStyles } from "../../utils/stylingFunctions";
 import { setInitialLayout } from "../../features/layouts/layoutSettingsSlice";
 import { getLayout } from "../../features/layouts/layoutSlice";
 
-const StorePage = () => {
+const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
   const settings = useAppSelector((state) => state.layoutSettings);
-  // const { storeId } = useParams<{ storeId: string }>();
-  const storeId = "686e76aa96f14c28650b671d";
+  const { storeId: paramStoreId } = useParams<{ storeId: string }>();
+  const storeId = propStoreId || paramStoreId 
+
   const dispatch = useAppDispatch();
   const [store, setStore] = useState<StoreType | null>(null); // Local state for the store
   const [loading, setLoading] = useState<boolean>(true); // Loading state

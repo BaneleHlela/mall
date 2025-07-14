@@ -24,7 +24,7 @@ const StoreLayouts = () => {
       const newLayout = await dispatch(createLayout({ ...layoutSettings })).unwrap();
 
       // Redirect to the preview page for the new layout
-      navigate(`/layouts/build/${newLayout._id}`);
+      navigate(`/layouts/${newLayout._id}`);
     } catch (error) {
       console.error("Failed to create layout:", error);
     }

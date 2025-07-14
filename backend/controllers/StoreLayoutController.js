@@ -46,6 +46,39 @@ export const getLayoutConfig = expressAsyncHandler(async (req, res) => {
     res.json(layout);
 });
 
+
+// Get Layout by Demo Store
+export const getLayoutByDemoStore = expressAsyncHandler(async (req, res) => {
+    const { storeId } = req.params;
+
+    // Find the layout where the store field matches the given storeId
+    const layout = await StoreLayout.findOne({ store: storeId });
+
+    if (!layout) {
+        res.status(404);
+        throw new Error("Layout configuration not found for this store.");
+    }
+
+    res.json(layout);
+});
+
+
+// Get Layout by Store
+export const getLayoutByStore = expressAsyncHandler(async (req, res) => {
+    const { storeId } = req.params;
+
+    // Find the layout where the store field matches the given storeId
+    const layout = await StoreLayout.findOne({ store: storeId });
+
+    if (!layout) {
+        res.status(404);
+        throw new Error("Layout configuration not found for this store.");
+    }
+
+    res.json(layout);
+});
+
+
 // Update Layout Configuration
 export const updateLayoutConfig = expressAsyncHandler(async (req, res) => {
     const { layoutId } = req.params;

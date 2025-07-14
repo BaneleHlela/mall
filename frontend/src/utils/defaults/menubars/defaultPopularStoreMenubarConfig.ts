@@ -1,23 +1,9 @@
 export const defaultPupularStoreMenubarConfig = {
     variation: "popular",
-    extras: {
-        include: "icons",
-        button: {
-            function: "bookNow",
-        },
-        icons: {
-            number: 3,
-            platforms: {
-                first: "whatsapp",
-                second: "phone",
-                third: "twitter",
-            }
-        }
-    },
     background: {
         height: {
             mobile: "110px",
-            desktop: "120px", // Sometimes without responsive handlers
+            desktop: "120px",
         },
         width: {
             mobile: "110px",
@@ -66,9 +52,6 @@ export const defaultPupularStoreMenubarConfig = {
     },
     topbar: {
         sticky: true,
-        icons: {
-            show: ["phone", "twitter", "whatsapp"],
-        },
         desktop: {
             order: [ "logo", "links", "icons", ],
             logo: {
@@ -255,6 +238,7 @@ export const defaultPupularStoreMenubarConfig = {
                 }
             },
             extras: {
+                include: "icons",
                 button: {
                     function: "bookNow",
                     style: {
@@ -285,11 +269,16 @@ export const defaultPupularStoreMenubarConfig = {
                     }
                 },
                 icons: {
+                    number: 3,
+                    platforms: {
+                        first: "whatsapp",
+                        second: "phone",
+                        third: "twitter",
+                    },
                     size: 22,
                     color: "#6c4d37",
                     background: {
-                        padding: "0px",
-                        backgroundColor: "",
+                        color: "",
                         border: {
                             width: "0px",
                             style: "solid",
@@ -297,7 +286,10 @@ export const defaultPupularStoreMenubarConfig = {
                         },
                     },
                     iconBackground: {
-                        padding: "0px",
+                        padding: {
+                            x: "0px",
+                            y: "0px"
+                        },
                         backgroundColor: "",
                         border: {
                             width: "0px",
@@ -331,7 +323,6 @@ export const defaultPupularStoreMenubarConfig = {
     },
     sidebar: {
         animation: "fade",
-        display: "icons",
         links: {
             alignment: "center",
             text: {
@@ -353,56 +344,67 @@ export const defaultPupularStoreMenubarConfig = {
                 },
             },
         },
-        icons: {
-            size: 32,
-            color: "#6c4d37",
-            background: {
-                padding: "0px",
-                backgroundColor: "",
-                border: {
-                    width: "0px",
-                    style: "solid",
-                    color: "brown",
-                },
-            },
-            iconBackground: {
-                padding: "0px",
-                backgroundColor: "",
-                border: {
-                    width: "0px",
-                    style: "solid",
-                    color: "brown",
-                },
-            }
-        },
-        button: {
-            function: "bookNow",
-            style: {
-                text: {
-                    input: "Get a quote",
-                    fontFamily: "Open Sans",
-                    color: "brown",
-                    fontSize: "1.2em",
-                    fontWeight: "bold",
-                    letterSpacing: "0px",
-                },
-                background: {
-                    height: "10px",
-                    width: "190px",
-                    color: "#f9d195",
-                    shadow: true,
-                    border: {
-                        width: "3px",
-                        style: "solid",
-                        color: "black",
-                        radius: "0px",
+        extras: {
+            include: "icons",
+            button: {
+                function: "bookNow",
+                style: {
+                    text: {
+                        input: "Get a quote",
+                        fontFamily: "Open Sans",
+                        color: "brown",
+                        fontSize: "1.2em",
+                        fontWeight: "bold",
+                        letterSpacing: "0px",
                     },
-                    padding: {
-                        x: "0.8rem",
-                        y: "50px",
+                    background: {
+                        height: "10px",
+                        width: "190px",
+                        color: "#f9d195",
+                        shadow: true,
+                        border: {
+                            width: "3px",
+                            style: "solid",
+                            color: "black",
+                            radius: "0px",
+                        },
+                        padding: {
+                            x: "0.8rem",
+                            y: "50px",
+                        }
                     }
                 }
-            }
+            },
+            icons: {
+                number: 3,
+                platforms: {
+                    first: "whatsapp",
+                    second: "phone",
+                    third: "twitter",
+                },
+                size: 22,
+                color: "#6c4d37",
+                background: {
+                    color: "",
+                    border: {
+                        width: "0px",
+                        style: "solid",
+                        color: "brown",
+                    },
+                },
+                iconBackground: {
+                    padding: {
+                        x: "0px",
+                        y: "0px"
+                    },
+                    backgroundColor: "",
+                    border: {
+                        width: "0px",
+                        style: "solid",
+                        color: "brown",
+                    },
+                }
+            },
         },
     }
 }

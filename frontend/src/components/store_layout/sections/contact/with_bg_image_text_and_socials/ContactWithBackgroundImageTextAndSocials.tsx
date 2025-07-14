@@ -94,7 +94,7 @@ const ContactWithBackgroundImageTextAndSocials = () => {
           className="w-full h-full object-cover" 
         />
       </div>
-      {/* backgroundImage */}
+      {/* background Opacity */}
       <div
         style={{
           ...getBackgroundStyles(settings.background),

@@ -6,6 +6,7 @@ import HeroWithImagePatternAndBoxSettings from "./with_image_pattern_and_box/Her
 import HeroWithSlidingImages from "./with_sliding_images/HeroWithSlidingImagesSettings";
 import HeroWithButtonImageAndTextSettings from "./with_button_image_and_text/HeroWithButtonImageAndTextSettings";
 import OptionsToggler from "../../supporting/OptionsToggler";
+import HeroWithReviewCardAndEmailFormSettings from "./with_review_card_and_email_form/HeroWithReviewCardAndEmailFormSettings";
 
 export const handleAddSectionToLinks = (
   dispatch: any,
@@ -71,6 +72,15 @@ const HeroSettings = () => {
   if (variation === "heroWithButtonImageAndText") {
     return <HeroWithButtonImageAndTextSettings settings={settings} handleSettingChange={handleSettingChange}/>
   }
+
+  if (variation === "heroWithReviewCardAndEmailForm") {
+    return (
+      <div className="space-y-1">
+        <HeroWithReviewCardAndEmailFormSettings settings={settings} handleSettingChange={handleSettingChange}/>
+      </div>
+    )
+  }
+
 
   return (
     <FirstHeroSettings />

@@ -39,8 +39,9 @@ const GalleryModalSettings: React.FC<SupportingSettingsProps> = ({
                     objectPath={`${objectPath}.imagesModal.background.modal`}
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={["color", "border"]}
+                    allow={["color"]}
                     heightUnit='vh'
+                    widthUnit='vw'
                     responsiveSize
                 />
             </div>

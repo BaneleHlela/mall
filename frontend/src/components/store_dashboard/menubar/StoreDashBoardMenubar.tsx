@@ -85,7 +85,7 @@ const StoreDashBoardMenubar = ({ store }: Props) => {
         <DashboardLink 
           linkTo={`/dashboard/${store._id}/settings`} 
           icon={<Settings size={20} />} 
-          text="Settings" 
+          text="Store Settings" 
         />
         <DashboardLink 
           linkTo={`/dashboard/${store._id}/store-help`} 

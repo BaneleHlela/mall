@@ -95,8 +95,10 @@ export const getDivAnimation = (transition: string | undefined) => {
       return { initial: { x: "-100%", opacity: 0 }, exit: { x: "-100%", opacity: 0 } };
     case "rightToLeft":
       return { initial: { x: "100%", opacity: 0 }, exit: { x: "100%", opacity: 0 } };
-      case "fade":
+    case "fade":
       return { initial: { opacity: 0 }, exit: { opacity: 0 } };
+    case "none":
+        return {}; 
     default:
       return { initial: { y: "-100%", opacity: 0 }, exit: { y: "-100%", opacity: 0 } }; // fallback
   }

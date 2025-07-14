@@ -71,10 +71,10 @@ const FirstStoreSidebar = ({
 
         {/* Social Icons or Button */}
         <div className="w-full flex flex-row justify-center mb-5">
-          {style.display === "icons" && (
-            <StoreMenubarIcons style={style.icons} />
+          {style.extras.include === "icons" && (
+            <StoreMenubarIcons style={style.extras.icons} />
           )}
-          {style.display === "button" && <StoreButton style={style.button} />}
+          {style.extras.include === "button" && <StoreButton style={style.extras.button} />}
         </div>
       </motion.div>
     )

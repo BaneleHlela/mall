@@ -15,7 +15,6 @@ const initialState: LayoutState = {
 const API_URL = 'http://localhost:5000';
 
 // Async thunks for layout actions
-
 export const getLayout = createAsyncThunk(
     "layouts/getLayout",
     async (layoutId: string, thunkAPI) => {
@@ -25,6 +24,19 @@ export const getLayout = createAsyncThunk(
       } catch (error: any) {
         return thunkAPI.rejectWithValue(error.response?.data || "Fetch failed");
       }
+    }
+);
+
+// Add this thunk to your file
+export const getLayoutByDemoStore = createAsyncThunk(
+    "layouts/getLayoutByDemoStore",
+    async (storeId: string, thunkAPI) => {
+        try {
+            const response = await axios.get(`${API_URL}/api/layouts/demo-store/${storeId}`);
+            return response.data as Layout;
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue(error.response?.data || "Failed to fetch layout for demo store");
+        }
     }
 );
 
@@ -134,6 +146,7 @@ const layoutSlice = createSlice({
                 state.status = "failed";
                 state.error = action.error.message || "Failed to update layout";
             })
+            
             // Remove layout
             .addCase(removeLayout.pending, (state) => {
                 state.status = "loading";
@@ -145,6 +158,20 @@ const layoutSlice = createSlice({
             .addCase(removeLayout.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error.message || "Failed to delete layout";
+            })
+
+            // Get layout by demo store
+            .addCase(getLayoutByDemoStore.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(getLayoutByDemoStore.fulfilled, (state, action: PayloadAction<Layout>) => {
+                state.status = "succeeded";
+                state.activeLayout = action.payload;
+                state.layoutSettings = action.payload;
+            })
+            .addCase(getLayoutByDemoStore.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.error.message || "Failed to load layout for demo store";
             })
             // Upload Layout Image
     //         .addCase(uploadLayoutImageThunk.pending, (state) => {

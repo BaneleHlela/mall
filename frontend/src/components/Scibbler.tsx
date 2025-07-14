@@ -1,11 +1,13 @@
-import ContactWithBackgroundImageTextAndSocials from './store_layout/sections/contact/with_bg_image_text_and_socials/ContactWithBackgroundImageTextAndSocials'
+import React from 'react'
+import CreateStoreForm from './the_mall/store/create_store_form/CreateStoreForm'
+import { getSectionDefaults } from '../utils/defaults/sections/getSectionDefaults'
 
 const Scibbler = () => {
+  const result = getSectionDefaults("hero", "heroWithButtonImageAndText")
+  console.log(result)
   return (
-    <div className='w-screen h-screen'>
-      <ContactWithBackgroundImageTextAndSocials />
-    </div>
+    <div><CreateStoreForm/></div>
   )
 }
 
-export default Scibbler;
+export default Scibbler

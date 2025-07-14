@@ -74,6 +74,30 @@ export const editStore = expressAsyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Store not found");
   }
+  // Update store name
+  if (req.body.name) {
+    store.name = req.body.name;
+  }
+
+  // Update store slogan
+  if (req.body.slogan !== undefined) {
+    store.slogan = req.body.slogan;
+  }
+
+  // Update store trade options
+  if (req.body.trades && Array.isArray(req.body.trades)) {
+    store.trades = req.body.trades;
+  }
+
+  // Update Store Location
+  if (req.body.location) {
+    store.location = req.body.location;
+  }
+
+  // Update store about
+  if (req.body.about) {
+    store.about = req.body.about;
+  }
 
   // Merge locations
   if (req.body.locations && Array.isArray(req.body.locations) && req.body.locations.length > 0) {

@@ -51,10 +51,10 @@ const MobileTopBar: React.FC<{
 
   const renderIcons = () => (
     <div className={`w-full h-full flex row ${settings.topbar.mobile.hamburgerFirst ? "justify-end" : "justify-start"} pl-1 pr-1`}>
-      {settings.extras.include === "button" && (
-        <StoreButton style={settings.topbar.mobile.extras.button}/>
+      {settings.topbar.mobile.extras.include === "button" && (
+        <StoreButton style={settings.topbar.mobile.extras.button} />
       )}
-      {settings.extras.include === "icons" && (
+      {settings.topbar.mobile.extras.include === "icons" && (
         <StoreMenubarIcons style={settings.topbar.mobile.extras.icons} />
       )}
     </div>
@@ -172,10 +172,10 @@ const DesktopTopBar: React.FC<{
     <div className='w-fit h-full flex flex-col justify-center'>
       {settings.topbar.desktop.iconsCart.iconsFirst ? (
         <div className="flex flex-row items-center space-x-3">
-          {settings.extras.include === "button" && (
+          {settings.topbar.desktop.extras.include === "button" && (
             <StoreButton style={settings.topbar.desktop.extras.button}/>
           )}
-          {settings.extras.include === "icons" && (
+          {settings.topbar.desktop.extras.include === "icons" && (
             <StoreMenubarIcons style={settings.topbar.desktop.extras.icons} />
           )}
           {Array.isArray(store?.trades) && store?.trades.includes('products') && (
@@ -187,10 +187,10 @@ const DesktopTopBar: React.FC<{
           {Array.isArray(store?.trades) && store?.trades.includes('products') && (
             <StoreCart style={settings.cart} />
           )}
-          {settings.extras.include === "button" && (
+          {settings.topbar.desktop.extras.include === "button" && (
             <StoreButton style={settings.topbar.desktop.extras.button}/>
           )}
-          {settings.extras.include === "icons" && (
+          {settings.topbar.desktop.extras.include === "icons" && (
             <StoreMenubarIcons style={settings.topbar.desktop.extras.icons} />
           )}
         </div>
@@ -236,18 +236,18 @@ const PopularStoreMenubar: React.FC = () => {
       to: `/stores/${storeId}#${link.section}`,
       label: link.name,
     }));
-  
+
     // Then, create an array of links from other routes
     const routeLinks = routeOrder //@ts-ignore-next-line
-      .filter(key => routes[key] && key !== 'home') // Exclude 'home' as we're handling its sections separately
+      .filter(key => routes[key] && (key !== 'home' || settings.topbar.mobile.display !== "logo")) // Include 'home' if display is not "logo"
       .map(key => ({ //@ts-ignore-next-line
         to: `/stores/${storeId}${routes[key].url === "/" ? "" : routes[key].url}`, // @ts-ignore-next-line
         label: routes[key].name,
       }));
-  
+
     // Combine the two arrays, with inLinks first
     return [...inLinksArray, ...routeLinks];
-  }, [routes, routeOrder, storeId]);
+  }, [routes, routeOrder, storeId, settings.topbar.mobile.display]);
 
   return (
     <nav
