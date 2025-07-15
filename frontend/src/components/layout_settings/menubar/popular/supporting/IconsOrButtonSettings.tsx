@@ -73,7 +73,7 @@ const IconsOrButtonSettings: React.FC<Props> = ({
         <div className="px-2">
           <OptionsToggler
             label="Show"
-            options={["icons", "button"]}
+            options={["icons", "button", "none"]}
             value={currentInclude}
             onChange={(newValue) =>
               handleChange("include")({

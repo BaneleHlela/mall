@@ -28,7 +28,9 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
               objectPath={`${objectPath}.background`}
               settings={settings}
               handleSettingChange={handleSettingChange}
-              allow={["color"]}
+              allow={["color", "width"]}
+              widthUnit="%"
+              responsiveSize
             />
           </div>
         }
@@ -46,12 +48,16 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
               images={getSetting("image.imageUrl", settings, objectPath)}
             />
             <SubSettingsContainer
-              name="Border"
+              name="Background"
               SettingsComponent={
-                <BorderEditor
-                    objectPath={`${objectPath}.image.border`}
-                    settings={settings}
-                    handleSettingChange={handleSettingChange}
+                <BackgroundEditor
+                  objectPath={`${objectPath}.image.background`}
+                  settings={settings}
+                  handleSettingChange={handleSettingChange}
+                  allow={["width", "height", "border"]}
+                  responsiveSize
+                  widthUnit="%"
+                  heightUnit="vh"
                 />
             }
             />

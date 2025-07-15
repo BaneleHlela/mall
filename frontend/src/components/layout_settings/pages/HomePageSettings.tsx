@@ -28,6 +28,8 @@ import StoreReviewsSectionSettings from "../sections/store_reviews/StoreReviewsS
 import BookSectionSettings from "../sections/book/BookSectionSettings";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import ServicesSectionSettings from "../sections/services/ServicesSectionSettings";
+import StoreFooterSectionSettings from "../sections/footer/StoreFooterSectionSettings";
 
 const SortableItem = ({
   id,
@@ -171,6 +173,10 @@ const HomePageSettings = () => {
         return <StoreGallerySettings />;
       case "reviews": 
         return <StoreReviewsSectionSettings />;
+      case "services": 
+        return <ServicesSectionSettings />;
+      case "footer":
+        return <StoreFooterSectionSettings />
       default:
         return <div>No settings available for section "{section}".</div>;
     }

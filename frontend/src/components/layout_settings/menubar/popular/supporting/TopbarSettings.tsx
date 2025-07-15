@@ -76,6 +76,7 @@ const TopbarSettings = () => {
               handleSettingChange={handleSettingChange}
               settings={settings}
               allow={["height", "padding", "border", "shadow"]}
+              heightUnit="vh"
               responsiveSize={true}
             />
           </SlidingPanel>

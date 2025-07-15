@@ -36,10 +36,10 @@ const StoreHome = () => {
   };
 
   return (
-    <div className="w-full flex flex-col items-center justify-center bg-gray-100">
+    <div className="w-full flex flex-col items-center justify-center">
       {contains.map((sectionKey) =>
         sectionMap[sectionKey] ? (
-          <div key={sectionKey} className="w-full">
+          <div key={sectionKey} className="w-full flex flex-row justify-center">
             {sectionMap[sectionKey]}
           </div>
         ) : null

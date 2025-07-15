@@ -1,4 +1,6 @@
 export const defaultFirstFooterConfig = {
+    variation: "footerWithStoreDetailsButtonAndFormOrLocation",
+    show: "location",
     background: {
         width: {
             mobile: "80%",
@@ -10,6 +12,36 @@ export const defaultFirstFooterConfig = {
         },
         color: "#f9d195",
         shadow: true,
+    },
+    button: {
+        show: true,
+        function: "buyNow",
+        style: {
+            text: {
+                input: "Buy Now",
+                fontFamily: "Open Sans",
+                color: "brown",
+                fontSize: "1.2em",
+                fontWeight: "bold",
+                letterSpacing: "0px",
+            },
+            background: {
+                height: "10px",
+                width: "190px",
+                color: "#f9d195",
+                shadow: true,
+                border: {
+                    width: "3px",
+                    style: "solid",
+                    color: "black",
+                    radius: "0px",
+                },
+                padding: {
+                    x: "0.8rem",
+                    y: "50px",
+                }
+            }
+        }
     },
     title: {
         text: {
@@ -55,35 +87,6 @@ export const defaultFirstFooterConfig = {
         style: "solid",
         color: "#d1d5db",
         radius: "0",
-    },
-    button: {
-        function: "buyNow",
-        style: {
-            text: {
-                input: "Buy Now",
-                fontFamily: "Open Sans",
-                color: "brown",
-                fontSize: "1.2em",
-                fontWeight: "bold",
-                letterSpacing: "0px",
-            },
-            background: {
-                height: "10px",
-                width: "190px",
-                color: "#f9d195",
-                shadow: true,
-                border: {
-                    width: "3px",
-                    style: "solid",
-                    color: "black",
-                    radius: "0px",
-                },
-                padding: {
-                    x: "0.8rem",
-                    y: "50px",
-                }
-            }
-        }
     },
     sendEmailForm: {
         background: {

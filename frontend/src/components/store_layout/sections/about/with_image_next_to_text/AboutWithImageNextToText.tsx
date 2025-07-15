@@ -1,5 +1,5 @@
 import { useAppSelector } from "../../../../../app/hooks";
-import { getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunctions";
+import { getBackgroundStyles, getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunctions";
 
 const AboutWithImageNextToText = () => {
   const settings = useAppSelector((state) => state.layoutSettings.about);
@@ -7,27 +7,27 @@ const AboutWithImageNextToText = () => {
   return (
     <div 
       style={{
-        backgroundColor: settings.background.color,
-        ...getTextStyles(settings.text.style)
+        ...getBackgroundStyles(settings.background),
+         ...getTextStyles(settings.text.style)
       }}
       className="w-full h-fit"
     >
       {/* Mobile */}
       <div
-        className="p-3 text-center md:hidden"
+        className="p-3 text-center pb-10 lg:hidden"
       >
         <h1 
           style={{
             ...getTextStyles(settings.text.title.style)
           }}
-          className={`${settings.text.title.style.animation} mb-3`}
+          className={`${settings.text.title.style.animation} mb-3 py-5`}
         >
           {settings.text.title.style.input}
         </h1>
         <img 
           src={settings.image.imageUrl} alt="about us" 
           style={{
-            ...getBorderStyles(settings.image.border)
+            ...getBackgroundStyles(settings.image.background),
           }}
           className="w-full h-[38vh] object-cover mb-3" 
         />
@@ -37,7 +37,7 @@ const AboutWithImageNextToText = () => {
             ...getBorderStyles(settings.text.border),
             ...getTextStyles(settings.text.style),
           }} 
-          className={`${settings.text.style.animation} flex flex-col space-y-4 whitespace-pre-line`}
+          className={`${settings.text.style.animation} flex flex-col space-y-4 whitespace-pre-line max-h-[70vh] overflow-scroll hide-scrollbar lg:h-fit`}
         >
           <p>
             {store?.about}
@@ -47,16 +47,20 @@ const AboutWithImageNextToText = () => {
 
       {/* Desktop */}
       <div 
-        className="hidden lg:flex flex-row justify-between w-full h-fit min-h-[85vh] p-8"
+        className="hidden lg:flex flex-row justify-between items-center w-full h-fit min-h-[85vh] p-8"
       >
         {/* Image */}
         <div 
-          style={{
-            ...getBorderStyles(settings.image.border)
-          }}
           className="h-full w-[40%]"
         >
-          <img src={settings.image.imageUrl} alt="about us" className="w-full h-full object-cover mb-3" />
+          <img 
+            style={{
+              ...getBackgroundStyles(settings.image.background),
+            }}
+            src={settings.image.imageUrl} 
+            alt="about us" 
+            className="w-full h-full object-cover mb-3" 
+          />
         </div>
         {/* Text */}
         <div

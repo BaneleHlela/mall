@@ -13,8 +13,9 @@ import { defaultGalleryWithImageSliderConfig } from "./gallery/defaultGalleryWit
 import { defaultHeroWithButtonImageAndTextConfig } from "./hero/defaultHeroWithButtonImageAndTextConfig";
 import { store } from "../../../app/store";
 import { getLayoutByDemoStore } from "../../../features/layouts/layoutSlice";
+import { simpleServicesSectionConfig } from "./services/defaultSimpleStoreServicesConfig";
 
-export type SectionType = 'book' | 'products' | 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer' | 'gallery';
+export type SectionType = 'book' | 'products' | 'services' | 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer' | 'gallery';
 type VariationType = string;
 
 
@@ -40,26 +41,6 @@ const fetchDemoStoreLayout = async (demoStoreId: string, section: string) => {
 
 export const getSectionDefaults = async (section: SectionType, variation: VariationType) => {
   
-  // If a demoStoreId is provided and the variation is 'heroWithButtonImageAndText'
-  if (section === 'hero' && variation === 'heroWithButtonImageAndText') {
-    const demoStoreId = "686e76aa96f14c28650b671d"; // Hard-coded demo store ID
-    try {
-      // Dispatch the thunk to fetch the layout for the demo store
-      const resultAction = await store.dispatch(getLayoutByDemoStore(demoStoreId));
-      
-      if (getLayoutByDemoStore.fulfilled.match(resultAction)) {
-        // If the fetch was successful, extract the hero section from the layout
-        const layout = resultAction.payload;
-        if (layout && layout.hero) {
-          return layout.hero;
-        }
-      }
-      // If the fetch failed or the hero section doesn't exist, fall back to the default
-      console.warn('Failed to fetch demo store layout or hero section not found. Using default.');
-    } catch (error) {
-      console.error('Error fetching demo store layout:', error);
-    }
-  }
 
   const defaults: Record<SectionType, Record<VariationType, any>> = {
     hero: {
@@ -102,6 +83,9 @@ export const getSectionDefaults = async (section: SectionType, variation: Variat
     },
     products: {
       first: defaultFirstStoreProductsConfig,
+    },
+    services: {
+      servicesSectionSimple: simpleServicesSectionConfig,
     },
     reviews: {
       first: defaultFirstStoreReviewsConfig,

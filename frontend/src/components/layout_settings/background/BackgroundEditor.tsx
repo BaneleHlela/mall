@@ -91,6 +91,20 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
         />
       )}
 
+      {/* Position */}
+      {isAllowed("position") && (
+        <OptionsToggler
+          label="Position"
+          options={["start", "center", "end"]}
+          value={getSetting("position", settings, objectPath) || "start"}
+          onChange={(newValue) =>
+            handleChange("position")({
+              target: { value: newValue }
+            } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
+          }
+        />
+      )}
+
       {/* HEIGHT */}
       {isAllowed("height") &&
         (responsiveSize ? (
@@ -157,7 +171,7 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
             value={parseInt(getSetting("padding.y", settings, objectPath) || "50")}
             unit="px"
             min={0}
-            max={100}
+            max={200}
             step={1}
             onChange={createSliderChangeHandler("padding.y", "px")}
           />
@@ -166,7 +180,7 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
             value={parseInt(getSetting("padding.x", settings, objectPath) || "50")}
             unit="px"
             min={0}
-            max={100}
+            max={200}
             step={1}
             onChange={createSliderChangeHandler("padding.x", "px")}
           />

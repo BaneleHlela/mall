@@ -1,5 +1,4 @@
 import { useAppSelector } from "../../../../../app/hooks"
-import type { SectionProps } from "../../../../../types/layoutTypes"
 import { getBackgroundStyles, getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunctions"
 import StoreButton from "../../../extras/buttons/StoreButton";
 import SendEmailForm from "../../../extras/forms/SendEmailForm";
@@ -8,31 +7,38 @@ import FooterAddressDisplay from "./supporting/FooterAddressDisplay";
 import FooterContactDetailsDisplay from "./supporting/FooterContactDetailsDisplay";
 import FooterOperationTimesDisplay from "./supporting/FooterOperationTimesDisplay";
 
-const FooterWithStoreDetailsFormAndButton = ({id}: SectionProps) => {
+const FooterWithStoreDetailsFormAndButton = () => {
   const settings = useAppSelector((state) => state.layoutSettings.footer);
   const store = useAppSelector((state) => state.stores.currentStore);
   return (
-    <div className="w-full h-full  flex flex-row justify-center">
+    <div 
+      id="footer"
+      className="w-full h-full  flex flex-row justify-center">
       {/* Desktop */}
       <div
         style={{
           ...getBackgroundStyles(settings.background)
         }} 
-        className="hidden lg:block" id={id}
+        className="hidden lg:block" 
       >
-        {/* Heading and Book an appointment online */}
-        <div
-          style={{
-            ...getTextStyles(settings.title.text),
-          }} 
-          className="h-[13vh] flex items-center justify-between px-6"
-        >
-          <h1>{settings.title.text.input}</h1>
-          {/* Book an appointment online */}
-          <div>
-            <StoreButton style={settings.button}/>
+        {/* Heading and Button */}
+        {(settings.button.show || settings.title.text.input) && (
+          <div
+            style={{
+              ...getTextStyles(settings.title.text),
+            }} 
+            className="h-[13vh] w-full flex items-center justify-between px-6"
+          >
+            <h1>{settings.title.text.input}</h1>
+            {/* Button*/}
+            {settings.button.show && (
+              <div>
+                <StoreButton style={settings.button} onClick={() => {}}/>
+              </div>
+            )}
           </div>
-        </div>
+        )}
+        
         {/* Content */}
         <div
           className="h-[77vh] flex flex-row justify-center items-center gap-2"
@@ -48,7 +54,7 @@ const FooterWithStoreDetailsFormAndButton = ({id}: SectionProps) => {
               {/* Address */}
               <div className="h-[25vh] w-[50%] flex flex-col justify-between p-4">
                 <FooterAddressDisplay // @ts-ignore-next-line
-                  location={store?.locations[0].address}
+                  location={store?.location.address}
                   headingStyle={settings.detailsTitle}
                   addressStyle={settings.detailsText}
                   headingInput={settings.inputs.address}
@@ -76,23 +82,26 @@ const FooterWithStoreDetailsFormAndButton = ({id}: SectionProps) => {
                 />
             </div>
           </div>
-          {/* Email send section */}
+          {/* Form or Button */}
           <div
             className="h-[77vh] w-[50%]"
           >
-            <div className="w-full h-full flex flex-row justify-center">
-              <SendEmailForm />
-            </div>
-            {/* Our location on map */}
-            <div className="w-full h-full flex flex-col justify-center items-center">
-              <MapComponent // @ts-ignore-next-line
-                name={store?.name} // @ts-ignore-next-line
-                lat={store?.locations[0].lat} // @ts-ignore-next-line
-                lng={store?.locations[0].lng}
-                style={settings.location}
-              />
-            </div>
-          
+            {settings.show === "form" && (
+              <div className="w-full h-full flex flex-row justify-center">
+                {/* <SendEmailForm /> */}
+              </div>
+            )}
+            {/* Location */}
+            {settings.show === "location" && (
+              <div className="w-full h-full flex flex-col justify-center items-center">
+                <MapComponent // @ts-ignore-next-line
+                  name={store?.name} // @ts-ignore-next-line
+                  lat={store?.location.lat} // @ts-ignore-next-line
+                  lng={store?.location.lng}
+                  style={settings.location}
+                />
+              </div>
+            )}
           </div>
         </div>
         {/* Copyright and socials */}
@@ -116,22 +125,24 @@ const FooterWithStoreDetailsFormAndButton = ({id}: SectionProps) => {
         >
 
           {/* Heading */}
-          <div
-            style={{
-              ...getTextStyles(settings.title.text),
-            }} 
-            className={`h-[10vh] w-full flex 
-              ${settings.title.position === "left" ? "justify-start" : "justify-center"}`
-            }
-          >
-            <h1>{settings.title.text.input}</h1>
-          </div>
+          {settings.title.text.input && (
+            <div
+              style={{
+                ...getTextStyles(settings.title.text),
+              }} 
+              className={`h-[10vh] w-full flex 
+                ${settings.title.position === "left" ? "justify-start" : "justify-center"}`
+              }
+            >
+              <h1>{settings.title.text.input}</h1>
+            </div>
+          )}
           {/* Address */}
           <div
             className={`h-fit flex flex-col justify-center mb-10`}
           >
             <FooterAddressDisplay //@ts-ignore-next-line
-              location={store?.locations[0].address}
+              location={store?.location.address}
               headingStyle={settings.detailsTitle}
               addressStyle={settings.detailsText}
               headingInput={settings.inputs.address}
@@ -164,37 +175,38 @@ const FooterWithStoreDetailsFormAndButton = ({id}: SectionProps) => {
             />
           </div>
         </div>
-        {/* Book an appointment online */}
-        <div
-          className="w-full flex flex-row justify-center"
-        >
-          <StoreButton style={settings.button}/>
-        </div>
+        {/* Button*/}
+        {settings.button.show && (
+          <div
+            className="w-full flex flex-row justify-center"
+          >
+            <StoreButton style={settings.button} onClick={() => {}}/>
+          </div>
+        )}
         {/* Email send, copyright, and social */}
         <div
           className="min-h-[80vh] w-full p-1 mt-10"
         > 
           {/* Email send */}
-          <div
-            className="h-fit w-full flex flex-row justify-center"
-          >
-            <SendEmailForm />
-          </div>
-          {/* Our location on map */}
-          <div className="w-full h-full flex flex-col justify-center items-center">
-            <MapComponent // @ts-ignore-next-line
-              name={store?.name} // @ts-ignore-next-line
-              lat={store?.locations[0].lat} // @ts-ignore-next-line
-              lng={store?.locations[0].lng}
-              style={settings.location}
-            />
-          </div>
-          {/* Copyright and social */}
-          <div
-            className="h-[15%] bg-white mt-5"
-          >
-            
-          </div>
+          {settings.show === "form" && (
+            <div
+              className="h-fit w-full flex flex-row justify-center"
+            >
+              {/* <SendEmailForm /> */}
+            </div>
+          )}
+          
+          {/* Location */}
+          {settings.show === "location" && (
+            <div className="w-full h-[80vh] bg-black flex flex-col justify-center items-center">
+              <MapComponent // @ts-ignore-next-line
+                name={store?.name} // @ts-ignore-next-line
+                lat={store?.location.lat} // @ts-ignore-next-line
+                lng={store?.location.lng}
+                style={settings.location}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

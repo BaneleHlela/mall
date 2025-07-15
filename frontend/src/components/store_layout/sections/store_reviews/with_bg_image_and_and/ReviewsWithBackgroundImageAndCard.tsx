@@ -83,7 +83,7 @@ const ReviewsWithBackgroundImageAndCard = () => {
             {reviews.length > 0 ? (
             <div
                 style={{
-                gap: getResponsiveDimension(settings.grid.gap),
+                    gap: getResponsiveDimension(settings.grid.gap),
                 }}
                 className={`grid px-1 ${getGridColumnClasses({
                 mobile: settings.grid.columns.mobile,

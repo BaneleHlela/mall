@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { getBackgroundStyles } from '../../../utils/stylingFunctions';
 
 interface MapComponentProps {
   lat: number;
@@ -44,12 +45,15 @@ const MapComponent: React.FC<MapComponentProps> = ({ lat, lng, name, style }) =>
     infowindow.open(map, marker);
   }, [lat, lng, name]);
 
-  return <div ref={mapRef} 
-    style={{ 
-        height: window.innerWidth >= 1024 ? style.height.desktop : style.height.mobile, 
-        width: window.innerWidth >= 1024? style.width.desktop : style.width.mobile,  
-    }} 
-  />;
+  return (
+    <div 
+
+      ref={mapRef} 
+      style={{ 
+          ...getBackgroundStyles(style),
+      }} 
+    />
+  );
 };
 
 export default MapComponent;

@@ -21,7 +21,7 @@ const LogoControl: React.FC = () => {
   };
 
   const handleUpload = async (file: File) => {
-    const MAX_FILE_SIZE = 1024 * 1024;
+    const MAX_FILE_SIZE = 2024 * 2024;
   
     if (file.size > MAX_FILE_SIZE) return alert("File too large (max 1MB).");
     if (!store?._id) return alert("Store ID missing.");

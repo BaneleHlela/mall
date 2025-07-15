@@ -1,5 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { updateSetting } from "../../../../features/layouts/layoutSettingsSlice";
+import OptionsToggler from "../../supporting/OptionsToggler";
+import { handleAddSectionToLinks } from "../hero/HeroSettings";
 import FirstStoreReviewsSectionSettings from "./first/FirstStoreReviewsSectionSettings";
 import ReviewsWithBackgroundImageAndCardSettings from "./with_bg_image_and_card/ReviewsWithBackgroundImageAndCardSettings";
 
@@ -13,19 +15,39 @@ const StoreReviewsSectionSettings = () => {
 
     if (variation === "reviewsWithBackgroundImageAndCard") {
         return (
-            <ReviewsWithBackgroundImageAndCardSettings
-                settings={settings} 
-                handleSettingChange={handleSettingChange}
-            />
+            <>
+                <div className="px-2 py-1 border rounded">
+                    <OptionsToggler
+                        label="Add to Menubar ?"
+                        options={['yes', 'no']}
+                        value={settings.routes?.home?.inLinks?.some(link => link.section === 'reviews') ? 'yes' : 'no'}
+                        onChange={(option) => handleAddSectionToLinks(dispatch, settings, 'reviews', option)}
+                    />
+                </div>
+                <ReviewsWithBackgroundImageAndCardSettings
+                    settings={settings} 
+                    handleSettingChange={handleSettingChange}
+                />
+            </>
         )
     }
 
     if (variation === "firstStoreReviewsSection") {
         return (
-            <FirstStoreReviewsSectionSettings 
-                settings={settings} 
-                handleSettingChange={handleSettingChange}
-            />
+            <>
+                <div className="px-2 py-1 border rounded">
+                    <OptionsToggler
+                        label="Add to Menubar ?"
+                        options={['yes', 'no']}
+                        value={settings.routes?.home?.inLinks?.some(link => link.section === 'reviews') ? 'yes' : 'no'}
+                        onChange={(option) => handleAddSectionToLinks(dispatch, settings, 'reviews', option)}
+                    />
+                </div>
+                <FirstStoreReviewsSectionSettings 
+                    settings={settings} 
+                    handleSettingChange={handleSettingChange}
+                />
+            </>
         )
     }
 

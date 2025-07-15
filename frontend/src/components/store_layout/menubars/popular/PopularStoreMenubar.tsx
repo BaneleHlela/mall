@@ -50,7 +50,7 @@ const MobileTopBar: React.FC<{
     };
 
   const renderIcons = () => (
-    <div className={`w-full h-full flex row ${settings.topbar.mobile.hamburgerFirst ? "justify-end" : "justify-start"} pl-1 pr-1`}>
+    <div className={`w-full h-full flex row items-center ${settings.topbar.mobile.hamburgerFirst ? "justify-end" : "justify-start"} pl-1 pr-1`}>
       {settings.topbar.mobile.extras.include === "button" && (
         <StoreButton style={settings.topbar.mobile.extras.button} />
       )}
@@ -132,7 +132,7 @@ const DesktopTopBar: React.FC<{
               ...getBackgroundStyles(logoSettings.background),
               ...getTextStyles(logoSettings.text),
             }}
-            className='min-w-[250px]'
+            className='min-w-[250px] flex flex-col justify-center'
           >
             {logoSettings.text.input || store?.name || 'Store Name'}
           </div>
@@ -171,7 +171,7 @@ const DesktopTopBar: React.FC<{
   const renderIcons = () => (
     <div className='w-fit h-full flex flex-col justify-center'>
       {settings.topbar.desktop.iconsCart.iconsFirst ? (
-        <div className="flex flex-row items-center space-x-3">
+        <div className="flex flex-row space-x-3 h-full items-center">
           {settings.topbar.desktop.extras.include === "button" && (
             <StoreButton style={settings.topbar.desktop.extras.button}/>
           )}
@@ -183,7 +183,7 @@ const DesktopTopBar: React.FC<{
           )}
         </div>
       ) : (
-        <div className="flex flex-row space-x-5">
+        <div className="flex flex-row space-x-5 h-full items-center">
           {Array.isArray(store?.trades) && store?.trades.includes('products') && (
             <StoreCart style={settings.cart} />
           )}

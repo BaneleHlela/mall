@@ -15,6 +15,7 @@ import { defaultBasicBookWithOpenCalendarConfig } from "./sections/book/defaultB
 import { defaultGalleryWithGroupedImagesConfig } from "./sections/gallery/defaultGalleryWithGroupedImagesConfig";
 import { defaultContactWithBackgroundImageTextAndSocialsConfig } from "./sections/contact/defaultContactWithBackgroundImageTextAndSocialsConfig";
 import { defaultReviewsWithBackgroungImageAndCardConfig } from "./sections/reviews/defaultReviewsWithBackgroundImageAndCardConfig";
+import { simpleServicesSectionConfig } from "./sections/services/defaultSimpleStoreServicesConfig";
 
 export const defaultMenubarConfig = {
   topbar: {
@@ -97,8 +98,8 @@ export const defaultLayoutConfig = {
       url: "",
       text: "",
     },
-    practice: defaultContactWithBackgroundImageTextAndSocialsConfig,
-    services: defaultFirstStoreServicesConfig,
+    practice: simpleServicesSectionConfig,
+    services: simpleServicesSectionConfig,
     about: defaultAboutWithImageNextToTextConfig,
     menubar: defaultPupularStoreMenubarConfig,
     gallery: defaultGalleryWithImageSliderConfig,

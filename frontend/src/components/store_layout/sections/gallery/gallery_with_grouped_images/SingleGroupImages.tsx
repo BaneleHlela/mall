@@ -20,7 +20,7 @@ export function getGridColumnClasses({
     const mobileClass = mobile ? `grid-cols-${mobile}` : '';
     const desktopClass = desktop ? `lg:grid-cols-${desktop}` : '';
     
-    return [mobileClass, desktopClass, 'sm:grid-cols-2'].join(' ').trim();
+    return [mobileClass, 'sm:grid-cols-1', desktopClass,].join(' ').trim();
 }
 
 const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({ groupName, groupDescrition, thumbnail, images, style, textStyle }) => {
