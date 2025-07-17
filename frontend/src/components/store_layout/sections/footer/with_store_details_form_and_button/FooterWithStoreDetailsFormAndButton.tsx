@@ -1,7 +1,7 @@
 import { useAppSelector } from "../../../../../app/hooks"
 import { getBackgroundStyles, getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunctions"
 import StoreButton from "../../../extras/buttons/StoreButton";
-import SendEmailForm from "../../../extras/forms/SendEmailForm";
+import SendEmailForm from "../../../extras/forms/send_email/SendEmailForm";
 import MapComponent from "../../../extras/MapComponent";
 import FooterAddressDisplay from "./supporting/FooterAddressDisplay";
 import FooterContactDetailsDisplay from "./supporting/FooterContactDetailsDisplay";
@@ -24,12 +24,13 @@ const FooterWithStoreDetailsFormAndButton = () => {
         {/* Heading and Button */}
         {(settings.button.show || settings.title.text.input) && (
           <div
-            style={{
-              ...getTextStyles(settings.title.text),
-            }} 
-            className="h-[13vh] w-full flex items-center justify-between px-6"
+            className={`h-[13vh] w-full flex items-center justify-between`} 
           >
-            <h1>{settings.title.text.input}</h1>
+            <h1
+              style={{
+                ...getTextStyles(settings.title.text),
+              }} 
+            >{settings.title.text.input}</h1>
             {/* Button*/}
             {settings.button.show && (
               <div>
@@ -45,14 +46,14 @@ const FooterWithStoreDetailsFormAndButton = () => {
         >
           {/* Address, Contact and Opening Hours */}
           <div
-            className="h-[77vh] w-[50%] bg-amber-50"
+            className="h-[77vh] w-[50%] "
           >
             {/* Address and Contact */}
             <div
               className="h-[25vh] flex flex-row"
             >
               {/* Address */}
-              <div className="h-[25vh] w-[50%] flex flex-col justify-between p-4">
+              <div className="h-[25vh] w-[50%] flex flex-col justify-between">
                 <FooterAddressDisplay // @ts-ignore-next-line
                   location={store?.location.address}
                   headingStyle={settings.detailsTitle}
@@ -61,7 +62,7 @@ const FooterWithStoreDetailsFormAndButton = () => {
                 />
               </div>
               {/* Contact */}
-              <div className="h-[25vh] w-[50%] text-white flex flex-col justify-between p-4">
+              <div className="h-[25vh] w-[50%] text-white flex flex-col justify-between">
                 <FooterContactDetailsDisplay // @ts-ignore-next-line
                   phone={store?.contact.phone} // @ts-ignore-next-line
                   email={store?.contact.email} 
@@ -72,7 +73,7 @@ const FooterWithStoreDetailsFormAndButton = () => {
               </div>
             </div>
             {/* Opening hours */}
-            <div className="h-fit w-[100%] text-white flex flex-col justify-between p-4">
+            <div className="h-fit w-[100%] text-white flex flex-col justify-between">
                 
                 <FooterOperationTimesDisplay // @ts-ignore-next-line
                   operationTimes={store?.operationTimes} 
@@ -88,7 +89,7 @@ const FooterWithStoreDetailsFormAndButton = () => {
           >
             {settings.show === "form" && (
               <div className="w-full h-full flex flex-row justify-center">
-                {/* <SendEmailForm /> */}
+                <SendEmailForm style={settings.sendEmailForm}/>
               </div>
             )}
             {/* Location */}
@@ -105,11 +106,11 @@ const FooterWithStoreDetailsFormAndButton = () => {
           </div>
         </div>
         {/* Copyright and socials */}
-        <div
+        {/* <div
           className="h-[10vh] bg-blue-300 flex justify-between items-center px-4"
         >
 
-        </div>
+        </div> */}
       </div>
       {/* Mobile */}
       <div
@@ -121,7 +122,7 @@ const FooterWithStoreDetailsFormAndButton = () => {
       >
         {/* Heading, address, Contact and Opening Hours */}
         <div
-          className="h-fit w-full flex flex-col p-4"
+          className="h-fit w-full flex flex-col"
         >
 
           {/* Heading */}
@@ -178,27 +179,27 @@ const FooterWithStoreDetailsFormAndButton = () => {
         {/* Button*/}
         {settings.button.show && (
           <div
-            className="w-full flex flex-row justify-center"
+            className="w-full flex flex-row justify-center mt-5"
           >
             <StoreButton style={settings.button} onClick={() => {}}/>
           </div>
         )}
         {/* Email send, copyright, and social */}
         <div
-          className="min-h-[80vh] w-full p-1 mt-10"
+          className="min-h-[60vh] w-full p-1 mt-10"
         > 
           {/* Email send */}
           {settings.show === "form" && (
             <div
               className="h-fit w-full flex flex-row justify-center"
             >
-              {/* <SendEmailForm /> */}
+              <SendEmailForm style={settings.sendEmailForm}/>
             </div>
           )}
           
           {/* Location */}
           {settings.show === "location" && (
-            <div className="w-full h-[80vh] bg-black flex flex-col justify-center items-center">
+            <div className="w-full h-[60vh] flex flex-col justify-center items-center">
               <MapComponent // @ts-ignore-next-line
                 name={store?.name} // @ts-ignore-next-line
                 lat={store?.location.lat} // @ts-ignore-next-line

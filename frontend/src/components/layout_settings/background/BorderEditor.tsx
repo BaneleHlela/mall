@@ -38,13 +38,15 @@ const BorderEditor: React.FC<EditorProps> = ({
       {isAllowed("width") && (
         <SettingsSlider
           label="Border Width"
-          value={parseInt(getSetting("width", settings, objectPath) || "3")}
-          unit="px"
+          value={parseFloat(getSetting("width", settings, objectPath) || "3")}
+          unit="vh"
           min={0}
+          max={5}
+          step={0.1}
           onChange={(newVal) => {
             const event = {
               target: Object.assign(document.createElement("input"), {
-                value: `${newVal}px`,
+                value: `${newVal}vh`,
               }),
             } as React.ChangeEvent<HTMLInputElement>;
             handleChange("width")(event);
@@ -64,13 +66,14 @@ const BorderEditor: React.FC<EditorProps> = ({
         <SettingsSlider
           label="Border Radius"
           value={parseInt(getSetting("radius", settings, objectPath) || "0")}
-          unit="px"
+          unit="vh"
           min={0}
-          max={100}
+          max={15}
+          step={.1}
           onChange={(newVal) => {
             const event = {
               target: Object.assign(document.createElement("input"), {
-                value: `${newVal}px`,
+                value: `${newVal}vh`,
               }),
             } as React.ChangeEvent<HTMLInputElement>;
             handleChange("radius")(event);

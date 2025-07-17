@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { sendEmail, resetState } from '../../../../features/emails/emailSlice';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { sendEmail, resetState } from '../../../../../../features/emails/emailSlice';
 import { TbLoader3 } from "react-icons/tb";
-import { getBackgroundStyles,  getTextStyles } from '../../../../utils/stylingFunctions';
+import { getBackgroundStyles,  getTextStyles } from '../../../../../../utils/stylingFunctions';
 
 interface SendEmailFormData {
   firstName: string;
@@ -147,7 +147,7 @@ const ElegantSendEmailForm: React.FC<SendEmailFormProps> = ({style}) => {
                   borderBottom: `${style.background.senderInfo.border.width} ${style.background.senderInfo.border.style} ${style.background.senderInfo.border.color}`,
                   borderRadius: style.background.senderInfo.border.radius,
                 }}
-                className="mt-1 h-[100px] block w-full p-2 focus:bg-[#ffffff11] focus:bg-opacity-30 focus:outline-none focus:ring-0 focus:border-none"
+                className="mt-1 h-[15vh] block w-full p-2 focus:bg-[#ffffff11] focus:bg-opacity-30 focus:outline-none focus:ring-0 focus:border-none"
               />
             ) : (
               <input

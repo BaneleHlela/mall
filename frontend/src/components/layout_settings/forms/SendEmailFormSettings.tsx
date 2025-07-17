@@ -25,7 +25,11 @@ const SendEmailFormSettings: React.FC<EmailFormSettingsProps> = ({
     }
     
     return (
-        <div>SendEmailFormSettings</div>
+        <ElegantSendEmailFormSettings 
+            settings={settings}
+            handleSettingChange={handleSettingChange}
+            objectPath={objectPath}
+        />
     )
 }
 

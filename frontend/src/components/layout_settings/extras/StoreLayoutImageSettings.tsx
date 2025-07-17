@@ -67,7 +67,7 @@ const StoreLayoutImageSettings: React.FC<StoreLayoutImageSettingsProps> = ({
                   src={img.url}
                   alt={`store-img-${i}`}
                   onClick={() => handleGalleryImageClick(img.url)}
-                  className="cursor-pointer rounded hover:opacity-80 border-2 border-transparent hover:border-blue-500"
+                  className="cursor-pointer rounded hover:opacity-80 border-[.3vh] border-transparent hover:border-blue-500"
                 />
               ))}
             </div>
@@ -81,7 +81,7 @@ const StoreLayoutImageSettings: React.FC<StoreLayoutImageSettingsProps> = ({
           <img
             src={value}
             alt="Selected"
-            className="w-40 h-40 object-cover rounded border"
+            className="w-40 h-40 object-cover rounded border-[.15vh]"
           />
         </div>
       )}

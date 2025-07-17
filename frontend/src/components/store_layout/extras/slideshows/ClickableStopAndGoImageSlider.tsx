@@ -60,7 +60,7 @@ const ClickableStopAndGoImageSlider: React.FC<ImageSliderProps> = ({
       <div
         className={`flex ${transitionEnabled ? "transition-transform duration-500 ease-in-out" : ""}`}
         style={{
-          transform: `translateX(-${offset * imageWidthPx}px)`,
+          transform: `translateX(-${offset * imageWidthPx}vh)`,
         }}
         onTransitionEnd={handleTransitionEnd}
       >
@@ -75,6 +75,7 @@ const ClickableStopAndGoImageSlider: React.FC<ImageSliderProps> = ({
             onMouseEnter={() => setHoveredImageId(img._id)}
             onMouseLeave={() => setHoveredImageId(null)}
           >
+            
             <img
               src={img.url}
               alt={img.description || "Image"}
@@ -83,7 +84,7 @@ const ClickableStopAndGoImageSlider: React.FC<ImageSliderProps> = ({
               }}
               className="object-cover cursor-pointer w-full h-full rounded-md"
             />
-
+            <p className="text-9xl">here</p>
             {hoveredImageId === img._id && (
                 <>
                     <div className="absolute inset-0 w-full h-full">
@@ -122,6 +123,7 @@ const ClickableStopAndGoImageSlider: React.FC<ImageSliderProps> = ({
                         className="absolute inset-0 w-full h-full">
 
                     </div>
+                    
                 </>
               
             )}

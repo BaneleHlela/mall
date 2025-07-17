@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import { getStoreRatingStats } from "../../../../../features/reviews/reviewSlice";
 import { getBackgroundStyles, getTextStyles } from "../../../../../utils/stylingFunctions";
 import StoreOverallReviewsCard from "../../../extras/cards/store/StoreOverallReviewsCard";
-import SendEmailForm from "../../../extras/forms/SendEmailForm";
+import SendEmailForm from "../../../extras/forms/send_email/basic/BasicSendEmailForm";
 
 const HeroWithReviewCardAndEmailForm = () => {
   const dispatch = useAppDispatch();

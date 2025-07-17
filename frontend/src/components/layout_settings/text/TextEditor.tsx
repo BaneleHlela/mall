@@ -64,6 +64,16 @@ const TextEditor: React.FC<EditorProps> = ({
               }
             />
           )}
+          {isAllowed("show") && (
+            <OptionsToggler
+              label="Show"
+              options={["Yes", "No"]}
+              value={getSetting("show", settings, objectPath) ? "Yes" : "No"}
+              onChange={(newValue) =>
+                handleSettingChange(`${objectPath}.show`, newValue === "Yes")
+              }
+            />
+          )}
           {isAllowed("animation") && (
               <OptionsToggler
                   label="Text Animation"
@@ -129,26 +139,28 @@ const TextEditor: React.FC<EditorProps> = ({
               <>
                 <SettingsSlider
                   label="Font Size (Phone)"
-                  value={parseInt(getSetting("fontSize.mobile", settings, objectPath) || '16')}
-                  unit="px"
-                  min={10}
-                  max={150}
+                  value={parseFloat(getSetting("fontSize.mobile", settings, objectPath) || '2.1')}
+                  unit="vh"
+                  step={0.1}
+                  min={0.5}
+                  max={15}
                   onChange={(newVal) => {
                     const event = {
-                      target: Object.assign(document.createElement("input"), { value: `${newVal}px` })
+                      target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
                     } as React.ChangeEvent<HTMLInputElement>;
                     handleChange("fontSize.mobile")(event);
                   }}
                 />
                 <SettingsSlider
                   label="Font Size (PC)"
-                  value={parseInt(getSetting("fontSize.desktop", settings, objectPath) || '16')}
-                  unit="px"
-                  min={10}
-                  max={150}
+                  value={parseFloat(getSetting("fontSize.desktop", settings, objectPath) || '2')}
+                  unit="vh"
+                  step={0.1}
+                  min={0.5}
+                  max={15}
                   onChange={(newVal) => {
                     const event = {
-                      target: Object.assign(document.createElement("input"), { value: `${newVal}px` })
+                      target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
                     } as React.ChangeEvent<HTMLInputElement>;
                     handleChange("fontSize.desktop")(event);
                   }}
@@ -157,13 +169,13 @@ const TextEditor: React.FC<EditorProps> = ({
             ) : (
               <SettingsSlider
                 label="Font Size"
-                value={parseInt(getSetting("fontSize", settings, objectPath))}
-                unit="px"
-                min={10}
-                max={150}
+                value={parseFloat(getSetting("fontSize", settings, objectPath))}
+                step={0.1}
+                min={0.5}
+                max={15}
                 onChange={(newVal) => {
                   const event = {
-                    target: Object.assign(document.createElement("input"), { value: `${newVal}px` })
+                    target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
                   } as React.ChangeEvent<HTMLInputElement>;
                   handleChange("fontSize")(event);
                 }}

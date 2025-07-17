@@ -21,7 +21,7 @@ const FirstOrderSubSettingsContainer: React.FC<FirstOrderSubSettingsContainerPro
   return (
     <div className="relative">
       <div
-        className="w-full h-[45px] bg-stone-50 border-2 border-white text-black rounded p-2 shadow-md hover:scale-103 hover:opacity-85 "
+        className="w-full h-[7vh] text-[1.8vh] bg-stone-50 border-[.3vh] border-white text-gray-900 rounded p-[.6vh] shadow-md hover:scale-103 hover:bg-gray-900 hover:text-white hover:border-white"
       >
         <div className="w-full h-full flex justify-between items-center pl-2">
           <span onClick={onClick} className="cursor-pointer">{name}</span>
@@ -31,7 +31,7 @@ const FirstOrderSubSettingsContainer: React.FC<FirstOrderSubSettingsContainerPro
                 onClick={onDeleteClick}
                 className="flex flex-col justify-center hover:scale:150 cursor-pointer"
               >
-                <FiTrash size={18} className="text-red-600" />
+                <FiTrash className="text-red-600 text-[2vh]" />
               </div>
             )}
             

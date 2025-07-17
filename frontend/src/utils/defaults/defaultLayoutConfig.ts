@@ -1,7 +1,6 @@
 import { defaultPupularStoreMenubarConfig } from "./menubars/defaultPopularStoreMenubarConfig";
 import { defaultAboutWithImageNextToTextConfig } from "./sections/about/defaultAboutWithImageNextToText";
 import { defaultFirstBookWithCalandarConfig } from "./sections/book_with_calendar/defaultFirstBookWithCalandarConfig";
-import { defaultFirstFooterConfig } from "./sections/footer/defaultFirstFooterConfig";
 import { defaultHeroWithReviewCardAndEmailFormConfig } from "./sections/hero/defaultHeroWithReviewCardAndEmailFormConfig";
 import { defaultHeroWithButtonBetweenImages } from "./sections/hero/defaultHeroWithButtonBetweenImagesConfig";
 import { defaultFirstStoreMenuSectionConfig } from "./sections/menu/defaultFirstStoreMenuSectionConfig";
@@ -16,6 +15,7 @@ import { defaultGalleryWithGroupedImagesConfig } from "./sections/gallery/defaul
 import { defaultContactWithBackgroundImageTextAndSocialsConfig } from "./sections/contact/defaultContactWithBackgroundImageTextAndSocialsConfig";
 import { defaultReviewsWithBackgroungImageAndCardConfig } from "./sections/reviews/defaultReviewsWithBackgroundImageAndCardConfig";
 import { simpleServicesSectionConfig } from "./sections/services/defaultSimpleStoreServicesConfig";
+import { defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig } from "./sections/footer/defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig";
 
 export const defaultMenubarConfig = {
   topbar: {
@@ -111,6 +111,6 @@ export const defaultLayoutConfig = {
     order: defaultFirstStoreProductsConfig,
     reviews: defaultReviewsWithBackgroungImageAndCardConfig,
     contact: defaultContactWithBackgroundImageTextAndSocialsConfig,
-    footer: defaultFirstFooterConfig,
+    footer: defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig,
 };
   

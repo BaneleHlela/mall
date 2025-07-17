@@ -63,6 +63,12 @@ export const getBackgroundStyles = (bg: BackgroundSettings = {}) => {
   } else if (bg.width) {
     styles.width = bg.width;
   }
+  // Responsive Margin
+  if (typeof bg.margin === "object") {
+    styles.margin = getResponsiveDimension(bg.margin);
+  } else if (bg.margin) {
+    styles.margin = bg.margin;
+  }
 
   // Padding
   if (bg.padding?.x) styles.paddingLeft = styles.paddingRight = bg.padding.x;
@@ -158,3 +164,25 @@ export const getResponsiveDimension = (
     return dimension.desktop;
   }
 };
+
+interface PercentageObject {
+  mobile: string;
+  desktop: string;
+}
+
+export function getComplementaryPercentages(obj: PercentageObject, propertyName: string): { [key: string]: PercentageObject } {
+  const complementary = (percentage: string): string => {
+    const value = parseFloat(percentage);
+    if (isNaN(value) || !percentage.endsWith('%')) {
+      throw new Error('Invalid percentage value');
+    }
+    return `${100 - value}%`;
+  };
+
+  return {
+    [propertyName]: {
+      mobile: complementary(obj.mobile),
+      desktop: complementary(obj.desktop),
+    }
+  };
+}

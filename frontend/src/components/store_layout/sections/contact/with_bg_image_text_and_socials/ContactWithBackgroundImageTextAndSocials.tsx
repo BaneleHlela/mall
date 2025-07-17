@@ -1,6 +1,6 @@
 import React from 'react'
 import { useAppSelector } from '../../../../../app/hooks'
-import ElegantSendEmailForm from '../../../extras/forms/ElegantSendEmailForm';
+import ElegantSendEmailForm from '../../../extras/forms/send_email/elegant/ElegantSendEmailForm';
 import { getBackgroundStyles, getTextStyles } from '../../../../../utils/stylingFunctions';
 import StoreMenubarIcons, { socials } from '../../../menubars/supporting/StoreMenubarIcons';
 const ContactWithBackgroundImageTextAndSocials = () => {

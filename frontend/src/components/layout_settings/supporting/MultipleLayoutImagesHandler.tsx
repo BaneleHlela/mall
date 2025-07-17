@@ -42,7 +42,7 @@ const MultipleLayoutImagesHandler: React.FC<Props> = ({
     };
 
     return (
-        <div className="space-y-1 p-2">
+        <div className="space-y-[.3vh] p-[.6vh]">
             {images.map((image, index) => (
                 <SingleLayoutImageHandler
                     key={index}

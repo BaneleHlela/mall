@@ -4,7 +4,6 @@ import ReviewsWithBackgroundImageAndCard from "./with_bg_image_and_and/ReviewsWi
 
 const StoreReviewsSection = () => {
     const variation = useAppSelector((state) => state.layoutSettings.reviews.variation);
-    console.log(variation === "reviewsWithBackgroundImageAndCard" );
     if (variation === "reviewsWithBackgroundImageAndCard") {
         return (
             <ReviewsWithBackgroundImageAndCard />

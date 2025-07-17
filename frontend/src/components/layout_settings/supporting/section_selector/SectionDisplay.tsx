@@ -53,16 +53,16 @@ const SectionDisplay: React.FC<SectionDisplayProps> = ({
 
         {/* Overlay */}
         {showOptions && (
-          <div className="absolute top-0 left-0 w-full h-full bg-black opacity-15 z-10 rounded" />
+          <div className="absolute top-0 left-0 w-full h-full bg-black opacity-15 z-10" />
         )}
 
         {/* Action Buttons */}
         {showOptions && (
-          <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center space-y-2 py-5 z-20">
+          <div className="absolute text-[1.8vh] top-0 left-0 w-full h-full flex flex-col justify-center items-center space-y-2 py-5 z-20">
             {link.includes('layouts') && (
               <button
                 onClick={() => onVariationSelect(section.variation)}
-                className="w-[55%] border border-black text-white bg-gray-800 px-2 py-2 rounded-[22px] hover:scale-102"
+                className="w-[55%] border border-black text-white bg-gray-800 p-[.8vh] rounded-[5vh] hover:scale-102"
               >
                 Select
               </button>
@@ -70,14 +70,14 @@ const SectionDisplay: React.FC<SectionDisplayProps> = ({
             {link.includes('dashboard') && (
               <button
                 onClick={() => onDelete(section.variation)}
-                className="w-[55%] border border-black text-white bg-gray-800 hover:bg-gray-700 px-2 py-2 rounded-[22px] hover:scale-102"
+                className="w-[55%] border border-black text-white bg-gray-800 hover:bg-gray-700 p-[.8vh] rounded-[5vh] hover:scale-102"
               >
                 Delete
               </button>
             )}
             <button
               onClick={() => setShowPopup(true)}
-              className="w-[55%] border border-black text-black px-2 py-2 rounded-[22px] hover:scale-102 hover:bg-gray-700 hover:text-stone-200"
+              className="w-[55%] border border-black text-black p-[.8vh] rounded-[5vh] hover:scale-102 hover:bg-gray-700 hover:text-stone-200"
             >
               View
             </button>
@@ -86,7 +86,7 @@ const SectionDisplay: React.FC<SectionDisplayProps> = ({
       </div>
 
       {/* Footer with variation name */}
-      <div className="px-2 leading-5 text-center h-[45px] w-full rounded-b bg-white z-10 flex justify-center items-center">
+      <div className="px-2 leading-5 text-center text-[1.8vh] h-[7vh] w-full rounded-b bg-white z-10 flex justify-center items-center">
         {formatVariation(section.variation)}
       </div>
 
@@ -98,7 +98,7 @@ const SectionDisplay: React.FC<SectionDisplayProps> = ({
               className="absolute top-2 right-2 text-black shadow-md p-1 rounded-full hover:scale-102"
               onClick={() => setShowPopup(false)}
             >
-              <IoMdClose size={28} />
+              <IoMdClose className='text-[4vh]' />
             </button>
             <div className="flex flex-col gap-4">
               <img

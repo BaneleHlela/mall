@@ -7,8 +7,8 @@ const Scibbler = () => {
   const result = getSectionDefaults("hero", "heroWithButtonImageAndText")
   console.log(result)
   return (
-    <div className='w-screen h-screen flex flex-row justify-center'>
-      <SimpleServicesSection />
+    <div className='w-screen h-screen flex flex-row justify-center items-center text-[3vh]'>
+      Hello, World!
     </div>
   )
 }

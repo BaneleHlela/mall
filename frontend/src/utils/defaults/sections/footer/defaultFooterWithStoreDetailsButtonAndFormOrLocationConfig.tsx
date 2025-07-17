@@ -1,4 +1,4 @@
-export const defaultFirstFooterConfig = {
+export const defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig = {
     variation: "footerWithStoreDetailsButtonAndFormOrLocation",
     show: "location",
     background: {
@@ -11,7 +11,6 @@ export const defaultFirstFooterConfig = {
             desktop: "100%",
         },
         color: "#f9d195",
-        shadow: true,
     },
     button: {
         show: true,
@@ -47,7 +46,10 @@ export const defaultFirstFooterConfig = {
         text: {
             input: "Xhumana Nathi",
             fontFamily: "Open Sans",
-            fontSize: "2.2em",
+            fontSize: {
+                mobile: "2.2em",
+                desktop: "2.8em",
+            },
             color: "white",
             fontWeight: "normal",
             fontStyle: "normal",
@@ -71,7 +73,10 @@ export const defaultFirstFooterConfig = {
     },
     detailsText: {
         fontFamily: "Open Sans",
-        fontSize: "1em",
+        fontSize: {
+            mobile: "1em",
+            desktop: "1.2em",
+        },
         color: "black",
         fontWeight: "normal",
         fontStyle: "normal",
@@ -89,6 +94,7 @@ export const defaultFirstFooterConfig = {
         radius: "0",
     },
     sendEmailForm: {
+        variation: "elegant",
         background: {
             color: "white",
             shadow: true,
@@ -100,11 +106,11 @@ export const defaultFirstFooterConfig = {
             },
             width: {
                 mobile: "100%",
-                desktop: "100%",
+                desktop: "80%",
             },
             height: {
                 mobile: "100%",
-                desktop: "100%",
+                desktop: "fit-content",
             },
             padding: {
                 x: "1rem",
@@ -119,9 +125,9 @@ export const defaultFirstFooterConfig = {
                 }
             }
         },
-        display: "location",
         text: {
             title: {
+                show: false,
                 input: "Send Us An Email",
                 position: "end",
                 fontFamily: "Open Sans",

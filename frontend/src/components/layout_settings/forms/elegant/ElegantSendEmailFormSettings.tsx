@@ -25,6 +25,14 @@ const ElegantSendEmailFormSettings: React.FC<EmailFormSettingsProps> = ({
 
   return (
     <div className="space-y-1">
+      <div className="border-[.15vh] px-[1vh] rounded-[.5vh]">
+        <OptionsToggler
+          label='Variation'
+          options={["elegant", "basic"]}
+          value={getSetting('variation', settings, objectPath)}
+          onChange={(value) => handleSettingChange(`${objectPath}.variation`, value)}
+        />
+      </div>
       {/* FirstOrderSubSettings for Form Background */}
       <FirstOrderSubSettingsContainer
         name="Form Background"

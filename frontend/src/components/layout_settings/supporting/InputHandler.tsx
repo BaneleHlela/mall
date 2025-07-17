@@ -8,9 +8,9 @@ interface InputHandlerProps {
 
 const InputHandler: React.FC<InputHandlerProps> = ({ label, value, onChange }) => {
   return (
-    <div className="flex flex-row justify-between items-center w-full h-[35px] gap-1">
+    <div className="flex flex-row justify-between items-center w-full h-[4vh] text-[1.8vh]">
       <div className="w-[50%] flex flex-row justify-between">
-        {label && <label className="w-32">{label}</label>}
+        {label && <label className="">{label}</label>}
         <p className="mr-1">:</p>
       </div>
 
@@ -19,7 +19,7 @@ const InputHandler: React.FC<InputHandlerProps> = ({ label, value, onChange }) =
           type="text"
           value={value || ""}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full h-[24px] px-2 py-1 border rounded-md"
+          className="w-full px-[1vh] py-[.3vh] border rounded-md"
         />
       </div>
     </div>

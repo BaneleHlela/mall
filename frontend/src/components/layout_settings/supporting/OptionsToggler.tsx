@@ -41,14 +41,14 @@ const OptionsToggler: React.FC<OptionsTogglerProps> = ({
   };
 
   return (
-    <div className="flex flex-row justify-between items-center w-full h-[35px] gap-1">
-        <div className="w-[50%] flex flex-row justify-between">
-            {label && <label className="line-clamp-1 text-start">{label}</label>}
+    <div className="flex flex-row justify-between items-center w-full h-[3vh] text-[1.8vh]">
+        <div className="w-[50%] flex flex-row justify-between items-center">
+            {label && <label className="text-start">{label}</label>}
             <p className="mr-1">:</p>
         </div>
       
       <div className="w-[50%] flex flex-row justify-center items-center capitalize">
-        <div className="flex flex-row justify-between w-[100%] items-center gap-2 px-2 py-1 relative overflow-hidden h-[24px]">
+        <div className="flex flex-row justify-between w-[100%] items-center relative overflow-hidden h-[3vh]">
           {/* Back Arrow Button */}
           <button
             type="button"
@@ -59,7 +59,7 @@ const OptionsToggler: React.FC<OptionsTogglerProps> = ({
           </button>
   
           {/* Options Div */}
-          <div className="relative h-[24px] flex-grow flex items-center justify-center">
+          <div className=" h-[3vh] flex flex-col items-center justify-center">
             <AnimatePresence custom={direction} mode="wait">
               <motion.span
                 key={value}
@@ -69,7 +69,7 @@ const OptionsToggler: React.FC<OptionsTogglerProps> = ({
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.2 }}
-                className="absolute w-full h-full text-center"
+                className=" w-full h-full text-center"
               >
                 {options[index]}
               </motion.span>

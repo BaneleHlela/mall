@@ -23,7 +23,6 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
   widthUnit = "px",
 }) => {
   const isAllowed = (key: string) => !allow || allow.includes(key);
-  const [bgColor, setBgColor] = useState("#ffffff");
 
   const handleChange =
     (field: string) =>
@@ -168,21 +167,21 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
         <>
           <SettingsSlider
             label="Padding Y"
-            value={parseInt(getSetting("padding.y", settings, objectPath) || "50")}
-            unit="px"
-            min={0}
-            max={200}
-            step={1}
-            onChange={createSliderChangeHandler("padding.y", "px")}
+            value={parseFloat(getSetting("padding.y", settings, objectPath) || "50")}
+            unit="vh"
+            min={0.1}
+            max={15}
+            step={.1}
+            onChange={createSliderChangeHandler("padding.y", "vh")}
           />
           <SettingsSlider
             label="Padding X"
-            value={parseInt(getSetting("padding.x", settings, objectPath) || "50")}
-            unit="px"
-            min={0}
-            max={200}
-            step={1}
-            onChange={createSliderChangeHandler("padding.x", "px")}
+            value={parseFloat(getSetting("padding.x", settings, objectPath) || "50")}
+            unit="vh"
+            min={0.1}
+            max={15}
+            step={.1}
+            onChange={createSliderChangeHandler("padding.x", "vh")}
           />
         </>
       )}

@@ -12,7 +12,7 @@ const LayoutSettings = () => {
 
   return (
     <motion.div
-      className="h-screen min-w-[20vw] z-10 flex flex-col items-center justify-start p-2 space-y-1 relative overflow-hidden"
+      className="h-screen min-w-[22vw] z-10 flex flex-col items-center justify-start p-2 space-y-1 relative overflow-hidden"
       style={{ boxShadow: '8px 0 8px -4px rgba(0, 0, 0, 0.1)' }}
     >
       {/* Header with vertical line */}

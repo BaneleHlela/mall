@@ -15,29 +15,29 @@ type SettingsSliderProps = {
 const SettingsSlider: React.FC<SettingsSliderProps> = ({
   label = "Font Size",
   value,
-  unit = "px",
   min = 8,
   max = 110,
-  step = 1,
+  step = .25,
   onChange,
 }) => {
+  console.log(step);
   const handleArrowClick = (direction: number) => {
     const newValue = Math.min(Math.max(value + direction, min), max);
     onChange(newValue);
   };
 
   return (
-    <div className="flex flex-row justify-between items-center w-full h-[35px] gap-1">
+    <div className="flex flex-row justify-between items-center w-full h-[3vh] text-[1.8vh] ">
       <div className="w-[50%] flex flex-row justify-between">
-        <label className="w-32">{label}</label>
+        <label className="">{label}</label>
         <p className="mr-1">:</p>
       </div>
 
-      <div className="w-[50%] flex flex-row justify-between items-center gap-2 px-2 py-1">
+      <div className="w-[50%] flex flex-row justify-between items-center gap-[.5vh] py-1">
         <button
           type="button"
           onClick={() => handleArrowClick(-step)}
-          className="flex items-center justify-center"
+          className="flex items-center justify-center hover:scale-105"
         >
           <IoIosArrowBack />
         </button>
@@ -50,8 +50,13 @@ const SettingsSlider: React.FC<SettingsSliderProps> = ({
           value={value}
           onChange={(_, newValue) => onChange(newValue as number)}
           sx={{
-            width: "100px",
+            width: "20vh",
+            height: ".25vh",
             color: "black",
+            '& .MuiSlider-thumb': {
+              width: '1vh',
+              height: '1vh',
+            },
           }}
           valueLabelDisplay="auto"
         />
@@ -59,7 +64,7 @@ const SettingsSlider: React.FC<SettingsSliderProps> = ({
         <button
           type="button"
           onClick={() => handleArrowClick(step)}
-          className="flex items-center justify-center"
+          className="flex items-center justify-center hover:scale-105"
         >
           <IoIosArrowForward />
         </button>

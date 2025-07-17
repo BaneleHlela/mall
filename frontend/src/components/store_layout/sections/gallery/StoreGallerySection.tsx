@@ -1,6 +1,7 @@
 import { useAppSelector } from "../../../../app/hooks";
 import FirstStoreGallerySection from "./first/FirstStoreGallerySection"
 import GalleryWithGroupedImages from "./gallery_with_grouped_images/GalleryWithGroupedImages";
+import GalleryWithHorizontalImages from "./gallery_with_horizontal_images/GalleryWithHorizontalImages";
 import GalleryWithImageSlider from "./gallery_with_image_slider/GalleryWithImageSlider";
 
 const StoreGallerySection = () => {
@@ -14,6 +15,11 @@ const StoreGallerySection = () => {
   if (variation === "galleryWithGroupedImages") {
     return (
       <GalleryWithGroupedImages/>
+    )
+  }
+  if (variation === "galleryWithHorizontalImages") {
+    return (
+      <GalleryWithHorizontalImages />
     )
   }
   return (

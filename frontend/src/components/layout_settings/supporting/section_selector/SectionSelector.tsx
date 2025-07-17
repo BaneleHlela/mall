@@ -95,10 +95,10 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
   return (
     <div className="h-full w-full overflow-clip">
       {/* Header */}
-      <div className="relative h-[8%] w-full bg-blue-500 text-center flex flex-col justify-center text-xl text-white">
+      <div className="relative h-[8%] w-full bg-blue-500 text-center flex flex-col justify-center text-[3vh] text-white">
         Replace or Add New Section
-        <div className="absolute right-3 rounded-full hover:shadow-md hover:scale-102">
-            <IoMdClose size={32} onClick={onClose} />
+        <div className="absolute right-3 rounded-full p-[1vh] hover:shadow-md hover:scale-102">
+            <IoMdClose className='text-[3vh]' onClick={onClose} />
         </div>
       </div>
 

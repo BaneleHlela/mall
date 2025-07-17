@@ -20,7 +20,6 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
     onClick,
 }) => {
 
-    console.log(style, title, duration, description)
 
 
     return (

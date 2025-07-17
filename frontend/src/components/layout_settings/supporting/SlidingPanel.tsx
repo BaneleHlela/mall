@@ -20,9 +20,9 @@ const SlidingPanel: React.FC<SlidingPanelProps> = ({ isOpen, onClose, title, chi
       <div className="p-2">
         <div className="flex items-center mb-4">
           <button onClick={onClose} className="mr-2">
-            <IoIosArrowRoundBack className="text-[200%]"/>
+            <IoIosArrowRoundBack className="text-[4vh]"/>
           </button>
-          <h2 className="text-xl font-[500]">{title}</h2>
+          <h2 className="text-[2.8vh] font-[500]">{title}</h2>
         </div>
         {children}
       </div>

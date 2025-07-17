@@ -1,6 +1,5 @@
 import { defaultAboutWithImageNextToTextConfig } from "./about/defaultAboutWithImageNextToText";
 import { defaultFirstBookWithCalandarConfig } from "./book_with_calendar/defaultFirstBookWithCalandarConfig";
-import { defaultFirstFooterConfig } from "./footer/defaultFirstFooterConfig";
 import { defaultHeroWithReviewCardAndEmailFormConfig } from "./hero/defaultHeroWithReviewCardAndEmailFormConfig";
 import { defaultHeroWithButtonBetweenImages } from "./hero/defaultHeroWithButtonBetweenImagesConfig";
 import { defaultFirstStoreMenuSectionConfig } from "./menu/defaultFirstStoreMenuSectionConfig";
@@ -14,6 +13,8 @@ import { defaultHeroWithButtonImageAndTextConfig } from "./hero/defaultHeroWithB
 import { store } from "../../../app/store";
 import { getLayoutByDemoStore } from "../../../features/layouts/layoutSlice";
 import { simpleServicesSectionConfig } from "./services/defaultSimpleStoreServicesConfig";
+import { defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig } from "./footer/defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig";
+import { defaultGalleryWithHorizontalImagesConfig } from "./gallery/defaultGalleryWithHorizontalImages";
 
 export type SectionType = 'book' | 'products' | 'services' | 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer' | 'gallery';
 type VariationType = string;
@@ -77,6 +78,7 @@ export const getSectionDefaults = async (section: SectionType, variation: Variat
         const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'gallery');
         return demoLayout || defaultGalleryWithGroupedImagesConfig;
       },
+      galleryWithHorizontalImages: defaultGalleryWithHorizontalImagesConfig,
     },
     order: {
       first: defaultFirstStoreProductsConfig,
@@ -91,7 +93,7 @@ export const getSectionDefaults = async (section: SectionType, variation: Variat
       first: defaultFirstStoreReviewsConfig,
     },
     footer: {
-      first: defaultFirstFooterConfig,
+      footerWithStoreDetailsButtonAndFormOrLocation: defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig,
     },
   };
 

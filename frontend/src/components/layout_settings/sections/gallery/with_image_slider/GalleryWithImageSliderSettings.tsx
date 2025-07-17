@@ -23,16 +23,10 @@ const GalleryWithImageSliderSettings: React.FC<SectionSettingsProps> = ({
   const closePanel = () => setActivePanel(null);
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-[.8vh]">
       {/* Top-Level Background + Slider Variation */}
-      <div className="border rounded">
-        <BackgroundEditor
-          objectPath={`${objectPath}.background`}
-          settings={settings}
-          handleSettingChange={handleSettingChange}
-          allow={["color"]}
-        />
-        <div className="px-2">
+      <div className="border rounded-[.5vh]">
+        <div className="p-[1vh]">
           <OptionsToggler
             label="Slider Variation"
             options={["alwaysMoving", "stopAndGo"]}
@@ -40,10 +34,19 @@ const GalleryWithImageSliderSettings: React.FC<SectionSettingsProps> = ({
             onChange={(value) => handleSettingChange(`${objectPath}.sliderVariation`, value)}
           />
         </div>
+        <BackgroundEditor
+          objectPath={`${objectPath}.background`}
+          settings={settings}
+          handleSettingChange={handleSettingChange}
+          allow={["color"]}
+        />
       </div>
 
       {/* First Order Panels */}
-      <FirstOrderSubSettingsContainer name="Title" onClick={() => setActivePanel("title")} />
+      <FirstOrderSubSettingsContainer 
+        name="Title" 
+        onClick={() => setActivePanel("title")} 
+      />
       <FirstOrderSubSettingsContainer name="Slider" onClick={() => setActivePanel("slider")} />
 
       <AnimatePresence>
@@ -91,6 +94,8 @@ const GalleryWithImageSliderSettings: React.FC<SectionSettingsProps> = ({
                     settings={settings}
                     handleSettingChange={handleSettingChange}
                     allow={["color", "height", "width", "border", "margin"]}
+                    heightUnit='vh'
+                    widthUnit='vw'
                     responsiveSize
                   />
                 }

@@ -109,10 +109,10 @@ const SupportingImagesSettings: React.FC<SupportingSettingsProps> = ({
                 <div className="px-2">
                     <label className="block text-sm font-medium mb-1">Description</label>
                     <textarea
-                    className="w-full border border-gray-300 p-2 rounded text-sm"
-                    value={imageGroups[activeGroup].description}
-                    onChange={handleChange(activeGroup, "description")}
-                    rows={4}
+                      className="w-full border border-gray-300 p-2 rounded text-sm"
+                      value={imageGroups[activeGroup].description}
+                      onChange={handleChange(activeGroup, "description")}
+                      rows={4}
                     />
                 </div>
                 }

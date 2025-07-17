@@ -47,7 +47,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ lat, lng, name, style }) =>
 
   return (
     <div 
-
       ref={mapRef} 
       style={{ 
           ...getBackgroundStyles(style),

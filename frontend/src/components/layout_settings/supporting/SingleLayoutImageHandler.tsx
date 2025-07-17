@@ -19,9 +19,9 @@ const SingleLayoutImageHandler: React.FC<SingleLayoutImageHandlerProps> = ({ lab
     };
 
     return (
-        <div className="flex flex-row justify-between relative">
+        <div className="flex flex-row justify-between relative h-[6vh]">
             <div className="flex flex-row justify-between items-center">
-                <label className="w-32">{label}</label>
+                <label className="w-[15vh]">{label}</label>
                 <p className="mr-1">:</p>
             </div>
             <div className="flex flex-row justify-center items-center text-[17px] w-[50%] space-x-1">
@@ -40,7 +40,7 @@ const SingleLayoutImageHandler: React.FC<SingleLayoutImageHandlerProps> = ({ lab
             </div>
             {image && (
                 <div className="ml-1 w-[30%]">
-                    <img src={image} alt={label} className="w-full h-10 object-cover rounded" />
+                    <img src={image} alt={label} className="w-full h-full object-cover rounded" />
                 </div>
             )}
             {showStoreImages && (

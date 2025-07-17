@@ -16,7 +16,6 @@ const Layouts: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const settings = useAppSelector((state: RootState) => state.layoutSettings);
   const [storeId, setStoreId] = useState<string | null>(null);
-  console.log(layoutId);
   
   useEffect(() => {
     const loadLayout = async () => {

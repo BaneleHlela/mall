@@ -1,8 +1,24 @@
-export const defaultGalleryWithImageSliderConfig = {
-    variation: "galleryWithImageSlider",
+export const defaultGalleryWithHorizontalImagesConfig = {
+    variation: "galleryWithHorizontalImages",
     sliderVariation: "stopAndGo",
     background: {
         color: "blue",
+        width: {
+            mobile: "50vw",
+            desktop: "50vw",
+        },
+        height: {
+            mobile: "50vh",
+            desktop: "60vh",
+        },
+        padding: {
+            x: "10px",
+            y: "100px",
+        },
+        margin: {
+            mobile: "0",
+            desktop: "0",
+        }
     },
     heading: {
         show: false,
@@ -17,6 +33,7 @@ export const defaultGalleryWithImageSliderConfig = {
         fontWeight: "normal",
         fontStyle: "normal",
         marginBottom: "50px",
+        background: {}
     },
     subheading: {
         show: false,
@@ -30,7 +47,7 @@ export const defaultGalleryWithImageSliderConfig = {
         color: "white",
         fontWeight: "normal",
         fontStyle: "normal",
-        marginBottom: "50px",
+        background: {},
     },
     slider: {
         background: {
@@ -50,6 +67,16 @@ export const defaultGalleryWithImageSliderConfig = {
                 radius: "100%"
             },
             margin: "2px",
+        },
+        text: {
+            title: {
+                show: true,
+                position: "center"
+            },
+            description: {
+                show: true,
+                position: "center"
+            }
         },
         hover: {
             background: {
@@ -88,7 +115,30 @@ export const defaultGalleryWithImageSliderConfig = {
                 }
                 
             }
+        },
+        image: {
+            background: {
+                height: {
+                    mobile: "80%",
+                    desktop: "100%"
+                }, 
+                padding: {
+                    x: "10px",
+                    y: "10px"
+                }
+            },
+            images: {
+                image1: {
+                    url: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100115.png"],
+                    title: "",
+                    description: "",
+                },
+                image2: {
+                    url: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100115.png"],
+                    title: "",
+                    description: "",
+                },
+            }
         }
     }
-    
 }

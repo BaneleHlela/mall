@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { sendEmail, resetState } from '../../../../features/emails/emailSlice';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { sendEmail, resetState } from '../../../../../../features/emails/emailSlice';
 import { TbLoader3 } from "react-icons/tb";
-import { getBackgroundStyles, getBorderStyles, getDivAnimation, getTextStyles } from '../../../../utils/stylingFunctions';
+import { getBackgroundStyles, getBorderStyles, getDivAnimation, getTextStyles } from '../../../../../../utils/stylingFunctions';
 import { motion } from 'framer-motion';
 
 interface SendEmailFormData {
@@ -17,7 +17,7 @@ interface SendEmailFormProps {
   style: any;
 }
 
-const SendEmailForm: React.FC<SendEmailFormProps> = ({ style }) => {
+const BasicSendEmailForm: React.FC<SendEmailFormProps> = ({ style }) => {
   const dispatch = useAppDispatch();
   const emailState = useAppSelector((state) => state.email);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -68,7 +68,7 @@ const SendEmailForm: React.FC<SendEmailFormProps> = ({ style }) => {
       style={{
         ...getBackgroundStyles(style.background),
       }}
-      className="flex flex-col justify-center"
+      className="flex flex-col justify-center min-h-fit"
     >
       {style.text.title?.show && (
         <h2
@@ -139,7 +139,7 @@ const SendEmailForm: React.FC<SendEmailFormProps> = ({ style }) => {
                 onChange={handleChange}
                 required
                 style={{ ...getBorderStyles(style.background.senderInfo.border) }}
-                className="mt-1 block w-full p-2 h-[130px]"
+                className="mt-1 block w-full p-2 h-[15vh]"
               />
             ) : (
               <input
@@ -194,4 +194,4 @@ const SendEmailForm: React.FC<SendEmailFormProps> = ({ style }) => {
   );
 };
 
-export default SendEmailForm;
+export default BasicSendEmailForm;

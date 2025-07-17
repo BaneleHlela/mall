@@ -17,20 +17,20 @@ const SubSettingsContainer: React.FC<SubSettingsContainerProps> = ({
     <>
       <div
         onClick={() => setIsSettingsOpen((prev) => !prev)} 
-        className="w-full h-[45px]"
+        className="w-full h-[7vh] text-[1.8vh]"
       >
         {/* Header */}
         <div
-          className={`flex flex-row justify-between w-full h-full border-2 border-white bg-stone-50 text-black shadow-md pl-2 
-          ${isSettingsOpen ? "rounded-t-sm" : "rounded-sm"}`}
+          className={`flex flex-row pl-[1.2vh] justify-between w-full h-full border-[.3vh] border-white text-black shadow-md
+          ${isSettingsOpen ? "rounded-t-sm bg-gray-900 text-white" : "rounded-sm bg-stone-50"} hover:bg-gray-900 hover:text-white hover:border-white hover:border-[.3vh]`}
         >
-          <div className="flex flex-col justify-center text-[18px]">
+          <div className="flex flex-col justify-center">
             {name}
           </div>
 
           {/* Arrow icon */}
           <motion.div
-            className="flex flex-col justify-center cursor-pointer px-2"
+            className="flex flex-col justify-center cursor-pointer px-[1vh]"
             onClick={() => setIsSettingsOpen((prev) => !prev)}
             animate={{ rotate: isSettingsOpen ? 180 : 0 }}
             transition={{ duration: 0.3 }}
@@ -42,7 +42,7 @@ const SubSettingsContainer: React.FC<SubSettingsContainerProps> = ({
 
       {/* Sliding Settings Component */}
       <motion.div
-        className={`w-full border-2 border-white bg-stone-100 text-black rounded-b-sm shadow-md overflow-hidden -mt-1`}
+        className={`w-full border-[.3vh] border-white space-y-1 bg-stone-100 text-black rounded-b-sm shadow-md overflow-hidden -mt-1`}
         initial={{ height: 0, opacity: 0 }}
         animate={{
           height: isSettingsOpen ? "auto" : 0,

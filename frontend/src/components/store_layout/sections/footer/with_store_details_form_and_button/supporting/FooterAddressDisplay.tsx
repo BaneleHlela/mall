@@ -10,7 +10,6 @@ const FooterAddressDisplay = ({location, headingStyle, headingInput, addressStyl
             <h3 
                 style={{
                     ...getTextStyles(headingStyle),
-                    fontSize: headingStyle.fontSize.desktop,
                 }}
                 className="mb-3"
             >
