@@ -7,16 +7,17 @@ import SlidingPanel from '../../../supporting/SlidingPanel';
 import { AnimatePresence } from 'framer-motion';
 import TextEditor from '../../../text/TextEditor';
 import ResponsiveGridSettings from '../../../extras/ResponsiveGridSettings';
-import ServiceCardWithImageSettings from '../cards/service_card_with_image/ServiceCardWithImageSettings';
 import OptionsToggler from '../../../supporting/OptionsToggler';
 import { getSetting } from '../../../../../utils/helperFunctions';
+import PopularProductCard from '../../../../store_layout/extras/cards/product/popular/PopularProductCard';
+import PopularProductCardSettings from '../supporting/cards/PopularProductCardSettings';
 
 
-const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
+const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
     settings,
     handleSettingChange,
 }) => {
-    const objectPath ='services';
+    const objectPath ='products';
     const [activePanel, setActivePanel] = useState<string | null>(null);
     const closePanel = () => setActivePanel(null);
     
@@ -193,7 +194,7 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                 )}
                 {activePanel === "card" && (
                     <SlidingPanel key="card" isOpen={true} onClose={closePanel} title="Card Settings">
-                        <ServiceCardWithImageSettings settings={settings} handleSettingChange={handleSettingChange}/>
+                        <PopularProductCardSettings settings={settings} handleSettingChange={handleSettingChange}/>
                     </SlidingPanel>
                 )}
             </AnimatePresence>
@@ -201,4 +202,4 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
     )
 }
 
-export default ServicesSectionSimpleSettings
+export default PopularProductsSectionSettings

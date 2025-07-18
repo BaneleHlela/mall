@@ -70,9 +70,26 @@ export const getBackgroundStyles = (bg: BackgroundSettings = {}) => {
     styles.margin = bg.margin;
   }
 
-  // Padding
-  if (bg.padding?.x) styles.paddingLeft = styles.paddingRight = bg.padding.x;
-  if (bg.padding?.y) styles.paddingTop = styles.paddingBottom = bg.padding.y;
+  // Responsive Padding
+  if (typeof bg.padding === "object") {
+    // Responsive padding Y
+    if (typeof bg.padding.y === "object") {
+      const responsiveY = getResponsiveDimension(bg.padding.y);
+      styles.paddingTop = responsiveY;
+      styles.paddingBottom = responsiveY;
+    } else if (bg.padding.y) {
+      styles.paddingTop = styles.paddingBottom = bg.padding.y;
+    }
+
+    // Responsive padding X
+    if (typeof bg.padding.x === "object") {
+      const responsiveX = getResponsiveDimension(bg.padding.x);
+      styles.paddingLeft = responsiveX;
+      styles.paddingRight = responsiveX;
+    } else if (bg.padding.x) {
+      styles.paddingLeft = styles.paddingRight = bg.padding.x;
+    }
+  }
 
   // Opacity
   if (bg.opacity !== undefined) {
@@ -185,4 +202,19 @@ export function getComplementaryPercentages(obj: PercentageObject, propertyName:
       desktop: complementary(obj.desktop),
     }
   };
+}
+
+export function getSpacingClasses({
+  y,
+  x,
+}: {
+  y: { mobile: string; desktop: string };
+  x: { mobile: string; desktop: string };
+}): string {
+  const mobileY = y.mobile;
+  const desktopY = y.desktop;
+  const mobileX = x.mobile;
+  const desktopX = x.desktop;
+
+  return `space-y-[${mobileY}] space-x-[${mobileX}] lg:space-y-[${desktopY}] lg:space-x-[${desktopX}]`;
 }

@@ -65,7 +65,7 @@ const BorderEditor: React.FC<EditorProps> = ({
       {isAllowed("radius") && (
         <SettingsSlider
           label="Border Radius"
-          value={parseInt(getSetting("radius", settings, objectPath) || "0")}
+          value={parseFloat(getSetting("radius", settings, objectPath) || "0")}
           unit="vh"
           min={0}
           max={15}

@@ -28,11 +28,11 @@ const DisplaySocialLink: React.FC<{
 }> = ({ platform, deletable, onDeleteClick, onClick }) => {
     const Icon = socialIcons[platform];
     return (
-        <div className="relative border border-gray-400 p-2 rounded flex flex-row justify-center items-center cursor-pointer shadow-md" onClick={onClick}>
-            <Icon className="h-16 w-16 text-gray-600" />
+        <div className="relative border border-gray-400 p-[1.2vh] rounded flex flex-row justify-center items-center cursor-pointer shadow-md" onClick={onClick}>
+            <Icon className="h-[7vh] w-[7vh] text-gray-600" />
             {deletable && (
                 <button
-                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                    className="absolute -top-[.6vh] -right-[.6vh] bg-red-500 text-white rounded-full w-[2.5vh] h-[2.5vh] flex items-center justify-center text-[.8vh]"
                     onClick={(e) => {
                         e.stopPropagation();
                         onDeleteClick?.();
@@ -100,10 +100,10 @@ const StepSocials: React.FC = () => {
 
     return (
         <div className="relative w-full h-full">
-            <h2 className="text-xl mb-4 w-full border-b-2 border-gray-600">My Socials</h2>
+            <h2 className="text-[2.5vh] mb-[2vh] w-full border-b-[.4vh] border-gray-600">My Socials</h2>
             
             {/* Existing socials */}
-            <div className="grid grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-4 gap-[.8vh] mb-[2vh]">
                 {form.socials.map((social, index) => (
                     <DisplaySocialLink
                         key={index} // @ts-ignore-next-line
@@ -116,8 +116,8 @@ const StepSocials: React.FC = () => {
             </div>
             
             {/* Add new socials */}
-            <h3 className="text-xl mb-4 w-full border-b-2 border-gray-600">Add New Platform</h3>
-            <div className="grid grid-cols-3 gap-4">
+            <h3 className="text-[2.5vh] mb-[2vh] w-full border-b-[.4vh] border-gray-600">Add New Platform</h3>
+            <div className="grid grid-cols-4 gap-[.8vh]">
                 {availablePlatforms.map((platform) => (
                     <DisplaySocialLink
                         key={platform}

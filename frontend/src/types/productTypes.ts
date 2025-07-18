@@ -1,10 +1,12 @@
 export interface Product {
     _id: string;
+    store: string;
     name: string;
     description: string;
     price: number;
     stockQuantity: number;
     sold: number;
+    variations: string[],
     images: string[];
 }
 
@@ -15,7 +17,7 @@ export interface  StockUpdatePayload {
 
 export interface ProductsState {
     products: Product[];
-    loading: boolean;
+    isLoading: boolean;
     error: string | null;
     selectedProduct: Product | null;
 }

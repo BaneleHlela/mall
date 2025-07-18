@@ -12,11 +12,11 @@ import MultipleLayoutImagesHandler from '../../../../supporting/MultipleLayoutIm
 import { getSetting } from '../../../../../../utils/helperFunctions'
 import { useAppSelector } from '../../../../../../app/hooks'
 
-const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
+const ProductCardSettings: React.FC<SectionEditorProps> = ({
   settings,
   handleSettingChange
 }) => {
-  const objectPath="services.card";
+  const objectPath="products.card";
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
   const services = useAppSelector((state) => state.services.services)
@@ -58,12 +58,6 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
             name="Images"
             SettingsComponent={
                 <div className="px-2 space-y-2">
-                    <MultipleLayoutImagesHandler
-                        objectPath={`${objectPath}.image.urls`}
-                        min={1}
-                        max={15}
-                        images={getSetting("image.urls", settings, objectPath)}
-                    />
                     <BackgroundEditor
                         objectPath={`${objectPath}.image`}
                         settings={settings}
@@ -109,7 +103,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
                     />
                 </div>
               <SubSettingsContainer
-                name="Service Details"
+                name="Product Details"
                 SettingsComponent={
                   <TextEditor
                     objectPath={`${objectPath}.textAndButton.text`}
@@ -121,13 +115,13 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
                 }
               />
               <SubSettingsContainer
-                name="Service Name"
+                name="Product Name"
                 SettingsComponent={
                   <TextEditor
                     objectPath={`${objectPath}.textAndButton.text.name`}
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={["color", "fontSize", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight"]}
+                    allow={["color", "position", "fontSize", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight"]}
                     responsiveSize
                   />
                 }
@@ -138,7 +132,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
         )}
         {activePanel === "Button" && (
             <SlidingPanel onClose={closePanel} isOpen={true} title="Book Button Settings">
-              <StoreButtonSettings settings={settings} objectPath={`${objectPath}.textAndButton.button`}/>
+              <StoreButtonSettings settings={settings} objectPath={`${objectPath}.textAndButton.button`} allowPosition/>
             </SlidingPanel>
         )}
       </AnimatePresence>
@@ -146,4 +140,4 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
   )
 }
 
-export default ServiceCardWithImageSettings
+export default ProductCardSettings

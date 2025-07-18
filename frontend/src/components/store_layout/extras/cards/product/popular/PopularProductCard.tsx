@@ -1,48 +1,45 @@
 import React from 'react'
-import { getBackgroundStyles, getBorderStyles, getTextStyles } from '../../../../../../utils/stylingFunctions';
+import { getBackgroundStyles, getTextStyles } from '../../../../../../utils/stylingFunctions';
 import StoreButton from '../../../buttons/StoreButton';
 
-interface StoreServiceCardProps {
+interface StoreProductCardProps {
     title: string;
-    duration: number; // in minutes
-    description: string;
     price?: number;
     imageUrl: string;
     style: any;
     onClick?: () => void;
 }
 
-const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
+const PopularProductCard: React.FC<StoreProductCardProps> = ({
     title,
-    duration,
     price,
     style,
     imageUrl,
-    description,
     onClick,
 }) => {
 
     return (
         <div 
+            onClick={onClick}
             style={{
                 ...getBackgroundStyles(style.background),
             }}
-            className={`flex min-h-fit overflow-hidden
+            className={`flex min-h-fit
                 ${style.stack.mobile === "column" ? "flex-col" : "flex-row" }
                 lg:${style.stack.desktop === "column" ? "flex-col" : "flex-row" }
-            hover:scale-102`}
+            hover:scale-101`}
         >
             {/* Image */}
             <div 
                 style={{
                     ...getBackgroundStyles(style.image)
                 }}
-                className=''
+                className='overflow-hidden'
             >
                 <img 
                     src={imageUrl} 
-                    alt="Service Image" 
-                    className='w-full h-full object-cover'
+                    alt="Product Image" 
+                    className='w-full h-full object-cover transition-transform duration-500 ease-in-out hover:scale-110'
                 />
             </div>
             {/* Text and button */}
@@ -50,49 +47,34 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                 style={{
                     ...getBackgroundStyles(calculateTextDimensions(style.stack, style.image))
                 }} 
-                className="p-4 flex flex-col justify-between"
+                className="px-[1.3vh] flex flex-col justify-evenly min-h-fit"
             >
                 {/* Name */}
                 <h2
                     style={{
-                        ...getTextStyles(style.textAndButton.text),
                         ...getTextStyles(style.textAndButton.text.name)
                     }} 
-                    className=""
+                    className={`
+                        ${style.textAndButton.text.name.position === "center" && "text-center"}
+                        ${style.textAndButton.text.name.position === "start" && "text-start"}
+                        ${style.textAndButton.text.name.position === "end" && "text-end"}
+                    `}
                 >
                     {title}
                 </h2>
-                {/* Description */}
-                {style.textAndButton.text.show.description && (
-                    <p style={{
-                        ...getTextStyles(style.textAndButton.text)
-                        }} 
-                        className="line-clamp-4"
-                    >
-                        {description}
-                    </p>
-                )}
-                {/* Duration */}
-                {style.textAndButton.text.show.duration && (
-                    <p style={{
-                        ...getTextStyles(style.textAndButton.text)
-                        }} 
-                        className=""
-                    >
-                        {duration} min
-                    </p>
-                )}
                 {/* Price */}
-                {style.textAndButton.text.show.price && (
-                    <p 
-                        style={{
-                            ...getTextStyles(style.textAndButton.text)
-                        }} 
-                        className=""
-                    >
-                        R{price}
-                    </p>
-                )}
+                <p 
+                    style={{
+                        ...getTextStyles(style.textAndButton.text)
+                    }} 
+                    className={`
+                            ${style.textAndButton.text.position === "center" && "text-center"}
+                            ${style.textAndButton.text.position === "start" && "text-start"}
+                            ${style.textAndButton.text.position === "end" && "text-end"}
+                        `}
+                >
+                    R{price}
+                </p>
                 <div 
                     className={`flex flex-row 
                         ${style.textAndButton.button.position === "center" && "justify-center"}
@@ -100,14 +82,14 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                         ${style.textAndButton.button.position === "end" && "justify-end"}
                     `}
                 >
-                    <StoreButton style={style.textAndButton.button} onClick={onClick || (() => {})} />
+                    <StoreButton style={style.textAndButton.button} onClick={() => {}} />
                 </div>
             </div>
         </div>
     )
 }
 
-export default ServiceCardWithImage;
+export default PopularProductCard;
 
 
 interface StackConfig {

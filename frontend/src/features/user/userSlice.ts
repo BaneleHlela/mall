@@ -257,13 +257,19 @@ const userSlice = createSlice({
         state.isCheckingAuth = false;
       })
 
+      // Forgot passowrd
+      .addCase(forgotPassword.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.message = null;
+      })
       .addCase(forgotPassword.fulfilled, (state, action: PayloadAction<string>) => {
-        state.message = action.payload;
         state.isLoading = false;
+        state.message = action.payload;
       })
       .addCase(forgotPassword.rejected, (state, action) => {
-        state.error = action.payload as string;
         state.isLoading = false;
+        state.error = action.payload as string;
       })
 
       .addCase(resetPassword.fulfilled, (state, action: PayloadAction<string>) => {

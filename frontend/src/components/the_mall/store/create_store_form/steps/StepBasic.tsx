@@ -57,8 +57,8 @@ const StepBasic: React.FC = () => {
   }, [form]);
 
   return (
-    <div className="w-full h-full flex flex-col space-y-2 items-start">
-        <p className="text-xl w-full text-center mb-[5%]">Basic Details</p>
+    <div className="w-full h-full flex flex-col space-y-[.8vh] items-start text-[2vh]">
+        <p className="text-[3vh] w-full text-center mb-[5%]">Basic Details</p>
         <div className="w-full ">
             <label htmlFor='text' className="w-full text-left text-black text-[100%]">Store Name *</label>
             <input
@@ -69,17 +69,17 @@ const StepBasic: React.FC = () => {
                     handleChange('name', e.target.value);
                     validateField('name', e.target.value);
                 }}
-                className="w-full border-b p-2 bg-[#0000000e] focus:bg-[#00000030] focus:outline-none focus:ring-0"
+                className="w-full border-b p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none focus:ring-0"
             />
             {!validation.nameValid && <p className="text-red-500 text-sm">Store name is required</p>}
         </div>
         <div className="w-full">
-            <label className="w-full text-left text-black mt-2">Department *</label>
+            <label className="w-full text-left text-black mt-[.9vh]">Department *</label>
             <div className="w-full relative">
                 <button
                     type="button"
                     onClick={() => setIsDeptOpen(prev => !prev)}
-                    className="w-full flex justify-between items-center border p-2 bg-[#0000000e] focus:bg-[#00000030] focus:outline-none"
+                    className="w-full flex justify-between items-center border p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none"
                 >
                 {// @ts-ignore
                     form.departments[0] ? departments[form.departments[0]].full : 'Select Department'}
@@ -87,26 +87,26 @@ const StepBasic: React.FC = () => {
                 </button>
                 {!validation.departmentValid && <p className="text-red-500 text-sm">Department selection is required</p>}
                 <AnimatePresence>
-                {isDeptOpen && (
-                    <motion.ul
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute mt-1 w-full bg-white border rounded shadow max-h-[250px] overflow-y-auto z-10"
-                    >
-                    {Object.entries(departments).map(([key, { full, description }]) => (
-                        <li
-                        key={key}
-                        onClick={() => handleDepartmentChange(key)}
-                        className={`p-2 hover:bg-gray-100 cursor-pointer ${form.departments[0] === key ? 'bg-gray-200' : ''}`}
-                        >
-                        <p className="font-medium">{full}</p>
-                        <p className="text-xs text-gray-500">{description}</p>
-                        </li>
-                    ))}
-                    </motion.ul>
-                )}
+                  {isDeptOpen && (
+                      <motion.ul
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute mt-1 w-full bg-white border rounded shadow max-h-[250px] overflow-y-auto z-10"
+                      >
+                      {Object.entries(departments).map(([key, { full, description }]) => (
+                          <li
+                          key={key}
+                          onClick={() => handleDepartmentChange(key)}
+                          className={`p-[.8vh] hover:bg-gray-100 cursor-pointer ${form.departments[0] === key ? 'bg-gray-200' : ''}`}
+                          >
+                          <p className="font-medium">{full}</p>
+                          <p className="text-xs text-gray-500">{description}</p>
+                          </li>
+                      ))}
+                      </motion.ul>
+                  )}
                 </AnimatePresence>
             </div>
         </div>
@@ -117,7 +117,7 @@ const StepBasic: React.FC = () => {
                 placeholder="Slogan"
                 value={form.slogan}
                 onChange={e => handleChange('slogan', e.target.value)}
-                className="w-full border-b p-2 bg-[#0000000e] focus:bg-[#00000030] focus:outline-none"
+                className="w-full border-b p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none"
             />
         </div>
         
@@ -134,7 +134,7 @@ const StepBasic: React.FC = () => {
             setForm(updatedForm);
             validateField('contact.phone', phone);
           }}
-          className={`w-full border-b p-2 bg-[#0000000e] focus:bg-[#00000030] focus:outline-none ${!validation.phoneValid ? 'border-red-500' : ''}`}
+          className={`w-full border-b p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none ${!validation.phoneValid ? 'border-red-500' : ''}`}
         />
         {!validation.phoneValid && <p className="text-red-500 text-sm">Enter a valid phone number (10 digits)</p>}
       </div>
@@ -151,7 +151,7 @@ const StepBasic: React.FC = () => {
             setForm(updatedForm);
             validateField('contact.email', email);
           }}
-          className={`w-full border-b p-2 bg-[#0000000e] focus:bg-[#00000030] focus:outline-none ${!validation.emailValid ? 'border-red-500' : ''}`}
+          className={`w-full border-b p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none ${!validation.emailValid ? 'border-red-500' : ''}`}
         />
         {!validation.emailValid && <p className="text-red-500 text-sm">Enter a valid email address</p>}
       </div>

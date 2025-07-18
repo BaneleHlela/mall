@@ -54,6 +54,7 @@ export interface Layout {
     reviews: any;
     contact: any;
     footer: any;
+    singleProduct: any;
 }
   
 

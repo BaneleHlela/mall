@@ -80,7 +80,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const nextStep = () => {
     setDirection(1);
-    setStep(prev => Math.min(prev + 1, 4));
+    setStep(prev => Math.min(prev + 1, 5));
   };
 
   const prevStep = () => {

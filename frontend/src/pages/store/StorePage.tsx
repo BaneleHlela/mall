@@ -18,6 +18,8 @@ import StoreOrderOnlinePage from "./supporting/order_online/StoreOrderOnlinePage
 import { getBackgroundStyles } from "../../utils/stylingFunctions";
 import { setInitialLayout } from "../../features/layouts/layoutSettingsSlice";
 import { getLayout } from "../../features/layouts/layoutSlice";
+import { fetchStoreProducts } from "../../features/products/productsSlice";
+import SingleStoreProductPage from "./supporting/single_product/SingleStoreProductPage";
 
 const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
   const settings = useAppSelector((state) => state.layoutSettings);
@@ -71,9 +73,15 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
     }
   }, [dispatch]);
 
+  useEffect(() => {
+    if (storeId) {
+      dispatch(fetchStoreProducts({ storeId }));
+    }
+  }, [storeId, dispatch]);
+
   // Fetch store services if applicable
   useEffect(() => {
-    if (store?.trades === 2 && storeId) {
+    if (store?.trades.includes("services") && storeId) {
       dispatch(fetchStoreServices({ storeId })); // Fetch services if needed
     }
   }, [store, storeId, dispatch]);
@@ -116,13 +124,14 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
         className={`w-screen h-full overflow-y-scroll hide-scrollbar overflow-x-clip`}>
         <PopularStoreMenubar />
         <Routes>
-        {Object.values(routes).map((route) => (
-          <Route
-            key={route.url}
-            path={route.url}
-            element={routeComponents[route.url] ?? null}
-          />
-        ))}
+          {Object.values(routes).map((route) => (
+            <Route
+              key={route.url}
+              path={route.url}
+              element={routeComponents[route.url] ?? null}
+            />
+          ))}
+          {store?.trades.includes("products") && <Route path="/product/:productId" element={<SingleStoreProductPage />} />}
         </Routes>
       </div> 
     </div>

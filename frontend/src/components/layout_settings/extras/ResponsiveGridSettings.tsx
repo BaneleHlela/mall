@@ -24,8 +24,8 @@ const ResponsiveGridSettings: React.FC<ResponsiveGridSettingsProps> = ({
   handleSettingChange,
   columnOptions = { mobile: ['1', '2'], desktop: ['3', '4', '5'] },
   gapRange = {
-    mobile: { min: 0, max: 50 },
-    desktop: { min: 0, max: 100 },
+    mobile: { min: 0, max: 5 },
+    desktop: { min: 0, max: 10 },
   },
 }) => {
   return (
@@ -59,25 +59,25 @@ const ResponsiveGridSettings: React.FC<ResponsiveGridSettingsProps> = ({
 
         <SettingsSlider
           label="Mobile Gap"
-          value={parseInt(getSetting('mobile', settings, `${objectPath}.gap`))}
-          unit="px"
+          value={parseFloat(getSetting('mobile', settings, `${objectPath}.gap`))}
+          unit="vh"
           min={gapRange.mobile.min}
           max={gapRange.mobile.max}
-          step={1}
+          step={.1}
           onChange={(newValue) =>
-            handleSettingChange(`${objectPath}.gap.mobile`, `${newValue}px`)
+            handleSettingChange(`${objectPath}.gap.mobile`, `${newValue}vh`)
           }
         />
 
         <SettingsSlider
           label="Desktop Gap"
           value={parseInt(getSetting('desktop', settings, `${objectPath}.gap`))}
-          unit="px"
+          unit="vh"
           min={gapRange.desktop.min}
           max={gapRange.desktop.max}
-          step={1}
+          step={.1}
           onChange={(newValue) =>
-            handleSettingChange(`${objectPath}.gap.desktop`, `${newValue}px`)
+            handleSettingChange(`${objectPath}.gap.desktop`, `${newValue}vh`)
           }
         />
       </div>

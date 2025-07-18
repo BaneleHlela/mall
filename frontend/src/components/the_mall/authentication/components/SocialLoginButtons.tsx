@@ -1,3 +1,4 @@
+import { FaFacebook, FaGoogle } from "react-icons/fa";
 
 const BACKEND_URL = "http://localhost:5000"; // Or hardcode your backend URL
 
@@ -11,18 +12,24 @@ const SocialLoginButtons = () => {
   };
 
   return (
-    <div className="flex gap-4 justify-center mt-4">
+    <div className="flex gap-[.8vh] justify-evenly mt-[1vh]">
       <button
         onClick={googleLogin}
-        className="px-4 py-2 bg-red-500 text-white rounded"
+        className="py-[1vh] w-[40%] text-black rounded flex flex-row gap-[1vh] justify-center items-center bg-[#e8f0fe]"
       >
-        Continue with Google
+        <img
+          src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg"
+          alt="Google"
+          className="w-[3.3vh] h-[3.3vh]"
+        />
+        <div className="">Google</div>
       </button>
       <button
         onClick={facebookLogin}
-        className="px-4 py-2 bg-blue-600 text-white rounded"
+        className="py-[1vh] w-[40%] text-black rounded flex flex-row gap-[1vh] justify-center items-center bg-[#e8f0fe]"
       >
-        Continue with Facebook
+        <FaFacebook className="text-blue-600 text-[3.3vh]"/> 
+        <div className="">facebook</div>
       </button>
     </div>
   );

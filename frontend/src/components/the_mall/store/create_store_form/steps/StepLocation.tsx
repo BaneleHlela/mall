@@ -6,12 +6,12 @@ const StepLocation: React.FC = () => {
   const { form, handleChange } = useFormContext();
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-xl text-center">Pick store location</h3>
+    <div className="space-y-[1.2vh] text-[2vh]">
+      <h3 className="text-[2,5vh] text-center">Pick store location</h3>
 
       {/* Nickname input */}
       <div>
-        <label className="text-sm font-semibold text-gray-600">🏷 Nickname</label>
+        <label className="text-[1.8vh] font-semibold text-gray-600">🏷 Nickname</label>
         <input
           type="text"
           value={form.location.nickname || ''}
@@ -22,7 +22,7 @@ const StepLocation: React.FC = () => {
               nickname: e.target.value,
             })
           }
-          className="w-full bg-[#ffffffd0] p-2 border shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          className="w-full bg-[#ffffffd0] p-[.7vh] border shadow-sm focus:ring-[.15vh] focus:ring-blue-500 focus:outline-none"
         />
       </div>
 

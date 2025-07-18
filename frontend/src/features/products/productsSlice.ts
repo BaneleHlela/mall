@@ -6,7 +6,7 @@ const API_BASE = 'http://localhost:5000/api/products';
 
 const initialState: ProductsState = {
   products: [],
-  loading: false,
+  isLoading: false,
   error: null,
   selectedProduct: null,
 };
@@ -134,15 +134,15 @@ const productSlice = createSlice({
     builder
       // Fetch all
       .addCase(fetchAllProducts.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(fetchAllProducts.fulfilled, (state, action: PayloadAction<Product[]>) => {
-        state.loading = false;
+        state.isLoading = false;
         state.products = action.payload;
       })
       .addCase(fetchAllProducts.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.payload as string;
       })
 
@@ -185,15 +185,15 @@ const productSlice = createSlice({
 
       // Fetch store products
       .addCase(fetchStoreProducts.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(fetchStoreProducts.fulfilled, (state, action: PayloadAction<Product[]>) => {
-        state.loading = false;
+        state.isLoading = false;
         state.products = action.payload;
       })
       .addCase(fetchStoreProducts.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.payload as string;
       })
   },

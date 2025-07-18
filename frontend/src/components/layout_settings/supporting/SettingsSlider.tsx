@@ -20,7 +20,6 @@ const SettingsSlider: React.FC<SettingsSliderProps> = ({
   step = .25,
   onChange,
 }) => {
-  console.log(step);
   const handleArrowClick = (direction: number) => {
     const newValue = Math.min(Math.max(value + direction, min), max);
     onChange(newValue);

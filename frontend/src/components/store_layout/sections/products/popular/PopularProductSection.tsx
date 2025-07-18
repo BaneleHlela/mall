@@ -1,13 +1,25 @@
 import { useAppSelector } from '../../../../../app/hooks'
 import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../../../../../utils/stylingFunctions';
 import { getGridColumnClasses } from '../../gallery/gallery_with_grouped_images/SingleGroupImages';
-import ServiceCardWithImage from '../../../extras/cards/service/with_image/ServiceCardWithImage';
 import CategorySelector from '../../../extras/category_selector/CategorySelector';
+import PopularProductCard from '../../../extras/cards/product/popular/PopularProductCard';
+import { useNavigate } from 'react-router-dom';
 
-const SimpleServicesSection = () => {
-    const settings = useAppSelector((state) => state.layoutSettings.services);
-    const services = useAppSelector((state) => state.services.services);
+const PopularProductsSection = () => {
+    const settings = useAppSelector((state) => state.layoutSettings.products);
+    const products = useAppSelector((state) => state.products.products);
     const store = useAppSelector((state) => state.stores.currentStore);
+    const navigate = useNavigate();
+    
+    const handleProductClick = (productId: string) => {
+        if (store && store._id) {
+            navigate(`/stores/${store._id}/product/${productId}`);
+        } else {
+            console.error('Store ID is not available');
+        }
+    };
+
+
     return (
         <div
             style={{
@@ -46,9 +58,9 @@ const SimpleServicesSection = () => {
                 )}
             </div>
             {/* Categories */}
-            {store?.categories.services && settings.categorySelector.show && (
+            {store?.categories.products && settings.categorySelector.show && (
                 <div className="w-full pb-4 flex flex-row justify-center">
-                    <CategorySelector categories={store?.categories.services || []} style={settings.categorySelector} />
+                    <CategorySelector categories={store?.categories.products || []} style={settings.categorySelector} />
                 </div>
             )}
             {/* Grid container */}
@@ -69,16 +81,14 @@ const SimpleServicesSection = () => {
                         desktop: settings.grid.columns.desktop,
                     })}`}
                 >
-                    {services.map((service, index) => (
-                        <ServiceCardWithImage
-                            key={service._id}
-                            title={service.name}
-                            duration={service.duration}
-                            description={service.description}
-                            imageUrl={settings.card.image.urls[index]}
-                            price={service.price}
+                    {products.map((product) => (
+                        <PopularProductCard
+                            key={product._id}
+                            title={product.name}
+                            imageUrl={product.images[0]}
+                            price={product.price}
                             style={settings.card}
-                            onClick={() => console.log(`Clicked on service: ${service.name}`)}
+                            onClick={() => handleProductClick(product._id)}
                         />
                     ))}
                 </div>
@@ -87,4 +97,4 @@ const SimpleServicesSection = () => {
     )
 }
 
-export default SimpleServicesSection
+export default PopularProductsSection;

@@ -14,7 +14,7 @@ import { createLayout } from '../../../../features/layouts/layoutSlice';
 import { defaultLayoutConfig } from '../../../../utils/defaults/defaultLayoutConfig';
 import StepSocials from './steps/StepSocials';
 
-const steps = [StepBasic, StepTrade, StepBusinessHours, StepLocation, StepSocials, StepAbout];
+const steps = [StepBasic, StepTrade, StepBusinessHours, StepLocation, StepAbout, StepSocials];
 interface CreateStoreFormInnerProps {
     isDemo?: boolean;
 }
@@ -30,7 +30,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo }) =
       nextStep();
     }
   };
-
+  
   const createNewLayout = async () => {
     try {// @ts-ignore-next-line
       const result = await dispatch(createLayout(defaultLayoutConfig)).unwrap();
@@ -70,8 +70,8 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo }) =
   };
 
   return (
-    <div className="relative flex flex-col justify-between w-full h-full border max-w-2xl mx-auto p-4 bg-white">
-      <p className="w-full text-center text-3xl font-[500] h-[15%]">Create Your Store</p>
+    <div className="relative flex flex-col justify-between w-full h-full border max-w-[70vh] mx-auto p-[1.2vh] bg-white">
+      <p className="w-full text-center text-[4vh] font-[500] h-[15%]">Create Your Store</p>
       <AnimatePresence custom={direction} mode="wait">
         <motion.div
           key={step}
@@ -96,7 +96,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo }) =
             type="button" 
             onClick={prevStep} 
             disabled={step === 0}
-            className="px-4 py-1 text-white bg-[#74546a] disabled:opacity-40"
+            className="px-[1.2vh] py-[.3vh] text-[2vh] text-white bg-[#74546a] disabled:opacity-40"
             >
             Back
         </button>
@@ -104,14 +104,15 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo }) =
             <button
                 type="button"
                 onClick={handleSubmit} 
-                className="px-4 py-1 text-white bg-[#0b032d] hover:scale-105 hover:opacity-80 disabled:bg-gray-500">
+                className="px-[1.2vh] py-[.3vh] text-[2vh] text-white bg-[#0b032d] hover:scale-105 hover:opacity-80 disabled:bg-gray-500">
                 Submit
             </button>
               ) : (
             <button
                 onClick={handleNextStep}
                 disabled={step === steps.length - 1}
-                className="px-4 py-1 text-white bg-[#0b032d] hover:scale-105 hover:opacity-80 disabled:bg-gray-500"
+                className={`px-[1.2vh] py-[.3vh] text-[2vh] text-white 
+                  ${validateCurrentStep() && `bg-[#0b032d]`} bg-[#0b032d33] hover:scale-105 hover:opacity-80 disabled:bg-gray-500`}
             >
                 Next
             </button>

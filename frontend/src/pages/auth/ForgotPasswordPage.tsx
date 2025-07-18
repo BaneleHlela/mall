@@ -2,87 +2,104 @@ import { motion } from "framer-motion";
 import { useState, type FormEvent } from "react";
 import { ArrowLeft, Loader, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import Input from "../../components/the_mall/authentication/components/Input";
-import { type RootState } from "../../app/store";
 import { forgotPassword } from "../../features/user/userSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { TbLoader3 } from "react-icons/tb";
 
 const ForgotPasswordPage = () => {
-	const [email, setEmail] = useState("");
-	const [isSubmitted, setIsSubmitted] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-	const dispatch = useDispatch();
-	const isLoading = useSelector((state: RootState) => state.user.isLoading);
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector((state) => state.user.isLoading);
 
-	const handleSubmit = async (e: FormEvent) => {
-		e.preventDefault();
-		try {
-			await dispatch(forgotPassword(email)).unwrap();
-			setIsSubmitted(true);
-		} catch (err) {
-			console.error("Forgot password error:", err);
-		}
-	};
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      await dispatch(forgotPassword(email)).unwrap();
+      setIsSubmitted(true);
+    } catch (err) {
+      console.error("Forgot password error:", err);
+    }
+  };
 
-	return (
-		<motion.div
-			initial={{ opacity: 0, y: 20 }}
-			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.5 }}
-			className='max-w-md w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden'
-		>
-			<div className='p-8'>
-				<h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'>
-					Forgot Password
-				</h2>
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="max-w-[60vh] w-full h-full lg:h-[80%] flex flex-col justify-evenly backdrop-filter backdrop-blur-xl lg:rounded-[1vh] shadow-xl overflow-hidden p-[2vh]"
+    >
+      {/* Top banner image */}
+      <div className="w-full h-[20%]">
+        <img
+          src="https://storage.googleapis.com/the-mall-uploads-giza/stores/68726dde5987f5810dee5a8a/images/mall%20image.webp"
+          alt="mall theme image"
+          className="w-full h-full object-cover rounded-[1vh]"
+        />
+      </div>
 
-				{!isSubmitted ? (
-					<form onSubmit={handleSubmit}>
-						<p className='text-gray-300 mb-6 text-center'>
-							Enter your email address and we'll send you a link to reset your password.
-						</p>
-						<Input
-							icon={Mail}
-							type='email'
-							placeholder='Email Address'
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							required
-						/>
-						<motion.button
-							whileHover={{ scale: 1.02 }}
-							whileTap={{ scale: 0.98 }}
-							className='w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200'
-							type='submit'
-							disabled={isLoading}
-						>
-							{isLoading ? <Loader className='size-6 animate-spin mx-auto' /> : "Send Reset Link"}
-						</motion.button>
-					</form>
-				) : (
-					<div className='text-center'>
-						<motion.div
-							initial={{ scale: 0 }}
-							animate={{ scale: 1 }}
-							transition={{ type: "spring", stiffness: 500, damping: 30 }}
-							className='w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4'
-						>
-							<Mail className='h-8 w-8 text-white' />
-						</motion.div>
-						<p className='text-gray-300 mb-6'>
-							If an account exists for {email}, you will receive a password reset link shortly.
-						</p>
-					</div>
-				)}
-			</div>
+      <div className="text-center">
+        <h2 className="text-[3vh] font-semibold">Forgot Password</h2>
+        <p className="text-[2.2vh]">Enter your email to receive a reset link.</p>
+      </div>
 
-			<div className='px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center'>
-				<Link to={"/login"} className='text-sm text-green-400 hover:underline flex items-center'>
-					<ArrowLeft className='h-4 w-4 mr-2' /> Back to Login
-				</Link>
-			</div>
-		</motion.div>
-	);
+      {!isSubmitted ? (
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="email" className="text-[2.3vh]">
+            Email Address
+          </label>
+          <Input
+            icon={Mail}
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full mt-[1.5vh] py-[1.3vh] bg-gray-800 text-white font-bold rounded-[.5vh] shadow-lg focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200"
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <TbLoader3 className="w-6 h-6 animate-spin mx-auto" />
+            ) : (
+              "Send Reset Link"
+            )}
+          </motion.button>
+        </form>
+      ) : (
+        <div className="text-center mt-4">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+            className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <Mail className="h-8 w-8 text-white" />
+          </motion.div>
+          <p className="text-gray-800 text-[2vh]">
+            If an account exists for <strong>{email}</strong>, you’ll receive a password reset link shortly.
+          </p>
+        </div>
+      )}
+
+      <div className="px-8 py-4 flex justify-center">
+        <Link
+          to="/login"
+          className="text-sm text-blue-700 hover:underline flex items-center"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Login
+        </Link>
+      </div>
+    </motion.div>
+  );
 };
 
 export default ForgotPasswordPage;

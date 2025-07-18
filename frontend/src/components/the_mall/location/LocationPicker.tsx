@@ -82,7 +82,7 @@ export default function LocationPicker({ onLocationSelect }: any) {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4 py-2 border bg-white space-y-4">
+    <div className="w-full max-w-3xl mx-auto px-[1.2vh] py-[.3vh] border bg-white space-y-[1.2vh]">
       <div>
         <label className="text-md font-semibold text-gray-600 block mb-2">
           Search for a location
@@ -91,11 +91,11 @@ export default function LocationPicker({ onLocationSelect }: any) {
           ref={autocompleteInputRef}
           type="text"
           placeholder="e.g. 123 Main Street, Madadeni"
-          className="w-full p-2 pl-4 border shadow-sm bg-stone-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          className="w-full p-[.8vh] pl-[1.2vh] border shadow-sm bg-stone-50 focus:ring-[.2vh] focus:ring-blue-500 focus:outline-none"
         />
       </div>
 
-      <div ref={mapRef} className="w-full h-[200px] lg:h-[300px]" />
+      <div ref={mapRef} className="w-full h-[35vh] lg:h-[300px]" />
     </div>
   );
 }

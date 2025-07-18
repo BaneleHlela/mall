@@ -76,7 +76,6 @@ const ClickableStopAndGoImageSliderWithText: React.FC<ImageSliderProps> = ({ ima
     });
   }, [normalizedImages.length]);
 
-  console.log(style.image.background.height)
   return (
     <div
       className="relative w-full overflow-hidden font-[Outfit]"
@@ -126,7 +125,7 @@ const ClickableStopAndGoImageSliderWithText: React.FC<ImageSliderProps> = ({ ima
               style={{
                 ...getBackgroundStyles(getComplementaryPercentages(style.image.background.height, "height")),
               }}
-              className="px-2 flex flex-col bg-yellow-500 justify-evenly"
+              className="px-2 flex flex-col justify-evenly"
             >
               <h2 
                 style={{ ...getTextStyles(style.text.title) }}

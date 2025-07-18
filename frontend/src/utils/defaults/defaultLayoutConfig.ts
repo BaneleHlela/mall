@@ -16,6 +16,8 @@ import { defaultContactWithBackgroundImageTextAndSocialsConfig } from "./section
 import { defaultReviewsWithBackgroungImageAndCardConfig } from "./sections/reviews/defaultReviewsWithBackgroundImageAndCardConfig";
 import { simpleServicesSectionConfig } from "./sections/services/defaultSimpleStoreServicesConfig";
 import { defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig } from "./sections/footer/defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig";
+import { defaultPopularProductsSectionConfig } from "./sections/order_online/defaultPopularProductsSectionConfig";
+import { defaultSingleProductSectionConfig } from "./sections/single_product/defaultSingleProductSectionConfig";
 
 export const defaultMenubarConfig = {
   topbar: {
@@ -107,10 +109,11 @@ export const defaultLayoutConfig = {
     hero: defaultHeroWithReviewCardAndEmailFormConfig,
     book: defaultBasicBookWithOpenCalendarConfig,
     bookWithCalendar: defaultFirstBookWithCalandarConfig,
-    products: defaultFirstStoreProductsConfig,
+    products: defaultPopularProductsSectionConfig,
     order: defaultFirstStoreProductsConfig,
     reviews: defaultReviewsWithBackgroungImageAndCardConfig,
     contact: defaultContactWithBackgroundImageTextAndSocialsConfig,
     footer: defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig,
+    singleProduct: defaultSingleProductSectionConfig,
 };
   

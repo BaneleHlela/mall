@@ -21,17 +21,17 @@ const DashBoardMenubar = () => {
       <div className="font-[ubuntu] mt-[2vh]">
           <DashboardLink 
             linkTo={`/creators-dashboard`} 
-            icon={<ChartArea size={20} className="text-blue-600"/>} 
+            icon={<ChartArea className="text-blue-600 text-[2.5vh]"/>} 
             text="overview" 
           />
           <DashboardLink
             linkTo={`/creators-dashboard/demo-stores`}
-            icon={<FaStore size={20} className="text-blue-600"/>}
+            icon={<FaStore className="text-blue-600 text-[2.5vh]"/>}
             text="Demo Stores" 
           />
           {/* <DashboardLink 
             linkTo={`/creators-dashboard/team`} 
-            icon={<UsersRound size={20} className="text-blue-600"/>} 
+            icon={<UsersRound className="text-blue-600"/>} 
             beta={true}
             text="Team" 
           />
@@ -72,7 +72,7 @@ const DashBoardMenubar = () => {
         /> */}
         <DashboardLink 
           linkTo={`/creators-dashboard/sections`} 
-          icon={<TbSection size={20} className="text-red-600"/>} 
+          icon={<TbSection className="text-red-600 text-[2.5vh]"/>} 
           text="Sections" 
         />
         {/* <DashboardLink 
@@ -85,17 +85,17 @@ const DashBoardMenubar = () => {
       <div className="font-[ubuntu] absolute bottom-[10vh] left-1 w-full scale-95">
         <DashboardLink 
           linkTo={`/creators-dashboard/settings`} 
-          icon={<Settings size={20} />} 
+          icon={<Settings className="text-[2.5vh]" />} 
           text="Settings" 
         />
         <DashboardLink 
           linkTo={`/creators-dashboard/store-help`} 
-          icon={<MessageCircleQuestion size={20} />} 
+          icon={<MessageCircleQuestion className="text-[2.5vh]" />} 
           text="Help" 
         />
         <DashboardLink 
           linkTo={`/creators-dashboard/exit`} 
-          icon={<LogOut size={20} />} 
+          icon={<LogOut className="text-[2.5vh]" />} 
           text="exit" 
         />
       </div>

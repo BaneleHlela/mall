@@ -14,7 +14,6 @@ const FirstStoreProductsSection = () => {
   const settings = useAppSelector((state) => state.layoutSettings.products);
   const store = useAppSelector((state) => state.stores.currentStore);
   const storeId = store ? store._id : null;
-  const screenWidth = window.innerWidth; 
 
   const selectedCategory = useAppSelector((state) => state.categories.selectedCategory);
   const products = useAppSelector((state) => state.products.products)
@@ -25,6 +24,8 @@ const FirstStoreProductsSection = () => {
   const handleProductClick = (product: Product) => {
     setSelectedProduct(product); 
   };
+
+  
   const closeModal = () => {
     setSelectedProduct(null); 
   };
@@ -98,7 +99,7 @@ const FirstStoreProductsSection = () => {
           {/* Render a StoreProductCard for each image */}
           <div
             style={{
-              gap: getResponsiveDimension(settings.productsDisplay.grid.gap, screenWidth),
+              gap: getResponsiveDimension(settings.productsDisplay.grid.gap),
             }} 
             className={`grid 
               ${settings.productsDisplay.grid.columns.mobile === 1 && "grid-cols-1"}

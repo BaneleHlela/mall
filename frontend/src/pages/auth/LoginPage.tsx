@@ -7,6 +7,7 @@ import Input from "../../components/the_mall/authentication/components/Input";
 import { login } from "../../features/user/userSlice";
 import { type AppDispatch, type RootState } from "../../app/store";
 import SocialLoginButtons from "../../components/the_mall/authentication/components/SocialLoginButtons";
+import { TbLoader3 } from "react-icons/tb";
 
 const LoginPage = () => {
 	const [email, setEmail] = useState("");
@@ -25,14 +26,25 @@ const LoginPage = () => {
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.5 }}
-			className='max-w-md w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden'
+			className='max-w-[60vh] w-full h-full lg:h-[80%] flex flex-col justify-between backdrop-filter backdrop-blur-xl lg:rounded-[1vh] shadow-xl overflow-hidden p-[2vh]'
 		>
-			<div className='p-8'>
-				<h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'>
-					Welcome Back
+			<div className="w-full h-[20%] ">
+				<img 
+					src="https://storage.googleapis.com/the-mall-uploads-giza/stores/68726dde5987f5810dee5a8a/images/mall%20image.webp" 
+					alt="mall theme image" 
+					className="w-full h-full object-cover rounded-[1vh]"
+				/>
+			</div>
+			<div className="">
+				<h2 className='text-[3vh] font-semibold'>
+					Welcome Back! 
 				</h2>
-
+				<p className="text-[2.2vh]">It's a great pleasure to have you login again. Remember, you can do anything!</p>
+			</div>
+			
+			<div className=''>
 				<form onSubmit={handleLogin}>
+					<label htmlFor="email" className="text-[2.3vh]">Email </label>
 					<Input
 						icon={Mail}
 						type='email'
@@ -40,7 +52,7 @@ const LoginPage = () => {
 						value={email}
 						onChange={(e: any) => setEmail(e.target.value)}
 					/>
-
+					<label htmlFor="password" className="text-[2.3vh]">Password </label>
 					<Input
 						icon={Lock}
 						type='password'
@@ -49,30 +61,38 @@ const LoginPage = () => {
 						onChange={(e: any) => setPassword(e.target.value)}
 					/>
 
-					<div className='flex items-center mb-6'>
-						<Link to='/forgot-password' className='text-sm text-green-400 hover:underline'>
+					<div className='flex flex-col items-end mb-[1vh]'>
+						<Link to='/forgot-password' className='text-end text-[2vh] text-blue-700 hover:underline'>
 							Forgot password?
 						</Link>
 					</div>
 
-					{error && <p className='text-red-500 font-semibold mb-2'>{error}</p>}
+					{error && <p className="text-red-500 font-semibold mt-2 text-[2vh] mb-2">{error && "Something went wrong. Did you fill all the details?"}</p>}
 
 					<motion.button
 						whileHover={{ scale: 1.02 }}
 						whileTap={{ scale: 0.98 }}
-						className='w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200'
+						className='w-full py-[1.3vh] bg-gray-800 text-white font-bold rounded-[.5vh] shadow-lg focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200'
 						type='submit'
 						disabled={isLoading}
 					>
-						{isLoading ? <Loader className='w-6 h-6 animate-spin mx-auto' /> : "Login"}
+						{isLoading ? <TbLoader3 className='w-6 h-6 animate-spin mx-auto' /> : "Sign in"}
 					</motion.button>
 				</form>
 			</div>
-			<SocialLoginButtons/>
-			<div className='px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center'>
-				<p className='text-sm text-gray-400'>
+			<div className="flex flex-col">
+				<div className="w-full flex flex-row items-center justify-between text-[2.2vh]">
+					<span className="h-[.15vh] w-[30%] bg-gray-600"></span>
+						Or sign in with
+					<span className="h-[.15vh] w-[30%] bg-gray-600"></span>
+				</div>
+				<SocialLoginButtons/>
+			</div>
+			
+			<div className='px-8 py-4 flex justify-center'>
+				<p className='text-sm text-gray-500'>
 					Don't have an account?{" "}
-					<Link to='/signup' className='text-green-400 hover:underline'>
+					<Link to='/signup' className='text-blue-700 hover:underline'>
 						Sign up
 					</Link>
 				</p>

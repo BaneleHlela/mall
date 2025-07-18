@@ -6,9 +6,9 @@ const StepTrade: React.FC = () => {
   const { form, handleChange } = useFormContext();
 
   return (
-    <div className="relative w-full h-full flex flex-col justify-center space-y-4">
-      <p className="absolute top-3 text-center w-full text-xl">What does your store sell?</p>
-      <p className="absolute top-10 text-center w-full text-md text-gray-700">(skip if none)</p>
+    <div className="relative w-full h-full flex flex-col justify-center space-y-[1.2vh]">
+      <p className="absolute top-[5%] text-center w-full text-[2.5vh]">What does your store sell?</p>
+      <p className="absolute top-[13%] text-center w-full text-[1.5vh] text-gray-700">(skip if none)</p>
 
       <OptionsToggler
         label="Products (Food, etc.)"

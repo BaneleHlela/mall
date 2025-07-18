@@ -1,7 +1,8 @@
 
-export const simpleServicesSectionConfig = {
-    variation: "servicesSectionSimple",
+export const defaultPopularProductsSectionConfig = {
+    variation: "productsSectionPopular",
     background: {
+        image: [],
         color: "white",
         width: {
             mobile: "100%",
@@ -73,7 +74,7 @@ export const simpleServicesSectionConfig = {
         }
     },
     card: {
-        variaton: "serviceCardWithImage",
+        variaton: "popularProductCard",
         stack: {
             mobile: "column",
             desktop: "row",
@@ -116,11 +117,6 @@ export const simpleServicesSectionConfig = {
                 }
             },
             text: {
-                show: {
-                    description: true,
-                    price: true,
-                    duration: true,
-                },
                 fontFamily: "Patrick Hand",
                 fontSize: {
                     mobile: "1.5rem",
@@ -138,6 +134,7 @@ export const simpleServicesSectionConfig = {
                 },
             },
             button: {
+                show: true,
                 function: "bookAppointment",
                 style: {
                     text: {
