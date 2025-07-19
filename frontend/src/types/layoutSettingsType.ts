@@ -12,6 +12,7 @@ export interface TextSettings {
     textDecoration?: string;
     textTransform?: string;
     fontStyle?: string;
+    padding?: PaddingValue;
   }
   
 export interface EditorProps {
@@ -20,6 +21,7 @@ export interface EditorProps {
     handleSettingChange: (field: string, value: any) => void;
     allow?: string[];
     responsiveSize?: boolean;
+    responsivePadding?: boolean;
 }
 
 export interface ResponsiveValue {

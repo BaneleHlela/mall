@@ -116,6 +116,21 @@ export const updateService = async (req, res) => {
   }
 };
 
+export const getServiceById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const service = await Service.findById(id);
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found' });
+    }
+
+    res.status(200).json(service);
+  } catch (error) {
+    console.error('Error fetching service by ID:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 export const getStoreServices = asyncHandler(async (req, res) => {
   const { storeId } = req.params;
@@ -135,8 +150,6 @@ export const getStoreServices = asyncHandler(async (req, res) => {
   if (category) {
     query.category = category;
   }
-
-  console.log('Service query:', query);
 
   try {
     const services = await Service.find(query).sort({ createdAt: -1 });

@@ -29,7 +29,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
       <SubSettingsContainer
         name="Background"
         SettingsComponent={
-          <div className="px-[.15vh] space-y-1">
+          <div className="px-[.15vh] space-y-[.3vh]">
             <BackgroundEditor
               objectPath={`${objectPath}.background`}
               settings={settings}

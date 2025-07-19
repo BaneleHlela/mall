@@ -3,9 +3,11 @@ import { useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks'
 import { fetchProductById } from '../../../../features/products/productsSlice'
 import { getBackgroundStyles, getBorderStyles, getResponsiveDimension, getSpacingClasses, getTextStyles } from '../../../../utils/stylingFunctions'
-import { HiArrowLeftEndOnRectangle } from 'react-icons/hi2'
+import { HiArrowLeftEndOnRectangle, HiOutlineMinus, HiOutlinePlus } from 'react-icons/hi2'
 import VariationDropdown from './supporting/VariationDropdown'
 import { addToCart } from '../../../../features/cart/cartSlice'
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md'
 
 const SingleStoreProductSection = () => {
     const { productId } = useParams<{ productId: string }>()
@@ -16,12 +18,41 @@ const SingleStoreProductSection = () => {
     const [selectedVariation, setSelectedVariation] = useState<string | null>(null);
     const [specialRequest, setSpecialRequest] = useState("");
     const [quantity, setQuantity] = useState(1);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    
+    
+    useEffect(() => {
+        if (productId) {
+            dispatch(fetchProductById(productId))
+        }
+    }, [dispatch, productId])
+
+
+    if (isLoading) {
+        return <div>Loading...</div>
+    }
+
+    if ( !product) {
+        return <div>Error loading product</div>
+    }
+
+    const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+        prevIndex === product.images.length - 1 ? 0 : prevIndex + 1
+    );
+    };
+
+    const handlePrevImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+        prevIndex === 0 ? product.images.length - 1 : prevIndex - 1
+    );
+    };
 
     const handleAddToCart = () => {
         dispatch(
           addToCart({
-            storeId: product.store, // Assuming `storeId` is part of the product object
-            productId: product._id,
+            storeId: product?.store || '', 
+            productId: product ? product._id : '', 
             quantity,
             specialRequest,
           })
@@ -30,20 +61,8 @@ const SingleStoreProductSection = () => {
 
     console.log(settings.details.addToCartBtn)
     
-    useEffect(() => {
-        if (productId) {
-            dispatch(fetchProductById(productId))
-        }
-    }, [dispatch, productId])
 
-    if (isLoading) {
-        return <div>Loading...</div>
-    }
-
-    if (status === 'failed' || !product) {
-        return <div>Error loading product</div>
-    }
-    console.log(product)
+    
     return (
         <div
             style={{
@@ -52,119 +71,226 @@ const SingleStoreProductSection = () => {
             className='flex flex-col justify-between'
         >   
             {/* Back to home */}
-            <div className="w-full flex flex-row items-center">
+            <div 
+                style={{
+                    ...getTextStyles(settings.text.exit),
+                    ...getBackgroundStyles(settings.text.exit.background),
+                }}
+                className="w-fit flex flex-row items-center"
+            >
                 <HiArrowLeftEndOnRectangle />
                 <p>Back to Home</p>
             </div>
             {/* Image and Details */}
-            <div className="flex flex-col justify-evenly items-center lg:flex lg:flex-row lg:justify-between">
+            <div className="flex flex-col justify-evenly items-center mt-4 lg:flex lg:flex-row lg:justify-between">
                 {/* Images */}
                 <div
                     style={{
-                        height: getResponsiveDimension(settings.details.background.height),
+                        maxHeight: window.innerWidth <= 1024 ? "60vh" : settings.details.background.height.desktop,
                     }} 
-                    className="h-full w-[100%] lg:w-[50%] bg-white flex flex-col items-center justify-center"
+                    className="relative w-full lg:w-[50%] flex flex-col items-center justify-center overflow-hidden"
                 >
-                    <img 
+                    {/* Image */}
+                    <img
+                        key={currentImageIndex} // Force re-animation on change
+                        src={product.images[currentImageIndex]}
+                        alt={`Product image ${currentImageIndex + 1}`}
+                        className="object-cover transition-opacity duration-700 ease-in-out opacity-100 w-full"
                         style={{
-                            ...getBackgroundStyles(settings.images.background),
-                            maxHeight: window.innerWidth <= 1024 ? "60vh" : "100",
+                        ...getBackgroundStyles(settings.images.background),
                         }}
-                        src={product.images[0]} alt="" className="object-cover" 
                     />
+
+                    {/* Left Arrow */}
+                    {product.images.length > 1 && currentImageIndex !== 0 && (
+                        <button
+                            style={{
+                                ...getBackgroundStyles(settings.images.toggleButton.background),
+                                ...getTextStyles(settings.images.toggleButton.text),
+                            }}
+                            onClick={handlePrevImage}
+                            className="absolute left-[0] top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/70 transition hover:scale-102"
+                        >
+                            <MdOutlineKeyboardArrowLeft/>
+                        </button>
+                    )}
+
+                    {/* Right Arrow */}
+                    {product.images.length > 1 && (currentImageIndex !== (product.images.length - 1)) && (
+                        <button
+                            style={{
+                                ...getBackgroundStyles(settings.images.toggleButton.background),
+                                ...getTextStyles(settings.images.toggleButton.text),
+                            }}
+                            onClick={handleNextImage}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/70 transition hover:scale-102"
+                        >
+                            <MdOutlineKeyboardArrowRight/>
+                        </button>
+                    )}
                 </div>
+
                 {/* Details */}
                 <div 
                     style={{
                         ...getBackgroundStyles(settings.details.background),
                     }}
-                    className="w-[100%] lg:w-[50%] min-h-fit flex flex-col justify-evenly"
+                    className="w-[100%] lg:w-[50%] min-h-fit flex flex-col"
                 >
                     {/* Name and price */}
                     <div
                         style={{
-                            
+                            ...getBackgroundStyles(settings.details.nameAndPrice.background),
                         }} 
-                        className={`${getSpacingClasses(settings.details.nameAndPrice.background.spacing)} flex flex-col justify-evenly`}
+                        className={`
+                            ${settings.details.nameAndPrice.background.position === "center" && "text-center"}
+                            ${settings.details.nameAndPrice.background.position === "start" && "text-start"}
+                            ${settings.details.nameAndPrice.background.position === "end" && "text-end"}
+                        `}
                     >
-                        <h2 className="">{product.name}</h2>
-                        <h2 className="">R{product.price}</h2>
+                        <h2 
+                            style={{
+                                ...getTextStyles(settings.details.nameAndPrice.name)
+                            }}
+                            className=""
+                        >{product.name}</h2>
+                        <h2
+                            style={{
+                                ...getTextStyles(settings.details.nameAndPrice.price)
+                            }} 
+                            className=""
+                        >R{product.price}</h2>
                     </div>
                     {/* Variation selector */}
                     {product.variations.length > 0 && (
-                        <div className="">
-                            <label htmlFor="variation_selector" className="">
-                                {settings.details.variationSelector.text.input} *
+                        <div
+                            style={{
+                                ...getBackgroundStyles(settings.details.variationSelector.background.container)
+                            }} 
+                            className={`
+                                ${settings.details.text.labels.position === "center" && "text-center"}
+                                ${settings.details.text.labels.position === "start" && "text-start"}
+                                ${settings.details.text.labels.position === "end" && "text-end"}
+                            `}
+                        >
+                            <label
+                                style={{
+                                    ...getTextStyles(settings.details.text.labels)
+                                }} 
+                                htmlFor="variation_selector" className="">
+                                {settings.details.variationSelector.text.label.input} *
                             </label>
                             <VariationDropdown
                                 variations={product.variations}
                                 selectedVariation={selectedVariation}
                                 onVariationChange={setSelectedVariation}
+                                style={settings.details.variationSelector}
                             />
                         </div>
                     )}
                     {settings.details.messageBox.show && (
                         <div 
                             style={{
-                                
+                                ...getBackgroundStyles(settings.details.messageBox.background.container)
                             }}
-                            className="mt-4"
+                            className={`
+                                    ${settings.details.text.labels.position === "center" && "text-center"}
+                                    ${settings.details.text.labels.position === "start" && "text-start"}
+                                    ${settings.details.text.labels.position === "end" && "text-end"}
+                            `}
                         >
-                            <label className="block">{settings.details.messageBox.titleInput}</label>
+                            <label
+                                style={{
+                                    ...getTextStyles(settings.details.text.labels)
+                                }}  
+                                
+                            >{settings.details.messageBox.titleInput.input}</label>
                             <textarea 
                                 value={specialRequest}
                                 onChange={(e) => setSpecialRequest(e.target.value)}
                                 style={{
-                                    
-                                    ...getBorderStyles(settings.details.messageBox.border),
+                                    ...getTextStyles(settings.details.messageBox.text),
+                                    ...getBackgroundStyles(settings.details.messageBox.background.box),
                                 }}
                                 className="w-full h-[13vh] p-2 mt-2"
-                                placeholder={`${settings.details.messageBox.placeholder || "We'll do our best to accommodate any requests when possible"} `}
+                                placeholder={`${settings.details.messageBox.placeholder.textArea || "We'll do our best to accommodate any requests when possible"} `}
                             />
                         </div>
                     )}
                     {/* Quantity Updater */}
-                    <div
-                        style={{
-
-                        }} 
-                        className="flex items-center justify-between mt-4"
+                    <div    
+                        className={`w-full flex flex-col 
+                            ${settings.details.quantityUpdater.background.container.position === "center" && "items-center"}
+                            ${settings.details.quantityUpdater.background.container.position === "start" && "items-start"}
+                            ${settings.details.quantityUpdater.background.container.position === "end" && "items-end"}
+                        `} 
                     >
-                        <span className="">Quantity</span>
-                        <div 
-                            style={{color: settings.details.quantityUpdator.color}}
-                            className="flex items-center space-x-4"
+                        <div
+                            style={{
+                                ...getBackgroundStyles(settings.details.quantityUpdater.background.container),
+                            }} 
+                            className={`w-full flex flex-col 
+                                ${settings.details.quantityUpdater.background.container.position === "center" && "items-center"}
+                                ${settings.details.quantityUpdater.background.container.position === "start" && "items-start"}
+                                ${settings.details.quantityUpdater.background.container.position === "end" && "items-end"}
+                            `} 
                         >
-                            <button
-                                style={{...getBorderStyles(settings.details.quantityUpdator.border)}}
-                                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                                className="px-4 py-2 bg-gray-100 hover:bg-gray-200"
+                            <span 
+                                style={{
+                                    ...getTextStyles(settings.details.text.labels)
+                                }}
+                                className=""
+                            >Quantity *</span>
+                            <div 
+                                style={{
+                                    ...getBackgroundStyles(settings.details.quantityUpdater.background.button),
+                                    ...getTextStyles(settings.details.quantityUpdater.text),
+                                    height: "",
+                                }}
+                                className="flex flex-row justify-between items-center w-fit"
                             >
-                                -
-                            </button>
-                            <span className="text-lg font-semibold">{quantity}</span>
-                            <button
-                                style={{...getBorderStyles(settings.details.quantityUpdator.border)}}
-                                onClick={() => setQuantity((q) => q + 1)}
-                                className="px-4 py-2 bg-gray-100 hover:bg-gray-200"
-                            >
-                                +
-                            </button>
+                                <button
+                                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                                    className={`${quantity === 1 && "opacity-50"}`}
+                                >
+                                    <HiOutlineMinus />
+                                </button>
+                                <span className="">{quantity}</span>
+                                <button
+                                    onClick={() => setQuantity((q) => q + 1)}
+                                    className=""
+                                >
+                                    <HiOutlinePlus />
+                                </button>
+                            </div>
                         </div>
                     </div>
                     {/* Add to Cart Button */}
-                    <button
-                        style={{
-                            ...getBorderStyles(settings.details.addToCartBtn.border),
-                            backgroundColor: settings.details.addToCartBtn.backgroundColor
-                        }}
-                        onClick={handleAddToCart}
-                        className="w-full mt-6 py-3 hover:scale-103"
+                    <div    
+                        className={`w-full flex flex-row 
+                            ${settings.details.addToCartBtn.background.position === "center" && "justify-center"}
+                            ${settings.details.addToCartBtn.background.position === "start" && "justify-start"}
+                            ${settings.details.addToCartBtn.background.position === "end" && "justify-end"}
+                        `} 
                     >
-                        Add to cart | R{Number(product.price) * quantity}
-                    </button>
+                        <button
+                            style={{
+                                ...getBackgroundStyles(settings.details.addToCartBtn.background),
+                                ...getTextStyles(settings.details.addToCartBtn.text)
+                            }}
+                            onClick={handleAddToCart}
+                            className="w-full mt-6 py-3 hover:scale-103"
+                        >
+                            Add to cart | R{Number(product.price) * quantity}
+                        </button>
+                    </div>
                     {/* Description */}
-                    <p className="">
+                    <p 
+                        style={{
+                            ...getTextStyles(settings.details.description.text)
+                        }}
+                        className=""
+                    >
                         {product.description}
                     </p>
                 </div>

@@ -1,27 +1,40 @@
 import React, { useState } from 'react';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { AnimatePresence, motion } from 'framer-motion';
+import { getBackgroundStyles, getTextStyles } from '../../../../../utils/stylingFunctions';
 
 const VariationDropdown: React.FC<{
   variations: string[];
   selectedVariation: string | null;
   onVariationChange: (variation: string) => void;
-}> = ({ variations, selectedVariation, onVariationChange }) => {
+  style: any;
+}> = ({ variations, selectedVariation, onVariationChange, style }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="w-full relative">
+    <div
+      style={{
+        ...getTextStyles(style.text.dropdown),
+      }} 
+      className="w-full relative"
+    >
       <button
+        style={{
+          ...getBackgroundStyles(style.background.button)
+        }}
         type="button"
         onClick={() => setIsOpen(prev => !prev)}
         className="w-full flex justify-between items-center border p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none"
       >
         {selectedVariation || 'Select Variation'}
-        <MdOutlineKeyboardArrowDown size={20} />
+        <MdOutlineKeyboardArrowDown className='text-[150%]'/>
       </button>
       <AnimatePresence>
         {isOpen && (
           <motion.ul
+            style={{
+              ...getBackgroundStyles(style.background.dropdown),
+            }}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}

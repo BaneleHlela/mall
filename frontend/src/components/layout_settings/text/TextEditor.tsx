@@ -14,6 +14,7 @@ const TextEditor: React.FC<EditorProps> = ({
     handleSettingChange,
     allow,
     responsiveSize = false,
+    responsivePadding = false
 }) => {
     const isAllowed = (key: string) => !allow || allow.includes(key);
     const availableFonts = useAppSelector((state) => state.layoutSettings.fonts);
@@ -38,7 +39,14 @@ const TextEditor: React.FC<EditorProps> = ({
       "glitch",
       "typewriter"
     ];
-
+    const createSliderChangeHandler = (field: string, unit: string) => (newVal: number) => {
+      const event = {
+        target: Object.assign(document.createElement("input"), {
+          value: `${newVal}${unit}`,
+        }),
+      } as React.ChangeEvent<HTMLInputElement>;
+      handleChange(field)(event);
+    };
 
     return (
         <div className="space-y-1 px-2">
@@ -254,7 +262,70 @@ const TextEditor: React.FC<EditorProps> = ({
               }}
             />
           )}
-
+          {/* PADDING */}
+          {isAllowed("padding") && (
+            responsivePadding ? (
+              <>
+                <SettingsSlider
+                  label="Padding Y (Mobile)"
+                  value={parseFloat(getSetting("padding.y.mobile", settings, objectPath) || "2")}
+                  unit="vh"
+                  min={0.1}
+                  max={15}
+                  step={0.1}
+                  onChange={createSliderChangeHandler("padding.y.mobile", "vh")}
+                />
+                <SettingsSlider
+                  label="Padding Y (Desktop)"
+                  value={parseFloat(getSetting("padding.y.desktop", settings, objectPath) || "4")}
+                  unit="vh"
+                  min={0.1}
+                  max={15}
+                  step={0.1}
+                  onChange={createSliderChangeHandler("padding.y.desktop", "vh")}
+                />
+                <SettingsSlider
+                  label="Padding X (Mobile)"
+                  value={parseFloat(getSetting("padding.x.mobile", settings, objectPath) || "2")}
+                  unit="vh"
+                  min={0.1}
+                  max={15}
+                  step={0.1}
+                  onChange={createSliderChangeHandler("padding.x.mobile", "vh")}
+                />
+                <SettingsSlider
+                  label="Padding X (Desktop)"
+                  value={parseFloat(getSetting("padding.x.desktop", settings, objectPath) || "4")}
+                  unit="vh"
+                  min={0.1}
+                  max={15}
+                  step={0.1}
+                  onChange={createSliderChangeHandler("padding.x.desktop", "vh")}
+                />
+              </>
+            ) : (
+              <>
+                <SettingsSlider
+                  label="Padding Y"
+                  value={parseFloat(getSetting("padding.y", settings, objectPath) || "4")}
+                  unit="vh"
+                  min={0.1}
+                  max={15}
+                  step={0.1}
+                  onChange={createSliderChangeHandler("padding.y", "vh")}
+                />
+                <SettingsSlider
+                  label="Padding X"
+                  value={parseFloat(getSetting("padding.x", settings, objectPath) || "4")}
+                  unit="vh"
+                  min={0.1}
+                  max={15}
+                  step={0.1}
+                  onChange={createSliderChangeHandler("padding.x", "vh")}
+                />
+              </>
+            )
+          )}
         </div>
       );
       

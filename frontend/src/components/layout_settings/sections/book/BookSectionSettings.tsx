@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import BasicBookWithOpenCalendarSettings from './basic_book_with_open_calendar/BasicBookWithOpenCalendarSettings';
 import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice';

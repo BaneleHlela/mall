@@ -1,4 +1,4 @@
-import type { X } from "lucide-react";
+import { Description } from "@headlessui/react";
 
 export const defaultSingleProductSectionConfig = {
     variation: "firstSingleProductSection",
@@ -19,6 +19,11 @@ export const defaultSingleProductSectionConfig = {
             },  
         }
     },
+    text: {
+        exit: {
+            background: {}
+        },
+    },
     images: {
         background: {
             color: "orange",
@@ -30,6 +35,10 @@ export const defaultSingleProductSectionConfig = {
                 mobile: "100%",
                 desktop: "100%"
             }
+        },
+        toggleButton: {
+            text: {},
+            background: {}
         }
     },
     details: {
@@ -46,59 +55,165 @@ export const defaultSingleProductSectionConfig = {
                 },
                 y: {
                     mobile: "20px",
-                    desktop: "120px",
+                    desktop: "0px",
                 },  
+            },
+        },
+        text: {
+            labels: {
+                color: "red",
+                position: "center"
             },
         },
         nameAndPrice: {
             background: {
-                spacing: {
-                    y: {
-                        mobile: "1vh",
-                        desktop: "40vh",
-                    },
-                    x: {
-                        mobile: "1vh",
-                        desktop: "2.8vh",
-                    }
-                },
                 height: {
                     mobile: "10%",
                     desktop: "20%",
-                }
+                },
+                position: "center"
+            },
+            name: {
+                fontFamily: "Open Sans",
+                fontSize: "25px",
+                padding: {
+                    x: {
+                        desktop: "0px",
+                        mobile: "10px",
+                    },
+                    y: {
+                        mobile: "0px",
+                        desktop: "0px",
+                    },  
+                },
+            },
+            price: {
+                fontFamily: "Open Sans",
+                fontSize: "10px",
+                padding: {
+                    x: {
+                        desktop: "20px",
+                        mobile: "10px",
+                    },
+                    y: {
+                        mobile: "10px",
+                        desktop: "10px",
+                    },  
+                },
             }
         },
         variationSelector: {
             text: {
-                input: "Color",
+                label: {
+                    input: "Color",
+                },
+                dropdown: {
+                    color: "red",
+                },
+            },
+            background: {
+                container: {
+                    padding: {
+                        x: {
+                            desktop: "20px",
+                            mobile: "10px",
+                        },
+                        y: {
+                            mobile: "10px",
+                            desktop: "10px",
+                        },  
+                    },
+                },
+                button: {
+                    color: "white"
+                },
+                dropdown: {
+                    color: "orange"
+                }
             }
         },
         messageBox: {
             show: true,
-            titleInput: "Special request",
-            placeholder: "Sozama ngokusemandleni",
-            border: {
-                width: "2px",
-                style: "solid",
-                color: "brown",
+            text: {
+                color: "blue",
             },
+            titleInput: {
+                input: "Special Request",
+            },
+            placeholder: { 
+                textArea: "Sozama ngokusemandleni",
+            },
+            background: {
+                container: {
+                    padding: {
+                        x: {
+                            desktop: "20px",
+                            mobile: "10px",
+                        },
+                        y: {
+                            mobile: "10px",
+                            desktop: "10px",
+                        },  
+                    },
+                },
+                box: {
+                    border: {
+                        width: "2px",
+                        style: "solid",
+                        color: "brown",
+                    },
+                },
+            },
+            
         },
-        quantityUpdator: {
-            color: "brown",
-            border: {
-                width: "2px",
-                style: "solid",
+        quantityUpdater: {
+            text: {
                 color: "brown",
-                radius: "0px"
+                fontSize: "2.5vh",
+            },
+            background: {
+                container: {
+                    position: "start",
+                    padding: {
+                        x: {
+                            desktop: "20px",
+                            mobile: "10px",
+                        },
+                        y: {
+                            mobile: "10px",
+                            desktop: "10px",
+                        },  
+                    },
+                },
+                button: {
+                    color: "orange",
+                    padding: {
+                        x: "10px",
+                        y: "10px",
+                    }
+                }
             },
         },
         addToCartBtn: {
-            border: {
-                style: "solid",
-                color: "brown",
-                radius: "0px"
+            background: {
+                position: "start",
+                color: "pink",
+                width: {
+                    mobile: "50%",
+                    desktop: "50%"
+                }
             },
-            color: "#3bbdf5",
+            text: {
+                fontSize: "2.5vh"
+            }
+        },
+        description: {
+            background: {
+                color: "pink",
+            },
+            text: {
+                fontSize: "2.5vh"
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ export interface Performer {
 
 export interface ServicesState {
     services: Service[];
-    loading: boolean;
+    isLoading: boolean;
     error: string | null;
+    selectedService?: Service | null;
 }

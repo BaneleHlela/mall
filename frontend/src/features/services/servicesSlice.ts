@@ -6,7 +6,8 @@ import type { Service, ServicesState } from '../../types/serviceTypes';
 
 const initialState: ServicesState = {
   services: [],
-  loading: false,
+  selectedService: null,
+  isLoading: false,
   error: null,
 };
 
@@ -33,6 +34,20 @@ export const fetchStoreServices = createAsyncThunk(
   }
 );
 
+export const fetchServiceById = createAsyncThunk(
+  'services/fetchServiceById',
+  async (serviceId: string, thunkAPI) => {
+    try {
+      const url = `${API_BASE}/${serviceId}`;
+      const res = await axios.get(url);
+      return res.data as Service;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || 'Failed to fetch service by ID'
+      );
+    }
+  }
+);
 
 export const createService = createAsyncThunk(
   'services/createService',
@@ -80,15 +95,15 @@ const servicesSlice = createSlice({
 
       // Fetch
       .addCase(fetchStoreServices.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(fetchStoreServices.fulfilled, (state, action: PayloadAction<Service[]>) => {
-        state.loading = false;
+        state.isLoading = false;
         state.services = action.payload;
       })
       .addCase(fetchStoreServices.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.payload as string;
       })
 
@@ -108,7 +123,21 @@ const servicesSlice = createSlice({
       // Delete
       .addCase(deleteService.fulfilled, (state, action: PayloadAction<string>) => {
         state.services = state.services.filter(s => s._id !== action.payload);
-      });
+      })
+
+      // Fetch by ID
+      .addCase(fetchServiceById.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchServiceById.fulfilled, (state, action: PayloadAction<Service>) => {
+        state.isLoading = false;
+        state.selectedService = action.payload;
+      })
+      .addCase(fetchServiceById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
   },
 });
 

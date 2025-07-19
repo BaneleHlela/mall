@@ -20,6 +20,7 @@ import { setInitialLayout } from "../../features/layouts/layoutSettingsSlice";
 import { getLayout } from "../../features/layouts/layoutSlice";
 import { fetchStoreProducts } from "../../features/products/productsSlice";
 import SingleStoreProductPage from "./supporting/single_product/SingleStoreProductPage";
+import StoreBookServicePage from "./supporting/book_service/StoreBookServicePage";
 
 const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
   const settings = useAppSelector((state) => state.layoutSettings);
@@ -132,6 +133,7 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
             />
           ))}
           {store?.trades.includes("products") && <Route path="/product/:productId" element={<SingleStoreProductPage />} />}
+          {store?.trades.includes("services") && <Route path="/service/:serviceId" element={<StoreBookServicePage />} />}
         </Routes>
       </div> 
     </div>

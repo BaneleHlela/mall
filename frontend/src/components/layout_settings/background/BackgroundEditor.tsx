@@ -170,39 +170,39 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
           <>
             <SettingsSlider
               label="Padding Y (Mobile)"
-              value={parseFloat(getSetting("padding.mobile.y", settings, objectPath) || "2")}
+              value={parseFloat(getSetting("padding.y.mobile", settings, objectPath) || "2")}
               unit="vh"
               min={0.1}
               max={15}
               step={0.1}
-              onChange={createSliderChangeHandler("padding.mobile.y", "vh")}
+              onChange={createSliderChangeHandler("padding.y.mobile", "vh")}
             />
             <SettingsSlider
               label="Padding Y (Desktop)"
-              value={parseFloat(getSetting("padding.desktop.y", settings, objectPath) || "4")}
+              value={parseFloat(getSetting("padding.y.desktop", settings, objectPath) || "4")}
               unit="vh"
               min={0.1}
               max={15}
               step={0.1}
-              onChange={createSliderChangeHandler("padding.desktop.y", "vh")}
+              onChange={createSliderChangeHandler("padding.y.desktop", "vh")}
             />
             <SettingsSlider
               label="Padding X (Mobile)"
-              value={parseFloat(getSetting("padding.mobile.x", settings, objectPath) || "2")}
+              value={parseFloat(getSetting("padding.x.mobile", settings, objectPath) || "2")}
               unit="vh"
               min={0.1}
               max={15}
               step={0.1}
-              onChange={createSliderChangeHandler("padding.mobile.x", "vh")}
+              onChange={createSliderChangeHandler("padding.x.mobile", "vh")}
             />
             <SettingsSlider
               label="Padding X (Desktop)"
-              value={parseFloat(getSetting("padding.desktop.x", settings, objectPath) || "4")}
+              value={parseFloat(getSetting("padding.x.desktop", settings, objectPath) || "4")}
               unit="vh"
               min={0.1}
               max={15}
               step={0.1}
-              onChange={createSliderChangeHandler("padding.desktop.x", "vh")}
+              onChange={createSliderChangeHandler("padding.x.desktop", "vh")}
             />
           </>
         ) : (

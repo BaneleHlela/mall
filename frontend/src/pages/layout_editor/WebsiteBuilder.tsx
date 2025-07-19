@@ -14,7 +14,7 @@ import { setInitialLayout } from '../../features/layouts/layoutSettingsSlice.ts'
 const sizeMap = {
   mobile: { width: 412, height: 840, scale: 0.75 },
   tablet: { width: 775, height: 1024, scale: 0.62 },
-  desktop: { width: 1920, height: 1080, scale: 0.55 },
+  desktop: { width: 1920, height: 950, scale: 0.55 },
 };
 
 const deviceStyles = {

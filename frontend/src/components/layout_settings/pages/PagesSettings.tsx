@@ -35,6 +35,9 @@ import type { Routes } from "../../../types/layoutTypes";
 import ServicesPageSettings from "./ServicesPageSettings";
 import GalleryPageSettings from "./GalleryPageSettings";
 import ContactPageSettings from "./ContactPageSettings";
+import SingleStoreProductPageSettings from "./SingleStoreProductPageSettings";
+import BookPageSettings from "./BookPageSettings";
+
 
 const SortableItem = ({
   id,
@@ -87,6 +90,7 @@ const PagesSettings: React.FC = () => {
   const dispatch = useAppDispatch();
   const routes: Routes = useAppSelector((state) => state.layoutSettings.routes);
   const routeOrder: string[] = useAppSelector((state) => state.layoutSettings.routeOrder);
+  const products = useAppSelector((state) => state.products.products);
   const MySwal = withReactContent(Swal);
 
   const [activePanel, setActivePanel] = useState<string | null>(null);
@@ -132,6 +136,8 @@ const PagesSettings: React.FC = () => {
         return <GalleryPageSettings />;
       case "contact": 
         return <ContactPageSettings />;
+      case "book":
+        return <BookPageSettings />;
       default:
         return <div>No settings available.</div>;
     }
@@ -230,9 +236,18 @@ const PagesSettings: React.FC = () => {
           })}
         </SortableContext>
       </DndContext>
+      
+      {1 > 0 && (
+          <SettingsContainer
+            name="Single Product Page"
+            onClick={() => setActivePanel("single_product")}
+            deletable={false}
+            renamable={false}
+          />
+      )}
 
       <AnimatePresence>
-        {activePanel && (
+        {activePanel && activePanel !== "single_product" && (
           <SlidingPanel
             key={activePanel}
             isOpen={true}
@@ -240,6 +255,16 @@ const PagesSettings: React.FC = () => {
             title={`${routes[activePanel].name} Settings`}
           >
             {getSettingsComponent(activePanel)}
+          </SlidingPanel>
+        )}
+        {activePanel === "single_product" && (
+          <SlidingPanel
+            key="single_prodcut"
+            isOpen={true}
+            onClose={closePanel} // @ts-ignore-next-line
+            title={`Single Product Page Settings`}
+          >
+            <SingleStoreProductPageSettings />
           </SlidingPanel>
         )}
       </AnimatePresence>

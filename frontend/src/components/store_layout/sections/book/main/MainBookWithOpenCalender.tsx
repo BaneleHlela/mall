@@ -4,7 +4,6 @@ import { format } from "date-fns";
 import ReactCalendar from "../../../extras/react_calendar/ReactCalendar";
 import { getAvailableBookingTimes, makeBooking } from "../../../../../features/bookings/bookingsSlice";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
-import { useParams } from "react-router-dom";
 import { getBackgroundStyles, getTextStyles } from "../../../../../utils/stylingFunctions";
 import { convertTo12HourFormat } from "../../../../../utils/helperFunctions";
 import type { Service } from "../../../../../types/serviceTypes";
@@ -20,11 +19,12 @@ interface MainBookWithOpenCalendarProps {
 
 const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({service}) => {
     // const { storeId } = useParams<{ storeId: string }>();
-    const storeId = "68677942e545985b2467b130";
-    if (!storeId) {
-        throw new Error("Store ID is required");
-    }
+    // const storeId = "68677942e545985b2467b130";
+    // if (!storeId) {
+    //     throw new Error("Store ID is required");
+    // }
     // State to manage selected date, service, staff, and time
+    const store = useAppSelector((state) => state.stores.currentStore);
     const [selectedDate, setSelectedDate] = useState<Value>(null);
     const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
     const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
@@ -35,7 +35,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
     // Redux selectors to get store, available times, and services
     // const store = useAppSelector((state) => state.stores.storesById[storeId as string]);
     const availableTimes = useAppSelector((state) => state.booking?.availableTimes || {});
-    const settings = useAppSelector((state) => state.layoutSettings.book.main);
+    const settings = useAppSelector(state => state.layoutSettings.book.main);
     const services = useAppSelector((state) => state.services.services);
 
     // variables
@@ -73,14 +73,14 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
     if (selectedDate instanceof Date && selectedServiceId && selectedStaffId) {
         const formattedDate = format(selectedDate, "yyyy-MM-dd");
         const result = dispatch(getAvailableBookingTimes({
-            storeId: storeId as string,
+            storeId: store?._id as string,
             serviceId: selectedServiceId,
             date: formattedDate,
             staffId: selectedStaffId,
         }));
         console.log(result);
     }
-    }, [selectedDate, selectedServiceId, selectedStaffId, storeId, dispatch]);
+    }, [selectedDate, selectedServiceId, selectedStaffId, store?._id, dispatch]);
 
     const handleBooking = () => {
         if (!selectedService || !selectedStaffId || !formattedDate || !selectedTime) {
@@ -89,7 +89,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
         }
       
         const bookingData = {
-          store: storeId,
+          store: store?._id,
           services: [
             {
               service: selectedService._id,
@@ -115,9 +115,9 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
     };
 
     return (
-        <>
+        <div className="">
             {/* Desktop */}
-            <div className="hidden lg:flex flex-row px-4  z-2 ">
+            <div className="hidden lg:flex flex-row z-2 min-h-fit">
                 {/* Service Details */}
                 <div className="h-full w-[32%]">
                     {/* Title */}
@@ -350,7 +350,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                 </div>  
             </div>
             {/* Mobile */}
-            <div className=" w-[100vw]  px-2 lg:hidden">
+            <div className="w-[100vw] min-h-fit px-2 lg:hidden">
                 {/* Select a Date*/}
                 <div className="w-full">
                     <div 
@@ -615,7 +615,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                 </div>
                 
             </div>
-        </>
+        </div>
         
     )
 }

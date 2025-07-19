@@ -24,6 +24,27 @@ export const getTextStyles = (text: TextSettings) => {
   if (text.textTransform) styles.textTransform = text.textTransform;
   if (text.textShadow) styles.textShadow = text.textShadow;
 
+  // Responsive Padding
+  if (typeof text.padding === "object") {
+    // Responsive padding Y
+    if (typeof text.padding.y === "object") {
+      const responsiveY = getResponsiveDimension(text.padding.y);
+      styles.paddingTop = responsiveY;
+      styles.paddingBottom = responsiveY;
+    } else if (text.padding.y) {
+      styles.paddingTop = styles.paddingBottom = text.padding.y;
+    }
+
+    // Responsive padding X
+    if (typeof text.padding.x === "object") {
+      const responsiveX = getResponsiveDimension(text.padding.x);
+      styles.paddingLeft = responsiveX;
+      styles.paddingRight = responsiveX;
+    } else if (text.padding.x) {
+      styles.paddingLeft = styles.paddingRight = text.padding.x;
+    }
+  }
+
   return styles;
 };
 

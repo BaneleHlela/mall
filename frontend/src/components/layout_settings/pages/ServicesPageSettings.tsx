@@ -12,8 +12,7 @@ const ServicesPageSettings = () => {
   const closePanel = () => setActivePanel(null);
 
   return (
-    <div className='space-y-1'>
-      
+    <div className='space-y-[.3vh]'>
       <SettingsContainer
         name="Services"
         onClick={() => setActivePanel("services")}

@@ -10,12 +10,19 @@ export const defaultBasicBookWithOpenCalendarConfig = {
         },
         width: {
             mobile: "",
-            desktop: "80%",
+            desktop: "70%",
         },
         padding: {
-            x: "1rem",
-            y: "1rem",
+            x: {
+                desktop: "0px",
+                mobile: "0px",
+            },
+            y: {
+                desktop: "0px",
+                mobile: "0px",
+            },
         },
+        image: ["https://storage.cloud.google.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100136.png"],
     },
     headerAndMainBackground: {
         height: {
@@ -46,6 +53,7 @@ export const defaultBasicBookWithOpenCalendarConfig = {
             fontWeight: "bold",
             fontStyle: "normal",
             marginBottom: "20px",
+            background: {}
         }
     },
     main: defaultMainBookWithOpenCalandarConfig,

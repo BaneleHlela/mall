@@ -23,7 +23,7 @@ const storeLayoutSchema = new mongoose.Schema({
     menubar: {},
     hero: {},
     order: {},
-    book: {},
+    //book: {},
     about: {},
     gallery: {},
     products: {},

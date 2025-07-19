@@ -2,7 +2,7 @@ import { StoreServicesSection, StoreFooterSection } from "../../../../components
 
 const StoreServicesPage = () => {
   return (
-    <div>
+    <div className="w-full flex-col items-center">
         <StoreServicesSection />
         <StoreFooterSection />
     </div>

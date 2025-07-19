@@ -7,6 +7,8 @@ import SettingsSlider from "../../../supporting/SettingsSlider";
 import SlidingPanel from "../../../supporting/SlidingPanel";
 import TextEditor from "../../../text/TextEditor";
 import type { SectionEditorProps } from "../../SectionSettings";
+import BackgroundEditor from "../../../background/BackgroundEditor";
+import MainBookWithCalenderSettings from "./supporting/MainBookWithCalenderSettings";
 
 const BasicBookWithOpenCalendarSettings: React.FC<SectionEditorProps> = ({
   settings,
@@ -23,20 +25,20 @@ const BasicBookWithOpenCalendarSettings: React.FC<SectionEditorProps> = ({
       />
       <FirstOrderSubSettingsContainer
         name="Background"
-        onClick={() => setActivePanel("Background")}
+        onClick={() => setActivePanel("background")}
       />
       <FirstOrderSubSettingsContainer
         name="Heading & Box Background"
         onClick={() => setActivePanel("headerAndBoxBackground")}
       />
       <FirstOrderSubSettingsContainer
-        name="Box"
-        onClick={() => setActivePanel("Box")}
+        name="Booking Box"
+        onClick={() => setActivePanel("box")}
       />
       <AnimatePresence>
         {activePanel === "Heading" && (
             <SlidingPanel key="title" isOpen={true} onClose={closePanel} title="Gallery Title">
-              <div className="px-2 space-y-1 py-1">
+              <div className="px-[.6vh] space-y-[.3vh] py-[.3vh]">
                 <SettingsSlider
                   label="Bottom Margin"
                   value={parseInt(getSetting("heading.text.marginBottom", settings, objectPath) || '16')}
@@ -57,7 +59,67 @@ const BasicBookWithOpenCalendarSettings: React.FC<SectionEditorProps> = ({
                     />
                   }
                 />
+
+                {/* Background Settings */}
+                <SubSettingsContainer
+                  name="Background"
+                  SettingsComponent={
+                    <div className="px-[.15vh] space-y-1">
+                      <BackgroundEditor
+                        objectPath={`${objectPath}.heading.text.background`}
+                        settings={settings}
+                        handleSettingChange={handleSettingChange}
+                        allow={["padding", "width", "color", "border"]}
+                        widthUnit="vw"
+                        heightUnit="vh"
+                        responsiveSize
+                        responsivePadding
+                      />
+                    </div>
+                  }
+                />
               </div>
+            </SlidingPanel>
+          )}
+          {activePanel === "background" && (
+            <SlidingPanel key="title" isOpen={true} onClose={closePanel} title="Book Section Background">
+              <div className="px-[.6vh] space-y-[.3vh] py-[.3vh]">
+                <BackgroundEditor
+                  objectPath={`${objectPath}.background`}
+                  settings={settings}
+                  handleSettingChange={handleSettingChange}
+                  allow={["padding", "width", "color", "border", "height"]}
+                  widthUnit="%"
+                  heightUnit="vh"
+                  responsiveSize
+                  responsivePadding
+                />
+              </div>
+            </SlidingPanel>
+          )}
+          {activePanel === "headerAndBoxBackground" && (
+            <SlidingPanel key="title" isOpen={true} onClose={closePanel} title="Heading And Box">
+              <div className="px-[.6vh] space-y-[.3vh] py-[.3vh]">
+                <BackgroundEditor
+                  objectPath={`${objectPath}.headerAndMainBackground`}
+                  settings={settings}
+                  handleSettingChange={handleSettingChange}
+                  allow={["padding", "width", "color", "border", "height"]}
+                  widthUnit="%"
+                  heightUnit="%"
+                  responsiveSize
+                  responsivePadding
+                />
+              </div>
+            </SlidingPanel>
+          )}
+          {activePanel === "box" && (
+            <SlidingPanel key="box" isOpen={true} onClose={closePanel} title="Booking Box Settings">
+              <MainBookWithCalenderSettings 
+                settings={settings}
+                handleSettingChange={handleSettingChange}
+                objectPath={`${objectPath}.main`} 
+              />
             </SlidingPanel>
           )}
       </AnimatePresence>
