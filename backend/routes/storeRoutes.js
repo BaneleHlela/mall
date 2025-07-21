@@ -14,8 +14,9 @@ import {
     uploadStoreGalleryImage,
     deleteStoreGalleryImage,
     editStore,
+    addTeamMember
 } from "../controllers/StoreController.js";
-import { uploadSingleFile } from "../middlewares/uploadMiddleware.js";
+import { uploadSingleFile, uploadTeamMemberImage } from "../middlewares/uploadMiddleware.js";
 
 const router = express.Router();
 
@@ -24,6 +25,8 @@ router.get("/my-stores", protectRoute, getStoresByOwner);
 router.get("/:storeId", getStore);
 router.get('/', getStores);
 router.put('/edit/:storeId', /*protectRoute,*/ editStore);
+router.post('/:storeId/team', uploadTeamMemberImage, addTeamMember);
+
 
 router.put("/:storeId/logo", uploadSingleFile("logo"), uploadStoreLogo);
 router.delete('/:storeId/logo', deleteStoreLogo);

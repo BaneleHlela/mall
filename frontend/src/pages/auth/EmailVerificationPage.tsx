@@ -28,8 +28,11 @@ const EmailVerificationPage = () => {
 			for (let i = 0; i < 6; i++) {
 				newCode[i] = pastedCode[i] || "";
 			}
-			setCode(newCode);
-			const lastFilledIndex = newCode.findLastIndex((digit) => digit !== "");
+			setCode(newCode); 
+			const lastFilledIndex = newCode
+				.slice()
+				.reverse()
+				.findIndex((digit) => digit !== "") || -1;
 			const focusIndex = lastFilledIndex < 5 ? lastFilledIndex + 1 : 5;
 			inputRefs.current[focusIndex]?.focus();
 		} else {
@@ -72,6 +75,7 @@ const EmailVerificationPage = () => {
 
 	useEffect(() => {
 		if (code.every((digit) => digit !== "")) {
+			console.log("All digits recieved")
 			handleSubmit(new Event("submit") as unknown as FormEvent);
 		}
 	}, [code]);

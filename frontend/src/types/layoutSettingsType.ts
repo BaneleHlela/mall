@@ -13,6 +13,7 @@ export interface TextSettings {
     textTransform?: string;
     fontStyle?: string;
     padding?: PaddingValue;
+    backgroundColor?: string;
   }
   
 export interface EditorProps {

@@ -70,16 +70,27 @@ const storeSchema = new mongoose.Schema(
       type: String,
     }, 
     team: [{
+      // member: {
+      //   type: mongoose.Schema.Types.ObjectId,
+      //   ref: "User",
+      //   required: false, 
+      // },
       member: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-          required: true, 
+        type: String,
+        required: true, 
       },
       role: {
-          type: String,
-          enum: ["owner", "manager", "staff", "viewer", "admin"], 
-          default: "owner", 
+        type: String,
+        enum: ["owner", "manager", "staff", "viewer", "admin"], 
+        default: "owner", 
       },
+      about: {
+        type: String,
+      },
+      image: {
+        type: String,
+        default: "",
+      }
     }],
     businessType: {
       type: String,

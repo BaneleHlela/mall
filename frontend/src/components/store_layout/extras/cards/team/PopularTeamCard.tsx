@@ -1,24 +1,20 @@
 import React from 'react'
-import { getBackgroundStyles, getBorderStyles, getTextStyles } from '../../../../../../utils/stylingFunctions';
-import StoreButton from '../../../buttons/StoreButton';
+import { getBackgroundStyles, getTextStyles } from '../../../../../utils/stylingFunctions';
+import StoreButton from '../../buttons/StoreButton';
 
-interface StoreServiceCardProps {
-    title: string;
-    duration: number; // in minutes
-    description: string;
-    price?: number;
+interface TeamCardProps {
+    name: string;
+    about: string;
     imageUrl: string;
     style: any;
     onClick?: () => void;
 }
 
-const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
-    title,
-    duration,
-    price,
+const PopularTeamCard: React.FC<TeamCardProps> = ({
+    name,
     style,
     imageUrl,
-    description,
+    about,
     onClick,
 }) => {
 
@@ -27,7 +23,7 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
             style={{
                 ...getBackgroundStyles(style.background),
             }}
-            className={`flex min-h-fit overflow-hidden
+            className={`flex min-h-fit overflow-hidden w-full
                 ${style.stack.mobile === "column" ? "flex-col" : "flex-row" }
                 lg:${style.stack.desktop === "column" ? "flex-col" : "flex-row" }
             hover:scale-102`}
@@ -37,7 +33,7 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                 style={{
                     ...getBackgroundStyles(style.image)
                 }}
-                className=''
+                className='overflow-hidden'
             >
                 <img 
                     src={imageUrl} 
@@ -64,41 +60,18 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                         ...getTextStyles(style.textAndButton.text),
                         ...getTextStyles(style.textAndButton.text.name)
                     }} 
-                    className=""
+                    className="max-w-full"
                 >
-                    {title}
+                    {name}
                 </h2>
-                {/* Description */}
-                {style.textAndButton.text.show.description && (
-                    <p style={{
-                        ...getTextStyles(style.textAndButton.text)
-                        }} 
-                        className="line-clamp-4"
-                    >
-                        {description}
-                    </p>
-                )}
-                {/* Duration */}
-                {style.textAndButton.text.show.duration && (
-                    <p style={{
-                        ...getTextStyles(style.textAndButton.text)
-                        }} 
-                        className=""
-                    >
-                        {duration} min
-                    </p>
-                )}
-                {/* Price */}
-                {style.textAndButton.text.show.price && (
-                    <p 
-                        style={{
-                            ...getTextStyles(style.textAndButton.text)
-                        }} 
-                        className=""
-                    >
-                        R{price}
-                    </p>
-                )}
+                {/* about */}
+                <p style={{
+                    ...getTextStyles(style.textAndButton.text)
+                    }} 
+                    className="line-clamp-4"
+                >
+                    {about}
+                </p>
                 {style.textAndButton.button.show && (
                     <div 
                         className={`flex flex-row w-full
@@ -110,12 +83,13 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                         <StoreButton style={style.textAndButton.button} onClick={onClick || (() => {})} />
                     </div>
                 )}
+                
             </div>
         </div>
     )
 }
 
-export default ServiceCardWithImage;
+export default PopularTeamCard;
 
 
 interface StackConfig {

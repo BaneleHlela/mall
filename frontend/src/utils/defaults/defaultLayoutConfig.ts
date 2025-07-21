@@ -18,6 +18,7 @@ import { simpleServicesSectionConfig } from "./sections/services/defaultSimpleSt
 import { defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig } from "./sections/footer/defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig";
 import { defaultPopularProductsSectionConfig } from "./sections/order_online/defaultPopularProductsSectionConfig";
 import { defaultSingleProductSectionConfig } from "./sections/single_product/defaultSingleProductSectionConfig";
+import { defaultPopularTeamSectionConfig } from "./sections/team/defaultPopularTeamSectionConfig";
 
 export const defaultMenubarConfig = {
   topbar: {
@@ -103,8 +104,9 @@ export const defaultLayoutConfig = {
     practice: simpleServicesSectionConfig,
     services: simpleServicesSectionConfig,
     about: defaultAboutWithImageNextToTextConfig,
+    team: defaultPopularTeamSectionConfig,
     menubar: defaultPupularStoreMenubarConfig,
-    gallery: defaultGalleryWithImageSliderConfig,
+    gallery: defaultGalleryWithGroupedImagesConfig,
     menu: defaultFirstStoreMenuSectionConfig,
     hero: defaultHeroWithReviewCardAndEmailFormConfig,
     book: defaultBasicBookWithOpenCalendarConfig,

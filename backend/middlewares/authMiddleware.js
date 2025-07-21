@@ -1,5 +1,5 @@
 import User from "../models/UserModel.js";
-import Store from "../models/storeModel.js";
+import Store from "../models/StoreModel.js";
 import jwt from "jsonwebtoken";
 import expressAsyncHandler from "express-async-handler";
 

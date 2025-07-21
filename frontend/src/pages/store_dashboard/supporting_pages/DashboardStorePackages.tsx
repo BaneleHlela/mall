@@ -13,7 +13,7 @@ const DashboardStorePackages = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [addServiceOpen, setAddServiceOpen] = useState(false);
+  const [addPackageOpen, setAddPackageOpen] = useState(false);
   const itemsPerPage = 10;
 
   const packages = useAppSelector(state => state.packages.packages);
@@ -41,7 +41,7 @@ const DashboardStorePackages = () => {
       <div className="h-[10%] flex flex-row justify-between items-center w-full bg-pink-600 px-4">
         <button
           className="bg-white text-sm font-semibold px-4 py-2 rounded"
-          onClick={() => setAddServiceOpen(true)}
+          onClick={() => setAddPackageOpen(true)}
         >
           Add Package
         </button>
@@ -74,8 +74,8 @@ const DashboardStorePackages = () => {
       </div>
       <div className="h-screen w-screen">
         <AddPackageModal
-          open={addServiceOpen}
-          onClose={() => setAddServiceOpen(false)}
+          open={addPackageOpen}
+          onClose={() => setAddPackageOpen(false)}
         />
       </div>
     </div>

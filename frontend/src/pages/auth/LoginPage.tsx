@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
-import { Mail, Lock, Loader } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Mail, Lock } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Input from "../../components/the_mall/authentication/components/Input";
 import { login } from "../../features/user/userSlice";
@@ -10,6 +10,10 @@ import SocialLoginButtons from "../../components/the_mall/authentication/compone
 import { TbLoader3 } from "react-icons/tb";
 
 const LoginPage = () => {
+	const navigate = useNavigate();
+	const location = useLocation();
+	const from = (location.state as any)?.from?.pathname || '/';
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
@@ -18,9 +22,13 @@ const LoginPage = () => {
 
 	const handleLogin = async (e: FormEvent) => {
 		e.preventDefault();
-		await dispatch(login({ email, password }));
+		const resultAction = await dispatch(login({ email, password }));
+	  
+		if (login.fulfilled.match(resultAction)) {
+		  navigate(from, { replace: true });
+		}
 	};
-
+	  
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 20 }}

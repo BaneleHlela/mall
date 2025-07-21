@@ -1,10 +1,8 @@
-import FirstStoreTeamSection from './first/FirstStoreTeamSection'
+import PupularStoreTeamSection from './popular/PopularStoreTeamSection';
 
 const StoreTeamSection = () => {
   return (
-    <div>
-        <FirstStoreTeamSection />
-    </div>
+    <PupularStoreTeamSection />
   )
 }
 

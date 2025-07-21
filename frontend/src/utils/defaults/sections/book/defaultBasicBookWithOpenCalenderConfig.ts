@@ -56,5 +56,21 @@ export const defaultBasicBookWithOpenCalendarConfig = {
             background: {}
         }
     },
+    subheading: {
+        text: {
+            input: "Book Now",
+            position: "center",
+            fontSize: {
+                mobile: "30px",
+                desktop: "30px",
+            },
+            fontFamily: "Open Sans",
+            color: "white",
+            fontWeight: "bold",
+            fontStyle: "normal",
+            marginBottom: "20px",
+            background: {}
+        }
+    },
     main: defaultMainBookWithOpenCalandarConfig,
 }

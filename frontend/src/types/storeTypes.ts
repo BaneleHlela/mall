@@ -6,8 +6,11 @@ export interface Logo {
 }
 
 export interface TeamMember {
-  member: Types.ObjectId | string; 
+  about: string;
+  member: string; 
   role: "owner" | "manager" | "staff" | "viewer"; 
+  image: string;
+  _id: Types.ObjectId | string; // Optional ID for the team member
 }
 export interface Image {
   _id: string;

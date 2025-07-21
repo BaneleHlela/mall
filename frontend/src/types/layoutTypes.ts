@@ -48,6 +48,7 @@ export interface Layout {
     hero?: any;
     book?: any;
     bookWithCalendar?: any;
+    team?: any;
     about: any;
     menu: any;
     order: any;

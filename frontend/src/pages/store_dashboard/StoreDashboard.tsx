@@ -1,15 +1,14 @@
 import { Routes, Route, useParams } from "react-router-dom";
-import type { RootState } from "../../app/store";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import StoreDashBoardMenubar from "../../components/store_dashboard/menubar/StoreDashBoardMenubar";
 import StoreLayouts from "./supporting_pages/StoreLayouts";
-import StoreTeam from "./supporting_pages/StoreTeam";
+import StoreTeam from "./supporting_pages/StoreDashboardTeam";
 import StoreServices from "./supporting_pages/DashboardStoreServices";
 import StoreOrders from "./supporting_pages/StoreOrders";
 import StoreBookings from "./supporting_pages/StoreBookings";
 import StoreSettings from "./supporting_pages/StoreSettings";
 import StoreImages from "./supporting_pages/StoreImages";
-import { setStore } from "../../features/store_admin/storeAdminSlice";
+import { fetchStore, setStore } from "../../features/store_admin/storeAdminSlice";
 import { useEffect } from "react";
 import StoreOverview from "./supporting_pages/StoreOverview";
 import StoreDashboardTopbar from "../../components/store_dashboard/menubar/StoreDashboardTopbar";
@@ -24,25 +23,29 @@ import StoreLocationSettings from "./supporting_pages/settings/StoreLocationSett
 import StoreSocialSettings from "./supporting_pages/settings/StoreSocialSettings";
 import StoreAboutSettings from "./supporting_pages/settings/StoreAboutSettings";
 
+
 const StoreDashboard = () => {
     const dispatch = useAppDispatch();
     const { storeId } = useParams<{ storeId: string  }>();
-    const store = useAppSelector((state: RootState) => 
-        storeId ? state.stores.myStoresById[storeId] : undefined
-    );
+    // const store = useAppSelector((state: RootState) => 
+    //     storeId ? state.stores.myStoresById[storeId] : undefined
+    // );
+    const store = useAppSelector((state) => state.storeAdmin.store);
     
     useEffect(() => {
-        if (store) {
-          dispatch(setStore(store));
+        if (!store && storeId) {
+            dispatch(fetchStore(storeId));
+        } else if (store) {
+            dispatch(setStore(store));
         }
-    }, [store, dispatch]);
+    }, [store, storeId, dispatch]);
 
     useEffect(() => {
         if (storeId) {
             dispatch(fetchStoreProducts({ storeId }));
         }
     }, [storeId, dispatch]);
-
+    
     if (!store) {
         return <p>Store not found or invalid store ID.</p>;
     }
@@ -61,7 +64,7 @@ const StoreDashboard = () => {
                     <Route path="/packages" element={<DashboardStorePackages />} />
                     <Route path="/orders" element={<StoreOrders />} />
                     <Route path="/bookings" element={<StoreBookings />} />
-                    <Route path="/images" element={<StoreImages />} /> 
+                    <Route path="/images" element={<StoreImages onImageSelect={() => {}}/>} /> 
                     <Route path="/settings" element={<StoreSettings />} />
                     <Route path="/settings/logo" element={<StoreLogoSettings />} />
                     <Route path="/settings/basic" element={<StoreBasicSettings />} />

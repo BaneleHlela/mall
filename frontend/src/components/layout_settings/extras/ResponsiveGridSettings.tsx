@@ -32,8 +32,7 @@ const ResponsiveGridSettings: React.FC<ResponsiveGridSettingsProps> = ({
     <div className="px-1 space-y-2 py-1">
       {/* Grid Columns */}
       <div className="border rounded px-1 text-center space-y-2">
-        <label className="block text-sm font-medium text-gray-700">Grid Columns</label>
-
+        <label className="block text-[1.4vh] font-medium text-gray-700">Grid Columns</label>
         <OptionsToggler
           label="Mobile"
           options={columnOptions.mobile}
@@ -55,7 +54,7 @@ const ResponsiveGridSettings: React.FC<ResponsiveGridSettingsProps> = ({
 
       {/* Grid Gap */}
       <div className="border rounded px-1 text-center space-y-2">
-        <label className="block text-sm font-medium text-gray-700">Grid Gap</label>
+        <label className="block text-[1.4vh] font-medium text-gray-700">Grid Gap</label>
 
         <SettingsSlider
           label="Mobile Gap"

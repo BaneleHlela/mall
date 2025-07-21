@@ -7,17 +7,18 @@ import SlidingPanel from '../../../supporting/SlidingPanel';
 import { AnimatePresence } from 'framer-motion';
 import TextEditor from '../../../text/TextEditor';
 import ResponsiveGridSettings from '../../../extras/ResponsiveGridSettings';
-import ServiceCardWithImageSettings from '../cards/service_card_with_image/ServiceCardWithImageSettings';
 import OptionsToggler from '../../../supporting/OptionsToggler';
 import { getSetting } from '../../../../../utils/helperFunctions';
+import ServiceCardWithImageSettings from '../../services/cards/service_card_with_image/ServiceCardWithImageSettings';
+import PopularTeamCardSettings from '../../services/cards/team/PopularTeamCardSettings';
 import BorderEditor from '../../../background/BorderEditor';
 
 
-const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
+const PopularStoreTeamSectionSettings: React.FC<SectionEditorProps> = ({
     settings,
     handleSettingChange,
 }) => {
-    const objectPath ='services';
+    const objectPath ='team';
     const [activePanel, setActivePanel] = useState<string | null>(null);
     const closePanel = () => setActivePanel(null);
     
@@ -45,10 +46,6 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
             <FirstOrderSubSettingsContainer
                 name="Text"
                 onClick={() => setActivePanel("Text")}
-            />
-            <FirstOrderSubSettingsContainer
-                name="Category Selector"
-                onClick={() => setActivePanel("categorySelector")}
             />
             
             {/* Text */}
@@ -133,7 +130,7 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                     ((getSetting("stack.mobile", settings, objectPath) === "horizontal") ||
                     (getSetting("stack.desktop", settings, objectPath) === "horizontal"))
                     && (
-                    <SlidingPanel  key="container" isOpen={true} onClose={() => setActivePanel("cards")} title="Toggle Buttons Settings">
+                    <SlidingPanel  key="toggle_buttons" isOpen={true} onClose={() => setActivePanel("cards")} title="Toggle Buttons Settings">
                         <TextEditor
                             objectPath={`${objectPath}.toggleButtons`}
                             settings={settings}
@@ -199,47 +196,9 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                         </div>
                     </SlidingPanel>
                 )}
-                {activePanel === "categorySelector" && (
-                    <SlidingPanel key="categorySelector" isOpen={true} onClose={closePanel} title="Category Selector">
-                        <div className="space-y-[.3vh] border-[.15vh] rounded-[.6vh]">
-                            <div className="px-[.65vh]">
-                                <OptionsToggler
-                                    label="Show"
-                                    options={["Yes", "No"]}
-                                    value={getSetting("categorySelector.show", settings, objectPath) ? "Yes" : "No"}
-                                    onChange={(newValue) =>
-                                        handleSettingChange(`${objectPath}.categorySelector.show`, newValue === "Yes")
-                                    }
-                                />
-                            </div>
-                            <BackgroundEditor
-                                objectPath={`${objectPath}.categorySelector`}
-                                settings={settings}
-                                handleSettingChange={handleSettingChange}
-                                allow={["width"]}
-                                widthUnit='%'
-                                responsiveSize
-                            />
-                        </div>
-                        <div className="space-y-[.3vh]">
-                            <SubSettingsContainer
-                                name="Text"
-                                SettingsComponent={
-                                    <TextEditor
-                                        objectPath={`${objectPath}.categorySelector.text`}
-                                        settings={settings}
-                                        handleSettingChange={handleSettingChange}
-                                        allow={["fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight", "textDecoration"]}
-                                        responsiveSize
-                                    />
-                                }
-                            />
-                        </div>
-                    </SlidingPanel>
-                )}
                 {activePanel === "card" && (
-                    <SlidingPanel key="card" isOpen={true} onClose={closePanel} title="Card Settings">
-                        <ServiceCardWithImageSettings settings={settings} handleSettingChange={handleSettingChange}/>
+                    <SlidingPanel key="card" isOpen={true} onClose={() => setActivePanel("cards")} title="Card Settings">
+                        <PopularTeamCardSettings settings={settings} handleSettingChange={handleSettingChange}/>
                     </SlidingPanel>
                 )}
             </AnimatePresence>
@@ -247,4 +206,4 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
     )
 }
 
-export default ServicesSectionSimpleSettings
+export default PopularStoreTeamSectionSettings

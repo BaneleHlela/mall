@@ -8,8 +8,19 @@ export const defaultGalleryWithGroupedImagesConfig = {
         },
     },
     text: {
-        title: {
+        heading: {
             input: "Selected Work",
+            position: "center",
+            fontSize: {
+                mobile: "35px",
+                desktop: "35px",
+            },
+            fontFamily: "Patrick Hand",
+            color: "brown",
+            lineHeight: "1.3",
+        },
+        subheading: {
+            input: "Some work",
             position: "center",
             fontSize: {
                 mobile: "35px",
@@ -27,9 +38,13 @@ export const defaultGalleryWithGroupedImagesConfig = {
             },
             fontFamily: "Patrick Hand",
             color: "black",
-        }
+        },
     },
     imagesModal: {
+        addModal: true,
+        toggleButtons: {
+            background: {}
+        },
         background: {
             color: "pink",
             image: {
@@ -45,6 +60,10 @@ export const defaultGalleryWithGroupedImagesConfig = {
                 }
             },
             thumbnail: {
+                stack: {
+                    mobile: "horizontal",
+                    desktop: "horizontal",
+                },
                 color: "red",
                 border: {
                     width: "2px",
@@ -82,6 +101,10 @@ export const defaultGalleryWithGroupedImagesConfig = {
         },
         grids: {
             thumbnail: {
+                stack: {
+                    mobile: "horizontal",
+                    desktop: "horizontal",
+                },
                 columns: {
                     mobile: 1,
                     desktop: 1,
@@ -92,6 +115,10 @@ export const defaultGalleryWithGroupedImagesConfig = {
                 },
             },
             modal: {
+                stack: {
+                    mobile: "horizontal",
+                    desktop: "horizontal",
+                },
                 columns: {
                     mobile: 1,
                     desktop: 1,

@@ -1,6 +1,6 @@
 
-export const simpleServicesSectionConfig = {
-    variation: "servicesSectionSimple",
+export const defaultPopularTeamSectionConfig = {
+    variation: "popularTeamSection",
     background: {
         color: "white",
         width: {
@@ -20,7 +20,7 @@ export const simpleServicesSectionConfig = {
     },
     text: {
         heading: {
-            input: "Our Services",
+            input: "Team",
             fontSize: {
                 mobile: "40px",
                 desktop: "50px",
@@ -32,7 +32,7 @@ export const simpleServicesSectionConfig = {
         subheading: {
             show: true,
             animation: "fade",
-            input: "We Provide High-Quality Products and Services",
+            input: "We have experienced individuals",
             fontSize: {
                 mobile: "20px",
                 desktop: "25px",
@@ -66,27 +66,10 @@ export const simpleServicesSectionConfig = {
             desktop: "0px",
         },
     },
-    categorySelector: {
-        show: true,
-        text: {
-            fontFamily: "Patrick Hand",
-            fontSize: {
-                mobile: "1.1em",
-                desktop: "1.5em",
-            },
-            color: "#4b5563",
-            fontWeight: "bold",
-        },
-        width: {
-            mobile: "100%",
-            desktop: "70%",
-        }
-    },
     toggleButtons: {
         background: {}
     },
     card: {
-        variaton: "serviceCardWithImage",
         stack: {
             mobile: "column",
             desktop: "row",
@@ -105,7 +88,6 @@ export const simpleServicesSectionConfig = {
             }
         },
         image: {
-            urls: [],
             height: {
                 mobile: "50%",
                 desktop: "100%",

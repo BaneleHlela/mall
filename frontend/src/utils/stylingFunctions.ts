@@ -15,7 +15,7 @@ export const getTextStyles = (text: TextSettings) => {
   } else if (text.fontSize) {
     styles.fontSize = text.fontSize;
   }
-
+  if (text.backgroundColor) styles.backgroundColor = text.backgroundColor;
   if (text.fontFamily) styles.fontFamily = text.fontFamily;
   if (text.fontStyle) styles.fontStyle = text.fontStyle;
   if (text.lineHeight) styles.lineHeight = text.lineHeight;

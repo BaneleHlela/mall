@@ -17,7 +17,7 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { updateSetting } from "../../../features/layouts/layoutSettingsSlice";
 import SettingsContainer from "../SettingsContainer";
 import SlidingPanel from "../supporting/SlidingPanel";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { FaPlus } from "react-icons/fa6";
 import HeroSettings from "../sections/hero/HeroSettings";
 import SectionSelector from "../supporting/section_selector/SectionSelector";
@@ -30,6 +30,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import ServicesSectionSettings from "../sections/services/ServicesSectionSettings";
 import StoreFooterSectionSettings from "../sections/footer/StoreFooterSectionSettings";
+import StoreTeamSectionSettings from "../sections/team/StoreTeamSectionSettings";
 
 const SortableItem = ({
   id,
@@ -177,6 +178,8 @@ const HomePageSettings = () => {
         return <ServicesSectionSettings />;
       case "footer":
         return <StoreFooterSectionSettings />
+      case "team":
+        return <StoreTeamSectionSettings />
       default:
         return <div>No settings available for section "{section}".</div>;
     }

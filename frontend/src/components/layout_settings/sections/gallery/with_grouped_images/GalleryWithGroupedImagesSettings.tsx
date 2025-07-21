@@ -36,20 +36,10 @@ const GalleryWithGroupedImagesSettings: React.FC<SectionSettingsProps>  = ({
                 </div>
                 }
             />
-            {/* Heading */}
-            <SubSettingsContainer
-                name="Heading"
-                SettingsComponent={
-                <div className="px-2 space-y-1 py-1">
-                    <TextEditor
-                        objectPath={`${objectPath}.text.title`}
-                        settings={settings}
-                        handleSettingChange={handleSettingChange}
-                        allow={[ "color", "input", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing" ]}
-                        responsiveSize
-                    />
-                </div>
-                }
+            {/* Text */}
+            <FirstOrderSubSettingsContainer
+                name="Text"
+                onClick={() => setActivePanel("Text")}
             />
             {/* Images */}
             <FirstOrderSubSettingsContainer
@@ -66,6 +56,53 @@ const GalleryWithGroupedImagesSettings: React.FC<SectionSettingsProps>  = ({
                 name="Modal"
                 onClick={() => setActivePanel("Modal")}
             />
+            {activePanel === "Text" && (
+                    <SlidingPanel
+                        key="text" isOpen={true} onClose={closePanel} title="Text Settings"
+                    >
+                        <div className="space-y-[.3vh]">
+                            {/* Text */}
+                            <FirstOrderSubSettingsContainer
+                                name="Heading"
+                                onClick={() => setActivePanel("heading")}
+                            />
+                            {/* Text */}
+                            <FirstOrderSubSettingsContainer
+                                name="Subheading"
+                                onClick={() => setActivePanel("subheading")}
+                            />
+                        </div>
+                        
+                    </SlidingPanel>
+                )}
+                {activePanel === "heading" && (
+                    <SlidingPanel key="heading" isOpen={true} onClose={() => setActivePanel("Text")} title="Heading Settings">
+                        <div className="space-y-[.3vh]">
+                            <TextEditor
+                                objectPath={`${objectPath}.text.heading`}
+                                settings={settings}
+                                handleSettingChange={handleSettingChange}
+                                allow={["input", "position", "fontFamily", "padding", "backgroundColor", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "textDecoration"]}
+                                responsiveSize
+                                responsivePadding
+                            />
+                        </div>
+                    </SlidingPanel>
+                )}
+                {activePanel === "subheading" && (
+                    <SlidingPanel key="subheading" isOpen={true} onClose={() => setActivePanel("Text")} title="subheading Settings">
+                        <div className="space-y-[.3vh]">
+                            <TextEditor
+                                objectPath={`${objectPath}.text.subheading`}
+                                settings={settings}
+                                handleSettingChange={handleSettingChange}
+                                allow={["input", "position", "padding", "fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "textDecoration"]}
+                                responsiveSize
+                                responsivePadding
+                            />
+                        </div>
+                    </SlidingPanel>
+                )}
             {activePanel === "Images" && (
                 <SlidingPanel 
                     key="images"

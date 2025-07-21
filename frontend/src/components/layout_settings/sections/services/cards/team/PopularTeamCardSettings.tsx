@@ -8,15 +8,14 @@ import TextEditor from '../../../../text/TextEditor'
 import { AnimatePresence } from 'framer-motion'
 import StoreButtonSettings from '../../../../extras/StoreButtonSettings'
 import OptionsToggler from '../../../../supporting/OptionsToggler'
-import MultipleLayoutImagesHandler from '../../../../supporting/MultipleLayoutImagesHandler'
 import { getSetting } from '../../../../../../utils/helperFunctions'
 import { useAppSelector } from '../../../../../../app/hooks'
 
-const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
+const PopularTeamCardSettings: React.FC<SectionEditorProps> = ({
   settings,
   handleSettingChange
 }) => {
-  const objectPath="services.card";
+  const objectPath="team.card";
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
   const services = useAppSelector((state) => state.services.services)
@@ -24,7 +23,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
 
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-[.3vh]">
         <OptionsToggler
             label="Mobile Stack"
             options={["row", "column"]}
@@ -41,7 +40,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
         <SubSettingsContainer
             name="Background"
             SettingsComponent={
-                <div className="px-2 space-y-1 pb-1">
+                <div className="px-2 space-y-[.3vh] pb-1">
                     <BackgroundEditor
                         objectPath={`${objectPath}.background`}
                         settings={settings}
@@ -53,17 +52,10 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
                 </div>
             }
         />
-        {/* Image Settings */}
         <SubSettingsContainer
-            name="Images"
+            name="Images Background"
             SettingsComponent={
                 <div className="px-2 space-y-2">
-                    <MultipleLayoutImagesHandler
-                        objectPath={`${objectPath}.image.urls`}
-                        min={1}
-                        max={15}
-                        images={getSetting("image.urls", settings, objectPath)}
-                    />
                     <BackgroundEditor
                         objectPath={`${objectPath}.image`}
                         settings={settings}
@@ -90,59 +82,41 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
                 </div>
             }
         />
-      <FirstOrderSubSettingsContainer
-          name="Text"
-          onClick={() => setActivePanel("Text")}
-      />
-      <FirstOrderSubSettingsContainer
-          name="Button"
-          onClick={() => setActivePanel("Button")}
-      />
+        <FirstOrderSubSettingsContainer
+            name="Text"
+            onClick={() => setActivePanel("Text")}
+        />
+        <FirstOrderSubSettingsContainer
+            name="Button"
+            onClick={() => setActivePanel("Button")}
+        />
       <AnimatePresence>
         {activePanel === "Text" && (
           <SlidingPanel onClose={closePanel} isOpen={true} title="Card Text Settings">
-            <div className="space-y-1 ">
-                <div className="border rounded px-2">
-                    <OptionsToggler
-                        label="Show price"
-                        options={["yes", "no"]}
-                        value={getSetting("textAndButton.text.show.price", settings, objectPath) ? "yes" : "no"}
-                        onChange={(value) => handleSettingChange(`${objectPath}.textAndButton.text.show.price`, value === "yes")}
-                    />
-                    <OptionsToggler
-                        label="Show duration"
-                        options={["yes", "no"]}
-                        value={getSetting("textAndButton.text.show.duration", settings, objectPath) ? "yes" : "no"}
-                        onChange={(value) => handleSettingChange(`${objectPath}.textAndButton.text.show.duration`, value === "yes")}
-                    />
-                    <OptionsToggler
-                        label="Show description"
-                        options={["yes", "no"]}
-                        value={getSetting("textAndButton.text.show.description", settings, objectPath) ? "yes" : "no"}
-                        onChange={(value) => handleSettingChange(`${objectPath}.textAndButton.text.show.description`, value === "yes")}
-                    />
-                </div>
+            <div className="space-y-[.3vh] ">
               <SubSettingsContainer
-                name="Service Details"
-                SettingsComponent={
-                  <TextEditor
-                    objectPath={`${objectPath}.textAndButton.text`}
-                    settings={settings}
-                    handleSettingChange={handleSettingChange}
-                    allow={["position","fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight", "textDecoration"]}
-                    responsiveSize
-                  />
-                }
-              />
-              <SubSettingsContainer
-                name="Service Name"
+                name="Name"
                 SettingsComponent={
                   <TextEditor
                     objectPath={`${objectPath}.textAndButton.text.name`}
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={["color", "fontSize", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight"]}
+                    allow={["color", "padding", "fontSize", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight"]}
                     responsiveSize
+                    responsivePadding
+                  />
+                }
+              />
+              <SubSettingsContainer
+                name="About"
+                SettingsComponent={
+                  <TextEditor
+                    objectPath={`${objectPath}.textAndButton.text`}
+                    settings={settings}
+                    handleSettingChange={handleSettingChange}
+                    allow={["position", "padiing", "fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight", "textDecoration"]}
+                    responsiveSize
+                    responsivePadding
                   />
                 }
               />
@@ -170,4 +144,4 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
   )
 }
 
-export default ServiceCardWithImageSettings
+export default PopularTeamCardSettings;

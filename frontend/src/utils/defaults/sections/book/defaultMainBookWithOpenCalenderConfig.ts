@@ -1,11 +1,21 @@
 export const defaultMainBookWithOpenCalandarConfig = {
+    background: {
+        color: "black",
+        shadow: true,
+        border: {
+            width: "3px",
+            style: "solid",
+            color: "#4a4a4a",
+            radius: "0px",
+        },
+        width: "100%"
+    },
     titles: {
         text: {
             color: "white",
             fontFamily: "Open Sans",
             fontWeight: "bold",
             letterSpacing: "0.05rem",
-            fontSize: "1.5rem",
         },
         background: {
             border: {
@@ -47,7 +57,8 @@ export const defaultMainBookWithOpenCalandarConfig = {
                 padding: {
                     x: "0px",
                     y: "0px",
-                }
+                },
+                dropdown: {},
             }
         },
         messageBox: {

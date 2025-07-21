@@ -1,8 +1,7 @@
 import expressAsyncHandler from 'express-async-handler';
 import  Store  from '../models/StoreModel.js';
-import { sendStoreCreatedEmail } from '../emails/email.js';
 import { uploadToUploads, uploadsBucket } from '../config/gcsClient.js';
-
+import mongoose from 'mongoose';
 // add store
 export const addStore = expressAsyncHandler(async (req, res) => {
     //const { _id, email, firstName } = req.user;
@@ -407,5 +406,42 @@ export const deleteStoreGalleryImage = expressAsyncHandler(async (req, res) => {
     console.error("Delete gallery image error:", error);
     res.status(500).json({ message: "Failed to delete gallery image" });
   }
+});
+
+
+export const addTeamMember = expressAsyncHandler(async (req, res) => {
+  const { member, role, about } = req.body;
+  const { storeId } = req.params;
+
+  // Validate store ID
+  const store = await Store.findById(storeId);
+  if (!store) {
+    return res.status(404).json({ message: 'Store not found.' });
+  }
+
+  // Handle file upload
+  const file = req.file; // Single file upload
+  let imageUrl = '';
+  if (file) {
+    const imageFileName = `${Date.now()}-${file.originalname}`;
+    const imagePath = `stores/${storeId}/team/${imageFileName}`;
+
+    await uploadToUploads(file.buffer, imagePath);
+
+    imageUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${imagePath}`;
+  }
+
+  // Add team member
+  const newTeamMember = {
+    member: member,
+    role: role || 'owner',
+    about: about || '',
+    image: imageUrl,
+  };
+
+  store.team.push(newTeamMember);
+  await store.save();
+
+  res.status(201).json({ message: 'Team member added successfully.', teamMember: newTeamMember });
 });
 

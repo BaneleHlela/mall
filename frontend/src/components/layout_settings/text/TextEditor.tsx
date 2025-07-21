@@ -48,6 +48,10 @@ const TextEditor: React.FC<EditorProps> = ({
       handleChange(field)(event);
     };
 
+    const handleClear = (field: string) => () => {
+      handleSettingChange(`${objectPath}.${field}`, "transparent");
+    };
+
     return (
         <div className="space-y-1 px-2">
           {isAllowed("input") && (
@@ -139,6 +143,15 @@ const TextEditor: React.FC<EditorProps> = ({
                   target: { value: newValue }
                 } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
               }
+            />
+          )}
+
+          {isAllowed("backgroundColor") && (
+            <ColorPicker
+              label="Background Color"
+              value={getSetting("backgroundColor", settings, objectPath)}
+              onChange={handleChange("backgroundColor")}
+              onClear={handleClear("backgroundColor")} // 👈 added
             />
           )}
       

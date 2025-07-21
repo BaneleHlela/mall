@@ -83,6 +83,32 @@ export const uploadStoreGalleryImage = createAsyncThunk<
   }
 );
 
+export const addTeamMember = createAsyncThunk<
+  Store, // returning the updated Store
+  { storeId: string; memberData: { name: string; position: string; about: string; }; imageFile: File }
+>(
+  'store_admin/addTeamMember',
+  async ({ storeId, memberData, imageFile }, thunkAPI) => {
+    try {
+      const formData = new FormData();
+      formData.append('image', imageFile);
+      formData.append('member', memberData.name);
+      formData.append('position', memberData.position);
+      formData.append('about', memberData.about);
+
+      const response = await axios.post(`${STORE_URL}/${storeId}/team`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      return response.data as Store;
+    } catch (error) {
+      console.error('Error adding team member:', error);
+      return thunkAPI.rejectWithValue('Failed to add team member');
+    }
+  }
+);
+
+
 export const deleteStoreGalleryImage = createAsyncThunk<
   string, // returns the imageUrl of the deleted image
   { storeId: string; imageUrl: string }
@@ -196,6 +222,20 @@ const storeAdminSlice = createSlice({
             state.isLoading = false;
             state.error = action.error.message || 'Failed to delete store';
           })
+          // Add Team Member
+          .addCase(addTeamMember.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+          })
+          .addCase(addTeamMember.fulfilled, (state, action: PayloadAction<Store>) => {
+            state.isLoading = false;
+            state.error = null;
+            state.store = action.payload;
+          })
+          .addCase(addTeamMember.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.error.message || 'Failed to add team member';
+          })
     
           // Link Layout to Store
           .addCase(linkLayoutToStore.pending, (state) => {
@@ -206,7 +246,7 @@ const storeAdminSlice = createSlice({
             state.isLoading = false;
             state.error = null;
             if (state.store) {
-              state.store.layoutId = action.payload;
+              state.store.layouts = [action.payload];
             }
           })
           .addCase(linkLayoutToStore.rejected, (state, action) => {

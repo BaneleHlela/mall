@@ -4,7 +4,6 @@ import { getBackgroundStyles, getBorderStyles, getTextStyles } from '../../../..
 
 const BasicBookWithOpenCalender = () => {
   const style = useAppSelector((state => state.layoutSettings.book));
-  console.log(style.background.color)
   return (
     <div
       style={{
@@ -34,14 +33,29 @@ const BasicBookWithOpenCalender = () => {
             <p 
               style={{
                 ...getTextStyles(style.heading.text),
-                marginBottom: style.heading.text.marginBottom,
                 ...getBackgroundStyles(style.heading.text.background)
                 }}
                 className='text-center min-w-fit'
             >{style.heading.text.input || "Book"}</p>
           </div>
-          
-          <MainBookWithCalendar/>
+          <div 
+            className={`w-full flex flex-row items-center
+              ${style.subheading.text.position === "center" && "justify-center"}
+              ${style.subheading.text.position === "end" && "justify-end"}
+              ${style.subheading.text.position === "start" && "justify-start"}
+            `}
+          >
+            <p 
+              style={{
+                ...getTextStyles(style.subheading.text),
+                marginBottom: style.subheading.text.marginBottom,
+              }}
+              className='text-center min-w-fit'
+            >{style.subheading.text.input || "Book"}</p>
+          </div>
+          <div className="w-full bg-white">
+            <MainBookWithCalendar/>
+          </div>
         </div>
       </div>
     </div>

@@ -1,35 +1,70 @@
-import React from 'react'
+import React, { useState } from 'react'
 import type { SupportingSettingsProps } from './SupportingImagesSettings'
 import SubSettingsContainer from '../../../extras/SubSettingsContainer'
 import TextEditor from '../../../text/TextEditor'
 import BackgroundEditor from '../../../background/BackgroundEditor'
 import ResponsiveGridSettings from '../../../extras/ResponsiveGridSettings'
+import { getSetting } from '../../../../../utils/helperFunctions'
+import BorderEditor from '../../../background/BorderEditor'
+import SlidingPanel from '../../../supporting/SlidingPanel'
+import OptionsToggler from '../../../supporting/OptionsToggler'
+import FirstOrderSubSettingsContainer from '../../../FirstOrderSubSettingsContainer'
 
 const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
     settings,
     handleSettingChange,
     objectPath,
 }) => {
+    const [activePanel, setActivePanel] = useState<string | null>(null);
+    const closePanel = () => setActivePanel(null);
   return (
     <div className='space-y-1'>
+        {/* Toggle Buttons */}
+        
         <SubSettingsContainer
                 name="Grid"
                 SettingsComponent={
-                    <ResponsiveGridSettings
-                        objectPath={`${objectPath}.imagesModal.grids.thumbnail`}
-                        settings={settings}
-                        handleSettingChange={handleSettingChange}
-                        columnOptions={{
-                            mobile: ['1', '2'],
-                            desktop: ['1', '2', '3', '4', '5']
-                        }}
-                        gapRange={{
-                            mobile: { min: 0, max: 50 },
-                            desktop: { min: 0, max: 100 }
-                        }}
-                    />
+                    <div>
+                        <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
+                            <OptionsToggler
+                                label="Mobile Stack"
+                                options={["horizontal", "vertical"]}
+                                value={getSetting("imagesModal.grids.thumbnail.stack.mobile", settings, objectPath)}
+                                onChange={(value) => handleSettingChange(`${objectPath}.imagesModal.grids.thumbnail.stack.mobile`, value)}
+                            />
+                            <OptionsToggler
+                                label="Desktop Stack"
+                                options={["horizontal", "vertical"]}
+                                value={getSetting("imagesModal.grids.thumbnail.stack.desktop", settings, objectPath)}
+                                onChange={(value) => handleSettingChange(`${objectPath}.imagesModal.grids.thumbnail.stack.desktop`, value)}
+                            />
+                        </div>
+                        <ResponsiveGridSettings
+                            objectPath={`${objectPath}.imagesModal.grids.thumbnail`}
+                            settings={settings}
+                            handleSettingChange={handleSettingChange}
+                            columnOptions={{
+                                mobile: ['1', '2'],
+                                desktop: ['1', '2', '3', '4', '5']
+                            }}
+                            gapRange={{
+                                mobile: { min: 0, max: 50 },
+                                desktop: { min: 0, max: 100 }
+                            }}
+                        />
+                    </div>
+                    
                 }
         />
+        {((getSetting("imagesModal.grids.thumbnail.stack.mobile", settings, objectPath) === "horizontal") ||
+            (getSetting("imagesModal.grids.thumbnail.stack.desktop", settings, objectPath) === "horizontal"))
+            &&
+            (
+                <FirstOrderSubSettingsContainer
+                    name="Toggle Buttons"
+                    onClick={() => setActivePanel("toggle_buttons")}
+                />
+        )}
         {/* Background */}
         <SubSettingsContainer
             name="Background"
@@ -74,6 +109,38 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                 />
             }
         />
+        {!settings.gallery.imagesModal.addModal && (
+            <SubSettingsContainer
+                name="Description"
+                SettingsComponent={
+                    <TextEditor
+                        objectPath={`${objectPath}.imagesModal.text.description`}
+                        settings={settings}
+                        handleSettingChange={handleSettingChange}
+                        allow={[ "color", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing" ]}
+                    />
+                }
+            />
+        )}
+        
+        {activePanel === "toggle_buttons" && 
+            ((getSetting("imagesModal.grids.thumbnail.stack.mobile", settings, objectPath) === "horizontal") ||
+            (getSetting("imagesModal.grids.thumbnail.stack.desktop", settings, objectPath) === "horizontal"))
+            && (
+            <SlidingPanel  key="toggle_buttons" isOpen={true} onClose={closePanel} title="Toggle Buttons Settings">
+                <TextEditor
+                    objectPath={`${objectPath}.imagesModal.toggleButtons`}
+                    settings={settings}
+                    handleSettingChange={handleSettingChange}
+                    allow={["position", "fontFamily", "backgroundColor", "padding", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "textDecoration"]}
+                />
+                <BorderEditor
+                    objectPath={`${objectPath}.imagesModal.toggleButtons.background.border`}
+                    settings={settings}
+                    handleSettingChange={handleSettingChange}
+                />
+            </SlidingPanel>
+        )}
     </div>
   )
 }
