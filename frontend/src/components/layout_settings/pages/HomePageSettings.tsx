@@ -205,13 +205,13 @@ const HomePageSettings = () => {
   };
 
   return (
-    <div className="w-full h-[80vh] space-y-2">
+    <div className="w-full h-[80vh] space-y-[.6vh] text-[2vh]">
       <div className="relative px-4 flex justify-center">
         <button
           onClick={() => setIsAddingSection(true)}
-          className="flex flex-row justify-between items-center bg-stone-50 border-2 border-white text-black rounded px-8 py-2 shadow-md hover:scale-103 hover:opacity-85"
+          className="text-[2vh] flex flex-row justify-between items-center bg-stone-50 border-[.35vh] border-white text-black rounded px-[2.4vh] py-[.6vh] shadow-md hover:scale-103 hover:opacity-85"
         >
-          Add New Section <FaPlus className="ml-2" size={16} />
+          Add New Section <FaPlus className="ml-[.6vh]"/>
         </button>
       </div>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>

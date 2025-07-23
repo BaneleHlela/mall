@@ -8,6 +8,8 @@ import SupportingImagesSettings from "./SupportingImagesSettings";
 import SlidingPanel from "../../../supporting/SlidingPanel";
 import GalleryThumbnailSettings from "./GalleryThumbnailSettings";
 import GalleryModalSettings from "./GalleryModalSettings";
+import { AnimatePresence } from "framer-motion";
+import UnderlinedTextSettings from "../../../extras/text/UnderlinedTextSettings";
 
 const GalleryWithGroupedImagesSettings: React.FC<SectionSettingsProps>  = ({
     settings,
@@ -56,7 +58,8 @@ const GalleryWithGroupedImagesSettings: React.FC<SectionSettingsProps>  = ({
                 name="Modal"
                 onClick={() => setActivePanel("Modal")}
             />
-            {activePanel === "Text" && (
+            <AnimatePresence>
+                {activePanel === "Text" && (
                     <SlidingPanel
                         key="text" isOpen={true} onClose={closePanel} title="Text Settings"
                     >
@@ -78,13 +81,11 @@ const GalleryWithGroupedImagesSettings: React.FC<SectionSettingsProps>  = ({
                 {activePanel === "heading" && (
                     <SlidingPanel key="heading" isOpen={true} onClose={() => setActivePanel("Text")} title="Heading Settings">
                         <div className="space-y-[.3vh]">
-                            <TextEditor
-                                objectPath={`${objectPath}.text.heading`}
+                            <UnderlinedTextSettings
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                allow={["input", "position", "fontFamily", "padding", "backgroundColor", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "textDecoration"]}
-                                responsiveSize
-                                responsivePadding
+                                objectPath={`${objectPath}.text.heading`}
+                                allowInput
                             />
                         </div>
                     </SlidingPanel>
@@ -92,59 +93,58 @@ const GalleryWithGroupedImagesSettings: React.FC<SectionSettingsProps>  = ({
                 {activePanel === "subheading" && (
                     <SlidingPanel key="subheading" isOpen={true} onClose={() => setActivePanel("Text")} title="subheading Settings">
                         <div className="space-y-[.3vh]">
-                            <TextEditor
-                                objectPath={`${objectPath}.text.subheading`}
+                            <UnderlinedTextSettings
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                allow={["input", "position", "padding", "fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "textDecoration"]}
-                                responsiveSize
-                                responsivePadding
+                                objectPath={`${objectPath}.text.subheading`}
+                                allowInput
                             />
                         </div>
                     </SlidingPanel>
                 )}
-            {activePanel === "Images" && (
-                <SlidingPanel 
-                    key="images"
-                    onClose={closePanel}
-                    isOpen={true}
-                    title="Gallery Images"
-                >
-                    <SupportingImagesSettings 
-                        handleSettingChange={handleSettingChange}
-                        objectPath={`${objectPath}.imagesModal.images`} 
-                        settings={settings} 
-                    />
-                </SlidingPanel>
-            )}
-            {activePanel === "Thumbnails" && (
-                <SlidingPanel 
-                    key="thumbnail"
-                    onClose={closePanel}
-                    isOpen={true}
-                    title="Gallery Thumbnails"
-                >
-                    <GalleryThumbnailSettings 
-                        settings={settings}
-                        handleSettingChange={handleSettingChange}
-                        objectPath={`${objectPath}`} 
-                    />
-                </SlidingPanel>
-            )}
-            {activePanel === "Modal" && (
-                <SlidingPanel 
-                    key="modal"
-                    onClose={closePanel}
-                    isOpen={true}
-                    title="Gallery Modal"
-                >
-                    <GalleryModalSettings 
-                        settings={settings}
-                        handleSettingChange={handleSettingChange}
-                        objectPath={`${objectPath}`} 
-                    />
-                </SlidingPanel>
-            )}
+                {activePanel === "Images" && (
+                    <SlidingPanel 
+                        key="images"
+                        onClose={closePanel}
+                        isOpen={true}
+                        title="Gallery Images"
+                    >
+                        <SupportingImagesSettings 
+                            handleSettingChange={handleSettingChange}
+                            objectPath={`${objectPath}.imagesModal.images`} 
+                            settings={settings} 
+                        />
+                    </SlidingPanel>
+                )}
+                {activePanel === "Thumbnails" && (
+                    <SlidingPanel 
+                        key="thumbnail"
+                        onClose={closePanel}
+                        isOpen={true}
+                        title="Gallery Thumbnails"
+                    >
+                        <GalleryThumbnailSettings 
+                            settings={settings}
+                            handleSettingChange={handleSettingChange}
+                            objectPath={`${objectPath}`} 
+                        />
+                    </SlidingPanel>
+                )}
+                {activePanel === "Modal" && (
+                    <SlidingPanel 
+                        key="modal"
+                        onClose={closePanel}
+                        isOpen={true}
+                        title="Gallery Modal"
+                    >
+                        <GalleryModalSettings 
+                            settings={settings}
+                            handleSettingChange={handleSettingChange}
+                            objectPath={`${objectPath}`} 
+                        />
+                    </SlidingPanel>
+                )}
+            </AnimatePresence>
         </div>
     )
 }

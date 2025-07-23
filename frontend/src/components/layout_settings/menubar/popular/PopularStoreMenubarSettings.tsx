@@ -15,13 +15,13 @@ const PopularStoreMenubarSettings = () => {
 
   const settings = useAppSelector((state: any) => state.layoutSettings);
   const dispatch = useAppDispatch();
-
   const handleSettingChange = (field: string, value: any) => {
     dispatch(updateSetting({ field, value }));
   };
+  
 
   return (
-    <div className="p-2 space-y-1">
+    <div className="p-[.6vh] space-y-[.3vh] w-full">
       {/* Shared Settings */}
       <div className="w-full border border-black text-black rounded-sm">
         <BackgroundEditor

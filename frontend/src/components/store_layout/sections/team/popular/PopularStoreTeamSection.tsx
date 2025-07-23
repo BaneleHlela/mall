@@ -189,30 +189,45 @@ const PupularStoreTeamSection = () => {
                         </AnimatePresence>
 
                     </div>
-                    <div className="mt-4 text-sm text-black">
+                    {/* Digits indicator */}
+                    {settings.grid.container.stepIndicator.use === 'digits' && (
+                    <div
+                        style={{
+                        ...getTextStyles(settings.grid.container.stepIndicator.text),
+                        }}
+                        className="mt-4 text-sm text-black"
+                    >
                         {teamMembers.length > 0 && (() => {
-                            const start = activeGroupIndex * visibleCount + 1;
-                            const end = Math.min(start + visibleCount - 1, teamMembers.length);
-                            return start === end
+                        const start = activeGroupIndex * visibleCount + 1;
+                        const end = Math.min(start + visibleCount - 1, teamMembers.length);
+                        return start === end
                             ? `${start} / ${teamMembers.length}`
                             : `${start}–${end} / ${teamMembers.length}`;
                         })()}
                     </div>
-
+                    )}
 
                     {/* Dot Indicator */}
-                    <div className="mt-4 flex gap-2">
+                    {settings.grid.container.stepIndicator.use === 'dots' && (
+                    <div className="mt-4 flex gap-2 p-[1vh]">
                         {Array.from({ length: totalGroups }).map((_, index) => (
-                            <span
+                        <span
                             key={index}
-                            className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                            style={{
+                            ...getBackgroundStyles(settings.grid.container.stepIndicator.background),
+                            width: getResponsiveDimension(settings.grid.container.stepIndicator.background.height),
+                            backgroundColor:
                                 index === activeGroupIndex
-                                ? "bg-black scale-125"
-                                : "bg-gray-300"
+                                ? settings.grid.container.stepIndicator.background.color
+                                : 'transparent',
+                            }}
+                            className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                            index === activeGroupIndex ? 'scale-105' : ''
                             }`}
-                            />
+                        />
                         ))}
                     </div>
+                    )}
                 </div>
                 )}
         </div>

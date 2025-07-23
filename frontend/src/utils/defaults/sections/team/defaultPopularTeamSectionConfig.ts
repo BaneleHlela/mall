@@ -55,7 +55,17 @@ export const defaultPopularTeamSectionConfig = {
                     mobile: "100%",
                     desktop: "80%",
                 },
-            }
+            },
+            stepIndicator: {
+                use: "dots",
+                background: {
+                    height: {
+                        mobile: "2px",
+                        desktop: "2px",	
+                    }
+                },
+                text: {},
+            },
         },
         columns: {
             mobile: 1,

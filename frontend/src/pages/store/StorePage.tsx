@@ -21,6 +21,7 @@ import { getLayout } from "../../features/layouts/layoutSlice";
 import { fetchStoreProducts } from "../../features/products/productsSlice";
 import SingleStoreProductPage from "./supporting/single_product/SingleStoreProductPage";
 import StoreBookServicePage from "./supporting/book_service/StoreBookServicePage";
+import StoreAlertDiv from "../../components/store_layout/extras/alert_div/StoreAlertDiv";
 
 const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
   const settings = useAppSelector((state) => state.layoutSettings);
@@ -95,6 +96,7 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
     return <div className="p-6 text-red-500">Store not found.</div>;
   }
 
+
   const routeComponents: { [key: string]: React.ReactNode } = {
     "/": <StoreHomePage />,
     "/about": <StoreAboutPage />,
@@ -124,6 +126,7 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
         }}
         className={`w-screen h-full overflow-y-scroll hide-scrollbar overflow-x-clip`}>
         <PopularStoreMenubar />
+        <StoreAlertDiv config={settings.menubar.alertDiv} objectPath={`menubar.alertDiv`}/>
         <Routes>
           {Object.values(routes).map((route) => (
             <Route

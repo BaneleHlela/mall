@@ -8,6 +8,7 @@ import VariationDropdown from './supporting/VariationDropdown'
 import { addToCart } from '../../../../features/cart/cartSlice'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md'
+import UnderlinedText from '../../extras/text/UnderlinedText'
 
 const SingleStoreProductSection = () => {
     const { productId } = useParams<{ productId: string }>()
@@ -68,7 +69,7 @@ const SingleStoreProductSection = () => {
             style={{
                 ...getBackgroundStyles(settings.background),
             }}
-            className='flex flex-col justify-between'
+            className='flex flex-col justify-between min-h-fit'
         >   
             {/* Back to home */}
             <div 
@@ -142,24 +143,20 @@ const SingleStoreProductSection = () => {
                         style={{
                             ...getBackgroundStyles(settings.details.nameAndPrice.background),
                         }} 
-                        className={`
+                        className={`min-h-fit
                             ${settings.details.nameAndPrice.background.position === "center" && "text-center"}
                             ${settings.details.nameAndPrice.background.position === "start" && "text-start"}
                             ${settings.details.nameAndPrice.background.position === "end" && "text-end"}
                         `}
                     >
-                        <h2 
-                            style={{
-                                ...getTextStyles(settings.details.nameAndPrice.name)
-                            }}
-                            className=""
-                        >{product.name}</h2>
-                        <h2
-                            style={{
-                                ...getTextStyles(settings.details.nameAndPrice.price)
-                            }} 
-                            className=""
-                        >R{product.price}</h2>
+                        <UnderlinedText 
+                            style={settings.details.nameAndPrice.name}
+                            input={product.name || "Product Name"}
+                        />
+                        <UnderlinedText 
+                            style={settings.details.nameAndPrice.price}
+                            input={`R${product.price}`}
+                        />
                     </div>
                     {/* Variation selector */}
                     {product.variations.length > 0 && (
@@ -268,15 +265,15 @@ const SingleStoreProductSection = () => {
                     {/* Add to Cart Button */}
                     <div    
                         className={`w-full flex flex-row 
-                            ${settings.details.addToCartBtn.background.position === "center" && "justify-center"}
-                            ${settings.details.addToCartBtn.background.position === "start" && "justify-start"}
-                            ${settings.details.addToCartBtn.background.position === "end" && "justify-end"}
+                            ${settings.details.addToCartBtn.position === "center" && "justify-center"}
+                            ${settings.details.addToCartBtn.position === "start" && "justify-start"}
+                            ${settings.details.addToCartBtn.position === "end" && "justify-end"}
                         `} 
                     >
                         <button
                             style={{
-                                ...getBackgroundStyles(settings.details.addToCartBtn.background),
-                                ...getTextStyles(settings.details.addToCartBtn.text)
+                                ...getBackgroundStyles(settings.details.addToCartBtn.style.background),
+                                ...getTextStyles(settings.details.addToCartBtn.style.text)
                             }}
                             onClick={handleAddToCart}
                             className="w-full mt-6 py-3 hover:scale-103"
@@ -289,7 +286,7 @@ const SingleStoreProductSection = () => {
                         style={{
                             ...getTextStyles(settings.details.description.text)
                         }}
-                        className=""
+                        className="max-h-[25%] overflow-y-scroll"
                     >
                         {product.description}
                     </p>

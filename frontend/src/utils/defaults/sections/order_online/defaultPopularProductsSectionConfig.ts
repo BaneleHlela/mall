@@ -23,6 +23,14 @@ export const defaultPopularProductsSectionConfig = {
             fontWeight: "bold",
             color: "black",
             position: "center",
+            underline: {
+                show: true,
+                color: "black",
+                width: "50%",
+                style: "solid",
+                thickness: "10px",
+                marginTop: "10px",
+            }
         },
         subheading: {
             show: true,
@@ -36,7 +44,19 @@ export const defaultPopularProductsSectionConfig = {
             color: "black",
             position: "center",
             textAlign: "center",
+            underline: {
+                show: false,
+                color: "black",
+                width: "50%",
+                style: "solid",
+                thickness: "10px",
+                marginTop: "10px",
+            }
         },
+    },
+    stack: {
+        mobile: "horizontal",
+        desktop: "horizontal",
     },
     grid: {
         container: {
@@ -46,7 +66,22 @@ export const defaultPopularProductsSectionConfig = {
                     mobile: "100%",
                     desktop: "80%",
                 },
-            }
+            },
+            stepIndicator: {
+                use: "dots",
+                background: {
+                    height: {
+                        mobile: "2px",
+                        desktop: "2px",	
+                    }
+                },
+                text: {},
+            },
+            toggleButtons: {
+                background: {
+                    color: "transparent",
+                }
+            },
         },
         columns: {
             mobile: 1,
@@ -58,7 +93,7 @@ export const defaultPopularProductsSectionConfig = {
         },
     },
     categorySelector: {
-        show: true,
+        show: false,
         text: {
             fontFamily: "Patrick Hand",
             fontSize: {
@@ -109,6 +144,17 @@ export const defaultPopularProductsSectionConfig = {
                 radius: "10px"
             }
         },
+        markingButton: {
+            background: {
+                color: "black",
+                padding: {
+                    x: "10px",
+                    y: "5px",
+                },
+                border: {}
+            },
+            text: {},
+        },
         textAndButton: {
             background: {
                 padding: {
@@ -124,6 +170,14 @@ export const defaultPopularProductsSectionConfig = {
                 },
                 color: "black",
                 fontWeight: "bold",
+                underline: {
+                    show: true,
+                    color: "black",
+                    width: "50%",
+                    style: "solid",
+                    thickness: "2px",
+                    marginTop: "10px",
+                },
                 name: {
                     fontSize: {
                         mobile: "1.5rem",
@@ -131,10 +185,21 @@ export const defaultPopularProductsSectionConfig = {
                     },
                     color: "black",
                     fontWeight: "bold",
+                    underline: {
+                        show: true,
+                        color: "black",
+                        width: "50%",
+                        style: "solid",
+                        thickness: "2px",
+                        marginTop: "10px",
+                    }
                 },
             },
             button: {
-                show: true,
+                show: {
+                    mobile: "never",
+                    desktop: "on-hover",
+                },
                 function: "bookAppointment",
                 style: {
                     text: {

@@ -1,4 +1,5 @@
 export interface Product {
+    marking: string | undefined;
     _id: string;
     store: string;
     name: string;

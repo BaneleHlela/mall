@@ -1,14 +1,10 @@
-import React from 'react'
-import CreateStoreForm from './the_mall/store/create_store_form/CreateStoreForm'
-import { getSectionDefaults } from '../utils/defaults/sections/getSectionDefaults'
-import SimpleServicesSection from './store_layout/sections/services/simple_services_section/SimpleServicesSection'
+import StoreAlertDiv from './store_layout/extras/alert_div/StoreAlertDiv'
+import { defaultStoreAlertDivConfig } from '../utils/defaults/extras/defaultStoreAlertDivConfig'
 
 const Scibbler = () => {
-  const result = getSectionDefaults("hero", "heroWithButtonImageAndText")
-  console.log(result)
   return (
     <div className='w-screen h-screen flex flex-row justify-center items-center text-[3vh]'>
-      Hello, World!
+      <StoreAlertDiv config={defaultStoreAlertDivConfig} objectPath='menubar.alertDiv'/>
     </div>
   )
 }

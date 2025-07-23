@@ -11,6 +11,7 @@ import OptionsToggler from '../../../../supporting/OptionsToggler'
 import MultipleLayoutImagesHandler from '../../../../supporting/MultipleLayoutImagesHandler'
 import { getSetting } from '../../../../../../utils/helperFunctions'
 import { useAppSelector } from '../../../../../../app/hooks'
+import UnderlinedTextSettings from '../../../../extras/text/UnderlinedTextSettings'
 
 const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
   settings,
@@ -24,7 +25,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
 
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-[.3vh]">
         <OptionsToggler
             label="Mobile Stack"
             options={["row", "column"]}
@@ -41,7 +42,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
         <SubSettingsContainer
             name="Background"
             SettingsComponent={
-                <div className="px-2 space-y-1 pb-1">
+                <div className="px-[.6vh] space-y-[.3vh] pb-[.3vh]">
                     <BackgroundEditor
                         objectPath={`${objectPath}.background`}
                         settings={settings}
@@ -57,7 +58,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
         <SubSettingsContainer
             name="Images"
             SettingsComponent={
-                <div className="px-2 space-y-2">
+                <div className="px-[.6vh] space-y-2">
                     <MultipleLayoutImagesHandler
                         objectPath={`${objectPath}.image.urls`}
                         min={1}
@@ -79,7 +80,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
         <SubSettingsContainer
             name="Details Background"
             SettingsComponent={
-                <div className="px-2 space-y-2">
+                <div className="px-[.6vh] space-y-2">
                     <BackgroundEditor
                         objectPath={`${objectPath}.textAndButton.background`}
                         settings={settings}
@@ -101,8 +102,8 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
       <AnimatePresence>
         {activePanel === "Text" && (
           <SlidingPanel onClose={closePanel} isOpen={true} title="Card Text Settings">
-            <div className="space-y-1 ">
-                <div className="border rounded px-2">
+            <div className="space-y-[.3vh] ">
+                <div className="border rounded px-[.6vh]">
                     <OptionsToggler
                         label="Show price"
                         options={["yes", "no"]}
@@ -122,46 +123,38 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
                         onChange={(value) => handleSettingChange(`${objectPath}.textAndButton.text.show.description`, value === "yes")}
                     />
                 </div>
-              <SubSettingsContainer
-                name="Service Details"
-                SettingsComponent={
-                  <TextEditor
-                    objectPath={`${objectPath}.textAndButton.text`}
-                    settings={settings}
-                    handleSettingChange={handleSettingChange}
-                    allow={["position","fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight", "textDecoration"]}
-                    responsiveSize
-                  />
-                }
-              />
-              <SubSettingsContainer
-                name="Service Name"
-                SettingsComponent={
-                  <TextEditor
-                    objectPath={`${objectPath}.textAndButton.text.name`}
-                    settings={settings}
-                    handleSettingChange={handleSettingChange}
-                    allow={["color", "fontSize", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight"]}
-                    responsiveSize
-                  />
-                }
-              />
+                <SubSettingsContainer
+                  name="Service Name"
+                  SettingsComponent={
+                    <UnderlinedTextSettings
+                      objectPath={`${objectPath}.textAndButton.text.name`}
+                      settings={settings}
+                      handleSettingChange={handleSettingChange}
+                    />
+                  }
+                />
+                <SubSettingsContainer
+                  name="Service Details"
+                  SettingsComponent={
+                    <UnderlinedTextSettings
+                      objectPath={`${objectPath}.textAndButton.text`}
+                      settings={settings}
+                      handleSettingChange={handleSettingChange}
+                    />
+                  }
+                />
             </div>
           </SlidingPanel>
           
         )}
         {activePanel === "Button" && (
             <SlidingPanel onClose={closePanel} isOpen={true} title="Book Button Settings">
-              <OptionsToggler
-                  label="Show"
-                  options={["yes", "no"]}
-                  value={getSetting("textAndButton.button.show", settings, objectPath) ? "yes" : "no"}
-                  onChange={(value) => handleSettingChange(`${objectPath}.textAndButton.button.show`, value === "yes")}
-              />
               <StoreButtonSettings 
                 settings={settings} 
                 objectPath={`${objectPath}.textAndButton.button`}
                 allowPosition
+                allowShow
+                allowFunction
               />
             </SlidingPanel>
         )}

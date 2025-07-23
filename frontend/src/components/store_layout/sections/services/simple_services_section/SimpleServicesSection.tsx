@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md';
 import { Settings } from 'lucide-react';
+import UnderlinedText from '../../../extras/text/UnderlinedText';
 
 const SimpleServicesSection = () => {
   const settings = useAppSelector((state) => state.layoutSettings.services);
@@ -29,7 +30,7 @@ const SimpleServicesSection = () => {
   
 
   const isMobile = window.innerWidth < 768;
-  const isHorizontal = (isMobile && settings.stack.mobile === "horizontal") || (!isMobile && settings.stack.desktop === "horizontal");
+  const isHorizontal = (isMobile && settings.grid.container.stack.mobile === "horizontal") || (!isMobile && settings.grid.container.stack.desktop === "horizontal");
 
   const handleNext = () => {
     setDirection("right");
@@ -44,50 +45,20 @@ const SimpleServicesSection = () => {
   return (
     <div 
         style={getBackgroundStyles(settings.background)}
-        className='flex flex-col justify-between min-h-fit'
+        className='flex flex-col justify-between h-full'
     >
         {/* Heading & Subheading */}
         <div 
             className='w-full'
         >   
-            {/* Heading */}
-            <div className={`w-full flex flex-row
-                ${settings.text.heading.position === "center" && "justify-center"}
-                ${settings.text.heading.position === "start" && "justify-start"}
-                ${settings.text.heading.position === "end" && "justify-end"}
-            `}>
-                <h1 
-                    style={{
-                        ...getTextStyles(settings.text.heading),
-                    }}
-                    
-                >
-                    {settings.text.heading.input}
-                </h1>
+            {/* Heading + Subheading */}
+            <div className="w-full">
+              <UnderlinedText style={settings.text.heading} />
+              
+              {settings.text.subheading.input && (
+                <UnderlinedText style={settings.text.subheading} />
+              )}
             </div>
-            {/* Subheading */}
-            {settings.text.subheading.input && (
-                <div className={`w-full flex flex-row
-                    ${settings.text.subheading.position === "center" && "justify-center"}
-                    ${settings.text.subheading.position === "start" && "justify-start"}
-                    ${settings.text.subheading.position === "end" && "justify-end"}
-                `}>
-                    <h1 
-                        style={{
-                            ...getTextStyles(settings.text.subheading),
-                            ...getBackgroundStyles(settings.text.subheading.background),
-                            maxWidth: "fit-content"
-                        }}
-                        className={`w-full
-                            ${settings.text.subheading.position === "center" && "text-center"}
-                            ${settings.text.subheading.position === "start" && "text-start"}
-                            ${settings.text.subheading.position === "end" && "text-end"}
-                        `}
-                    >
-                        {settings.text.subheading.input}
-                    </h1>
-                </div>
-            )}
         </div>
 
       {store?.categories.services && settings.categorySelector.show && (
@@ -102,8 +73,8 @@ const SimpleServicesSection = () => {
           <div className="flex justify-between absolute top-1/2 w-full z-10">
             <button 
                 style={{
-                    ...getTextStyles(settings.toggleButtons),
-                    ...getBackgroundStyles(settings.toggleButtons.background)
+                    ...getBackgroundStyles(settings.grid.container.toggleButtons.background),
+                    ...getTextStyles(settings.grid.container.toggleButtons),
                 }}
                 onClick={handlePrev}
             >
@@ -112,8 +83,8 @@ const SimpleServicesSection = () => {
             </button>
             <button 
                 style={{
-                    ...getTextStyles(settings.toggleButtons),
-                    ...getBackgroundStyles(settings.toggleButtons.background)
+                    ...getBackgroundStyles(settings.grid.container.toggleButtons.background),
+                    ...getTextStyles(settings.grid.container.toggleButtons),
                 }}
                 onClick={handleNext}
             >
@@ -152,29 +123,46 @@ const SimpleServicesSection = () => {
               </motion.div>
             </AnimatePresence>
           </div>
-
+          
           {/* Position Info */}
-          <div className="mt-4 text-sm text-black">
-            {services.length > 0 && (() => {
-              const start = activeGroupIndex * visibleCount + 1;
-              const end = Math.min(start + visibleCount - 1, services.length);
-              return start === end
-                ? `${start} / ${services.length}`
-                : `${start}–${end} / ${services.length}`;
-            })()}
-          </div>
+          {settings.grid.container.stepIndicator.use === 'digits' && (
+            <div
+              style={{
+                ...getTextStyles(settings.grid.container.stepIndicator.text),
+              }}
+              className="mt-4 text-sm text-black"
+            >
+              {services.length > 0 && (() => {
+                const start = activeGroupIndex * visibleCount + 1;
+                const end = Math.min(start + visibleCount - 1, services.length);
+                return start === end
+                  ? `${start} / ${services.length}`
+                  : `${start}–${end} / ${services.length}`;
+              })()}
+            </div>
+          )}
 
           {/* Dots */}
-          <div className="mt-4 flex gap-2">
-            {Array.from({ length: totalGroups }).map((_, index) => (
-              <span
-                key={index}
-                className={`h-2 w-2 rounded-full transition-all duration-300 ${
-                  index === activeGroupIndex ? "bg-black scale-125" : "bg-gray-300"
-                }`}
-              />
-            ))}
-          </div>
+          {settings.grid.container.stepIndicator.use === 'dots' && (
+            <div className="mt-4 flex gap-2 p-[1.8vh]">
+              {Array.from({ length: totalGroups }).map((_, index) => (
+                <span
+                  key={index}
+                  style={{
+                    ...getBackgroundStyles(settings.grid.container.stepIndicator.background),
+                    width: getResponsiveDimension(settings.grid.container.stepIndicator.background.height),
+                    backgroundColor:
+                      index === activeGroupIndex
+                        ? settings.grid.container.stepIndicator.background.color
+                        : 'transparent',
+                  }}
+                  className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                    index === activeGroupIndex ? 'scale-105' : ''
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       ) : (
         // Vertical (grid layout)

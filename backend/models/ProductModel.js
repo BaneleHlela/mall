@@ -25,6 +25,11 @@ const productSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
+  marking: {
+    type: String,
+    //enum: ['new', 'sale', 'featured', ''],
+    default: '',
+  },
   stockQuantity: {
     type: Number,
     // required: true,

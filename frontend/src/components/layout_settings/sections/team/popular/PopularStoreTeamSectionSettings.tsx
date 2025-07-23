@@ -9,7 +9,6 @@ import TextEditor from '../../../text/TextEditor';
 import ResponsiveGridSettings from '../../../extras/ResponsiveGridSettings';
 import OptionsToggler from '../../../supporting/OptionsToggler';
 import { getSetting } from '../../../../../utils/helperFunctions';
-import ServiceCardWithImageSettings from '../../services/cards/service_card_with_image/ServiceCardWithImageSettings';
 import PopularTeamCardSettings from '../../services/cards/team/PopularTeamCardSettings';
 import BorderEditor from '../../../background/BorderEditor';
 
@@ -123,6 +122,15 @@ const PopularStoreTeamSectionSettings: React.FC<SectionEditorProps> = ({
                                         onClick={() => setActivePanel("toggle_buttons")}
                                     />
                             )}
+                            {/* Step Indicator */}
+                            {((getSetting("stack.mobile", settings, objectPath) === "horizontal") ||
+                                (getSetting("stack.desktop", settings, objectPath) === "horizontal")) && 
+                                (
+                                    <FirstOrderSubSettingsContainer
+                                        name="Step Indicator"
+                                        onClick={() => setActivePanel("step_indicator")}
+                                    />
+                            )}
                         </div>
                     </SlidingPanel>    
                 )}
@@ -144,6 +152,40 @@ const PopularStoreTeamSectionSettings: React.FC<SectionEditorProps> = ({
                         />
                     </SlidingPanel>
                 )}
+                {activePanel === "step_indicator" && 
+                    ((getSetting("stack.mobile", settings, objectPath) === "horizontal") ||
+                    (getSetting("stack.desktop", settings, objectPath) === "horizontal"))
+                    && (
+                    <SlidingPanel  key="step_indicator" isOpen={true} onClose={() => setActivePanel("cards")} title="Step Indicator Settings">
+                        <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
+                            <OptionsToggler
+                                label="Use"
+                                options={["dots", "digits"]}
+                                value={getSetting("grid.container.stepIndicator.use", settings, objectPath)}
+                                onChange={(value) => handleSettingChange(`${objectPath}.grid.container.stepIndicator.use`, value)}
+                            />
+                        </div>
+                        {settings.team.grid.container.stepIndicator.use === "digits" && (
+                            <TextEditor
+                                objectPath={`${objectPath}.grid.container.stepIndicator.text`}
+                                settings={settings}
+                                handleSettingChange={handleSettingChange}
+                                allow={["position", "fontFamily", "backgroundColor", "padding", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "textDecoration"]}
+                            />
+                        )}
+                        {settings.team.grid.container.stepIndicator.use === "dots" && (
+                            <BackgroundEditor
+                                objectPath={`${objectPath}.grid.container.stepIndicator.background`}
+                                settings={settings}
+                                handleSettingChange={handleSettingChange}
+                                allow={["height", "border", "color"]}
+                                heightUnit='px'
+                                responsiveSize
+                            />
+                        )}
+                    </SlidingPanel>
+                )}
+
                 {activePanel === "container" && (
                     <SlidingPanel key="container" isOpen={true} onClose={() => setActivePanel("cards")} title="Container Settings">
                         <div className="space-y-[.3vh]">

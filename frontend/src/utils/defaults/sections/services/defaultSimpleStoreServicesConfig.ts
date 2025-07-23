@@ -28,6 +28,14 @@ export const simpleServicesSectionConfig = {
             fontWeight: "bold",
             color: "black",
             position: "center",
+            underline: {
+                show: true,
+                color: "black",
+                width: "50%",
+                style: "solid",
+                thickness: "10px",
+                marginTop: "10px",
+            }
         },
         subheading: {
             show: true,
@@ -41,11 +49,15 @@ export const simpleServicesSectionConfig = {
             color: "black",
             position: "center",
             textAlign: "center",
+            underline: {
+                show: false,
+                color: "black",
+                width: "50%",
+                style: "solid",
+                thickness: "10px",
+                marginTop: "10px",
+            }
         },
-    },
-    stack: {
-        mobile: "horizontal",
-        desktop: "horizontal",
     },
     grid: {
         container: {
@@ -55,7 +67,26 @@ export const simpleServicesSectionConfig = {
                     mobile: "100%",
                     desktop: "80%",
                 },
-            }
+            },
+            stepIndicator: {
+                use: "dots",
+                background: {
+                    height: {
+                        mobile: "2px",
+                        desktop: "2px",	
+                    }
+                },
+                text: {},
+            },
+            toggleButtons: {
+                background: {
+                    color: "transparent",
+                }
+            },
+            stack: {
+                mobile: "horizontal",
+                desktop: "horizontal",
+            },
         },
         columns: {
             mobile: 1,
@@ -81,9 +112,6 @@ export const simpleServicesSectionConfig = {
             mobile: "100%",
             desktop: "70%",
         }
-    },
-    toggleButtons: {
-        background: {}
     },
     card: {
         variaton: "serviceCardWithImage",
@@ -135,6 +163,14 @@ export const simpleServicesSectionConfig = {
                     mobile: "1.5rem",
                     desktop: "2rem",
                 },
+                underline: {
+                    show: true,
+                    color: "black",
+                    width: "50%",
+                    style: "solid",
+                    thickness: "2px",
+                    marginTop: "10px",
+                },
                 color: "black",
                 fontWeight: "bold",
                 name: {
@@ -144,6 +180,14 @@ export const simpleServicesSectionConfig = {
                     },
                     color: "black",
                     fontWeight: "bold",
+                    underline: {
+                        show: true,
+                        color: "black",
+                        width: "50%",
+                        style: "solid",
+                        thickness: "2px",
+                        marginTop: "10px",
+                    }
                 },
             },
             button: {

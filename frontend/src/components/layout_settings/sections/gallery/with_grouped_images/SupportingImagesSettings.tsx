@@ -69,7 +69,7 @@ const SupportingImagesSettings: React.FC<SupportingSettingsProps> = ({
   };
   
   return (
-    <div className="space-y-2 px-2">
+    <div className="space-y-[.6vh] px-[.6vh]">
       {/* Group Selectors */}
       {Object.keys(imageGroups).length === 0 && (
         <div className="text-center text-gray-500 mt-4">No groups available. Click "Add Group" to get started.</div>
@@ -132,19 +132,23 @@ const SupportingImagesSettings: React.FC<SupportingSettingsProps> = ({
                 }
             />
             {/* Images */}
-            <SubSettingsContainer
-                name="Images"
-                SettingsComponent={
-                <div className="px-2">
-                    <MultipleLayoutImagesHandler
-                    objectPath={`${objectPath}.${activeGroup}.images`}
-                    images={imageGroups[activeGroup].images}
-                    min={2}
-                    max={25}
-                    />
-                </div>
-                }
-            />
+            {settings.gallery.imagesModal.addModal && (
+              <SubSettingsContainer
+                  name="Images"
+                  SettingsComponent={
+                    <div className="px-2">
+                        <MultipleLayoutImagesHandler
+                        objectPath={`${objectPath}.${activeGroup}.images`}
+                        images={imageGroups[activeGroup].images}
+                        min={2}
+                        max={25}
+                        />
+                    </div>
+                  }
+              />
+            )}
+            
+            
             </div>
         </SlidingPanel>
       )}
@@ -153,7 +157,7 @@ const SupportingImagesSettings: React.FC<SupportingSettingsProps> = ({
       <div className="pt-4 w-full flex flex-row justify-center">
         <button
           onClick={handleAddGroup}
-          className="flex flex-row justify-between items-center bg-stone-50 border-2 border-white text-black rounded px-8 py-2 shadow-md hover:scale-103 hover:opacity-85"
+          className="text-[2vh] flex flex-row justify-between items-center bg-stone-50 border-[.35vh] border-white text-black rounded px-[2.4vh] py-[.6vh] shadow-md hover:scale-103 hover:opacity-85"
         >
           + Add Group
         </button>

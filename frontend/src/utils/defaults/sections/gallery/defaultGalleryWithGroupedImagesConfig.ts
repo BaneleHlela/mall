@@ -18,6 +18,14 @@ export const defaultGalleryWithGroupedImagesConfig = {
             fontFamily: "Patrick Hand",
             color: "brown",
             lineHeight: "1.3",
+            underline: {
+                show: true,
+                color: "black",
+                width: "50%",
+                style: "solid",
+                thickness: "10px",
+                marginTop: "10px",
+            }
         },
         subheading: {
             input: "Some work",
@@ -29,6 +37,14 @@ export const defaultGalleryWithGroupedImagesConfig = {
             fontFamily: "Patrick Hand",
             color: "brown",
             lineHeight: "1.3",
+            underline: {
+                show: false,
+                color: "black",
+                width: "50%",
+                style: "solid",
+                thickness: "10px",
+                marginTop: "10px",
+            }
         },
         groupName: {
             position: "start",
@@ -38,6 +54,31 @@ export const defaultGalleryWithGroupedImagesConfig = {
             },
             fontFamily: "Patrick Hand",
             color: "black",
+            underline: {
+                show: true,
+                color: "black",
+                width: "50%",
+                style: "solid",
+                thickness: "10px",
+                marginTop: "10px",
+            }
+        },
+        groupDescription: {
+            position: "start",
+            fontSize: {
+                mobile: "1.2rem",
+                desktop: "1.35rem",
+            },
+            fontFamily: "Patrick Hand",
+            color: "black",
+            underline: {
+                show: true,
+                color: "black",
+                width: "50%",
+                style: "solid",
+                thickness: "10px",
+                marginTop: "10px",
+            }
         },
     },
     imagesModal: {
@@ -89,14 +130,39 @@ export const defaultGalleryWithGroupedImagesConfig = {
             }
         },
         text: {
-            description: {
-                position: "center",
+            groupName: {
+                position: "start",
                 fontSize: {
-                    mobile: "1.1rem",
+                    mobile: "1.2rem",
                     desktop: "1.35rem",
                 },
                 fontFamily: "Patrick Hand",
                 color: "black",
+                underline: {
+                    show: true,
+                    color: "black",
+                    width: "50%",
+                    style: "solid",
+                    thickness: "10px",
+                    marginTop: "10px",
+                }
+            },
+            groupDescription: {
+                position: "start",
+                fontSize: {
+                    mobile: "1.2rem",
+                    desktop: "1.35rem",
+                },
+                fontFamily: "Patrick Hand",
+                color: "black",
+                underline: {
+                    show: true,
+                    color: "black",
+                    width: "50%",
+                    style: "solid",
+                    thickness: "10px",
+                    marginTop: "10px",
+                }
             },
         },
         grids: {
@@ -150,6 +216,16 @@ export const defaultGalleryWithGroupedImagesConfig = {
                     "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100200.png" 
                 ],
             },
+        },
+        stepIndicator: {
+            use: "dots",
+            background: {
+                height: {
+                    mobile: "2px",
+                    desktop: "2px",	
+                }
+            },
+            text: {},
         },
     },
 }

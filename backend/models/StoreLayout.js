@@ -20,7 +20,7 @@ const storeLayoutSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Store",
     },
-    menubar: {},
+    //menubar: {},
     hero: {},
     order: {},
     //book: {},

@@ -9,6 +9,9 @@ import SlidingPanel from '../../supporting/SlidingPanel';
 import TextEditor from '../../text/TextEditor';
 import { getSetting } from '../../../../utils/helperFunctions';
 import OptionsToggler from '../../supporting/OptionsToggler';
+import UnderlinedText from '../../../store_layout/extras/text/UnderlinedText';
+import UnderlinedTextSettings from '../../extras/text/UnderlinedTextSettings';
+import StoreButtonSettings from '../../extras/StoreButtonSettings';
 
 const SingleStoreProductSectionSettings = () => {
     const dispatch = useAppDispatch();
@@ -134,7 +137,7 @@ const SingleStoreProductSectionSettings = () => {
                     <SlidingPanel
                         key="toggle_button"
                         isOpen={true}
-                        onClose={closePanel}
+                        onClose={() => setActivePanel("images")}
                         title="Image Toggle Button"
                     >    
                         <div className="space-y-[.3vh]">
@@ -266,9 +269,9 @@ const SingleStoreProductSectionSettings = () => {
                                         objectPath={`${objectPath}.details.variationSelector.background.container`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={["color", "border", "padding"]}
+                                        allow={["color", "padding", "height"]}
                                         widthUnit="vw"
-                                        heightUnit="vh"
+                                        heightUnit="%"
                                         responsiveSize
                                         responsivePadding
                                     />
@@ -297,7 +300,7 @@ const SingleStoreProductSectionSettings = () => {
                                         objectPath={`${objectPath}.details.variationSelector.text.dropdown`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={[ "color", "fontSize", "weight" ]}
+                                        allow={[ "color", "fontSize", "weight", "fontFamily" ]}
                                         responsivePadding
                                     />
                                 </div>
@@ -371,7 +374,7 @@ const SingleStoreProductSectionSettings = () => {
                                 SettingsComponent={
                                 <div className="px-[.15vh] space-y-[.3vh]">
                                     <TextEditor
-                                        objectPath={`${objectPath}.details.messageBox.titleInput.input`}
+                                        objectPath={`${objectPath}.details.messageBox.titleInput`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
                                         allow={[ "input" ]}
@@ -551,9 +554,9 @@ const SingleStoreProductSectionSettings = () => {
                                         objectPath={`${objectPath}.details.nameAndPrice.background`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={["color", "padding", "border", "position"]}
+                                        allow={["color", "padding", "border", "height"]}
                                         widthUnit="vw"
-                                        heightUnit="vh"
+                                        heightUnit="%"
                                         responsiveSize
                                         responsivePadding
                                     />
@@ -564,12 +567,10 @@ const SingleStoreProductSectionSettings = () => {
                                 name="Name"
                                 SettingsComponent={
                                 <div className="px-[.15vh] space-y-[.3vh]">
-                                    <TextEditor
+                                    <UnderlinedTextSettings
                                         objectPath={`${objectPath}.details.nameAndPrice.name`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={[ "color", "fontSize", "position", "weight", "padding" ]}
-                                        responsivePadding
                                     />
                                 </div>
                                 }
@@ -578,12 +579,11 @@ const SingleStoreProductSectionSettings = () => {
                                 name="Price"
                                 SettingsComponent={
                                 <div className="px-[.15vh] space-y-[.3vh]">
-                                    <TextEditor
+                                    <UnderlinedTextSettings
                                         objectPath={`${objectPath}.details.nameAndPrice.price`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={[ "color", "fontSize", "position", "weight", "padding" ]}
-                                        responsivePadding
+                                        responsiveSize
                                     />
                                 </div>
                                 }
@@ -591,60 +591,18 @@ const SingleStoreProductSectionSettings = () => {
                         </div>
                     </SlidingPanel>
                 )}
-                {activePanel === "details_name_and_price" && (
+                {activePanel === "details_add_to_cart" && (
                     <SlidingPanel
-                        key="details_name_and_price"
+                        key="details_add_to_cart"
                         isOpen={true}
                         onClose={() => setActivePanel("details")}
-                        title="Name And Price settings"
+                        title="Add To Cart Button settings"
                     >
-                        <div className="space-y-[.3vh]">
-                            <SubSettingsContainer
-                                name="Background"
-                                SettingsComponent={
-                                <div className="px-[.15vh] space-y-[.3vh]">
-                                    <BackgroundEditor
-                                        objectPath={`${objectPath}.details.nameAndPrice.background`}
-                                        settings={settings}
-                                        handleSettingChange={handleSettingChange}
-                                        allow={["color", "padding", "border", "position"]}
-                                        widthUnit="vw"
-                                        heightUnit="vh"
-                                        responsiveSize
-                                        responsivePadding
-                                    />
-                                </div>
-                                }
-                            />
-                            <SubSettingsContainer
-                                name="Name"
-                                SettingsComponent={
-                                <div className="px-[.15vh] space-y-[.3vh]">
-                                    <TextEditor
-                                        objectPath={`${objectPath}.details.nameAndPrice.name`}
-                                        settings={settings}
-                                        handleSettingChange={handleSettingChange}
-                                        allow={[ "color", "fontSize", "position", "weight", "padding" ]}
-                                        responsivePadding
-                                    />
-                                </div>
-                                }
-                            />
-                            <SubSettingsContainer
-                                name="Price"
-                                SettingsComponent={
-                                <div className="px-[.15vh] space-y-[.3vh]">
-                                    <TextEditor
-                                        objectPath={`${objectPath}.details.nameAndPrice.price`}
-                                        settings={settings}
-                                        handleSettingChange={handleSettingChange}
-                                        allow={[ "color", "fontSize", "position", "weight", "padding" ]}
-                                        responsivePadding
-                                    />
-                                </div>
-                                }
-                            />
-                        </div>
+                        <StoreButtonSettings
+                            objectPath={`${objectPath}.details.addToCartBtn`}
+                            settings={settings}
+                            allowPosition
+                        />
                     </SlidingPanel>
                 )}
             </AnimatePresence>
@@ -652,4 +610,4 @@ const SingleStoreProductSectionSettings = () => {
     )
 }
 
-export default SingleStoreProductSectionSettings
+export default SingleStoreProductSectionSettings;

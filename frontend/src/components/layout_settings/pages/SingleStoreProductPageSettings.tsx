@@ -17,7 +17,7 @@ const SingleStoreProductPageSettings = () => {
           replaceble
         />
         {activePanel  === "product" && (
-        <SlidingPanel key="product_page" isOpen={true} onClose={closePanel} title="Services Settings">
+        <SlidingPanel key="product_page" isOpen={true} onClose={closePanel} title="Product Section Settings">
           <SingleStoreProductSectionSettings />
         </SlidingPanel>
       )}

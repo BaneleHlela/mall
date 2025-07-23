@@ -9,6 +9,8 @@ import FirstOrderSubSettingsContainer from '../../../FirstOrderSubSettingsContai
 import SlidingPanel from '../../../supporting/SlidingPanel'
 import BorderEditor from '../../../background/BorderEditor'
 import OptionsToggler from '../../../supporting/OptionsToggler'
+import { AnimatePresence } from 'framer-motion'
+import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings'
 
 const GalleryModalSettings: React.FC<SupportingSettingsProps> = ({
     settings,
@@ -89,35 +91,9 @@ const GalleryModalSettings: React.FC<SupportingSettingsProps> = ({
             }
         />
         {/* Text */}
-        <SubSettingsContainer
+        <FirstOrderSubSettingsContainer
             name="Text"
-            SettingsComponent={
-            <div className="px-2 space-y-[.3vh] py-1">
-                <SubSettingsContainer
-                    name="Description"
-                    SettingsComponent={
-                        <TextEditor
-                            objectPath={`${objectPath}.imagesModal.text.description`}
-                            settings={settings}
-                            handleSettingChange={handleSettingChange}
-                            allow={[ "color", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing" ]}
-                        />
-                    }
-                />
-                <SubSettingsContainer
-                    name="Name"
-                    SettingsComponent={
-                        <TextEditor
-                            objectPath={`${objectPath}.text.groupName`}
-                            settings={settings}
-                            handleSettingChange={handleSettingChange}
-                            allow={[ "color", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing" ]}
-                            responsiveSize
-                        />
-                    }
-                />
-            </div>
-            }
+            onClick={() => setActivePanel("Text")}
         />
         {/* Background */}
         <SubSettingsContainer
@@ -153,6 +129,51 @@ const GalleryModalSettings: React.FC<SupportingSettingsProps> = ({
                 />
             </SlidingPanel>
         )}
+        <AnimatePresence>
+            {activePanel === "Text" && (
+                <SlidingPanel
+                    key="text" isOpen={true} onClose={closePanel} title="Text Settings"
+                >
+                    <div className="space-y-[.3vh]">
+                        {/* Text */}
+                        <FirstOrderSubSettingsContainer
+                            name="Group Name"
+                            onClick={() => setActivePanel("group_name")}
+                        />
+                        {/* Text */}
+                        <FirstOrderSubSettingsContainer
+                            name="Group Description"
+                            onClick={() => setActivePanel("group_description")}
+                        />
+                    </div>
+                    
+                </SlidingPanel>
+            )}
+            {activePanel === "group_name" && (
+                <SlidingPanel key="group_name" isOpen={true} onClose={() => setActivePanel("Text")} title="Name Settings">
+                    <div className="space-y-[.3vh]">
+                        <UnderlinedTextSettings
+                            settings={settings}
+                            handleSettingChange={handleSettingChange}
+                            objectPath={`${objectPath}.imagesModal.text.groupName`}
+                            allowInput
+                        />
+                    </div>
+                </SlidingPanel>
+            )}
+            {activePanel === "group_description" && (
+                <SlidingPanel key="group_description" isOpen={true} onClose={() => setActivePanel("Text")} title="Description Settings">
+                    <div className="space-y-[.3vh]">
+                        <UnderlinedTextSettings
+                            settings={settings}
+                            handleSettingChange={handleSettingChange}
+                            objectPath={`${objectPath}.imagesModal.text.groupDescription`}
+                            allowInput
+                        />
+                    </div>
+                </SlidingPanel>
+            )}
+        </AnimatePresence>
     </div>
   )
 }

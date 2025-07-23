@@ -11,6 +11,7 @@ import ServiceCardWithImageSettings from '../cards/service_card_with_image/Servi
 import OptionsToggler from '../../../supporting/OptionsToggler';
 import { getSetting } from '../../../../../utils/helperFunctions';
 import BorderEditor from '../../../background/BorderEditor';
+import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings';
 
 
 const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
@@ -79,13 +80,11 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                 {activePanel === "heading" && (
                     <SlidingPanel key="heading" isOpen={true} onClose={() => setActivePanel("Text")} title="Heading Settings">
                         <div className="space-y-[.3vh]">
-                            <TextEditor
-                                objectPath={`${objectPath}.text.heading`}
+                            <UnderlinedTextSettings
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                allow={["input", "position", "fontFamily", "padding", "backgroundColor", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "textDecoration"]}
-                                responsiveSize
-                                responsivePadding
+                                objectPath={`${objectPath}.text.heading`}
+                                allowInput
                             />
                         </div>
                     </SlidingPanel>
@@ -93,19 +92,17 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                 {activePanel === "subheading" && (
                     <SlidingPanel key="subheading" isOpen={true} onClose={() => setActivePanel("Text")} title="subheading Settings">
                         <div className="space-y-[.3vh]">
-                            <TextEditor
-                                objectPath={`${objectPath}.text.subheading`}
+                            <UnderlinedTextSettings
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                allow={["input", "position", "padding", "fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "textDecoration"]}
-                                responsiveSize
-                                responsivePadding
+                                objectPath={`${objectPath}.text.subheading`}
+                                allowInput
                             />
                         </div>
                     </SlidingPanel>
                 )}
                 {activePanel === "cards" && (
-                    <SlidingPanel key="card" isOpen={true} onClose={closePanel} title="Card Settings">
+                    <SlidingPanel key="card" isOpen={true} onClose={closePanel} title="Cards Settings">
                         <div className="space-y-[.3vh]">
                             {/* Container */}
                             <FirstOrderSubSettingsContainer
@@ -118,52 +115,81 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                                 onClick={() => setActivePanel("card")}
                             />
                             {/* Toggle Buttons */}
-                            {((getSetting("stack.mobile", settings, objectPath) === "horizontal") ||
+                            {((getSetting("grid.container.stack.mobile", settings, objectPath) === "horizontal") ||
                                 (getSetting("stack.desktop", settings, objectPath) === "horizontal")) && 
                                 (
                                     <FirstOrderSubSettingsContainer
-                                        name="Togge Buttons"
+                                        name="Toggle Buttons"
                                         onClick={() => setActivePanel("toggle_buttons")}
+                                    />
+                            )}
+                            {/* Step Indicator */}
+                            {((getSetting("grid.container.stack.mobile", settings, objectPath) === "horizontal") ||
+                                (getSetting("stack.desktop", settings, objectPath) === "horizontal")) && 
+                                (
+                                    <FirstOrderSubSettingsContainer
+                                        name="Step Indicator"
+                                        onClick={() => setActivePanel("step_indicator")}
                                     />
                             )}
                         </div>
                     </SlidingPanel>    
                 )}
                 {activePanel === "toggle_buttons" && 
-                    ((getSetting("stack.mobile", settings, objectPath) === "horizontal") ||
+                    ((getSetting("grid.container.stack.mobile", settings, objectPath) === "horizontal") ||
                     (getSetting("stack.desktop", settings, objectPath) === "horizontal"))
                     && (
-                    <SlidingPanel  key="container" isOpen={true} onClose={() => setActivePanel("cards")} title="Toggle Buttons Settings">
+                    <SlidingPanel  key="toggle_buttons" isOpen={true} onClose={() => setActivePanel("cards")} title="Toggle Buttons Settings">
                         <TextEditor
-                            objectPath={`${objectPath}.toggleButtons`}
+                            objectPath={`${objectPath}.grid.container.toggleButtons`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
                             allow={["position", "fontFamily", "backgroundColor", "padding", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "textDecoration"]}
                         />
                         <BorderEditor
-                            objectPath={`${objectPath}.toggleButtons.background.border`}
+                            objectPath={`${objectPath}.grid.container.toggleButtons.background.border`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
                         />
                     </SlidingPanel>
                 )}
+                {activePanel === "step_indicator" && 
+                    ((getSetting("grid.container.stack.mobile", settings, objectPath) === "horizontal") ||
+                    (getSetting("stack.desktop", settings, objectPath) === "horizontal"))
+                    && (
+                    <SlidingPanel  key="step_indicator" isOpen={true} onClose={() => setActivePanel("cards")} title="Step Indicator Settings">
+                        <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
+                            <OptionsToggler
+                                label="Use"
+                                options={["dots", "digits"]}
+                                value={getSetting("grid.container.stepIndicator.use", settings, objectPath)}
+                                onChange={(value) => handleSettingChange(`${objectPath}.grid.container.stepIndicator.use`, value)}
+                            />
+                        </div>
+                        {settings.services.grid.container.stepIndicator.use === "digits" && (
+                            <TextEditor
+                                objectPath={`${objectPath}.grid.container.stepIndicator.text`}
+                                settings={settings}
+                                handleSettingChange={handleSettingChange}
+                                allow={["position", "fontFamily", "backgroundColor", "padding", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "textDecoration"]}
+                            />
+                        )}
+                        {settings.services.grid.container.stepIndicator.use === "dots" && (
+                            <BackgroundEditor
+                                objectPath={`${objectPath}.grid.container.stepIndicator.background`}
+                                settings={settings}
+                                handleSettingChange={handleSettingChange}
+                                allow={["height", "border", "color"]}
+                                heightUnit='px'
+                                responsiveSize
+                            />
+                        )}
+                    </SlidingPanel>
+                )}
                 {activePanel === "container" && (
                     <SlidingPanel key="container" isOpen={true} onClose={() => setActivePanel("cards")} title="Container Settings">
                         <div className="space-y-[.3vh]">
-                            <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
-                                <OptionsToggler
-                                    label="Mobile Stack"
-                                    options={["horizontal", "vertical"]}
-                                    value={getSetting("stack.mobile", settings, objectPath)}
-                                    onChange={(value) => handleSettingChange(`${objectPath}.stack.mobile`, value)}
-                                />
-                                <OptionsToggler
-                                    label="Desktop Stack"
-                                    options={["horizontal", "vertical"]}
-                                    value={getSetting("stack.desktop", settings, objectPath)}
-                                    onChange={(value) => handleSettingChange(`${objectPath}.stack.desktop`, value)}
-                                />
-                            </div>
+                            
                             <SubSettingsContainer
                                 name="Background"
                                 SettingsComponent={
@@ -181,19 +207,35 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                             <SubSettingsContainer
                                 name="Grid"
                                 SettingsComponent={
-                                    <ResponsiveGridSettings
-                                        objectPath={`${objectPath}.grid`}
-                                        settings={settings}
-                                        handleSettingChange={handleSettingChange}
-                                        columnOptions={{
-                                            mobile: ['1', "2"],
-                                            desktop: ['1', '2', '3', '4']
-                                        }}
-                                        gapRange={{
-                                            mobile: { min: 0, max: 50 },
-                                            desktop: { min: 0, max: 100 }
-                                        }}
-                                    />
+                                    <div>
+                                        <div className="border-[.1vh] rounded-[.6vh] px-[.6vh] mx-[.5vh]">
+                                            <OptionsToggler
+                                                label="Mobile Stack"
+                                                options={["horizontal", "vertical"]}
+                                                value={getSetting("grid.container.stack.mobile", settings, objectPath)}
+                                                onChange={(value) => handleSettingChange(`${objectPath}.grid.container.stack.mobile`, value)}
+                                            />
+                                            <OptionsToggler
+                                                label="Desktop Stack"
+                                                options={["horizontal", "vertical"]}
+                                                value={getSetting("stack.desktop", settings, objectPath)}
+                                                onChange={(value) => handleSettingChange(`${objectPath}.stack.desktop`, value)}
+                                            />
+                                        </div>
+                                        <ResponsiveGridSettings
+                                            objectPath={`${objectPath}.grid`}
+                                            settings={settings}
+                                            handleSettingChange={handleSettingChange}
+                                            columnOptions={{
+                                                mobile: ['1', "2"],
+                                                desktop: ['1', '2', '3', '4', '5']
+                                            }}
+                                            gapRange={{
+                                                mobile: { min: 0, max: 50 },
+                                                desktop: { min: 0, max: 100 }
+                                            }}
+                                        />
+                                    </div>
                                 }
                             />
                         </div>
@@ -238,7 +280,7 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                     </SlidingPanel>
                 )}
                 {activePanel === "card" && (
-                    <SlidingPanel key="card" isOpen={true} onClose={closePanel} title="Card Settings">
+                    <SlidingPanel key="card" isOpen={true} onClose={() => setActivePanel("cards")} title="Card Settings">
                         <ServiceCardWithImageSettings settings={settings} handleSettingChange={handleSettingChange}/>
                     </SlidingPanel>
                 )}

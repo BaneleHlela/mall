@@ -70,7 +70,7 @@ const ResponsiveGridSettings: React.FC<ResponsiveGridSettingsProps> = ({
 
         <SettingsSlider
           label="Desktop Gap"
-          value={parseInt(getSetting('desktop', settings, `${objectPath}.gap`))}
+          value={parseFloat(getSetting('desktop', settings, `${objectPath}.gap`))}
           unit="vh"
           min={gapRange.desktop.min}
           max={gapRange.desktop.max}

@@ -14,7 +14,8 @@ export const createProduct = asyncHandler(async (req, res) => {
     category,
     isActive,
     tags,
-    store, 
+    store,
+    marking 
   } = req.body;
 
   const files = req.files; // array of images
@@ -54,6 +55,7 @@ export const createProduct = asyncHandler(async (req, res) => {
     isActive,
     tags: Array.isArray(tags) ? tags : JSON.parse(tags),
     slug,
+    marking,
     store: new mongoose.Types.ObjectId(store),
   });
 

@@ -1,5 +1,8 @@
+import { defaultStoreAlertDivConfig } from "../extras/defaultStoreAlertDivConfig";
+
 export const defaultPupularStoreMenubarConfig = {
     variation: "popular",
+    alertDiv: defaultStoreAlertDivConfig,
     background: {
         height: {
             mobile: "110px",

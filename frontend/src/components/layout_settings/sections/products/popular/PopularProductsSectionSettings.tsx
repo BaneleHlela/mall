@@ -11,6 +11,9 @@ import OptionsToggler from '../../../supporting/OptionsToggler';
 import { getSetting } from '../../../../../utils/helperFunctions';
 import PopularProductCard from '../../../../store_layout/extras/cards/product/popular/PopularProductCard';
 import PopularProductCardSettings from '../supporting/cards/PopularProductCardSettings';
+import BorderEditor from '../../../background/BorderEditor';
+import { Underline } from 'lucide-react';
+import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings';
 
 
 const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
@@ -22,7 +25,7 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
     const closePanel = () => setActivePanel(null);
     
     return (
-        <div className='space-y-1'>
+        <div className='space-y-[.3vh]'>
             {/* Background Settings */}
             <SubSettingsContainer
                 name="Background"
@@ -59,7 +62,7 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                     <SlidingPanel
                         key="text" isOpen={true} onClose={closePanel} title="Text Settings"
                     >
-                        <div className="space-y-1">
+                        <div className="space-y-[.3vh]">
                             {/* Text */}
                             <FirstOrderSubSettingsContainer
                                 name="Heading"
@@ -75,35 +78,32 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                     </SlidingPanel>
                 )}
                 {activePanel === "heading" && (
-                    <SlidingPanel key="heading" isOpen={true} onClose={closePanel} title="Heading Settings">
-                        <div className="space-y-1">
-                            <TextEditor
-                                objectPath={`${objectPath}.text.heading`}
+                    <SlidingPanel key="heading" isOpen={true} onClose={() => setActivePanel("Text")} title="Heading Settings">
+                        <div className="space-y-[.3vh]">
+                            <UnderlinedTextSettings
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                allow={["input", "position", "fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight", "textDecoration"]}
-                                responsiveSize
+                                objectPath={`${objectPath}.text.heading`}
+                                allowInput
                             />
-
                         </div>
                     </SlidingPanel>
                 )}
                 {activePanel === "subheading" && (
-                    <SlidingPanel key="subheading" isOpen={true} onClose={closePanel} title="subheading Settings">
-                        <div className="space-y-1">
-                            <TextEditor
-                                objectPath={`${objectPath}.text.subheading`}
+                    <SlidingPanel key="subheading" isOpen={true} onClose={() => setActivePanel("Text")} title="subheading Settings">
+                        <div className="space-y-[.3vh]">
+                            <UnderlinedTextSettings
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                allow={["input", "position", "fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight", "textDecoration"]}
-                                responsiveSize
+                                objectPath={`${objectPath}.text.subheading`}
+                                allowInput
                             />
                         </div>
                     </SlidingPanel>
                 )}
                 {activePanel === "cards" && (
                     <SlidingPanel key="card" isOpen={true} onClose={closePanel} title="Card Settings">
-                        <div className="space-y-1">
+                        <div className="space-y-[.3vh]">
                             {/* Container */}
                             <FirstOrderSubSettingsContainer
                                 name="Container"
@@ -114,12 +114,81 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                                 name="Card"
                                 onClick={() => setActivePanel("card")}
                             />
+                            {/* Toggle Buttons */}
+                            {((getSetting("stack.mobile", settings, objectPath) === "horizontal") ||
+                                (getSetting("stack.desktop", settings, objectPath) === "horizontal")) && 
+                                (
+                                    <FirstOrderSubSettingsContainer
+                                        name="Toggle Buttons"
+                                        onClick={() => setActivePanel("toggle_buttons")}
+                                    />
+                            )}
+                            {/* Step Indicator */}
+                            {((getSetting("stack.mobile", settings, objectPath) === "horizontal") ||
+                                (getSetting("stack.desktop", settings, objectPath) === "horizontal")) && 
+                                (
+                                    <FirstOrderSubSettingsContainer
+                                        name="Step Indicator"
+                                        onClick={() => setActivePanel("step_indicator")}
+                                    />
+                            )}
                         </div>
                     </SlidingPanel>    
                 )}
+                {activePanel === "toggle_buttons" && 
+                    ((getSetting("stack.mobile", settings, objectPath) === "horizontal") ||
+                    (getSetting("stack.desktop", settings, objectPath) === "horizontal"))
+                    && (
+                    <SlidingPanel  key="toggle_buttons" isOpen={true} onClose={() => setActivePanel("cards")} title="Toggle Buttons Settings">
+                        <TextEditor
+                            objectPath={`${objectPath}.toggleButtons`}
+                            settings={settings}
+                            handleSettingChange={handleSettingChange}
+                            allow={["position", "fontFamily", "backgroundColor", "padding", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "textDecoration"]}
+                        />
+                        <BorderEditor
+                            objectPath={`${objectPath}.toggleButtons.background.border`}
+                            settings={settings}
+                            handleSettingChange={handleSettingChange}
+                        />
+                    </SlidingPanel>
+                )}
+                {activePanel === "step_indicator" && 
+                    ((getSetting("stack.mobile", settings, objectPath) === "horizontal") ||
+                    (getSetting("stack.desktop", settings, objectPath) === "horizontal"))
+                    && (
+                    <SlidingPanel  key="step_indicator" isOpen={true} onClose={() => setActivePanel("cards")} title="Step Indicator Settings">
+                        <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
+                            <OptionsToggler
+                                label="Use"
+                                options={["dots", "digits"]}
+                                value={getSetting("grid.container.stepIndicator.use", settings, objectPath)}
+                                onChange={(value) => handleSettingChange(`${objectPath}.grid.container.stepIndicator.use`, value)}
+                            />
+                        </div>
+                        {settings.products.grid.container.stepIndicator.use === "digits" && (
+                            <TextEditor
+                                objectPath={`${objectPath}.grid.container.stepIndicator.text`}
+                                settings={settings}
+                                handleSettingChange={handleSettingChange}
+                                allow={["position", "fontFamily", "backgroundColor", "padding", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "textDecoration"]}
+                            />
+                        )}
+                        {settings.products.grid.container.stepIndicator.use === "dots" && (
+                            <BackgroundEditor
+                                objectPath={`${objectPath}.grid.container.stepIndicator.background`}
+                                settings={settings}
+                                handleSettingChange={handleSettingChange}
+                                allow={["height", "border", "color"]}
+                                heightUnit='px'
+                                responsiveSize
+                            />
+                        )}
+                    </SlidingPanel>
+                )}
                 {activePanel === "container" && (
-                    <SlidingPanel key="container" isOpen={true} onClose={closePanel} title="Container Settings">
-                        <div className="space-y-1">
+                    <SlidingPanel key="container" isOpen={true} onClose={() => setActivePanel("cards")} title="Container Settings">
+                        <div className="space-y-[.3vh]">
                             <SubSettingsContainer
                                 name="Background"
                                 SettingsComponent={
@@ -136,19 +205,35 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                             <SubSettingsContainer
                                 name="Grid"
                                 SettingsComponent={
-                                    <ResponsiveGridSettings
-                                        objectPath={`${objectPath}.grid`}
-                                        settings={settings}
-                                        handleSettingChange={handleSettingChange}
-                                        columnOptions={{
-                                            mobile: ['1', "2"],
-                                            desktop: ['1', '2', '3', '4', '5']
-                                        }}
-                                        gapRange={{
-                                            mobile: { min: 0, max: 50 },
-                                            desktop: { min: 0, max: 100 }
-                                        }}
-                                    />
+                                    <>
+                                        <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
+                                            <OptionsToggler
+                                                label="Mobile Stack"
+                                                options={["horizontal", "vertical"]}
+                                                value={getSetting("stack.mobile", settings, objectPath)}
+                                                onChange={(value) => handleSettingChange(`${objectPath}.stack.mobile`, value)}
+                                            />
+                                            <OptionsToggler
+                                                label="Desktop Stack"
+                                                options={["horizontal", "vertical"]}
+                                                value={getSetting("stack.desktop", settings, objectPath)}
+                                                onChange={(value) => handleSettingChange(`${objectPath}.stack.desktop`, value)}
+                                            />
+                                        </div>
+                                        <ResponsiveGridSettings
+                                            objectPath={`${objectPath}.grid`}
+                                            settings={settings}
+                                            handleSettingChange={handleSettingChange}
+                                            columnOptions={{
+                                                mobile: ['1', "2"],
+                                                desktop: ['1', '2', '3', '4', '5']
+                                            }}
+                                            gapRange={{
+                                                mobile: { min: 0, max: 50 },
+                                                desktop: { min: 0, max: 100 }
+                                            }}
+                                        />
+                                    </> 
                                 }
                             />
                         </div>
@@ -156,7 +241,7 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                 )}
                 {activePanel === "categorySelector" && (
                     <SlidingPanel key="categorySelector" isOpen={true} onClose={closePanel} title="Category Selector">
-                        <div className="space-y-1 border-[.15vh] rounded-[.6vh]">
+                        <div className="space-y-[.3vh] border-[.15vh] rounded-[.6vh]">
                             <div className="px-[.65vh]">
                                 <OptionsToggler
                                     label="Show"
@@ -176,7 +261,7 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                                 responsiveSize
                             />
                         </div>
-                        <div className="space-y-1">
+                        <div className="space-y-[.3vh]">
                             <SubSettingsContainer
                                 name="Text"
                                 SettingsComponent={
@@ -193,7 +278,7 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                     </SlidingPanel>
                 )}
                 {activePanel === "card" && (
-                    <SlidingPanel key="card" isOpen={true} onClose={closePanel} title="Card Settings">
+                    <SlidingPanel key="card" isOpen={true} onClose={() => setActivePanel("cards")} title="Card Settings">
                         <PopularProductCardSettings settings={settings} handleSettingChange={handleSettingChange}/>
                     </SlidingPanel>
                 )}

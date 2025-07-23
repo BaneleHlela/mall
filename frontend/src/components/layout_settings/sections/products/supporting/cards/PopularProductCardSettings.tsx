@@ -11,6 +11,7 @@ import OptionsToggler from '../../../../supporting/OptionsToggler'
 import MultipleLayoutImagesHandler from '../../../../supporting/MultipleLayoutImagesHandler'
 import { getSetting } from '../../../../../../utils/helperFunctions'
 import { useAppSelector } from '../../../../../../app/hooks'
+import UnderlinedTextSettings from '../../../../extras/text/UnderlinedTextSettings'
 
 const ProductCardSettings: React.FC<SectionEditorProps> = ({
   settings,
@@ -24,7 +25,7 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
 
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-[.3vh]">
         <OptionsToggler
             label="Mobile Stack"
             options={["row", "column"]}
@@ -41,7 +42,7 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
         <SubSettingsContainer
             name="Background"
             SettingsComponent={
-                <div className="px-2 space-y-1 pb-1">
+                <div className="px-[.6vh] space-y-[.3vh] pb-[.3vh]">
                     <BackgroundEditor
                         objectPath={`${objectPath}.background`}
                         settings={settings}
@@ -55,9 +56,9 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
         />
         {/* Image Settings */}
         <SubSettingsContainer
-            name="Images"
+            name="Image"
             SettingsComponent={
-                <div className="px-2 space-y-2">
+                <div className="px-[.6vh] space-y-2">
                     <BackgroundEditor
                         objectPath={`${objectPath}.image`}
                         settings={settings}
@@ -75,64 +76,77 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
           onClick={() => setActivePanel("Text")}
       />
       <FirstOrderSubSettingsContainer
-          name="Button"
+          name="Add to Cart Button"
           onClick={() => setActivePanel("Button")}
+      />
+      <FirstOrderSubSettingsContainer
+          name="Marking Button"
+          onClick={() => setActivePanel("marking_button")}
       />
       <AnimatePresence>
         {activePanel === "Text" && (
           <SlidingPanel onClose={closePanel} isOpen={true} title="Card Text Settings">
-            <div className="space-y-1 ">
-                <div className="border rounded px-2">
-                    <OptionsToggler
-                        label="Show price"
-                        options={["yes", "no"]}
-                        value={getSetting("textAndButton.text.show.price", settings, objectPath) ? "yes" : "no"}
-                        onChange={(value) => handleSettingChange(`${objectPath}.textAndButton.text.show.price`, value === "yes")}
+            <div className="space-y-[.3vh] ">
+                <SubSettingsContainer
+                  name="Product Name"
+                  SettingsComponent={
+                    <UnderlinedTextSettings
+                      objectPath={`${objectPath}.textAndButton.text.name`}
+                      settings={settings}
+                      handleSettingChange={handleSettingChange}
                     />
-                    <OptionsToggler
-                        label="Show duration"
-                        options={["yes", "no"]}
-                        value={getSetting("textAndButton.text.show.duration", settings, objectPath) ? "yes" : "no"}
-                        onChange={(value) => handleSettingChange(`${objectPath}.textAndButton.text.show.duration`, value === "yes")}
+                  }
+                />
+                <SubSettingsContainer
+                  name="Product Price"
+                  SettingsComponent={
+                    <UnderlinedTextSettings
+                      objectPath={`${objectPath}.textAndButton.text`}
+                      settings={settings}
+                      handleSettingChange={handleSettingChange}
                     />
-                    <OptionsToggler
-                        label="Show description"
-                        options={["yes", "no"]}
-                        value={getSetting("textAndButton.text.show.description", settings, objectPath) ? "yes" : "no"}
-                        onChange={(value) => handleSettingChange(`${objectPath}.textAndButton.text.show.description`, value === "yes")}
-                    />
-                </div>
-              <SubSettingsContainer
-                name="Product Details"
-                SettingsComponent={
-                  <TextEditor
-                    objectPath={`${objectPath}.textAndButton.text`}
-                    settings={settings}
-                    handleSettingChange={handleSettingChange}
-                    allow={["position","fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight", "textDecoration"]}
-                    responsiveSize
-                  />
-                }
-              />
-              <SubSettingsContainer
-                name="Product Name"
-                SettingsComponent={
-                  <TextEditor
-                    objectPath={`${objectPath}.textAndButton.text.name`}
-                    settings={settings}
-                    handleSettingChange={handleSettingChange}
-                    allow={["color", "position", "fontSize", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight"]}
-                    responsiveSize
-                  />
-                }
-              />
+                  }
+                />
             </div>
           </SlidingPanel>
           
         )}
         {activePanel === "Button" && (
             <SlidingPanel onClose={closePanel} isOpen={true} title="Book Button Settings">
-              <StoreButtonSettings settings={settings} objectPath={`${objectPath}.textAndButton.button`} allowPosition/>
+              <StoreButtonSettings 
+                settings={settings} 
+                objectPath={`${objectPath}.textAndButton.button`} 
+                allowPosition 
+                allowShow
+              />
+            </SlidingPanel>
+        )}
+        {activePanel === "marking_button" && (
+            <SlidingPanel onClose={closePanel} isOpen={true} title="Marking Button Settings">
+              <div className="space-y-[.3vh]">
+                  <SubSettingsContainer
+                    name={"Text"}
+                    SettingsComponent={
+                      <TextEditor
+                        objectPath={`${objectPath}.markingButton.text`}
+                        settings={settings}
+                        handleSettingChange={handleSettingChange}
+                        allow={["color", "fontSize", "fontFamily", "weight", "fontStyle", "textTransform"]}
+                      />
+                    }
+                  />
+                  <SubSettingsContainer
+                    name="Background"
+                    SettingsComponent={
+                      <BackgroundEditor
+                        objectPath={`${objectPath}.markingButton.background`}
+                        settings={settings}
+                        handleSettingChange={handleSettingChange}
+                        allow={["color", "padding", "border"]}
+                      />
+                    }
+                  />
+              </div>
             </SlidingPanel>
         )}
       </AnimatePresence>

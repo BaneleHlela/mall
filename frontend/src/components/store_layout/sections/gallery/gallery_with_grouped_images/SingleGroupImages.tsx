@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../../../../../utils/stylingFunctions';
 import { IoMdClose } from 'react-icons/io';
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md';
+import UnderlinedText from '../../../extras/text/UnderlinedText';
 
 interface SingleGroupImagesProps {
     groupName: string;
@@ -11,6 +12,7 @@ interface SingleGroupImagesProps {
     images: string[];
     textStyle: any;
     style: any;
+    descriptionTextStyle: any;
 }
 
 export function getGridColumnClasses({
@@ -32,7 +34,8 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
     thumbnail,
     images,
     style,
-    textStyle
+    textStyle,
+    descriptionTextStyle
 }) => {
     const [showGrid, setShowGrid] = useState(false);
     const isMobile = window.innerWidth < 768;
@@ -80,10 +83,15 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                     className="w-full object-cover cursor-pointer hover:opacity-80 transition-opacity duration-300"
                     onClick={() => setShowGrid(true)}
                 />
-                <p style={getTextStyles(textStyle)} className="mb-5">{groupName}</p>
+                <div className="w-full">
+                    <UnderlinedText style={textStyle} input={groupName} />
+                </div>
+                <div className="w-full">
+                    <UnderlinedText style={descriptionTextStyle} input={groupDescrition} />
+                </div>
             </div>
 
-            {showGrid && (
+            {showGrid && style.addModal && (
                 <div
                     style={{
                         ...getBackgroundStyles(style.background.modal),
@@ -102,10 +110,12 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
 
                     {/* Title & Description */}
                     <div className="flex flex-col items-center text-center my-4">
-                        <p style={getTextStyles(textStyle)}>{groupName}</p>
-                        <p style={{ ...getTextStyles(style.text.description) }} className="px-2 md:w-[50%]">
-                            {groupDescrition}
-                        </p>
+                        <div className="w-full">
+                            <UnderlinedText style={style.text.groupName} input={groupName} />
+                        </div>
+                        <div className="w-full">
+                            <UnderlinedText style={style.text.groupDescription} input={groupDescrition} />
+                        </div>
                     </div>
 
                     {isHorizontal ? (
@@ -161,25 +171,40 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                             </div>
 
                             {/* Count */}
-                            <div className="mt-4 text-sm text-black">
-                                {images.length > 0 && (() => {
-                                    const start = activeIndex * visibleCount + 1;
-                                    const end = Math.min(start + visibleCount - 1, images.length);
-                                    return start === end ? `${start} / ${images.length}` : `${start}–${end} / ${images.length}`;
-                                })()}
-                            </div>
+                            {style.stepIndicator.use === 'digits' && (
+                                <div 
+                                    style={{
+                                        ...getTextStyles(style.stepIndicator.text),
+                                    }}
+                                    className="mt-4 text-sm text-black"
+                                >
+                                    {images.length > 0 && (() => {
+                                        const start = activeIndex * visibleCount + 1;
+                                        const end = Math.min(start + visibleCount - 1, images.length);
+                                        return start === end ? `${start} / ${images.length}` : `${start}–${end} / ${images.length}`;
+                                    })()}
+                                </div>
+                            )}
+                            
 
                             {/* Dots */}
-                            <div className="mt-4 flex gap-2">
-                                {Array.from({ length: totalGroups }).map((_, index) => (
-                                    <span
-                                        key={index}
-                                        className={`h-2 w-2 rounded-full transition-all duration-300 ${
-                                            index === activeIndex ? 'bg-black scale-125' : 'bg-gray-300'
-                                        }`}
-                                    />
-                                ))}
-                            </div>
+                            {style.stepIndicator.use === 'dots' && (
+                                <div className="mt-4 flex gap-2">
+                                    {Array.from({ length: totalGroups }).map((_, index) => (
+                                        <span
+                                            style={{
+                                                ...getBackgroundStyles(style.stepIndicator.background),
+                                                width: getResponsiveDimension(style.stepIndicator.background.height),
+                                                backgroundColor: index === activeIndex ? style.stepIndicator.background.color : 'transparent',
+                                            }}
+                                            key={index}
+                                            className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                                                index === activeIndex ? 'scale:102' : ''
+                                            }`}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <div

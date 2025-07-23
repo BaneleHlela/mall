@@ -75,31 +75,33 @@ export const defaultSingleProductSectionConfig = {
             },
             name: {
                 fontFamily: "Open Sans",
-                fontSize: "25px",
-                padding: {
-                    x: {
-                        desktop: "0px",
-                        mobile: "10px",
-                    },
-                    y: {
-                        mobile: "0px",
-                        desktop: "0px",
-                    },  
+                fontSize: {
+                    mobile: "10px",
+                    desktop: "20px"
                 },
+                underline: {
+                    show: false,
+                    color: "black",
+                    width: "50%",
+                    style: "solid",
+                    thickness: "10px",
+                    marginTop: "10px",
+                }
             },
             price: {
                 fontFamily: "Open Sans",
-                fontSize: "10px",
-                padding: {
-                    x: {
-                        desktop: "20px",
-                        mobile: "10px",
-                    },
-                    y: {
-                        mobile: "10px",
-                        desktop: "10px",
-                    },  
+                fontSize: {
+                    mobile: "10px",
+                    desktop: "20px"
                 },
+                underline: {
+                    show: false,
+                    color: "black",
+                    width: "50%",
+                    style: "solid",
+                    thickness: "10px",
+                    marginTop: "10px",
+                }
             }
         },
         variationSelector: {
@@ -195,16 +197,23 @@ export const defaultSingleProductSectionConfig = {
             },
         },
         addToCartBtn: {
-            background: {
-                position: "start",
-                color: "pink",
-                width: {
-                    mobile: "50%",
-                    desktop: "50%"
-                }
-            },
-            text: {
-                fontSize: "2.5vh"
+            position: "start",
+            style: {
+                background: {
+                    color: "orange",
+                    width: {
+                        mobile: "50%",
+                        desktop: "50%"
+                    },
+                    padding: {
+                        x: "10px",
+                        y: "10px",
+                    }
+                },
+                text: {
+                    fontSize: "2.5vh",
+                    color: "white",
+                },
             }
         },
         description: {

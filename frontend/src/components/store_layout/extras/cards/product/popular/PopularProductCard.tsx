@@ -1,10 +1,12 @@
 import React from 'react'
 import { getBackgroundStyles, getTextStyles } from '../../../../../../utils/stylingFunctions';
 import StoreButton from '../../../buttons/StoreButton';
+import UnderlinedText from '../../../text/UnderlinedText';
 
 interface StoreProductCardProps {
     title: string;
     price?: number;
+    marking?: string;
     imageUrl: string;
     style: any;
     onClick?: () => void;
@@ -16,6 +18,7 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
     style,
     imageUrl,
     onClick,
+    marking
 }) => {
 
     return (
@@ -24,7 +27,7 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
             style={{
                 ...getBackgroundStyles(style.background),
             }}
-            className={`flex min-h-fit
+            className={`flex group w-full h-full
                 ${style.stack.mobile === "column" ? "flex-col" : "flex-row" }
                 lg:${style.stack.desktop === "column" ? "flex-col" : "flex-row" }
             hover:scale-101`}
@@ -34,13 +37,24 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
                 style={{
                     ...getBackgroundStyles(style.image)
                 }}
-                className='overflow-hidden'
+                className='overflow-hidden relative'
             >
                 <img 
                     src={imageUrl} 
                     alt="Product Image" 
                     className='w-full h-full object-cover transition-transform duration-500 ease-in-out hover:scale-110'
                 />
+                {marking && (
+                    <button
+                        style={{
+                            ...getTextStyles(style.markingButton.text),
+                            ...getBackgroundStyles(style.markingButton.background)
+                        }} 
+                        className="absolute top-[.5vh] left-[.5vh] bg-black text-white"
+                    >
+                        {marking || "New"}
+                    </button>
+                )}
             </div>
             {/* Text and button */}
             <div
@@ -50,18 +64,7 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
                 className="px-[1.3vh] flex flex-col justify-evenly min-h-fit"
             >
                 {/* Name */}
-                <h2
-                    style={{
-                        ...getTextStyles(style.textAndButton.text.name)
-                    }} 
-                    className={`
-                        ${style.textAndButton.text.name.position === "center" && "text-center"}
-                        ${style.textAndButton.text.name.position === "start" && "text-start"}
-                        ${style.textAndButton.text.name.position === "end" && "text-end"}
-                    `}
-                >
-                    {title}
-                </h2>
+                <UnderlinedText style={style.textAndButton.text.name} input={title}/>
                 {/* Price */}
                 <p 
                     style={{
@@ -76,13 +79,28 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
                     R{price}
                 </p>
                 <div 
-                    className={`flex flex-row 
-                        ${style.textAndButton.button.position === "center" && "justify-center"}
-                        ${style.textAndButton.button.position === "start" && "justify-start"}
-                        ${style.textAndButton.button.position === "end" && "justify-end"}
+                    className={`flex-row w-full
+                        ${style.textAndButton.button.show.desktop === "never" && "lg:hidden"}
+                        ${style.textAndButton.button.show.mobile === "never" && "hidden"}
+                        ${style.textAndButton.button.show.desktop !== "never"  && "lg:flex"}
+                        ${style.textAndButton.button.show.mobile !== "never" && "flex"}
+                        
                     `}
                 >
-                    <StoreButton style={style.textAndButton.button} onClick={() => {}} />
+                    <div 
+                        className={`w-full flex flex-row
+                            ${style.textAndButton.button.show.desktop === "on-hover" && "lg:opacity-0 lg:group-hover:opacity-100 lg:transition-opacity lg:duration-300" }
+                            ${style.textAndButton.button.show.mobile === "on-hover" && "opacity-0 group-hover:opacity-100 transition-opacity duration-300" }
+                            ${style.textAndButton.button.position === "center" && "justify-center"}
+                            ${style.textAndButton.button.position === "start" && "justify-start"}
+                            ${style.textAndButton.button.position === "end" && "justify-end"} 
+                        `}
+                        >
+                        <StoreButton 
+                            style={style.textAndButton.button} 
+                            onClick={() => {}} 
+                        />
+                    </div>
                 </div>
             </div>
         </div>

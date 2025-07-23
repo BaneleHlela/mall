@@ -17,7 +17,7 @@ const SubSettingsContainer: React.FC<SubSettingsContainerProps> = ({
     <>
       <div
         onClick={() => setIsSettingsOpen((prev) => !prev)} 
-        className="w-full h-[7vh] text-[1.8vh]"
+        className="w-full h-[7vh] text-[2vh]"
       >
         {/* Header */}
         <div
@@ -42,7 +42,7 @@ const SubSettingsContainer: React.FC<SubSettingsContainerProps> = ({
 
       {/* Sliding Settings Component */}
       <motion.div
-        className={`w-full border-[.3vh] border-white space-y-1 bg-stone-100 text-black rounded-b-sm shadow-md overflow-hidden -mt-1`}
+        className={`w-full border-[.3vh] border-white space-y-[.3vh] bg-stone[.3vh]00 text-black rounded-b-sm shadow-md overflow-hidden -mt-1`}
         initial={{ height: 0, opacity: 0 }}
         animate={{
           height: isSettingsOpen ? "auto" : 0,

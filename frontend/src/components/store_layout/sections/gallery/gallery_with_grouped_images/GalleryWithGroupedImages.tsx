@@ -4,6 +4,7 @@ import SingleGroupImages, { getGridColumnClasses } from './SingleGroupImages';
 import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../../../../../utils/stylingFunctions';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md';
+import UnderlinedText from '../../../extras/text/UnderlinedText';
 
 interface GalleryGroup {
   input: string;
@@ -53,51 +54,18 @@ const GalleryWithGroupedImages = () => {
   return (
     <div style={getBackgroundStyles(settings.background)}>
       {/* Heading & Subheading */}
-      <div className="w-full">
-        <div
-          className={`w-full flex flex-row ${
-            settings.text.heading.position === 'center'
-              ? 'justify-center'
-              : settings.text.heading.position === 'start'
-              ? 'justify-start'
-              : 'justify-end'
-          }`}
-        >
-          <h1 style={getTextStyles(settings.text.heading)}>
-            {settings.text.heading.input}
-          </h1>
-        </div>
-
-        {settings.text.subheading.input && (
-          <div
-            className={`w-full flex flex-row ${
-              settings.text.subheading.position === 'center'
-                ? 'justify-center'
-                : settings.text.subheading.position === 'start'
-                ? 'justify-start'
-                : 'justify-end'
-            }`}
-          >
-            <h1
-              style={{
-                ...getTextStyles(settings.text.subheading),
-                ...getBackgroundStyles(settings.text.subheading.background),
-                maxWidth: 'fit-content',
-              }}
-              className={`w-full ${
-                settings.text.subheading.position === 'center'
-                  ? 'text-center'
-                  : settings.text.subheading.position === 'start'
-                  ? 'text-start'
-                  : 'text-end'
-              }`}
-            >
-              {settings.text.subheading.input}
-            </h1>
+      <div 
+            className='w-full'
+        >   
+          {/* Heading + Subheading */}
+          <div className="w-full">
+            <UnderlinedText style={settings.text.heading} />
+            
+            {settings.text.subheading.input && (
+              <UnderlinedText style={settings.text.subheading} />
+            )}
           </div>
-        )}
       </div>
-
       {/* Stack Layouts */}
       {isHorizontal ? (
         <div className="w-full relative flex flex-col items-center overflow-hidden">
@@ -146,6 +114,7 @@ const GalleryWithGroupedImages = () => {
                     groupName={groupData.input}
                     groupDescrition={groupData.description}
                     thumbnail={groupData.thumbnail}
+                    descriptionTextStyle={settings.text.groupDescription}
                     images={groupData.images}
                     textStyle={settings.text.groupName}
                     style={settings.imagesModal}
@@ -154,29 +123,46 @@ const GalleryWithGroupedImages = () => {
               </motion.div>
             </AnimatePresence>
           </div>
-
+          
           {/* Count */}
-          <div className="mt-4 text-sm text-black">
-            {allGroups.length > 0 && (() => {
-              const start = activeGroupIndex * visibleCount + 1;
-              const end = Math.min(start + visibleCount - 1, allGroups.length);
-              return start === end
-                ? `${start} / ${allGroups.length}`
-                : `${start}–${end} / ${allGroups.length}`;
-            })()}
-          </div>
+          {settings.imagesModal.stepIndicator.use === 'digits' && (
+            <div
+              style={{
+                ...getTextStyles(settings.imagesModal.stepIndicator.text),
+              }}
+              className="mt-4 text-sm text-black"
+            >
+              {allGroups.length > 0 && (() => {
+                const start = activeGroupIndex * visibleCount + 1;
+                const end = Math.min(start + visibleCount - 1, allGroups.length);
+                return start === end
+                  ? `${start} / ${allGroups.length}`
+                  : `${start}–${end} / ${allGroups.length}`;
+              })()}
+            </div>
+          )}
 
           {/* Dots */}
-          <div className="mt-4 flex gap-2">
-            {Array.from({ length: totalGroups }).map((_, index) => (
-              <span
-                key={index}
-                className={`h-2 w-2 rounded-full transition-all duration-300 ${
-                  index === activeGroupIndex ? 'bg-black scale-125' : 'bg-gray-300'
-                }`}
-              />
-            ))}
-          </div>
+          {settings.imagesModal.stepIndicator.use === 'dots' && (
+            <div className="mt-4 flex gap-2">
+              {Array.from({ length: totalGroups }).map((_, index) => (
+                <span
+                  key={index}
+                  style={{
+                    ...getBackgroundStyles(settings.imagesModal.stepIndicator.background),
+                    width: getResponsiveDimension(settings.imagesModal.stepIndicator.background.height),
+                    backgroundColor:
+                      index === activeGroupIndex
+                        ? settings.imagesModal.stepIndicator.background.color
+                        : 'transparent',
+                  }}
+                  className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                    index === activeGroupIndex ? 'scale-102' : ''
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       ) : (
         <div
@@ -197,6 +183,7 @@ const GalleryWithGroupedImages = () => {
               thumbnail={groupData.thumbnail}
               images={groupData.images}
               textStyle={settings.text.groupName}
+              descriptionTextStyle={settings.text.groupDescription}
               style={settings.imagesModal}
             />
           ))}

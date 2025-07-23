@@ -1,6 +1,7 @@
 import React from 'react'
 import { getBackgroundStyles, getBorderStyles, getTextStyles } from '../../../../../../utils/stylingFunctions';
 import StoreButton from '../../../buttons/StoreButton';
+import UnderlinedText from '../../../text/UnderlinedText';
 
 interface StoreServiceCardProps {
     title: string;
@@ -27,7 +28,7 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
             style={{
                 ...getBackgroundStyles(style.background),
             }}
-            className={`flex min-h-fit overflow-hidden
+            className={`flex min-h-fit overflow-hidden group
                 ${style.stack.mobile === "column" ? "flex-col" : "flex-row" }
                 lg:${style.stack.desktop === "column" ? "flex-col" : "flex-row" }
             hover:scale-102`}
@@ -52,22 +53,14 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                     ...getBackgroundStyles(style.textAndButton.background)
                 }} 
                 className={`
-                        flex flex-col justify-between overflow-hidden
+                        flex flex-col justify-between overflow-hidden min-h-fit
                         ${style.textAndButton.background.position === "center" && "items-center"}
                         ${style.textAndButton.background.position === "start" && "items-start"}
                         ${style.textAndButton.background.position === "end" && "items-end"}
                     `}
             >
                 {/* Name */}
-                <h2
-                    style={{
-                        ...getTextStyles(style.textAndButton.text),
-                        ...getTextStyles(style.textAndButton.text.name)
-                    }} 
-                    className=""
-                >
-                    {title}
-                </h2>
+                <UnderlinedText style={style.textAndButton.text.name} input={title}/>
                 {/* Description */}
                 {style.textAndButton.text.show.description && (
                     <p style={{
@@ -99,17 +92,30 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                         R{price}
                     </p>
                 )}
-                {style.textAndButton.button.show && (
+                <div 
+                    className={`flex-row w-full
+                        ${style.textAndButton.button.show.desktop === "never" && "lg:hidden"}
+                        ${style.textAndButton.button.show.mobile === "never" && "hidden"}
+                        ${style.textAndButton.button.show.desktop !== "never"  && "lg:flex"}
+                        ${style.textAndButton.button.show.mobile !== "never" && "flex"}
+                        
+                    `}
+                >
                     <div 
-                        className={`flex flex-row w-full
+                        className={`w-full flex flex-row
+                            ${style.textAndButton.button.show.desktop === "on-hover" && "lg:opacity-0 lg:group-hover:opacity-100 lg:transition-opacity lg:duration-300" }
+                            ${style.textAndButton.button.show.mobile === "on-hover" && "opacity-0 group-hover:opacity-100 transition-opacity duration-300" }
                             ${style.textAndButton.button.position === "center" && "justify-center"}
                             ${style.textAndButton.button.position === "start" && "justify-start"}
-                            ${style.textAndButton.button.position === "end" && "justify-end"}
+                            ${style.textAndButton.button.position === "end" && "justify-end"} 
                         `}
-                    >
-                        <StoreButton style={style.textAndButton.button} onClick={onClick || (() => {})} />
+                        >
+                        <StoreButton 
+                            style={style.textAndButton.button} 
+                            onClick={() => {}} 
+                        />
                     </div>
-                )}
+                </div>
             </div>
         </div>
     )

@@ -19,7 +19,7 @@ const FirstOrderSubSettingsContainer: React.FC<FirstOrderSubSettingsContainerPro
 
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <div
         className="w-full h-[7vh] text-[1.8vh] bg-stone-50 border-[.3vh] border-white text-gray-900 rounded p-[.6vh] shadow-md hover:scale-103 hover:bg-gray-900 hover:text-white hover:border-white"
       >

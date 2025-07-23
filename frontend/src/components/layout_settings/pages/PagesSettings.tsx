@@ -190,10 +190,10 @@ const PagesSettings: React.FC = () => {
     <div className="w-full h-[80vh] space-y-2 bg-stone-50">
       <div className="relative px-4 flex flex-row justify-center">
         <button
-          className="flex flex-row justify-between items-center border-2 bg-stone-50 border-white text-black rounded px-8 py-2 shadow-md hover:scale-103 hover:opacity-85"
+          className="text-[2vh] flex flex-row justify-between items-center bg-stone-50 border-[.35vh] border-white text-black rounded px-[2.4vh] py-[.6vh] shadow-md hover:scale-103 hover:opacity-85"
           onClick={() => setDropdownOpen(!dropdownOpen)}
         >
-          Add New Page <FaPlus size={18} className="ml-1" />
+          Add New Page <FaPlus className="ml-[.6vh]" />
         </button>
 
         <AnimatePresence>

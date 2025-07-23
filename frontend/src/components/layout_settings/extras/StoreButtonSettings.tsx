@@ -11,9 +11,17 @@ interface StoreButtonSettingsProps {
   objectPath: string;
   settings: any;
   allowPosition?: boolean;
+  allowShow?: boolean;
+  allowFunction?: boolean;
 }
 
-const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({ objectPath, settings, allowPosition }) => {
+const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({ 
+  objectPath, 
+  settings, 
+  allowPosition,
+  allowShow = false,
+  allowFunction = false
+}) => {
   const dispatch = useAppDispatch();
 
   const handleSettingChange = (field: string, value: any) => {
@@ -24,13 +32,15 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({ objectPath, s
   return (
     <div className="space-y-1 p-2 ">
       <h3 className="text-lg font-semibold text-center">Button Settings</h3>
-      
-      <OptionsToggler
-            label="Button Function"
-            options={buttonFunctions}
-            value={getSetting('function', settings, objectPath)}
-            onChange={(value) => handleSettingChange(`${objectPath}.function`, value)}
-      />
+      {allowFunction && (
+        <OptionsToggler
+          label="Button Function"
+          options={buttonFunctions}
+          value={getSetting('function', settings, objectPath)}
+          onChange={(value) => handleSettingChange(`${objectPath}.function`, value)}
+        />
+      )}
+
       {allowPosition && (
         <OptionsToggler
           label="Position"
@@ -38,6 +48,22 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({ objectPath, s
           value={getSetting('position', settings, objectPath)}
           onChange={(value) => handleSettingChange(`${objectPath}.position`, value)}
         />
+      )}
+      {allowShow && (
+        <>
+          <OptionsToggler
+            label="Show (Mobile)"
+            options={["never", "on-hover", "always"]}
+            value={getSetting('show.mobile', settings, objectPath)}
+            onChange={(value) => handleSettingChange(`${objectPath}.show.mobile`, value)}
+          />
+          <OptionsToggler
+            label="Show (Desktop)"
+            options={["never", "on-hover", "always"]}
+            value={getSetting('show.desktop', settings, objectPath)}
+            onChange={(value) => handleSettingChange(`${objectPath}.show.desktop`, value)}
+          />
+        </>
       )}
       <SubSettingsContainer
         name="Text"
