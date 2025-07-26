@@ -24,11 +24,15 @@ import StoreBookServicePage from "./supporting/book_service/StoreBookServicePage
 import StoreAlertDiv from "../../components/store_layout/extras/alert_div/StoreAlertDiv";
 import StoreMenubarIcons from "../../components/store_layout/menubars/supporting/StoreMenubarIcons";
 import StoreFloatingButton from "../../components/store_layout/extras/buttons/StoreFloatingButton";
+import StoreBusinessHoursSettings from "../store_dashboard/supporting_pages/settings/StoreBusinessHoursSettings";
+import { IoMdClose } from "react-icons/io";
+import ComingSoon from "../../components/the_mall/ComingSoon";
 
 const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
   const settings = useAppSelector((state) => state.layoutSettings);
   const { storeId: paramStoreId } = useParams<{ storeId: string }>();
   const storeId = propStoreId || paramStoreId 
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const dispatch = useAppDispatch();
   const [store, setStore] = useState<StoreType | null>(null); // Local state for the store
@@ -128,8 +132,8 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
         }}
         className={`relative w-screen h-full overflow-y-scroll hide-scrollbar overflow-x-clip`}>
             <PopularStoreMenubar />
-            {settings.menubar.alertDiv.display  && (
-              <StoreAlertDiv config={settings.menubar.alertDiv} objectPath={`menubar.alertDiv`}/>
+            {settings?.menubar?.alertDiv?.display && (
+              <StoreAlertDiv config={settings.menubar.alertDiv} objectPath={`menubar.alertDiv`} />
             )}
             <Routes>
               {Object.values(routes).map((route) => (
@@ -142,7 +146,7 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
               {store?.trades.includes("products") && <Route path="/product/:productId" element={<SingleStoreProductPage />} />}
               {store?.trades.includes("services") && <Route path="/service/:serviceId" element={<StoreBookServicePage />} />}
             </Routes>
-            {settings.floats.floatingIcons.show && (
+            {settings?.floats?.floatingIcons?.show && (
               <div className={`fixed
                 ${settings.floats.floatingIcons.position === "left-1/2" && "left-2 top-1/2"} 
                 ${settings.floats.floatingIcons.position === "left-1/4" && "left-2 top-1/4"} 
@@ -155,10 +159,53 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
                 />
               </div>
             )}
-            {settings.floats.floatingButton.show !== "none" && (
+
+            {settings?.floats?.floatingButton?.show !== "none" && (
               <div className={`fixed 
-                ${settings.floats.floatingButton.position === "left" ? "bottom-2 left-2" : "bottom-2 right-2" }`}>
-                <StoreFloatingButton config={settings.floats.floatingButton} />
+                ${settings.floats.floatingButton.position === "left" ? "bottom-2 left-2" : "bottom-2 right-2"}`}
+              >
+                <StoreFloatingButton
+                  config={settings.floats.floatingButton}
+                  onClick={() => {
+                    if (settings.floats.floatingButton.show === "chat") {
+                      setIsChatOpen(true);
+                    }
+                  }}
+                />
+              </div>
+            )}
+            {isChatOpen && (
+              <div
+                className={`
+                  fixed 
+                  ${settings.floats.floatingButton.position === "left" ? "bottom-0 left-0 lg:bottom-2 lg:left-2" : "bottom-0 right-0 lg:bottow-2 lg:right-2"}
+                  z-50
+                `}
+              >
+                <div
+                  className={`w-[60w] h-[80vh] 
+                    bg-white rounded-lg shadow-lg
+                    flex flex-col
+                    relative lg:w-[20vw] lg:h-[60vh]
+                  `}
+                >
+                  <button
+                    onClick={() => setIsChatOpen(false)}
+                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl"
+                  >
+                    <IoMdClose />
+                  </button>
+                  <div className="p-4 overflow-y-auto h-full">
+                    <div className="border-b h-[12%]">
+                      <h2 className="text-lg font-semibold mb-2">{store?.name}</h2>
+                      <p className="text-sm text-gray-600">Online</p>
+                    </div>
+                    <div className="h-[88%] w-full">
+                      <ComingSoon message="Soon you'll be able to chat directly with vendors right here on the website!" />
+                    </div>
+                  </div>
+                  
+                </div>
               </div>
             )}
       </div> 

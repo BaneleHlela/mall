@@ -54,12 +54,12 @@ const storeSchema = new mongoose.Schema(
         type: String,
       },
     }],
-    locations: [{
-			nickname: {type: String},
-			lat: Number,
-			lng: Number,
-			address: String,
-		}],
+    // locations: [{
+		// 	nickname: {type: String},
+		// 	lat: Number,
+		// 	lng: Number,
+		// 	address: String,
+		// }],
     location: {
 			nickname: {type: String},
 			lat: Number,
@@ -96,6 +96,15 @@ const storeSchema = new mongoose.Schema(
       type: String,
       enum: ['sole', 'partnership', 'company', 'corporation', 'LLC', 'non-profit', 'franchise'],
       default: 'sole',
+    },
+    flag: {
+      red: {
+        type: Boolean,
+      },
+      level: {
+        type: Number,
+        enum: [1, 2, 3, 4, 5],
+      }
     },
     isVerified: {
       type: Boolean,
@@ -147,6 +156,19 @@ const storeSchema = new mongoose.Schema(
     isDemo: {
       type: String,
       default: false,
+    },
+    rating: {
+      averageRating: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 5,
+      },
+      numberOfRatings: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
     },
   },
   {

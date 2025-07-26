@@ -25,41 +25,51 @@ export interface Socials {
 }
 
 export interface Store {
-  _id?: string; 
+  isVerified: any;
+  _id?: string;
   description: string;
+  thumbnail: string;
   name: string;
   logo: Logo;
   isDemo?: boolean;
   trades: string[];
   slogan: string;
-  departments: string[]; 
-  layouts: Types.ObjectId[] | string[];  
+  departments: string[];
+  layouts: Types.ObjectId[] | string[];
   categories: {
-    products: string[]; 
-    services: string[]; 
+    products: string[];
+    services: string[];
   };
   about: string;
-  team: TeamMember[]; 
-  updatedAt?: Date; 
-  socials?: Socials[]; 
+  team: TeamMember[];
+  updatedAt?: Date;
+  socials?: Socials[];
   contact: {
     phone: string;
     email: string;
-  }, 
+  },
   locations: Array<{
-    nickname: string;   
-    lat: number;   
-    lng: number  
-    address: string; 
+    nickname: string;
+    lat: number;
+    lng: number
+    address: string;
   }>;
   location: {
-    nickname: string;   
-    lat: number;   
-    lng: number  
+    nickname: string;
+    lat: number;
+    lng: number
     address: string;
   }
   images?: Image[];
   operationTimes?: OperationTimes;
+  rating?: {
+    averageRating: number;
+    numberOfRatings: number;
+  };
+  flag?: {
+    red: boolean;
+    level: 1 | 2 | 3 | 4 | 5;
+  };
 }
 
 export interface OperationTimes {

@@ -50,11 +50,30 @@ export const getStore = expressAsyncHandler(async (req, res) => {
 // });
 
 export const getStores = expressAsyncHandler(async (req, res) => {
-  const { search } = req.query;
+  const { search, department } = req.query;
 
-  const searchFilter = search
-    ? { name: { $regex: search.toString(), $options: 'i' } } // case-insensitive partial match
-    : {};
+  let searchFilter = {};
+  
+  if (search) {
+    // Search across multiple fields
+    searchFilter = {
+      $or: [
+        { name: { $regex: search.toString(), $options: 'i' } },
+        { slogan: { $regex: search.toString(), $options: 'i' } },
+        { about: { $regex: search.toString(), $options: 'i' } },
+        { 'categories.products': { $in: [new RegExp(search.toString(), 'i')] } },
+        { 'categories.services': { $in: [new RegExp(search.toString(), 'i')] } }
+      ]
+    };
+  }
+
+  // Add department filter if provided
+  if (department) {
+    searchFilter = {
+      ...searchFilter,
+      departments: department
+    };
+  }
 
   const stores = await Store.find(searchFilter);
 

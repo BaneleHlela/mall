@@ -33,7 +33,7 @@ const App: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div className="relative font-[Outfit] text-[2vh] bg-stone-50 h-screen w-screen flex justify-center items-center overflow-x-clip">  
+    <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-screen w-screen flex justify-center items-center overflow-x-clip">  
       <Router>
         <Menubar /> 
         <Routes>

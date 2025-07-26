@@ -1,6 +1,7 @@
 import Review from "../models/ReviewModel.js";
 import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
+import { updateStoreRating, initializeAllStoreRatings } from "../utils/updateStoreRating.js";
 
 export const createReview = asyncHandler(async (req, res) => {
     const { store, rating, comment, anonymous = false } = req.body;
@@ -46,6 +47,14 @@ export const createReview = asyncHandler(async (req, res) => {
 
   const savedReview = await review.save();
 
+  // Update store rating after review is saved
+  try {
+    await updateStoreRating(store);
+  } catch (error) {
+    console.error("Error updating store rating:", error);
+    // Don't fail the request if rating update fails
+  }
+
   res.status(201).json(savedReview);
 });
   
@@ -90,6 +99,15 @@ export const updateReview = asyncHandler(async (req, res) => {
     review.comment = req.body.comment || review.comment;
   
     const updatedReview = await review.save();
+
+    // Update store rating after review is updated
+    try {
+      await updateStoreRating(review.store);
+    } catch (error) {
+      console.error("Error updating store rating:", error);
+      // Don't fail the request if rating update fails
+    }
+
     res.json(updatedReview);
 });
 
@@ -110,7 +128,19 @@ export const deleteReview = asyncHandler(async (req, res) => {
       throw new Error("Not authorized to delete this review");
     }
 
+    // Store the store ID before deleting the review
+    const storeId = review.store;
+    
     await review.deleteOne();
+
+    // Update store rating after review is deleted
+    try {
+      await updateStoreRating(storeId);
+    } catch (error) {
+      console.error("Error updating store rating:", error);
+      // Don't fail the request if rating update fails
+    }
+
     res.json({ message: "Review removed" });
 });
 
@@ -150,7 +180,17 @@ export const getStoreRatingStats = asyncHandler(async (req, res) => {
     numberOfRatings: stats[0].numberOfRatings,
   });
 });
-  
-  
-  
-  
+
+// Initialize ratings for all stores (migration endpoint)
+export const initializeStoreRatings = asyncHandler(async (req, res) => {
+try {
+  const updatedCount = await initializeAllStoreRatings();
+  res.json({
+    message: `Successfully initialized ratings for ${updatedCount} stores`,
+    updatedCount
+  });
+} catch (error) {
+  res.status(500);
+  throw new Error("Failed to initialize store ratings");
+}
+});

@@ -43,11 +43,23 @@ export const createStore = createAsyncThunk<Store, Omit<Store, 'id'>>(
 
 
 
-export const fetchStores = createAsyncThunk<Store[], string | undefined>(
+export const fetchStores = createAsyncThunk<
+  Store[],
+  { search?: string; department?: string } | string | undefined
+>(
   'stores/fetchStores',
-  async (searchTerm) => {
-    const params = searchTerm ? { search: searchTerm } : {};
-    const response = await axios.get(API_URL, { params });
+  async (params) => {
+    let queryParams = {};
+    
+    if (typeof params === 'string') {
+      // Handle the case where only a search string is provided
+      queryParams = { search: params };
+    } else if (params && typeof params === 'object') {
+      // Handle the case where an object with search and/or department is provided
+      queryParams = params;
+    }
+    
+    const response = await axios.get(API_URL, { params: queryParams });
     return response.data;
   }
 );
