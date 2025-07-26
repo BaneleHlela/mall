@@ -4,6 +4,7 @@ import type { ReviewCardProps } from "../StoreReviewCard";
 import { getBackgroundStyles, getTextStyles } from "../../../../../../utils/stylingFunctions";
 
 const FirstStoreReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, review, rating, anonymous, style }) => {
+  console.log(reviewerName)
   return (
     <div 
         style={{

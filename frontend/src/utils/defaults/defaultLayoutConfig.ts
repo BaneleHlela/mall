@@ -19,6 +19,7 @@ import { defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig } from "./se
 import { defaultPopularProductsSectionConfig } from "./sections/order_online/defaultPopularProductsSectionConfig";
 import { defaultSingleProductSectionConfig } from "./sections/single_product/defaultSingleProductSectionConfig";
 import { defaultPopularTeamSectionConfig } from "./sections/team/defaultPopularTeamSectionConfig";
+import { defaultStoreIconsConfig } from "./extras/defaultStoreIconsConfig";
 
 export const defaultMenubarConfig = {
   topbar: {
@@ -100,6 +101,30 @@ export const defaultLayoutConfig = {
     image: {
       url: "",
       text: "",
+    },
+    floats: {
+        floatingIcons: {
+          show: true,
+          icons: defaultStoreIconsConfig,
+        },
+        floatingButton: {
+          show: "chat",
+          style: {
+            position: "left",
+            icon: {
+              size: "3vh",
+              color: "pink"
+            },
+            background: {
+              color: "orange",
+              padding: {
+                y: "10px",
+                x: "10px"
+              },
+              border: {}
+            }
+          }
+        }
     },
     practice: simpleServicesSectionConfig,
     services: simpleServicesSectionConfig,

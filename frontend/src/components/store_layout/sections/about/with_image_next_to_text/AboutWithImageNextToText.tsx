@@ -1,5 +1,6 @@
 import { useAppSelector } from "../../../../../app/hooks";
 import { getBackgroundStyles, getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunctions";
+import UnderlinedText from "../../../extras/text/UnderlinedText";
 
 const AboutWithImageNextToText = () => {
   const settings = useAppSelector((state) => state.layoutSettings.about);
@@ -14,16 +15,9 @@ const AboutWithImageNextToText = () => {
     >
       {/* Mobile */}
       <div
-        className="p-3 text-center pb-10 lg:hidden"
+        className="text-center flex flex-col items-center pb-10 lg:hidden"
       >
-        <h1 
-          style={{
-            ...getTextStyles(settings.text.title.style)
-          }}
-          className={`${settings.text.title.style.animation} mb-3 py-5`}
-        >
-          {settings.text.title.style.input}
-        </h1>
+        <UnderlinedText style={settings.text.title.style} />
         <img 
           src={settings.image.imageUrl} alt="about us" 
           style={{
@@ -69,14 +63,8 @@ const AboutWithImageNextToText = () => {
           }} 
           className=" p-4 flex flex-col justify-center text-center h-full w-[58%]"
         >
-          <h1 
-            style={{
-              ...getTextStyles(settings.text.title.style),
-            }}
-            className={`${settings.text.title.style.animation}`}
-          >
-            {settings.text.title.style.input}
-          </h1><br/><br/>
+          <UnderlinedText style={settings.text.title.style} />
+          <br/><br/>
           <div 
             style={{
               ...getBorderStyles(settings.text.border),

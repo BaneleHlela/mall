@@ -8,10 +8,10 @@ interface TextareaHandlerProps {
 
 const TextareaHandler: React.FC<TextareaHandlerProps> = ({ label, value, onChange }) => {
   return (
-    <div className="flex flex-col space-y-1">
+    <div className="flex flex-col space-y-1 h-fit">
       <label className="text-sm font-medium">{label}</label>
       <textarea
-        className="border rounded p-2 resize-y min-h-[100px]"
+        className="border rounded p-2 resize-y min-h-[100px] max-h-[400px]"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />

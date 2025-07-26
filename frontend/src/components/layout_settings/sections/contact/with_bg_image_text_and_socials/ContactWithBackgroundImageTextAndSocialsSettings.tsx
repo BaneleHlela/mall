@@ -10,6 +10,7 @@ import TextEditor from '../../../text/TextEditor';
 import IconsSettingsHandler from '../../../menubar/popular/supporting/IconsSettingsHandler';
 import IconsOrButtonSettings from '../../../menubar/popular/supporting/IconsOrButtonSettings';
 import SendEmailFormSettings from '../../../forms/SendEmailFormSettings';
+import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings';
 
 const ContactWithBackgroundImageTextAndSocialsSettings: React.FC<SectionEditorProps> = ({
   settings,
@@ -75,6 +76,16 @@ const ContactWithBackgroundImageTextAndSocialsSettings: React.FC<SectionEditorPr
           title="Contact Text Settings"
         >
           <div className="space-y-1">
+            {/* Text */}
+            <FirstOrderSubSettingsContainer
+                name="Heading"
+                onClick={() => setActivePanel("heading")}
+            />
+            {/* Text */}
+            <FirstOrderSubSettingsContainer
+                name="Subheading"
+                onClick={() => setActivePanel("subheading")}
+            />
             <SubSettingsContainer
               name="Heading"
               SettingsComponent={
@@ -100,6 +111,32 @@ const ContactWithBackgroundImageTextAndSocialsSettings: React.FC<SectionEditorPr
             />
           </div>
         </SlidingPanel>
+      )}
+      {activePanel === "heading" && (
+          <SlidingPanel key="heading" isOpen={true} onClose={() => setActivePanel("Text")} title="Heading Settings">
+              <div className="space-y-[.3vh]">
+                  <UnderlinedTextSettings
+                      settings={settings}
+                      handleSettingChange={handleSettingChange}
+                      objectPath={`${objectPath}.text.heading`}
+                      allowInput
+                      responsiveSize
+                  />
+              </div>
+          </SlidingPanel>
+      )}
+      {activePanel === "subheading" && (
+          <SlidingPanel key="subheading" isOpen={true} onClose={() => setActivePanel("Text")} title="subheading Settings">
+              <div className="space-y-[.3vh]">
+                  <UnderlinedTextSettings
+                      settings={settings}
+                      handleSettingChange={handleSettingChange}
+                      objectPath={`${objectPath}.text.subheading`}
+                      allowInput
+                      responsiveSize
+                  />
+              </div>
+          </SlidingPanel>
       )}
       {activePanel === "Socials" && (
         <SlidingPanel

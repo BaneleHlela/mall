@@ -11,6 +11,7 @@ import TextEditor from '../../../text/TextEditor'
 import InputHandler from '../../../supporting/InputHandler'
 import StoreButtonSettings from '../../../extras/StoreButtonSettings'
 import SendEmailFormSettings from '../../../forms/SendEmailFormSettings'
+import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings'
 
 const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEditorProps> = ({
     settings,
@@ -98,11 +99,11 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                         onClose={closePanel}
                         title="Heading Text Settings"
                     >
-                        <TextEditor
-                            objectPath={`${objectPath}.title.text`}
+                        <UnderlinedTextSettings
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={[ "color", "input", "fontFamily", "textDecoration", "fontSize", "weight", "lineHeight", "animation", "letterSpacing" ]}
+                            objectPath={`${objectPath}.title.text`}
+                            allowInput
                             responsiveSize
                         />
                     </SlidingPanel>
@@ -134,7 +135,7 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                                 />  
                             </div>
                             <FirstOrderSubSettingsContainer
-                                name="Heading"
+                                name="Title"
                                 onClick={() => setActivePanel("details_heading")}
                             />
                             <FirstOrderSubSettingsContainer
@@ -155,7 +156,7 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                             objectPath={`${objectPath}.detailsTitle`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={[ "color", "fontFamily", "fontSize", "weight", "textDecoration", "animation", "letterSpacing" ]}
+                            allow={[ "color", "fontFamily", "fontSize", "weight", "textDecoration", "animation", "letterSpacing", "textTransform", "fontStyle" ]}
                             responsiveSize
                         />
                     </SlidingPanel>
@@ -171,7 +172,7 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                             objectPath={`${objectPath}.detailsText`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={[ "color", "fontFamily", "fontSize", "weight", "textDecoration", "animation", "letterSpacing" ]}
+                            allow={[ "color", "textArea",  "fontFamily", "fontSize", "weight", "textDecoration", "animation", "letterSpacing" ]}
                             responsiveSize
                         />
                     </SlidingPanel>

@@ -10,6 +10,8 @@ import FirstOrderSubSettingsContainer from '../../../FirstOrderSubSettingsContai
 import SlidingPanel from '../../../supporting/SlidingPanel';
 import { AnimatePresence } from 'framer-motion';
 import IconsOrButtonSettings from './IconsOrButtonSettings';
+import OptionsToggler from '../../../supporting/OptionsToggler';
+import { getSetting } from '../../../../../utils/helperFunctions';
 
 const DesktopTopbarSettings: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -22,6 +24,7 @@ const DesktopTopbarSettings: React.FC = () => {
   const handleSettingChange = (field: string, value: any) => {
     dispatch(updateSetting({ field, value }));
   };
+  console.log(getSetting("desktop.position", settings, "menubar.topbar"))
 
   return (
     <div className="space-y-1 px-2 py-1">
@@ -31,6 +34,17 @@ const DesktopTopbarSettings: React.FC = () => {
         <OrderDnD
           order={order}
           objectPath="menubar.topbar.desktop.order"
+        />
+      </div>
+      {/* Position Settings*/}
+      <div className="px-2">
+        <OptionsToggler
+          label="Sticky?"
+          options={["static", "sticky", "fixed"]}
+          value={getSetting("desktop.position", settings, "menubar.topbar")}
+          onChange={(newValue) =>
+            handleSettingChange("menubar.topbar.desktop.position", newValue)
+          }
         />
       </div>
 

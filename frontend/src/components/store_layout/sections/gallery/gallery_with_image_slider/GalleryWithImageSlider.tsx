@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useAppSelector, useAppDispatch } from '../../../../../app/hooks'
 import ClickableStopAndGoImageSlider from '../../../extras/slideshows/ClickableStopAndGoImageSlider'
 import { fetchStoreImages } from '../../../../../features/stores/storeSlice'
-import { getTextStyles } from '../../../../../utils/stylingFunctions'
+import { getBackgroundStyles, getTextStyles } from '../../../../../utils/stylingFunctions'
 import ClickableAlwaysMovingImageSlider from '../../../extras/slideshows/ClickableAlwaysMovingImageSlider'
+import UnderlinedText from '../../../extras/text/UnderlinedText'
 
 const GalleryWithImageSlider = () => {
     const dispatch = useAppDispatch()
@@ -12,7 +13,7 @@ const GalleryWithImageSlider = () => {
     const settings = useAppSelector((state) => state.layoutSettings.gallery);
     const [page, setPage] = useState(1)
     const [hasMore, setHasMore] = useState(true)
-    const limit = 5
+    const limit = 10
 
     useEffect(() => {
         if (currentStore?._id) {
@@ -36,37 +37,31 @@ const GalleryWithImageSlider = () => {
 
     return (
         <div
+            id="gallery"
             style={{
-                backgroundColor: settings.background.color,
-            }} 
-        >   {settings.heading.input && settings.heading.show && (
-                <>
-                    <h1 
-                        style={{
-                            ...getTextStyles(settings.heading),
-                            marginBottom: settings.heading.marginBottom,
-                        }}
-                        className={`w-full px-4
-                            ${settings.heading.position === "center" && "text-center"}
-                            ${settings.heading.position === "start" && "text-start"}
-                            ${settings.heading.position === "end" && "text-end"}
-                        `}
-                    >{settings.heading.input}</h1>
-                    
-                </>
-            )}
-            {settings.sliderVariation === "stopAndGo" && (
-                <ClickableStopAndGoImageSlider 
-                    images={images}
-                    style={settings.slider}
-                />   
-            )}   
-            {settings.sliderVariation === "alwaysMoving" && (
+                ...getBackgroundStyles(settings.background),
+            }}
+            className='max-w-full'
+        >   
+            {/* Heading and Subheading */}
+            <div className="w-full">
+                <UnderlinedText style={settings.text.heading} />
+                
+                {settings.text.subheading.input && (
+                <UnderlinedText style={settings.text.subheading} />
+                )}
+            </div>
+            {/* <ClickableStopAndGoImageSlider 
+                images={images}
+                style={settings.slider}
+            />    */}
+            <div className="max-w-full">
                 <ClickableAlwaysMovingImageSlider 
                     images={images}
                     style={settings.slider}
                 />   
-            )}   
+            </div>
+            
         </div>
     )
 }

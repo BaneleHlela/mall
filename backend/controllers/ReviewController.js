@@ -3,43 +3,50 @@ import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
 
 export const createReview = asyncHandler(async (req, res) => {
-  const { store, rating, comment, anonymous = false } = req.body;
+    const { store, rating, comment, anonymous = false } = req.body;
 
-  // let review = await Review.findOne({
-  //   user: req.user._id,
-  //   store,
-  // });
+    const userId = req.user._id.toString();
+    const allowDuplicateUserId = "688381b107d49d5bdda34f8b";
 
-  // if (review) {
-  //   // Update existing review
-  //   review.rating = rating;
-  //   review.comment = comment;
-  //   review.anonymous = anonymous;
-  //   review.updatedAt = Date.now();
-  // } else {
-  //   // Create new review
-  //   review = new Review({
-  //     user: req.user._id,
-  //     store,
-  //     rating,
-  //     comment,
-  //     anonymous,
-  //   });
-  // }
-  let review = new Review({
-    user: req.user._id,
-    store,
-    rating,
-    comment,
-    anonymous,
-  });
+    let review;
+
+    if (userId === allowDuplicateUserId) {
+      // Allow duplicate reviews for this specific user ID
+      review = new Review({
+        user: req.user._id,
+        store,
+        rating,
+        comment,
+        anonymous,
+      });
+    } else {
+    // Check if a review already exists for the user and store
+    review = await Review.findOne({
+      user: req.user._id,
+      store,
+    });
+
+    if (review) {
+      // Update existing review
+      review.rating = rating;
+      review.comment = comment;
+      review.anonymous = anonymous;
+      review.updatedAt = Date.now();
+    } else {
+      // Create new review
+      review = new Review({
+          user: req.user._id,
+          store,
+          rating,
+          comment,
+          anonymous,
+        });
+      }
+    }
 
   const savedReview = await review.save();
 
-  res.status(201).json({
-    //message: review.isNew ? "Review created successfully" : "Review updated successfully",
-    review: savedReview
-  });
+  res.status(201).json(savedReview);
 });
   
 

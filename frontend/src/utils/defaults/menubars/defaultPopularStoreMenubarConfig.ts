@@ -56,6 +56,7 @@ export const defaultPupularStoreMenubarConfig = {
     topbar: {
         sticky: true,
         desktop: {
+            position: "sticky",
             order: [ "logo", "links", "icons", ],
             logo: {
                 use: "logo",
@@ -156,7 +157,7 @@ export const defaultPupularStoreMenubarConfig = {
                         second: "phone",
                         third: "twitter",
                     },
-                    size: 22,
+                    size: "3.5vh",
                     color: "#6c4d37",
                     background: {
                         color: "",
@@ -213,6 +214,7 @@ export const defaultPupularStoreMenubarConfig = {
             iconsFirst: false,
         },
         mobile: {
+            position: "sticky",
             hamburgerFirst: true, 
             display: "extras",
             logo: {

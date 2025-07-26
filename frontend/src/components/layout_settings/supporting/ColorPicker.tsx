@@ -5,7 +5,7 @@ interface ColorPickerProps {
   label: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onClear?: () => void; // new optional prop
+  onClear?: () => void; 
 }
 
 const ColorPicker: React.FC<ColorPickerProps> = ({ label, value, onChange, onClear }) => {

@@ -108,18 +108,6 @@ const IconsOrButtonSettings: React.FC<Props> = ({
             title="Icon Settings"
           >
             <div className="p-2 space-y-4">
-              <SettingsSlider
-                label="Number of icons"
-                value={currentNumber}
-                min={1}
-                max={MAX_ICONS}
-                onChange={(newVal) =>
-                  handleSettingChange(`${objectPath}.icons.number`, newVal)
-                }
-              />
-
-              {renderPlatformTogglers()}
-
               <IconsSettingsHandler
                 settings={settings}
                 handleSettingChange={handleSettingChange}

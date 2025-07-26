@@ -34,6 +34,7 @@ export const defaultHeroWithButtonBetweenImages = {
         }
     },
     midDiv: {
+        background: {},
         backgroundColor: "#f7e9e4",
         animation: "leftToRight",
         text: {

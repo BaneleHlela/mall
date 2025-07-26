@@ -11,7 +11,7 @@ const FooterAddressDisplay = ({location, headingStyle, headingInput, addressStyl
                 style={{
                     ...getTextStyles(headingStyle),
                 }}
-                className="mb-3"
+                className="mb-[1vh]"
             >
                 {headingInput || 'Address'}
             </h3>
@@ -19,7 +19,7 @@ const FooterAddressDisplay = ({location, headingStyle, headingInput, addressStyl
                 style={{
                     ...getTextStyles(addressStyle),
                 }}
-                className="">
+                className="whitespace-pre-line">
                 {address.map((line, index) => (
                     <p
                         key={index}
@@ -28,6 +28,7 @@ const FooterAddressDisplay = ({location, headingStyle, headingInput, addressStyl
                         {line}
                     </p>
                 ))}
+                {addressStyle.textArea}
             </div>
         </div>
     )

@@ -22,7 +22,7 @@ const SlidingPanel: React.FC<SlidingPanelProps> = ({ isOpen, onClose, title, chi
           <button onClick={onClose} className="mr-2">
             <IoIosArrowRoundBack className="text-[4vh]"/>
           </button>
-          <h2 className="text-[2.8vh] font-[500]">{title}</h2>
+          <h2 className="text-[2.8vh] font-[500] capitalize">{title}</h2>
         </div>
         {children}
       </div>

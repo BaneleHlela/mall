@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { getTextStyles } from '../../../../utils/stylingFunctions';
 
 interface UnderlinedTextProps {
@@ -10,37 +10,38 @@ const UnderlinedText: React.FC<UnderlinedTextProps> = ({
     style,
     input
 }) => {
-    console.log(style.underline.show, 'style.underline.show')
-  return (
-    <div
-        className={`w-full flex flex-row  ${
-        style.position === 'center'
-            ? 'justify-center'
-            : style.position === 'start'
-            ? 'justify-start'
-            : 'justify-end'
-        }`}
-    >
-        <div className="flex flex-col items-center">
-            <h1 style={{ ...getTextStyles(style) }} className=''>
-                {input || style.input}
-            </h1>
-            {style.underline.show && (
-                <span
-                    style={{
-                        backgroundColor: style.underline.color || 'black',
-                        width: style.underline.width || '50%', 
-                        height: style.underline.height ||  '2px',
-                        marginTop: style.underline.marginTop || '10px',
-                    }}
-                    className=""
-                >     
-                </span>
-            )}
-        </div>
-        
-    </div>
-  )
-}
+    const underline = style?.underline;
 
-export default UnderlinedText
+
+    return (
+        <div
+            style={{ ...getTextStyles(style) }} 
+            className={`w-full flex flex-row ${
+                style.position === 'center'
+                    ? 'justify-center text-center'
+                    : style.position === 'start'
+                    ? 'justify-start text-start'
+                    : 'justify-end text-end'
+            }`}
+        >
+            <div className="flex flex-col items-center">
+                <h1 className=''>
+                    {input || style.input}
+                </h1>
+                {underline?.show && (
+                    <span
+                        style={{
+                            backgroundColor: underline.color || 'black',
+                            width: underline.width || '50%',
+                            height: underline.height || '2px',
+                            marginTop: underline.marginTop || '0px',
+                        }}
+                        className=""
+                    ></span>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default UnderlinedText;

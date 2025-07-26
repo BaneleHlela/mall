@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
 import { useAppSelector } from "../../../../../app/hooks";
 import {
+  getBackgroundStyles,
   getDivAnimation,
   getTextStyles,
 } from "../../../../../utils/stylingFunctions";
 import StoreButton from "../../../extras/buttons/StoreButton";
+import UnderlinedText from "../../../extras/text/UnderlinedText";
 
 const HeroWithButtonBetweenImagesSection = () => {
   const store = useAppSelector((state) => state.stores.currentStore);
@@ -13,10 +15,10 @@ const HeroWithButtonBetweenImagesSection = () => {
   return (
     <div
       style={{
-        backgroundColor: style.background.color,
+        ...getBackgroundStyles(style.background),
         fontFamily: style.fontFamily,
       }} 
-      className="w-full"
+      className="w-full min-h-fit"
     >
       {/* Desktop */}
       <div
@@ -25,18 +27,11 @@ const HeroWithButtonBetweenImagesSection = () => {
         {/* Top div */}
         {style.topDiv.display && (
           <div className="h-[13%] w-full flex flex-col justify-center items-center text-center">
-            <p
-              style={{
-                ...getTextStyles({
-                  ...style.topDiv.text.style,
-                  fontSize: style.topDiv.text.style.fontSize.desktop,
-                }),
-              }}
-            >
-              {style.topDiv.text.style.input?.trim() === ""
+            <UnderlinedText style={style.topDiv.text.style} 
+              input={style.topDiv.text.style.input?.trim() === ""
                 ? store?.name
                 : style.topDiv.text.style.input}
-            </p>
+            />
           </div>
         )}
 
@@ -56,34 +51,30 @@ const HeroWithButtonBetweenImagesSection = () => {
             />
           </motion.div>
 
-          {/* Text */}
+          {/* Text and Button */}
           <motion.div
             {...getDivAnimation(style.midDiv.animation || "leftToright")}
             animate={{ y: 0, x: 0, opacity: 1 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
             style={{
-              backgroundColor: style.midDiv.backgroundColor,
+              ...getBackgroundStyles(style.midDiv.background),
             }}
             className="w-[33%] h-full bg-pink-500 flex flex-col justify-center text-center"
           >
             <div className="w-full flex flex-row justify-center text-center">
               <div
                 style={{
-                  ...getTextStyles({
-                    ...style.midDiv.text.style,
-                    fontSize: style.midDiv.text.style.fontSize.desktop,
-                  }),
-                  fontWeight: style.midDiv.text.style.fontWeight,
+                  ...getTextStyles(style.midDiv.text.style),
                   wordBreak: 'break-word', // ensures long words break into the next line
                   whiteSpace: 'normal', // allows wrapping
                 }}
                 className="max-w-[80%] leading-[3.75rem] break-words text-wrap"
               >
-                {style.midDiv.text.input?.trim() || "Discover Our Store"}
+                {style.midDiv.text.style.input?.trim() || "Discover Our Store"}
               </div>
             </div>
             <div className="w-full flex flex-row justify-center mt-6">
-               <StoreButton style={style.midDiv.button} />
+               <StoreButton style={style.midDiv.button} onClick={() => {}}/>
             </div>
           </motion.div>
 
@@ -108,18 +99,7 @@ const HeroWithButtonBetweenImagesSection = () => {
         {/* Top div */}
         {style.topDiv.display && (
           <div className="h-[10vh] w-full flex flex-col justify-center text-center">
-            <p
-              style={{
-                ...getTextStyles({
-                  ...style.topDiv.text.style,
-                  fontSize: style.topDiv.text.style.fontSize.mobile,
-                }),
-              }}
-            >
-              {style.topDiv.text.style.input?.trim() === ""
-                ? store?.name
-                : style.topDiv.text.style.input}
-            </p>
+            <UnderlinedText style={style.topDiv.text.style} />
           </div>
         )}
 
@@ -139,34 +119,30 @@ const HeroWithButtonBetweenImagesSection = () => {
             />
           </motion.div>
 
-          {/* Text */}
+          {/* Text and Button*/}
           <motion.div
             {...getDivAnimation(style.midDiv.animation || "leftToright")}
             animate={{ y: 0, x: 0, opacity: 1 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
             style={{
-              backgroundColor: style.midDiv.backgroundColor,
+              ...getBackgroundStyles(style.midDiv.background),
             }}
             className="w-full h-[35vh] flex flex-col justify-center"
           >
             <div className="w-full flex flex-row justify-center text-center">
               <div
                 style={{
-                  ...getTextStyles({
-                    ...style.midDiv.text.style,
-                    fontSize: style.midDiv.text.style.fontSize.mobile,
-                  }),
-                  fontWeight: style.midDiv.text.style.fontWeight,
+                  ...getTextStyles(style.midDiv.text.style),
                   wordBreak: 'break-word', // ensures long words break into the next line
                   whiteSpace: 'normal', // allows wrapping
                 }}
                 className="max-w-[80%] leading-[2rem]  break-words text-wrap"
               >
-                {style.midDiv.text.input?.trim() || "Discover Our Store"}
+                {style.midDiv.text.style.input?.trim() || "Discover Our Store"}
               </div>
             </div>
             <div className="w-full flex flex-row justify-center mt-6">
-              <StoreButton style={style.midDiv.button} />
+              <StoreButton style={style.midDiv.button} onClick={() => {}}/>
             </div>
           </motion.div>
 

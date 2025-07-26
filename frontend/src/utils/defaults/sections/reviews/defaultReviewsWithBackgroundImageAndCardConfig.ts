@@ -13,7 +13,7 @@ export const defaultReviewsWithBackgroungImageAndCardConfig = {
     },
     reviewCard: defaultFirstStoreReviewCardConfig,
     text: {
-        title: {
+        heading: {
             input: "Reviews",
             position: "center",
             fontSize: {
@@ -35,6 +35,34 @@ export const defaultReviewsWithBackgroungImageAndCardConfig = {
         }
     },
     grid: {
+        container: {
+            background: {
+                position: "center",
+                width: {
+                    mobile: "100%",
+                    desktop: "80%",
+                },
+            },
+            stepIndicator: {
+                use: "dots",
+                background: {
+                    height: {
+                        mobile: "2px",
+                        desktop: "2px",	
+                    }
+                },
+                text: {},
+            },
+            toggleButtons: {
+                background: {
+                    color: "transparent",
+                }
+            },
+            stack: {
+                mobile: "horizontal",
+                desktop: "horizontal",
+            },
+        },
         columns: {
             mobile: 1,
             desktop: 3,
@@ -61,6 +89,7 @@ export const defaultReviewsWithBackgroungImageAndCardConfig = {
             shadow: false,
         },
         text: {
+            input: "",
             fontSize: "20px",
             fontFamily: "Patrick Hand",
             color: "black",

@@ -74,7 +74,7 @@ const FirstStoreSidebar = ({
           {style.extras.include === "icons" && (
             <StoreMenubarIcons style={style.extras.icons} />
           )}
-          {style.extras.include === "button" && <StoreButton style={style.extras.button} />}
+          {style.extras.include === "button" && <StoreButton style={style.extras.button} onClick={() => {}} />}
         </div>
       </motion.div>
     )

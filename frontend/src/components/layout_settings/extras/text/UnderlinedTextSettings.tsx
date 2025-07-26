@@ -25,6 +25,7 @@ const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: 
         "textTransform",
         "lineHeight",
         "textDecoration",
+        "padding",
         ...(allowInput ? ["input"] : []) // Include "input" only if allowInput is true
     ];
 
@@ -46,6 +47,7 @@ const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: 
                         handleSettingChange={handleSettingChange}
                         allow={allowArray}
                         responsiveSize={responsiveSize}
+                        responsivePadding
                     />
                 }
             />
@@ -66,14 +68,14 @@ const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: 
                         />
                         <SettingsSlider
                             label="Width"
-                            value={parseInt(getSetting("underline.width", settings, objectPath)) || 50}
+                            value={parseInt(getSetting("underline.width", settings, objectPath))}
                             onChange={(value) => handleSettingChange(`${objectPath}.underline.width`, `${value}%`)}
                             min={0}
                             max={100}
                         />
                         <SettingsSlider
                             label='Thickness'
-                            value={parseFloat(getSetting("underline.height", settings, objectPath)) || 2}
+                            value={parseFloat(getSetting("underline.height", settings, objectPath))}
                             onChange={(value) => handleSettingChange(`${objectPath}.underline.height`, `${value}vh`)}
                             min={.1}
                             max={5}
@@ -81,11 +83,11 @@ const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: 
                         />
                         <SettingsSlider
                             label='Margin Top'
-                            value={parseInt(getSetting("underline.marginTop", settings, objectPath)) || 10}
-                            onChange={(value) => handleSettingChange(`${objectPath}.underline.marginTop`, `${value}px`)}
+                            value={parseFloat(getSetting("underline.marginTop", settings, objectPath))}
+                            onChange={(value) => handleSettingChange(`${objectPath}.underline.marginTop`, `${value}vh`)}
                             min={0}
-                            max={100}
-                            step={1}
+                            max={15}
+                            step={.1}
                         />
                     </div>
                 }

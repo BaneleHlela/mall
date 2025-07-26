@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAppSelector } from '../../../../../app/hooks'
 import ElegantSendEmailForm from '../../../extras/forms/send_email/elegant/ElegantSendEmailForm';
 import { getBackgroundStyles, getTextStyles } from '../../../../../utils/stylingFunctions';
@@ -12,17 +11,18 @@ const ContactWithBackgroundImageTextAndSocials = () => {
       {/* Title */}
       <h1
         style={{
-          ...getTextStyles(settings.text.title),
+          ...getTextStyles(settings.text.heading),
           ...getBackgroundStyles(settings.containerBackground),
         }} 
         className={`z-1  min-h-[80px] w-full flex flex-col justify-center
-          ${settings.text.title.position === 'center' && 'text-center'}
-          ${settings.text.title.position === 'start' && 'text-start'}
-          ${settings.text.title.position === 'end' && 'text-end'}
+          ${settings.text.heading.position === 'center' && 'text-center'}
+          ${settings.text.heading.position === 'start' && 'text-start'}
+          ${settings.text.heading.position === 'end' && 'text-end'}
         lg:h-[d15vh]`}
       >
-        {settings.text.title.input || "Contact"}
+        {settings.text.heading.input || "Contact"}
       </h1>
+      
       {/* Desktop Version */}
       <div
         style={{

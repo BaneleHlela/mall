@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 import type { BackgroundSettings } from './layoutSettingsType';
 import type { SectionType } from '../utils/defaults/sections/getSectionDefaults';
+import type { defaultStoreIconsConfig } from '../utils/defaults/extras/defaultStoreIconsConfig';
 
 
 export interface LayoutState {
@@ -41,6 +42,14 @@ export interface Layout {
     name?: string;
     _id?: string;
     store?: Types.ObjectId | null;
+    floats: {
+        floatingIcons: {
+            show: boolean;
+            position: string;
+            icons: typeof defaultStoreIconsConfig;
+        };
+        floatingButton: any;
+    };    
     menubar?: any;
     gallery?: any;
     products?: any;

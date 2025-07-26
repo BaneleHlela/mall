@@ -17,11 +17,11 @@ interface StoreMenubarIconsProps {
       number: number;
       display: boolean;
       platforms: any;
-      show: string[];
-      size: number;
+      //show: string[];
+      size: string;
       color: string;
       background: {
-        padding: {
+        padding?: {
             x: string;
             y: string;
         };
@@ -45,6 +45,7 @@ interface StoreMenubarIconsProps {
         };
       };
     };
+    asFloat?: boolean;
 }
 
 export const socials = [
@@ -54,7 +55,7 @@ export const socials = [
 ];
 
 
-const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({style}) => {
+const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({ style, asFloat }) => {
     const socials = useAppSelector((state) => state.stores?.currentStore?.socials);
     const platforms = style.platforms
     
@@ -73,7 +74,7 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({style}) => {
             case "youtube":
                 return <FaYoutube size={style.size} color={style.color} />;
             case "whatsapp":
-                return <FaWhatsapp size={style.size + 5} color={style.color} />;
+                return <FaWhatsapp size={style.size} color={style.color} className="scale-108"/>;
             case "phone":
                 return <FaPhoneAlt size={style.size} color={style.color} />;
             case "email":
@@ -99,7 +100,7 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({style}) => {
                 padding: style.background.padding,
                 ...getBackgroundStyles(style.background)
             }}
-            className={`w-fit flex flex-row justify-center gap-2`}
+            className={`w-fit flex ${ asFloat ? "flex-col" : "flex-row" } justify-center gap-2`}
         >
             {platformOrder
             .slice(0, Math.min(style.number, 3)) // ✅ limit the number of icons

@@ -10,6 +10,7 @@ import FirstOrderSubSettingsContainer from '../../../FirstOrderSubSettingsContai
 import SlidingPanel from '../../../supporting/SlidingPanel';
 import { AnimatePresence } from 'framer-motion';
 import IconsOrButtonSettings from './IconsOrButtonSettings';
+import { getSetting } from '../../../../../utils/helperFunctions';
 
 const MobileTopbarSettings: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +24,17 @@ const MobileTopbarSettings: React.FC = () => {
 
   return (
     <div className="space-y-1 px-2 py-1">
+      {/* Position Settings*/}
+      <div className="px-2">
+        <OptionsToggler
+          label="Sticky?"
+          options={["static", "sticky", "fixed"]}
+          value={getSetting("mobile.position", settings, "menubar.topbar")}
+          onChange={(newValue) =>
+            handleSettingChange("menubar.topbar.mobile.position", newValue)
+          }
+        />
+      </div>
       {/* Togglers */}
       <div className="border rounded px-2">
         <OptionsToggler

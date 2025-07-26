@@ -92,7 +92,7 @@ const ClickableAlwaysMovingImageSlider: React.FC<ImageSliderProps> = ({
                         ...getBackgroundStyles(style.hover.viewButton.background),
                         ...getTextStyles(style.hover.viewButton.text)
                       }}
-                      className="min-h-[30px] hover:scale-102 z-30"
+                      className="min-h-[30px] hover:scale-102 z-30 mt-[.6vh]"
                     >
                       View
                     </button>
@@ -120,9 +120,9 @@ const ClickableAlwaysMovingImageSlider: React.FC<ImageSliderProps> = ({
           <div className="relative flex flex-row justify-center lg:max-w-[60%] max-h-[70%]">
             <button
               onClick={() => setPopupImage(null)}
-              className="absolute top-2 right-2 text-white bg-black p-1 rounded-full z-50 hover:scale-105"
+              className="absolute top-[.3vh] right-[.3vh] text-white bg-black p-[.3vh] rounded-full z-50 hover:scale-105"
             >
-              <IoMdClose size={28} />
+              <IoMdClose size={"3vh"} />
             </button>
             <img
               src={popupImage.url}

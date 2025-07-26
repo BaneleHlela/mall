@@ -9,10 +9,10 @@ const StoreAboutPage = () => {
   );
 
   return (
-    <>
+    <div className="w-full flex flex-col justify-center items-center">
       <StoreAboutSection />
       {aboutSections.includes("footer") && <StoreFooterSection />}
-    </>
+    </div>
   );
 };
 

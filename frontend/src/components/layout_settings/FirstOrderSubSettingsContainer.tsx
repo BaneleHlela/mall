@@ -24,7 +24,7 @@ const FirstOrderSubSettingsContainer: React.FC<FirstOrderSubSettingsContainerPro
         className="w-full h-[7vh] text-[1.8vh] bg-stone-50 border-[.3vh] border-white text-gray-900 rounded p-[.6vh] shadow-md hover:scale-103 hover:bg-gray-900 hover:text-white hover:border-white"
       >
         <div className="w-full h-full flex justify-between items-center pl-2">
-          <span onClick={onClick} className="cursor-pointer">{name}</span>
+          <span onClick={onClick} className="cursor-pointer capitalize">{name}</span>
           <div className="flex flex-row space-x-1">
             {deletable && (
               <div 

@@ -23,9 +23,8 @@ const FooterOperationTimesDisplay: React.FC<FooterOperationTimesDisplayProps> = 
             <h3
                 style={{
                     ...getTextStyles(headingStyle),
-                    fontSize: headingStyle.fontSize.desktop,
                 }} 
-                className="mb-3"
+                className="mb-[1vh]"
             >{headingInput}</h3>
             {formattedTimes}
         </div>

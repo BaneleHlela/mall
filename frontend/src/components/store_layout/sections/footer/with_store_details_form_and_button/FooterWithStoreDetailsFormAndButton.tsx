@@ -1,8 +1,9 @@
 import { useAppSelector } from "../../../../../app/hooks"
-import { getBackgroundStyles, getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunctions"
+import { getBackgroundStyles, getTextStyles } from "../../../../../utils/stylingFunctions"
 import StoreButton from "../../../extras/buttons/StoreButton";
 import SendEmailForm from "../../../extras/forms/send_email/SendEmailForm";
 import MapComponent from "../../../extras/MapComponent";
+import UnderlinedText from "../../../extras/text/UnderlinedText";
 import FooterAddressDisplay from "./supporting/FooterAddressDisplay";
 import FooterContactDetailsDisplay from "./supporting/FooterContactDetailsDisplay";
 import FooterOperationTimesDisplay from "./supporting/FooterOperationTimesDisplay";
@@ -10,6 +11,7 @@ import FooterOperationTimesDisplay from "./supporting/FooterOperationTimesDispla
 const FooterWithStoreDetailsFormAndButton = () => {
   const settings = useAppSelector((state) => state.layoutSettings.footer);
   const store = useAppSelector((state) => state.stores.currentStore);
+  console.log(store?.location)
   return (
     <div 
       id="footer"
@@ -26,11 +28,7 @@ const FooterWithStoreDetailsFormAndButton = () => {
           <div
             className={`h-[13vh] w-full flex items-center justify-between`} 
           >
-            <h1
-              style={{
-                ...getTextStyles(settings.title.text),
-              }} 
-            >{settings.title.text.input}</h1>
+            <UnderlinedText style={settings.title.text} />
             {/* Button*/}
             {settings.button.show && (
               <div>
@@ -135,7 +133,7 @@ const FooterWithStoreDetailsFormAndButton = () => {
                 ${settings.title.position === "left" ? "justify-start" : "justify-center"}`
               }
             >
-              <h1>{settings.title.text.input}</h1>
+              <UnderlinedText style={settings.title.text} />
             </div>
           )}
           {/* Address */}

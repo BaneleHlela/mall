@@ -20,9 +20,8 @@ const FooterContactDetailsDisplay: React.FC<FooterAddressDisplayProps> = ({
         <h3 
             style={{
                 ...getTextStyles(headingStyle),
-                fontSize: headingStyle.fontSize.desktop,
             }}
-            className="mb-3"
+            className="mb-[1vh]"
         >
                 {headingInput || "Contact Us"}
         </h3>

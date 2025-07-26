@@ -6,12 +6,12 @@ const storeLayoutSchema = new mongoose.Schema({
         required: [true, "Store layout name is required"],
     },
     routes: {},
+    floats: {},
     routeOrder: [{
         type: String,
     }],
     background: {},
     fonts: {},
-
     imageUrl: {
         type: String,
         default: "",
@@ -20,12 +20,12 @@ const storeLayoutSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Store",
     },
-    //menubar: {},
+    menubar: {},
     hero: {},
     order: {},
     //book: {},
     about: {},
-    //gallery: {},
+    gallery: {},
     products: {},
     // services: {},
     reviews: {},

@@ -12,7 +12,23 @@ export const defaultContactWithBackgroundImageTextAndSocialsConfig = {
         }
     },
     text: {
-        title: {
+        heading: {
+            input: "Contact Us",
+            position: "center",
+            fontFamily: "Open Sans",
+            fontSize: {
+                mobile: "2rem",
+                desktop: "3rem",
+            },
+            fontWeight: "bold",
+            color: "white",
+            padding: {
+                x: "1rem",
+                y: "1rem",
+            },
+            underline: {}
+        },
+        subheading: {
             input: "Contact Us",
             position: "center",
             fontFamily: "Open Sans",

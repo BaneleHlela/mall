@@ -22,6 +22,8 @@ import { fetchStoreProducts } from "../../features/products/productsSlice";
 import SingleStoreProductPage from "./supporting/single_product/SingleStoreProductPage";
 import StoreBookServicePage from "./supporting/book_service/StoreBookServicePage";
 import StoreAlertDiv from "../../components/store_layout/extras/alert_div/StoreAlertDiv";
+import StoreMenubarIcons from "../../components/store_layout/menubars/supporting/StoreMenubarIcons";
+import StoreFloatingButton from "../../components/store_layout/extras/buttons/StoreFloatingButton";
 
 const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
   const settings = useAppSelector((state) => state.layoutSettings);
@@ -124,20 +126,41 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
           ...getBackgroundStyles(settings.background),
           // width: window.innerWidth >= 1024 ? settings.background?.width?.desktop : settings.background?.width?.mobile, // Apply width for large screens
         }}
-        className={`w-screen h-full overflow-y-scroll hide-scrollbar overflow-x-clip`}>
-        <PopularStoreMenubar />
-        <StoreAlertDiv config={settings.menubar.alertDiv} objectPath={`menubar.alertDiv`}/>
-        <Routes>
-          {Object.values(routes).map((route) => (
-            <Route
-              key={route.url}
-              path={route.url}
-              element={routeComponents[route.url] ?? null}
-            />
-          ))}
-          {store?.trades.includes("products") && <Route path="/product/:productId" element={<SingleStoreProductPage />} />}
-          {store?.trades.includes("services") && <Route path="/service/:serviceId" element={<StoreBookServicePage />} />}
-        </Routes>
+        className={`relative w-screen h-full overflow-y-scroll hide-scrollbar overflow-x-clip`}>
+            <PopularStoreMenubar />
+            {settings.menubar.alertDiv.display  && (
+              <StoreAlertDiv config={settings.menubar.alertDiv} objectPath={`menubar.alertDiv`}/>
+            )}
+            <Routes>
+              {Object.values(routes).map((route) => (
+                <Route
+                  key={route.url}
+                  path={route.url}
+                  element={routeComponents[route.url] ?? null}
+                />
+              ))}
+              {store?.trades.includes("products") && <Route path="/product/:productId" element={<SingleStoreProductPage />} />}
+              {store?.trades.includes("services") && <Route path="/service/:serviceId" element={<StoreBookServicePage />} />}
+            </Routes>
+            {settings.floats.floatingIcons.show && (
+              <div className={`fixed
+                ${settings.floats.floatingIcons.position === "left-1/2" && "left-2 top-1/2"} 
+                ${settings.floats.floatingIcons.position === "left-1/4" && "left-2 top-1/4"} 
+                ${settings.floats.floatingIcons.position === "right-1/2" && "right-2 top-1/2"} 
+                ${settings.floats.floatingIcons.position === "right-1/4" && "right-2 top-1/4"} 
+              `}>
+                <StoreMenubarIcons
+                  style={settings.floats.floatingIcons.icons}
+                  asFloat={true}
+                />
+              </div>
+            )}
+            {settings.floats.floatingButton.show !== "none" && (
+              <div className={`fixed 
+                ${settings.floats.floatingButton.position === "left" ? "bottom-2 left-2" : "bottom-2 right-2" }`}>
+                <StoreFloatingButton config={settings.floats.floatingButton} />
+              </div>
+            )}
       </div> 
     </div>
   );

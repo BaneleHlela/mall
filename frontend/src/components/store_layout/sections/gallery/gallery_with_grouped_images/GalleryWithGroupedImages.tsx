@@ -78,8 +78,7 @@ const GalleryWithGroupedImages = () => {
                     }}
                     onClick={handlePrev}
                 >
-                    <MdOutlineKeyboardArrowLeft
-                />
+                    <MdOutlineKeyboardArrowLeft />
                 </button>
                 <button 
                     style={{

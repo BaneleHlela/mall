@@ -4,33 +4,45 @@ export const defaultGalleryWithImageSliderConfig = {
     background: {
         color: "blue",
     },
-    heading: {
-        show: false,
-        position: "center",
-        input: "Gallery",
-        fontFamily: "Open Sans",
-        fontSize: {
-            mobile: "20px",
-            desktop: "28px",
+    text: {
+        heading: {
+            input: "Selected Work",
+            position: "center",
+            fontSize: {
+                mobile: "35px",
+                desktop: "35px",
+            },
+            fontFamily: "Patrick Hand",
+            color: "brown",
+            lineHeight: "1.3",
+            underline: {
+                show: true,
+                color: "black",
+                width: "50%",
+                style: "solid",
+                thickness: "10px",
+                marginTop: "10px",
+            }
         },
-        color: "white",
-        fontWeight: "normal",
-        fontStyle: "normal",
-        marginBottom: "50px",
-    },
-    subheading: {
-        show: false,
-        position: "center",
-        input: "Gallery",
-        fontFamily: "Open Sans",
-        fontSize: {
-            mobile: "20px",
-            desktop: "28px",
+        subheading: {
+            input: "Some work",
+            position: "center",
+            fontSize: {
+                mobile: "35px",
+                desktop: "35px",
+            },
+            fontFamily: "Patrick Hand",
+            color: "brown",
+            lineHeight: "1.3",
+            underline: {
+                show: false,
+                color: "black",
+                width: "50%",
+                style: "solid",
+                thickness: "10px",
+                marginTop: "10px",
+            }
         },
-        color: "white",
-        fontWeight: "normal",
-        fontStyle: "normal",
-        marginBottom: "50px",
     },
     slider: {
         background: {

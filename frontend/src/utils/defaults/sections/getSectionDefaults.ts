@@ -46,7 +46,11 @@ export const getSectionDefaults = async (section: SectionType, variation: Variat
   const defaults: Record<SectionType, Record<VariationType, any>> = {
     hero: {
       fourth: defaultHeroWithReviewCardAndEmailFormConfig,
-      heroWithButtonBetweenImages: defaultHeroWithButtonBetweenImages,
+      heroWithButtonBetweenImages: async () => {
+        const demoStoreId = "6883116947fc791fc7b89df9"; 
+        const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'hero');
+        return demoLayout || defaultHeroWithButtonBetweenImages;
+      },
       heroWithImageButtonAndBox: defaultHeroWithImageButtonAndBox,
       heroWithButtonImageAndText: async () => {
         const demoStoreId = "686e76aa96f14c28650b671d"; 
@@ -72,7 +76,11 @@ export const getSectionDefaults = async (section: SectionType, variation: Variat
       first: defaultFirstBookWithCalandarConfig,
     },
     gallery: {
-      galleryWithImageSlider: defaultGalleryWithImageSliderConfig,
+      galleryWithImageSlider: async () => {
+        const demoStoreId = "6883116947fc791fc7b89df9"; 
+        const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'gallery');
+        return demoLayout || defaultGalleryWithImageSliderConfig;
+      },
       galleryWithGroupedImages: async () => {
         const demoStoreId = "686e76aa96f14c28650b671d"; 
         const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'gallery');

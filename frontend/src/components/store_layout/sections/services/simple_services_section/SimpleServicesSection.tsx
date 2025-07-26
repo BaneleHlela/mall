@@ -6,7 +6,6 @@ import CategorySelector from '../../../extras/category_selector/CategorySelector
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md';
-import { Settings } from 'lucide-react';
 import UnderlinedText from '../../../extras/text/UnderlinedText';
 
 const SimpleServicesSection = () => {

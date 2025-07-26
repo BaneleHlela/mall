@@ -70,7 +70,7 @@ const SecondStoreMenubar = () => {
       <FirstStoreSidebar
         isOpen={isOpen}
         onClose={() => setOpen(false)}
-        storeId={store?._id as string}
+        links={links}
       />
 
       {/* === Desktop Section === */}

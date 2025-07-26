@@ -128,10 +128,12 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
         ) : (
           <SettingsSlider
             label="Height"
-            value={parseInt(getSetting("height", settings, objectPath) || "120")}
-            unit={heightUnit}
-            {...getSliderProps(heightUnit)}
-            onChange={createSliderChangeHandler("height", heightUnit)}
+            value={parseFloat(getSetting("height", settings, objectPath) || "120")}
+            unit={"vh"}
+            min={.1}
+            max={20}
+            step={.1}
+            onChange={createSliderChangeHandler("height", "vh")}
           />
         ))}
 
@@ -157,10 +159,12 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
         ) : (
           <SettingsSlider
             label="Width"
-            value={parseInt(getSetting("width", settings, objectPath) || "95")}
-            unit={widthUnit}
-            {...getSliderProps(widthUnit)}
-            onChange={createSliderChangeHandler("width", widthUnit)}
+            value={parseFloat(getSetting("width", settings, objectPath) || "95")}
+            unit={"vh"}
+            min={.1}
+            max={40}
+            step={.1}
+            onChange={createSliderChangeHandler("width", "vh")}
           />
         ))}
 

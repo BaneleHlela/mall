@@ -5,6 +5,7 @@ import SettingsContainer from "./SettingsContainer";
 import GeneralLayoutSettings from "./GeneralLayoutSettings";
 import SlidingPanel from "./supporting/SlidingPanel";
 import PagesSettings from "./pages/PagesSettings";
+import StoreFloatsSettings from "./extras/floats/StoreFloatsSettings";
 
 const LayoutSettings = () => {
   const [activePanel, setActivePanel] = useState<string | null>(null);
@@ -12,7 +13,7 @@ const LayoutSettings = () => {
 
   return (
     <motion.div
-      className="h-screen min-w-[22vw] z-10 flex flex-col items-center justify-start p-2 space-y-1 relative overflow-hidden"
+      className="h-screen min-w-[22vw] z-10 flex flex-col items-center justify-start p-2[.6vh] space-y-[.3vh] relative overflow-hidden"
       style={{ boxShadow: '8px 0 8px -4px rgba(0, 0, 0, 0.1)' }}
     >
       {/* Header with vertical line */}
@@ -23,7 +24,7 @@ const LayoutSettings = () => {
         <div className="w-[80%] h-[1px] bg-gray-600"></div>
       </div>
       
-      <div className="w-full h-full space-y-1 ">
+      <div className="w-full h-full space-y-[.3vh] ">
         <SettingsContainer
           name="General"
           onClick={() => setActivePanel("general")}
@@ -35,6 +36,10 @@ const LayoutSettings = () => {
         <SettingsContainer
           name="Pages & Sections"
           onClick={() => setActivePanel("pages")}
+        />
+        <SettingsContainer
+          name="floats"
+          onClick={() => setActivePanel("floats")}
         />
       </div>
 
@@ -53,6 +58,17 @@ const LayoutSettings = () => {
           <SlidingPanel key="pages" isOpen={true} onClose={closePanel} title="Pages">
             <PagesSettings />
           </SlidingPanel>
+        )}
+        {activePanel === "floats" && (
+          <SlidingPanel
+            key="floats"
+            isOpen={true}
+            onClose={closePanel}
+            title="pages"
+          >
+            <StoreFloatsSettings />
+          </SlidingPanel>
+          
         )}
       </AnimatePresence>
     </motion.div>

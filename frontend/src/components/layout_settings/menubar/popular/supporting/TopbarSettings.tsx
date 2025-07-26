@@ -28,32 +28,17 @@ const TopbarSettings = () => {
 
   return (
     <div className="p-1.5 space-y-1">
-      {/* Sticky Toggle & Cart Section */}
-      <div className="space-y-1 border border-black text-black rounded-sm px-2 py-1 shadows-sm">
-        <div className="px-2">
-          <OptionsToggler
-            label="Sticky?"
-            options={["true", "false"]}
-            value={String(getSetting("sticky", settings, "menubar.topbar"))}
-            onChange={(newValue) =>
-              handleSettingChange("menubar.topbar.sticky", newValue === "true")
-            }
-          />
-        </div>
-
-        {Array.isArray(store?.trades) && store.trades.includes("products") && (
-          <FirstOrderSubSettingsContainer
-            name="Cart"
-            onClick={() => setActivePanel("cart")}
-          />
-        )}
-      </div>
-
       {/* Background, Desktop, Mobile */}
       <FirstOrderSubSettingsContainer
         name="Background"
         onClick={() => setActivePanel("background")}
       />
+      {Array.isArray(store?.trades) && store.trades.includes("products") && (
+          <FirstOrderSubSettingsContainer
+            name="Cart"
+            onClick={() => setActivePanel("cart")}
+          />
+      )}
       <FirstOrderSubSettingsContainer
         name="Desktop"
         onClick={() => setActivePanel("desktop")}

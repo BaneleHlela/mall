@@ -8,7 +8,6 @@ const HeroWithButtonImageAndText = () => {
     const routes = useAppSelector((state) => state.layoutSettings.routes);
     const store = useAppSelector((state) => state.stores.currentStore);
     const handleButtonClick = useStoreButtonClickHandler();
-    console.log(style.image[0])
     return (
         <div
             className="relative flex flex-col justify-center items-center w-full h-fit"

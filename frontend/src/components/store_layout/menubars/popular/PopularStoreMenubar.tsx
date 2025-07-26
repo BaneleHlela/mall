@@ -52,7 +52,7 @@ const MobileTopBar: React.FC<{
   const renderIcons = () => (
     <div className={`w-full h-full flex row items-center ${settings.topbar.mobile.hamburgerFirst ? "justify-end" : "justify-start"} pl-1 pr-1`}>
       {settings.topbar.mobile.extras.include === "button" && (
-        <StoreButton style={settings.topbar.mobile.extras.button} />
+        <StoreButton style={settings.topbar.mobile.extras.button} onClick={() => {}} />
       )}
       {settings.topbar.mobile.extras.include === "icons" && (
         <StoreMenubarIcons style={settings.topbar.mobile.extras.icons} />
@@ -132,7 +132,7 @@ const DesktopTopBar: React.FC<{
               ...getBackgroundStyles(logoSettings.background),
               ...getTextStyles(logoSettings.text),
             }}
-            className='min-w-[250px] flex flex-col justify-center'
+            className='min-w-fit flex flex-col justify-center'
           >
             {logoSettings.text.input || store?.name || 'Store Name'}
           </div>
@@ -173,7 +173,7 @@ const DesktopTopBar: React.FC<{
       {settings.topbar.desktop.iconsCart.iconsFirst ? (
         <div className="flex flex-row space-x-3 h-full items-center">
           {settings.topbar.desktop.extras.include === "button" && (
-            <StoreButton style={settings.topbar.desktop.extras.button}/>
+            <StoreButton style={settings.topbar.desktop.extras.button} onClick={() => {}}/>
           )}
           {settings.topbar.desktop.extras.include === "icons" && (
             <StoreMenubarIcons style={settings.topbar.desktop.extras.icons} />
@@ -188,7 +188,7 @@ const DesktopTopBar: React.FC<{
             <StoreCart style={settings.cart} />
           )}
           {settings.topbar.desktop.extras.include === "button" && (
-            <StoreButton style={settings.topbar.desktop.extras.button}/>
+            <StoreButton style={settings.topbar.desktop.extras.button} onClick={() => {}}/>
           )}
           {settings.topbar.desktop.extras.include === "icons" && (
             <StoreMenubarIcons style={settings.topbar.desktop.extras.icons} />
@@ -231,23 +231,30 @@ const PopularStoreMenubar: React.FC = () => {
 
   
   const links = React.useMemo(() => {
-    // First, create an array of links from home.inLinks
+    // Create the 'home' link first
+    const homeLink = {
+      to: `/stores/${storeId}`,
+      label: routes.home?.name || 'Home',
+    };
+  
+    // Create an array of links from home.inLinks
     const inLinksArray = (routes.home?.inLinks || []).map(link => ({
       to: `/stores/${storeId}#${link.section}`,
       label: link.name,
     }));
-
-    // Then, create an array of links from other routes
-    const routeLinks = routeOrder //@ts-ignore-next-line
-      .filter(key => routes[key] && (key !== 'home' || settings.topbar.mobile.display !== "logo")) // Include 'home' if display is not "logo"
-      .map(key => ({ //@ts-ignore-next-line
-        to: `/stores/${storeId}${routes[key].url === "/" ? "" : routes[key].url}`, // @ts-ignore-next-line
-        label: routes[key].name,
+  
+    // Create an array of links from other routes (excluding 'home')
+    const routeLinks = routeOrder
+      .filter(key => key !== 'home') // 'home' is already handled separately
+      .map(key => ({ //@ts-ignore
+        to: `/stores/${storeId}${routes[key]?.url || ''}`, //@ts-ignore
+        label: routes[key]?.name || '',
       }));
-
-    // Combine the two arrays, with inLinks first
-    return [...inLinksArray, ...routeLinks];
-  }, [routes, routeOrder, storeId, settings.topbar.mobile.display]);
+  
+    // Combine all arrays: home link, then inLinks, then other route links
+    return [homeLink, ...inLinksArray, ...routeLinks];
+  }, [routes, routeOrder, storeId]);
+  
 
   return (
     <nav
@@ -257,9 +264,14 @@ const PopularStoreMenubar: React.FC = () => {
         borderBottom: `${settings.background.border.width} ${settings.background.border.style} ${settings.background.border.color}`,
         padding: `${settings.background.padding.y} ${settings.background.padding.x}`,
       }}
-      className={`flex flex-row justify-between
+      className={`flex flex-row justify-between z-10 top-0 w-full
         ${settings.background.shadow ? "shadow-md" : ""} 
-        ${settings.topbar.sticky ? "sticky top-0 z-10" : ""}
+        ${settings.topbar.desktop.position === "static" && "lg:static"}
+        ${settings.topbar.desktop.position === "sticky" && "lg:sticky"}
+        ${settings.topbar.desktop.position === "fixed" && "lg:fixed"}
+        ${settings.topbar.mobile.position === "static" && "static"}
+        ${settings.topbar.mobile.position === "sticky" && "sticky"}
+        ${settings.topbar.mobile.position === "fixed" && "fixed"}
       `}
     >
         <div className="h-full w-full lg:hidden">      

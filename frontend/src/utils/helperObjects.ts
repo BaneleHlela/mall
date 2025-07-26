@@ -83,5 +83,13 @@ export const departments = {
   creative: {
     full: "Creative & Media",
     description: "Photographers, musicians, and content creators."
-  }
+  },
+  home_utilities: {
+    full: "Home Utilities & Supplies",
+    description: "Gas refills, firewood, water tanks, and essential home services."
+  },
+  security: {
+    full: "Security & Surveillance",
+    description: "Home security systems, CCTV, electric fencing, and armed response."
+  } 
 };

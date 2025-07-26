@@ -7,9 +7,11 @@ import SlidingPanel from "../supporting/SlidingPanel";
 import { FaPlus } from "react-icons/fa";
 import { updateSetting } from "../../../features/layouts/layoutSettingsSlice";
 import StoreAlertDivSettings from "../extras/alert_div/StoreAlertDivSettings";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 const MenubarSettings = () => {
-  const settings = useAppSelector((state) => state.layoutSettings)
+    const settings = useAppSelector((state) => state.layoutSettings)
     const { variation, alertDiv } = useAppSelector((state) => state.layoutSettings.menubar );
     const [activePanel, setActivePanel] = useState<string | null>(null);
     const closePanel = () => setActivePanel(null);
@@ -17,11 +19,26 @@ const MenubarSettings = () => {
     const handleSettingChange = (field: string, value: any) => {
       dispatch(updateSetting({ field, value }));
     };
+
+    
+  const MySwal = withReactContent(Swal);
+
     const handleAddAlertDivClick = () => {
       handleSettingChange('menubar.alertDiv.display', true)
     }
-    const handleDeleteAlertDivClick = () => {
-      handleSettingChange('menubar.alertDiv.display', false)
+    const handleDeleteAlertDivClick = async () => {
+      const result = await MySwal.fire({
+        title: "Are you sure?",
+        text: "This will remove the Alert Div from your menubar.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#aaa",
+        confirmButtonText: "Yes, remove it",
+      });
+      if (result.isConfirmed) {
+        handleSettingChange("menubar.alertDiv.display", false);
+      }
     }
 
     if (variation === "popular" && alertDiv.display !== true) {
