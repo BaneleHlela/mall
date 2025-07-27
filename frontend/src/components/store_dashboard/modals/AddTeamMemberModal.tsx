@@ -1,156 +1,188 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { addTeamMember } from '../../../features/store_admin/storeAdminSlice';
+import { searchUsersByUsername, addTeamMember } from '../../../features/store_admin/storeAdminSlice';
+import { TbLoader3 } from 'react-icons/tb';
+import debounce from 'lodash.debounce';
 
 interface AddTeamMemberModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({
-  open,
-  onClose,
-}) => {
+const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({ open, onClose }) => {
   const dispatch = useAppDispatch();
-  const store = useAppSelector((state) => state.storeAdmin.store);
+  const { store, isLoading } = useAppSelector((state) => state.storeAdmin );
 
-  const [form, setForm] = useState({
-    name: '',
-    position: '',
-    about: '',
-  });
-
+  const [username, setUsername] = useState('');
+  const [position, setPosition] = useState<"owner" | "manager" | "staff" | "viewer">('manager');
+  const [about, setAbout] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [selectedUser, setSelectedUser] = useState<{ _id: string; username: string; firstName: string; lastName: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
-      setImageFile(e.target.files[0]);
-    }
-  };
+  useEffect(() => {
+    const fetchSuggestions = debounce(async () => {
+      if (!username) {
+        setSuggestions([]);
+        return;
+      }
+      try {
+        setLoadingSuggestions(true);
+        const result = await dispatch(searchUsersByUsername(username)).unwrap();
+        setSuggestions(result);
+      } catch (err) {
+        setSuggestions([]);
+      } finally {
+        setLoadingSuggestions(false);
+      }
+    }, 300); // 300ms debounce
+  
+    fetchSuggestions();
+  
+    return () => fetchSuggestions.cancel();
+  }, [username]);
 
   const handleFormSubmit = async () => {
-    setError(null);
-
-    if (!store?._id) {
-      setError('Store not found');
-      return;
-    }
-
-    const { name, position, about } = form;
-
-    if (!name || !position || !about || !imageFile) {
+    if (!store?._id || !selectedUser || !position || !about || !imageFile) {
       setError('All fields are required');
       return;
     }
-
     try {
       await dispatch(
         addTeamMember({
           storeId: store._id,
-          memberData: { name, position, about },
+          memberData: { //@ts-ignore
+            member: selectedUser._id,
+            username: selectedUser.username,
+            role: position,
+            about,
+          },
           imageFile,
         })
       ).unwrap();
       onClose();
     } catch (err: any) {
-      setError(err?.message || 'Failed to add team member');
+      setError(err || 'Failed to add team member');
     }
   };
 
   if (!open) return null;
-
   return (
-    <div className="fixed inset-0 bg-[#0000004d] flex items-center justify-center z-50">
-      <div className="bg-white max-h-screen overflow-scroll hide-scrollbar w-full max-w-md rounded-lg shadow-lg p-6 font-[Outfit]">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Add Team Member</h2>
-          <button onClick={onClose}>
-            <IoClose size={20} />
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium">Name</label>
+    <div className="fixed inset-0 bg-[#0000004d] flex flex-col items-center justify-center z-50">
+      {/* contents */}
+      <div className="space-y-[1.5vh] bg-white py-[2vh] px-[3vh]">
+        <div>
+          <label>Username</label>
+          <div className="relative">
             <input
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded border mt-1"
-              required
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                setSelectedUser(null);
+              }}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+              placeholder="Search by username"
             />
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium">Position</label>
-            <input
-              name="position"
-              value={form.position}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded border mt-1"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">About</label>
-            <textarea
-              name="about"
-              rows={3}
-              value={form.about}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded border mt-1"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Image</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="mt-1 block w-full"
-              required
-            />
-            {imageFile && (
-              <div className="mt-2">
-                <img
-                  src={URL.createObjectURL(imageFile)}
-                  alt="preview"
-                  className="w-24 h-24 object-cover rounded"
-                />
+            {loadingSuggestions && (
+              <div className="absolute top-full mt-1 left-0 right-0 bg-white border rounded shadow p-2 text-sm text-gray-600">
+                Searching...
               </div>
+            )}
+
+            {suggestions.length > 0 && !selectedUser && (
+              <ul className="absolute z-10 top-full mt-1 left-0 right-0 bg-white border rounded shadow max-h-48 overflow-y-auto text-sm">
+                {suggestions.slice(0, 5).map((user) => (
+                  <li
+                    key={user._id}
+                    onClick={() => {
+                      setSelectedUser(user);
+                      setUsername(user.username);
+                      setSuggestions([]);
+                    }}
+                    className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
+                  >
+                    <strong>{user.username}</strong> — {user.firstName} {user.lastName}
+                  </li>
+                ))}
+              </ul>
             )}
           </div>
 
-          {error && <div className="text-red-500 text-sm">{error}</div>}
+          {selectedUser && (
+            <div className="mt-2 text-sm text-green-700">
+              Selected: {selectedUser.username} ({selectedUser.firstName} {selectedUser.lastName})
+            </div>
+          )}
         </div>
+        {/* position, about, image file inputs */}
+        <div className="space-y-4 mt-4">
+          {/* Position Selector */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Position</label>
+            <select
+              value={position}
+              onChange={(e) => setPosition(e.target.value as any)}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            >
+              <option value="owner">Owner</option>
+              <option value="manager">Manager</option>
+              <option value="staff">Staff</option>
+              <option value="viewer">Viewer</option>
+            </select>
+          </div>
 
-        <div className="flex justify-end gap-2 mt-6">
+          {/* About Field */}
+          <div>
+            <label className="block text-sm font-medium mb-1">About</label>
+            <textarea
+              value={about}
+              onChange={(e) => setAbout(e.target.value)}
+              rows={3}
+              placeholder="Write something about this team member..."
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            />
+          </div>
+
+          {/* Image File Upload */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Profile Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0]) {
+                  setImageFile(e.target.files[0]);
+                }
+              }}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            />
+            {imageFile && (
+              <p className="text-sm text-gray-500 mt-1">Selected: {imageFile.name}</p>
+            )}
+          </div>
+        </div>
+        {error && <div className="text-red-500">{error}</div>}
+        {/* Cancel / Add buttons */}
+        <div className="flex justify-center gap-4 mt-6">
           <button
             onClick={onClose}
-            className="px-4 py-2 border rounded text-sm bg-gray-200"
+            className="px-4 py-2 rounded-md bg-gray-300 text-gray-800 hover:bg-gray-400 transition"
           >
             Cancel
           </button>
           <button
             onClick={handleFormSubmit}
-            className="px-4 py-2 rounded text-white bg-blue-600"
+            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
           >
-            Add Member
+            {isLoading ? <TbLoader3 className='w-6 h-6 animate-spin mx-auto' /> : "Add Member"}
           </button>
         </div>
       </div>
+      
     </div>
   );
 };

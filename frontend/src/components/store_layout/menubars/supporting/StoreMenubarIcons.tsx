@@ -97,7 +97,6 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({ style, asFloat })
         <div 
             style={{
                 ...getBorderStyles(style.background.border),
-                padding: style.background.padding,
                 ...getBackgroundStyles(style.background)
             }}
             className={`w-fit flex ${ asFloat ? "flex-col" : "flex-row" } justify-center gap-2`}
@@ -113,9 +112,8 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({ style, asFloat })
                         key={platform}
                         style={{
                             ...getBackgroundStyles(style.iconBackground),
-                            border: `${style.iconBackground.border.width} ${style.iconBackground.border.style} ${style.iconBackground.border.color}`,
                         }}
-                        className="flex items-center justify-between rounded-full cursor-pointer"
+                        className="flex items-center justify-between rounded-full cursor-pointer hover:scale-110"
                         onClick={() => handleRedirect(social.url)}
                     >
                         {renderIcon(platform)}

@@ -76,7 +76,7 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
                             ${style.textAndButton.text.position === "end" && "text-end"}
                         `}
                 >
-                    R{price}
+                    R{formatPriceWithSpaces(price)}.00
                 </p>
                 <div 
                     className={`flex-row w-full
@@ -148,3 +148,9 @@ return {
     },
 };
 }
+
+export function formatPriceWithSpaces(price?: number): string {
+    if (typeof price !== 'number') return '';
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+}
+  

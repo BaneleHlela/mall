@@ -70,14 +70,18 @@ const storeSchema = new mongoose.Schema(
       type: String,
     }, 
     team: [{
-      // member: {
-      //   type: mongoose.Schema.Types.ObjectId,
-      //   ref: "User",
-      //   required: false, 
-      // },
       member: {
         type: String,
         required: true, 
+      },
+      username: {
+        type: String,
+      },
+      firstName: {
+        type: String,
+      },
+      lastName: {
+        type: String,
       },
       role: {
         type: String,

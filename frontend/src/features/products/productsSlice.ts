@@ -148,18 +148,44 @@ const productSlice = createSlice({
 
       // Fetch by ID
       .addCase(fetchProductById.fulfilled, (state, action: PayloadAction<Product>) => {
+        state.isLoading = false;
         state.selectedProduct = action.payload;
+      })
+      .addCase(fetchProductById.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchProductById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       })
 
       // Fetch by slug
       .addCase(fetchProductBySlug.fulfilled, (state, action: PayloadAction<Product>) => {
         state.selectedProduct = action.payload;
       })
+      .addCase(fetchProductBySlug.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchProductBySlug.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
 
       // Create
       .addCase(createProduct.fulfilled, (state, action: PayloadAction<Product>) => {
         state.products.push(action.payload);
       })
+      .addCase(createProduct.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(createProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      
 
       // Update
       .addCase(updateProduct.fulfilled, (state, action: PayloadAction<Product>) => {
@@ -168,10 +194,28 @@ const productSlice = createSlice({
           state.products[index] = action.payload;
         }
       })
+      .addCase(updateProduct.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      
       // Delete
       .addCase(deleteProduct.fulfilled, (state, action: PayloadAction<string>) => {
         state.products = state.products.filter(p => p._id !== action.payload);
       })
+      .addCase(deleteProduct.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      
         
       // Update stock and sold count
       .addCase(updateStockAndSoldCount.fulfilled, (state, action: PayloadAction<Product[]>) => {
@@ -182,6 +226,15 @@ const productSlice = createSlice({
           }
         });
       })
+      .addCase(updateStockAndSoldCount.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateStockAndSoldCount.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      
 
       // Fetch store products
       .addCase(fetchStoreProducts.pending, (state) => {

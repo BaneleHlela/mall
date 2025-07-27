@@ -1,95 +1,105 @@
-import React from 'react'
+import React from 'react';
 import { getBackgroundStyles, getTextStyles } from '../../../../../utils/stylingFunctions';
 import StoreButton from '../../buttons/StoreButton';
 
 interface TeamCardProps {
-    name: string;
-    about: string;
-    imageUrl: string;
-    style: any;
-    onClick?: () => void;
+  firstName: string;
+  lastName: string;
+  about: string;
+  imageUrl: string;
+  style: any;
+  onClick?: () => void;
 }
 
 const PopularTeamCard: React.FC<TeamCardProps> = ({
-    name,
-    style,
-    imageUrl,
-    about,
-    onClick,
+  firstName,
+  lastName,
+  style,
+  imageUrl,
+  about,
+  onClick,
 }) => {
+  const fullName = `${firstName} ${lastName}`;
 
-    return (
-        <div 
-            style={{
-                ...getBackgroundStyles(style.background),
-            }}
-            className={`flex min-h-fit overflow-hidden w-full
-                ${style.stack.mobile === "column" ? "flex-col" : "flex-row" }
-                lg:${style.stack.desktop === "column" ? "flex-col" : "flex-row" }
-            hover:scale-102`}
+  return (
+    <div
+      style={{
+        ...getBackgroundStyles(style.background),
+      }}
+      className={`flex min-h-fit overflow-hidden w-full
+        ${style.stack.mobile === 'column' ? 'flex-col' : 'flex-row'}
+        lg:${style.stack.desktop === 'column' ? 'flex-col' : 'flex-row'}
+      hover:scale-102`}
+    >
+      {/* Image */}
+      <div
+        style={{
+          ...getBackgroundStyles(style.image),
+        }}
+        className="overflow-hidden"
+      >
+        <img
+          src={imageUrl}
+          alt="Team Member"
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Text and button */}
+      <div
+        style={{
+          ...getBackgroundStyles(calculateTextDimensions(style.stack, style.image)),
+          ...getBackgroundStyles(style.textAndButton.background),
+        }}
+        className={`
+          flex flex-col justify-between overflow-hidden
+          ${style.textAndButton.background.position === 'center' && 'items-center'}
+          ${style.textAndButton.background.position === 'start' && 'items-start'}
+          ${style.textAndButton.background.position === 'end' && 'items-end'}
+        `}
+      >
+        {/* Full Name */}
+        <h2
+          style={{
+            ...getTextStyles(style.textAndButton.text),
+            ...getTextStyles(style.textAndButton.text.name),
+          }}
+          className="max-w-full"
         >
-            {/* Image */}
-            <div 
-                style={{
-                    ...getBackgroundStyles(style.image)
-                }}
-                className='overflow-hidden'
-            >
-                <img 
-                    src={imageUrl} 
-                    alt="Service Image" 
-                    className='w-full h-full object-cover'
-                />
-            </div>
-            {/* Text and button */}
-            <div
-                style={{
-                    ...getBackgroundStyles(calculateTextDimensions(style.stack, style.image)),
-                    ...getBackgroundStyles(style.textAndButton.background)
-                }} 
-                className={`
-                        flex flex-col justify-between overflow-hidden
-                        ${style.textAndButton.background.position === "center" && "items-center"}
-                        ${style.textAndButton.background.position === "start" && "items-start"}
-                        ${style.textAndButton.background.position === "end" && "items-end"}
-                    `}
-            >
-                {/* Name */}
-                <h2
-                    style={{
-                        ...getTextStyles(style.textAndButton.text),
-                        ...getTextStyles(style.textAndButton.text.name)
-                    }} 
-                    className="max-w-full"
-                >
-                    {name}
-                </h2>
-                {/* about */}
-                <p style={{
-                    ...getTextStyles(style.textAndButton.text)
-                    }} 
-                    className="line-clamp-4"
-                >
-                    {about}
-                </p>
-                {style.textAndButton.button.show && (
-                    <div 
-                        className={`flex flex-row w-full
-                            ${style.textAndButton.button.position === "center" && "justify-center"}
-                            ${style.textAndButton.button.position === "start" && "justify-start"}
-                            ${style.textAndButton.button.position === "end" && "justify-end"}
-                        `}
-                    >
-                        <StoreButton style={style.textAndButton.button} onClick={onClick || (() => {})} />
-                    </div>
-                )}
-                
-            </div>
-        </div>
-    )
-}
+          {fullName}
+        </h2>
+
+        {/* About */}
+        <p
+          style={{
+            ...getTextStyles(style.textAndButton.text),
+          }}
+          className="line-clamp-4"
+        >
+          {about}
+        </p>
+
+        {style.textAndButton.button.show && (
+          <div
+            className={`flex flex-row w-full
+              ${style.textAndButton.button.position === 'center' && 'justify-center'}
+              ${style.textAndButton.button.position === 'start' && 'justify-start'}
+              ${style.textAndButton.button.position === 'end' && 'justify-end'}
+            `}
+          >
+            <StoreButton
+              style={style.textAndButton.button}
+              onClick={onClick || (() => {})}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default PopularTeamCard;
+
 
 
 interface StackConfig {

@@ -15,6 +15,7 @@ const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: 
     responsiveSize = false
 }) => {
     const allowArray = [
+        "animation",
         "position",
         "fontFamily",
         "fontSize",

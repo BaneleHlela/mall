@@ -5,7 +5,8 @@ import { signup, login, logout,
     forgotPassword, resetPassword, fetchAllUsers, 
     getProfile, userLoginStatus, updateUser,
     deleteUser, blockUser, unblockUser,
-    verifyEmail, checkAuth, refreshAccessToken
+    verifyEmail, checkAuth, refreshAccessToken,
+    searchUsersByUsername
  } from "../controllers/UserController.js";
 import { checkBlocked, isAdmin, protectRoute } from "../middlewares/authMiddleware.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
@@ -21,6 +22,7 @@ router.get("/profile", protectRoute, getProfile);
 router.put("/edit-user", protectRoute, updateUser);
 router.get("/login-status", userLoginStatus);
 router.post("/verify-email", verifyEmail);
+router.get('/search-users', /*protectRoute, isAdmin,*/ searchUsersByUsername);
 
 router.delete("/", protectRoute, deleteUser);
 

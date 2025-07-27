@@ -31,7 +31,8 @@ const GalleryWithGroupedImagesSettings: React.FC<SectionSettingsProps>  = ({
                         objectPath={`${objectPath}.background`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["width", "color"]}
+                        allow={["width", "color", "padding"]}
+                        responsivePadding
                         widthUnit="%"
                         responsiveSize
                     />
@@ -86,6 +87,7 @@ const GalleryWithGroupedImagesSettings: React.FC<SectionSettingsProps>  = ({
                                 handleSettingChange={handleSettingChange}
                                 objectPath={`${objectPath}.text.heading`}
                                 allowInput
+                                responsiveSize
                             />
                         </div>
                     </SlidingPanel>
@@ -98,6 +100,7 @@ const GalleryWithGroupedImagesSettings: React.FC<SectionSettingsProps>  = ({
                                 handleSettingChange={handleSettingChange}
                                 objectPath={`${objectPath}.text.subheading`}
                                 allowInput
+                                responsiveSize
                             />
                         </div>
                     </SlidingPanel>

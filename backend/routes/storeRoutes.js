@@ -14,7 +14,9 @@ import {
     uploadStoreGalleryImage,
     deleteStoreGalleryImage,
     editStore,
-    addTeamMember
+    addTeamMember,
+    deleteTeamMember,
+    editTeamMember
 } from "../controllers/StoreController.js";
 import { uploadSingleFile, uploadTeamMemberImage } from "../middlewares/uploadMiddleware.js";
 
@@ -26,7 +28,8 @@ router.get("/:storeId", getStore);
 router.get('/', getStores);
 router.put('/edit/:storeId', /*protectRoute,*/ editStore);
 router.post('/:storeId/team', uploadTeamMemberImage, addTeamMember);
-
+router.delete('/:storeId/team/:username', deleteTeamMember);
+router.put('/:storeId/team/:username', uploadSingleFile('image'), editTeamMember);
 
 router.put("/:storeId/logo", uploadSingleFile("logo"), uploadStoreLogo);
 router.delete('/:storeId/logo', deleteStoreLogo);

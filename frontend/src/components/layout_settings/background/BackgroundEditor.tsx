@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { getSetting } from "../../../utils/helperFunctions";
 import type { EditorProps } from "../../../types/layoutSettingsType";
 import ColorPicker from "../supporting/ColorPicker";
@@ -126,16 +126,27 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
             />
           </>
         ) : (
-          <SettingsSlider
-            label="Height"
-            value={parseFloat(getSetting("height", settings, objectPath) || "120")}
-            unit={"vh"}
-            min={.1}
-            max={20}
-            step={.1}
-            onChange={createSliderChangeHandler("height", "vh")}
-          />
-        ))}
+          heightUnit ? (
+            <SettingsSlider
+              label="Height"
+              value={parseInt(getSetting("height", settings, objectPath) || "120")}
+              unit={heightUnit}
+              {...getSliderProps(heightUnit)}
+              onChange={createSliderChangeHandler("height", heightUnit)}
+            />
+           )
+           : (
+            <SettingsSlider
+              label="Height"
+              value={parseFloat(getSetting("height", settings, objectPath) || "120")}
+              unit={"vh"}
+              min={.1}
+              max={20}
+              step={.1}
+              onChange={createSliderChangeHandler("height", "vh")}
+            />)
+          
+      ))}
 
       {/* WIDTH */}
       {isAllowed("width") &&
@@ -157,15 +168,25 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
             />
           </>
         ) : (
-          <SettingsSlider
-            label="Width"
-            value={parseFloat(getSetting("width", settings, objectPath) || "95")}
-            unit={"vh"}
-            min={.1}
-            max={40}
-            step={.1}
-            onChange={createSliderChangeHandler("width", "vh")}
-          />
+          widthUnit ? (
+            <SettingsSlider
+              label="Width"
+              value={parseInt(getSetting("width", settings, objectPath) || "20")}
+              unit={widthUnit}
+              {...getSliderProps(widthUnit)}
+              onChange={createSliderChangeHandler("width", widthUnit)}
+            />
+          ) : (
+            <SettingsSlider
+              label="Width"
+              value={parseFloat(getSetting("width", settings, objectPath) || "20")}
+              unit={"vw"}
+              min={.1}
+              max={100}
+              step={.1}
+              onChange={createSliderChangeHandler("width", "vw")}
+            />
+          )
         ))}
 
       {/* PADDING */}

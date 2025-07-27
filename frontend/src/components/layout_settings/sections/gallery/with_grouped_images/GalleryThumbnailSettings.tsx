@@ -112,18 +112,6 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
             </div>
             }
         />
-        <SubSettingsContainer
-            name="Title"
-            SettingsComponent ={
-                <TextEditor
-                    objectPath={`${objectPath}.text.groupName`}
-                    settings={settings}
-                    handleSettingChange={handleSettingChange}
-                    allow={[ "color", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing" ]}
-                    responsiveSize
-                />
-            }
-        />
         <AnimatePresence>
             {activePanel === "Text" && (
                 <SlidingPanel
@@ -135,11 +123,13 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                             name="Group Name"
                             onClick={() => setActivePanel("group_name")}
                         />
-                        {/* Text */}
-                        <FirstOrderSubSettingsContainer
-                            name="Group Description"
-                            onClick={() => setActivePanel("group_description")}
-                        />
+                        {/* Description */}
+                        {settings.gallery.imagesModal.addModal && (
+                            <FirstOrderSubSettingsContainer
+                                name="Group Description"
+                                onClick={() => setActivePanel("group_description")}
+                            />
+                        )}
                     </div>
                     
                 </SlidingPanel>
@@ -152,11 +142,12 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                             handleSettingChange={handleSettingChange}
                             objectPath={`${objectPath}.text.groupName`}
                             allowInput
+                            responsiveSize
                         />
                     </div>
                 </SlidingPanel>
             )}
-            {activePanel === "group_description" && (
+            {activePanel === "group_description" && settings.gallery.imagesModal.addModal && (
                 <SlidingPanel key="group_description" isOpen={true} onClose={() => setActivePanel("Text")} title="Description Settings">
                     <div className="space-y-[.3vh]">
                         <UnderlinedTextSettings
@@ -193,7 +184,7 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                     objectPath={`${objectPath}.imagesModal.toggleButtons`}
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={["position", "fontFamily", "backgroundColor", "padding", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "textDecoration"]}
+                    allow={["backgroundColor", "padding", "fontSize", "color"]}
                 />
                 <BorderEditor
                     objectPath={`${objectPath}.imagesModal.toggleButtons.background.border`}

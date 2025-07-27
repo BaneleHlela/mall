@@ -31,6 +31,8 @@ const PupularStoreTeamSection = () => {
       
 
     const teamMembers = store?.team || [];
+
+    console.log(teamMembers)
     
     const totalGroups = Math.ceil(teamMembers.length / visibleCount);
     const startIdx = activeGroupIndex * visibleCount;
@@ -116,9 +118,10 @@ const PupularStoreTeamSection = () => {
                         {teamMembers.map((member, index) => (
                             <PopularTeamCard
                                 key={index}
-                                name={member.member}
+                                firstName={member.firstName}
+                                lastName={member.lastName}
                                 about={member.about}
-                                imageUrl={member.image}
+                                imageUrl={member.image || 'defaultImageUrl.png'} // Provide a default image URL
                                 style={settings.card}
                             />
                         ))}
@@ -177,13 +180,14 @@ const PupularStoreTeamSection = () => {
                                 }}
                             >
                                 {currentGroup.map((member, index) => (
-                                <PopularTeamCard
-                                    key={index}
-                                    name={member.member}
-                                    about={member.about}
-                                    imageUrl={member.image}
-                                    style={settings.card}
-                                />
+                                    <PopularTeamCard
+                                        key={index}
+                                        firstName={member.firstName}
+                                        lastName={member.lastName}
+                                        about={member.about}
+                                        imageUrl={member.image || 'defaultImageUrl.png'} // Provide a default image URL
+                                        style={settings.card}
+                                    />
                                 ))}
                             </motion.div>
                         </AnimatePresence>

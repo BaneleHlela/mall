@@ -30,6 +30,7 @@ const storeLayoutSchema = new mongoose.Schema({
     // services: {},
     reviews: {},
     contact: {},
+    singleProduct: {},
     bookWithCalender: {},
     menu: {},
     footer: {

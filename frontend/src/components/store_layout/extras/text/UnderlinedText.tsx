@@ -25,7 +25,7 @@ const UnderlinedText: React.FC<UnderlinedTextProps> = ({
             }`}
         >
             <div className="flex flex-col items-center">
-                <h1 className=''>
+                <h1 className={`${style.animation}`}>
                     {input || style.input}
                 </h1>
                 {underline?.show && (

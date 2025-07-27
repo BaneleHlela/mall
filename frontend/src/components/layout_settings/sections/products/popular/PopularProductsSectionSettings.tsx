@@ -30,7 +30,7 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
             <SubSettingsContainer
                 name="Background"
                 SettingsComponent={
-                    <div className="px-2 space-y-2">
+                    <div className="px-[.8vh] space-y-[.7vh]">
                         <BackgroundEditor
                             objectPath={`${objectPath}.background`}
                             settings={settings}
@@ -38,6 +38,7 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                             allow={["width", "color", "padding",]}
                             widthUnit="%"
                             responsiveSize
+                            responsivePadding
                         />
                     </div>
                 }
@@ -85,6 +86,7 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                                 handleSettingChange={handleSettingChange}
                                 objectPath={`${objectPath}.text.heading`}
                                 allowInput
+                                responsiveSize
                             />
                         </div>
                     </SlidingPanel>
@@ -97,12 +99,13 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                                 handleSettingChange={handleSettingChange}
                                 objectPath={`${objectPath}.text.subheading`}
                                 allowInput
+                                responsiveSize
                             />
                         </div>
                     </SlidingPanel>
                 )}
                 {activePanel === "cards" && (
-                    <SlidingPanel key="card" isOpen={true} onClose={closePanel} title="Card Settings">
+                    <SlidingPanel key="card" isOpen={true} onClose={closePanel} title="Cards Settings">
                         <div className="space-y-[.3vh]">
                             {/* Container */}
                             <FirstOrderSubSettingsContainer

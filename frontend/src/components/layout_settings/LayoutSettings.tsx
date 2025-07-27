@@ -64,7 +64,7 @@ const LayoutSettings = () => {
             key="floats"
             isOpen={true}
             onClose={closePanel}
-            title="pages"
+            title="Floats"
           >
             <StoreFloatsSettings />
           </SlidingPanel>

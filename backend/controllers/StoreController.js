@@ -2,6 +2,7 @@ import expressAsyncHandler from 'express-async-handler';
 import  Store  from '../models/StoreModel.js';
 import { uploadToUploads, uploadsBucket } from '../config/gcsClient.js';
 import mongoose from 'mongoose';
+import User from '../models/UserModel.js';
 // add store
 export const addStore = expressAsyncHandler(async (req, res) => {
     //const { _id, email, firstName } = req.user;
@@ -429,30 +430,49 @@ export const deleteStoreGalleryImage = expressAsyncHandler(async (req, res) => {
 
 
 export const addTeamMember = expressAsyncHandler(async (req, res) => {
-  const { member, role, about } = req.body;
+  const { username, role, about } = req.body;
   const { storeId } = req.params;
 
-  // Validate store ID
+
+  // Validate input
+  if (!username) {
+    return res.status(400).json({ message: 'Username is required.' });
+  }
+
+  // Find the user by username
+  const user = await User.findOne({ username });
+  if (!user) {
+    return res.status(404).json({ message: 'User not found.' });
+  }
+
   const store = await Store.findById(storeId);
   if (!store) {
     return res.status(404).json({ message: 'Store not found.' });
   }
 
-  // Handle file upload
-  const file = req.file; // Single file upload
+  // Check if user is already on the team
+  const alreadyExists = store.team.some((member) =>
+    member.member.toString() === user._id.toString()
+  );
+  if (alreadyExists) {
+    return res.status(400).json({ message: 'User is already a team member.' });
+  }
+
+  // Handle image upload
+  const file = req.file;
   let imageUrl = '';
   if (file) {
     const imageFileName = `${Date.now()}-${file.originalname}`;
     const imagePath = `stores/${storeId}/team/${imageFileName}`;
-
     await uploadToUploads(file.buffer, imagePath);
-
     imageUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${imagePath}`;
   }
 
-  // Add team member
   const newTeamMember = {
-    member: member,
+    member: user._id,
+    username: user.username,
+    firstName: user.firstName || '',
+    lastName: user.lastName || '',
     role: role || 'owner',
     about: about || '',
     image: imageUrl,
@@ -461,6 +481,80 @@ export const addTeamMember = expressAsyncHandler(async (req, res) => {
   store.team.push(newTeamMember);
   await store.save();
 
-  res.status(201).json({ message: 'Team member added successfully.', teamMember: newTeamMember });
+  res.status(201).json(store);
 });
 
+
+export const deleteTeamMember = expressAsyncHandler(async (req, res) => {
+  const { storeId, username } = req.params;
+
+  // Find the store
+  const store = await Store.findById(storeId);
+  if (!store) {
+    return res.status(404).json({ message: 'Store not found.' });
+  }
+
+  // Check if the user exists in the team
+  const memberIndex = store.team.findIndex(
+    (member) => member.username === username
+  );
+
+  if (memberIndex === -1) {
+    return res.status(404).json({ message: 'Team member not found.' });
+  }
+
+  // Ensure at least one member remains
+  if (store.team.length <= 1) {
+    return res.status(400).json({
+      message: 'Cannot delete the last team member. A store must have at least one team member.',
+    });
+  }
+
+  // Remove the team member
+  store.team.splice(memberIndex, 1);
+  await store.save();
+
+  res.status(200).json({
+    message: 'Team member removed successfully.',
+    store,
+  });
+});
+
+
+export const editTeamMember = expressAsyncHandler(async (req, res) => {
+  const { storeId, username } = req.params;
+  const { name, position, about } = req.body;
+
+  // Find the store
+  const store = await Store.findById(storeId);
+  if (!store) {
+    return res.status(404).json({ message: 'Store not found.' });
+  }
+
+  // Find the team member
+  const member = store.team.find((m) => m.username === username);
+  if (!member) {
+    return res.status(404).json({ message: 'Team member not found.' });
+  }
+
+  // Update fields
+  if (name) member.name = name;
+  if (position) member.position = position;
+  if (about) member.about = about;
+
+  // Handle image upload
+  const file = req.file;
+  if (file) {
+    const imageFileName = `${Date.now()}-${file.originalname}`;
+    const imagePath = `stores/${storeId}/team/${imageFileName}`;
+    await uploadToUploads(file.buffer, imagePath);
+    member.image = `https://storage.googleapis.com/the-mall-uploads-giza/${imagePath}`;
+  }
+
+  await store.save();
+
+  res.status(200).json({
+    message: 'Team member updated successfully.',
+    store,
+  });
+});

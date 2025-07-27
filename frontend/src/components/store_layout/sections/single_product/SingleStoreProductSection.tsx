@@ -9,6 +9,7 @@ import { addToCart } from '../../../../features/cart/cartSlice'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md'
 import UnderlinedText from '../../extras/text/UnderlinedText'
+import { formatPriceWithSpaces } from '../../extras/cards/product/popular/PopularProductCard'
 
 const SingleStoreProductSection = () => {
     const { productId } = useParams<{ productId: string }>()
@@ -60,7 +61,6 @@ const SingleStoreProductSection = () => {
         );
     };
 
-    console.log(settings.details.addToCartBtn)
     
 
     
@@ -110,7 +110,7 @@ const SingleStoreProductSection = () => {
                                 ...getTextStyles(settings.images.toggleButton.text),
                             }}
                             onClick={handlePrevImage}
-                            className="absolute left-[0] top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/70 transition hover:scale-102"
+                            className="absolute left-0 top-1/2  bg-black/40 text-white p-2 rounded-full hover:bg-black/70 transition hover:scale-102"
                         >
                             <MdOutlineKeyboardArrowLeft/>
                         </button>
@@ -124,7 +124,7 @@ const SingleStoreProductSection = () => {
                                 ...getTextStyles(settings.images.toggleButton.text),
                             }}
                             onClick={handleNextImage}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/70 transition hover:scale-102"
+                            className="absolute right-0 top-1/2  bg-black/40 text-white p-2 rounded-full hover:bg-black/70 transition hover:scale-102"
                         >
                             <MdOutlineKeyboardArrowRight/>
                         </button>
@@ -155,7 +155,7 @@ const SingleStoreProductSection = () => {
                         />
                         <UnderlinedText 
                             style={settings.details.nameAndPrice.price}
-                            input={`R${product.price}`}
+                            input={`R${formatPriceWithSpaces(product.price)}.00`}
                         />
                     </div>
                     {/* Variation selector */}
@@ -174,7 +174,8 @@ const SingleStoreProductSection = () => {
                                 style={{
                                     ...getTextStyles(settings.details.text.labels)
                                 }} 
-                                htmlFor="variation_selector" className="">
+                                htmlFor="variation_selector" className=""
+                            >
                                 {settings.details.variationSelector.text.label.input} *
                             </label>
                             <VariationDropdown
@@ -278,7 +279,7 @@ const SingleStoreProductSection = () => {
                             onClick={handleAddToCart}
                             className="w-full mt-6 py-3 hover:scale-103"
                         >
-                            Add to cart | R{Number(product.price) * quantity}
+                            Add to cart | R{formatPriceWithSpaces(Number(product.price) * quantity)}
                         </button>
                     </div>
                     {/* Description */}
@@ -286,7 +287,7 @@ const SingleStoreProductSection = () => {
                         style={{
                             ...getTextStyles(settings.details.description.text)
                         }}
-                        className="max-h-[25%] overflow-y-scroll"
+                        className="lg:max-h-[30%] overflow-y-scroll mt-[4vh] hide-scrollbar"
                     >
                         {product.description}
                     </p>

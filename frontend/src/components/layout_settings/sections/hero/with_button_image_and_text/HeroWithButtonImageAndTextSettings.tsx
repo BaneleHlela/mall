@@ -9,6 +9,7 @@ import OptionsToggler from "../../../supporting/OptionsToggler";
 import FirstOrderSubSettingsContainer from "../../../FirstOrderSubSettingsContainer";
 import SlidingPanel from "../../../supporting/SlidingPanel";
 import { AnimatePresence } from "framer-motion";
+import UnderlinedTextSettings from "../../../extras/text/UnderlinedTextSettings";
 
 interface HeroWithButtonImageAndTextSettingsProps {
   settings: any;
@@ -99,37 +100,10 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
 
               {/* Individual Line Settings */}
               {["firstLine", "secondLine", "thirdLine"].map((lineKey) => (
-                <SubSettingsContainer
+                <FirstOrderSubSettingsContainer
                   key={lineKey}
-                  name={lineKey}
-                  SettingsComponent={
-                    <>
-                      <div className="px-2">
-                        <OptionsToggler
-                          label={`Show`}
-                          options={["true", "false"]}
-                          value={
-                            getSetting(`text.${lineKey}.show`, settings, objectPath)
-                              ? "true"
-                              : "false"
-                          }
-                          onChange={(value) =>
-                            handleSettingChange(
-                              `${objectPath}.text.${lineKey}.show`,
-                              value === "true"
-                            )
-                          }
-                        />
-                      </div>
-                      <TextEditor
-                        objectPath={`${objectPath}.text.${lineKey}`}
-                        settings={settings}
-                        handleSettingChange={handleSettingChange}
-                        allow={[ "color", "input", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing" ]}
-                        responsiveSize
-                      />
-                    </>
-                  }
+                  name={lineKey.replace("Line", " Line")} // Formats: firstLine -> first Line
+                  onClick={() => setActivePanel(lineKey)}
                 />
               ))}
             </div>
@@ -149,6 +123,42 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
             />
           </SlidingPanel>
         )}
+        {["firstLine", "secondLine", "thirdLine"].map((lineKey) => (
+          activePanel === lineKey && (
+            <SlidingPanel
+              key={lineKey}
+              isOpen={true}
+              onClose={closePanel}
+              title={`Text Line: ${lineKey.replace("Line", " Line")}`}
+            >
+              <div className="px-2 space-y-2">
+                <OptionsToggler
+                  label="Show"
+                  options={["true", "false"]}
+                  value={
+                    getSetting(`text.${lineKey}.show`, settings, objectPath)
+                      ? "true"
+                      : "false"
+                  }
+                  onChange={(value) =>
+                    handleSettingChange(
+                      `${objectPath}.text.${lineKey}.show`,
+                      value === "true"
+                    )
+                  }
+                />
+
+                <UnderlinedTextSettings
+                  objectPath={`${objectPath}.text.${lineKey}`}
+                  settings={settings}
+                  handleSettingChange={handleSettingChange}
+                  allowInput
+                  responsiveSize
+                />
+              </div>
+            </SlidingPanel>
+          )
+        ))}
       </AnimatePresence>
     </div>
   );

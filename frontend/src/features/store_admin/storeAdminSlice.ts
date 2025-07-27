@@ -7,12 +7,23 @@ import type { Store } from '../../types/storeTypes';
 const API_URL = '/api/dashboard'; 
 const STORE_URL = "http://localhost:5000/api/stores";
 
-const initialState: StoreAdmin = {
-    store: null,
-    analytics: null,
-    isLoading: false,
-    error: null,
+interface AddTeamMemberParams {
+  storeId: string;
+  memberData: {
+    username: string;
+    role: "owner" | "manager" | "staff" | "viewer";
+    about: string;
+  };
+  imageFile?: File;
 }
+
+const initialState: StoreAdmin = {
+  store: null,
+  analytics: null,
+  isLoading: false,
+  error: null,
+  searchResults: [], // <-- add this
+};
 
 export const editStore = createAsyncThunk<
   Store,
@@ -27,6 +38,22 @@ export const editStore = createAsyncThunk<
     } catch (error) {
       console.error('Error editing store:', error);
       return thunkAPI.rejectWithValue('Failed to edit store');
+    }
+  }
+);
+
+export const searchUsersByUsername = createAsyncThunk<
+  Array<{ _id: string; username: string; firstName: string; lastName: string }>,
+  string
+>(
+  'store_admin/searchUsersByUsername',
+  async (username: string, thunkAPI) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/user/search-users?q=${username}`);
+      return response.data;
+    } catch (error) {
+      console.error('User search failed:', error);
+      return thunkAPI.rejectWithValue('Failed to search users');
     }
   }
 );
@@ -84,30 +111,56 @@ export const uploadStoreGalleryImage = createAsyncThunk<
 );
 
 export const addTeamMember = createAsyncThunk<
-  Store, // returning the updated Store
-  { storeId: string; memberData: { name: string; position: string; about: string; }; imageFile: File }
+  Store, // return type
+  AddTeamMemberParams // argument type
 >(
   'store_admin/addTeamMember',
   async ({ storeId, memberData, imageFile }, thunkAPI) => {
     try {
       const formData = new FormData();
-      formData.append('image', imageFile);
-      formData.append('member', memberData.name);
-      formData.append('position', memberData.position);
+      formData.append('username', memberData.username);
+      formData.append('role', memberData.role);
       formData.append('about', memberData.about);
+      if (imageFile) {
+        formData.append('image', imageFile);
+      }
 
-      const response = await axios.post(`${STORE_URL}/${storeId}/team`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const response = await axios.post<Store>(
+        `${STORE_URL}/${storeId}/team`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
 
-      return response.data as Store;
-    } catch (error) {
-      console.error('Error adding team member:', error);
-      return thunkAPI.rejectWithValue('Failed to add team member');
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to add team member'
+      );
     }
   }
 );
 
+export const deleteTeamMember = createAsyncThunk<
+  Store, // response type (updated store)
+  { storeId: string; username: string }, // args type
+  { rejectValue: string }
+>(
+  'store/deleteTeamMember',
+  async ({ storeId, username }, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(
+        `${STORE_URL}/${storeId}/team/${username}`
+      );
+      return response.data.store;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || 'Failed to delete team member');
+    }
+  }
+);
 
 export const deleteStoreGalleryImage = createAsyncThunk<
   string, // returns the imageUrl of the deleted image
@@ -128,6 +181,36 @@ export const deleteStoreGalleryImage = createAsyncThunk<
     }
   }
 );
+
+export const editTeamMember = createAsyncThunk<
+  Store,
+  {
+    storeId: string;
+    username: string;
+    updatedData: {
+      name?: string;
+      position?: string;
+      about?: string;
+      imageFile?: File;
+    };
+  }
+>('store/editTeamMember', async ({ storeId, username, updatedData }, thunkAPI) => {
+  try {
+    const formData = new FormData();
+    if (updatedData.name) formData.append('name', updatedData.name);
+    if (updatedData.position) formData.append('position', updatedData.position);
+    if (updatedData.about) formData.append('about', updatedData.about);
+    if (updatedData.imageFile) formData.append('image', updatedData.imageFile);
+
+    const res = await axios.put(`${STORE_URL}/${storeId}/team/${username}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+
+    return res.data.store;
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue(err.response?.data?.message || 'Edit failed');
+  }
+});
 
 
 
@@ -271,7 +354,6 @@ const storeAdminSlice = createSlice({
           })
 
           // Delete gallery image
-          // Add this to your existing extraReducers in storeAdminSlice
           .addCase(deleteStoreGalleryImage.pending, (state) => {
             state.isLoading = true;
             state.error = null;
@@ -290,6 +372,48 @@ const storeAdminSlice = createSlice({
             state.error = action.error.message || 'Failed to delete gallery image';
           })
           
+          // Search Users By Username
+          .addCase(searchUsersByUsername.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+          })
+          .addCase(searchUsersByUsername.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.error = null;
+            state.searchResults = action.payload;
+          })
+          .addCase(searchUsersByUsername.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.error.message || 'Failed to search users';
+          })
+          
+          // Delete Team Member
+          .addCase(deleteTeamMember.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+          })
+          .addCase(deleteTeamMember.fulfilled, (state, action: PayloadAction<Store>) => {
+            state.isLoading = false;
+            state.store = action.payload; // updated store from server
+          })
+          .addCase(deleteTeamMember.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload || 'Failed to delete team member';
+          })
+
+          // Edit Team Member
+          .addCase(editTeamMember.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+          })
+          .addCase(editTeamMember.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.store = action.payload; 
+          })
+          .addCase(editTeamMember.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload as string;
+          })
     }
 });
 

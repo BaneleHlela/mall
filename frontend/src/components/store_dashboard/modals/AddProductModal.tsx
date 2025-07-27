@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { createProduct } from '../../../features/products/productsSlice';
+import { TbLoader3 } from 'react-icons/tb';
 
 interface AddProductModalProps {
   open: boolean;
@@ -15,8 +16,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   categories,
 }) => {
   const dispatch = useAppDispatch();
-  const store = useAppSelector((state) => state.storeAdmin.store);
-
+  const { store } = useAppSelector((state) => state.storeAdmin);
+  const isLoading = useAppSelector((state) => state.products.isLoading);
   const [form, setForm] = useState({
     name: '',
     description: '',
@@ -252,7 +253,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
             onClick={handleFormSubmit}
             className="px-4 py-2 rounded text-white bg-blue-600"
           >
-            Add Product
+            {isLoading ? <TbLoader3 className='w-6 h-6 animate-spin mx-auto' /> : "Add Product"}
           </button>
         </div>
       </div>

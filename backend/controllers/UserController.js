@@ -171,6 +171,16 @@ export const getProfile = async (req, res) => {
 	}
 };
 
+// Search By Username
+export const searchUsersByUsername = expressAsyncHandler(async (req, res) => {
+  const q = req.query.q;
+  if (!q) return res.status(400).json({ message: 'Query required' });
+  const users = await User.find({ username: { $regex: `^${q}`, $options: 'i' } })
+    .select('username firstName lastName');
+  res.json(users);
+});
+
+
 // user login status
 export const userLoginStatus = expressAsyncHandler(async (req, res) => {
     const accessToken = req.cookies.accessToken;

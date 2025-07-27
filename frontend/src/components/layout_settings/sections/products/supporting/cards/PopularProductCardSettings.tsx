@@ -94,6 +94,7 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
                       objectPath={`${objectPath}.textAndButton.text.name`}
                       settings={settings}
                       handleSettingChange={handleSettingChange}
+                      responsiveSize
                     />
                   }
                 />
@@ -104,6 +105,7 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
                       objectPath={`${objectPath}.textAndButton.text`}
                       settings={settings}
                       handleSettingChange={handleSettingChange}
+                      responsiveSize
                     />
                   }
                 />

@@ -9,8 +9,14 @@ export const defaultPopularProductsSectionConfig = {
             desktop: "80%",
         },
         padding: {
-            x: "10px",
-            y: "100px",
+            x: {
+                mobile: "2rem",
+                desktop: "2rem",
+            },
+            y: {
+                mobile: "2rem",
+                desktop: "2rem",
+            }
         }
     },
     text: {

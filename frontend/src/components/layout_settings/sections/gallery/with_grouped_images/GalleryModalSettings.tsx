@@ -82,7 +82,8 @@ const GalleryModalSettings: React.FC<SupportingSettingsProps> = ({
                     objectPath={`${objectPath}.imagesModal.background.modal`}
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={["color"]}
+                    allow={["color", "padding"]}
+                    responsivePadding
                     heightUnit='vh'
                     widthUnit='vw'
                     responsiveSize
@@ -156,7 +157,7 @@ const GalleryModalSettings: React.FC<SupportingSettingsProps> = ({
                             settings={settings}
                             handleSettingChange={handleSettingChange}
                             objectPath={`${objectPath}.imagesModal.text.groupName`}
-                            allowInput
+                            responsiveSize
                         />
                     </div>
                 </SlidingPanel>
@@ -168,7 +169,7 @@ const GalleryModalSettings: React.FC<SupportingSettingsProps> = ({
                             settings={settings}
                             handleSettingChange={handleSettingChange}
                             objectPath={`${objectPath}.imagesModal.text.groupDescription`}
-                            allowInput
+                            responsiveSize
                         />
                     </div>
                 </SlidingPanel>

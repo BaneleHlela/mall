@@ -262,7 +262,7 @@ const PopularStoreMenubar: React.FC = () => {
         height: getBackgroundHeight(),
         backgroundColor: settings.background.color,
         borderBottom: `${settings.background.border.width} ${settings.background.border.style} ${settings.background.border.color}`,
-        padding: `${settings.background.padding.y} ${settings.background.padding.x}`,
+        ...getBackgroundStyles(settings.background),
       }}
       className={`flex flex-row justify-between z-10 top-0 w-full
         ${settings.background.shadow ? "shadow-md" : ""} 

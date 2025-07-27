@@ -6,12 +6,17 @@ export interface Logo {
 }
 
 export interface TeamMember {
+  _id: Types.ObjectId | string;
+  member: string; // user ID
+  username: string;
+  firstName: string;
+  lastName: string;
   about: string;
-  member: string; 
-  role: "owner" | "manager" | "staff" | "viewer"; 
-  image: string;
-  _id: Types.ObjectId | string; // Optional ID for the team member
+  image?: string;
+  role: "owner" | "manager" | "staff" | "viewer" | "admin";
 }
+
+
 export interface Image {
   _id: string;
   category?: string; 

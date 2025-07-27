@@ -52,7 +52,7 @@ const GalleryWithGroupedImages = () => {
     }
 
   return (
-    <div style={getBackgroundStyles(settings.background)}>
+    <div style={getBackgroundStyles(settings.background)} className='min-h-fit'>
       {/* Heading & Subheading */}
       <div 
             className='w-full'

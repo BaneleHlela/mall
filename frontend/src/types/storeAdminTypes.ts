@@ -11,7 +11,14 @@ export interface Analyitics {
 // Initial state for store settings
 export interface StoreAdmin {
     store: Store | null;
-    analytics: Analyitics | null;
+    analytics: any; // or proper type
     isLoading: boolean;
     error: string | null;
-}
+    searchResults: Array<{
+      _id: string;
+      username: string;
+      firstName: string;
+      lastName: string;
+    }>;
+  }
+  

@@ -9,7 +9,6 @@ import SlidingPanel from '../../supporting/SlidingPanel';
 import TextEditor from '../../text/TextEditor';
 import { getSetting } from '../../../../utils/helperFunctions';
 import OptionsToggler from '../../supporting/OptionsToggler';
-import UnderlinedText from '../../../store_layout/extras/text/UnderlinedText';
 import UnderlinedTextSettings from '../../extras/text/UnderlinedTextSettings';
 import StoreButtonSettings from '../../extras/StoreButtonSettings';
 
@@ -571,6 +570,7 @@ const SingleStoreProductSectionSettings = () => {
                                         objectPath={`${objectPath}.details.nameAndPrice.name`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
+                                        responsiveSize
                                     />
                                 </div>
                                 }
@@ -602,6 +602,7 @@ const SingleStoreProductSectionSettings = () => {
                             objectPath={`${objectPath}.details.addToCartBtn`}
                             settings={settings}
                             allowPosition
+                            
                         />
                     </SlidingPanel>
                 )}

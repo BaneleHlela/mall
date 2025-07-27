@@ -24,7 +24,6 @@ import StoreBookServicePage from "./supporting/book_service/StoreBookServicePage
 import StoreAlertDiv from "../../components/store_layout/extras/alert_div/StoreAlertDiv";
 import StoreMenubarIcons from "../../components/store_layout/menubars/supporting/StoreMenubarIcons";
 import StoreFloatingButton from "../../components/store_layout/extras/buttons/StoreFloatingButton";
-import StoreBusinessHoursSettings from "../store_dashboard/supporting_pages/settings/StoreBusinessHoursSettings";
 import { IoMdClose } from "react-icons/io";
 import ComingSoon from "../../components/the_mall/ComingSoon";
 
@@ -118,6 +117,7 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
     "/book": <StoreBookPage />,
   };
 
+
   return (
     <div 
       className={`w-screen h-screen flex flex-row justify-center`}
@@ -147,7 +147,7 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
               {store?.trades.includes("services") && <Route path="/service/:serviceId" element={<StoreBookServicePage />} />}
             </Routes>
             {settings?.floats?.floatingIcons?.show && (
-              <div className={`fixed
+              <div className={`fixed z-5 
                 ${settings.floats.floatingIcons.position === "left-1/2" && "left-2 top-1/2"} 
                 ${settings.floats.floatingIcons.position === "left-1/4" && "left-2 top-1/4"} 
                 ${settings.floats.floatingIcons.position === "right-1/2" && "right-2 top-1/2"} 
@@ -161,7 +161,7 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
             )}
 
             {settings?.floats?.floatingButton?.show !== "none" && (
-              <div className={`fixed 
+              <div className={`fixed z-5
                 ${settings.floats.floatingButton.position === "left" ? "bottom-2 left-2" : "bottom-2 right-2"}`}
               >
                 <StoreFloatingButton

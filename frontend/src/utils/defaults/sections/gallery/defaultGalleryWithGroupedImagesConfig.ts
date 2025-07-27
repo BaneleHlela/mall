@@ -84,7 +84,9 @@ export const defaultGalleryWithGroupedImagesConfig = {
     imagesModal: {
         addModal: true,
         toggleButtons: {
-            background: {}
+            background: {
+                color: "transparent",
+            }
         },
         background: {
             color: "pink",

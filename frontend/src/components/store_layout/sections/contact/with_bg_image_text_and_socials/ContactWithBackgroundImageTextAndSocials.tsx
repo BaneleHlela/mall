@@ -1,27 +1,23 @@
 import { useAppSelector } from '../../../../../app/hooks'
 import ElegantSendEmailForm from '../../../extras/forms/send_email/elegant/ElegantSendEmailForm';
 import { getBackgroundStyles, getTextStyles } from '../../../../../utils/stylingFunctions';
-import StoreMenubarIcons, { socials } from '../../../menubars/supporting/StoreMenubarIcons';
+import StoreMenubarIcons from '../../../menubars/supporting/StoreMenubarIcons';
+import UnderlinedText from '../../../extras/text/UnderlinedText';
 const ContactWithBackgroundImageTextAndSocials = () => {
   const settings = useAppSelector((state) => state.layoutSettings.contact);
   const store = useAppSelector((state) => state.stores.currentStore);
 
   return (
     <div className='relative h-fit w-full flex flex-col items-center min-h-[100dvh]'>
-      {/* Title */}
-      <h1
-        style={{
-          ...getTextStyles(settings.text.heading),
-          ...getBackgroundStyles(settings.containerBackground),
-        }} 
-        className={`z-1  min-h-[80px] w-full flex flex-col justify-center
-          ${settings.text.heading.position === 'center' && 'text-center'}
-          ${settings.text.heading.position === 'start' && 'text-start'}
-          ${settings.text.heading.position === 'end' && 'text-end'}
-        lg:h-[d15vh]`}
-      >
-        {settings.text.heading.input || "Contact"}
-      </h1>
+
+      {/* Heading + Subheading */}
+      <div className="w-full z-2">
+        <UnderlinedText style={settings.text.heading} />
+        
+        {settings.text.subheading.input && (
+          <UnderlinedText style={settings.text.subheading} />
+        )}
+      </div>
       
       {/* Desktop Version */}
       <div

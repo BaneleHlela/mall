@@ -87,18 +87,6 @@ const ContactWithBackgroundImageTextAndSocialsSettings: React.FC<SectionEditorPr
                 onClick={() => setActivePanel("subheading")}
             />
             <SubSettingsContainer
-              name="Heading"
-              SettingsComponent={
-                <TextEditor
-                  objectPath={`${objectPath}.text.title`}
-                  settings={settings}
-                  handleSettingChange={handleSettingChange}
-                  allow={[ "color", "input", "position", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing" ]}
-                  responsiveSize
-                />
-              }
-            />
-            <SubSettingsContainer
               name="Paragraph"
               SettingsComponent={
                 <TextEditor
@@ -145,12 +133,12 @@ const ContactWithBackgroundImageTextAndSocialsSettings: React.FC<SectionEditorPr
           onClose={closePanel}
           title="Contact Socials Settings"
         >
-          <IconsOrButtonSettings
+          {/* <IconsOrButtonSettings
             objectPath={`${objectPath}`}
             handleSettingChange={handleSettingChange}
             settings={settings}
             allow="icons"
-          />
+          /> */}
           <IconsSettingsHandler 
             settings={settings}
             handleSettingChange={handleSettingChange}

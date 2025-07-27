@@ -13,6 +13,7 @@ interface SingleGroupImagesProps {
     textStyle: any;
     style: any;
     descriptionTextStyle: any;
+    addModal?: boolean;
 }
 
 export function getGridColumnClasses({
@@ -35,7 +36,8 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
     images,
     style,
     textStyle,
-    descriptionTextStyle
+    descriptionTextStyle,
+    addModal = true,
 }) => {
     const [showGrid, setShowGrid] = useState(false);
     const isMobile = window.innerWidth < 768;
@@ -86,9 +88,12 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                 <div className="w-full">
                     <UnderlinedText style={textStyle} input={groupName} />
                 </div>
-                <div className="w-full">
-                    <UnderlinedText style={descriptionTextStyle} input={groupDescrition} />
-                </div>
+                {!addModal && (
+                    <div className="w-full">
+                        <UnderlinedText style={descriptionTextStyle} input={groupDescrition} />
+                    </div>
+                )}
+                
             </div>
 
             {showGrid && style.addModal && (

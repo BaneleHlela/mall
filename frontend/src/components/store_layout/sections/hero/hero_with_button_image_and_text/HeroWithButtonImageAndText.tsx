@@ -2,6 +2,7 @@ import { useAppSelector } from "../../../../../app/hooks";
 import { getTextStyles } from "../../../../../utils/stylingFunctions";
 import StoreButton from "../../../extras/buttons/StoreButton";
 import { useStoreButtonClickHandler } from "../../../extras/buttons/useStoreButtonClickHandler";
+import UnderlinedText from "../../../extras/text/UnderlinedText";
 
 const HeroWithButtonImageAndText = () => {
     const style = useAppSelector((state) => state.layoutSettings.hero);
@@ -27,34 +28,13 @@ const HeroWithButtonImageAndText = () => {
                     className="text-center text-wrap z-2"
                 >   
                     {style.text.firstLine.show && (
-                        <p 
-                            style={{
-                                ...getTextStyles(style.text.firstLine),
-                            }}
-                            className={`${style.text.firstLine.animation}`}
-                        >
-                                {style.text.firstLine.input}
-                        </p>  
+                        <UnderlinedText style={style.text.firstLine} />
                     )}
                     {style.text.secondLine.show && (
-                        <p 
-                            style={{
-                                ...getTextStyles(style.text.secondLine),
-                            }}
-                            className={`${style.text.secondLine.animation}`}
-                        >
-                            {style.text.secondLine.input}
-                        </p>
+                        <UnderlinedText style={style.text.secondLine} />
                     )}
                     {style.text.thirdLine.show && (
-                        <p 
-                            style={{
-                                ...getTextStyles(style.text.thirdLine),
-                            }}
-                            className={`${style.text.thirdLine.animation}`}
-                        >
-                            {style.text.thirdLine.input}
-                        </p>
+                        <UnderlinedText style={style.text.thirdLine} />
                     )}
                 </div>
                 {/* Button */}
