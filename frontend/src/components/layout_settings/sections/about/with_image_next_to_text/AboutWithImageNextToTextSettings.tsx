@@ -24,20 +24,21 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
   const closePanel = () => setActivePanel(null);
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-[.3vh]">
       
       {/* Background Settings */}
       <SubSettingsContainer
         name="Background"
         SettingsComponent={
-          <div className="px-2 space-y-1">
+          <div className="px-[.65vh] space-y-[.3vh]">
             <BackgroundEditor
               objectPath={`${objectPath}.background`}
               settings={settings}
               handleSettingChange={handleSettingChange}
-              allow={["color", "width"]}
+              allow={["color", "width", "padding"]}
               widthUnit="%"
               responsiveSize
+              responsivePadding
             />
           </div>
         }
@@ -136,7 +137,7 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
             onClose={closePanel}
             isOpen
           >
-            <div className="px-2 space-y-1 py-1">
+            <div className="px-[.65vh] space-y-[.3vh] py-[.3vh]">
               <MultipleLayoutImagesHandler
                 objectPath={`${objectPath}.image.imageUrl`}
                 min={1}

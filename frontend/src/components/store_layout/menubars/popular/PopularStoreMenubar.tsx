@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useAppSelector } from '../../../../app/hooks'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import StoreCart from '../supporting/StoreCart'
 import StoreHamburger from '../supporting/StoreHamburger'
 import FirstStoreSidebar from '../supporting/FirstStoreSidebar'
@@ -19,10 +19,15 @@ const MobileTopBar: React.FC<{
     
     const renderLogo = () => {
         const logoSettings = settings.topbar.mobile.logo;
-    
+        const location = useLocation();
+      const layoutId = useAppSelector((state) => state.layoutSettings._id);
+      const isPreviewMode = location.pathname.startsWith(`/layouts/${layoutId}/preview`);
+      const linkTo = isPreviewMode
+        ? `/layouts/${layoutId}/preview`
+        : `/stores/${store?._id}`;
         
         return (
-          <Link to={`/stores/${store?._id}`} className='w-fit h-full pl-1 pr-1 flex flex-col justify-center'>
+          <Link to={linkTo} className='w-fit h-full pl-1 pr-1 flex flex-col justify-center'>
             {logoSettings.use === 'logo' && store?.logo?.url ? (
               <img
                 style={{ 
@@ -114,9 +119,15 @@ const DesktopTopBar: React.FC<{
 
   const renderLogo = () => {
     const logoSettings = settings.topbar.desktop.logo;
+    const location = useLocation();
+    const layoutId = useAppSelector((state) => state.layoutSettings._id);
+    const isPreviewMode = location.pathname.startsWith(`/layouts/${layoutId}/preview`);
+    const linkTo = isPreviewMode
+      ? `/layouts/${layoutId}/preview`
+      : `/stores/${store?._id}`;
 
     return (
-      <Link to={`/stores/${store?._id}`} className='w-fit h-full pl-1 pr-1 flex flex-col justify-center'>
+      <Link to={linkTo} className='w-fit h-full pl-1 pr-1 flex flex-col justify-center'>
         {logoSettings.use === 'logo' && store?.logo?.url ? (
           <img
             style={{ 
@@ -218,6 +229,7 @@ const DesktopTopBar: React.FC<{
 // Main PopularStoreMenubar Component
 const PopularStoreMenubar: React.FC = () => {
   const settings = useAppSelector((state) => state.layoutSettings.menubar)
+  const layoutId = useAppSelector((state) => state.layoutSettings._id);
   const store = useAppSelector((state) => state.stores.currentStore);
   const { routes, routeOrder } = useAppSelector((state) => state.layoutSettings);
   const storeId = store?._id as string;
@@ -231,29 +243,38 @@ const PopularStoreMenubar: React.FC = () => {
 
   
   const links = React.useMemo(() => {
-    // Create the 'home' link first
+    const location = useLocation();
+    const isPreviewMode = location.pathname.startsWith(`/layouts/${layoutId}/preview`);
+    const basePath = isPreviewMode
+      ? `/layouts/${layoutId}/preview`
+      : `/stores/${storeId}`;
+  
+    // Home link
     const homeLink = {
-      to: `/stores/${storeId}`,
+      to: basePath,
       label: routes.home?.name || 'Home',
     };
   
-    // Create an array of links from home.inLinks
+    // Section links (anchors)
     const inLinksArray = (routes.home?.inLinks || []).map(link => ({
-      to: `/stores/${storeId}#${link.section}`,
+      to: `${basePath}#${link.section}`,
       label: link.name,
     }));
   
-    // Create an array of links from other routes (excluding 'home')
+    // Other route links
     const routeLinks = routeOrder
-      .filter(key => key !== 'home') // 'home' is already handled separately
-      .map(key => ({ //@ts-ignore
-        to: `/stores/${storeId}${routes[key]?.url || ''}`, //@ts-ignore
-        label: routes[key]?.name || '',
-      }));
+      .filter(key => key !== 'home')
+      .map(key => { //@ts-ignore
+        const rawUrl = routes[key]?.url || "";
+        const trimmedPath = rawUrl.replace(/^\//, ""); // remove leading slash
+        return {
+          to: `${basePath}/${trimmedPath}`, //@ts-ignore
+          label: routes[key]?.name || '',
+        };
+      });
   
-    // Combine all arrays: home link, then inLinks, then other route links
     return [homeLink, ...inLinksArray, ...routeLinks];
-  }, [routes, routeOrder, storeId]);
+  }, [routes, routeOrder, storeId, layoutId, useLocation()]);
   
 
   return (
@@ -263,6 +284,7 @@ const PopularStoreMenubar: React.FC = () => {
         backgroundColor: settings.background.color,
         borderBottom: `${settings.background.border.width} ${settings.background.border.style} ${settings.background.border.color}`,
         ...getBackgroundStyles(settings.background),
+        width: "100%"
       }}
       className={`flex flex-row justify-between z-10 top-0 w-full
         ${settings.background.shadow ? "shadow-md" : ""} 

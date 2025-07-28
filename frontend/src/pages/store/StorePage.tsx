@@ -1,7 +1,7 @@
 import type { Store as StoreType } from "../../types/storeTypes"; // Import the correct type for the store object
 import { useState, useEffect } from "react";
 import { TbLoader3 } from "react-icons/tb";
-import { Route, Routes, useParams } from "react-router-dom";
+import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import WebFont from "webfontloader";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { fetchStoreServices } from "../../features/services/servicesSlice";
@@ -26,10 +26,12 @@ import StoreMenubarIcons from "../../components/store_layout/menubars/supporting
 import StoreFloatingButton from "../../components/store_layout/extras/buttons/StoreFloatingButton";
 import { IoMdClose } from "react-icons/io";
 import ComingSoon from "../../components/the_mall/ComingSoon";
+import StoreHome from "./supporting/home/StoreHomePage";
 
 const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
   const settings = useAppSelector((state) => state.layoutSettings);
   const { storeId: paramStoreId } = useParams<{ storeId: string }>();
+  const layoutId = useAppSelector 
   const storeId = propStoreId || paramStoreId 
   const [isChatOpen, setIsChatOpen] = useState(false);
 
@@ -136,6 +138,7 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
               <StoreAlertDiv config={settings.menubar.alertDiv} objectPath={`menubar.alertDiv`} />
             )}
             <Routes>
+              <Route key="*" path="*" element={<StoreHomePage />} />
               {Object.values(routes).map((route) => (
                 <Route
                   key={route.url}

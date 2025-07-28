@@ -9,6 +9,7 @@ import TextEditor from '../../../text/TextEditor';
 import { AnimatePresence } from 'framer-motion';
 import StoreOverallReviewsCardSettings from '../../../extras/cards/StoreOverallReviewsCardSettings';
 import SendEmailFormSettings from '../../../forms/SendEmailFormSettings';
+import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings';
 
 interface HeroSettingsProps {
   settings: any;
@@ -88,36 +89,44 @@ const HeroWithReviewCardAndEmailFormSettings: React.FC<HeroSettingsProps> = ({
                     responsiveSize={true}
                   />
                 </div>
-                {/* Heading */}
-                <SubSettingsContainer
-                  key="heading"
-                  name="Heading"
-                  SettingsComponent={
-                    <TextEditor
-                      objectPath={`${objectPath}.text.heading`}
-                      settings={settings}
-                      handleSettingChange={handleSettingChange}
-                      allow={[ "color", "animation", "input", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing" ]}
-                      responsiveSize
-                    />
-                  }
+                {/* Headin */}
+                <FirstOrderSubSettingsContainer
+                    name="Heading"
+                    onClick={() => setActivePanel("heading")}
                 />
-                {/* Subheading */}
-                <SubSettingsContainer
-                  key="heading"
-                  name="Subheading"
-                  SettingsComponent={
-                    <TextEditor
-                      objectPath={`${objectPath}.text.subheading`}
-                      settings={settings}
-                      handleSettingChange={handleSettingChange}
-                      allow={[ "color", "animation", "input", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing" ]}
-                      responsiveSize
-                    />
-                  }
+                {/* Text */}
+                <FirstOrderSubSettingsContainer
+                    name="Subheading"
+                    onClick={() => setActivePanel("subheading")}
                 />
               </div>
             </SlidingPanel>
+          )}
+          {activePanel === "heading" && (
+              <SlidingPanel key="heading" isOpen={true} onClose={() => setActivePanel("text")} title="Heading Settings">
+                  <div className="space-y-[.3vh]">
+                      <UnderlinedTextSettings
+                          settings={settings}
+                          handleSettingChange={handleSettingChange}
+                          objectPath={`${objectPath}.text.heading`}
+                          allowInput
+                          responsiveSize
+                      />
+                  </div>
+              </SlidingPanel>
+          )}
+          {activePanel === "subheading" && (
+              <SlidingPanel key="subheading" isOpen={true} onClose={() => setActivePanel("text")} title="subheading Settings">
+                  <div className="space-y-[.3vh]">
+                      <UnderlinedTextSettings
+                          settings={settings}
+                          handleSettingChange={handleSettingChange}
+                          objectPath={`${objectPath}.text.subheading`}
+                          allowInput
+                          responsiveSize
+                      />
+                  </div>
+              </SlidingPanel>
           )}
           {activePanel === "reviews" && (
             <SlidingPanel

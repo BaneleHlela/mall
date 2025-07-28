@@ -20,8 +20,8 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
   handleSettingChange,
   allow,
   responsiveSize = false,
-  heightUnit = "px",
-  widthUnit = "px",
+  heightUnit = "vh",
+  widthUnit = "vw",
   responsivePadding
 }) => {
   const isAllowed = (key: string) => !allow || allow.includes(key);
@@ -45,9 +45,9 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
 
   const getSliderProps = (unit: string) => {
     if (unit === 'vw' || unit === 'vh' || unit === "%") {
-      return { min: 0, max: 100, step: 1 };
+      return { min: 0, max: 150, step: 1 };
     }
-    return { min: 0, max: 500, step: 1 };
+    return { min: .1, max: 35, step: .1 };
   };
   const animationOptions = [
     { value: "none", label: "None" },
@@ -129,7 +129,7 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
           heightUnit ? (
             <SettingsSlider
               label="Height"
-              value={parseInt(getSetting("height", settings, objectPath) || "120")}
+              value={parseInt(getSetting("height", settings, objectPath) || "10")}
               unit={heightUnit}
               {...getSliderProps(heightUnit)}
               onChange={createSliderChangeHandler("height", heightUnit)}
@@ -138,7 +138,7 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
            : (
             <SettingsSlider
               label="Height"
-              value={parseFloat(getSetting("height", settings, objectPath) || "120")}
+              value={parseFloat(getSetting("height", settings, objectPath) || "10")}
               unit={"vh"}
               min={.1}
               max={20}

@@ -10,19 +10,19 @@ const CLIENT_URL = process.env.CLIENT_URL
 export const createLayoutConfig = async (req, res) => {
     try {
       const layout = await StoreLayout.create(req.body);
-      //const layoutId = layout._id.toString();
+      const layoutId = layout._id.toString();
   
-      // Generate the preview screenshot
-    //   const previewUrl = `${CLIENT_URL}/layouts/preview/${layoutId}`;
-    //   const screenshotBuffer = await captureScreenshot(previewUrl);
+      //Generate the preview screenshot
+      const previewUrl = `${CLIENT_URL}/layouts/${layoutId}/preview`;
+      const screenshotBuffer = await captureScreenshot(previewUrl, 360, 740);
   
-    //   // Upload to Google Cloud
-    //   const fileName = `stores/layouts/${layoutId}/${layoutId}_preview.png`;
-    //   await uploadToUploads(screenshotBuffer, fileName);
+      // Upload to Google Cloud
+      const fileName = `stores/layouts/${layoutId}/${layoutId}_preview.png`;
+      await uploadToUploads(screenshotBuffer, fileName);
   
-    //   // Save public URL in MongoDB
-    //   const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${fileName}`;
-    //   layout.imageUrl = publicUrl;
+      // Save public URL in MongoDB
+      const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${fileName}`;
+      layout.imageUrl = publicUrl;
       await layout.save();
   
       res.status(201).json(layout);

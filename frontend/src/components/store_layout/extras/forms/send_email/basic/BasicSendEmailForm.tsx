@@ -79,7 +79,7 @@ const BasicSendEmailForm: React.FC<SendEmailFormProps> = ({ style }) => {
                 ? style.text.title.fontSize.mobile
                 : style.text.title.fontSize.desktop,
           }}
-          className={`w-full mb-5
+          className={`w-full mb-[1.8vh]
             ${style.text.title.position === 'center' && 'text-center'}
             ${style.text.title.position === 'start' && 'text-start'}
             ${style.text.title.position === 'end' && 'text-end'}
@@ -89,9 +89,9 @@ const BasicSendEmailForm: React.FC<SendEmailFormProps> = ({ style }) => {
         </h2>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-3 capitalize">
+      <form onSubmit={handleSubmit} className="space-y-[.95vh] capitalize">
         {/* First and Last Name side by side */}
-        <div className="flex flex-col lg:flex-row gap-3">
+        <div className="flex flex-col lg:flex-row gap-[.95vh]">
           {['firstName', 'lastName'].map((field) => (
             <div key={field} className="w-full" style={{ ...getTextStyles(style.text.senderInfo) }}>
               <label
@@ -112,7 +112,7 @@ const BasicSendEmailForm: React.FC<SendEmailFormProps> = ({ style }) => {
                 onChange={handleChange}
                 required
                 style={{ ...getBorderStyles(style.background.senderInfo.border) }}
-                className="mt-1 block w-full p-2"
+                className="mt-[.3vh] block w-full p-[.65vh]"
               />
             </div>
           ))}
@@ -139,7 +139,7 @@ const BasicSendEmailForm: React.FC<SendEmailFormProps> = ({ style }) => {
                 onChange={handleChange}
                 required
                 style={{ ...getBorderStyles(style.background.senderInfo.border) }}
-                className="mt-1 block w-full p-2 h-[15vh]"
+                className="mt-[.3vh] block w-full p-[.65vh] h-[15vh]"
               />
             ) : (
               <input
@@ -150,7 +150,7 @@ const BasicSendEmailForm: React.FC<SendEmailFormProps> = ({ style }) => {
                 onChange={handleChange}
                 required
                 style={{ ...getBorderStyles(style.background.senderInfo.border) }}
-                className="mt-1 block w-full p-2"
+                className="mt-[.3vh] block w-full p-[.65vh]"
               />
             )}
           </div>

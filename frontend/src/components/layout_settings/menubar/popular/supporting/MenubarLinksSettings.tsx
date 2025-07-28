@@ -37,7 +37,7 @@ const MenubarLinksSettings: React.FC<MenubarLinksSettingsProps> = ({ type, allow
             {allowPositioning && (
                 <OptionsToggler
                     label="Links Position"
-                    options={['left', 'center', 'right']}
+                    options={['left', 'center', 'right',]}
                     value={linksSettings.alignment}
                     onChange={(value) => handleSettingChange(`${objectPath}.alignment`, value)}
                 />
@@ -50,7 +50,7 @@ const MenubarLinksSettings: React.FC<MenubarLinksSettingsProps> = ({ type, allow
                     objectPath={`${objectPath}.text`}
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={['fontFamily', 'color', 'fontSize', 'fontWeight', 'letterSpacing']}
+                    allow={['fontFamily', 'color', 'fontSize', 'weight', 'letterSpacing', "textDecoration", "textTransform", "lineHeight", "animation"]}
                 />} 
             />
             

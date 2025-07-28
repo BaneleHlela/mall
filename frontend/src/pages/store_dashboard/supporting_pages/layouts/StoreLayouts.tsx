@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../../../app/hooks";
-import type { RootState } from "../../../app/store";
-import { createLayout } from "../../../features/layouts/layoutSlice";
+import { useAppSelector, useAppDispatch } from "../../../../app/hooks";
+import type { RootState } from "../../../../app/store";
+import { createLayout } from "../../../../features/layouts/layoutSlice";
 import { useNavigate } from "react-router-dom";
+import { defaultLayoutConfig } from "../../../../utils/defaults/defaultLayoutConfig";
 
 
 const StoreLayouts = () => {
@@ -15,13 +16,13 @@ const StoreLayouts = () => {
   );
 
   if (!store) {
-    return <p>Store not found or invalid store ID.</p>;
+    return <p>Store not found or invalid store ID: {storeId}.</p>;
   }
   
   const handleClick = async () => {
     try {
       // Create a new layout with a unique name
-      const newLayout = await dispatch(createLayout({ ...layoutSettings })).unwrap();
+      const newLayout = await dispatch(createLayout({ ...defaultLayoutConfig, store: storeId })).unwrap();
 
       // Redirect to the preview page for the new layout
       navigate(`/layouts/${newLayout._id}`);
@@ -44,7 +45,7 @@ const StoreLayouts = () => {
         </ul>
       )}
       <button onClick={handleClick} className="border-2 p-20 bg-blue-400">
-        Add layouts
+        Create New Layout
       </button>
     </div>
   );

@@ -1,7 +1,7 @@
 import { Routes, Route, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import StoreDashBoardMenubar from "../../components/store_dashboard/menubar/StoreDashBoardMenubar";
-import StoreLayouts from "./supporting_pages/StoreLayouts";
+import StoreLayouts from "./supporting_pages/layouts/StoreLayouts";
 import StoreTeam from "./supporting_pages/StoreDashboardTeam";
 import StoreServices from "./supporting_pages/DashboardStoreServices";
 import StoreOrders from "./supporting_pages/StoreOrders";

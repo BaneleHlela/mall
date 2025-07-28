@@ -9,6 +9,8 @@ import FirstOrderSubSettingsContainer from '../../../FirstOrderSubSettingsContai
 import SlidingPanel from '../../../supporting/SlidingPanel';
 import { AnimatePresence } from 'framer-motion';
 import IconsOrButtonSettings from './IconsOrButtonSettings';
+import BackgroundEditor from '../../../background/BackgroundEditor';
+import SubSettingsContainer from '../../../extras/SubSettingsContainer';
 
 const SidebarSettings: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -32,6 +34,18 @@ const SidebarSettings: React.FC = () => {
         options={animationOptions}
         value={sidebarAnimation}
         onChange={(value) => handleSettingChange('menubar.sidebar.animation', value)}
+      />
+
+      <SubSettingsContainer
+          name="Background"
+          SettingsComponent={
+              <BackgroundEditor
+                  objectPath={`menubar.sidebar.background`}
+                  settings={settings}
+                  handleSettingChange={handleSettingChange}
+                  allow={['color', 'border', 'padding', "height", "width"]}
+              />
+          }
       />
 
       {/* Refactored: Links Section */}

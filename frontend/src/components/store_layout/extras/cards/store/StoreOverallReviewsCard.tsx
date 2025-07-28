@@ -19,7 +19,7 @@ const StoreOverallReviewsCard: React.FC<StoreOverallReviewsCardProps> = ({stats,
             style={{
                ...getBackgroundStyles(style.background),
             }}
-            className="flex flex-col justify-between"
+            className="flex flex-col justify-between min-h-fit"
         >
             <div className="flex flex-row justify-center">
                 <StarDisplay 

@@ -24,9 +24,6 @@ const FirstStoreSidebar = ({
   links: NavLink[];
 }) => {
   const style = useAppSelector((state) => state.layoutSettings.menubar.sidebar);
-  const { color: backgroundColor } = useAppSelector(
-    (state) => state.layoutSettings.menubar.background
-  );
 
   return (
     isOpen && (
@@ -35,7 +32,7 @@ const FirstStoreSidebar = ({
         animate={{ y: 0, x: 0, opacity: 1 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         style={{
-          backgroundColor: backgroundColor,
+          ...getBackgroundStyles(style.background || {}),
         }}
         className="fixed pb-5 h-screen w-screen flex flex-col justify-between z-50 right-0 lg:hidden"
       >

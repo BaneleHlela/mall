@@ -76,7 +76,7 @@ export const defaultHeroWithReviewCardAndEmailFormConfig = {
         }
     },
     sendEmailForm: {
-        variation: "elegantSendEmailForm",
+        variation: "elegant",
         background: {
             color: "white",
             shadow: true,

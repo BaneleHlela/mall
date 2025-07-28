@@ -6,7 +6,7 @@ import StorePage from '../store/StorePage';
 const WebsitePreview = ({storeId}: {storeId: string}) => {
 
   return (
-    <div className='relative h-screen w-screen bg-stone-200 p-3'>
+    <div className='relative h-screen w-screen bg-stone-200'>
       <StorePage storeId={storeId}/>
     </div>
   );

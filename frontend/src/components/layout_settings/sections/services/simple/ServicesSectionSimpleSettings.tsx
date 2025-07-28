@@ -85,6 +85,7 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                                 handleSettingChange={handleSettingChange}
                                 objectPath={`${objectPath}.text.heading`}
                                 allowInput
+                                responsiveSize
                             />
                         </div>
                     </SlidingPanel>
@@ -97,6 +98,7 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                                 handleSettingChange={handleSettingChange}
                                 objectPath={`${objectPath}.text.subheading`}
                                 allowInput
+                                responsiveSize
                             />
                         </div>
                     </SlidingPanel>
@@ -218,8 +220,8 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                                             <OptionsToggler
                                                 label="Desktop Stack"
                                                 options={["horizontal", "vertical"]}
-                                                value={getSetting("stack.desktop", settings, objectPath)}
-                                                onChange={(value) => handleSettingChange(`${objectPath}.stack.desktop`, value)}
+                                                value={getSetting("grid.container.stack.desktop", settings, objectPath)}
+                                                onChange={(value) => handleSettingChange(`${objectPath}.grid.container.stack.desktop`, value)}
                                             />
                                         </div>
                                         <ResponsiveGridSettings

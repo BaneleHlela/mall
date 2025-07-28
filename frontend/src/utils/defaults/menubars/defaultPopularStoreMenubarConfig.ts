@@ -5,8 +5,8 @@ export const defaultPupularStoreMenubarConfig = {
     alertDiv: defaultStoreAlertDivConfig,
     background: {
         height: {
-            mobile: "110px",
-            desktop: "120px",
+            mobile: "8vh",
+            desktop: "8vh",
         },
         color: "white",
         shadow: true,
@@ -17,8 +17,14 @@ export const defaultPupularStoreMenubarConfig = {
             radius: "0px",
         },
         padding: {
-            x: "1px",
-            y: "1px",
+            x: {
+                mobile: "0px",
+                desktop: "0px",
+            },
+            y: {
+                mobile: "0px",
+                desktop: "0px",
+            }
         }
     },
     cart: {
@@ -97,8 +103,14 @@ export const defaultPupularStoreMenubarConfig = {
                         radius: "0x"
                     },
                     padding: {
-                        y: "15px",
-                        x: "0px",
+                        x: {
+                            mobile: "0px",
+                            desktop: "0px",
+                        },
+                        y: {
+                            mobile: "15px",
+                            desktop: "15px",
+                        }
                     }
                 },
                 allLinksBackground: {
@@ -110,8 +122,14 @@ export const defaultPupularStoreMenubarConfig = {
                         radius: "0x"
                     },
                     padding: {
-                        y: "15px",
-                        x: "0px",
+                        x: {
+                            mobile: "0px",
+                            desktop: "0px",
+                        },
+                        y: {
+                            mobile: "15px",
+                            desktop: "15px",
+                        }
                     }
                 }
             },
@@ -140,8 +158,14 @@ export const defaultPupularStoreMenubarConfig = {
                                 radius: "0px",
                             },
                             padding: {
-                                x: "0.8rem",
-                                y: "50px",
+                                x: {
+                                    mobile: "0px",
+                                    desktop: "0px",
+                                },
+                                y: {
+                                    mobile: "15px",
+                                    desktop: "15px",
+                                }
                             }
                         }
                     }
@@ -334,10 +358,6 @@ export const defaultPupularStoreMenubarConfig = {
                 letterSpacing: "0px",
             },
             background: {
-                padding: {
-                    x: "10px",
-                    y: "10px"
-                },
                 border: {
                     width: "0px",
                     style: "solid",
@@ -369,10 +389,6 @@ export const defaultPupularStoreMenubarConfig = {
                             color: "black",
                             radius: "0px",
                         },
-                        padding: {
-                            x: "0.8rem",
-                            y: "50px",
-                        }
                     }
                 }
             },

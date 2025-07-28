@@ -47,7 +47,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
                         objectPath={`${objectPath}.background`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["color", "border", "height"]}
+                        allow={["color", "border", "height", "shadow"]}
                         heightUnit="vh"
                         responsiveSize
                     />
@@ -130,6 +130,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
                       objectPath={`${objectPath}.textAndButton.text.name`}
                       settings={settings}
                       handleSettingChange={handleSettingChange}
+                      responsiveSize
                     />
                   }
                 />
@@ -140,6 +141,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
                       objectPath={`${objectPath}.textAndButton.text`}
                       settings={settings}
                       handleSettingChange={handleSettingChange}
+                      responsiveSize
                     />
                   }
                 />

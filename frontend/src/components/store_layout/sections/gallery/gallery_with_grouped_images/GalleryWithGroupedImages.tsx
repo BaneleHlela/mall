@@ -74,7 +74,7 @@ const GalleryWithGroupedImages = () => {
                 <button 
                     style={{
                         ...getTextStyles(settings.imagesModal.toggleButtons),
-                        ...getBackgroundStyles(settings.imagesModal.toggleButtons.background)
+                        ...getBackgroundStyles(settings.imagesModal.toggleButtons?.background || {})
                     }}
                     onClick={handlePrev}
                 >
@@ -83,7 +83,7 @@ const GalleryWithGroupedImages = () => {
                 <button 
                     style={{
                         ...getTextStyles(settings.imagesModal.toggleButtons),
-                        ...getBackgroundStyles(settings.imagesModal.toggleButtons.background)
+                        ...getBackgroundStyles(settings.imagesModal.toggleButtons?.background || {})
                     }}
                     onClick={handleNext}
                 >

@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import { getStoreRatingStats } from "../../../../../features/reviews/reviewSlice";
-import { getBackgroundStyles, getTextStyles } from "../../../../../utils/stylingFunctions";
+import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from "../../../../../utils/stylingFunctions";
 import StoreOverallReviewsCard from "../../../extras/cards/store/StoreOverallReviewsCard";
-import SendEmailForm from "../../../extras/forms/send_email/basic/BasicSendEmailForm";
+import UnderlinedText from "../../../extras/text/UnderlinedText";
+import SendEmailForm from "../../../extras/forms/send_email/SendEmailForm";
 
 const HeroWithReviewCardAndEmailForm = () => {
   const dispatch = useAppDispatch();
@@ -38,27 +39,18 @@ const HeroWithReviewCardAndEmailForm = () => {
         </div>
         {/* Mobile */}
         <div className="p-4 space-y-5 z-10 lg:hidden">
-          {/* text */}
-          <div
-            className="flex flex-col justify-center w-full h-fit mt-10 "
-          >
-            <p
-              style={{
-                ...getTextStyles(style.text.heading),
-              }}  
-              className={`${style.text.heading.animation}`}
-            >
-              {style.text.heading.input === "" ? "Quality (Your Service) Solutions" : style.text.heading.input}
-            </p>
-            <p
-              style={{
-                ...getTextStyles(style.text.subheading),
-              }}  
-              className={`${style.text.subheading.animation}`}
-            >
-                {style.text.subheading === ""? "Durable, Reliable, and Professional" : style.text.subheading.input}
-            </p>
-
+          {/* Heading & Subheading */}
+          <div 
+              className='w-full mt-15'
+          >   
+              {/* Heading + Subheading */}
+              <div className="w-full">
+                <UnderlinedText style={style.text.heading} />
+                
+                {style.text.subheading.input && (
+                  <UnderlinedText style={style.text.subheading} />
+                )}
+              </div>
           </div>
           {/* Reviews summary */}
           <div className={`
@@ -77,10 +69,10 @@ const HeroWithReviewCardAndEmailForm = () => {
           </div>
         </div>
         {/* desktop */}
-        <div className="hidden lg:flex flex-col w-full z-10 h-[fit] justify-between px-10">
+        <div className="hidden lg:flex flex-col w-full z-10 h-full justify-center px-10">
           {/* Text */}
           <div 
-              className="flex flex-col justify-center h-fit w-full mt-5"
+              className="flex flex-col justify-center h-fit w-full mt-[15vh]"
               style={{
                 width: style.text.width.desktop
               }}

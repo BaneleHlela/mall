@@ -10,7 +10,7 @@ import MyStores from "./pages/my_stores/MyStores";
 import Search from "./pages/my_stores/Search";
 import Profile from "./pages/profile/Profile";
 import StoreDashboard from "./pages/store_dashboard/StoreDashboard";
-import MyLayouts from "./pages/store_dashboard/supporting_pages/StoreLayouts";
+import MyLayouts from "./pages/store_dashboard/supporting_pages/layouts/StoreLayouts";
 import { useDispatch } from "react-redux";
 import { setInitialLayout } from "./features/layouts/layoutSettingsSlice";
 import Dashboard from "./pages/dashboard/Dashboard";

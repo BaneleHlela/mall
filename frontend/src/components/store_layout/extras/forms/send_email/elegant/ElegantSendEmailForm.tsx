@@ -75,7 +75,7 @@ const ElegantSendEmailForm: React.FC<SendEmailFormProps> = ({style}) => {
               ...getTextStyles(style.text.title),
               fontSize: window.innerWidth < 1024 ? style.text.title.fontSize.mobile : style.text.title.fontSize.desktop,
             }}
-            className={`w-full mb-5
+            className={`w-full mb-[1.8vh]
               ${style.text.title.position === 'center' && 'text-center'}
               ${style.text.title.position === 'start' && 'text-start'}
               ${style.text.title.position === 'end' && 'text-end'}
@@ -84,7 +84,7 @@ const ElegantSendEmailForm: React.FC<SendEmailFormProps> = ({style}) => {
             {style.text.title.input || "Send a message"}
           </h2>
       )}
-      <form onSubmit={handleSubmit} className="space-y-3 capitalize">
+      <form onSubmit={handleSubmit} className="space-y-[1vh] capitalize">
         <div className="flex flex-col lg:flex-row gap-3">
           {['firstName', 'lastName'].map((field) => (
             <div key={field} className="w-full"
@@ -113,7 +113,7 @@ const ElegantSendEmailForm: React.FC<SendEmailFormProps> = ({style}) => {
                   borderBottom: `${style.background.senderInfo.border.width} ${style.background.senderInfo.border.style} ${style.background.senderInfo.border.color}`,
                   borderRadius: style.background.senderInfo.border.radius,
                 }}
-                className="mt-1 block w-full p-2 focus:bg-[#ffffff30] focus:bg-opacity-30 focus:outline-none focus:ring-0 focus:border-none"
+                className="mt-[.3vh] block w-full p-[.65vh] focus:bg-[#ffffff30] focus:bg-opacity-30 focus:outline-none focus:ring-0 focus:border-none"
               />
             </div>
           ))}
@@ -147,7 +147,7 @@ const ElegantSendEmailForm: React.FC<SendEmailFormProps> = ({style}) => {
                   borderBottom: `${style.background.senderInfo.border.width} ${style.background.senderInfo.border.style} ${style.background.senderInfo.border.color}`,
                   borderRadius: style.background.senderInfo.border.radius,
                 }}
-                className="mt-1 h-[15vh] block w-full p-2 focus:bg-[#ffffff11] focus:bg-opacity-30 focus:outline-none focus:ring-0 focus:border-none"
+                className="mt-[.32vh] h-[15vh] block w-full p-[.65vh] focus:bg-[#ffffff11] focus:bg-opacity-30 focus:outline-none focus:ring-0 focus:border-none"
               />
             ) : (
               <input
@@ -161,7 +161,7 @@ const ElegantSendEmailForm: React.FC<SendEmailFormProps> = ({style}) => {
                   borderBottom: `${style.background.senderInfo.border.width} ${style.background.senderInfo.border.style} ${style.background.senderInfo.border.color}`,
                   borderRadius: style.background.senderInfo.border.radius,
                 }}
-                className="mt-1 block w-full p-2 focus:bg-[#ffffff2a] focus:bg-opacity-30 focus:outline-none focus:ring-0 focus:border-none"
+                className="mt-[.32vh] block w-full p-[.65vh] focus:bg-[#ffffff2a] focus:bg-opacity-30 focus:outline-none focus:ring-0 focus:border-none"
               />
             )}
           </div>

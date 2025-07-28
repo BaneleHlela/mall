@@ -19,7 +19,7 @@ const StoreOverallReviewsCardSettings: React.FC<StoreOverallReviewsCardSettingsP
   const basePath = `${objectPath}.reviewsCard`;
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-[.3vh]">
       {/* Placement */}
       <OptionsToggler 
         label="Position"

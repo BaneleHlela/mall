@@ -54,9 +54,9 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                 }} 
                 className={`
                         flex flex-col justify-between overflow-hidden min-h-fit
-                        ${style.textAndButton.background.position === "center" && "items-center"}
-                        ${style.textAndButton.background.position === "start" && "items-start"}
-                        ${style.textAndButton.background.position === "end" && "items-end"}
+                        ${style.textAndButton.background?.position === "center" && "items-center"}
+                        ${style.textAndButton.background?.position === "start" && "items-start"}
+                        ${style.textAndButton.background?.position === "end" && "items-end"}
                     `}
             >
                 {/* Name */}

@@ -126,14 +126,14 @@ export const defaultLayoutConfig = {
           }
         }
     },
+    menubar: defaultPupularStoreMenubarConfig,
+    hero: defaultHeroWithReviewCardAndEmailFormConfig,
     practice: simpleServicesSectionConfig,
     services: simpleServicesSectionConfig,
     about: defaultAboutWithImageNextToTextConfig,
     team: defaultPopularTeamSectionConfig,
-    menubar: defaultPupularStoreMenubarConfig,
     gallery: defaultGalleryWithGroupedImagesConfig,
     menu: defaultFirstStoreMenuSectionConfig,
-    hero: defaultHeroWithReviewCardAndEmailFormConfig,
     book: defaultBasicBookWithOpenCalendarConfig,
     bookWithCalendar: defaultFirstBookWithCalandarConfig,
     products: defaultPopularProductsSectionConfig,
