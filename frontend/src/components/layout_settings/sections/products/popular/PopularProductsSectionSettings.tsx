@@ -144,13 +144,13 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                     && (
                     <SlidingPanel  key="toggle_buttons" isOpen={true} onClose={() => setActivePanel("cards")} title="Toggle Buttons Settings">
                         <TextEditor
-                            objectPath={`${objectPath}.toggleButtons`}
+                            objectPath={`${objectPath}.grid.container.toggleButtons`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
                             allow={["position", "fontFamily", "backgroundColor", "padding", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "textDecoration"]}
                         />
                         <BorderEditor
-                            objectPath={`${objectPath}.toggleButtons.background.border`}
+                            objectPath={`${objectPath}.grid.container.toggleButtons.background.border`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
                         />

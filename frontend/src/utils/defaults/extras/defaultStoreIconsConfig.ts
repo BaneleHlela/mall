@@ -8,7 +8,7 @@ export const defaultStoreIconsConfig = {
         third: "twitter",
     },
     size: "3.5vh",
-    color: "#6c4d37",
+    color: "blue",
     background: {
         color: "",
         border: {

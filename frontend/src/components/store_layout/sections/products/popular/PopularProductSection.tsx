@@ -85,7 +85,7 @@ const PopularProductsSection = () => {
       {isHorizontal ? (
         <div className="w-full relative flex flex-col items-center overflow-hidden">
           {/* Toggle Buttons */}
-          <div className="flex justify-between absolute top-1/2 w-full z-10">
+          <div className="flex justify-between absolute top-1/2 w-full z-2">
             <button
               style={{
                 ...getTextStyles(settings.grid.container.toggleButtons),

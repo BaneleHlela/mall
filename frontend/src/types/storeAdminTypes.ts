@@ -14,6 +14,7 @@ export interface StoreAdmin {
     analytics: any; // or proper type
     isLoading: boolean;
     error: string | null;
+    recommendedStoreDesigns: Store[] | null;
     searchResults: Array<{
       _id: string;
       username: string;

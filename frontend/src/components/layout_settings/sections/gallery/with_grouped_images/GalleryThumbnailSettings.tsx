@@ -124,7 +124,7 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                             onClick={() => setActivePanel("group_name")}
                         />
                         {/* Description */}
-                        {settings.gallery.imagesModal.addModal && (
+                        {!settings.gallery.imagesModal.addModal && (
                             <FirstOrderSubSettingsContainer
                                 name="Group Description"
                                 onClick={() => setActivePanel("group_description")}

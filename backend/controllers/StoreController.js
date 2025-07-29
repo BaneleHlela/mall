@@ -81,6 +81,22 @@ export const getStores = expressAsyncHandler(async (req, res) => {
   res.status(200).json(stores);
 });
 
+// Get demo stores
+export const getDemoStores = expressAsyncHandler(async (req, res) => {
+  try {
+    const stores = await Store.find({ isDemo: true });
+
+    if (!stores || stores.length === 0) {
+      return res.status(404).json({ message: 'No demo stores found' });
+    }
+
+    res.status(200).json(stores);
+  } catch (error) {
+    console.error('Error fetching demo stores:', error);
+    res.status(500).json({ message: 'Server error while fetching demo stores' });
+  }
+})
+
 // Edit store information
 export const editStore = expressAsyncHandler(async (req, res) => {
   const { storeId } = req.params;

@@ -20,11 +20,21 @@ const storeLayoutSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Store",
     },
+    isDemo: {
+        type: Boolean,
+        default: true,
+    },
     menubar: {},
-    hero: {},
-    order: {},
+    hero: {
+        type: Object,
+    },
+    order: {
+        type: Object,
+    },
     //book: {},
-    about: {},
+    about: {
+
+    },
     gallery: {},
     products: {},
     services: {},
@@ -35,6 +45,10 @@ const storeLayoutSchema = new mongoose.Schema({
     menu: {},
     footer: {
         
+    },
+    colors: {
+        type: Array,
+        default: [],
     },
 }, { 
         timestamps: true 

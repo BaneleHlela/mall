@@ -93,3 +93,9 @@ export const departments = {
     description: "Home security systems, CCTV, electric fencing, and armed response."
   } 
 };
+
+
+export const colorPalettes = {
+  paletteA: ["#ffffff", "#000000", "#f1f1f1"],
+}; 
+

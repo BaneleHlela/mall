@@ -8,7 +8,7 @@ export interface LayoutState {
     layouts: Layout[];
     activeLayout: Layout | null;
     layoutSettings: Layout | null;
-    status: "idle" | "loading" | "succeeded" | "failed";
+    isLoading: boolean;
     error: string | null;
 }
   
@@ -37,9 +37,10 @@ export interface Layout {
     routes: Routes;
     routeOrder: string[]; 
     practice: any;
+    imageUrl: string;
     background: BackgroundSettings;
     fonts: Fonts;
-    name?: string;
+    name: string;
     _id?: string;
     store?: Types.ObjectId | null;
     floats: {
@@ -98,7 +99,6 @@ export interface Route {
     // | "footer"
     // | "order" 
     // >;
-
 }
   
 export interface Routes {

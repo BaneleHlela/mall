@@ -70,30 +70,6 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
                 name="paragraph"
                 onClick={() => setActivePanel("paragraph")}
               />
-              <SubSettingsContainer
-                  name="Title"
-                  SettingsComponent={
-                    <UnderlinedTextSettings
-                      settings={settings}
-                      handleSettingChange={handleSettingChange}
-                      objectPath={`${objectPath}.text.title.style`}
-                      allowInput
-                    />
-                  }
-                  
-              />
-              <SubSettingsContainer
-                  name="Paragraph"
-                  SettingsComponent={
-                  <TextEditor
-                      objectPath={`${objectPath}.text.style`}
-                      settings={settings}
-                      handleSettingChange={handleSettingChange}
-                      allow={["input", "fontFamily", "fontSize", "color", "weight", "fontStyle", "animation"]}
-                      responsiveSize
-                  />
-                }
-              />
             </div>
           </SlidingPanel>
         )}

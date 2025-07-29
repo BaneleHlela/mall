@@ -128,7 +128,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
             <SlidingPanel
               key={lineKey}
               isOpen={true}
-              onClose={closePanel}
+              onClose={() => setActivePanel("textLines")}
               title={`Text Line: ${lineKey.replace("Line", " Line")}`}
             >
               <div className="px-2 space-y-2">

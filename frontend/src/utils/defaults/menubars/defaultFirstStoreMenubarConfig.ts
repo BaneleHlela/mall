@@ -4,7 +4,7 @@ export const defaultFirstStoreMenubarConfig = {
             mobile: "250px",
             desktop: "450px",
         },
-        color: "#f9d195",
+        color: "#000000",
         shadow: true,
     },
     cart: {
@@ -126,7 +126,7 @@ export const defaultFirstStoreMenubarConfig = {
     },
     sidebar: {
         animation: "fade",
-        backgroundColor: "#f9d195",
+        backgroundColor: "#000000",
         logo: {
             display: false,       
         },

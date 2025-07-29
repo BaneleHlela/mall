@@ -4,11 +4,8 @@ import { updateSetting } from "../../../../../features/layouts/layoutSettingsSli
 import { getSetting } from "../../../../../utils/helperFunctions";
 import BackgroundEditor from "../../../background/BackgroundEditor";
 import StoreButtonSettings from "../../../extras/StoreButtonSettings";
-import OptionsToggler from "../../../supporting/OptionsToggler";
-import TextEditor from "../../../text/TextEditor";
 import CartSettings from "../../CartSettings";
 import DesktopTopbarSettings from "./DesktopTopbarSettings";
-import IconsSettingsHandler from "./IconsSettingsHandler";
 import MobileTopbarSettings from "./MobileTopbarSettings";
 import FirstOrderSubSettingsContainer from "../../../FirstOrderSubSettingsContainer";
 import SlidingPanel from "../../../supporting/SlidingPanel";

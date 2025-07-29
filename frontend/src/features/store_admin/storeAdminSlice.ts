@@ -22,7 +22,8 @@ const initialState: StoreAdmin = {
   analytics: null,
   isLoading: false,
   error: null,
-  searchResults: [], // <-- add this
+  searchResults: [], 
+  recommendedStoreDesigns: null,
 };
 
 export const editStore = createAsyncThunk<
@@ -211,6 +212,26 @@ export const editTeamMember = createAsyncThunk<
     return thunkAPI.rejectWithValue(err.response?.data?.message || 'Edit failed');
   }
 });
+
+export const getDemoStores = createAsyncThunk<
+  Store[], // Return type: array of Store
+  void,    // No argument needed
+  { rejectValue: string }
+>(
+  'store_admin/getDemoStores',
+  async (_, thunkAPI) => {
+    try {
+      const response = await axios.get(`${STORE_URL}/demo`);
+      return response.data; // array of demo stores
+    } catch (error: any) {
+      console.error('Error fetching demo stores:', error);
+      return thunkAPI.rejectWithValue('Failed to fetch demo stores');
+    }
+  }
+);
+
+
+
 
 
 
@@ -414,6 +435,21 @@ const storeAdminSlice = createSlice({
             state.isLoading = false;
             state.error = action.payload as string;
           })
+
+          // Get Demo Stores
+          .addCase(getDemoStores.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+          })
+          .addCase(getDemoStores.fulfilled, (state, action: PayloadAction<Store[]>) => {
+            state.isLoading = false;
+            state.recommendedStoreDesigns = action.payload;
+          })
+          .addCase(getDemoStores.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload || 'Failed to fetch demo stores';
+          })
+          
     }
 });
 
