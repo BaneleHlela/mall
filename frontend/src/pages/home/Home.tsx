@@ -7,12 +7,13 @@ import TheMallTopbar from '../../components/the_mall/topbar/TheMallTopbar';
 import { departments } from '../../utils/helperObjects';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React from 'react';
+import DepartmentSelectorWithImages from './supporting/DepartmentSelectorWithImages';
+
+
+
 
 const HomePage = () => {
   const dispatch = useAppDispatch();
-  const { isLoading, error, storeIds, storesById } = useAppSelector(
-    (state: RootState) => state.stores
-  );
   const user = useAppSelector((state: RootState) => state.user.user);
   const departmentRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
 
@@ -20,6 +21,9 @@ const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const imageScrollRef = useRef<HTMLDivElement>(null);
+  const touchStartXRef = useRef<number>(0);
+  const touchScrollLeftRef = useRef<number>(0);
 
   // Fetch stores when department changes
   useEffect(() => {
@@ -38,9 +42,6 @@ const HomePage = () => {
       });
     }
   }, [selectedDepartment]);
-  
-
-  
 
   // Scroll handlers for department selector
   const scrollLeft = () => {
@@ -60,13 +61,39 @@ const HomePage = () => {
     // You can add filtering logic here based on department
   };
 
+  const handleImageWheel = (e: React.WheelEvent) => {
+    if (imageScrollRef.current) {
+      e.preventDefault(); // Prevent vertical scroll
+      imageScrollRef.current.scrollBy({
+        left: e.deltaY,
+        behavior: 'smooth',
+      });
+    }
+  };
+  
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].pageX;
+    if (imageScrollRef.current) {
+      touchScrollLeftRef.current = imageScrollRef.current.scrollLeft;
+    }
+  };
+  
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (imageScrollRef.current) {
+      const walk = touchStartXRef.current - e.touches[0].pageX;
+      imageScrollRef.current.scrollLeft = touchScrollLeftRef.current + walk;
+    }
+  };
+  
+  
+
   return (
     <div className="relative w-full h-full bg-stone-100 flex flex-col items-center">
       {/* Menubar */}
       <nav className="w-[100vw] h-[15vh] z-11 sticky inset-0 bg-gray-900 flex flex-col items-center lg:h-[9vh]">
         <TheMallTopbar />
       </nav>
-      <div className="w-full lg:w-[80%]">
+      <div className="w-full lg:w-[80%] overflow-x-hidden hide-scrollbar">
         {/* Department Selector */}
         <div className="h-[8vh] w-full bg-stone-100 flex items-center relative">
           {/* Left scroll button */}
@@ -106,13 +133,48 @@ const HomePage = () => {
           {/* Right scroll button */}
           <button
             onClick={scrollRight}
+            
             className="absolute right-0 z-10 h-full bg-opacity-80 flex items-center justify-center"
           >
             <ChevronRight size={24} />
           </button>
         </div>
+        {/* Department Toggler With Images */}
+        {!selectedDepartment && (
+          <div
+            ref={imageScrollRef}
+            onWheel={handleImageWheel}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            className="flex overflow-x-auto space-x-4 py-4 hide-scrollbar"
+          >
+            {Object.entries(departments).map(([key, dept]) => (
+              <DepartmentSelectorWithImages
+                key={key}
+                onSelect={() => handleDepartmentSelect(key)}
+                department={dept}
+              />
+            ))}
+          </div>
+        )}
 
-        {isLoading ? (
+        {/* Placeholder divs */}
+        <div className="bg-amber-600 flex w-full lg:h-[40vh] lg:flex-row">
+          {/* For creators */}
+          <div className="h-full w-[50%]  bg-white text-center flex flex-col justify-evenly items-center hover:scale-102">
+            <h2 style={{fontFamily: "Bebas Neue"}} className="font-[BebasNeue] text-[7vh]">Get Started With The Mall</h2>
+            <button className="shadow-sm border-[.6vh] w-fit px-[2vh] text-[2.5vh] hover:scale-105">Creators</button>
+          </div>
+          {/* For investors */}
+          <div className="h-full w-[50%] bg-gradient-to-r from-stone-800 to-stone-900 text-center flex flex-col justify-evenly items-center hover:scale-102 text-white">
+            <h2 style={{fontFamily: "Bebas Neue"}} className="font-[BebasNeue] text-[7vh]">Get Started With The Mall</h2>
+            <button className="shadow-sm border-[.6vh] border-white w-fit px-[2vh] text-[2.5vh] hover:scale-105">Investors</button>
+          </div>
+        </div>
+
+        
+
+        {/* {isLoading ? (
           <p className="text-center text-gray-500">Loading stores...</p>
         ) : error ? (
           <p className="text-center text-red-500">Error: {error}</p>
@@ -124,7 +186,7 @@ const HomePage = () => {
               <StoreCard key={id} store={storesById[id]} user={user}/>
             ))}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

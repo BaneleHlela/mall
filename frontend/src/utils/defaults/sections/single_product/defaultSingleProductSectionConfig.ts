@@ -21,7 +21,9 @@ export const defaultSingleProductSectionConfig = {
     },
     text: {
         exit: {
-            background: {}
+            background: {
+                color: "transparent"
+            }
         },
     },
     images: {

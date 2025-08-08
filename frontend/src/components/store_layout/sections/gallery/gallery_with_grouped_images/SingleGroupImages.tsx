@@ -73,7 +73,7 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                 ...getBackgroundStyles(style.background.thumbnail),
                 height: 'fit-content',
             }}
-            className="relative h-fit"
+            className="relative h-fit overflow-hidden"
         >
             <div className="text-center h-fit">
                 <img

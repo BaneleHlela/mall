@@ -29,7 +29,7 @@ const StoreImageItem: React.FC<StoreImageItemProps> = ({ img, onDelete, onUse })
       />
       {showOptions && (
         <div className="absolute top-0 left-0 w-full h-full rounded  flex flex-col justify-center items-center space-y-2 py-5 z-10">
-          {link.includes("layouts") && (
+          {(link.includes("posters") || link.includes("layouts")) && (
             <button 
                 onClick={() => onUse(img.url)}
                 className="w-[55%] border border-black text-white bg-gray-800 px-2 py-2 rounded-[22px] hover:scale-102"
@@ -37,7 +37,7 @@ const StoreImageItem: React.FC<StoreImageItemProps> = ({ img, onDelete, onUse })
                 Select
             </button>
           )}
-          {link.includes("dashboard") && (
+          {link.includes("images") && (
               <button 
                 onClick={() => onDelete(img._id)}
                 className="w-[55%] border border-black text-white bg-gray-800 hover:bg-gray-700 px-2 py-2 rounded-[22px] hover:scale-102 "

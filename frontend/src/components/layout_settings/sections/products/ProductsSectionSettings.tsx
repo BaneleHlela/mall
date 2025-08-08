@@ -1,6 +1,6 @@
-import React from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice';
+import AddToMenuBarToggler from '../../extras/AddToMenubarToggler';
 import PopularProductsSectionSettings from './popular/PopularProductsSectionSettings';
 
 const ProductsSectionSettings = () => {
@@ -13,7 +13,12 @@ const ProductsSectionSettings = () => {
     };
 
     if ( variation === "productsSectionPopular") {
-        return <PopularProductsSectionSettings settings={settings} handleSettingChange={handleSettingChange}/>
+        return (
+            <>
+                <AddToMenuBarToggler section='products' />
+                <PopularProductsSectionSettings settings={settings} handleSettingChange={handleSettingChange}/>
+            </>
+        ) 
     }    
     
     

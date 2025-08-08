@@ -9,10 +9,11 @@ import StepAbout from './steps/StepAbout';
 import { LiaStoreSolid } from 'react-icons/lia';
 import StoreSuccessOverlay from '../StoreSuccessOverlay';
 import { createStore } from '../../../../features/stores/storeSlice';
-import { useAppDispatch } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { createLayout } from '../../../../features/layouts/layoutSlice';
 import { defaultLayoutConfig } from '../../../../utils/defaults/defaultLayoutConfig';
 import StepSocials from './steps/StepSocials';
+import { TbLoader3 } from 'react-icons/tb';
 
 const steps = [StepBasic, StepTrade, StepBusinessHours, StepLocation, StepAbout, StepSocials];
 interface CreateStoreFormInnerProps {
@@ -23,6 +24,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo }) =
   const dispatch = useAppDispatch(); 
   const { step, direction, nextStep, prevStep, validateCurrentStep, form } = useFormContext();
   const [isSuccess, setIsSuccess] = useState(false);
+  const isLoading = useAppSelector((state) => state.stores.isLoading || state.layout.isLoading); // Combine loading states for both store and layout creation
   
   const StepComponent = steps[step];
   const handleNextStep = () => {
@@ -104,8 +106,13 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo }) =
             <button
                 type="button"
                 onClick={handleSubmit} 
-                className="px-[1.2vh] py-[.3vh] text-[2vh] text-white bg-[#0b032d] hover:scale-105 hover:opacity-80 disabled:bg-gray-500">
-                Submit
+                className="px-[1.2vh] py-[.3vh] text-[2vh] text-white bg-[#0b032d] hover:scale-105 hover:opacity-80 disabled:bg-gray-500"
+            >
+                {isLoading ? (
+                  <TbLoader3 className="w-6 h-6 animate-spin mx-auto" />
+                ) : (
+                  "Submit"
+                )}
             </button>
               ) : (
             <button

@@ -37,6 +37,7 @@ import GalleryPageSettings from "./GalleryPageSettings";
 import ContactPageSettings from "./ContactPageSettings";
 import SingleStoreProductPageSettings from "./SingleStoreProductPageSettings";
 import BookPageSettings from "./BookPageSettings";
+import BookServicePageSettings from "./BookServicePageSettings";
 
 
 const SortableItem = ({
@@ -54,6 +55,8 @@ const SortableItem = ({
 }) => {
   const [draggable, setDraggable] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+  
+
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -90,7 +93,7 @@ const PagesSettings: React.FC = () => {
   const dispatch = useAppDispatch();
   const routes: Routes = useAppSelector((state) => state.layoutSettings.routes);
   const routeOrder: string[] = useAppSelector((state) => state.layoutSettings.routeOrder);
-  const products = useAppSelector((state) => state.products.products);
+  const store = useAppSelector((state) => state.storeAdmin.store);
   const MySwal = withReactContent(Swal);
 
   const [activePanel, setActivePanel] = useState<string | null>(null);
@@ -237,7 +240,7 @@ const PagesSettings: React.FC = () => {
         </SortableContext>
       </DndContext>
       
-      {1 > 0 && (
+      {store?.trades.includes('products') && (
           <SettingsContainer
             name="Single Product Page"
             onClick={() => setActivePanel("single_product")}
@@ -246,8 +249,17 @@ const PagesSettings: React.FC = () => {
           />
       )}
 
+      {store?.trades.includes('services') && (
+          <SettingsContainer
+            name="Single Service Page"
+            onClick={() => setActivePanel("service")}
+            deletable={false}
+            renamable={false}
+          />
+      )}
+
       <AnimatePresence>
-        {activePanel && activePanel !== "single_product" && (
+        {activePanel && activePanel !== "single_product" && activePanel !== "service" && (
           <SlidingPanel
             key={activePanel}
             isOpen={true}
@@ -265,6 +277,16 @@ const PagesSettings: React.FC = () => {
             title={`Single Product Page Settings`}
           >
             <SingleStoreProductPageSettings />
+          </SlidingPanel>
+        )}
+        {activePanel === "service" && (
+          <SlidingPanel
+            key="service"
+            isOpen={true}
+            onClose={closePanel} // @ts-ignore-next-line
+            title={`Service Page Settings`}
+          >
+            <BookServicePageSettings />
           </SlidingPanel>
         )}
       </AnimatePresence>

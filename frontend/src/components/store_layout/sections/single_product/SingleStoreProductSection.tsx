@@ -6,7 +6,6 @@ import { getBackgroundStyles, getBorderStyles, getResponsiveDimension, getSpacin
 import { HiArrowLeftEndOnRectangle, HiOutlineMinus, HiOutlinePlus } from 'react-icons/hi2'
 import VariationDropdown from './supporting/VariationDropdown'
 import { addToCart } from '../../../../features/cart/cartSlice'
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md'
 import UnderlinedText from '../../extras/text/UnderlinedText'
 import { formatPriceWithSpaces } from '../../extras/cards/product/popular/PopularProductCard'
@@ -22,7 +21,12 @@ const SingleStoreProductSection = () => {
     const [quantity, setQuantity] = useState(1);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     
-    
+
+    useEffect(() => {
+        setQuantity(1);
+    }, [selectedVariation]);
+        
+
     useEffect(() => {
         if (productId) {
             dispatch(fetchProductById(productId))
@@ -37,6 +41,11 @@ const SingleStoreProductSection = () => {
     if ( !product) {
         return <div>Error loading product</div>
     }
+
+    const selectedPrice = product.prices.find(p => p.variation === selectedVariation)?.amount 
+    ?? product.prices[0]?.amount 
+    ?? 0;
+
 
     const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) =>
@@ -120,7 +129,7 @@ const SingleStoreProductSection = () => {
                     {product.images.length > 1 && (currentImageIndex !== (product.images.length - 1)) && (
                         <button
                             style={{
-                                ...getBackgroundStyles(settings.images.toggleButton.background),
+                                ...getBackgroundStyles(settings.images?.toggleButton?.background),
                                 ...getTextStyles(settings.images.toggleButton.text),
                             }}
                             onClick={handleNextImage}
@@ -155,7 +164,7 @@ const SingleStoreProductSection = () => {
                         />
                         <UnderlinedText 
                             style={settings.details.nameAndPrice.price}
-                            input={`R${formatPriceWithSpaces(product.price)}.00`}
+                            input={`R${formatPriceWithSpaces(selectedPrice)}.00`}
                         />
                     </div>
                     {/* Variation selector */}
@@ -279,7 +288,7 @@ const SingleStoreProductSection = () => {
                             onClick={handleAddToCart}
                             className="w-full mt-6 py-3 hover:scale-103"
                         >
-                            Add to cart | R{formatPriceWithSpaces(Number(product.price) * quantity)}
+                            Add to cart | R{formatPriceWithSpaces(selectedPrice * quantity)}
                         </button>
                     </div>
                     {/* Description */}

@@ -5,6 +5,7 @@ import {
   HandHelping, Settings, Images, LogOut,
 } from "lucide-react";
 import { IoStar, IoStarHalf } from "react-icons/io5";
+import { LuFileImage } from "react-icons/lu";
 import DashboardLink from "./DashboardLink";
 import type { Store } from "../../../types/storeTypes";
 
@@ -86,6 +87,11 @@ const StoreDashBoardMenubar = ({ store }: Props) => {
           linkTo={`/dashboard/${store._id}/layouts`} 
           icon={<LayoutDashboard className="text-red-600"/>} 
           text="Layouts" 
+        />
+        <DashboardLink 
+          linkTo={`/dashboard/${store._id}/posters`} 
+          icon={<LuFileImage className="text-black"/>} 
+          text="Posters" 
         />
         <DashboardLink 
           linkTo={`/dashboard/${store._id}/images`} 

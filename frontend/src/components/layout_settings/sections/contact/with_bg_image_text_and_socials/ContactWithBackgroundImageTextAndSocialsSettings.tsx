@@ -49,8 +49,9 @@ const ContactWithBackgroundImageTextAndSocialsSettings: React.FC<SectionEditorPr
               objectPath={`${objectPath}.containerBackground`}
               settings={settings}
               handleSettingChange={handleSettingChange}
-              allow={["width", "color"]}
+              allow={["width", "color", "padding"]}
               responsiveSize
+              responsivePadding
               widthUnit='%'
             />
           </div>

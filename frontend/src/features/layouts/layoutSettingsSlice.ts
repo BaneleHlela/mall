@@ -13,11 +13,8 @@ const layoutSettingsSlice = createSlice({
   name: 'layoutSettings',
   initialState,
   reducers: {
-    setInitialLayout: (state, action: PayloadAction<any>) => {
-      return {
-        ...state,
-        ...action.payload,
-      };
+    setInitialLayout: (_state, action: PayloadAction<Layout>) => {
+      return action.payload;
     },
     updateSetting: (state, action: PayloadAction<{ field: string; value: any }>) => {
       const {field, value} = action.payload;

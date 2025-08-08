@@ -84,9 +84,11 @@ const ElegantSendEmailFormSettings: React.FC<EmailFormSettingsProps> = ({
                   "fontFamily",
                   "fontSize",
                   "fontWeight",
-                  "fontStyle"
+                  "fontStyle",
+                  "padding"
                 ]}
                 responsiveSize
+                responsivePadding
               />
             )}
           </div>
@@ -122,6 +124,7 @@ const ElegantSendEmailFormSettings: React.FC<EmailFormSettingsProps> = ({
                 handleSettingChange={handleSettingChange}
                 allow={["color", "animation", "shadow", "border", "padding", "width", "height"]}
                 responsiveSize
+                responsivePadding
                 widthUnit="%"
                 heightUnit="vh"
               />

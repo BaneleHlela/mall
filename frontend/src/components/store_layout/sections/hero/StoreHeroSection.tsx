@@ -4,6 +4,8 @@ import HeroWithSlidingImages from './second/HeroWithSlidingImages';
 import HeroWithButtonBetweenImagesSection from './hero_with_button_between_images/HeroWithButtonBetweenImages';
 import HeroWithButtonImageAndText from './hero_with_button_image_and_text/HeroWithButtonImageAndText';
 import HeroWithReviewCardAndEmailForm from './with_review_card_and_email_form/HeroWithReviewCardAndEmailForm';
+import HeroWithBox from './hero_with_box/HeroWithBox';
+import HeroWithDivAndImage from './hero_with_div_and_image/HeroWithDivAndImage';
 const StoreHeroSection = () => {
   const variation = useAppSelector((state) => state.layoutSettings.hero.variation);
   
@@ -20,6 +22,18 @@ const StoreHeroSection = () => {
   if (variation === "heroWithReviewCardAndEmailForm") {
     return (
       <HeroWithReviewCardAndEmailForm />
+    )
+  }
+
+  if (variation === "heroWithBox") {
+    return (
+      <HeroWithBox />
+    )
+  }
+
+  if (variation === "heroWithDivAndImage") {
+    return (
+      <HeroWithDivAndImage />
     )
   }
 

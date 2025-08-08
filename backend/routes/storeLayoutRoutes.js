@@ -7,7 +7,8 @@ import {
     getLayoutByDemoStore,
     getDemoLayouts,
     replaceLayoutColor,
-    createLayoutConfigWithSettings
+    createLayoutConfigWithSettings,
+    getStoreLayouts
 } from "../controllers/StoreLayoutController.js";
 import { protectRoute } from "../middlewares/authMiddleware.js";
 
@@ -17,6 +18,7 @@ const router = express.Router();
 router.post("/", /*protectRoute,*/ createLayoutConfig);
 router.get('/demo', getDemoLayouts);
 router.post('/with-settings', createLayoutConfigWithSettings);
+router.post('/store', getStoreLayouts)
 
 // Dynamic routes
 router.patch('/:layoutId', /*protectRoute,*/ /*isAdmin,*/ updateLayoutConfig);

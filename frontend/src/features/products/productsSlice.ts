@@ -176,6 +176,7 @@ const productSlice = createSlice({
       // Create
       .addCase(createProduct.fulfilled, (state, action: PayloadAction<Product>) => {
         state.products.push(action.payload);
+        state.isLoading = false;
       })
       .addCase(createProduct.pending, (state) => {
         state.isLoading = true;

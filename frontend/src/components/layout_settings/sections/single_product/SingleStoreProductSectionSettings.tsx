@@ -480,7 +480,7 @@ const SingleStoreProductSectionSettings = () => {
                                         objectPath={`${objectPath}.details.quantityUpdater.text`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={[ "color", "fontSize", "weight", "lineHeight" ]}
+                                        allow={[ "color", "fontSize", "weight", "fontFamily" ]}
                                     />
                                 </div>
                                 }
@@ -533,7 +533,7 @@ const SingleStoreProductSectionSettings = () => {
                             objectPath={`${objectPath}.details.text.labels`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={[ "color", "fontSize", "position", "weight" ]}
+                            allow={[ "color", "fontSize", "position", "weight", "fontFamily" ]}
                         />
                     </SlidingPanel>
                 )}
@@ -602,7 +602,6 @@ const SingleStoreProductSectionSettings = () => {
                             objectPath={`${objectPath}.details.addToCartBtn`}
                             settings={settings}
                             allowPosition
-                            
                         />
                     </SlidingPanel>
                 )}

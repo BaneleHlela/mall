@@ -21,7 +21,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const [form, setForm] = useState({
     name: '',
     description: '',
-    price: 0,
     stockQuantity: 0,
     category: '',
     isActive: false,
@@ -30,6 +29,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 
   const [variations, setVariations] = useState<string[]>([]);
   const [variationInput, setVariationInput] = useState('');
+  const [priceByVariation, setPriceByVariation] = useState<{ [variation: string]: number }>({});
   const [images, setImages] = useState<File[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,18 +44,31 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     const trimmed = variationInput.trim();
     if (trimmed && !variations.includes(trimmed)) {
       setVariations((prev) => [...prev, trimmed]);
+      setPriceByVariation((prev) => ({ ...prev, [trimmed]: 0 }));
     }
     setVariationInput('');
   };
 
   const handleRemoveVariation = (tag: string) => {
     setVariations((prev) => prev.filter((v) => v !== tag));
+    setPriceByVariation((prev) => {
+      const updated = { ...prev };
+      delete updated[tag];
+      return updated;
+    });
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
       setImages((prev) => [...prev, ...newFiles].slice(-5));
+    }
+  };
+
+  const handlePriceChange = (variation: string, value: string) => {
+    const amount = parseFloat(value);
+    if (!isNaN(amount)) {
+      setPriceByVariation((prev) => ({ ...prev, [variation]: amount }));
     }
   };
 
@@ -70,13 +83,19 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     const formData = new FormData();
     formData.append('name', form.name);
     formData.append('description', form.description);
-    formData.append('price', String(form.price));
     formData.append('stockQuantity', String(form.stockQuantity));
     formData.append('category', form.category);
     formData.append('isActive', String(form.isActive));
     formData.append('store', store._id);
 
     formData.append('variations', JSON.stringify(variations));
+
+    const prices = variations.map((variation) => ({
+      variation,
+      amount: priceByVariation[variation] || 0,
+    }));
+
+    formData.append('prices', JSON.stringify(prices));
 
     const tagsArray = form.tags
       .split(',')
@@ -150,18 +169,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Price</label>
-            <input
-              name="price"
-              type="number"
-              value={form.price}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded border mt-1"
-              required
-            />
-          </div>
-
-          <div>
             <label className="block text-sm font-medium">Stock Quantity</label>
             <input
               name="stockQuantity"
@@ -207,6 +214,27 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               ))}
             </div>
           </div>
+
+          {variations.length > 0 && (
+            <div>
+              <label className="text-sm font-medium">Set Prices</label>
+              <div className="space-y-2 mt-2">
+                {variations.map((variation) => (
+                  <div key={variation} className="flex items-center gap-2">
+                    <span className="text-sm w-1/2">{variation}</span>
+                    <input
+                      type="number"
+                      className="w-1/2 px-3 py-2 rounded border"
+                      value={priceByVariation[variation] || ''}
+                      onChange={(e) => handlePriceChange(variation, e.target.value)}
+                      placeholder="Enter price"
+                      required
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div>
             <label className="text-sm font-medium">Images</label>

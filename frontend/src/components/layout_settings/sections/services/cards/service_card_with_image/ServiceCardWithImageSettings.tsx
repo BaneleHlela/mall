@@ -69,7 +69,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
                         objectPath={`${objectPath}.image`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["border", "width", "height"]}
+                        allow={["border", "width", "height", "color"]}
                         widthUnit='%'
                         heightUnit='%'
                         responsiveSize

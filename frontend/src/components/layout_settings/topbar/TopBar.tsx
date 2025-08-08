@@ -21,7 +21,11 @@ const TopBar = ({ setDevice, zoom, setZoom }: TopBarProps) => {
           save
         </button>
       </div>
-      <div className="absolute h-full right-10 flex flex-col justify-center">
+      <div className="absolute h-full right-10 flex flex-row items-center">
+        {/* Preview Button */}
+        <button className="bg-black text-white rounded-[20px] px-8 shadow-md hover:scale-103 hover:opacity-85">
+          Preview
+        </button>
         <ZoomControls zoom={zoom} setZoom={setZoom} />
       </div>
       <DeviceSelector setDevice={setDevice} />

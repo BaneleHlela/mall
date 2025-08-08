@@ -18,26 +18,29 @@ const Menubar = () => {
       initial={{ y: isHidden ? 100 : 0 }}
       animate={{ y: isHidden ? 100 : 0 }}
       transition={{ type: "spring", stiffness: 120, damping: 17 }}
-      className="fixed bottom-0 h-[5.5vh] w-screen text-gray-900 bg-stone-50 shadow-sm flex flex-row items-center justify-between pt-3 pb-3 pl-[20px] pr-[20px] z-100"
+      className={`
+        fixed z-100 text-white bg-gray-900 shadow-sm
+        flex items-center justify-between
+        h-[5.5vh] w-full bottom-0 
+        lg:top-0 lg:bottom-auto lg:left-0 lg:h-screen lg:w-[5vh] lg:flex-col lg:justify-evenly lg:pt-10
+        ${isHidden ? 'hidden' : ''}
+      `}
     >
-      <Link to="/">
-        <House size={32} />
+      <Link to="/" className="p-2">
+        <House size={28} />
       </Link>
-      <Link to="/search">
-        <Search size={32} />
+      <Link to="/search" className="p-2">
+        <Search size={28} />
       </Link>
-      <Link to="/my-stores">
-        <Store size={32} />
+      <Link to="/my-stores" className="p-2">
+        <Store size={28} />
       </Link>
-      <Link to="/login">
-        <LayoutDashboard size={32} />
+      <Link to="/login" className="p-2">
+        <LayoutDashboard size={28} />
       </Link>
-      <Link to="/stores/684c15bca0f98a1d13a7ff00/order-online">
-        <CircleUser size={32} />
+      <Link to="/stores/684c15bca0f98a1d13a7ff00/order-online" className="p-2">
+        <CircleUser size={28} />
       </Link>
-      {/* <Link to="/scribbler">
-        <CircleUser size={32} />
-      </Link> */}
     </motion.nav>
   );
 };

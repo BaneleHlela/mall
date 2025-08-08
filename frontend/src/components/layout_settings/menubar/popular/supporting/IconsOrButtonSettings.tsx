@@ -128,6 +128,7 @@ const IconsOrButtonSettings: React.FC<Props> = ({
               <StoreButtonSettings
                 objectPath={`${objectPath}.button`}
                 settings={settings}
+                allowFunction
               />
             </div>
           </SlidingPanel>

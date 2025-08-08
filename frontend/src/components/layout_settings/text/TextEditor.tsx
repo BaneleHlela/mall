@@ -116,6 +116,7 @@ const TextEditor: React.FC<EditorProps> = ({
               label="Color"
               value={getSetting("color", settings, objectPath)}
               onChange={handleChange("color")}
+              onClear={handleClear("color")}
             />
           )}
 

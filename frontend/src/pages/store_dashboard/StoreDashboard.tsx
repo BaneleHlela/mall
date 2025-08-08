@@ -22,6 +22,7 @@ import StoreBusinessHoursSettings from "./supporting_pages/settings/StoreBusines
 import StoreLocationSettings from "./supporting_pages/settings/StoreLocationSettings";
 import StoreSocialSettings from "./supporting_pages/settings/StoreSocialSettings";
 import StoreAboutSettings from "./supporting_pages/settings/StoreAboutSettings";
+import StoreDashboardPosters from "./supporting_pages/StoreDashboardPosters";
 
 
 const StoreDashboard = () => {
@@ -65,6 +66,7 @@ const StoreDashboard = () => {
                     <Route path="/orders" element={<StoreOrders />} />
                     <Route path="/bookings" element={<StoreBookings />} />
                     <Route path="/images" element={<StoreImages onImageSelect={() => {}}/>} /> 
+                    <Route path="/posters/*" element={<StoreDashboardPosters />} />
                     <Route path="/settings" element={<StoreSettings />} />
                     <Route path="/settings/logo" element={<StoreLogoSettings />} />
                     <Route path="/settings/basic" element={<StoreBasicSettings />} />

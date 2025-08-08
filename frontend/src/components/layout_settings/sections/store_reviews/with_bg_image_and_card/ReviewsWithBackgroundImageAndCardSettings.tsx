@@ -267,34 +267,13 @@ const ReviewsWithBackgroundImageAndCardSettings: React.FC<SectionSettingsProps> 
                                     />
                                 }
                             />
-                            <SubSettingsContainer
+                            
+                            {/* Reviews Card text */}
+                            <FirstOrderSubSettingsContainer
                                 name="Text"
-                                SettingsComponent={
-                                    <div className='px-2 py-1 space-y-1'>
-                                        <SubSettingsContainer
-                                            name="Comment"
-                                            SettingsComponent={
-                                                <TextEditor
-                                                    objectPath={`${objectPath}.reviewCard.text.comment`}
-                                                    settings={settings}
-                                                    handleSettingChange={handleSettingChange}
-                                                    allow={["fontFamily", "fontSize", "color", "weight", "lineHeight"]}
-                                                />
-                                            }
-                                        />
-                                        <SubSettingsContainer
-                                            name="Reviewer Name"
-                                            SettingsComponent={
-                                            <TextEditor
-                                                objectPath={`${objectPath}.reviewCard.text.name`}
-                                                settings={settings}
-                                                handleSettingChange={handleSettingChange}
-                                                allow={["position", "fontFamily", "fontSize", "color", "weight", "lineHeight"]}
-                                            />
-                                        }/>
-                                    </div>
-                                }
+                                onClick={() => setActivePanel("review_card_text")}
                             />
+
                         </div>
                     </SlidingPanel>
                 )}
@@ -328,6 +307,39 @@ const ReviewsWithBackgroundImageAndCardSettings: React.FC<SectionSettingsProps> 
                                     />
                                 }
                             />
+                        </div>
+                    </SlidingPanel>
+                )}
+                {activePanel === "review_card_text" && (
+                    <SlidingPanel
+                        key="review_card_text"
+                        isOpen
+                        onClose={() => setActivePanel("card")}
+                        title="Review Card Text Settings"
+                    >
+                        <div className="space-y-[.3vh] px-2 py-1">
+                        <SubSettingsContainer
+                            name="Comment"
+                            SettingsComponent={
+                            <TextEditor
+                                objectPath={`${objectPath}.reviewCard.text.comment`}
+                                settings={settings}
+                                handleSettingChange={handleSettingChange}
+                                allow={["fontFamily", "fontSize", "color", "weight", "lineHeight", "padding", "position"]}
+                            />
+                            }
+                        />
+                        <SubSettingsContainer
+                            name="Reviewer Name"
+                            SettingsComponent={
+                            <TextEditor
+                                objectPath={`${objectPath}.reviewCard.text.name`}
+                                settings={settings}
+                                handleSettingChange={handleSettingChange}
+                                allow={["position", "fontFamily", "fontSize", "color", "weight", "lineHeight"]}
+                            />
+                            }
+                        />
                         </div>
                     </SlidingPanel>
                 )}

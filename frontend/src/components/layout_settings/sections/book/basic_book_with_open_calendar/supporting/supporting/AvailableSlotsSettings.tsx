@@ -71,7 +71,8 @@ const AvailableSlotsSettings: React.FC<SupportingSettingsProps> = ({
                     objectPath={`${objectPath}.timeSlot.background`}
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={["color", "border"]}
+                    allow={["color", "border", "padding"]}
+                    responsivePadding
                     heightUnit='vh'
                   />
                 }

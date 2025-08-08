@@ -12,12 +12,14 @@ const AboutWithImageNextToText = () => {
          ...getTextStyles(settings.text.style)
       }}
       className="w-full h-fit"
+      id="about"
     >
       {/* Mobile */}
       <div
-        className="text-center flex flex-col items-center pb-10 lg:hidden"
+        className="text-center flex flex-col justify-center items-center pb-10 lg:hidden"
       >
         <UnderlinedText style={settings.text.title.style} />
+        <UnderlinedText style={settings.text.subheading?.style || {}} />
         <img 
           src={settings.image.imageUrl} alt="about us" 
           style={{
@@ -45,7 +47,7 @@ const AboutWithImageNextToText = () => {
       >
         {/* Image */}
         <div 
-          className="h-full w-[40%]"
+          className="h-full flex flex-col justify-center items-center w-[40%]"
         >
           <img 
             style={{
@@ -64,6 +66,7 @@ const AboutWithImageNextToText = () => {
           className=" p-4 flex flex-col justify-center text-center h-full w-[58%]"
         >
           <UnderlinedText style={settings.text.title.style} />
+          <UnderlinedText style={settings.text.subheading?.style || {}} />
           <br/><br/>
           <div 
             style={{

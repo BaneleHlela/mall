@@ -15,6 +15,8 @@ import { useDispatch } from "react-redux";
 import { setInitialLayout } from "./features/layouts/layoutSettingsSlice";
 import Dashboard from "./pages/dashboard/Dashboard";
 import ProtectedRoute from "./components/the_mall/authorization/ProtectedRoute";
+import LayoutCreator from "./pages/store_dashboard/supporting_pages/layouts/supporting/LayoutCreator";
+import MallSearchPage from "./pages/search/MallSearchPage";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -33,14 +35,14 @@ const App: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-screen w-screen flex justify-center items-center overflow-x-clip">  
+    <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-screen w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar">  
       <Router>
         <Menubar /> 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/stores/:storeId/*" element={<StorePage />} />
           <Route path="/my-stores" element={<MyStores />} />
-          <Route path="/search" element={<Search />} />
+          <Route path="/search" element={<MallSearchPage />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/scribbler/*" element={<Scribbler />} />
           <Route path="/layouts/:layoutId/*" element={<Layouts />} />
@@ -59,6 +61,7 @@ const App: React.FC = () => {
             } 
           />
           <Route path="/layouts/my-layouts" element={<MyLayouts />} />
+          <Route path="/layouts/create" element={<LayoutCreator />} />
           <Route path="/creators-dashboard/*" element={<Dashboard />} />
           {authRoutes}
         </Routes>

@@ -61,7 +61,8 @@ const MenubarLinksSettings: React.FC<MenubarLinksSettingsProps> = ({ type, allow
                         objectPath={`${objectPath}.background`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={['color', 'border', 'padding', "height", "width"]}
+                        allow={['color', 'border', 'padding', "height", "width", "shadow"]}
+                        heightUnit='%'
                     />
                 }
             />
@@ -72,7 +73,7 @@ const MenubarLinksSettings: React.FC<MenubarLinksSettingsProps> = ({ type, allow
                         objectPath={`${objectPath}.allLinksBackground`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={['color', 'border', 'padding', "height", "width"]}
+                        allow={['color', 'border', 'padding', "height", "width", "shadow"]}
                         heightUnit='%'
                         widthUnit='%'
                     />

@@ -23,7 +23,11 @@ const FirstStoreReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, review,
         style={{
           ...getTextStyles(style.text.comment),
         }} 
-        className={`mt-2 text-sm text-gray-600`}
+        className={`mt-2 text-sm text-gray-600
+          ${style.text.comment.position === 'start' && 'text-start'}
+          ${style.text.comment.position === 'center' && 'text-center'}
+          ${style.text.comment.position === 'end' && 'text-end'}
+          `}
       >
         "{review}"
       </p>

@@ -66,6 +66,7 @@ export interface Layout {
     contact: any;
     footer: any;
     singleProduct: any;
+    bookService: any;
 }
   
 

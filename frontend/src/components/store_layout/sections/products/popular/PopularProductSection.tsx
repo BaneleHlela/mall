@@ -28,12 +28,17 @@ const PopularProductsSection = () => {
   const [direction, setDirection] = useState<'left' | 'right'>('right');
 
   const handleProductClick = (productId: string) => {
-    if (store && store._id) {
+    const currentUrl = window.location.href;
+  
+    if (currentUrl.includes('layouts')) {
+      navigate(`/layouts/${store?._id}/preview/product/${productId}`);
+    } else if (store && store._id) {
       navigate(`/stores/${store._id}/product/${productId}`);
     } else {
       console.error('Store ID is not available');
     }
   };
+  
 
   // Slice products into visible group
   const startIdx = activeGroupIndex * visibleCount;
@@ -200,7 +205,7 @@ const PopularProductsSection = () => {
                 key={product._id}
                 title={product.name}
                 imageUrl={product.images[0]}
-                price={product.price}
+                price={product.prices[0].amount}
                 marking={product.marking}
                 style={settings.card}
                 onClick={() => handleProductClick(product._id)}

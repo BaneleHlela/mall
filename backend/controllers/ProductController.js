@@ -3,19 +3,18 @@ import asyncHandler from 'express-async-handler';
 import mongoose from 'mongoose';
 import { uploadToUploads } from '../config/gcsClient.js';
 
-// Create product
 export const createProduct = asyncHandler(async (req, res) => {
   const {
     name,
     description,
-    price,
     stockQuantity,
     variations,
+    prices,
     category,
     isActive,
     tags,
     store,
-    marking 
+    marking,
   } = req.body;
 
   const files = req.files; // array of images
@@ -24,13 +23,43 @@ export const createProduct = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: 'At least one product image is required.' });
   }
 
-  // Create slug
-  const slug = name
+  // Create slug: <slug-name>-<Date.now>
+  const baseSlug = name
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .trim()
     .replace(/\s+/g, '-')
     .substring(0, 100);
+
+  const timestamp = Date.now();
+  const slug = `${baseSlug}-${timestamp}`;
+
+  // Parse form-data fields if needed
+  const parsedVariations = Array.isArray(variations)
+    ? variations
+    : variations
+    ? JSON.parse(variations)
+    : [];
+
+  const parsedTags = Array.isArray(tags)
+    ? tags
+    : tags
+    ? JSON.parse(tags)
+    : [];
+
+  const parsedPrices = Array.isArray(prices)
+    ? prices
+    : prices
+    ? JSON.parse(prices)
+    : [];
+
+  // Validate prices format
+  if (
+    !Array.isArray(parsedPrices) ||
+    parsedPrices.some(p => typeof p.amount !== 'number' || p.amount < 0)
+  ) {
+    return res.status(400).json({ message: 'Invalid prices format.' });
+  }
 
   const imageUrls = [];
 
@@ -43,17 +72,17 @@ export const createProduct = asyncHandler(async (req, res) => {
     const imageUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${imagePath}`;
     imageUrls.push(imageUrl);
   }
-  // Create product
+
   const product = await Product.create({
     name,
     description,
-    price,
+    prices: parsedPrices,
     stockQuantity,
-    variations: Array.isArray(variations) ? variations : JSON.parse(variations),
+    variations: parsedVariations,
     images: imageUrls,
     category,
     isActive,
-    tags: Array.isArray(tags) ? tags : JSON.parse(tags),
+    tags: parsedTags,
     slug,
     marking,
     store: new mongoose.Types.ObjectId(store),
@@ -61,6 +90,7 @@ export const createProduct = asyncHandler(async (req, res) => {
 
   res.status(201).json(product);
 });
+
 
 // Get product by ID
 export const getProductById = asyncHandler(async (req, res) => {

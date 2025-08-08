@@ -56,7 +56,9 @@ const MainBookWithCalenderSettings: React.FC<SupportingSettingsProps> = ({
                                 objectPath={`${objectPath}.background`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                allow={["color", "shadow", "border", "padding", "width"]}
+                                allow={["color", "shadow", "border", "padding", "width", "height"]}
+                                heightUnit="vh"
+                                widthUnit="%"
                                 responsivePadding
                                 responsiveSize
                             />

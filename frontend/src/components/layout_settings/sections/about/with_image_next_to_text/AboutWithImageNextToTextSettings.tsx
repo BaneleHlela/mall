@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { getSetting } from "../../../../../utils/helperFunctions";
 import BackgroundEditor from "../../../background/BackgroundEditor";
-import BorderEditor from "../../../background/BorderEditor";
 import SubSettingsContainer from "../../../extras/SubSettingsContainer";
 import UnderlinedTextSettings from "../../../extras/text/UnderlinedTextSettings";
 import FirstOrderSubSettingsContainer from "../../../FirstOrderSubSettingsContainer";
@@ -63,8 +62,12 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
           >
             <div className="space-y-[.3vh]">
               <FirstOrderSubSettingsContainer
-                name="title"
+                name="heading"
                 onClick={() => setActivePanel("title")}
+              />
+              <FirstOrderSubSettingsContainer
+                name="subheading"
+                onClick={() => setActivePanel("subheading")}
               />
               <FirstOrderSubSettingsContainer
                 name="paragraph"
@@ -76,7 +79,7 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
         {activePanel === "title" && (
           <SlidingPanel 
             key="title"
-            title="Title Text Settings"
+            title="Heading Text Settings"
             onClose={() => setActivePanel("text")}
             isOpen={true}
           >
@@ -84,6 +87,22 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
               settings={settings}
               handleSettingChange={handleSettingChange}
               objectPath={`${objectPath}.text.title.style`}
+              allowInput
+              responsiveSize
+            />
+          </SlidingPanel>
+        )}
+        {activePanel === "subheading" && (
+          <SlidingPanel 
+            key="subheading"
+            title="Subheading Text Settings"
+            onClose={() => setActivePanel("text")}
+            isOpen={true}
+          >
+            <UnderlinedTextSettings
+              settings={settings}
+              handleSettingChange={handleSettingChange}
+              objectPath={`${objectPath}.text.subheading.style`}
               allowInput
               responsiveSize
             />

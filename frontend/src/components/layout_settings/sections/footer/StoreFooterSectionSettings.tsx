@@ -2,6 +2,7 @@ import React from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks'
 import FooterWithStoreDetailsButtonAndFormOrLocationSettings from './with_store_details_button_and_form_or_location/FooterWithStoreDetailsButtonAndFormOrLocationSettings';
 import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice';
+import AddToMenuBarToggler from '../../extras/AddToMenubarToggler';
 
 const StoreFooterSectionSettings = () => {
   const dispatch = useAppDispatch();
@@ -13,6 +14,7 @@ const StoreFooterSectionSettings = () => {
   if ( variation === "footerWithStoreDetailsButtonAndFormOrLocation") {
     return (
       <>
+        <AddToMenuBarToggler section='footer' />
         <FooterWithStoreDetailsButtonAndFormOrLocationSettings handleSettingChange={handleSettingChange} settings={settings}/>
       </>
     )

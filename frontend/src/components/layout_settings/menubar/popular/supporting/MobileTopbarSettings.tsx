@@ -11,6 +11,7 @@ import SlidingPanel from '../../../supporting/SlidingPanel';
 import { AnimatePresence } from 'framer-motion';
 import IconsOrButtonSettings from './IconsOrButtonSettings';
 import { getSetting } from '../../../../../utils/helperFunctions';
+import BackgroundEditor from '../../../background/BackgroundEditor';
 
 const MobileTopbarSettings: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -24,8 +25,8 @@ const MobileTopbarSettings: React.FC = () => {
 
   return (
     <div className="space-y-1 px-2 py-1">
-      {/* Position Settings*/}
-      <div className="px-2">
+      <div className="border rounded px-2">
+        
         <OptionsToggler
           label="Sticky?"
           options={["static", "sticky", "fixed"]}
@@ -34,9 +35,6 @@ const MobileTopbarSettings: React.FC = () => {
             handleSettingChange("menubar.topbar.mobile.position", newValue)
           }
         />
-      </div>
-      {/* Togglers */}
-      <div className="border rounded px-2">
         <OptionsToggler
             label="Hamburger First"
             options={['true', 'false']}
@@ -52,6 +50,12 @@ const MobileTopbarSettings: React.FC = () => {
             onChange={(value) => handleSettingChange('menubar.topbar.mobile.display', value)}
         />
       </div>
+      {/* Background */}
+      <FirstOrderSubSettingsContainer
+        name="Background"
+        onClick={() => setActivePanel('background')}
+      />
+      {/* Hamburger */}
       <FirstOrderSubSettingsContainer
         name="Hamburger"
         onClick={() => setActivePanel('hamburger')}
@@ -70,9 +74,23 @@ const MobileTopbarSettings: React.FC = () => {
           onClick={() => setActivePanel('extras')}
         />
       )}
-      
       {/* Sliding Panels */}
       <AnimatePresence>
+        {activePanel === "background" && (
+          <SlidingPanel
+            key="background"
+            isOpen={true}
+            onClose={closePanel}
+            title="Mobile Topbar Background"
+          >
+            <BackgroundEditor
+              objectPath="menubar.topbar.mobile.background"
+              handleSettingChange={handleSettingChange}
+              settings={settings}
+              allow={['color']}
+            />
+          </SlidingPanel>
+        )}
         {activePanel === 'logo' && (
           <SlidingPanel
             key="logo"

@@ -31,6 +31,7 @@ import withReactContent from 'sweetalert2-react-content';
 import ServicesSectionSettings from "../sections/services/ServicesSectionSettings";
 import StoreFooterSectionSettings from "../sections/footer/StoreFooterSectionSettings";
 import StoreTeamSectionSettings from "../sections/team/StoreTeamSectionSettings";
+import ProductsSectionSettings from "../sections/products/ProductsSectionSettings";
 
 const SortableItem = ({
   id,
@@ -81,7 +82,7 @@ const SortableItem = ({
         onDeleteClick={onDeleteClick}
         onRename={handleRename}
         replaceble={true}
-        deletable={id !== "hero"}
+        deletable
         renamable={isInMenubar}
       />
     </div>
@@ -176,6 +177,8 @@ const HomePageSettings = () => {
         return <StoreReviewsSectionSettings />;
       case "services": 
         return <ServicesSectionSettings />;
+      case "products": 
+        return <ProductsSectionSettings />
       case "footer":
         return <StoreFooterSectionSettings />
       case "team":

@@ -5,6 +5,10 @@ export interface Product {
     name: string;
     description: string;
     price: number;
+    prices: [{
+        variation: string;
+        amount: number;
+    }],
     stockQuantity: number;
     sold: number;
     variations: string[],

@@ -18,7 +18,7 @@ interface CustomizeLayoutProps {
 const CustomizeLayout: React.FC<CustomizeLayoutProps> = ({ layout, onBack }) => {
     const dispatch = useAppDispatch();
     const colorMap = extractLayoutColors(layout);
-    console.log("Color Map:", colorMap); // Debugging line to check the extracted colors
+    const storeId = useAppSelector((state) => state.storeAdmin.store?._id)
     const isLoading = useAppSelector((state) => state.layout.isLoading);
     const [step, setStep] = useState<"fonts" | "colors">("fonts");
     const [colors, setColors] = useState<string[]>(colorMap);    
@@ -35,14 +35,16 @@ const CustomizeLayout: React.FC<CustomizeLayoutProps> = ({ layout, onBack }) => 
     };
 
     const handleCreateLayout = () => {
-        const oldColors = colorMap; // Extract original colors
-        const newColors = colors; // Use the updated colors from state
+        const oldColors = colorMap; 
+        const newColors = colors;
+        
     
         dispatch(createLayoutWithSettings({
             layoutId: layout._id,
             newColors,
             oldColors,
-            newFonts: selectedFonts
+            newFonts: selectedFonts,
+            storeId
         }));
     };
 
@@ -60,7 +62,7 @@ const CustomizeLayout: React.FC<CustomizeLayoutProps> = ({ layout, onBack }) => 
             <h2 className="text-xl font-semibold">Customize Layout</h2>
 
             {/* Step Navigation */}
-            <div className="flex gap-4">
+            <div className="flex flex-row justify-evenly gap-4 w-full">
                 <button
                 onClick={() => setStep("fonts")}
                 className={`px-4 py-2 rounded ${

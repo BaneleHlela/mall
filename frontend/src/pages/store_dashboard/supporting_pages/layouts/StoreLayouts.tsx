@@ -1,52 +1,63 @@
 import { useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../../../app/hooks";
 import type { RootState } from "../../../../app/store";
-import { createLayout } from "../../../../features/layouts/layoutSlice";
 import { useNavigate } from "react-router-dom";
-import { defaultLayoutConfig } from "../../../../utils/defaults/defaultLayoutConfig";
-
+import { getStoreLayouts } from "../../../../features/layouts/layoutSlice";
+import { useEffect } from "react";
+import StoreLayoutCard from "./supporting/StoreLayoutsCard";
 
 const StoreLayouts = () => {
   const dispatch = useAppDispatch();
-  const layoutSettings = useAppSelector((state: RootState) => state.layoutSettings);
   const navigate = useNavigate();
   const { storeId } = useParams<{ storeId: string }>();
-  const store = useAppSelector((state: RootState) =>
-    storeId ? state.stores.myStoresById[storeId] : undefined
-  );
+  const store = useAppSelector((state) => state.storeAdmin.store)
+  const layouts = useAppSelector((state) => state.layout.layouts);
+
+
+  useEffect(() => {
+    if (true) {
+      dispatch(getStoreLayouts(store?.layouts));
+    }
+  }, [dispatch]);
 
   if (!store) {
     return <p>Store not found or invalid store ID: {storeId}.</p>;
   }
   
   const handleClick = async () => {
-    try {
-      // Create a new layout with a unique name
-      const newLayout = await dispatch(createLayout({ ...defaultLayoutConfig, store: storeId })).unwrap();
-
-      // Redirect to the preview page for the new layout
-      navigate(`/layouts/${newLayout._id}`);
-    } catch (error) {
-      console.error("Failed to create layout:", error);
-    }
+    navigate(`/layouts/create`);
   };
 
+  const handleView = async () => {
+    console.log()
+  }
+
+  const handleEdit = async (layoutId: string) => {
+    navigate(`/layouts/${layoutId}`);
+  }
+
   return (
-    <div className="w-full h-screen bg-amber-200">
+    <div className="w-full h-screen p-[1vh] bg-amber-200">
+      <h1 className="">Store Layouts:</h1>
       {store.layouts.length === 0 ? (
         <p>No layouts available for this store.</p>
       ) : (
-        <ul>
-          {store.layouts.map((layoutId) => (
-            <li key={layoutId.toString()} className="p-2 bg-white m-2 rounded shadow">
-              Layout ID: {layoutId.toString()}
-            </li>
+        <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-4 bg-white rounded shadow">
+          {layouts.map((layout) => (
+              <StoreLayoutCard
+                key={layout._id} 
+                layout={layout}
+                onSelect={() => handleEdit(layout._id)}
+                onView={handleView}
+              />
           ))}
-        </ul>
+        </div>
       )}
-      <button onClick={handleClick} className="border-2 p-20 bg-blue-400">
-        Create New Layout
-      </button>
+      <div className="w-full flex flex-col justify-center items-center p-[1vh]">
+        <button onClick={handleClick} className="bg-blue-400 p-4">
+          Create New Layout
+        </button>
+      </div>
     </div>
   );
 };

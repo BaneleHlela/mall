@@ -1,7 +1,7 @@
 import type { Store as StoreType } from "../../types/storeTypes"; // Import the correct type for the store object
 import { useState, useEffect } from "react";
 import { TbLoader3 } from "react-icons/tb";
-import { Navigate, Route, Routes, useParams } from "react-router-dom";
+import { Route, Routes, useLocation, useParams } from "react-router-dom";
 import WebFont from "webfontloader";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { fetchStoreServices } from "../../features/services/servicesSlice";
@@ -26,12 +26,11 @@ import StoreMenubarIcons from "../../components/store_layout/menubars/supporting
 import StoreFloatingButton from "../../components/store_layout/extras/buttons/StoreFloatingButton";
 import { IoMdClose } from "react-icons/io";
 import ComingSoon from "../../components/the_mall/ComingSoon";
-import StoreHome from "./supporting/home/StoreHomePage";
 
 const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
+  const location = useLocation();
   const settings = useAppSelector((state) => state.layoutSettings);
   const { storeId: paramStoreId } = useParams<{ storeId: string }>();
-  const layoutId = useAppSelector 
   const storeId = propStoreId || paramStoreId 
   const [isChatOpen, setIsChatOpen] = useState(false);
 
@@ -60,7 +59,8 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
           const result = await dispatch(fetchStoreById(storeId)).unwrap(); // Fetch store and unwrap the result
           setStore(result); // Set the fetched store in local state
           dispatch(setCurrentStore(result)); // Update the global store state
-          if (result?.layouts[0]) {
+          if (result?.layouts[0] && !location.pathname.includes("layouts")) {
+            console.log("Fetching layout from store page.")
             const layoutResult = await dispatch(getLayout(result.layouts[0] as string)).unwrap(); // Fetch layout and unwrap the result
             dispatch(setInitialLayout(layoutResult)); // Update the global layout state if available
           }
@@ -87,6 +87,15 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
       dispatch(fetchStoreProducts({ storeId }));
     }
   }, [storeId, dispatch]);
+
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.querySelector(location.hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [location]);
 
   // Fetch store services if applicable
   useEffect(() => {

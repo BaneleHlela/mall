@@ -7,11 +7,14 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md';
 import UnderlinedText from '../../../extras/text/UnderlinedText';
+import { useNavigate } from 'react-router-dom';
 
 const SimpleServicesSection = () => {
+  const navigate = useNavigate();
   const settings = useAppSelector((state) => state.layoutSettings.services);
   const services = useAppSelector((state) => state.services.services);
   const store = useAppSelector((state) => state.stores.currentStore);
+  const layoutId = useAppSelector((state) => state.layoutSettings._id);
 
   const visibleCount = window.innerWidth < 768 ? settings.grid.columns.mobile : settings.grid.columns.desktop;
   const [activeGroupIndex, setActiveGroupIndex] = useState(0);
@@ -26,6 +29,19 @@ const SimpleServicesSection = () => {
     const padding = services.slice(0, needed);
     currentGroup = [...currentGroup, ...padding];
   }
+
+  const handleServiceButtonClick = (serviceId: string) => {
+    const currentUrl = window.location.href;
+  
+    if (currentUrl.includes('layouts')) {
+      console.log("navigating")
+      navigate(`/layouts/${layoutId}/preview/service/${serviceId}`);
+    } else if (store && store._id) {
+      navigate(`/stores/${store._id}/service/${serviceId}`);
+    } else {
+      console.error('Store ID is not available');
+    }
+  };
   
 
   const isMobile = window.innerWidth < 768;
@@ -43,6 +59,7 @@ const SimpleServicesSection = () => {
 
   return (
     <div 
+        id="services"
         style={getBackgroundStyles(settings.background)}
         className='flex flex-col justify-between h-full'
     >
@@ -116,7 +133,7 @@ const SimpleServicesSection = () => {
                     imageUrl={settings.card.image.urls[index]}
                     price={service.price}
                     style={settings.card}
-                    onClick={() => console.log(`Clicked on service: ${service.name}`)}
+                    onClick={() => handleServiceButtonClick(service._id || "")}
                   />
                 ))}
               </motion.div>
@@ -190,7 +207,7 @@ const SimpleServicesSection = () => {
                 imageUrl={settings.card.image.urls[index]}
                 price={service.price}
                 style={settings.card}
-                onClick={() => console.log(`Clicked on service: ${service.name}`)}
+                onClick={() => handleServiceButtonClick(service._id || "")}
               />
             ))}
           </div>

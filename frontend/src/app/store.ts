@@ -14,6 +14,7 @@ import cartReducer from "../features/cart/cartSlice.ts";
 import reviewReducer from "../features/reviews/reviewSlice.ts";
 import emailReducer from "../features/emails/emailSlice.ts";
 import sectionReducer from "../features/sections/sectionSlice.ts";
+import posterReducer from "../features/posters/posterSlice.ts";
 
 export const store = configureStore({
     reducer: {
@@ -32,6 +33,7 @@ export const store = configureStore({
         reviews: reviewReducer,
         email: emailReducer,
         sections: sectionReducer,
+        posters: posterReducer,
     },
 });
 

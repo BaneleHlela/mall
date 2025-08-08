@@ -13,6 +13,8 @@ interface StoreButtonSettingsProps {
   allowPosition?: boolean;
   allowShow?: boolean;
   allowFunction?: boolean;
+  allowSimpleShow?: boolean;
+  responsiveBackground?: boolean;
 }
 
 const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({ 
@@ -20,7 +22,9 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({
   settings, 
   allowPosition,
   allowShow = false,
-  allowFunction = false
+  allowFunction = false,
+  allowSimpleShow = false,
+  responsiveBackground = false
 }) => {
   const dispatch = useAppDispatch();
 
@@ -65,6 +69,14 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({
           />
         </>
       )}
+      {allowSimpleShow && (
+        <OptionsToggler
+          label="Show"
+          options={["yes", "no"]}
+          value={getSetting('show', settings, objectPath) ? "yes" : "no"}
+          onChange={(value) => handleSettingChange(`${objectPath}.show`, value === "yes")}
+        />
+      )}
       <SubSettingsContainer
         name="Text"
         SettingsComponent={
@@ -89,7 +101,7 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({
             handleSettingChange={handleSettingChange}
             allow={["color", "width", "height", "shadow", "border", "padding", "shadow", ]}
             widthUnit='%'
-            responsiveSize={false}
+            responsiveSize={responsiveBackground}
           />
         }
       />

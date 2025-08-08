@@ -89,7 +89,7 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                     objectPath={`${objectPath}.imagesModal.background.thumbnail`}
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={["color", "border"]}
+                    allow={["color", "shadow", "border"]}
                     heightUnit='vh'
                     responsiveSize
                 />
@@ -161,19 +161,6 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
             )}
         </AnimatePresence>
         
-        {!settings.gallery.imagesModal.addModal && (
-            <SubSettingsContainer
-                name="Description"
-                SettingsComponent={
-                    <TextEditor
-                        objectPath={`${objectPath}.imagesModal.text.description`}
-                        settings={settings}
-                        handleSettingChange={handleSettingChange}
-                        allow={[ "color", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing" ]}
-                    />
-                }
-            />
-        )}
         
         {activePanel === "toggle_buttons" && 
             ((getSetting("imagesModal.grids.thumbnail.stack.mobile", settings, objectPath) === "horizontal") ||

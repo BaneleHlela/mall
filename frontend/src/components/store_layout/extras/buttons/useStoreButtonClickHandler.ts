@@ -1,6 +1,6 @@
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
-type ActionType = 'book' | 'buy' | 'subscribe' | 'call';
+type ActionType = 'services' | 'buy' | 'subscribe' | 'call' | 'book';
 
 interface ButtonClickHandlerOptions {
   type: ActionType;

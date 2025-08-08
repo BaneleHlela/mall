@@ -27,7 +27,7 @@ const MobileTopBar: React.FC<{
         : `/stores/${store?._id}`;
         
         return (
-          <Link to={linkTo} className='w-fit h-full pl-1 pr-1 flex flex-col justify-center'>
+          <Link to={linkTo} className='w-fit h-full pl-1 pr-1 flex flex-col justify-center text-center'>
             {logoSettings.use === 'logo' && store?.logo?.url ? (
               <img
                 style={{ 
@@ -45,7 +45,7 @@ const MobileTopBar: React.FC<{
                   fontFamily: logoSettings.text.fontFamily,
                   padding: `${logoSettings.background.padding.y} ${logoSettings.background.padding.x}`,
                 }}
-                className='h-full'
+                className='h-full flex flex-col justify-center'
               >
                 {logoSettings.text.input || store?.name || 'Store Name'}
               </div>
@@ -86,7 +86,13 @@ const MobileTopBar: React.FC<{
   );
 
   return (
-    <div className="flex flex-row w-full justify-between h-full lg:hidden">
+    <div 
+      style={{
+        backgroundColor: settings.topbar.mobile?.background?.color || "",
+        ...getBackgroundStyles(settings.topbar.mobile?.background || {}),
+      }}
+      className="flex flex-row w-full justify-between items-center h-full lg:hidden"
+    >
       <div className={`w-[50%] flex flex-col h-full  ${settings.topbar.mobile.hamburgerFirst ? "items-end" : "items-start"}`}>
         {!settings.topbar.mobile.hamburgerFirst ? (
           settings.topbar.mobile.display === "logo" ? renderLogo() : renderIcons()
@@ -153,29 +159,28 @@ const DesktopTopBar: React.FC<{
   };
 
   const renderLinks = () => (
-    <div 
-      style={{
-        ...getBackgroundStyles(settings.topbar.desktop.links.allLinksBackground),
-      }}
-      className='w-fit h-full flex flex-col justify-center'
-    >
-      <ul className="hidden lg:flex flex-row justify-center text-center capitalize space-x-0">
-        {links.map(({ to, label }) => (
-          <li
-            key={label}
-            className='hover:scale-102 hover:text-gray-800'
-            style={{
-              ...getBorderStyles(settings.topbar.desktop.links.background.border),
-              ...getTextStyles(settings.topbar.desktop.links.text),
-              fontFamily: settings.topbar.desktop.links.text.fontFamily,
-              backgroundColor: settings.topbar.desktop.links.background.backgroundColor,
-              padding: `${settings.topbar.desktop.links.background.padding.x} ${settings.topbar.desktop.links.background.padding.y}`,
-            }}
-          >
-            <Link to={to}>{label}</Link>
-          </li>
-        ))}
-      </ul>
+    <div className="h-full flex flex-col justify-center items-center">
+      <div 
+        style={{
+          ...getBackgroundStyles(settings.topbar.desktop.links.allLinksBackground),
+        }}
+        className='w-fit h-full flex flex-col justify-center'
+      >
+        <ul className="hidden lg:flex flex-row h-full justify-center items-center text-center capitalize space-x-0">
+          {links.map(({ to, label }) => (
+            <li
+              key={label}
+              className='hover:scale-102 hover:text-gray-800 min-h-fit flex flex-col justify-center'
+              style={{
+                ...getBackgroundStyles(settings.topbar.desktop.links.background),
+                ...getTextStyles(settings.topbar.desktop.links.text),
+              }}
+            >
+              <Link to={to}>{label}</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 
@@ -216,7 +221,7 @@ const DesktopTopBar: React.FC<{
   };
 
   return (
-    <div className='w-full h-full flex flex-row justify-between'>
+    <div style={{ border: "none" }} className='w-full h-full flex flex-row justify-between'>
       {order.map((type: string, index: number) => (
         <React.Fragment key={`${type}-${index}`}>
           {componentMap[type]()}
@@ -276,14 +281,18 @@ const PopularStoreMenubar: React.FC = () => {
     return [homeLink, ...inLinksArray, ...routeLinks];
   }, [routes, routeOrder, storeId, layoutId, useLocation()]);
   
+  const {
+    border,
+    ...backgroundStylesWithoutBorder
+  } = settings.background
 
   return (
     <nav
       style={{
         height: getBackgroundHeight(),
         backgroundColor: settings.background.color,
+        ...getBackgroundStyles(backgroundStylesWithoutBorder),
         borderBottom: `${settings.background.border.width} ${settings.background.border.style} ${settings.background.border.color}`,
-        ...getBackgroundStyles(settings.background),
         width: "100%"
       }}
       className={`flex flex-row justify-between z-10 top-0 w-full
@@ -299,7 +308,7 @@ const PopularStoreMenubar: React.FC = () => {
         <div className="h-full w-full lg:hidden">      
             <MobileTopBar settings={settings} store={store} isOpen={isOpen} setOpen={setOpen} />
         </div>
-        <div className="hidden lg:flex w-full h-full">
+        <div className="hidden lg:flex flex-col justify-center items-center w-full h-full">
             <DesktopTopBar settings={settings} store={store} links={links} />
         </div>
       

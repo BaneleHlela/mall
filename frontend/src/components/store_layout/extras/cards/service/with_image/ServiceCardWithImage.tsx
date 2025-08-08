@@ -112,7 +112,7 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                         >
                         <StoreButton 
                             style={style.textAndButton.button} 
-                            onClick={() => {}} 
+                            onClick={onClick} 
                         />
                     </div>
                 </div>

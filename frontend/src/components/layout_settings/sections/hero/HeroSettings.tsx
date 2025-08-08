@@ -5,8 +5,9 @@ import HeroWithButtonBetweenImagesSettings from "./with_button_between_images/He
 import HeroWithImagePatternAndBoxSettings from "./with_image_pattern_and_box/HeroWithImagePatternAndBoxSettings";
 import HeroWithSlidingImages from "./with_sliding_images/HeroWithSlidingImagesSettings";
 import HeroWithButtonImageAndTextSettings from "./with_button_image_and_text/HeroWithButtonImageAndTextSettings";
-import OptionsToggler from "../../supporting/OptionsToggler";
 import HeroWithReviewCardAndEmailFormSettings from "./with_review_card_and_email_form/HeroWithReviewCardAndEmailFormSettings";
+import HeroWithBoxSettings from "./hero_with_box/HeroWithBoxSettings";
+import HeroWithDivAndImageSettings from "./hero_with_div_and_image/HeroWithDivAndImageSettings";
 
 export const handleAddSectionToLinks = (
   dispatch: any,
@@ -48,14 +49,6 @@ const HeroSettings = () => {
   if (variation === "heroWithImagePatternAndBox") {
     return (
       <div className="space-y-1">
-        <div className="px-2 py-1 border rounded">
-          <OptionsToggler
-            label="Add to Menubar ?"
-            options={['yes', 'no']}
-            value={settings.routes?.home?.inLinks?.some(link => link.section === 'hero') ? 'yes' : 'no'}
-            onChange={(option) => handleAddSectionToLinks(dispatch, settings, 'hero', option)}
-          />
-        </div>
         <HeroWithImagePatternAndBoxSettings settings={settings} handleSettingChange={handleSettingChange}/>
       </div>
     )
@@ -70,17 +63,32 @@ const HeroSettings = () => {
   }
   
   if (variation === "heroWithButtonImageAndText") {
-    return <HeroWithButtonImageAndTextSettings settings={settings} handleSettingChange={handleSettingChange}/>
+    return (
+      <>
+        <HeroWithButtonImageAndTextSettings settings={settings} handleSettingChange={handleSettingChange}/>
+      </>
+    )
+  }
+
+  if (variation === "heroWithBox") {
+    return (
+      <>
+        <HeroWithBoxSettings settings={settings} handleSettingChange={handleSettingChange}  />
+      </>
+    )
   }
 
   if (variation === "heroWithReviewCardAndEmailForm") {
     return (
       <div className="space-y-1">
-        <HeroWithReviewCardAndEmailFormSettings settings={settings} handleSettingChange={handleSettingChange}/>
+        <HeroWithReviewCardAndEmailFormSettings settings={settings} handleSettingChange={handleSettingChange} />
       </div>
     )
   }
 
+  if (variation === "heroWithDivAndImage") {
+    return <HeroWithDivAndImageSettings settings={settings} handleSettingChange={handleSettingChange} />
+  }
 
   return (
     <FirstHeroSettings />

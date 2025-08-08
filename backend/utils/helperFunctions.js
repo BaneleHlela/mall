@@ -1,3 +1,4 @@
+
 export const addMinutes = (date, mins) => new Date(date.getTime() + mins * 60000);
 
 export const timeStringToDate = (baseDate, timeStr) => {

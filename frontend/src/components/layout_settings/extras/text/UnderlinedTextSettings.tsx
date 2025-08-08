@@ -6,13 +6,15 @@ import { getSetting } from '../../../../utils/helperFunctions'
 import OptionsToggler from '../../supporting/OptionsToggler'
 import ColorPicker from '../../supporting/ColorPicker'
 import SettingsSlider from '../../supporting/SettingsSlider'
+import BackgroundEditor from '../../background/BackgroundEditor'
 
-const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: boolean, responsiveSize?: boolean }> = ({
+const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: boolean, responsiveSize?: boolean, allowWidth?: boolean }> = ({
     settings,
     handleSettingChange,
     objectPath,
     allowInput = false,
-    responsiveSize = false
+    responsiveSize = false,
+    allowWidth = false
 }) => {
     const allowArray = [
         "animation",
@@ -39,6 +41,19 @@ const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: 
 
     return (
         <div className="space-y-1">
+            {allowWidth && (
+                <SettingsSlider
+                    label="Width"
+                    value={parseInt(getSetting("width", settings, objectPath) || "10")} 
+                    unit="%"
+                    min={0}
+                    max={150}
+                    onChange={(value) => 
+                    handleSettingChange(`${objectPath}.width`, `${value}%`)
+                    }
+                />
+            )}
+            
             <SubSettingsContainer
                 name={"Text"}
                 SettingsComponent={
@@ -50,6 +65,22 @@ const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: 
                         responsiveSize={responsiveSize}
                         responsivePadding
                     />
+                }
+            />
+            <SubSettingsContainer
+                name="Background"
+                SettingsComponent={
+                    <div className="px-[.8vh] space-y-[.7vh]">
+                        <BackgroundEditor
+                            objectPath={`${objectPath}.background`}
+                            settings={settings}
+                            handleSettingChange={handleSettingChange}
+                            allow={["color", "padding", "shadow", "border"]}
+                            widthUnit="%"
+                            responsiveSize
+                            responsivePadding
+                        />
+                    </div>
                 }
             />
             <SubSettingsContainer

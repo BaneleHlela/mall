@@ -17,14 +17,17 @@ const productSchema = new mongoose.Schema({
   },
   slug: {
     type: String,
-    // required: true,
     unique: true,
   },
-  price: {
-    type: Number,
-    required: true,
-    min: 0,
-  },
+  prices: [{
+    variation: {
+      type: String,
+    },
+    amount: {
+      type: Number,
+      min: 0,
+    }
+  }],
   marking: {
     type: String,
     //enum: ['new', 'sale', 'featured', ''],

@@ -78,11 +78,13 @@ export const createLayoutWithSettings = createAsyncThunk(
         newColors,
         oldColors,
         newFonts,
+        store
       }: {
         layoutId: string;
         newColors: string[];
         oldColors?: string[];
         newFonts?: Fonts;
+        store: string; 
       },
       thunkAPI
     ) => {
@@ -92,6 +94,7 @@ export const createLayoutWithSettings = createAsyncThunk(
           newColors,
           oldColors,
           newFonts,
+          store
         });
         return response.data; // Adjust as needed depending on what the backend returns
       } catch (error: any) {
@@ -101,6 +104,21 @@ export const createLayoutWithSettings = createAsyncThunk(
       }
     }
 );
+
+export const getStoreLayouts = createAsyncThunk(
+    "layouts/getStoreLayouts",
+    async (layoutIds: string[], thunkAPI) => {
+      try {
+        const response = await axios.post(`${API_URL}/api/layouts/store`, layoutIds);
+        return response.data as Layout[];
+      } catch (error: any) {
+        return thunkAPI.rejectWithValue(
+          error.response?.data || "Failed to fetch multiple layouts"
+        );
+      }
+    }
+);
+  
   
   
 
@@ -244,7 +262,30 @@ const layoutSlice = createSlice({
             .addCase(createLayoutWithSettings.rejected, (state, action) => {
                 state.isLoading = true;
                 state.error = action.error.message || "Failed to create layout with settings";
+            })
+
+            // Get multiple layouts by IDs
+            .addCase(getStoreLayouts.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getStoreLayouts.fulfilled, (state, action: PayloadAction<Layout[]>) => {
+                state.isLoading = false;
+                // Optionally merge or replace existing layouts
+                const newLayouts = action.payload;
+                const existingIds = new Set(state.layouts.map(layout => layout._id));
+                
+                // Add only new layouts
+                newLayouts.forEach(layout => {
+                if (!existingIds.has(layout._id)) {
+                    state.layouts.push(layout);
+                }
+                });
+            })
+            .addCase(getStoreLayouts.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.error.message || "Failed to load multiple layouts";
             });
+  
   
             // Upload Layout Image
     //         .addCase(uploadLayoutImageThunk.pending, (state) => {

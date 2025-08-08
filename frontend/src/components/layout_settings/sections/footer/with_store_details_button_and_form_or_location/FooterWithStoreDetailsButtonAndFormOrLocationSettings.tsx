@@ -45,6 +45,7 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                         widthUnit="%"
                         heightUnit="%"
                         responsiveSize
+                        responsivePadding
                     />
                 </div>
                 }
@@ -75,7 +76,7 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
             <AnimatePresence>
                 {activePanel === "text" && (
                     <SlidingPanel
-                        key="button"
+                        key="text"
                         isOpen={true}
                         onClose={closePanel}
                         title="Text"
@@ -205,6 +206,8 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                         <StoreButtonSettings 
                             objectPath={`${objectPath}.button`}
                             settings={settings}
+                            allowSimpleShow
+                            
                         />
                     </SlidingPanel>
                 )}

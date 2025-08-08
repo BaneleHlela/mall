@@ -146,6 +146,7 @@ const ServiceDetailsSettings: React.FC<SupportingSettingsProps> = ({
                       handleSettingChange={handleSettingChange}
                       allow={["color", "shadow", "border", "padding", "width"]} 
                       widthUnit='%'	
+                      responsiveSize
                     />
                   }
                 />

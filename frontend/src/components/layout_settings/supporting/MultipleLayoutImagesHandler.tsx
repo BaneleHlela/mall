@@ -8,52 +8,60 @@ import StoreImages from "../../../pages/store_dashboard/supporting_pages/StoreIm
 
 interface Props {
     images: string[];
-    objectPath: string; // example: "hero.images"
     max?: number;
     min?: number;
+    onChange?: (images: string[]) => void; // ✅ Optional
+    objectPath?: string; // ✅ Needed for Redux fallback
 }
 
 const MultipleLayoutImagesHandler: React.FC<Props> = ({
     images,
-    objectPath,
     max = Infinity,
     min = 0,
+    onChange,
+    objectPath,
 }) => {
     const dispatch = useAppDispatch();
     const [showStoreImages, setShowStoreImages] = useState(false);
 
+    const updateImages = (newImages: string[]) => {
+        if (onChange) {
+            onChange(newImages);
+        } else if (objectPath) {
+            dispatch(updateSetting({ field: objectPath, value: newImages }));
+        } else {
+            console.warn("No onChange or objectPath provided for MultipleLayoutImagesHandler.");
+        }
+    };
+
     const handleImageSelect = (index: number, imageUrl: string) => {
-        dispatch(updateSetting({ field: `${objectPath}.${index}`, value: imageUrl }));
+        const newImages = [...images];
+        newImages[index] = imageUrl;
+        updateImages(newImages);
     };
 
     const handleImageDelete = (index: number) => {
         if (images.length <= min) return;
-
         const newImages = [...images.slice(0, index), ...images.slice(index + 1)];
-        dispatch(updateSetting({ field: objectPath, value: newImages }));
+        updateImages(newImages);
     };
 
     const handleAddImage = (imageUrl: string) => {
         if (images.length >= max) return;
-
         const newImages = [...images, imageUrl];
-        dispatch(updateSetting({ field: objectPath, value: newImages }));
+        updateImages(newImages);
         setShowStoreImages(false);
     };
 
     return (
-        <div className="space-y-[.3vh] p-[.6vh]">
+        <div className="space-y-[.3vh] p-[.6vh] text-[2vh]">
             {images.map((image, index) => (
                 <SingleLayoutImageHandler
                     key={index}
                     label={`Image ${index + 1}`}
                     image={image}
                     onImageSelect={(url) => handleImageSelect(index, url)}
-                    onDelete={() => {
-                        if (images.length > min) {
-                            handleImageDelete(index);
-                        }
-                    }}
+                    onDelete={() => handleImageDelete(index)}
                 />
             ))}
 

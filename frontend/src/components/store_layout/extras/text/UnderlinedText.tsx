@@ -1,5 +1,5 @@
 import React from 'react';
-import { getTextStyles } from '../../../../utils/stylingFunctions';
+import { getBackgroundStyles, getTextStyles } from '../../../../utils/stylingFunctions';
 
 interface UnderlinedTextProps {
     style: any;
@@ -24,8 +24,20 @@ const UnderlinedText: React.FC<UnderlinedTextProps> = ({
                     : 'justify-end text-end'
             }`}
         >
-            <div className="flex flex-col items-center">
-                <h1 className={`${style.animation}`}>
+            <div 
+                style={{
+                    maxWidth: style.width || "100%",
+                    width: "fit-content",
+                    wordBreak: 'break-word'
+                }}
+                className="flex flex-col items-center text-wrap"
+            >
+                <h1 
+                    style={{
+                        ...getBackgroundStyles(style?.background || {})
+                    }}
+                    className={`${style.animation} text-wrap`}
+                >
                     {input || style.input}
                 </h1>
                 {underline?.show && (

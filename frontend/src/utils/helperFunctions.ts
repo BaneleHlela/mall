@@ -6,6 +6,7 @@ export const getSetting = (key: string, settings: any, objectPath: string) => {
       ...((key && key.length > 0) ? key.split(".") : [])
     ];
 
+
     return path.reduce((current, prop) => current?.[prop], settings);
   } catch {
     return undefined;
@@ -88,58 +89,72 @@ export function extractLayoutColors(layout: any): string[] {
     "unset",
   ]);
 
-  const extractColors = (obj: any) => {
-    if (!obj || typeof obj !== "object") return;
+const extractColors = (obj: any) => {
+  if (!obj || typeof obj !== "object") return;
 
-    for (const key in obj) {
-      const value = obj[key];
+  for (const key in obj) {
+    const value = obj[key];
 
-      // Handle color or backgroundColor
-      if (
-        (key === "color" || key === "backgroundColor") &&
-        typeof value === "string"
-      ) {
-        const color = value.trim().toLowerCase();
-        if (isValidHexColor(color) && !blockedValues.has(color)) {
-          colors.add(color);
-        }
-      }
-
-      // Only scan "underline" if underline.show === "true"
-      else if (key === "underline" && typeof value === "object") {
-        if (value.show) extractColors(value);
-      }
-
-      // Special case: "extras" object
-      else if (key === "extras" && typeof value === "object") {
-        const include = value.include;
-        if (include === "button" && value.button) {
-          console.log("Extracting button colors:", value.button);
-          extractColors(value.button);
-        } else if (include === "icons" && value.icons) {
-          console.log("Extracting icon colors:", value.icons);
-          extractColors(value.icons);
-        }
-        // skip if "none" or invalid
-      }
-
-      // Recurse normally for other keys
-      else if (typeof value === "object" && key !== "underline") {
-        extractColors(value);
+    // Handle color or backgroundColor
+    if (
+      (key === "color" || key === "backgroundColor") &&
+      typeof value === "string"
+    ) {
+      const color = value.trim().toLowerCase();
+      if (isValidHexColor(color) && !blockedValues.has(color)) {
+        colors.add(color);
       }
     }
+
+    // Only scan "underline" if underline.show === "true"
+    else if (key === "underline" && typeof value === "object") {
+      if (value.show) extractColors(value);
+    }
+
+    // Special case: "extras" object
+    else if (key === "extras" && typeof value === "object") {
+      const include = value.include;
+      if (include === "button" && value.button) {
+        console.log("Extracting button colors:", value.button);
+        extractColors(value.button);
+      } else if (include === "icons" && value.icons) {
+        console.log("Extracting icon colors:", value.icons);
+        extractColors(value.icons);
+      }
+      // skip if "none" or invalid
+    }
+
+    // Recurse normally for other keys
+    else if (typeof value === "object" && key !== "underline") {
+      extractColors(value);
+    }
+  }
   };
 
   const sectionsToScan = new Set<string>();
   const routes = layout.routes || {};
   for (const routeKey in routes) {
-    const route = routes[routeKey];
-    if (route && Array.isArray(route.contains))  {// @ts-ignore
+  const route = routes[routeKey];
+  if (route && Array.isArray(route.contains))  {// @ts-ignore
       route.contains.forEach(section => sectionsToScan.add(section));
     }
   }
 
-  if (layout.menubar) extractColors(layout.menubar);
+  if (layout.menubar) {
+    extractColors({
+      ...layout.menubar,
+      alertDiv: undefined, // temporarily exclude it
+      cart: undefined       // temporarily exclude it
+    });
+  
+    if (layout.menubar.alertDiv?.display === true) {
+      extractColors(layout.menubar.alertDiv);
+    }
+  
+    if (sectionsToScan.has("products") && layout.menubar.cart) {
+      extractColors(layout.menubar.cart);
+    }
+  }  
 
   if (layout.floats?.floatingIcons?.show) {
     extractColors(layout.floats.floatingIcons);

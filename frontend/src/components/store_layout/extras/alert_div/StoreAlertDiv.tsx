@@ -134,21 +134,21 @@ const StoreAlertDiv: FC<StoreAlertDivProps> = ({ config, objectPath }) => {
           style={{ gap: config.items.gap.allItems }}
         >
             {content}
-                <div style={{ width: config.items.gap }} /> 
+                <div style={{ width: config.items.gap.allItems }} /> 
             {content}
-                <div style={{ width: config.items.gap }} />
+                <div style={{ width: config.items.gap.allItems }} />
             {content}
-                <div style={{ width: config.items.gap }} /> 
+                <div style={{ width: config.items.gap.allItems }} /> 
             {content}
-                <div style={{ width: config.items.gap }} /> 
+                <div style={{ width: config.items.gap.allItems }} /> 
             {content}
-                <div style={{ width: config.items.gap }} /> 
+                <div style={{ width: config.items.gap.allItems }} /> 
             {content}
-                <div style={{ width: config.items.gap }} />
+                <div style={{ width: config.items.gap.allItems }} />
             {content}
-                <div style={{ width: config.items.gap }} /> 
+                <div style={{ width: config.items.gap.allItems }} /> 
             {content}
-                <div style={{ width: config.items.gap }} /> 
+                <div style={{ width: config.items.gap.allItems }} /> 
         </motion.div>
       ) : animation === "flash" ? (
         <motion.div

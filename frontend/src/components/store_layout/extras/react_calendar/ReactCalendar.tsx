@@ -5,8 +5,7 @@ type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 function ReactCalendar({ value, onChange }: { value: Value; onChange: (value: Value) => void }) {
-  const style = useAppSelector((state => state.layoutSettings.book.main.calendar));
-  console.log(style);
+  const style = useAppSelector((state => state.layoutSettings.bookService.main.calendar));
   return (
     <div>
       <style>

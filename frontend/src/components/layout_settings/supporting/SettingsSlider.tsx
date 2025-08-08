@@ -26,7 +26,7 @@ const SettingsSlider: React.FC<SettingsSliderProps> = ({
   };
 
   return (
-    <div className="flex flex-row justify-between items-center w-full h-[3vh] text-[1.8vh] ">
+    <div className="flex flex-row justify-between items-center w-full h-[3vh] text-[2vh] ">
       <div className="w-[50%] flex flex-row justify-between">
         <label className="">{label}</label>
         <p className="mr-1">:</p>

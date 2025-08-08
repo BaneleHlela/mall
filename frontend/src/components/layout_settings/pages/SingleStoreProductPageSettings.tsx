@@ -5,14 +5,13 @@ import SlidingPanel from '../supporting/SlidingPanel';
 import SingleStoreProductSectionSettings from '../sections/single_product/SingleStoreProductSectionSettings';
 
 const SingleStoreProductPageSettings = () => {
-    const routes = useAppSelector((state) => state.layoutSettings.routes);
 
     const [activePanel, setActivePanel] = useState<string | null>(null);
     const closePanel = () => setActivePanel(null);
     return (
       <div>
         <SettingsContainer
-          name="Product"
+          name="Product Section"
           onClick={() => setActivePanel("product")}
           replaceble
         />

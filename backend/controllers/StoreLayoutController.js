@@ -34,7 +34,7 @@ export const createLayoutConfig = async (req, res) => {
 
 export const createLayoutConfigWithSettings = async (req, res) => {
     try {
-      const { layoutId, newColors, oldColors, newFonts } = req.body;
+      const { layoutId, newColors, oldColors, newFonts, store } = req.body;
   
       // Fetch the original layout
       const originalLayout = await StoreLayout.findById(layoutId);
@@ -103,6 +103,7 @@ export const createLayoutConfigWithSettings = async (req, res) => {
         fonts: updatedFonts,
         colors: newColors,
         name: "New Layout with Updated Settings",
+        store
       });
   
       const newLayoutId = newLayout._id.toString();
@@ -126,8 +127,18 @@ export const createLayoutConfigWithSettings = async (req, res) => {
 };
   
   
+export const getStoreLayouts = expressAsyncHandler(async (req, res) => {
+  const layoutIds = req.body; 
 
-
+  if (!Array.isArray(layoutIds) || layoutIds.length === 0) {
+    res.status(400);
+    throw new Error("Request body must be a non-empty array of layout IDs.");
+  }
+  const layouts = await StoreLayout.find({
+    _id: { $in: layoutIds }
+  });
+  res.json(layouts);
+});
 
 // Fetch Layout Configuration
 export const getLayoutConfig = expressAsyncHandler(async (req, res) => {

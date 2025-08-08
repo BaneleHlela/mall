@@ -22,11 +22,8 @@ const Layouts: React.FC = () => {
       if (!layoutId) return;
   
       try {
-        console.log("fetching layout")
         const result = await dispatch(getLayout(layoutId)).unwrap();
-        console.log(result)
         dispatch(setInitialLayout(result));
-        console.log("✅ Layout fetched and set", result);
       } catch (error) {
         console.error("❌ Failed to fetch layout:", error);
       }

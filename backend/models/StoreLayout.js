@@ -31,7 +31,7 @@ const storeLayoutSchema = new mongoose.Schema({
     order: {
         type: Object,
     },
-    //book: {},
+    book: {},
     about: {
 
     },
@@ -43,6 +43,7 @@ const storeLayoutSchema = new mongoose.Schema({
     singleProduct: {},
     bookWithCalender: {},
     menu: {},
+    bookService: {},
     footer: {
         
     },

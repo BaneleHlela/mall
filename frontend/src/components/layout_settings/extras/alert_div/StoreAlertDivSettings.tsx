@@ -15,6 +15,7 @@ import SubSettingsContainer from '../SubSettingsContainer'
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { AnimatePresence } from 'framer-motion'
+import SettingsSlider from '../../supporting/SettingsSlider'
 
 const MySwal = withReactContent(Swal);
 
@@ -90,7 +91,7 @@ const StoreAlertDivSettings: React.FC<SupportingSettingsProps> = ({
       
         setShowDropdown(false);
     };
-      
+
 
     return (
         <div className='space-y-[.3vh] w-full flex flex-col items-center'>
@@ -135,6 +136,31 @@ const StoreAlertDivSettings: React.FC<SupportingSettingsProps> = ({
                         allow={["height", "color"]}
                         heightUnit="vh"
                         responsiveSize
+                    />
+                </div>
+                }
+            />
+            <SubSettingsContainer
+                name="Gaps"
+                SettingsComponent={
+                <div className="px-[.6vh] space-y-[.3vh]">
+                    <SettingsSlider
+                        label="Gap (Container)"
+                        value={getSetting('items.gap.allItems', settings, objectPath)}
+                        min={.1}
+                        max={50}
+                        onChange={(newValue) =>
+                            handleSettingChange(`${objectPath}.items.gap.allItems`, newValue)
+                        }
+                    />
+                    <SettingsSlider
+                        label="Gap (Item)"
+                        value={getSetting('items.gap.item', settings, objectPath)}
+                        min={.1}
+                        max={50}
+                        onChange={(newValue) =>
+                            handleSettingChange(`${objectPath}.items.gap.item`, newValue)
+                        }
                     />
                 </div>
                 }
@@ -201,9 +227,9 @@ const StoreAlertDivSettings: React.FC<SupportingSettingsProps> = ({
                         title={`Icon Settings (${activePanel})`}
                     >
                         <StoreAlertIconSettings
-                        settings={settings}
-                        handleSettingChange={handleSettingChange}
-                        objectPath={`${objectPath}.items.${activePanel}`}
+                            settings={settings}
+                            handleSettingChange={handleSettingChange}
+                            objectPath={`${objectPath}.items.${activePanel}`}
                         />
                     </SlidingPanel>
                 )}

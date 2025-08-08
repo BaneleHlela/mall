@@ -20,6 +20,9 @@ import { defaultPopularProductsSectionConfig } from "./sections/order_online/def
 import { defaultSingleProductSectionConfig } from "./sections/single_product/defaultSingleProductSectionConfig";
 import { defaultPopularTeamSectionConfig } from "./sections/team/defaultPopularTeamSectionConfig";
 import { defaultStoreIconsConfig } from "./extras/defaultStoreIconsConfig";
+import { defaultHeroWithBoxConfig } from "./sections/hero/defaultHeroWithBox";
+import { defaultBookServiceSectionConfig } from "./sections/book_service/defaultBookServiceSectionConfig";
+import { defaultHeroWithDivAndImageConfig } from "./sections/hero/defaultHeroWithDivAndImageConfig";
 
 export const defaultMenubarConfig = {
   topbar: {
@@ -127,8 +130,8 @@ export const defaultLayoutConfig = {
         }
     },
     menubar: defaultPupularStoreMenubarConfig,
-    hero: defaultHeroWithReviewCardAndEmailFormConfig,
-    practice: simpleServicesSectionConfig,
+    hero: defaultHeroWithDivAndImageConfig,
+    practice: defaultHeroWithDivAndImageConfig,
     services: simpleServicesSectionConfig,
     about: defaultAboutWithImageNextToTextConfig,
     team: defaultPopularTeamSectionConfig,
@@ -142,5 +145,6 @@ export const defaultLayoutConfig = {
     contact: defaultContactWithBackgroundImageTextAndSocialsConfig,
     footer: defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig,
     singleProduct: defaultSingleProductSectionConfig,
+    bookService: defaultBookServiceSectionConfig,
 };
   
