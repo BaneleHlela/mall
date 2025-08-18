@@ -18,6 +18,18 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
     });
 
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 0 });
+    // Wait for all images
+    await page.evaluate(async () => {
+      const selectors = Array.from(document.images).map(img => {
+        if (img.complete) return;
+        return new Promise(resolve => {
+          img.addEventListener('load', resolve);
+          img.addEventListener('error', resolve);
+        });
+      });
+      await Promise.all(selectors);
+    });
+
 
     const screenshotBuffer = await page.screenshot({ fullPage: true }); // or fullPage: false
     return screenshotBuffer;

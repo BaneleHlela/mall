@@ -1,8 +1,16 @@
 import UserDisplay from './UserDisplay'
 import { IoMdNotifications } from "react-icons/io";
 import { Fade as Hamburger } from 'hamburger-react'
+
 const StoreDashboardTopbar = () => {
-  return (
+    // Check if the current URL contains 'posters/view'
+    const shouldHideTopbar = window.location.href.includes('posters/view');
+
+    if (shouldHideTopbar) {
+        return null; // Return null to hide the component
+    }
+    
+    return (
     <div
         className='font-[ubuntu] flex flex-row justify-between w-full min-h-[12vh] bg-white m-1 shadow-sm rounded-[8px]'
     >

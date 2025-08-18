@@ -15,13 +15,13 @@ const FooterWithStoreDetailsFormAndButton = () => {
   return (
     <div 
       id="footer"
-      className="w-full h-full  flex flex-row justify-center">
+      className="w-full h-full  flex flex-row justify-center min-h-fit">
       {/* Desktop */}
       <div
         style={{
           ...getBackgroundStyles(settings.background)
         }} 
-        className="hidden lg:block" 
+        className="hidden lg:block min-h-fit" 
       >
         {/* Heading and Button */}
         {(settings.button.show || settings.title.text.input) && (
@@ -83,10 +83,10 @@ const FooterWithStoreDetailsFormAndButton = () => {
           </div>
           {/* Form or Button */}
           <div
-            className="h-[77vh] w-[50%]"
+            className="h-[77vh] w-[50%] min-h-fit"
           >
             {settings.show === "form" && (
-              <div className="w-full h-full flex flex-row justify-center">
+              <div className="w-full h-full flex flex-row justify-center min-h-fit">
                 <SendEmailForm style={settings.sendEmailForm}/>
               </div>
             )}

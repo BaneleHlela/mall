@@ -9,6 +9,9 @@ const PosterSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "StoreLayout",
     },
+    screenshot: {
+        type: String,
+    },
     type: {
         type: String,
         enum: ["digital", "physical"],
@@ -24,7 +27,15 @@ const PosterSchema = new mongoose.Schema({
             url: {
                 type: String,
             },
-
+            opacity: {
+                type: String,
+            },
+            height: {
+                type: String,
+            },
+            width: {
+                type: String,
+            }
         },
         color: {
             type: String,
@@ -33,6 +44,23 @@ const PosterSchema = new mongoose.Schema({
         opacity: {
             type: String,
         }
+    },
+    text: {
+        input: {
+            type: String,
+        },
+        color: {
+            type: String,
+        },
+        fontWeight: {
+            type: String,
+        },
+        fontFamily: {
+            type: String,
+        }
+    },
+    deviceColor: { 
+        type: String,
     },
     images: {
         mobile: [{

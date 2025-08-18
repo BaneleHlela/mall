@@ -8,7 +8,7 @@ const CLIENT_URL = process.env.CLIENT_URL;
 
 export const createPoster = async (req, res) => {
   try {
-    const { type, layout, store, variation, background, images, imageSource } = req.body;
+    const { type, layout, store, variation, background, images, deviceColor, imageSource, text } = req.body;
 
     // Create poster with initial data (empty image URLs for now)
     const poster = new Poster({
@@ -17,18 +17,21 @@ export const createPoster = async (req, res) => {
       store,
       variation,
       background,
+      text,
+      deviceColor,
       images: {
         mobile: [],
         desktop: "",
         tablet: "",
       },
+      screenshot: "",
     });
 
     // Device screenshot configurations
     const screenshotConfig = {
-      desktop: { width: 1440, height: 900 },
-      tablet: { width: 768, height: 1024 },
-      mobile: { width: 360, height: 740 },
+      desktop: { width: 1500, height: 800 },
+      tablet: { width: 775, height: 1024 },
+      mobile: { width: 350, height: 740 },
     };
 
     // Screenshots for each device if capture is true
@@ -64,7 +67,19 @@ export const createPoster = async (req, res) => {
       }
     }
 
-    await poster.save();
+    
+
+    const result = await poster.save();
+    
+    // Take a screenshot of the poster view page
+    const posterViewUrl = `${CLIENT_URL}/dashboard/${store}/posters/view/${result._id}`;
+    const screenshotBuffer = await captureScreenshot(posterViewUrl, 839, 839); // Adjust dimensions as necessary
+    const screenshotFileName = `stores/${store}/posters/${result._id}/poster_view.png`;
+    await uploadToUploads(screenshotBuffer, screenshotFileName);
+    
+    // Update the poster with the screenshot URL
+    result.screenshot = `https://storage.googleapis.com/the-mall-uploads-giza/${screenshotFileName}`;
+    await result.save();
 
     res.status(201).json(poster);
   } catch (error) {
@@ -86,4 +101,26 @@ export const fetchStorePosters = expressAsyncHandler(async (req, res) => {
     .populate("layout", "name"); // Optional: populate layout details
 
   res.status(200).json(posters);
+});
+
+// Fetch poster by ID
+export const fetchPosterById = expressAsyncHandler(async (req, res) => {
+  const { posterId } = req.params;
+
+  if (!posterId) {
+    res.status(400);
+    throw new Error("Poster ID is required");
+  }
+
+  // Find the poster by its ID
+  const poster = await Poster.findById(posterId)
+    .populate("store", "name") // Optional: populate store details
+    .populate("layout", "name"); // Optional: populate layout details
+
+  if (!poster) {
+    res.status(404);
+    throw new Error("Poster not found");
+  }
+
+  res.status(200).json(poster);
 });

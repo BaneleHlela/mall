@@ -22,7 +22,14 @@ export interface BackgroundImage {
     layout: string;
     store: string;
     variation: "mobileOnly" | "allDevices" | "mobileAndPC" | "default";
+    text: {
+      input: string;
+      color: string;
+      fontWeight: string;
+      fontFamily: string;
+    };
     background: Background;
+    deviceColor: string;
     images: {
       mobile: string[];
       desktop?: string;

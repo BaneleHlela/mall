@@ -11,6 +11,9 @@ import SettingsSlider from '../../layout_settings/supporting/SettingsSlider';
 import { getLayout } from '../../../features/layouts/layoutSlice';
 import { createPoster } from '../../../features/posters/posterSlice';
 import { TbLoader3 } from 'react-icons/tb';
+import GoogleFontsSelector from '../../layout_settings/text/GoogleFontsSelector';
+import InputHandler from '../../layout_settings/supporting/InputHandler';
+import RenderDigitalPoster from '../extras/RenderDigitalPoster';
 
 
 const CreatePosterModal = () => {
@@ -26,17 +29,24 @@ const CreatePosterModal = () => {
         type: "digital",
         layout: selectedLayout?._id,
         store: store?._id,
+        text: {
+            input: "",
+            fontFamily: "Open Sans",
+            color: "",
+            fontWeight: "normal",
+        },
         variation: 'mobileAndPC',
         background: {
             image: {
                 url: "",
-                height: "%",
-                width: "%",
-                opacity: "%",
+                height: "100%",
+                width: "100%",
+                opacity: "50%",
             },
-            color: "white",
+            color:  "#ffffff",
 
         },
+        deviceColor: "purple",
         images: {
             mobile: ["", "", ""],
             desktop: "",
@@ -77,27 +87,27 @@ const CreatePosterModal = () => {
       
           if (createPoster.fulfilled.match(resultAction)) {
             console.log("Poster created successfully:", resultAction.payload);
-            // Optionally reset form or close modal
-            setForm({
-              type: "digital",
-              layout: "",
-              store: store?._id,
-              variation: "mobileAndPC",
-              background: {
-                image: { url: "", height: "%", width: "%", opacity: "%" },
-                color: "",
-              },
-              images: {
-                mobile: ["", "", ""],
-                desktop: "",
-                tablet: "",
-              },
-              imageSource: {
-                desktop: { capture: true, page: "home", section: "" },
-                tablet: { capture: true, page: "home", section: "" },
-                mobile: [{ capture: true, page: "home", section: "" }],
-              },
-            });
+            // setForm({
+            //   type: "digital",
+            //   layout: "",
+            //   store: store?._id,
+            //   deviceColor: "",
+            //   variation: "mobileAndPC",
+            //   background: {
+            //     image: { url: "", height: "%", width: "%", opacity: "%" },
+            //     color: "",
+            //   },
+            //   images: {
+            //     mobile: ["", "", ""],
+            //     desktop: "",
+            //     tablet: "",
+            //   },
+            //   imageSource: {
+            //     desktop: { capture: true, page: "home", section: "" },
+            //     tablet: { capture: true, page: "home", section: "" },
+            //     mobile: [{ capture: true, page: "home", section: "" }],
+            //   },
+            // });
           } else {
             console.error("Failed to create poster:", resultAction.payload);
           }
@@ -113,7 +123,11 @@ const CreatePosterModal = () => {
         <div className='flex flex-col w-full h-full'>
             {/* Preview */}
             <div className="flex flex-col justify-center items-center w-full h-[40vh]">
-                <div className="bg-orange-600 w-[70%] aspect-square"></div>
+                <div className="bg-orange-600 w-[100%] aspect-square scale-70">
+                    <RenderDigitalPoster //@ts-ignore
+                        config={form} 
+                    />
+                </div>
             </div>
             {/* Settings */}
             <div className="relative h-[60vh] w-full bg-white border-t space-y-[.3vh] p-[.6vh]">
@@ -129,120 +143,10 @@ const CreatePosterModal = () => {
                     value={form.variation}
                     onChange={(newValue) => setForm(prev => ({ ...prev, variation: newValue }))}
                 />
-                <SubSettingsContainer
-                    name="Background"
-                    SettingsComponent={
-                        <div>
-                            <div className="px-[.7vh]">
-                                <ColorPicker
-                                    label="Color"
-                                    value={form.background.color}
-                                    onChange={(e) =>
-                                        setForm(prev => ({
-                                        ...prev,
-                                        background: {
-                                            ...prev.background,
-                                            color: e.target.value
-                                        }
-                                        }))
-                                    }
-                                    onClear={() =>
-                                        setForm(prev => ({
-                                        ...prev,
-                                        background: {
-                                            ...prev.background,
-                                            color: ""
-                                        }
-                                        }))
-                                    }
-                                />
-                            </div>
-                            
-                            <MultipleLayoutImagesHandler
-                                images={[form.background.image.url]}
-                                min={0}
-                                max={1}
-                                onChange={(newImages) =>
-                                    setForm(prev => ({
-                                        ...prev,
-                                        background: {
-                                            ...prev.background,
-                                            image: {
-                                            ...prev.background.image,
-                                            url: newImages[0]
-                                            }
-                                        }
-                                    }))
-                                }                              
-                            />
-                            {form.background.image.url && (
-                                <div className='px-[.7vh]'>
-                                    <SettingsSlider
-                                        label="Image Height"
-                                        value={parseInt(form.background.image.height)}
-                                        min={1}
-                                        max={150}
-                                        unit="%"
-                                        step={1}
-                                        onChange={(value) =>
-                                            setForm(prev => ({
-                                            ...prev,
-                                            background: {
-                                                ...prev.background,
-                                                image: {
-                                                ...prev.background.image,
-                                                height: `${value}%`
-                                                }
-                                            }
-                                            }))
-                                        }
-                                    />
-
-                                    <SettingsSlider
-                                        label="Image Width"
-                                        value={parseInt(form.background.image.width)}
-                                        min={1}
-                                        max={150}
-                                        unit="%"
-                                        step={1}
-                                        onChange={(value) =>
-                                            setForm(prev => ({
-                                            ...prev,
-                                            background: {
-                                                ...prev.background,
-                                                image: {
-                                                ...prev.background.image,
-                                                width: `${value}%`
-                                                }
-                                            }
-                                            }))
-                                        }
-                                    />
-
-                                    <SettingsSlider
-                                        label="Opacity"
-                                        value={parseInt(form.background.image.opacity)}
-                                        min={0}
-                                        max={100}
-                                        unit="%"
-                                        step={1}
-                                        onChange={(value) =>
-                                            setForm(prev => ({
-                                            ...prev,
-                                            background: {
-                                                ...prev.background,
-                                                image: {
-                                                ...prev.background.image,
-                                                opacity: `${value}%`
-                                                }
-                                            }
-                                            }))
-                                        }
-                                    />
-                                </div>
-                            )}
-                        </div>
-                    }
+                
+                <FirstOrderSubSettingsContainer
+                    name="Style"
+                    onClick={() => setActivePanel("style")}
                 />
                 <FirstOrderSubSettingsContainer
                     name="images"
@@ -256,6 +160,221 @@ const CreatePosterModal = () => {
                 )}
                 </button>
                 <AnimatePresence>
+                    {activePanel === "style" && (
+                        <SlidingPanel
+                            key="style"
+                            isOpen={true}
+                            onClose={closePanel}
+                            title="Poster Style"
+                        >
+                            <div className="space-y-[.45vh]">
+                                <SubSettingsContainer
+                                    name="Background"
+                                    SettingsComponent={
+                                        <div className=''>
+                                            <div className="px-[.7vh]">
+                                                <ColorPicker
+                                                    label="Color"
+                                                    value={form.background.color}
+                                                    onChange={(e) =>
+                                                        setForm(prev => ({
+                                                        ...prev,
+                                                        background: {
+                                                            ...prev.background,
+                                                            color: e.target.value
+                                                        }
+                                                        }))
+                                                    }
+                                                    onClear={() =>
+                                                        setForm(prev => ({
+                                                        ...prev,
+                                                        background: {
+                                                            ...prev.background,
+                                                            color: ""
+                                                        }
+                                                        }))
+                                                    }
+                                                />
+                                            </div>
+                                            
+                                            <MultipleLayoutImagesHandler
+                                                images={[form.background.image.url]}
+                                                min={0}
+                                                max={1}
+                                                onChange={(newImages) =>
+                                                    setForm(prev => ({
+                                                        ...prev,
+                                                        background: {
+                                                            ...prev.background,
+                                                            image: {
+                                                            ...prev.background.image,
+                                                            url: newImages[0]
+                                                            }
+                                                        }
+                                                    }))
+                                                }                              
+                                            />
+                                            {form.background.image.url && (
+                                                <div className='px-[.7vh]'>
+                                                    <SettingsSlider
+                                                        label="Image Height"
+                                                        value={parseInt(form.background.image.height)}
+                                                        min={1}
+                                                        max={150}
+                                                        unit="%"
+                                                        step={1}
+                                                        onChange={(value) =>
+                                                            setForm(prev => ({
+                                                            ...prev,
+                                                            background: {
+                                                                ...prev.background,
+                                                                image: {
+                                                                ...prev.background.image,
+                                                                height: `${value}%`
+                                                                }
+                                                            }
+                                                            }))
+                                                        }
+                                                    />
+
+                                                    <SettingsSlider
+                                                        label="Image Width"
+                                                        value={parseInt(form.background.image.width)}
+                                                        min={1}
+                                                        max={150}
+                                                        unit="%"
+                                                        step={1}
+                                                        onChange={(value) =>
+                                                            setForm(prev => ({
+                                                            ...prev,
+                                                            background: {
+                                                                ...prev.background,
+                                                                image: {
+                                                                ...prev.background.image,
+                                                                width: `${value}%`
+                                                                }
+                                                            }
+                                                            }))
+                                                        }
+                                                    />
+
+                                                    <SettingsSlider
+                                                        label="Opacity"
+                                                        value={parseInt(form.background.image.opacity)}
+                                                        min={0}
+                                                        max={100}
+                                                        unit="%"
+                                                        step={1}
+                                                        onChange={(value) =>
+                                                            setForm(prev => ({
+                                                            ...prev,
+                                                            background: {
+                                                                ...prev.background,
+                                                                image: {
+                                                                ...prev.background.image,
+                                                                opacity: `${value}%`
+                                                                }
+                                                            }
+                                                            }))
+                                                        }
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    }
+                                />
+                                <div className="rounded-[.6vh] border shadow-md bg-stone-50">
+                                    <div className="px-[.7vh]">
+                                        <ColorPicker
+                                            label="Devices Color"
+                                            value={form.deviceColor}
+                                            onChange={(e) =>
+                                                setForm(prev => ({
+                                                    ...prev,
+                                                    deviceColor: e.target.value
+                                                }))
+                                            }
+                                            onClear={() =>
+                                                setForm(prev => ({
+                                                    ...prev,
+                                                    deviceColor:  "transparent",
+                                                }))
+                                            }
+                                        />
+                                    </div>
+                                    <div className="px-[.65vh]">
+                                        <InputHandler
+                                            label="Store Name"
+                                            value={form.text.input}
+                                            onChange={(newValue: string) =>
+                                                setForm((prev) => ({
+                                                  ...prev,
+                                                  text: {
+                                                    ...prev.text,
+                                                    input: newValue
+                                                  }
+                                                }))
+                                            }                                             
+                                        />
+                                    </div>
+                                    
+                                    <div className="flex flex-row justify-between px-[.65vh]">
+                                        <p className="">Name Font Family</p>
+                                        <GoogleFontsSelector
+                                            selectedFont={form.text.fontFamily}
+                                            onFontSelect={(font) => {
+                                                setForm((prev) => ({
+                                                ...prev,
+                                                text: {
+                                                    ...prev.text,
+                                                    fontFamily: font
+                                                }
+                                                }));
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="px-[.65vh]">
+                                        <ColorPicker
+                                            label="Text Color"
+                                            value={form.text.color}
+                                            onChange={(e) =>
+                                                setForm((prev) => ({
+                                                ...prev,
+                                                text: {
+                                                    ...prev.text,
+                                                    color: e.target.value
+                                                }
+                                                }))
+                                            }
+                                            onClear={() =>
+                                                setForm((prev) => ({
+                                                ...prev,
+                                                text: {
+                                                    ...prev.text,
+                                                    color: "transparent"
+                                                }
+                                                }))
+                                            }
+                                        />
+                                        <OptionsToggler
+                                            label="Font Weight"
+                                            options={["normal", "bold", "lighter", "bolder", "100", "200", "300", "400", "500", "600", "700", "800", "900"]}
+                                            value={form.text.fontWeight || "normal"}
+                                            onChange={(newValue) =>
+                                                setForm((prev) => ({
+                                                ...prev,
+                                                text: {
+                                                    ...prev.text,
+                                                    fontWeight: newValue
+                                                }
+                                                }))
+                                            }
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </SlidingPanel>
+                    )}
                     {activePanel === "images" && (
                         <SlidingPanel
                             key="images"

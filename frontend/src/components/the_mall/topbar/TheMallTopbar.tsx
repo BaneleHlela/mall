@@ -17,12 +17,13 @@ const TheMallTopbar = () => {
                 {/* Desktop */}
                 <div className="hidden lg:flex w-full h-full flex-row justify-between items-center">
                     {/* logo */}
-                    <div className="w-fit h-[60%]">
-                        <img 
+                    <div className="w-fit h-[60%] flex items-center">
+                        {/* <img 
                             src="https://storage.googleapis.com/the-mall-uploads-giza/stores/6884a99461cfbcec1883b7dc/images/mall-logo.png" 
                             alt="the-mall-logo" 
                             className="w-fit h-full object-contain" 
-                        />
+                        /> */}
+                        <p style={{fontFamily: "Bebas Neue"}} className="text-white font-bold text-[5vh]"> The Mall </p>
                     </div>
                     {/* Searchbar, Location and Range */}
                     <div className="flex flex-row w-[60%] h-full justify-end items-center space-x-[.6vh]">
