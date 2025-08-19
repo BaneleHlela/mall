@@ -15,9 +15,9 @@ const DashboardFilterByCategory: React.FC<DashboardFilterByCategoryProps> = ({
     <select
       value={value || ""}
       onChange={(e) => onChange(e.target.value)}
-      className="border rounded-md px-3 py-2 text-sm"
+      className="border rounded-md px-[1.5vh] py-[1vh] text-sm"
     >
-      <option value="">Category</option>
+      <option value="" className="">Category</option>
       {categories.map((cat) => (
         <option key={cat} value={cat}>
           {cat}

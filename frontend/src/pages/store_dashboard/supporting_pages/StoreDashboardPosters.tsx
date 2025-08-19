@@ -33,9 +33,9 @@ const StoreDashboardPosters = () => {
             />
             <Route path="/create" element={<CreatePosterModal />} />
             <Route path="/view/:posterId" element={
-              <div className='w-full'>
-                <RenderDigitalPoster config={posters[-1]}/>
-              </div>
+                <div className='w-full'>
+                  <RenderDigitalPoster config={posters[3]}/>
+                </div>
               } 
             />
           </Routes>

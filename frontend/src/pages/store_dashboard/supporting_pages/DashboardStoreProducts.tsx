@@ -41,52 +41,55 @@ const DashBoardStoreProducts = () => {
   );
 
   return (
-    <div className="h-[88vh] w-[82vw] bg-amber-300 rounded m-1">
-      {/* Top bar: Add product + filters */}
-      <div className="h-[10%] flex flex-row justify-between items-center w-full bg-pink-600 px-4">
-        <button
-          className="bg-white text-sm font-semibold px-4 py-2 rounded"
-          onClick={() => setAddProductOpen(true)}
-        >
-          Add Product
-        </button>
-        <div className="space-x-3">
-          <DashboardFilterByCategory
-            categories={categories}
-            value={selectedCategory}
-            onChange={setSelectedCategory}
+    <div className="w-fit h-fit p-1">
+      <div className="h-[88vh] w-[82vw] rounded bg-white">
+        {/* Top bar: Add product + filters */}
+        <div className="h-[10%] flex flex-row justify-between items-center w-full px-[1.2vh]">
+          <button
+            className="bg-gray-900 text-white text-sm font-semibold px-[2.2vh] py-[1vh] rounded-[.45vh] hover:bg-white hover:text-black"
+            onClick={() => setAddProductOpen(true)}
+          >
+            Add Product
+          </button>
+          <div className="space-x-3 flex flex-row">
+            <DashboardFilterByCategory
+              categories={categories}
+              value={selectedCategory}
+              onChange={setSelectedCategory}
+            />
+            <DashboardFilterByStatus
+              value={selectedStatus}
+              onChange={setSelectedStatus}
+            />
+          </div>
+        </div>
+
+        {/* Product Table */}
+        <div className="w-full h-[80%] overflow-y-scroll bg-blue-600 p-2">
+          <DashboardStoreItemsTable items={paginatedProducts} type="product" />
+        </div>
+
+        {/* Pagination */}
+        <div className="h-[10%] bg-white flex justify-center items-center text-sm">
+          <DashboardPagination
+            currentPage={currentPage}
+            totalItems={filteredProducts.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
           />
-          <DashboardFilterByStatus
-            value={selectedStatus}
-            onChange={setSelectedStatus}
+        </div>
+
+        {/* Add Product Modal */}
+        <div className="h-screen w-screen">
+          <AddProductModal
+            open={addProductOpen}
+            onClose={() => setAddProductOpen(false)}
+            categories={categories}
           />
         </div>
       </div>
-
-      {/* Product Table */}
-      <div className="w-full h-[80%] overflow-y-scroll bg-blue-600 p-2">
-        <DashboardStoreItemsTable items={paginatedProducts} type="product" />
-      </div>
-
-      {/* Pagination */}
-      <div className="h-[10%] bg-white flex justify-center items-center text-sm">
-        <DashboardPagination
-          currentPage={currentPage}
-          totalItems={filteredProducts.length}
-          itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
-        />
-      </div>
-
-      {/* Add Product Modal */}
-      <div className="h-screen w-screen">
-        <AddProductModal
-          open={addProductOpen}
-          onClose={() => setAddProductOpen(false)}
-          categories={categories}
-        />
-      </div>
     </div>
+    
   );
 };
 

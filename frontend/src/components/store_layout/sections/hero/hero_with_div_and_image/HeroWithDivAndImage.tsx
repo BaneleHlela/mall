@@ -12,14 +12,14 @@ const HeroWithDivAndImage = () => {
     const store = useAppSelector((state) => state.stores.currentStore); // Assuming you have a store slice
 
     const isMobile = window.innerWidth < 740;
-    const imageFirst = isMobile ? config.imageFirst.mobile : config.imageFirst.desktop;
+    const imageFirst = isMobile ? config.imageFirst?.mobile : config.imageFirst?.desktop;
 
     const Container = () => (
         <div
             style={{
                 ...getBackgroundStyles(config.background.container),
             }}
-            className="flex flex-col justify-center items-center w-full"
+            className="flex flex-col justify-center items-center overflow-hidden"
         >
             {/* Text */}
             {config.text.firstLine.show && (
@@ -60,7 +60,7 @@ const HeroWithDivAndImage = () => {
             )}
         </div>
     );
-
+    
     const Image = () => (
         <div
             style={{
@@ -85,14 +85,15 @@ const HeroWithDivAndImage = () => {
             style={{
                 ...getBackgroundStyles(config.background),
             }}
+            className="w-full overflow-hidden"
         >
             {imageFirst ? (
-                <div className="w-full h-full flex flex-row">
+                <div className="w-full h-full flex flex-col lg:flex-row">
                     <Image />
                     <Container />
                 </div>
             ) : (
-                <div className="w-full h-full flex flex-row">
+                <div className="w-full h-full flex flex-col lg:flex-row">
                     <Container />
                     <Image />
                 </div>
@@ -125,14 +126,14 @@ function adjustContainer(container: Container): AdjustedContainer {
   
     // Calculate new mobile height
     const newMobileHeight = `${100 - parsePercent(container.height.mobile)}%`;
-  
+    
     // Calculate new mobile width
-    const newMobileWidth = `${100 - parsePercent(container.width.mobile)}%`;
-  
+    const newDesktopWidth = `${100 - parsePercent(container.width.desktop)}%`;
+    
     return {
         width: {
-            mobile: newMobileWidth,
-            desktop: container.width.desktop
+            mobile: container.width.mobile,
+            desktop: newDesktopWidth
         },
         height: {
             mobile: newMobileHeight,

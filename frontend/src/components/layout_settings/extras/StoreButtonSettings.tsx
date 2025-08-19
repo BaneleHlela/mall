@@ -34,8 +34,8 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({
   const buttonFunctions = ['book', 'call', 'buy', 'subscribe'];
 
   return (
-    <div className="space-y-1 p-2 ">
-      <h3 className="text-lg font-semibold text-center">Button Settings</h3>
+    <div className="space-y-[.35vh]">
+      <h3 className="text-[2.5vh] font-semibold text-center">Button Settings</h3>
       {allowFunction && (
         <OptionsToggler
           label="Button Function"
