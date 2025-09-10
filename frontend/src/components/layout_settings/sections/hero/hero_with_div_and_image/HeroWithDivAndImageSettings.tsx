@@ -49,7 +49,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                         objectPath={`${objectPath}.background`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["height"]}
+                        allow={["height", "width"]}
                         widthUnit="%"
                         heightUnit="vh"
                         responsiveSize
@@ -206,6 +206,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                             settings={settings}
                             allowFunction
                             allowPosition
+                            allowSimpleShow
                         />
                     </SlidingPanel>
                 )}
@@ -214,4 +215,4 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
     )
 }
 
-export default HeroWithDivAndImageSettings
+export default HeroWithDivAndImageSettings;

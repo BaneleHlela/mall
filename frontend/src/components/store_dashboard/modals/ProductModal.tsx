@@ -1,19 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
-import { createProduct } from '../../../features/products/productsSlice';
+import { createProduct, updateProduct } from '../../../features/products/productsSlice';
 import { TbLoader3 } from 'react-icons/tb';
+import type { Product } from '../../../types/productTypes';
 
-interface AddProductModalProps {
+// ts Errors
+// You shouldn't be able to add save a product without prices for its variations.
+// Be more specific about the error, e.g. "Price for variation 'Red' is missing." or "Products require at least one image" Not just "failed to add product"
+// Confirm edit product
+// UI
+
+interface ProductModalProps {
   open: boolean;
   onClose: () => void;
   categories: string[];
+  product?: Product; 
 }
 
-const AddProductModal: React.FC<AddProductModalProps> = ({
+const ProductModal: React.FC<ProductModalProps> = ({
   open,
   onClose,
   categories,
+  product,
 }) => {
   const dispatch = useAppDispatch();
   const { store } = useAppSelector((state) => state.storeAdmin);
@@ -25,13 +34,39 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     category: '',
     isActive: false,
     tags: '',
+    price: 0,
   });
 
   const [variations, setVariations] = useState<string[]>([]);
   const [variationInput, setVariationInput] = useState('');
   const [priceByVariation, setPriceByVariation] = useState<{ [variation: string]: number }>({});
   const [images, setImages] = useState<File[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (product) {
+      setForm({
+        name: product.name || '',
+        description: product.description || '',
+        stockQuantity: product.stockQuantity || 0,
+        category: product.category || '',
+        isActive: product.isActive || false,
+        tags: (product.tags || []).join(', '),
+        price: product.price || 0,
+      });
+      setVariations(product.variations || []);
+      setPriceByVariation(
+        product.prices?.reduce((acc, { variation, amount }) => {
+          acc[variation] = amount;
+          return acc;
+        }, {} as { [variation: string]: number }) || {}
+      );
+      // Set images to [] by default; optionally preload URLs if needed
+      setImages([]);
+      setImageUrls([...product.images])
+    }
+  }, [product]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -61,9 +96,15 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      setImages((prev) => [...prev, ...newFiles].slice(-5));
+      // Calculate how many images can be uploaded based on existing image URLs
+      const remainingImagesCount = 5 - imageUrls.length;
+      // If there are more images selected than the remaining count, slice the excess
+      const filesToAdd = newFiles.slice(0, remainingImagesCount);
+      // Update the images state by appending the new images, ensuring no more than 5 in total
+      setImages((prev) => [...prev, ...filesToAdd].slice(0, 5));
     }
   };
+  
 
   const handlePriceChange = (variation: string, value: string) => {
     const amount = parseFloat(value);
@@ -74,12 +115,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 
   const handleFormSubmit = async () => {
     setError(null);
-
+  
     if (!store?._id) {
       setError('Store not found');
       return;
     }
-
+  
     const formData = new FormData();
     formData.append('name', form.name);
     formData.append('description', form.description);
@@ -87,33 +128,45 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     formData.append('category', form.category);
     formData.append('isActive', String(form.isActive));
     formData.append('store', store._id);
-
+    formData.append('imageUrls', JSON.stringify(imageUrls));
+  
     formData.append('variations', JSON.stringify(variations));
-
-    const prices = variations.map((variation) => ({
-      variation,
-      amount: priceByVariation[variation] || 0,
-    }));
-
-    formData.append('prices', JSON.stringify(prices));
-
+  
+    if (variations.length > 0) {
+      const prices = variations.map((variation) => ({
+        variation,
+        amount: priceByVariation[variation] || 0,
+      }));
+      formData.append('prices', JSON.stringify(prices));
+    } else {
+      formData.append('price', String(form.price)); 
+    }
+  
     const tagsArray = form.tags
       .split(',')
       .map((tag) => tag.trim())
       .filter((tag) => tag !== '');
     formData.append('tags', JSON.stringify(tagsArray));
-
+  
     images.forEach((file) => {
       formData.append('images', file);
     });
-
+  
     try {
-      await dispatch(createProduct(formData)).unwrap();
+      if (product?._id) {
+        await dispatch(updateProduct({ id: product._id, data: formData })).unwrap();
+      } else {
+        await dispatch(createProduct(formData)).unwrap();
+      }
       onClose();
     } catch (err: any) {
-      setError(err?.message || 'Failed to add product');
-    }
+      setError(err?.message || 'Failed to save product');
+    }    
   };
+
+  
+  
+  
 
   if (!open) return null;
 
@@ -214,6 +267,21 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               ))}
             </div>
           </div>
+          {variations.length === 0 && (
+            <div>
+              <label className="block text-sm font-medium">Price</label>
+              <input
+                type="number"
+                name="price"
+                value={form.price}
+                onChange={handleChange}
+                className="w-full px-3 py-2 rounded border mt-1"
+                required
+              />
+            </div>
+          )}
+          
+
 
           {variations.length > 0 && (
             <div>
@@ -245,26 +313,48 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               onChange={handleImageChange}
               className="mt-1 block w-full"
             />
-            {images.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-2">
-                {images.map((file, index) => (
-                  <div key={index} className="relative w-20 h-20">
-                    <img
-                      src={URL.createObjectURL(file)}
-                      alt={`preview-${index}`}
-                      className="w-full h-full object-cover rounded"
-                    />
-                    <IoClose
-                      size={16}
-                      className="absolute top-0 right-0 cursor-pointer bg-white rounded-full"
-                      onClick={() =>
-                        setImages((prev) => prev.filter((_, i) => i !== index))
-                      }
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
+            <div className="flex flex-row">
+              {imageUrls.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {imageUrls.map((url, index) => (
+                    <div key={index} className="relative w-20 h-20">
+                      <img
+                        src={url}
+                        alt={`existing-${index}`}
+                        className="w-full h-full object-cover rounded"
+                      />
+                      <IoClose
+                        size={16}
+                        className="absolute top-0 right-0 cursor-pointer bg-white rounded-full"
+                        onClick={() =>
+                          setImageUrls((prev) => prev.filter((_, i) => i !== index))
+                        }
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+              {images.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {images.map((file, index) => (
+                    <div key={index} className="relative w-20 h-20">
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={`preview-${index}`}
+                        className="w-full h-full object-cover rounded"
+                      />
+                      <IoClose
+                        size={16}
+                        className="absolute top-0 right-0 cursor-pointer bg-white rounded-full"
+                        onClick={() =>
+                          setImages((prev) => prev.filter((_, i) => i !== index))
+                        }
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {error && <div className="text-red-500 text-sm">{error}</div>}
@@ -281,7 +371,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
             onClick={handleFormSubmit}
             className="px-4 py-2 rounded text-white bg-blue-600"
           >
-            {isLoading ? <TbLoader3 className='w-6 h-6 animate-spin mx-auto' /> : "Add Product"}
+            {isLoading ? <TbLoader3 className='w-6 h-6 animate-spin mx-auto' /> : `${product ? 'Edit Product' : 'Create Product'}`}
           </button>
         </div>
       </div>
@@ -289,4 +379,4 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   );
 };
 
-export default AddProductModal;
+export default ProductModal;

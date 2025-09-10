@@ -2,29 +2,52 @@ import React from 'react';
 import type { Product } from '../../../types/productTypes';
 import type { Service } from '../../../types/serviceTypes';
 import type { Package } from '../../../types/packageTypes';
+import { CiEdit } from 'react-icons/ci';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { FaCircleInfo } from 'react-icons/fa6';
+import { IoIosInformation } from 'react-icons/io';
+
+// ts errors
 
 type ItemType = 'product' | 'service' | 'package';
 
 interface DashboardStoreItemsTableProps {
-  items: (Product | Service | Package)[];
+  items: Product[];
   type: ItemType;
+  onEditClick: (item: Product) => void;
+  onDeleteClick: (item: Product) => void;
+  onSort: (key: string) => void;   // ✅ new
+  onStatusClick: (item: Product) => void; 
 }
 
-const DashboardStoreItemsTable: React.FC<DashboardStoreItemsTableProps> = ({ items, type }) => {
+const DashboardStoreItemsTable: React.FC<DashboardStoreItemsTableProps> = ({ 
+  items, 
+  type, 
+  onEditClick,
+  onDeleteClick,
+  onSort,
+  onStatusClick
+}) => {
   return (
     <div className="w-full overflow-x-auto">
       <table className="w-full text-sm text-left border-collapse bg-white">
         <thead className="bg-gray-50 text-gray-600 font-medium">
           <tr className="text-center">
             <th className="p-3 text-start"><input type="checkbox" /></th>
-            <th className="p-3">
+            <th className="p-3 bg-pink-600 cursor-pointer" onClick={() => onSort('name')}>
               {type.charAt(0).toUpperCase() + type.slice(1)} Name
             </th>
-            <th className="p-3">Category</th>
-            <th className="p-3">{type === 'product' ? 'Stock' : 'Duration'}</th>
-            <th className="p-3">Price</th>
-            <th className="p-3">Status</th>
-            <th className="p-3">Action</th>
+            <th className="p-3 bg-blue-500">Category</th>
+            <th className="p-3 bg-pink-600 cursor-pointer" onClick={() => onSort('stock')}>
+              {type === 'product' ? 'Stock' : 'Duration'}
+            </th>
+            <th className="p-3 bg-blue-500 cursor-pointer" onClick={() => onSort('price')}>
+              Price
+            </th>
+            <th className="p-3 bg-pink-600 cursor-pointer" onClick={() => onSort('status')}>
+              Status
+            </th>
+            <th className="p-3 bg-blue-500">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -34,7 +57,7 @@ const DashboardStoreItemsTable: React.FC<DashboardStoreItemsTableProps> = ({ ite
               <td className="p-3 flex items-center gap-2">
                 {type === 'product' && 'image' in item ? (
                   <img
-                    src={item.image}
+                    src={item.images.length > 0 ? item.images[0] : '/placeholder.png'}
                     alt={item.name}
                     className="w-8 h-8 rounded-md object-cover"
                   />
@@ -49,7 +72,7 @@ const DashboardStoreItemsTable: React.FC<DashboardStoreItemsTableProps> = ({ ite
                 {type === 'service' && formatDuration((item as Service).duration || 0)}
                 {type === 'package' && formatPackageDuration((item as Package).duration)}
               </td>
-              <td className="p-3">${item.price}</td>
+              <td className="p-3">R{item.price}</td>
               <td className="p-3">
                 {(() => {
                   let status: string;
@@ -66,13 +89,23 @@ const DashboardStoreItemsTable: React.FC<DashboardStoreItemsTableProps> = ({ ite
                   }
 
                   return (
-                    <span className={getStatusBadgeClass(status)}>
+                    <span onClick={() => onStatusClick(item)} className={getStatusBadgeClass(status)}>
                       {status}
                     </span>
                   );
                 })()}
               </td>
-              <td className="p-3 text-xl">⋯</td>
+              <td className="flex flex-row justify-evenly items-center p-[1vh]">
+                <div className="" onClick={() => onEditClick(item)}>
+                  <CiEdit  className='text-green-500 hover:scale-110 text-[3vh]'/>
+                </div>
+                <div className="">
+                  <AiOutlineDelete 
+                    className='text-red-600 text-[2.5vh] cursor-pointer' 
+                    onClick={() => onDeleteClick(item)} // Handle delete click
+                  />
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>

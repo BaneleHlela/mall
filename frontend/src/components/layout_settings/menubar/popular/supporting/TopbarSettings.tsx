@@ -57,7 +57,7 @@ const TopbarSettings = () => {
               objectPath="menubar.background"
               handleSettingChange={handleSettingChange}
               settings={settings}
-              allow={["height", "padding", "border", "shadow"]}
+              allow={["padding", "border", "shadow"]}
               heightUnit="vh"
               responsiveSize={true}
               responsivePadding

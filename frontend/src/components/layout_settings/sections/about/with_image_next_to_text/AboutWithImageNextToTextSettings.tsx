@@ -61,6 +61,21 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
             isOpen={true}
           >
             <div className="space-y-[.3vh]">
+              <SubSettingsContainer
+                  name="Background"
+                  SettingsComponent={
+                      <BackgroundEditor
+                        objectPath={`${objectPath}.text.background`}
+                        settings={settings}
+                        handleSettingChange={handleSettingChange}
+                        allow={["padding", "border", "height"]}
+                        responsiveSize
+                        responsivePadding
+                        widthUnit="%"
+                        heightUnit="vh"
+                      />
+                  }
+              />
               <FirstOrderSubSettingsContainer
                 name="heading"
                 onClick={() => setActivePanel("title")}
@@ -142,16 +157,16 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
               <SubSettingsContainer
                 name="Background"
                 SettingsComponent={
-                  <BackgroundEditor
-                    objectPath={`${objectPath}.image.background`}
-                    settings={settings}
-                    handleSettingChange={handleSettingChange}
-                    allow={["width", "height", "border"]}
-                    responsiveSize
-                    widthUnit="%"
-                    heightUnit="vh"
-                  />
-              }
+                    <BackgroundEditor
+                      objectPath={`${objectPath}.image.background`}
+                      settings={settings}
+                      handleSettingChange={handleSettingChange}
+                      allow={["width", "height", "border"]}
+                      responsiveSize
+                      widthUnit="%"
+                      heightUnit="vh"
+                    />
+                }
               />
             </div>
           </SlidingPanel>

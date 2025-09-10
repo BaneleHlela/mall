@@ -29,15 +29,21 @@ const AboutWithImageNextToText = () => {
         />
         {/* Text */}
         <div 
-          style={{
-            ...getBorderStyles(settings.text.border),
-            ...getTextStyles(settings.text.style),
+          style={{            
+            ...getBackgroundStyles(settings.text.background || {}),
+            height: "fit-content"
           }} 
           className={`${settings.text.style.animation} flex flex-col space-y-4 whitespace-pre-line max-h-[70vh] overflow-scroll hide-scrollbar lg:h-fit`}
         >
-          <p>
+          <p 
+            style={{
+              ...getTextStyles(settings.text.style),
+            }}
+            className=""
+          >
             {store?.about}
           </p>
+            
         </div>
       </div>
 
@@ -61,7 +67,8 @@ const AboutWithImageNextToText = () => {
         {/* Text */}
         <div
           style={{
-            ...getBorderStyles(settings.text.border),
+            //...getBorderStyles(settings.text.border),
+            ...getBackgroundStyles(settings.text.background || {}),
           }} 
           className=" p-4 flex flex-col justify-center text-center h-full w-[58%]"
         >
@@ -70,7 +77,7 @@ const AboutWithImageNextToText = () => {
           <br/><br/>
           <div 
             style={{
-              ...getBorderStyles(settings.text.border),
+              //...getBorderStyles(settings.text.border),
               ...getTextStyles(settings.text.style),
             }} 
             className={`${settings.text.style.animation} flex flex-col space-y-4 whitespace-pre-line`}

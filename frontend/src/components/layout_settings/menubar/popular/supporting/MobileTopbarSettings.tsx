@@ -87,7 +87,7 @@ const MobileTopbarSettings: React.FC = () => {
               objectPath="menubar.topbar.mobile.background"
               handleSettingChange={handleSettingChange}
               settings={settings}
-              allow={['color']}
+              allow={['color', "height", "padding"]}
             />
           </SlidingPanel>
         )}

@@ -3,12 +3,14 @@ import asyncHandler from 'express-async-handler';
 import mongoose from 'mongoose';
 import { uploadToUploads } from '../config/gcsClient.js';
 
+
 export const createProduct = asyncHandler(async (req, res) => {
   const {
     name,
     description,
     stockQuantity,
     variations,
+    price,
     prices,
     category,
     isActive,
@@ -16,6 +18,8 @@ export const createProduct = asyncHandler(async (req, res) => {
     store,
     marking,
   } = req.body;
+
+  
 
   const files = req.files; // array of images
 
@@ -80,6 +84,7 @@ export const createProduct = asyncHandler(async (req, res) => {
     stockQuantity,
     variations: parsedVariations,
     images: imageUrls,
+    price,
     category,
     isActive,
     tags: parsedTags,
@@ -91,6 +96,68 @@ export const createProduct = asyncHandler(async (req, res) => {
   res.status(201).json(product);
 });
 
+
+// Update product
+export const updateProduct = asyncHandler(async (req, res) => {
+  const { name, description, stockQuantity, variations, price, prices, category, isActive, tags, store } = req.body;
+  const files = req.files; // array of images
+  console.log(req.body.isActive);
+
+  
+  if (!req.body.isActive && (!files || files.length === 0) && (req.body.imageUrls.length === 0)) {
+    return res.status(400).json({ message: 'At least one product image is required.' });
+  }
+
+  const productId = req.params.id;
+
+  // Find the existing product
+  const product = await Product.findById(productId);
+  if (!product) {
+    return res.status(404).json({ message: 'Product not found.' });
+  }
+
+  // Array to store image URLs
+  const imageUrls = [];
+
+  if (files && files.length > 0) {
+    // Upload new images
+    for (const file of files) {
+      const imageFileName = `${Date.now()}-${file.originalname}`;
+      const imagePath = `stores/${store}/products/${product.slug}/${imageFileName}`;
+
+      await uploadToUploads(file.buffer, imagePath); // assuming uploadToUploads handles file upload
+
+      const imageUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${imagePath}`;
+      imageUrls.push(imageUrl);
+    }
+  }
+
+  // Merge new images with the existing ones (if any)
+  const updatedImages = [...product.images, ...imageUrls];
+  
+  // Prepare updated product data
+  const updatedProductData = {
+    name: name || product.name,
+    description: description || product.description,
+    stockQuantity: stockQuantity || product.stockQuantity,
+    variations: variations || product.variations,
+    price: price || product.price,
+    prices: prices || product.prices,
+    category: category || product.category,
+    isActive: isActive || product.isActive,
+    tags: tags || product.tags,
+    images: updatedImages,
+  };
+
+  // Update product
+  const updatedProduct = await Product.findByIdAndUpdate(productId, updatedProductData, { new: true });
+
+  if (!updatedProduct) {
+    return res.status(500).json({ message: 'Failed to update product.' });
+  }
+
+  res.status(200).json(updatedProduct);
+});
 
 // Get product by ID
 export const getProductById = asyncHandler(async (req, res) => {
@@ -141,12 +208,7 @@ export const getProductBySlug = asyncHandler(async (req, res) => {
   res.status(200).json(product);
 });
 
-// Update product
-export const updateProduct = asyncHandler(async (req, res) => {
-  const updated = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  if (!updated) throw new Error('Product not found');
-  res.status(200).json(updated);
-});
+
 
 // Delete product
 export const deleteProduct = asyncHandler(async (req, res) => {

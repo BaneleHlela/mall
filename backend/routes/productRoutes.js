@@ -19,7 +19,7 @@ router.get("/store/:storeId", getStoreProducts);
 router.get('/', getAllProducts); 
 router.put('/update-stock', updateStockAndSoldCount);
 router.get('/slug/:slug', getProductBySlug);
-router.put('/:id', updateProduct);
+router.put('/:id',  uploadProductImages, updateProduct);
 router.delete('/:id', deleteProduct);
 
 export default router;

@@ -221,7 +221,13 @@ const DesktopTopBar: React.FC<{
   };
 
   return (
-    <div style={{ border: "none" }} className='w-full h-full flex flex-row justify-between'>
+    <div 
+      style={{ 
+        border: "none",
+        backgroundColor: settings.topbar.desktop?.background?.color || "",
+        ...getBackgroundStyles(settings.topbar.desktop?.background || {}), 
+      }} className='w-full h-full flex flex-row justify-between'
+    >
       {order.map((type: string, index: number) => (
         <React.Fragment key={`${type}-${index}`}>
           {componentMap[type]()}
@@ -289,9 +295,10 @@ const PopularStoreMenubar: React.FC = () => {
   return (
     <nav
       style={{
-        height: getBackgroundHeight(),
+        // height: getBackgroundHeight(),
         backgroundColor: settings.background.color,
         ...getBackgroundStyles(backgroundStylesWithoutBorder),
+        height: "fit-content",
         borderBottom: `${settings.background.border.width} ${settings.background.border.style} ${settings.background.border.color}`,
         width: "100%"
       }}

@@ -12,6 +12,7 @@ import { AnimatePresence } from 'framer-motion';
 import IconsOrButtonSettings from './IconsOrButtonSettings';
 import OptionsToggler from '../../../supporting/OptionsToggler';
 import { getSetting } from '../../../../../utils/helperFunctions';
+import BackgroundEditor from '../../../background/BackgroundEditor';
 
 const DesktopTopbarSettings: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -49,6 +50,11 @@ const DesktopTopbarSettings: React.FC = () => {
       </div>
 
       {/* Clickable Sections */}
+      {/* Background */}
+      <FirstOrderSubSettingsContainer
+        name="Background"
+        onClick={() => setActivePanel('background')}
+      />
       <FirstOrderSubSettingsContainer
         name="Logo"
         onClick={() => setActivePanel('logo')}
@@ -78,6 +84,22 @@ const DesktopTopbarSettings: React.FC = () => {
       )}
       {/* Panels */}
       <AnimatePresence>
+        {activePanel === "background" && (
+          <SlidingPanel
+            key="background"
+            isOpen={true}
+            onClose={closePanel}
+            title="Desktop Topbar Background"
+          >
+            <BackgroundEditor
+              objectPath="menubar.topbar.desktop.background"
+              handleSettingChange={handleSettingChange}
+              settings={settings}
+              allow={['color', "padding", "height"]}
+              heightUnit='vh'
+            />
+          </SlidingPanel>
+        )}
         {activePanel === 'logo' && (
           <SlidingPanel
             key="logo"

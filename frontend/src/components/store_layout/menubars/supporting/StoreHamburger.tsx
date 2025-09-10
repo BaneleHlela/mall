@@ -84,7 +84,7 @@ const StoreHamburger: React.FC<StoreHamburgerProps> = ({ style, toggled, toggle 
       style={{
         ...getBackgroundStyles(style.background),
       }}
-      className={`flex flex-col justify-center z-100 relative cursor-pointer ${style.shadow ? "shadow-sm" : ""}`}
+      className={`flex flex-col justify-center items-center z-100 relative cursor-pointer ${style.shadow ? "shadow-sm" : ""} min-h-fit min-w-fit`}
     >
       {renderIcon()}
     </div>

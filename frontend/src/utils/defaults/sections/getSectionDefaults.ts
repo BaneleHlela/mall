@@ -98,7 +98,7 @@ export const getSectionDefaults = async (section: SectionType, variation: Variat
     products: {
       first: defaultFirstStoreProductsConfig,
       productsSectionPopular: async () => {
-        const demoStoreId = "687f8600418ddcb1548a210f"; 
+        const demoStoreId = "686e76aa96f14c28650b671d"; 
         const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'products');
         return demoLayout || defaultPopularProductsSectionConfig;
       },

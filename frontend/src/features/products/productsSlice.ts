@@ -70,6 +70,7 @@ export const updateProduct = createAsyncThunk(
   'products/update',
   async ({ id, data }: { id: string; data: Partial<Product> }, thunkAPI) => {
     try {
+      console.log(data)
       const res = await axios.put(`${API_BASE}/${id}`, data);
       return res.data as Product;
     } catch (err: any) {
@@ -190,6 +191,7 @@ const productSlice = createSlice({
 
       // Update
       .addCase(updateProduct.fulfilled, (state, action: PayloadAction<Product>) => {
+        state.isLoading = false;
         const index = state.products.findIndex(p => p._id === action.payload._id);
         if (index !== -1) {
           state.products[index] = action.payload;
@@ -203,7 +205,7 @@ const productSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-      
+    
       // Delete
       .addCase(deleteProduct.fulfilled, (state, action: PayloadAction<string>) => {
         state.products = state.products.filter(p => p._id !== action.payload);

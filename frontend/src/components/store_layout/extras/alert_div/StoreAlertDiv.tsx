@@ -160,7 +160,7 @@ const StoreAlertDiv: FC<StoreAlertDivProps> = ({ config, objectPath }) => {
           {config.items.order.map((key: string) => renderItem(key))}
         </motion.div>
       ) : (
-        <div className="w-full flex flex-row justify-center items-center" style={{ gap: config.items.gap.item }}>
+        <div className="w-full flex flex-row justify-evenly items-center" style={{ gap: config.items.gap.item }}>
           {config.items.order.map((key: string) => renderItem(key))}
         </div>
       )}

@@ -60,7 +60,7 @@ const HamburgerSettings = () => {
                         objectPath={`menubar.topbar.mobile.hamburger.background`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["color", "height", "width", "shadow", "border", "padding"]}
+                        allow={["color", "shadow", "border", "padding"]}
                         responsiveSize={false}
                     />
                 }
