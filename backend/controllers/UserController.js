@@ -8,10 +8,7 @@ import { storeRefreshToken } from "../config/storeRefreshToken.js";
 import { generateTokens } from "../config/generateTokens.js";
 import { setCookies } from "../config/setCookies.js";
 import { sendVerificationEmail, sendWelcomeEmail, sendPasswordResetEmail, sendResetSuccessEmail } from "../emails/email.js";
-
 import User from "../models/UserModel.js";
-
-
 
 export const signup = expressAsyncHandler(async (req, res) => {
     const { email, password, firstName, lastName } = req.body;
@@ -66,7 +63,7 @@ export const login = expressAsyncHandler(async (req, res) => {
     if (user && (await user.comparePassword(password))) {
         const { accessToken, refreshToken } = generateTokens(user._id);
         
-        await storeRefreshToken(user._id, refreshToken);
+        // await storeRefreshToken(user._id, refreshToken);
         setCookies(res, accessToken, refreshToken);
 
         user.lastLogin = new Date();
@@ -228,6 +225,24 @@ export const updateUser = expressAsyncHandler(async (req, res) => {
           });
         }
       });
+    }
+
+    // Update favoriteStores
+    if (req.body.favoriteStore) {
+      const storeId = req.body.favoriteStore;
+
+      // Check if the store already exists in favoriteStores
+      const storeIndex = user.favoriteStores.findIndex(
+        (store) => store.toString() === storeId
+      );
+
+      if (storeIndex === -1) {
+        // Add the store if it doesn't exist
+        user.favoriteStores.push(storeId);
+      } else {
+        // Remove the store if it already exists
+        user.favoriteStores.splice(storeIndex, 1);
+      }
     }
 
     const updatedUser = await user.save();

@@ -8,6 +8,7 @@ import { departments } from '../../utils/helperObjects';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React from 'react';
 import DepartmentSelectorWithImages from '../home/supporting/DepartmentSelectorWithImages';
+import StoresBundle from './StoresBundle';
 
 
 
@@ -19,6 +20,35 @@ const MallSearchPage = () => {
   );
   const user = useAppSelector((state: RootState) => state.user.user);
   const departmentRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const stores = useAppSelector((state: RootState) => {
+    const { storeIds, storesById } = state.stores;
+    return storeIds.slice(0, 5).map(id => storesById[id]);
+  });
+
+  const allStores = useAppSelector((state: RootState) => {
+    const { storeIds, storesById } = state.stores;
+    return storeIds.map(id => storesById[id]);
+  });
+
+  // group + sort + slice top 5 per department
+  const topStoresByDepartment = Object.keys(departments).reduce(
+    (acc: Record<string, typeof allStores>, deptKey) => {
+      const deptStores = allStores
+        .filter(store => store.departments?.includes(deptKey))
+        .sort((a, b) => (b.rating || 0) - (a.rating || 0)) // highest rated first
+        .slice(0, 5);
+
+      if (deptStores.length > 0) {
+        acc[deptKey] = deptStores;
+      }
+      return acc;
+    },
+    {}
+  );
+
+
+  console.log(topStoresByDepartment)
+
 
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -91,77 +121,41 @@ const MallSearchPage = () => {
   
 
   return (
-    <div className="relative w-full h-full bg-stone-100 flex flex-col items-center">
+    <div className="relative w-full h-full bg-white flex flex-col items-center ">
       {/* Menubar */}
-      <nav className="w-[100vw] h-[15vh] z-11 sticky inset-0 bg-gray-900 flex flex-col items-center lg:h-[9vh]">
+      <nav className="w-[100vw] h-[15vh] z-11 sticky inset-0 bg-gray-900 flex flex-col items-center lg:h-[10vh]">
         <TheMallTopbar />
       </nav>
-      <div className="w-full lg:w-[80%] overflow-x-hidden hide-scrollbar">
-        {/* Department Selector */}
-        <div className="h-[8vh] w-full bg-stone-100 flex items-center relative">
-          {/* Left scroll button */}
-          <button
-            onClick={scrollLeft}
-            className="absolute left-0 z-10 h-full w-fit p-0   bg-opacity-80 flex items-center justify-center"
-          >
-            <ChevronLeft className='' />
-          </button>
-          
-          {/* Scrollable department buttons */}
-          <div
-            ref={scrollContainerRef}
-            className="flex overflow-x-auto hide-scrollbar space-x-2 w-full h-[5vh] ml-[2vh] items-center relative"
-          >
-            {Object.entries(departments).map(([key, dept], index) => (
-              <React.Fragment key={key}>
-                <button
-                  ref={(el) => { departmentRefs.current[key] = el; }}
-                  onClick={() => handleDepartmentSelect(key)}
-                  className={`whitespace-nowrap px-[1.2vh] py-[.8vh] font-bold text-[1.8vh] text-gray-800 transition-colors ${
-                    selectedDepartment === key
-                      ? 'bg-gray-900 text-white border-b-3 border-gray-500'
-                      : 'bg-stone-100 text-black  hover:bg-gray-100'
-                  }`}
-                >
-                  {dept.full}
-                </button>
-                {/* Add a gray line between buttons, except after the last button */}
-                {index < Object.entries(departments).length - 1 && (
-                  <div className="h-[80vh] w-[1px] bg-gray-300">.</div>
-                )}
-              </React.Fragment>
-            ))}
+      <div className="w-full lg:w-[80%] overflow-x-hidden hide-scrollbar space-y-[5vh]">
+        {/* Poster */}
+        <div className="flex justify-between w-full h-[45vh] mt-[4vh]">
+          {/* Poster A */}
+          <div className="relative h-full w-[49.5%]">
+            {/* Background Image */}
+            <img src="https://storage.googleapis.com/the-mall-uploads-giza/stores/6884a99461cfbcec1883b7dc/images/pexels-toan-d-cong-680842095-28671808.jpg" alt="poster" className="w-full h-full object-cover" />
+            {/*  */}
+            <div className="absolute inset-0 w-full h-full bg-black opacity-25" />
           </div>
-          
-          {/* Right scroll button */}
-          <button
-            onClick={scrollRight}
-            
-            className="absolute right-0 z-10 h-full bg-opacity-80 flex items-center justify-center"
-          >
-            <ChevronRight size={24} />
-          </button>
+          {/* Poster B */}
+          <div className="relative h-full w-[49.5%]">
+            {/* Background Image */}
+            <img src="https://storage.googleapis.com/the-mall-uploads-giza/stores/6884a99461cfbcec1883b7dc/images/kk.jpg" alt="poster" className="w-full h-full object-cover" />
+            {/*  */}
+            <div className="absolute inset-0 w-full h-full bg-black opacity-0" />
+          </div>
         </div>
-        {/* Department Toggler With Images */}
-        {!selectedDepartment && (
-          <div
-            ref={imageScrollRef}
-            onWheel={handleImageWheel}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            className="flex overflow-x-auto space-x-4 px-2 py-4 hide-scrollbar"
-          >
-            {Object.entries(departments).map(([key, dept]) => (
-              <DepartmentSelectorWithImages
-                key={key}
-                onSelect={() => handleDepartmentSelect(key)}
-                department={dept}
-              />
-            ))}
-          </div>
-        )}
+        {/* Department bundles */}
+        <div className="space-y-[5vh]">
+        {Object.entries(topStoresByDepartment).map(([deptKey, stores]) => (
+          <StoresBundle 
+            key={deptKey}
+            department={deptKey}
+            stores={stores}
+            title={departments[deptKey].full} // if StoresBundle supports a title
+          />
+        ))}
+      </div>
 
-        
 
         {isLoading ? (
           <p className="text-center text-gray-500">Loading stores...</p>
@@ -172,7 +166,7 @@ const MallSearchPage = () => {
         ) : (
           <div className="px-[.6vh] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-[2vh]">
             {storeIds.map((id) => (
-              <StoreCard key={id} store={storesById[id]} user={user}/>
+              <StoreCard key={id} store={storesById[id]} user={user} allowShadow/>
             ))}
           </div>
         )}

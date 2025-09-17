@@ -6,37 +6,79 @@ import { calculateDistanceToStore, formatDistance } from './supporting/calculate
 import { getStoreStatus, getStatusClasses } from './supporting/storeStatus';
 import { RatingDisplay } from './supporting/storeRating.tsx';
 import { MdVerified } from 'react-icons/md';
-import { BsFlagFill } from 'react-icons/bs';
+import { updateUser} from '../../../../features/user/userSlice';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks.ts';
+import { GoHeartFill, GoHeart } from "react-icons/go";
 
 interface StoreCardProps {
   store: Store;
   user?: User | null; 
+  allowShadow?: boolean;
+  onFavoriteClick?: () => void;
 }
 
-const StoreCard: React.FC<StoreCardProps> = ({ store, user }) => {
-    const navigate = useNavigate();
+const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteClick }) => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-    const handleClick = () => {
-      navigate(`/stores/${store._id}`);
-    };
-
-    // Calculate distance if user is provided
-    const distance = user ? calculateDistanceToStore(user, store) : null;
-    const distanceText = formatDistance(distance);
-    
-    // Get store status
-    const storeStatus = getStoreStatus(store.operationTimes);
-    const statusClasses = getStatusClasses(storeStatus);
+  const user = useAppSelector((state) => state.user.user)
   
-    return (
+  const handleClick = () => {
+    navigate(`/stores/${store._id}`);
+  };
+
+  // Calculate distance if user is provided
+  const distance = user ? calculateDistanceToStore(user, store) : null;
+  const distanceText = formatDistance(distance);
+  
+  // Get store status
+  const storeStatus = getStoreStatus(store.operationTimes);
+  const statusClasses = getStatusClasses(storeStatus);
+  
+  const isFavorite = user?.favoriteStores?.includes(store._id);
+
+  // Dispatch updateUser directly to toggle favorite
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent navigating when clicking the heart
+
+    if (!user) {
+      alert('Please log in to manage favorites.');
+      return;
+    }
+
+    dispatch(
+      updateUser({
+          user: user._id, // userId
+          favoriteStore: store._id, // storeId
+        })
+    );
+  };
+  
+  return (
     <div
         onClick={handleClick}
-        className="aspect-4/3 bg-white  overflow-hidden shadow-lg shadow-[#dd9c5121] hover:shadow-lg transition-transform transform hover:-translate-y-1"
+        className={`relative aspect-4/3 border-b border-blue-100 bg-white rounded-[2px]  overflow-hidden ${allowShadow && "shadow"} transition-transform transform hover:-translate-y-1 z-0`}
     >
+      <div className="flex flex-row justify-end items-center h-[6%] space-x-[.5vh] w-full px-[2%] bg-blue-50 shadow z-1">
+        <span className="h-[40%] aspect-square bg-gray-400 rounded-full "></span>
+        <span className="h-[40%] aspect-square bg-gray-400 rounded-full "></span>
+        <span className="h-[40%] aspect-square bg-gray-400 rounded-full "></span>
+      </div>
       {/* Image */}
-      <div className="relative h-[75%]">
-        <img src={store.thumbnail} alt="store-thumbnail" className="w-full h-full object-cover" />
+      <div className="relative h-[72%]">
+        <img src={store.thumbnail} alt="store-thumbnail" className="w-full h-full object-cover -z-1" />
         <div className="absolute top-0 w-full h-full bg-[#00000000]"></div>
+        {/* Favorite toggle button */}
+        <button
+          onClick={handleFavoriteClick}
+          className="absolute bottom-[1%] right-[1%]"
+        >
+          {isFavorite ? (
+            <GoHeartFill className="text-[4vh] text-red-500" />
+          ) : (
+            <GoHeart className="text-[4vh] text-gray-400" />
+          )}
+        </button>
         {/* Red flag */}
         {/* <div className="absolute top-1/2 left-1/2 text-red">
           <button className="text-red-600 z-10 h-full">
@@ -52,9 +94,9 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, user }) => {
           )}
         </div>
       </div>
-      <div className="h-[25%] shadow-xl">
+      <div className="h-[22%] shadow-md z-1">
         {/* Store name */}
-        <h3 className="text-center mb-2 font-[Ubuntu] font-semibold">{store.name}</h3>
+        <h3 className="text-center text-[90%] font-semibold text-gray-900">{store.name}</h3>
         {/* Detials */}
         <div className="flex flex-row justify-between items-center px-[.8vh]">
           {/* Distance */}

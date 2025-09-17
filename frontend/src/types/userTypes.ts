@@ -25,6 +25,7 @@ export interface User {
     createdAt: string;
     updatedAt: string;
     isVerified?: string;
+    favoteStores?: string[] | ObjectId[];
 }
   
 export interface UserState {

@@ -10,7 +10,7 @@ import StoreSettings from "./supporting_pages/StoreSettings";
 import StoreImages from "./supporting_pages/StoreImages";
 import { fetchStore, setStore } from "../../features/store_admin/storeAdminSlice";
 import { useEffect } from "react";
-import StoreOverview from "./supporting_pages/StoreOverview";
+import StoreOverview from "./supporting_pages/StoreDashboardOverview";
 import StoreDashboardTopbar from "../../components/store_dashboard/menubar/StoreDashboardTopbar";
 import DashboardStoreProducts from "./supporting_pages/DashboardStoreProducts";
 import DashboardStorePackages from "./supporting_pages/DashboardStorePackages";

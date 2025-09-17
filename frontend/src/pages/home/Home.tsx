@@ -88,57 +88,60 @@ const HomePage = () => {
   
 
   return (
-    <div className="relative w-full h-full bg-stone-100 flex flex-col items-center">
+    <div className="relative px-2 w-full h-full bg-white flex flex-col items-center">
       {/* Menubar */}
       <nav className="w-[100vw] h-[15vh] z-11 sticky inset-0 bg-gray-900 flex flex-col items-center lg:h-[9vh]">
         <TheMallTopbar />
       </nav>
       <div className="w-full lg:w-[80%] overflow-x-hidden hide-scrollbar">
         {/* Department Selector */}
-        <div className="h-[8vh] w-full bg-stone-100 flex items-center relative">
-          {/* Left scroll button */}
-          <button
-            onClick={scrollLeft}
-            className="absolute left-0 z-10 h-full w-fit p-0   bg-opacity-80 flex items-center justify-center"
-          >
-            <ChevronLeft className='' />
-          </button>
-          
-          {/* Scrollable department buttons */}
-          <div
-            ref={scrollContainerRef}
-            className="flex overflow-x-auto hide-scrollbar space-x-2 w-full h-[5vh] ml-[2vh] items-center relative"
-          >
-            {Object.entries(departments).map(([key, dept], index) => (
-              <React.Fragment key={key}>
-                <button
-                  ref={(el) => { departmentRefs.current[key] = el; }}
-                  onClick={() => handleDepartmentSelect(key)}
-                  className={`whitespace-nowrap px-[1.2vh] py-[.8vh] font-bold text-[1.8vh] text-gray-800 transition-colors ${
-                    selectedDepartment === key
-                      ? 'bg-gray-900 text-white border-b-3 border-gray-500'
-                      : 'bg-stone-100 text-black  hover:bg-gray-100'
-                  }`}
-                >
-                  {dept.full}
-                </button>
-                {/* Add a gray line between buttons, except after the last button */}
-                {index < Object.entries(departments).length - 1 && (
-                  <div className="h-[80vh] w-[1px] bg-gray-300">.</div>
-                )}
-              </React.Fragment>
-            ))}
-          </div>
-          
-          {/* Right scroll button */}
-          <button
-            onClick={scrollRight}
+        {selectedDepartment && (
+          <div className="h-[8vh] w-full bg-stone-100 flex items-center relative">
+            {/* Left scroll button */}
+            <button
+              onClick={scrollLeft}
+              className="absolute left-0 z-10 h-full w-fit p-0   bg-opacity-80 flex items-center justify-center"
+            >
+              <ChevronLeft className='' />
+            </button>
             
-            className="absolute right-0 z-10 h-full bg-opacity-80 flex items-center justify-center"
-          >
-            <ChevronRight size={24} />
-          </button>
-        </div>
+            {/* Scrollable department buttons */}
+            <div
+              ref={scrollContainerRef}
+              className="flex overflow-x-auto hide-scrollbar space-x-2 w-full h-[5vh] ml-[2vh] items-center relative"
+            >
+              {Object.entries(departments).map(([key, dept], index) => (
+                <React.Fragment key={key}>
+                  <button
+                    ref={(el) => { departmentRefs.current[key] = el; }}
+                    onClick={() => handleDepartmentSelect(key)}
+                    className={`whitespace-nowrap px-[1.2vh] py-[.8vh] font-bold text-[1.8vh] text-gray-800 transition-colors ${
+                      selectedDepartment === key
+                        ? 'bg-gray-900 text-white border-b-3 border-gray-500'
+                        : 'bg-stone-100 text-black  hover:bg-gray-100'
+                    }`}
+                  >
+                    {dept.full}
+                  </button>
+                  {/* Add a gray line between buttons, except after the last button */}
+                  {index < Object.entries(departments).length - 1 && (
+                    <div className="h-[80vh] w-[1px] bg-gray-300">.</div>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+            
+            {/* Right scroll button */}
+            <button
+              onClick={scrollRight}
+              
+              className="absolute right-0 z-10 h-full bg-opacity-80 flex items-center justify-center"
+            >
+              <ChevronRight size={24} />
+            </button>
+          </div>
+        )}
+        
         {/* Department Toggler With Images */}
         {!selectedDepartment && (
           <div
@@ -159,16 +162,27 @@ const HomePage = () => {
         )}
 
         {/* Placeholder divs */}
-        <div className="bg-amber-600 flex w-full lg:h-[40vh] lg:flex-row">
+        <div className="flex flex-col w-full h-[48vh] lg:h-[40vh] lg:flex-row">
           {/* For creators */}
-          <div className="h-full w-[50%]  bg-white text-center flex flex-col justify-evenly items-center hover:scale-102">
-            <h2 style={{fontFamily: "Bebas Neue"}} className="font-[BebasNeue] text-[7vh]">Get Started With The Mall</h2>
-            <button className="shadow-sm border-[.6vh] w-fit px-[2vh] text-[2.5vh] hover:scale-105">Creators</button>
+          <div className="h-[50%] w-full lg:h-full lg:w-[50%]  bg-[#aab7c4] text-white text-center flex flex-col justify-center lg:justify-evenly items-center hover:scale-102">
+            <h2 
+              style={{
+                fontFamily: "Bebas Neue",
+                lineHeight: "1",	
+              }} 
+              className="font-[BebasNeue] text-[5.5vh] lg:text-[7vh]"
+            >Get Started With The Mall</h2>
+            <button className="shadow-sm border-[.5vh] w-fit px-[2vh] text-[2.5vh] hover:scale-105">Creators</button>
           </div>
           {/* For investors */}
-          <div className="h-full w-[50%] bg-gradient-to-r from-stone-800 to-stone-900 text-center flex flex-col justify-evenly items-center hover:scale-102 text-white">
-            <h2 style={{fontFamily: "Bebas Neue"}} className="font-[BebasNeue] text-[7vh]">Get Started With The Mall</h2>
-            <button className="shadow-sm border-[.6vh] border-white w-fit px-[2vh] text-[2.5vh] hover:scale-105">Investors</button>
+          <div className="h-[50%] w-full lg:h-full lg:w-[50%] bg-gradient-to-r from-stone-800 to-stone-900 text-center flex flex-col justify-evenly items-center hover:scale-102 text-white">
+            <h2 style={{
+                fontFamily: "Bebas Neue",
+                lineHeight: "1",	
+              }} 
+              className="font-[BebasNeue] text-[5.5vh] lg:text-[7vh]"
+            >Get Started With The Mall</h2>
+            <button className="shadow-sm border-[.5vh] border-white w-fit px-[2vh] text-[2.5vh] hover:scale-105">Investors</button>
           </div>
         </div>
 

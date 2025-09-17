@@ -1,6 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { House, LayoutDashboard, Store, Search, CircleUser } from "lucide-react";
 import { motion } from "framer-motion";
+import { IoIosHeartEmpty } from "react-icons/io";
+import { FaRegHeart } from "react-icons/fa";
 
 // Utility function to check if the current route should hide the nav
 const shouldHideNav = (hiddenRoutes: string[], currentPath: string): boolean => {
@@ -21,7 +23,7 @@ const Menubar = () => {
       className={`
         fixed z-100 text-white bg-gray-900 shadow-sm
         flex items-center justify-between
-        h-[5.5vh] w-full bottom-0 
+        h-[5.5vh] w-full bottom-0 lg:px-[3vh]
         lg:top-0 lg:bottom-auto lg:left-0 lg:h-screen lg:w-[5vh] lg:flex-col lg:justify-evenly lg:pt-10
         ${isHidden ? 'hidden' : ''}
       `}
@@ -35,10 +37,10 @@ const Menubar = () => {
       <Link to="/my-stores" className="p-2">
         <Store size={28} />
       </Link>
-      <Link to="/login" className="p-2">
-        <LayoutDashboard size={28} />
+      <Link to="/favorites" className="p-2">
+        <FaRegHeart size={28} />
       </Link>
-      <Link to="/stores/684c15bca0f98a1d13a7ff00/order-online" className="p-2">
+      <Link to="/login" className="p-2">
         <CircleUser size={28} />
       </Link>
     </motion.nav>

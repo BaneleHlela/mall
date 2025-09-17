@@ -17,6 +17,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import ProtectedRoute from "./components/the_mall/authorization/ProtectedRoute";
 import LayoutCreator from "./pages/store_dashboard/supporting_pages/layouts/supporting/LayoutCreator";
 import MallSearchPage from "./pages/search/MallSearchPage";
+import FavoriteStores from "./pages/favorites/FavoriteStores";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const App: React.FC = () => {
           <Route path="/stores/:storeId/*" element={<StorePage />} />
           <Route path="/my-stores" element={<MyStores />} />
           <Route path="/search" element={<MallSearchPage />} />
+          <Route path="/favorites" element={<FavoriteStores />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/scribbler/*" element={<Scribbler />} />
           <Route path="/layouts/:layoutId/*" element={<Layouts />} />
@@ -66,6 +68,7 @@ const App: React.FC = () => {
           {authRoutes}
         </Routes>
       </Router>
+      
     </div>
   );
 };

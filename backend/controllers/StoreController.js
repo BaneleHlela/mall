@@ -3,6 +3,9 @@ import  Store  from '../models/StoreModel.js';
 import { uploadToUploads, uploadsBucket } from '../config/gcsClient.js';
 import mongoose from 'mongoose';
 import User from '../models/UserModel.js';
+
+const CLIENT_URL = process.env.CLIENT_URL;
+
 // add store
 export const addStore = expressAsyncHandler(async (req, res) => {
     //const { _id, email, firstName } = req.user;
@@ -35,20 +38,7 @@ export const getStore = expressAsyncHandler(async (req, res) => {
     }
 }); 
 
-// Get all stores or filter by department
-// export const getStores = expressAsyncHandler(async (req, res) => {
-//   const { department } = req.query;
-//   //more query settings
 
-//   let stores;
-//   if (department) {
-//     stores = await Store.find({ department });
-//   } else {
-//     stores = await Store.find({});
-//   }
-
-//   res.status(200).json(stores);
-// });
 
 export const getStores = expressAsyncHandler(async (req, res) => {
   const { search, department } = req.query;

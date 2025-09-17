@@ -10,6 +10,7 @@ import MobileTopbarSettings from "./MobileTopbarSettings";
 import FirstOrderSubSettingsContainer from "../../../FirstOrderSubSettingsContainer";
 import SlidingPanel from "../../../supporting/SlidingPanel";
 import { AnimatePresence } from "framer-motion";
+import TextEditor from "../../../text/TextEditor";
 
 const TopbarSettings = () => {
   const settings = useAppSelector((state: any) => state.layoutSettings);
@@ -30,12 +31,17 @@ const TopbarSettings = () => {
         name="Background"
         onClick={() => setActivePanel("background")}
       />
+      <FirstOrderSubSettingsContainer
+        name="heart"
+        onClick={() => setActivePanel("heart")}
+      />
       {Array.isArray(store?.trades) && store.trades.includes("products") && (
           <FirstOrderSubSettingsContainer
             name="Cart"
             onClick={() => setActivePanel("cart")}
           />
       )}
+
       <FirstOrderSubSettingsContainer
         name="Desktop"
         onClick={() => setActivePanel("desktop")}
@@ -97,6 +103,22 @@ const TopbarSettings = () => {
             <CartSettings
               settings={settings}
               handleSettingChange={handleSettingChange}
+            />
+          </SlidingPanel>
+        )}
+        {activePanel === "heart" && (
+          <SlidingPanel
+            key="heart"
+            isOpen={true}
+            onClose={closePanel}
+            title="heart Settings"
+          >
+            {/* Favorite Icon settings */}
+            <TextEditor
+              settings={settings}
+              handleSettingChange={handleSettingChange}
+              allow={["color", "fontSize"]}
+              objectPath="menubar.topbar.mobile.heart"
             />
           </SlidingPanel>
         )}

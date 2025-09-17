@@ -8,6 +8,11 @@ import StoreMenubarIcons from '../supporting/StoreMenubarIcons'
 import { getBackgroundStyles, getBorderStyles, getTextStyles } from '../../../../utils/stylingFunctions';
 import type { Store } from '../../../../types/storeTypes'
 import StoreButton from '../../extras/buttons/StoreButton'
+import { useAppDispatch } from '../../../../app/hooks';
+import { updateUser } from '../../../../features/user/userSlice';
+import { GoHeartFill, GoHeart } from "react-icons/go";
+
+
 
 // MobileTopBar Component
 const MobileTopBar: React.FC<{
@@ -16,6 +21,22 @@ const MobileTopBar: React.FC<{
   isOpen: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }> = ({ settings, store, isOpen, setOpen }) => {
+    const dispatch = useAppDispatch();
+    const user = useAppSelector((state) => state.user.user);
+
+    const isFavorite = user?.favoriteStores?.includes(store?._id);
+
+    const handleFavoriteClick = () => {
+      if (!user || !store) {
+        alert("Please log in to manage favorites.");
+        return;
+      }
+
+      dispatch(updateUser({
+        user: user._id,
+        favoriteStore: store._id
+      }));
+    };
     
     const renderLogo = () => {
         const logoSettings = settings.topbar.mobile.logo;
@@ -66,16 +87,50 @@ const MobileTopBar: React.FC<{
   );
 
   const renderHamburgerAndCart = () => (
-    <div className={`w-full h-fit flex flex-row space-x-1 ${settings.topbar.mobile.hamburgerFirst ? "justify-start" : "justify-end"}`}>
+    <div className={`w-full h-fit flex flex-row items-center space-x-1 ${settings.topbar.mobile.hamburgerFirst ? "justify-start" : "justify-end"}`}>
       {settings.topbar.mobile.hamburgerFirst ? (
         <>
           <StoreHamburger style={settings.topbar.mobile.hamburger} toggled={isOpen} toggle={setOpen} />
+          
           {Array.isArray(store?.trades) && store?.trades.includes('products') && (
             <StoreCart style={settings.cart} />
           )}
+
+          <button onClick={handleFavoriteClick} className="focus:outline-none">
+            {isFavorite ? 
+              <GoHeartFill 
+                style={{
+                  color: settings.topbar.mobile.heart?.color || "red", 
+                  fontSize: settings.topbar.mobile.heart?.fontSize
+                }} className='text-white text-[4.5vh]' 
+              /> : 
+              <GoHeart 
+                style={{
+                  color: settings.topbar.mobile.heart?.color || "red", 
+                  fontSize: settings.topbar.mobile.heart?.fontSize 
+                }} className='text-red-600 text-[4.5vh]' 
+              />
+              }
+          </button>
         </>
       ) : (
         <>
+          <button onClick={handleFavoriteClick} className="focus:outline-none">
+            {isFavorite ? 
+              <GoHeartFill 
+                style={{
+                  color: settings.topbar.mobile.heart?.color || "red", 
+                  fontSize: settings.topbar.mobile.heart?.fontSize
+                }} className='text-white text-[4.5vh]' 
+              /> : 
+              <GoHeart 
+                style={{
+                  color: settings.topbar.mobile.heart?.color || "red", 
+                  fontSize: settings.topbar.mobile.heart?.fontSize 
+                }} className='text-red-600 text-[4.5vh]' 
+              />
+              }
+          </button>
           {Array.isArray(store?.trades) && store?.trades.includes('products') && (
             <StoreCart style={settings.cart} />
           )}
@@ -119,9 +174,26 @@ const MobileTopBar: React.FC<{
 const DesktopTopBar: React.FC<{
   settings: any,
   store: Store | null,
-  links: { to: string; label: string }[]
+  links: { to: string; label: string }[],
 }> = ({ settings, store, links }) => {
   const { order } = settings.topbar.desktop;
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user);
+
+  const isFavorite = user?.favoriteStores?.includes(store?._id);
+
+  const handleFavoriteClick = () => {
+    if (!user || !store) {
+      alert("Please log in to manage favorites.");
+      return;
+    }
+
+    dispatch(updateUser({
+      user: user._id,
+      favoriteStore: store._id
+    }));
+  };
+  
 
   const renderLogo = () => {
     const logoSettings = settings.topbar.desktop.logo;
@@ -185,24 +257,56 @@ const DesktopTopBar: React.FC<{
   );
 
   const renderIcons = () => (
-    <div className='w-fit h-full flex flex-col justify-center'>
+    <div className='w-fit h-full flex flex-col justify-center items-center'>
       {settings.topbar.desktop.iconsCart.iconsFirst ? (
-        <div className="flex flex-row space-x-3 h-full items-center">
+        <div className="flex flex-row space-x-2 h-full items-center">
           {settings.topbar.desktop.extras.include === "button" && (
             <StoreButton style={settings.topbar.desktop.extras.button} onClick={() => {}}/>
           )}
           {settings.topbar.desktop.extras.include === "icons" && (
             <StoreMenubarIcons style={settings.topbar.desktop.extras.icons} />
           )}
+          <button onClick={handleFavoriteClick} className="focus:outline-none">
+            {isFavorite ? 
+              <GoHeartFill 
+                style={{
+                  color: settings.topbar.mobile.heart?.color || "red", 
+                  fontSize: settings.topbar.mobile.heart?.fontSize
+                }} className='text-white text-[4.5vh]' 
+              /> : 
+              <GoHeart 
+                style={{
+                  color: settings.topbar.mobile.heart?.color || "red", 
+                  fontSize: settings.topbar.mobile.heart?.fontSize 
+                }} className='text-red-600 text-[4.5vh]' 
+              />
+              }
+          </button>
           {Array.isArray(store?.trades) && store?.trades.includes('products') && (
             <StoreCart style={settings.cart} />
           )}
         </div>
       ) : (
-        <div className="flex flex-row space-x-5 h-full items-center">
+        <div className="flex flex-row space-x-2 h-full items-center">
           {Array.isArray(store?.trades) && store?.trades.includes('products') && (
             <StoreCart style={settings.cart} />
           )}
+          <button onClick={handleFavoriteClick} className="focus:outline-none">
+            {isFavorite ? 
+              <GoHeartFill 
+                style={{
+                  color: settings.topbar.mobile.heart?.color || "red", 
+                  fontSize: settings.topbar.mobile.heart?.fontSize
+                }} className='text-white text-[4.5vh]' 
+              /> : 
+              <GoHeart 
+                style={{
+                  color: settings.topbar.mobile.heart?.color || "red", 
+                  fontSize: settings.topbar.mobile.heart?.fontSize 
+                }} className='text-red-600 text-[4.5vh]' 
+              />
+              }
+          </button>
           {settings.topbar.desktop.extras.include === "button" && (
             <StoreButton style={settings.topbar.desktop.extras.button} onClick={() => {}}/>
           )}
@@ -226,7 +330,7 @@ const DesktopTopBar: React.FC<{
         border: "none",
         backgroundColor: settings.topbar.desktop?.background?.color || "",
         ...getBackgroundStyles(settings.topbar.desktop?.background || {}), 
-      }} className='w-full h-full flex flex-row justify-between'
+      }} className='w-full h-full flex flex-row justify-between items-center'
     >
       {order.map((type: string, index: number) => (
         <React.Fragment key={`${type}-${index}`}>
@@ -237,21 +341,18 @@ const DesktopTopBar: React.FC<{
   );
 };
 
+
+
 // Main PopularStoreMenubar Component
 const PopularStoreMenubar: React.FC = () => {
-  const settings = useAppSelector((state) => state.layoutSettings.menubar)
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user);
+  const settings = useAppSelector((state) => state.layoutSettings.menubar);
   const layoutId = useAppSelector((state) => state.layoutSettings._id);
   const store = useAppSelector((state) => state.stores.currentStore);
   const { routes, routeOrder } = useAppSelector((state) => state.layoutSettings);
   const storeId = store?._id as string;
-  const [isOpen, setOpen] = useState(false)
-
-  const getBackgroundHeight = () => {
-    return window.innerWidth >= 1024
-      ? settings.background.height.desktop
-      : settings.background.height.mobile
-  };
-
+  const [isOpen, setOpen] = useState(false);
   
   const links = React.useMemo(() => {
     const location = useLocation();
@@ -316,7 +417,11 @@ const PopularStoreMenubar: React.FC = () => {
             <MobileTopBar settings={settings} store={store} isOpen={isOpen} setOpen={setOpen} />
         </div>
         <div className="hidden lg:flex flex-col justify-center items-center w-full h-full">
-            <DesktopTopBar settings={settings} store={store} links={links} />
+            <DesktopTopBar 
+              settings={settings} 
+              store={store} 
+              links={links}  
+            />
         </div>
       
         <FirstStoreSidebar

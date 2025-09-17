@@ -58,6 +58,7 @@ const userSchema = new mongoose.Schema(
 			address: String,
 		}],
     	wishlist: [{type: mongoose.Schema.Types.ObjectId, ref: "Product"}],
+		favoriteStores: [{type: mongoose.Schema.Types.ObjectId, ref: "Store"}],
 		isBlocked: {
 			type:Boolean,
 			default:false

@@ -12,6 +12,8 @@ const generateUsername = (firstName, lastName, id) => {
 
 const initializeUsernames = async () => {
   try {
+    
+
     await mongoose.connect(process.env.MONGODB_URL);
     console.log("Connected to DB");
 
