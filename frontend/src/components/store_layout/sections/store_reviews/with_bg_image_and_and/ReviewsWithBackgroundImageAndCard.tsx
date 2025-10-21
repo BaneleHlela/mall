@@ -62,7 +62,7 @@ const ReviewsWithBackgroundImageAndCard = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-scroll hide-scrollbar flex flex-col items-center">
+    <div className="relative w-full h-auto overflow-scroll hide-scrollbar flex flex-col items-center">
       {/* Background Image */}
       <div className="absolute inset-0 w-full h-full">
         <img
@@ -81,7 +81,7 @@ const ReviewsWithBackgroundImageAndCard = () => {
       {/* Content Container */}
       <div
         style={getBackgroundStyles(settings.containerBackground)}
-        className="relative z-1 p-4 bg-white min-h-screen overflow-y-scroll hide-scrollbar"
+        className="relative z-1 p-4 bg-white overflow-y-scroll hide-scrollbar"
       >
         {/* Heading */}
         <div className="w-full">

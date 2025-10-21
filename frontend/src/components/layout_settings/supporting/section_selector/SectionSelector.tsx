@@ -43,7 +43,7 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
 
   const validSections = useMemo(() => [
     "hero", "about", "menu", "services", "products",
-    "reviews", "gallery", "book", "contact", "events", "footer",
+    "reviews", "gallery", "book", "contact", "events", "footer", "singleProduct"
   ], []);
 
   const handleSelectSection = (variation: string) => {
@@ -56,11 +56,20 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
     // implement deletion logic
   };
 
-  const extractSectionFromVariation = (variation: string): SectionType => {
-    const match = variation.match(/^[a-z]+/);
-    return (match?.[0] || 'hero') as SectionType; // fallback to "hero" if nothing matches
-  };
+  // const extractSectionFromVariation = (variation: string): SectionType => {
+  //   const match = variation.match(/^[a-z]+/);
+  //   return (match?.[0] || 'hero') as SectionType; // fallback to "hero" if nothing matches
+  // };
   
+  const extractSectionFromVariation = (variation: string): SectionType => {
+    // This regex matches patterns like "singleProduct", "storeGallery", "aboutSection", etc.
+    const match = variation.match(/^[a-z]+(?:[A-Z][a-z]*)?/);
+  
+    // Convert the first character of the second word to lowercase to ensure proper section key formatting
+    const section = match?.[0] ?? 'hero';
+  
+    return section.charAt(0).toLowerCase() + section.slice(1) as SectionType;
+  };
  
   const handleSelectSectionVariation = async (variation: string) => {
     const section = sectionToReplace ?? extractSectionFromVariation(variation);

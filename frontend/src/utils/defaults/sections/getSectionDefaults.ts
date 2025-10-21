@@ -17,8 +17,10 @@ import { defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig } from "./fo
 import { defaultGalleryWithHorizontalImagesConfig } from "./gallery/defaultGalleryWithHorizontalImages";
 import { defaultPopularProductsSectionConfig } from "./order_online/defaultPopularProductsSectionConfig";
 import ContactWithBackgroundImageTextAndSocials from "../../../components/store_layout/sections/contact/with_bg_image_text_and_socials/ContactWithBackgroundImageTextAndSocials";
+import { defaultHeroWithDivAndImageConfig } from "./hero/defaultHeroWithDivAndImageConfig";
+import { defaultSingleProductSectionConfig } from "./single_product/defaultSingleProductSectionConfig";
 
-export type SectionType = 'book' | 'products' | 'services' | 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer' | 'gallery' | 'contact';
+export type SectionType = 'book' | 'products' | 'services' | 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer' | 'gallery' | 'contact' | 'singleProduct';
 type VariationType = string;
 
 
@@ -59,11 +61,16 @@ export const getSectionDefaults = async (section: SectionType, variation: Variat
         const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'hero');
         return demoLayout || defaultHeroWithButtonImageAndTextConfig;
       },
+      heroWithDivAndImages: async () => {
+        const demoStoreId = "6895c4d6a50d393f431b9d47"; 
+        const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'hero');
+        return demoLayout || defaultHeroWithDivAndImageConfig;
+      }
     },
     about: {
       second: defaultAboutWithImageNextToTextConfig,
       aboutWithImageNextToText: async () => {
-        const demoStoreId = "686e76aa96f14c28650b671d"; 
+        const demoStoreId = "6895c4d6a50d393f431b9d47"; 
         const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'about');
         return demoLayout || defaultAboutWithImageNextToTextConfig;
       }
@@ -123,8 +130,19 @@ export const getSectionDefaults = async (section: SectionType, variation: Variat
       },
     },
     footer: {
-      footerWithStoreDetailsButtonAndFormOrLocation: defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig,
+      footerWithStoreDetailsButtonAndFormOrLocation: async () => {
+        const demoStoreId = "6895c4d6a50d393f431b9d47"; 
+        const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'footer');
+        return demoLayout || defaultFooterWithStoreDetailsButtonAndFormOrLocationConfig;
+      }
     },
+    singleProduct: {
+      singleProductPopular: async () => {
+        const demoStoreId = "686e76aa96f14c28650b671d"; 
+        const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'singleProduct');
+        return demoLayout || defaultSingleProductSectionConfig;
+      },
+    }
   };
 
   if (defaults[section] && defaults[section][variation]) {

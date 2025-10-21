@@ -60,18 +60,28 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
             <SubSettingsContainer
                 name="Images"
                 SettingsComponent={
-                <div className="px-2 space-y-[.3vh] py-1">
-                    <MultipleLayoutImagesHandler
-                        objectPath={`${objectPath}.image.url.mobile`}
-                        min={1}
-                        max={1}
-                        images={getSetting("image.url.mobile", settings, objectPath)}
+                <div className="px-[.3vh] space-y-[.3vh] py-[.15vh]">
+                    <SubSettingsContainer
+                        name="Mobile"
+                        SettingsComponent = {
+                            <MultipleLayoutImagesHandler
+                                objectPath={`${objectPath}.image.url.mobile`}
+                                min={1}
+                                max={5}
+                                images={getSetting("image.url.mobile", settings, objectPath)}
+                            />
+                        }
                     />
-                    <MultipleLayoutImagesHandler
-                        objectPath={`${objectPath}.image.url.desktop`}
-                        min={1}
-                        max={1}
-                        images={getSetting("image.url.desktop", settings, objectPath)}
+                    <SubSettingsContainer
+                        name="Desktop"
+                        SettingsComponent = {
+                            <MultipleLayoutImagesHandler
+                                objectPath={`${objectPath}.image.url.desktop`}
+                                min={1}
+                                max={5}
+                                images={getSetting("image.url.desktop", settings, objectPath)}
+                            />
+                        }
                     />
                 </div>
                 }

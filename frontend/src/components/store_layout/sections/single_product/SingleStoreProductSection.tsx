@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks'
 import { fetchProductById } from '../../../../features/products/productsSlice'
-import { getBackgroundStyles, getBorderStyles, getResponsiveDimension, getSpacingClasses, getTextStyles } from '../../../../utils/stylingFunctions'
+import { getBackgroundStyles, getTextStyles } from '../../../../utils/stylingFunctions'
 import { HiArrowLeftEndOnRectangle, HiOutlineMinus, HiOutlinePlus } from 'react-icons/hi2'
 import VariationDropdown from './supporting/VariationDropdown'
 import { addToCart } from '../../../../features/cart/cartSlice'
@@ -10,73 +10,75 @@ import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-i
 import UnderlinedText from '../../extras/text/UnderlinedText'
 import { formatPriceWithSpaces } from '../../extras/cards/product/popular/PopularProductCard'
 
+// ts errors
+// Handle Add  To Cart. (Sometimes it's gotta say "please select a variation first")
+
 const SingleStoreProductSection = () => {
     const { productId } = useParams<{ productId: string }>()
     const dispatch = useAppDispatch()
     const product = useAppSelector(state => state.products.selectedProduct)
     const isLoading = useAppSelector(state => state.products.isLoading)
     const settings = useAppSelector((state) => state.layoutSettings.singleProduct);
+
     const [selectedVariation, setSelectedVariation] = useState<string | null>(null);
     const [specialRequest, setSpecialRequest] = useState("");
     const [quantity, setQuantity] = useState(1);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     
-
     useEffect(() => {
         setQuantity(1);
     }, [selectedVariation]);
         
-
     useEffect(() => {
         if (productId) {
             dispatch(fetchProductById(productId))
         }
     }, [dispatch, productId])
 
+    if (isLoading) return <div>Loading...</div>
+    if (!product) return <div>Error loading product</div>
 
-    if (isLoading) {
-        return <div>Loading...</div>
-    }
+    // --- Handle price logic (schema update) ---
+    const hasVariations = Array.isArray(product.variations) && product.variations.length > 0;
+    const hasPrices = Array.isArray(product.prices) && product.prices.length > 0;
 
-    if ( !product) {
-        return <div>Error loading product</div>
-    }
+    const selectedPrice =
+        hasVariations && hasPrices
+            ? product.prices.find(p => p.variation === selectedVariation)?.amount ??
+              product.prices[0]?.amount ??
+              0
+            : product.price ?? 0;
 
-    const selectedPrice = product.prices.find(p => p.variation === selectedVariation)?.amount 
-    ?? product.prices[0]?.amount 
-    ?? 0;
-
-
+    // --- Image Handlers ---
     const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-        prevIndex === product.images.length - 1 ? 0 : prevIndex + 1
-    );
-    };
-
-    const handlePrevImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-        prevIndex === 0 ? product.images.length - 1 : prevIndex - 1
-    );
-    };
-
-    const handleAddToCart = () => {
-        dispatch(
-          addToCart({
-            storeId: product?.store || '', 
-            productId: product ? product._id : '', 
-            quantity,
-            specialRequest,
-          })
+        setCurrentImageIndex((prevIndex) =>
+            prevIndex === product.images.length - 1 ? 0 : prevIndex + 1
         );
     };
 
-    
+    const handlePrevImage = () => {
+        setCurrentImageIndex((prevIndex) =>
+            prevIndex === 0 ? product.images.length - 1 : prevIndex - 1
+        );
+    };
 
-    
+    // --- Add to Cart ---
+    const handleAddToCart = () => {
+        dispatch(
+            addToCart({
+                storeId: product?.store || '', 
+                productId: product ? product._id : '', 
+                quantity,
+                specialRequest,
+                variation: selectedVariation || null,
+            })
+        );
+    };
+
     return (
         <div
             style={{
-                ...getBackgroundStyles(settings.background),
+                ...getBackgroundStyles(settings.background || {}),
             }}
             className='flex flex-col justify-between min-h-fit'
         >   
@@ -86,11 +88,12 @@ const SingleStoreProductSection = () => {
                     ...getTextStyles(settings.text.exit),
                     ...getBackgroundStyles(settings.text.exit.background),
                 }}
-                className="w-fit flex flex-row items-center"
+                className="w-fit flex flex-row items-center cursor-pointer"
             >
                 <HiArrowLeftEndOnRectangle />
                 <p>Back to Home</p>
             </div>
+
             {/* Image and Details */}
             <div className="flex flex-col justify-evenly items-center mt-4 lg:flex lg:flex-row lg:justify-between">
                 {/* Images */}
@@ -100,40 +103,39 @@ const SingleStoreProductSection = () => {
                     }} 
                     className="relative w-full lg:w-[50%] flex flex-col items-center justify-center overflow-hidden"
                 >
-                    {/* Image */}
                     <img
-                        key={currentImageIndex} // Force re-animation on change
+                        key={currentImageIndex}
                         src={product.images[currentImageIndex]}
                         alt={`Product image ${currentImageIndex + 1}`}
                         className="object-cover transition-opacity duration-700 ease-in-out opacity-100 w-full"
                         style={{
-                        ...getBackgroundStyles(settings.images.background),
+                            ...getBackgroundStyles(settings.images.background),
                         }}
                     />
 
                     {/* Left Arrow */}
-                    {product.images.length > 1 && currentImageIndex !== 0 && (
+                    {product.images.length > 1 && (
                         <button
                             style={{
                                 ...getBackgroundStyles(settings.images.toggleButton.background),
                                 ...getTextStyles(settings.images.toggleButton.text),
                             }}
                             onClick={handlePrevImage}
-                            className="absolute left-0 top-1/2  bg-black/40 text-white p-2 rounded-full hover:bg-black/70 transition hover:scale-102"
+                            className="absolute left-0 top-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/70 transition hover:scale-102"
                         >
                             <MdOutlineKeyboardArrowLeft/>
                         </button>
                     )}
 
                     {/* Right Arrow */}
-                    {product.images.length > 1 && (currentImageIndex !== (product.images.length - 1)) && (
+                    {product.images.length > 1 && (
                         <button
                             style={{
                                 ...getBackgroundStyles(settings.images?.toggleButton?.background),
                                 ...getTextStyles(settings.images.toggleButton.text),
                             }}
                             onClick={handleNextImage}
-                            className="absolute right-0 top-1/2  bg-black/40 text-white p-2 rounded-full hover:bg-black/70 transition hover:scale-102"
+                            className="absolute right-0 top-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/70 transition hover:scale-102"
                         >
                             <MdOutlineKeyboardArrowRight/>
                         </button>
@@ -147,7 +149,7 @@ const SingleStoreProductSection = () => {
                     }}
                     className="w-[100%] lg:w-[50%] min-h-fit flex flex-col"
                 >
-                    {/* Name and price */}
+                    {/* Name and Price */}
                     <div
                         style={{
                             ...getBackgroundStyles(settings.details.nameAndPrice.background),
@@ -167,8 +169,9 @@ const SingleStoreProductSection = () => {
                             input={`R${formatPriceWithSpaces(selectedPrice)}.00`}
                         />
                     </div>
+
                     {/* Variation selector */}
-                    {product.variations.length > 0 && (
+                    {hasVariations && (
                         <div
                             style={{
                                 ...getBackgroundStyles(settings.details.variationSelector.background.container)
@@ -183,7 +186,7 @@ const SingleStoreProductSection = () => {
                                 style={{
                                     ...getTextStyles(settings.details.text.labels)
                                 }} 
-                                htmlFor="variation_selector" className=""
+                                htmlFor="variation_selector"
                             >
                                 {settings.details.variationSelector.text.label.input} *
                             </label>
@@ -195,23 +198,26 @@ const SingleStoreProductSection = () => {
                             />
                         </div>
                     )}
+
+                    {/* Special Request Box */}
                     {settings.details.messageBox.show && (
                         <div 
                             style={{
                                 ...getBackgroundStyles(settings.details.messageBox.background.container)
                             }}
                             className={`
-                                    ${settings.details.text.labels.position === "center" && "text-center"}
-                                    ${settings.details.text.labels.position === "start" && "text-start"}
-                                    ${settings.details.text.labels.position === "end" && "text-end"}
+                                ${settings.details.text.labels.position === "center" && "text-center"}
+                                ${settings.details.text.labels.position === "start" && "text-start"}
+                                ${settings.details.text.labels.position === "end" && "text-end"}
                             `}
                         >
                             <label
                                 style={{
                                     ...getTextStyles(settings.details.text.labels)
                                 }}  
-                                
-                            >{settings.details.messageBox.titleInput.input}</label>
+                            >
+                                {settings.details.messageBox.titleInput.input}
+                            </label>
                             <textarea 
                                 value={specialRequest}
                                 onChange={(e) => setSpecialRequest(e.target.value)}
@@ -220,10 +226,11 @@ const SingleStoreProductSection = () => {
                                     ...getBackgroundStyles(settings.details.messageBox.background.box),
                                 }}
                                 className="w-full h-[13vh] p-2 mt-2"
-                                placeholder={`${settings.details.messageBox.placeholder.textArea || "We'll do our best to accommodate any requests when possible"} `}
+                                placeholder={settings.details.messageBox.placeholder.textArea || "We'll do our best to accommodate any requests when possible"}
                             />
                         </div>
                     )}
+
                     {/* Quantity Updater */}
                     <div    
                         className={`w-full flex flex-col 
@@ -232,46 +239,33 @@ const SingleStoreProductSection = () => {
                             ${settings.details.quantityUpdater.background.container.position === "end" && "items-end"}
                         `} 
                     >
-                        <div
+                        <span 
                             style={{
-                                ...getBackgroundStyles(settings.details.quantityUpdater.background.container),
-                            }} 
-                            className={`w-full flex flex-col 
-                                ${settings.details.quantityUpdater.background.container.position === "center" && "items-center"}
-                                ${settings.details.quantityUpdater.background.container.position === "start" && "items-start"}
-                                ${settings.details.quantityUpdater.background.container.position === "end" && "items-end"}
-                            `} 
+                                ...getTextStyles(settings.details.text.labels)
+                            }}
                         >
-                            <span 
-                                style={{
-                                    ...getTextStyles(settings.details.text.labels)
-                                }}
-                                className=""
-                            >Quantity *</span>
-                            <div 
-                                style={{
-                                    ...getBackgroundStyles(settings.details.quantityUpdater.background.button),
-                                    ...getTextStyles(settings.details.quantityUpdater.text),
-                                    height: "",
-                                }}
-                                className="flex flex-row justify-between items-center w-fit"
+                            Quantity *
+                        </span>
+                        <div 
+                            style={{
+                                ...getBackgroundStyles(settings.details.quantityUpdater.background.button),
+                                ...getTextStyles(settings.details.quantityUpdater.text),
+                            }}
+                            className="flex flex-row justify-between items-center w-fit"
+                        >
+                            <button
+                                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                                className={`${quantity === 1 && "opacity-50"}`}
                             >
-                                <button
-                                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                                    className={`${quantity === 1 && "opacity-50"}`}
-                                >
-                                    <HiOutlineMinus />
-                                </button>
-                                <span className="">{quantity}</span>
-                                <button
-                                    onClick={() => setQuantity((q) => q + 1)}
-                                    className=""
-                                >
-                                    <HiOutlinePlus />
-                                </button>
-                            </div>
+                                <HiOutlineMinus />
+                            </button>
+                            <span>{quantity}</span>
+                            <button onClick={() => setQuantity((q) => q + 1)}>
+                                <HiOutlinePlus />
+                            </button>
                         </div>
                     </div>
+
                     {/* Add to Cart Button */}
                     <div    
                         className={`w-full flex flex-row 
@@ -291,6 +285,7 @@ const SingleStoreProductSection = () => {
                             Add to cart | R{formatPriceWithSpaces(selectedPrice * quantity)}
                         </button>
                     </div>
+
                     {/* Description */}
                     <p 
                         style={{

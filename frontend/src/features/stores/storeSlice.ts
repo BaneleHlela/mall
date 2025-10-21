@@ -45,17 +45,15 @@ export const createStore = createAsyncThunk<Store, Omit<Store, 'id'>>(
 
 export const fetchStores = createAsyncThunk<
   Store[],
-  { search?: string; department?: string } | string | undefined
+  { search?: string; department?: string; sortBy?: string } | string | undefined
 >(
   'stores/fetchStores',
   async (params) => {
-    let queryParams = {};
+    let queryParams: Record<string, string | undefined> = {};
     
     if (typeof params === 'string') {
-      // Handle the case where only a search string is provided
       queryParams = { search: params };
     } else if (params && typeof params === 'object') {
-      // Handle the case where an object with search and/or department is provided
       queryParams = params;
     }
     
@@ -63,6 +61,7 @@ export const fetchStores = createAsyncThunk<
     return response.data;
   }
 );
+
 
 export const fetchStoresByOwner = createAsyncThunk<Store[], string>(
   'stores/fetchStoresByOwner',

@@ -57,9 +57,9 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
   return (
     <div
         onClick={handleClick}
-        className={`relative aspect-4/3 border-b border-blue-100 bg-white rounded-[2px]  overflow-hidden ${allowShadow && "shadow"} transition-transform transform hover:-translate-y-1 z-0`}
+        className={`relative aspect-4/3 border-b border-gray-700 bg-white rounded-[2px]  overflow-hidden ${allowShadow && "shadow"} transition-transform transform hover:-translate-y-1 z-0`}
     >
-      <div className="flex flex-row justify-end items-center h-[6%] space-x-[.5vh] w-full px-[2%] bg-blue-50 shadow z-1">
+      <div className="flex flex-row justify-end items-center h-[6%] space-x-[.5vh] w-full px-[2%] bg-gray-700 shadow z-1">
         <span className="h-[40%] aspect-square bg-gray-400 rounded-full "></span>
         <span className="h-[40%] aspect-square bg-gray-400 rounded-full "></span>
         <span className="h-[40%] aspect-square bg-gray-400 rounded-full "></span>
@@ -71,13 +71,16 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
         {/* Favorite toggle button */}
         <button
           onClick={handleFavoriteClick}
-          className="absolute bottom-[1%] right-[1%]"
+          className="absolute bottom-[1%] left-[1%] flex items-center justify-evenly w-[20%] scale-90 space-x-[.6vh] bg-[#0000005d] px-[.3vh] border-[.3vh] border-white rounded-[.3vh] shadow "
         >
+          <p style={{lineHeight: "1"}} className="text-white text-[3.4vh] font-light">{store.likes.count}</p>
           {isFavorite ? (
-            <GoHeartFill className="text-[4vh] text-red-500" />
+            <GoHeartFill className="text-[3.5vh] text-red-400" />
           ) : (
-            <GoHeart className="text-[4vh] text-gray-400" />
+            <GoHeart className="text-[3.5vh] text-white" />
           )}
+          
+          
         </button>
         {/* Red flag */}
         {/* <div className="absolute top-1/2 left-1/2 text-red">

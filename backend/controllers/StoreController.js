@@ -41,12 +41,11 @@ export const getStore = expressAsyncHandler(async (req, res) => {
 
 
 export const getStores = expressAsyncHandler(async (req, res) => {
-  const { search, department } = req.query;
+  const { search, department, sortBy, userLat, userLng } = req.query;
 
   let searchFilter = {};
   
   if (search) {
-    // Search across multiple fields
     searchFilter = {
       $or: [
         { name: { $regex: search.toString(), $options: 'i' } },
@@ -58,7 +57,6 @@ export const getStores = expressAsyncHandler(async (req, res) => {
     };
   }
 
-  // Add department filter if provided
   if (department) {
     searchFilter = {
       ...searchFilter,
@@ -66,7 +64,47 @@ export const getStores = expressAsyncHandler(async (req, res) => {
     };
   }
 
-  const stores = await Store.find(searchFilter);
+  let stores;
+
+  // Handle sorting
+  if (sortBy === 'nearest' && userLat && userLng) {
+    // ✅ requires location as a 2dsphere index
+    stores = await Store.find({
+      ...searchFilter,
+      'location.lat': { $exists: true },
+      'location.lng': { $exists: true },
+    }).aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [parseFloat(userLng), parseFloat(userLat)],
+          },
+          distanceField: 'distance',
+          spherical: true,
+        },
+      },
+    ]);
+  } else {
+    let sortOption = { createdAt: -1 }; // default newest first
+
+    switch (sortBy) {
+      case 'top-rated':
+        sortOption = { 'rating.averageRating': -1 };
+        break;
+      case 'newest':
+        sortOption = { createdAt: -1 };
+        break;
+      case 'oldest':
+        sortOption = { createdAt: 1 };
+        break;
+      case 'most-liked':
+        sortOption = { 'likes.count': -1 };
+        break;
+    }
+
+    stores = await Store.find(searchFilter).sort(sortOption);
+  }
 
   res.status(200).json(stores);
 });

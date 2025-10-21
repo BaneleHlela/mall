@@ -54,6 +54,17 @@ const storeSchema = new mongoose.Schema(
         type: String,
       },
     }],
+    likes: {
+      count: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
+      users: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      }],
+    },
     // locations: [{
 		// 	nickname: {type: String},
 		// 	lat: Number,
@@ -186,6 +197,8 @@ storeSchema.set('toJSON', {
     return ret;
   }
 });
+storeSchema.index({ 'location': '2dsphere' });
+
 
 const Store = mongoose.models.Store || mongoose.model("Store", storeSchema);
 export default Store; 

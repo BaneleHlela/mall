@@ -9,6 +9,7 @@ import { generateTokens } from "../config/generateTokens.js";
 import { setCookies } from "../config/setCookies.js";
 import { sendVerificationEmail, sendWelcomeEmail, sendPasswordResetEmail, sendResetSuccessEmail } from "../emails/email.js";
 import User from "../models/UserModel.js";
+import Store from "../models/StoreModel.js";
 
 export const signup = expressAsyncHandler(async (req, res) => {
     const { email, password, firstName, lastName } = req.body;
@@ -227,23 +228,52 @@ export const updateUser = expressAsyncHandler(async (req, res) => {
       });
     }
 
-    // Update favoriteStores
+    // Update favoriteStores and store.likes
     if (req.body.favoriteStore) {
       const storeId = req.body.favoriteStore;
+      const userId = user._id;
 
-      // Check if the store already exists in favoriteStores
+      // Check if the store is already in user's favorites
       const storeIndex = user.favoriteStores.findIndex(
         (store) => store.toString() === storeId
       );
 
       if (storeIndex === -1) {
-        // Add the store if it doesn't exist
+        // Add the store to favoriteStores
         user.favoriteStores.push(storeId);
+
+        // Increment likes.count and add the user to likes.users array
+        await Store.findByIdAndUpdate(
+          storeId,
+          {
+            $inc: { "likes.count": 1 },
+            $addToSet: { "likes.users": userId } // prevents duplicates
+          },
+          { new: true }
+        );
+
+        console.log("Store liked");
       } else {
-        // Remove the store if it already exists
+        // Remove the store from favoriteStores
         user.favoriteStores.splice(storeIndex, 1);
+
+        // Decrement likes.count and remove the user from likes.users array
+        await Store.findByIdAndUpdate(
+          storeId,
+          {
+            $inc: { "likes.count": -1 },
+            $pull: { "likes.users": userId }
+          },
+          { new: true }
+        );
+
+        console.log("Store unliked");
       }
+
+      // Save the updated user document
+      await user.save();
     }
+
 
     const updatedUser = await user.save();
     res.json(updatedUser);

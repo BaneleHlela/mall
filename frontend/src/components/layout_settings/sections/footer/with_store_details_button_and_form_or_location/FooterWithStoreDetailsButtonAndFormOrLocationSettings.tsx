@@ -97,7 +97,7 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                     <SlidingPanel
                         key="heading"
                         isOpen={true}
-                        onClose={closePanel}
+                        onClose={() => setActivePanel('text')}
                         title="Heading Text Settings"
                     >
                         <UnderlinedTextSettings
@@ -113,7 +113,7 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                     <SlidingPanel
                         key="heading"
                         isOpen={true}
-                        onClose={closePanel}
+                        onClose={() => setActivePanel('text')}
                         title="Details Text Settings"
                     >
                         <div className="space-y-[.5vh]">
@@ -207,6 +207,7 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                             objectPath={`${objectPath}.button`}
                             settings={settings}
                             allowSimpleShow
+                            allowFunction
                             
                         />
                     </SlidingPanel>

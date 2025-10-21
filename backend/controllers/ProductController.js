@@ -77,6 +77,8 @@ export const createProduct = asyncHandler(async (req, res) => {
     imageUrls.push(imageUrl);
   }
 
+  console.log("creating product")
+
   const product = await Product.create({
     name,
     description,

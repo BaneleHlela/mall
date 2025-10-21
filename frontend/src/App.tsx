@@ -19,6 +19,8 @@ import LayoutCreator from "./pages/store_dashboard/supporting_pages/layouts/supp
 import MallSearchPage from "./pages/search/MallSearchPage";
 import FavoriteStores from "./pages/favorites/FavoriteStores";
 
+
+
 const App: React.FC = () => {
   const dispatch = useDispatch();
 

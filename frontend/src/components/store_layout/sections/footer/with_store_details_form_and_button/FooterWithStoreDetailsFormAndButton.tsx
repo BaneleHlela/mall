@@ -31,9 +31,7 @@ const FooterWithStoreDetailsFormAndButton = () => {
             <UnderlinedText style={settings.title.text} />
             {/* Button*/}
             {settings.button.show && (
-              <div>
                 <StoreButton style={settings.button} onClick={() => {}}/>
-              </div>
             )}
           </div>
         )}

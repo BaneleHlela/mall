@@ -29,7 +29,7 @@ export const captureStoreThumbnail = async (storeId) => {
   console.log(url)
 
   try {
-    const screenshotBuffer = await captureScreenshot(url, 1447, 780);
+    const screenshotBuffer = await captureScreenshot(url, 1447, 900);
     return screenshotBuffer;
   } catch (error) {
     console.error(`Failed to capture thumbnail for store ${storeId}:`, error);

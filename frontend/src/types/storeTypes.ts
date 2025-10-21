@@ -71,6 +71,10 @@ export interface Store {
     averageRating: number;
     numberOfRatings: number;
   };
+  likes: {
+    count: number;
+    users: string[]; 
+  }
   flag?: {
     red: boolean;
     level: 1 | 2 | 3 | 4 | 5;
