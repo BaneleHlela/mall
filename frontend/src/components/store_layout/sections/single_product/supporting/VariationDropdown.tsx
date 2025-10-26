@@ -16,7 +16,7 @@ const VariationDropdown: React.FC<{
       style={{
         ...getTextStyles(style.text.dropdown),
       }} 
-      className="w-full relative"
+      className="w-full relative capitalize"
     >
       <button
         style={{
@@ -24,7 +24,7 @@ const VariationDropdown: React.FC<{
         }}
         type="button"
         onClick={() => setIsOpen(prev => !prev)}
-        className="w-full flex justify-between items-center border p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none"
+        className="w-full flex justify-between items-center border p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none capitalize"
       >
         {selectedVariation || 'Select Variation'}
         <MdOutlineKeyboardArrowDown className='text-[150%]'/>

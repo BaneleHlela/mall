@@ -120,6 +120,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
             <StoreButtonSettings
               objectPath={`${objectPath}.button`}
               settings={settings}
+              allowFunction
             />
           </SlidingPanel>
         )}

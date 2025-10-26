@@ -3,6 +3,7 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom';
 type ActionType = 'services' | 'buy' | 'subscribe' | 'call' | 'book';
 
 interface ButtonClickHandlerOptions {
+  storeId: string;
   type: ActionType;
   routes: Record<string, any>;
   contactNumber: string;
@@ -11,10 +12,9 @@ interface ButtonClickHandlerOptions {
 export const useStoreButtonClickHandler = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { storeId } = useParams(); // ✅ Get from router context
   const isHomePage = location.pathname === '/';
 
-  return ({ type, routes, contactNumber }: ButtonClickHandlerOptions) => {
+  return ({ type, routes, contactNumber, storeId }: ButtonClickHandlerOptions) => {
     if (!storeId) {
       console.error('storeId is missing from URL parameters');
       return;
@@ -48,6 +48,7 @@ export const useStoreButtonClickHandler = () => {
         break;
 
       case 'call':
+        console.log(`Initiating call to ${contactNumber}`);	
         window.location.href = `tel:${contactNumber}`;
         break;
 

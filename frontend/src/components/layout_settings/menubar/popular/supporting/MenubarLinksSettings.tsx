@@ -55,7 +55,7 @@ const MenubarLinksSettings: React.FC<MenubarLinksSettingsProps> = ({ type, allow
             />
             
             <SubSettingsContainer
-                name="Background"
+                name="Background for each link"
                 SettingsComponent={
                     <BackgroundEditor
                         objectPath={`${objectPath}.background`}
@@ -67,7 +67,7 @@ const MenubarLinksSettings: React.FC<MenubarLinksSettingsProps> = ({ type, allow
                 }
             />
             <SubSettingsContainer
-                name="Background For all links"
+                name="Background for all links"
                 SettingsComponent={
                     <BackgroundEditor
                         objectPath={`${objectPath}.allLinksBackground`}

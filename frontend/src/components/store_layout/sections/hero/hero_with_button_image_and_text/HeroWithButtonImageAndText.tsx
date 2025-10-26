@@ -8,6 +8,7 @@ const HeroWithButtonImageAndText = () => {
     const routes = useAppSelector((state) => state.layoutSettings.routes);
     const store = useAppSelector((state) => state.stores.currentStore);
     const handleButtonClick = useStoreButtonClickHandler();
+
     return (
         <div
             className="relative flex flex-col justify-center items-center w-full h-fit"
@@ -42,9 +43,10 @@ const HeroWithButtonImageAndText = () => {
                         style={style.button}
                         onClick={() =>
                             handleButtonClick({
-                            type: style.button.function,
-                            routes: routes, //@ts-ignore-next-line
-                            contactNumber: store?.contact.phone,
+                                type: style.button.function,
+                                routes: routes, //@ts-ignore-next-line
+                                contactNumber: store?.contact.phone,
+                                storeId: store?._id as string,
                             })
                         }
                     />
@@ -97,9 +99,9 @@ const HeroWithButtonImageAndText = () => {
                         style={style.button}
                         onClick={() =>
                             handleButtonClick({
-                            type: style.button.function,
-                            routes: routes, //@ts-ignore-next-line
-                            contactNumber: store?.contact.phone,
+                                type: style.button.function,
+                                routes: routes, //@ts-ignore-next-line
+                                contactNumber: store?.contact.phone,
                             })
                         }
                     />

@@ -19,6 +19,8 @@ import { defaultPopularProductsSectionConfig } from "./order_online/defaultPopul
 import ContactWithBackgroundImageTextAndSocials from "../../../components/store_layout/sections/contact/with_bg_image_text_and_socials/ContactWithBackgroundImageTextAndSocials";
 import { defaultHeroWithDivAndImageConfig } from "./hero/defaultHeroWithDivAndImageConfig";
 import { defaultSingleProductSectionConfig } from "./single_product/defaultSingleProductSectionConfig";
+import HeroWithBox from "../../../components/store_layout/sections/hero/hero_with_box/HeroWithBox";
+import { defaultHeroWithBoxConfig } from "./hero/defaultHeroWithBox";
 
 export type SectionType = 'book' | 'products' | 'services' | 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer' | 'gallery' | 'contact' | 'singleProduct';
 type VariationType = string;
@@ -65,12 +67,17 @@ export const getSectionDefaults = async (section: SectionType, variation: Variat
         const demoStoreId = "6895c4d6a50d393f431b9d47"; 
         const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'hero');
         return demoLayout || defaultHeroWithDivAndImageConfig;
+      },
+      heroWithBox:  async () => {
+        const demoStoreId = "6895c4d6a50d393f431b9d47"; 
+        const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'hero');
+        return demoLayout || defaultHeroWithBoxConfig;
       }
     },
     about: {
       second: defaultAboutWithImageNextToTextConfig,
       aboutWithImageNextToText: async () => {
-        const demoStoreId = "6895c4d6a50d393f431b9d47"; 
+        const demoStoreId = "689095a2adb5d26b9b845d01"; 
         const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'about');
         return demoLayout || defaultAboutWithImageNextToTextConfig;
       }
@@ -105,13 +112,18 @@ export const getSectionDefaults = async (section: SectionType, variation: Variat
     products: {
       first: defaultFirstStoreProductsConfig,
       productsSectionPopular: async () => {
-        const demoStoreId = "686e76aa96f14c28650b671d"; 
+        const demoStoreId = "6895c4cfa50d393f431b9d40"; 
         const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'products');
         return demoLayout || defaultPopularProductsSectionConfig;
       },
     },
     services: {
       servicesSectionSimple: simpleServicesSectionConfig,
+      servicesSectionPopular:  async () => {
+        const demoStoreId = "689095a2adb5d26b9b845d01"; 
+        const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'services');
+        return demoLayout || simpleServicesSectionConfig;
+      }
     },
     reviews: {
       first: defaultFirstStoreReviewsConfig,
@@ -138,7 +150,7 @@ export const getSectionDefaults = async (section: SectionType, variation: Variat
     },
     singleProduct: {
       singleProductPopular: async () => {
-        const demoStoreId = "686e76aa96f14c28650b671d"; 
+        const demoStoreId = "6895c4cfa50d393f431b9d40"; 
         const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'singleProduct');
         return demoLayout || defaultSingleProductSectionConfig;
       },

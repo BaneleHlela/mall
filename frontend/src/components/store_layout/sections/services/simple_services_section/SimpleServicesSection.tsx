@@ -61,7 +61,7 @@ const SimpleServicesSection = () => {
     <div 
         id="services"
         style={getBackgroundStyles(settings.background)}
-        className='flex flex-col justify-between h-full'
+        className='flex flex-col justify-between min-h-fit'
     >
         {/* Heading & Subheading */}
         <div 

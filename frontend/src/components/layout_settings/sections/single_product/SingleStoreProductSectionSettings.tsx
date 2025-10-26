@@ -517,7 +517,7 @@ const SingleStoreProductSectionSettings = () => {
                             objectPath={`${objectPath}.details.description.text`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={[ "color", "fontSize", "weight", "padding" ]}
+                            allow={[ "color", "fontSize", "weight", "padding", "fontFamily" ]}
                             responsivePadding
                         />      
                     </SlidingPanel>

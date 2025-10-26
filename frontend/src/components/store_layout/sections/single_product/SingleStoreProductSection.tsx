@@ -179,7 +179,7 @@ const SingleStoreProductSection = () => {
                             className={`
                                 ${settings.details.text.labels.position === "center" && "text-center"}
                                 ${settings.details.text.labels.position === "start" && "text-start"}
-                                ${settings.details.text.labels.position === "end" && "text-end"}
+                                ${settings.details.text.labels.position === "end" && "text-end"} capitalize
                             `}
                         >
                             <label
@@ -272,6 +272,7 @@ const SingleStoreProductSection = () => {
                             ${settings.details.addToCartBtn.position === "center" && "justify-center"}
                             ${settings.details.addToCartBtn.position === "start" && "justify-start"}
                             ${settings.details.addToCartBtn.position === "end" && "justify-end"}
+                            
                         `} 
                     >
                         <button
@@ -280,7 +281,7 @@ const SingleStoreProductSection = () => {
                                 ...getTextStyles(settings.details.addToCartBtn.style.text)
                             }}
                             onClick={handleAddToCart}
-                            className="w-full mt-6 py-3 hover:scale-103"
+                            className="w-full mt-2 py-3 hover:scale-103 lg:max-w-[50%]"
                         >
                             Add to cart | R{formatPriceWithSpaces(selectedPrice * quantity)}
                         </button>
@@ -291,7 +292,7 @@ const SingleStoreProductSection = () => {
                         style={{
                             ...getTextStyles(settings.details.description.text)
                         }}
-                        className="lg:max-h-[30%] overflow-y-scroll mt-[4vh] hide-scrollbar"
+                        className="lg:max-h-[30%] overflow-y-scroll mt-[2vh] hide-scrollbar"
                     >
                         {product.description}
                     </p>

@@ -28,7 +28,7 @@ const UnderlinedText: React.FC<UnderlinedTextProps> = ({
                 style={{
                     maxWidth: style.width || "100%",
                     width: "fit-content",
-                    wordBreak: 'break-word'
+                    //wordBreak: 'break-word'
                 }}
                 className="flex flex-col items-center text-wrap"
             >
