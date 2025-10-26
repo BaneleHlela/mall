@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_URL } from "../context";
 
-const API_URL = "http://localhost:5000/api/email"; 
+const EMAIL_API_URL = `${API_URL}/api/email`; 
 
 // Async thunk for sending email
 export const sendEmail = createAsyncThunk(
@@ -25,7 +26,7 @@ export const sendEmail = createAsyncThunk(
     thunkAPI
   ) => {
     try {
-      const response = await axios.post(`${API_URL}/send-email`, {
+      const response = await axios.post(`${EMAIL_API_URL}/send-email`, {
         destinationEmail,
         senderEmail,
         firstName,

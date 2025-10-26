@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { Store, Image } from '../../types/storeTypes';
+import { API_URL } from '../context';
 
-const API_URL = 'http://localhost:5000/api/stores'; // Adjust this based on your setup
+const STORE_API_URL = `${API_URL}/api/stores`; // Adjust this based on your setup
 
 // Initial state for store settings
 interface StoresState {
@@ -36,7 +37,7 @@ const initialState: StoresState = {
 export const createStore = createAsyncThunk<Store, Omit<Store, 'id'>>(
   'stores/createStore',
   async (storeData) => {
-    const response = await axios.post(`${API_URL}/add`, storeData);
+    const response = await axios.post(`${STORE_API_URL}/add`, storeData);
     return response.data;
   }
 );
@@ -57,7 +58,7 @@ export const fetchStores = createAsyncThunk<
       queryParams = params;
     }
     
-    const response = await axios.get(API_URL, { params: queryParams });
+    const response = await axios.get(STORE_API_URL, { params: queryParams });
     return response.data;
   }
 );
@@ -66,7 +67,7 @@ export const fetchStores = createAsyncThunk<
 export const fetchStoresByOwner = createAsyncThunk<Store[], string>(
   'stores/fetchStoresByOwner',
   async (ownerId) => {
-    const response = await axios.get(`${API_URL}/my-stores`, { params: { ownerId } });
+    const response = await axios.get(`${STORE_API_URL}/my-stores`, { params: { ownerId } });
     return response.data;
   }
 );
@@ -75,7 +76,7 @@ export const fetchStoreById = createAsyncThunk<Store, string>(
   'store/fetchStoreById',
   async (storeId, thunkAPI) => {
     try {
-      const response = await axios.get(`${API_URL}/${storeId}`);
+      const response = await axios.get(`${STORE_API_URL}/${storeId}`);
       return response.data;
     } catch (error) {
       console.error("Error fetching store:", error);
@@ -92,7 +93,7 @@ export const uploadStoreLogo = createAsyncThunk<string, { storeId: string; logoF
     formData.append('logo', logoFile);
 
     try {
-      const response = await axios.put(`${API_URL}/${storeId}/logo`, formData, {
+      const response = await axios.put(`${STORE_API_URL}/${storeId}/logo`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -115,7 +116,7 @@ export const deleteStoreLogo = createAsyncThunk<string, { storeId: string }>(
   'stores/deleteStoreLogo',
   async ({ storeId }) => {
     try {
-      const response = await axios.delete(`${API_URL}/${storeId}/logo`);
+      const response = await axios.delete(`${STORE_API_URL}/${storeId}/logo`);
       return response.data.storeId; // or simply: return storeId;
     } catch (error) {
       console.error('Error deleting store logo:', error);
@@ -131,7 +132,7 @@ export const deleteStoreGalleryImage = createAsyncThunk<
   'stores/deleteStoreGalleryImage',
   async ({ storeId, imageUrl }, thunkAPI) => {
     try {
-      await axios.delete(`${API_URL}/${storeId}/gallery`, {
+      await axios.delete(`${STORE_API_URL}/${storeId}/gallery`, {
         data: { imageUrl },
       });
 
@@ -154,7 +155,7 @@ export const fetchStoreImages = createAsyncThunk<
   async ({ storeId, page, limit }, thunkAPI) => {
     try {
       // Make the request with pagination parameters
-      const response = await axios.get(`${API_URL}/${storeId}/gallery`, {
+      const response = await axios.get(`${STORE_API_URL}/${storeId}/gallery`, {
         params: { page, limit }
       });
 

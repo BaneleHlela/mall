@@ -3,9 +3,10 @@ import axios from 'axios';
 import type { StoreAdmin } from "../../types/storeAdminTypes";
 import type { Image } from "../../types/storeTypes";
 import type { Store } from '../../types/storeTypes';
+import { API_URL } from '../context';
 
-const API_URL = '/api/dashboard'; 
-const STORE_URL = "http://localhost:5000/api/stores";
+const STORE_API_URL = '/api/dashboard'; 
+const STORE_URL = `${API_URL}/api/stores`;
 
 interface AddTeamMemberParams {
   storeId: string;
@@ -50,7 +51,7 @@ export const searchUsersByUsername = createAsyncThunk<
   'store_admin/searchUsersByUsername',
   async (username: string, thunkAPI) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/user/search-users?q=${username}`);
+      const response = await axios.get(`${API_URL}/api/user/search-users?q=${username}`);
       return response.data;
     } catch (error) {
       console.error('User search failed:', error);
@@ -63,7 +64,7 @@ export const searchUsersByUsername = createAsyncThunk<
 export const deleteStore = createAsyncThunk<string, string>(
     'store_admin/deleteStore',
     async (storeId) => {
-      const response = await axios.delete(`${API_URL}/delete/${storeId}`);
+      const response = await axios.delete(`${STORE_API_URL}/delete/${storeId}`);
       return response.data;
     }
 );
@@ -71,7 +72,7 @@ export const deleteStore = createAsyncThunk<string, string>(
 export const linkLayoutToStore = createAsyncThunk<string, string>(
     'store_admin/linkLayoutToStore',
     async (storeId) => {
-      const response = await axios.delete(`${API_URL}/link-layout/${storeId}`);
+      const response = await axios.delete(`${STORE_API_URL}/link-layout/${storeId}`);
       return response.data;
     }
 );
@@ -170,7 +171,7 @@ export const deleteStoreGalleryImage = createAsyncThunk<
   'stores/deleteStoreGalleryImage',
   async ({ storeId, imageUrl }, thunkAPI) => {
     try {
-      await axios.delete(`${API_URL}/${storeId}/gallery`, {
+      await axios.delete(`${STORE_API_URL}/${storeId}/gallery`, {
         data: { imageUrl },
       });
 

@@ -2,8 +2,9 @@ import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/tool
 import axios from "axios";
 import { type User } from "../../types/userTypes";
 import { type AdminState } from "../../types/adminTypes";
+import { API_URL } from "../context";
 
-const API_URL = "http://localhost:5000/api/user"; // Adjust if your admin routes differ
+const USER_API_URL = `${API_URL}/api/user`; // Adjust if your admin routes differ
 
 
 const initialState: AdminState = {
@@ -19,7 +20,7 @@ export const fetchAllUsers = createAsyncThunk(
   "admin/fetchAllUsers",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get(`${API_URL}/all`);
+      const response = await axios.get(`${USER_API_URL}/all`);
       return response.data as User[];
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to fetch users");
@@ -31,7 +32,7 @@ export const getAUser = createAsyncThunk(
   "admin/getAUser",
   async (id: string, thunkAPI) => {
     try {
-      const response = await axios.get(`${API_URL}/${id}`);
+      const response = await axios.get(`${USER_API_URL}/${id}`);
       return response.data as User;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to fetch user");
@@ -43,7 +44,7 @@ export const blockUser = createAsyncThunk(
   "admin/blockUser",
   async (id: string, thunkAPI) => {
     try {
-      const response = await axios.put(`${API_URL}/block/${id}`);
+      const response = await axios.put(`${USER_API_URL}/block/${id}`);
       return response.data.user as User;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to block user");
@@ -55,7 +56,7 @@ export const unblockUser = createAsyncThunk(
   "admin/unblockUser",
   async (id: string, thunkAPI) => {
     try {
-      const response = await axios.put(`${API_URL}/unblock/${id}`);
+      const response = await axios.put(`${USER_API_URL}/unblock/${id}`);
       return response.data.user as User;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to unblock user");

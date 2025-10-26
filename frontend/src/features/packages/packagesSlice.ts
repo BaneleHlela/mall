@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { PackagesState, Package } from '../../types/packageTypes';
+import { API_URL } from '../context';
 
 const initialState: PackagesState = {
   packages: [],
@@ -8,7 +9,7 @@ const initialState: PackagesState = {
   error: null,
 };
 
-const API_BASE = 'http://localhost:5000/api/packages';
+const API_BASE = `${API_URL}/api/packages`;
 
 // 🔁 Thunks
 export const fetchStorePackages = createAsyncThunk(

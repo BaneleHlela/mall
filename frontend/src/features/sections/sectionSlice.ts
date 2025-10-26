@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-
-const API_URL = "http://localhost:5000";
+import { API_URL } from "../context";
 
 export interface Section {
   _id: string;

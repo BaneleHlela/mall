@@ -5,8 +5,9 @@ import {
   } from '@reduxjs/toolkit';
   import axios from 'axios';
   import type { Booking, BookingsState, AvailableTimes } from '../../types/bookingTypes';
+  import { API_URL } from '../context';
   
-  const API_BASE = 'http://localhost:5000/api/bookings';
+  const API_BASE = `${API_URL}/api/bookings`;
   
   const initialState: BookingsState = {
     bookings: [],

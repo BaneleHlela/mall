@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { Product, ProductsState, StockUpdatePayload } from '../../types/productTypes';
+import { API_URL } from '../context';
 
-const API_BASE = 'http://localhost:5000/api/products';
+const API_BASE = `${API_URL}/api/products`;
 
 const initialState: ProductsState = {
   products: [],

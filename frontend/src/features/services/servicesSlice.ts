@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { Service, ServicesState } from '../../types/serviceTypes';
+import { API_URL } from '../context';
 
 
 
@@ -11,7 +12,7 @@ const initialState: ServicesState = {
   error: null,
 };
 
-const API_BASE = 'http://localhost:5000/api/services';
+const API_BASE = `${API_URL}/api/services`;
 
 // 🔁 Thunks
 export const fetchStoreServices = createAsyncThunk(

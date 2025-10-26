@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { Cart, CartState } from "../../types/cartTypes";
+import { API_URL } from "../context";
 
-const API_BASE = "http://localhost:5000/api/cart";
+const API_BASE = `${API_URL}/api/cart`;
 
 // Initial state
 const initialState: CartState = {

@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { type Review } from "../../types/reviewTypes"; // Define your Review type accordingly
+import { API_URL } from "../context";
 
-const API_URL = "http://localhost:5000/api/reviews";
+const REVIEWS_API_URL = `${API_URL}/api/reviews`;
 
 interface ReviewState {
   reviews: Review[];
@@ -34,7 +35,7 @@ export const createReview = createAsyncThunk(
   "review/createReview",
   async (reviewData: Partial<Review>, thunkAPI) => {
     try {
-      const response = await axios.post(API_URL, reviewData, {
+      const response = await axios.post(REVIEWS_API_URL, reviewData, {
         withCredentials: true,
       });
       return response.data as Review;
@@ -48,7 +49,7 @@ export const getAllReviews = createAsyncThunk(
   "review/getAllReviews",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get(API_URL);
+      const response = await axios.get(REVIEWS_API_URL);
       return response.data as Review[];
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to fetch reviews");
@@ -60,7 +61,7 @@ export const getStoreReviews = createAsyncThunk(
   "review/getStoreReviews",
   async (storeId: string, thunkAPI) => {
     try {
-      const response = await axios.get(`${API_URL}/store/${storeId}`);
+      const response = await axios.get(`${REVIEWS_API_URL}/store/${storeId}`);
       return response.data as Review[];
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to fetch store reviews");
@@ -72,7 +73,7 @@ export const getReviewById = createAsyncThunk(
   "review/getReviewById",
   async (id: string, thunkAPI) => {
     try {
-      const response = await axios.get(`${API_URL}/${id}`);
+      const response = await axios.get(`${REVIEWS_API_URL}/${id}`);
       return response.data as Review;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to fetch review");
@@ -84,7 +85,7 @@ export const updateReview = createAsyncThunk(
   "review/updateReview",
   async ({ id, data }: { id: string; data: Partial<Review> }, thunkAPI) => {
     try {
-      const response = await axios.put(`${API_URL}/${id}`, data, {
+      const response = await axios.put(`${REVIEWS_API_URL}/${id}`, data, {
         withCredentials: true,
       });
       return response.data as Review;
@@ -98,7 +99,7 @@ export const deleteReview = createAsyncThunk(
   "review/deleteReview",
   async (id: string, thunkAPI) => {
     try {
-      await axios.delete(`${API_URL}/${id}`, {
+      await axios.delete(`${REVIEWS_API_URL}/${id}`, {
         withCredentials: true,
       });
       return id;
@@ -112,7 +113,7 @@ export const getStoreRatingStats = createAsyncThunk(
   "review/getStoreRatingStats",
   async (storeId: string, thunkAPI) => {
     try {
-      const response = await axios.get(`${API_URL}/rating-stats/${storeId}`, {
+      const response = await axios.get(`${REVIEWS_API_URL}/rating-stats/${storeId}`, {
         withCredentials: true,
       });
       return response.data; // Expecting { averageRating, numberOfRatings }

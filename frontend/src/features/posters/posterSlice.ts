@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { Poster } from "../../types/posterTypes";
+import { API_URL } from "../context";
 
-const API_URL = "http://localhost:5000/api/posters";
+const POSTER_API_URL = `${API_URL}/api/posters`;
 
 
 
@@ -13,7 +14,7 @@ export const createPoster = createAsyncThunk(
   "posters/create",
   async (posterData: Poster, thunkAPI) => {
     try {
-      const { data } = await axios.post(API_URL, posterData);
+      const { data } = await axios.post(POSTER_API_URL, posterData);
       return data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to create poster");
@@ -26,7 +27,7 @@ export const fetchPostersByStore = createAsyncThunk(
   "posters/fetchByStore",
   async (storeId: string, thunkAPI) => {
     try {
-      const { data } = await axios.get(`${API_URL}/store/${storeId}`);
+      const { data } = await axios.get(`${POSTER_API_URL}/store/${storeId}`);
       return data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch posters");
@@ -39,7 +40,7 @@ export const fetchPosterById = createAsyncThunk(
   "posters/fetchById",
   async (posterId: string, thunkAPI) => {
     try {
-      const { data } = await axios.get(`${API_URL}/${posterId}`);
+      const { data } = await axios.get(`${POSTER_API_URL}/${posterId}`);
       return data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch poster");
@@ -52,7 +53,7 @@ export const updatePoster = createAsyncThunk(
   "posters/update",
   async ({ posterId, updates }: { posterId: string; updates: Partial<Poster> }, thunkAPI) => {
     try {
-      const { data } = await axios.put(`${API_URL}/${posterId}`, updates);
+      const { data } = await axios.put(`${POSTER_API_URL}/${posterId}`, updates);
       return data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to update poster");
@@ -65,7 +66,7 @@ export const deletePoster = createAsyncThunk(
   "posters/delete",
   async (posterId: string, thunkAPI) => {
     try {
-      await axios.delete(`${API_URL}/${posterId}`);
+      await axios.delete(`${POSTER_API_URL}/${posterId}`);
       return posterId;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to delete poster");

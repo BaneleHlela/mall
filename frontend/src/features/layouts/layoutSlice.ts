@@ -2,6 +2,7 @@ import axios from "axios";
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
 import type { Fonts, Layout, LayoutState } from "../../types/layoutTypes";
 import type { RootState } from "../../app/store.ts";
+import { API_URL } from "../context.ts";
 
 
 const initialState: LayoutState = {
@@ -12,7 +13,7 @@ const initialState: LayoutState = {
     error: null,
 };
 
-const API_URL = 'http://localhost:5000';
+
 
 // Async thunks for layout actions
 export const getLayout = createAsyncThunk(
