@@ -85,6 +85,10 @@ app.use("/api/email", emailRoutes);
 app.use("/api/sections", sectionRoutes);
 app.use('/api/posters', posterRoutes);
 
+app.get('/', (req, res) => {
+  res.send('API is working 🚀');
+});
+
 app.use(notFound);
 app.use(errorHandler);
 
