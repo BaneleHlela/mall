@@ -1,6 +1,6 @@
 import expressAsyncHandler from "express-async-handler";
 import StoreLayout from "../models/StoreLayout.js";
-import Store from "../models/storeModel.js";
+import Store from "../models/StoreModel.js";
 import Booking from "../models/BookingModel.js";
 
 // Fetch layouts by storeId
@@ -17,7 +17,7 @@ export const getLayoutsByStore = expressAsyncHandler(async (req, res) => {
     res.json(layouts);
 });
 
-// Edit store information
+// Edit store information here
 export const editStore = expressAsyncHandler(async (req, res) => {
   const { storeId } = req.params;
 
