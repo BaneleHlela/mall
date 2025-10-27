@@ -167,7 +167,7 @@ const HomePage = () => {
         {/* Placeholder divs */}
         <div className="flex flex-col w-full h-[48vh] lg:h-[40vh] lg:flex-row">
           {/* For creators */}
-          <div className="h-[50%] w-full lg:h-full lg:w-[50%]  bg-[#aab7c4] text-white text-center flex flex-col justify-center lg:justify-evenly items-center hover:scale-102">
+          <div onClick={() => navigate('/creators')} className="h-[50%] w-full lg:h-full lg:w-[50%]  bg-[#aab7c4] text-white text-center flex flex-col justify-center lg:justify-evenly items-center hover:scale-102">
             <h2 
               style={{
                 fontFamily: "Bebas Neue",
@@ -175,10 +175,10 @@ const HomePage = () => {
               }} 
               className="font-[BebasNeue] text-[5.5vh] lg:text-[7vh]"
             >Get Started With The Mall</h2>
-            <button className="shadow-sm border-[.5vh] w-fit px-[2vh] text-[2.5vh] hover:scale-105">Creators</button>
+            <button className="border-[.35vh] w-fit px-[2vh] text-[2.5vh] hover:scale-105">Creators</button>
           </div>
           {/* For investors */}
-          <div onClick={() => navigate('/business-plan')} className="h-[50%] w-full lg:h-full lg:w-[50%] bg-gradient-to-r from-stone-800 to-stone-900 text-center flex flex-col justify-evenly items-center hover:scale-102 text-white">
+          <div onClick={() => navigate('/business-plan')} className="h-[50%] w-full lg:h-full lg:w-[50%] bg-gradient-to-r from-gray-800 to-gray-900 text-center flex flex-col justify-evenly items-center hover:scale-102 text-white">
             <h2 style={{
                 fontFamily: "Bebas Neue",
                 lineHeight: "1",	
@@ -186,7 +186,7 @@ const HomePage = () => {
               className="font-[BebasNeue] text-[5.5vh] lg:text-[7vh]"
                // Navigate to /business-plan
             >Get Started With The Mall</h2>
-            <button className="shadow-sm border-[.5vh] border-white w-fit px-[2vh] text-[2.5vh] hover:scale-105">Investors</button>
+            <button className="border-[.35vh] border-white w-fit px-[2vh] text-[2.5vh] hover:scale-105">Investors</button>
           </div>
         </div>
 

@@ -70,6 +70,7 @@ const CreatePosterModal = () => {
             }]
         }
     })
+    console.log(form)
     
     useEffect(() => {
         // @ts-ignore

@@ -105,77 +105,79 @@ const MallSearchPage = () => {
 
       <div className={`w-full lg:w-[80%] overflow-x-hidden hide-scrollbar space-y-[5vh]`}>
         {/* Search details */}
-        <div className="relative flex flex-row justify-between mt-[5vh] w-full py-[1vh]">
-          <p className="">
-            {storeIds.length} results found for{' '}
-            <span className="font-semibold">{searchTerm}</span>
-          </p>
-          <div className="w-1/2 flex flex-row justify-end items-center space-x-[1vh] relative">
-            {/* Relevance dropdown */}
-            <div className="relative">
-              <div
-                onClick={() => setShowDropdown(prev => !prev)}
-                className="flex justify-between w-[20vh] cursor-pointer items-center space-x-[5vh] py-[.5vh] border-[.1vh] rounded-[.3vh] shadow-sm px-[1vh] bg-white hover:bg-gray-100 transition"
-              >
-                <p className="font-semibold font-[Outfit]">
-                  {selectedRelevance.label}
-                </p>
-                <IoMdArrowDropdown className={`transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
+        {searchTerm && (
+          <div className="relative flex flex-row justify-between mt-[5vh] w-full py-[1vh]">
+            <p className="">
+              {storeIds.length} results found for{' '}
+              <span className="font-semibold">{searchTerm}</span>
+            </p>
+            <div className="w-1/2 flex flex-row justify-end items-center space-x-[1vh] relative">
+              {/* Relevance dropdown */}
+              <div className="relative">
+                <div
+                  onClick={() => setShowDropdown(prev => !prev)}
+                  className="flex justify-between w-[20vh] cursor-pointer items-center space-x-[5vh] py-[.5vh] border-[.1vh] rounded-[.3vh] shadow-sm px-[1vh] bg-white hover:bg-gray-100 transition"
+                >
+                  <p className="font-semibold font-[Outfit]">
+                    {selectedRelevance.label}
+                  </p>
+                  <IoMdArrowDropdown className={`transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
+                </div>
+
+                {showDropdown && (
+                  <div className="absolute right-0 w-[20vh] bg-white border rounded-[.3vh] shadow-lg z-10 overflow-hidden">
+                    {relevanceOptions.map(option => (
+                      <div
+                        key={option.key}
+                        onClick={() => handleSelectRelevance(option)}
+                        className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 ${
+                          selectedRelevance.key === option.key ? 'bg-gray-50 font-medium' : ''
+                        }`}
+                      >
+                        {option.label}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              {showDropdown && (
-                <div className="absolute right-0 w-[20vh] bg-white border rounded-[.3vh] shadow-lg z-10 overflow-hidden">
-                  {relevanceOptions.map(option => (
-                    <div
-                      key={option.key}
-                      onClick={() => handleSelectRelevance(option)}
-                      className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 ${
-                        selectedRelevance.key === option.key ? 'bg-gray-50 font-medium' : ''
-                      }`}
-                    >
-                      {option.label}
-                    </div>
-                  ))}
-                </div>
-              )}
+              {/* Filter button */}
+              <div className="p-[.5vh] hover:bg-gray-100 cursor-pointer rounded">
+                <MdFilterList className="text-[3vh]" />
+              </div>
             </div>
-
-            {/* Filter button */}
-            <div className="p-[.5vh] hover:bg-gray-100 cursor-pointer rounded">
-              <MdFilterList className="text-[3vh]" />
-            </div>
+            <span className="absolute -bottom-0 w-[100%] h-[.1vh] bg-black"></span>
           </div>
-          <span className="absolute -bottom-0 w-[100%] h-[.1vh] bg-black"></span>
-        </div>
+        )}
 
         {/* Render Posters and Department Bundles only when NOT in search mode */}
         {!isSearchMode && (
           <>
             {/* Posters */}
-            <div className="flex justify-between w-full h-[45vh] mt-[4vh]">
+            <div className="hidden flex-col lg:flex-row justify-between w-full lg:h-[45vh] mt-[4vh]">
               {/* Poster A */}
-              <div className="relative h-full w-[49.5%]">
+              <div className="relative h-[20vh] lg:h-full lg:w-[49.5%]">
                 <img
                   src="https://storage.googleapis.com/the-mall-uploads-giza/stores/6884a99461cfbcec1883b7dc/images/pexels-toan-d-cong-680842095-28671808.jpg"
                   alt="poster"
-                  className="w-full h-full object-cover"
+                  className="w-full h-[20vh] lg:h-full object-cover"
                 />
-                <div className="absolute inset-0 w-full h-full bg-black opacity-25" />
+                <div className="absolute inset-0 w-full h-[20vh] lg:h-full bg-black opacity-25" />
               </div>
 
               {/* Poster B */}
-              <div className="relative h-full w-[49.5%]">
+              <div className="relative h-[20vh] lg:h-full lg:w-[49.5%]">
                 <img
                   src="https://storage.googleapis.com/the-mall-uploads-giza/stores/6884a99461cfbcec1883b7dc/images/kk.jpg"
                   alt="poster"
-                  className="w-full h-full object-cover"
+                  className="w-full h-[20vh] lg:h-full object-cover"
                 />
                 <div className="absolute inset-0 w-full h-full bg-black opacity-0" />
               </div>
             </div>
 
             {/* Department bundles */}
-            <div className="space-y-[5vh]">
+            {/* <div className="space-y-[5vh]">
               {Object.entries(topStoresByDepartment).map(([deptKey, stores]) => (
                 <StoresBundle
                   key={deptKey}
@@ -184,7 +186,7 @@ const MallSearchPage = () => {
                   title={departments[deptKey].full}
                 />
               ))}
-            </div>
+            </div> */}
           </>
         )}
 
@@ -196,13 +198,17 @@ const MallSearchPage = () => {
         ) : storeIds.length === 0 ? (
           <p className="text-center text-gray-500">No stores found.</p>
         ) : (
-          <div className="px-[.6vh] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-[2vh]">
+          <div className="px-[2vh] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mt-[2vh]">
             {storeIds.map(id => (
               <StoreCard key={id} store={storesById[id]} user={user} allowShadow />
             ))}
           </div>
         )}
+        <footer className="text-center py-8 text-gray-600 text-sm border-t mt-6 mb-[10vh]">
+        © {new Date().getFullYear()} The Mall — Concept by Banele Hlela.
+      </footer>
       </div>
+      
     </div>
   );
 };

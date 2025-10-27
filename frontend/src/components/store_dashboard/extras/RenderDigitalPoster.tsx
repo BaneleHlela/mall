@@ -78,7 +78,7 @@ const RenderDigitalPoster: React.FC<RenderPosterProps> = ({ config }) => {
                         color: posterConfig?.text?.color,
                         zIndex: 2
                     }}
-                    className="absolute top-[5%] text-[4.5vh] md:text-[70px] z-0 text-center w-full" 
+                    className="absolute top-[5%] text-[4.5vh] md:text-[85px] z-0 text-center w-full" 
                 >
                     {/* User Text */}
                     <p 
@@ -93,8 +93,8 @@ const RenderDigitalPoster: React.FC<RenderPosterProps> = ({ config }) => {
                 {/* The Mall Text */}
                 <div className="absolute bottom-[3%] left-[5%]">
                     <div className="w-full flex flex-col justify-start space-x-5 items-start">
-                        <p style={{fontFamily: "Quicksand", lineHeight: "1"}} className="text-[20px] "> There's everything on </p>
-                        <p style={{fontFamily: "Bebas Neue", lineHeight: "1"}} className="text-[65px] mt-2 font-[600]">The Mall</p>
+                        <p style={{fontFamily: "Quicksand", lineHeight: "1"}} className="text-[28px] "> There's everything on </p>
+                        <p style={{fontFamily: "Bebas Neue", lineHeight: "1"}} className="text-[100px] mt-2 font-[600]">The Mall</p>
                         {/* <div className="w-[1px] h-full bg-gray-700"></div> */}
                     </div>
                 </div>
@@ -386,7 +386,7 @@ const RenderDigitalPoster: React.FC<RenderPosterProps> = ({ config }) => {
                         color: posterConfig?.text?.color,
                         zIndex: 2
                     }}
-                    className="absolute top-[5%] text-[4.5vh] md:text-[70px] z-0 text-center w-full" 
+                    className="absolute top-[5%] text-[4.5vh] md:text-[85px] z-0 text-center w-full" 
                 >
                     {/* User Text */}
                     <p 
@@ -401,8 +401,8 @@ const RenderDigitalPoster: React.FC<RenderPosterProps> = ({ config }) => {
                 {/* The Mall Text */}
                 <div className="absolute bottom-[3%] left-[5%]">
                     <div className="w-full flex flex-col justify-start space-x-5 items-start">
-                        <p style={{fontFamily: "Quicksand", lineHeight: "1"}} className="text-[20px] "> There's everything on </p>
-                        <p style={{fontFamily: "Bebas Neue", lineHeight: "1"}} className="text-[65px] mt-2 font-[600]">The Mall</p>
+                        <p style={{fontFamily: "Quicksand", lineHeight: "1"}} className="text-[35px] "> There's everything on </p>
+                        <p style={{fontFamily: "Bebas Neue", lineHeight: "1"}} className="text-[85px] mt-2 font-[600]">The Mall</p>
                         {/* <div className="w-[1px] h-full bg-gray-700"></div> */}
                     </div>
                 </div>

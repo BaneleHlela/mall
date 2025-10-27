@@ -23,13 +23,14 @@ const StoreDashboardPosters = () => {
 
 
     return (
-      <div className='w-full h-full'>
+      <div className='w-full h-full overflow-y-scroll'>
           <Routes>
             <Route path="*" element={
-              <div className='w-full'>
-                <RenderDigitalPoster config={posters[0]}/>
+              posters.map((poster, index) => (
+              <div key={index} className="mb-4"> {/* Add a unique key and spacing between posters */}
+                <RenderDigitalPoster config={poster} />
               </div>
-              } 
+            ))} 
             />
             <Route path="/create" element={<CreatePosterModal />} />
             <Route path="/view/:posterId" element={

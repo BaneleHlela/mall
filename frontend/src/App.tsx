@@ -18,7 +18,9 @@ import ProtectedRoute from "./components/the_mall/authorization/ProtectedRoute";
 import LayoutCreator from "./pages/store_dashboard/supporting_pages/layouts/supporting/LayoutCreator";
 import MallSearchPage from "./pages/search/MallSearchPage";
 import FavoriteStores from "./pages/favorites/FavoriteStores";
-import BusinessPlan from "./components/the_mall/BusinessPlan";
+import BusinessPlan from "./components/the_mall/home/BusinessPlan";
+import ForCreators from "./components/the_mall/home/ForCreators";
+import ComingSoon from "./components/the_mall/ComingSoon";
 
 
 
@@ -45,7 +47,12 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/stores/:storeId/*" element={<StorePage />} />
-          <Route path="/my-stores" element={<MyStores />} />
+          {/* <Route path="/my-stores" element={<MyStores />} /> */}
+          <Route path="/my-stores" 
+            element={
+              <ComingSoon message="I have not deployed this page yet but it's where users can add stores and access them."/>
+            } 
+          />
           <Route path="/search" element={<MallSearchPage />} />
           <Route path="/favorites" element={<FavoriteStores />} />
           <Route path="/profile" element={<Profile />} />
@@ -69,6 +76,7 @@ const App: React.FC = () => {
           <Route path="/layouts/create" element={<LayoutCreator />} />
           <Route path="/creators-dashboard/*" element={<Dashboard />} />
           <Route path="/business-plan" element={<BusinessPlan />} />
+          <Route path="/creators" element={<ForCreators />} />
           {authRoutes}
         </Routes>
       </Router>

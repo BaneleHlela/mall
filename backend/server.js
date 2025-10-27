@@ -42,10 +42,11 @@ const corsOptions = {
     credentials: true
 };
 
+app.use(cors(corsOptions));
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); 
 app.use(cookieParser()); // Allow us to pass incoming cookies
-app.use(cors(corsOptions));
+
 
 
 

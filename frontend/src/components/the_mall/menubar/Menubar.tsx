@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { House, LayoutDashboard, Store, Search, CircleUser } from "lucide-react";
 import { motion } from "framer-motion";
-import { IoIosHeartEmpty } from "react-icons/io";
 import { FaRegHeart } from "react-icons/fa";
 
 // Utility function to check if the current route should hide the nav
@@ -11,7 +10,7 @@ const shouldHideNav = (hiddenRoutes: string[], currentPath: string): boolean => 
 
 const Menubar = () => {
   const location = useLocation(); // Get the current route
-  const hiddenRoutes = ["dashboard", "layouts", "preview", "stores", "scribbler", "signup", "business-plan"]; // Add routes that should hide the nav
+  const hiddenRoutes = ["dashboard", "layouts", "preview", "stores", "scribbler", "signup", "business-plan", "login"]; // Add routes that should hide the nav
 
   const isHidden = shouldHideNav(hiddenRoutes, location.pathname); // Determine if the nav should be hidden
 

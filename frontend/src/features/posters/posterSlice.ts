@@ -17,7 +17,7 @@ export const createPoster = createAsyncThunk(
       const { data } = await axios.post(POSTER_API_URL, posterData);
       return data;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to create poster");
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
     }
   }
 );

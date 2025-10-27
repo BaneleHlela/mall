@@ -9,7 +9,7 @@ const CLIENT_URL = process.env.CLIENT_URL;
 export const createPoster = async (req, res) => {
   try {
     const { type, layout, store, variation, background, images, deviceColor, imageSource, text } = req.body;
-
+    console.log("Received poster creation request with data:", req.body);
     // Create poster with initial data (empty image URLs for now)
     const poster = new Poster({
       type,

@@ -15,13 +15,13 @@ const ComingSoon = ({message}: {message: string}) => {
         <h1 
             style={{
                 lineHeight: '1',
-                fontFamily: "Fascinate Inline"	
+                fontFamily: "Roboto"	
             }}
-            className="text-[400%] font-[Fascinate] z-1"
+            className="text-[400%] font-[Fascinate] z-1 lg:text-[10vh] font-bold"
         >
             Coming Soon
         </h1>
-        <FaTools className="animate-spin text-[4vh]"/>
+        <FaTools className="animate-spin text-[7vh]"/>
         {/* Message */}
         <p className="text-center text-gray-600 w-[80%] max-w-[800px] bg-white shadow-md rounded-[2vh] p-[2vh] z-1">{message}</p>
     </div>

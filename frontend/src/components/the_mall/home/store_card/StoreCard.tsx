@@ -68,7 +68,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
       <div className="relative h-[72%]">
         <img src={store.thumbnail} alt="store-thumbnail" className="w-full h-full object-cover -z-1" />
         <div className="absolute top-0 w-full h-full bg-[#00000000]"></div>
-        {/* Favorite toggle button */}
+        {/* Favorite toggle button
         <button
           onClick={handleFavoriteClick}
           className="absolute bottom-[1%] left-[1%] flex items-center justify-evenly w-[20%] scale-90 space-x-[.6vh] bg-[#0000005d] px-[.3vh] border-[.3vh] border-white rounded-[.3vh] shadow "
@@ -81,7 +81,9 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
           )}
           
           
-        </button>
+        </button> */}
+        {/* Distance */}
+        <p className="absolute bottom-[2%] left-[1%] bg-white rounded text-[1.8vh] text-center text-black min-w-[15%]">{distanceText}</p>
         {/* Red flag */}
         {/* <div className="absolute top-1/2 left-1/2 text-red">
           <button className="text-red-600 z-10 h-full">
@@ -102,8 +104,18 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
         <h3 className="text-center text-[90%] font-semibold text-gray-900">{store.name}</h3>
         {/* Detials */}
         <div className="flex flex-row justify-between items-center px-[.8vh]">
-          {/* Distance */}
-          <p className="text-[1.8vh] text-gray-600 min-w-[15%]">{distanceText}</p>
+          <button
+            onClick={handleFavoriteClick}
+            className=""
+          >
+            {/* <p style={{lineHeight: "1"}} className="text-white text-[3.4vh] font-light">{store.likes.count}</p> */}
+            {isFavorite ? (
+              <GoHeartFill className="text-[3.8vh] text-gray-700" />
+            ) : (
+              <GoHeart className="text-[3.8vh] text-gray-700" />
+            )}
+          </button>
+          
           {/* Open Status */}
           <span className={statusClasses}>
             {storeStatus.message}
