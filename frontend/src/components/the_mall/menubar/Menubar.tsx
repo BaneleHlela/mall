@@ -11,7 +11,7 @@ const shouldHideNav = (hiddenRoutes: string[], currentPath: string): boolean => 
 
 const Menubar = () => {
   const location = useLocation(); // Get the current route
-  const hiddenRoutes = ["dashboard", "layouts", "preview", "stores", "scribbler", "signup"]; // Add routes that should hide the nav
+  const hiddenRoutes = ["dashboard", "layouts", "preview", "stores", "scribbler", "signup", "business-plan"]; // Add routes that should hide the nav
 
   const isHidden = shouldHideNav(hiddenRoutes, location.pathname); // Determine if the nav should be hidden
 

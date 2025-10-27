@@ -1,6 +1,7 @@
 import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { API_URL } from "../../../../features/context";
 
-const BACKEND_URL = "http://localhost:5000"; // Or hardcode your backend URL
+const BACKEND_URL = API_URL; // Or hardcode your backend URL
 
 const SocialLoginButtons = () => {
   const googleLogin = () => {

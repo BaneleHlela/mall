@@ -18,6 +18,7 @@ import ProtectedRoute from "./components/the_mall/authorization/ProtectedRoute";
 import LayoutCreator from "./pages/store_dashboard/supporting_pages/layouts/supporting/LayoutCreator";
 import MallSearchPage from "./pages/search/MallSearchPage";
 import FavoriteStores from "./pages/favorites/FavoriteStores";
+import BusinessPlan from "./components/the_mall/BusinessPlan";
 
 
 
@@ -67,6 +68,7 @@ const App: React.FC = () => {
           <Route path="/layouts/my-layouts" element={<MyLayouts />} />
           <Route path="/layouts/create" element={<LayoutCreator />} />
           <Route path="/creators-dashboard/*" element={<Dashboard />} />
+          <Route path="/business-plan" element={<BusinessPlan />} />
           {authRoutes}
         </Routes>
       </Router>

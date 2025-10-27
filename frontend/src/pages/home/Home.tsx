@@ -8,12 +8,15 @@ import { departments } from '../../utils/helperObjects';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React from 'react';
 import DepartmentSelectorWithImages from './supporting/DepartmentSelectorWithImages';
+import { useNavigate } from 'react-router-dom';
+
 
 
 
 
 const HomePage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate(); // Initialize the navigate function
   const user = useAppSelector((state: RootState) => state.user.user);
   const departmentRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
 
@@ -175,12 +178,13 @@ const HomePage = () => {
             <button className="shadow-sm border-[.5vh] w-fit px-[2vh] text-[2.5vh] hover:scale-105">Creators</button>
           </div>
           {/* For investors */}
-          <div className="h-[50%] w-full lg:h-full lg:w-[50%] bg-gradient-to-r from-stone-800 to-stone-900 text-center flex flex-col justify-evenly items-center hover:scale-102 text-white">
+          <div onClick={() => navigate('/business-plan')} className="h-[50%] w-full lg:h-full lg:w-[50%] bg-gradient-to-r from-stone-800 to-stone-900 text-center flex flex-col justify-evenly items-center hover:scale-102 text-white">
             <h2 style={{
                 fontFamily: "Bebas Neue",
                 lineHeight: "1",	
               }} 
               className="font-[BebasNeue] text-[5.5vh] lg:text-[7vh]"
+               // Navigate to /business-plan
             >Get Started With The Mall</h2>
             <button className="shadow-sm border-[.5vh] border-white w-fit px-[2vh] text-[2.5vh] hover:scale-105">Investors</button>
           </div>

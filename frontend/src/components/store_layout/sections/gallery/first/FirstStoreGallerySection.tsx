@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API_URL } from '../../../../../features/context';
 
 interface Image {
   url: string;
@@ -15,7 +16,7 @@ const FirstStoreGallerySection = ({ storeId }: { storeId: string }) => {
 
   useEffect(() => {
     const fetchImages = async () => {
-      const res = await axios.get(`http://localhost:5000/api/stores/${storeId}/gallery?page=${page}&limit=${limit}`);
+      const res = await axios.get(`${API_URL}/api/stores/${storeId}/gallery?page=${page}&limit=${limit}`);
       setImages(prev => [...prev, ...res.data.images]);
       setHasMore(res.data.hasMore);
     };
