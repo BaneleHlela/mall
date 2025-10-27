@@ -178,7 +178,7 @@ const HomePage = () => {
             <button className="border-[.35vh] w-fit px-[2vh] text-[2.5vh] hover:scale-105">Creators</button>
           </div>
           {/* For investors */}
-          <div onClick={() => navigate('/business-plan')} className="h-[50%] w-full lg:h-full lg:w-[50%] bg-gradient-to-r from-gray-800 to-gray-900 text-center flex flex-col justify-evenly items-center hover:scale-102 text-white">
+          <div onClick={() => navigate('/business-plan')} className="h-[50%] w-full lg:h-full lg:w-[50%] bg-gradient-to-r from-gray-800 to-gray-900 text-center flex flex-col justify-center items-center hover:scale-102 text-white">
             <h2 style={{
                 fontFamily: "Bebas Neue",
                 lineHeight: "1",	
