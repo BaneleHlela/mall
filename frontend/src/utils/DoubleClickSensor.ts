@@ -19,7 +19,7 @@ export class DoubleClickSensor implements SensorInstance {
     const target = event.target as HTMLElement;
     this.node = target.closest('[data-dnd-draggable]') as HTMLElement;
 
-    if (this.node) {
+    if (this.node) { // @ts-ignore
       this.options.onStart(event);
     }
   };
