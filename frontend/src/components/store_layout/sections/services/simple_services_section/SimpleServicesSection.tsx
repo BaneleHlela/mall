@@ -37,7 +37,7 @@ const SimpleServicesSection = () => {
       console.log("navigating")
       navigate(`/layouts/${layoutId}/preview/service/${serviceId}`);
     } else if (store && store._id) {
-      navigate(`/stores/${store._id}/service/${serviceId}`);
+      navigate(`/stores/${store._id}/service/${serviceId}#book`);
     } else {
       console.error('Store ID is not available');
     }

@@ -47,12 +47,12 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/stores/:storeId/*" element={<StorePage />} />
-          {/* <Route path="/my-stores" element={<MyStores />} /> */}
-          <Route path="/my-stores" 
+          <Route path="/my-stores" element={<MyStores />} />
+          {/* <Route path="/my-stores" 
             element={
               <ComingSoon message="I have not deployed this page yet but it's where users can add stores and access them."/>
             } 
-          />
+          /> */}
           <Route path="/search" element={<MallSearchPage />} />
           <Route path="/favorites" element={<FavoriteStores />} />
           <Route path="/profile" element={<Profile />} />

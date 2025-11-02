@@ -1,5 +1,5 @@
 import React from 'react'
-import { getBackgroundStyles, getBorderStyles, getTextStyles } from '../../../../../../utils/stylingFunctions';
+import { getBackgroundStyles, getTextStyles } from '../../../../../../utils/stylingFunctions';
 import StoreButton from '../../../buttons/StoreButton';
 import UnderlinedText from '../../../text/UnderlinedText';
 

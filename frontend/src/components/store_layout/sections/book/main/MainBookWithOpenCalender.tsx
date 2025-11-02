@@ -111,7 +111,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
     };
 
     return (
-        <div 
+        <div
             style={{
                 border: "none",
                 padding: "0px"

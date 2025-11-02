@@ -33,6 +33,7 @@ const StoreBookServiceSection = () => {
             style={{
                 ...getBackgroundStyles(settings.background),
             }}
+            id="book"
             className="w-full h-full flex flex-col max-w-[100vw]"
         >
             {/* Back to home */}

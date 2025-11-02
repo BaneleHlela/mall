@@ -102,7 +102,7 @@ const SecondBookWithCalendar: React.FC<SecondBookWithCalendarProps> = ({service}
     };
       
     return (
-        <div className="flex flex-row px-4 bg-white z-2 ">
+        <div className="flex flex-row px-4 bg-white z-2">
             {/* Service Details */}
             <div className="h-full w-[32%]">
                 {/* Title */}
