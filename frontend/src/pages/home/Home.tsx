@@ -9,6 +9,9 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React from 'react';
 import DepartmentSelectorWithImages from './supporting/DepartmentSelectorWithImages';
 import { useNavigate } from 'react-router-dom';
+import { FiPlus } from 'react-icons/fi';
+import BasicStorePost from '../../components/the_mall/home/BasicStorePost';
+import TipsAndTricks from '../../components/the_mall/home/TipsAndTricks';
 
 
 
@@ -91,12 +94,12 @@ const HomePage = () => {
   
 
   return (
-    <div className="relative px-2 w-full h-full bg-white flex flex-col items-center">
+    <div className="relative  w-full h-full bg-gray-100 flex flex-col items-center">
       {/* Menubar */}
       <nav className="w-[100vw] h-[15vh] z-11 sticky inset-0 bg-gray-900 flex flex-col items-center lg:h-[9vh]">
         <TheMallTopbar />
       </nav>
-      <div className="w-full lg:w-[80%] overflow-x-hidden hide-scrollbar">
+      <div className="w-full space-y-1 lg:w-[80%] overflow-x-hidden hide-scrollbar">
         {/* Department Selector */}
         {selectedDepartment && (
           <div className="h-[8vh] w-full bg-stone-100 flex items-center relative">
@@ -145,14 +148,14 @@ const HomePage = () => {
           </div>
         )}
         
-        {/* Department Toggler With Images */}
+        {/* Department Toggler With Images (Desktop) */}
         {!selectedDepartment && (
           <div
             ref={imageScrollRef}
             onWheel={handleImageWheel}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
-            className="flex overflow-x-auto space-x-4 py-4 hide-scrollbar"
+            className="hidden lg:flex overflow-x-auto space-x-4 py-4 hide-scrollbar"
           >
             {Object.entries(departments).map(([key, dept]) => (
               <DepartmentSelectorWithImages
@@ -163,6 +166,49 @@ const HomePage = () => {
             ))}
           </div>
         )}
+
+        {/* Department Toggler With Images (Mobile) */}
+        {!selectedDepartment && (
+          <div
+            ref={imageScrollRef}
+            onWheel={handleImageWheel}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            className="flex bg-white pl-[.5vh] overflow-x-auto space-x-1 py-4 hide-scrollbar lg:hidden"
+          >
+            {/* Add your store */}
+            <div className="relative flex justify-center h-[20vh] bg-amber-500 aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102">
+              {/* Image */}
+              <div className="w-full">
+                <img 
+                  src="https://storage.googleapis.com/the-mall-uploads-giza/stores/686e76aa96f14c28650b671d/images/Promote%20Your%20Shop%20in%20Style.png" 
+                  alt="Mall theme image" 
+                  className="w-full h-full object-cover rounded-[1vh]" 
+                />
+              </div>
+              {/* Button */}
+              <div className="absolute bottom-0 flex justify-center items-center w-full h-[20%] bg-[#0000001f]  rounded-b-[1vh]">
+                <button className=" bg-black text-white border-[.2vh] border-white rounded-full">
+                  <FiPlus className='text-[2.5vh]'/>
+                </button>
+              </div>
+              
+            </div>
+            <div className=""></div>
+            {Object.entries(departments).map(([key, dept]) => (
+              <DepartmentSelectorWithImages
+                key={key}
+                onSelect={() => handleDepartmentSelect(key)}
+                department={dept}
+              />
+            ))}
+          </div>
+        )}
+        {/* Feed  */}
+        <div className="space-y-1">
+          <BasicStorePost postData={null}/>
+          <TipsAndTricks />
+        </div>
 
         {/* Placeholder divs */}
         <div className="flex flex-col w-full h-[48vh] lg:h-[40vh] lg:flex-row">

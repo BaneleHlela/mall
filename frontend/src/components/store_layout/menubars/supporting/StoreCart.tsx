@@ -8,6 +8,7 @@ import { GiBeachBag } from "react-icons/gi";
 import { LiaShoppingBagSolid } from "react-icons/lia";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { getUserCart } from "../../../../features/cart/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 interface StoreCartProps {
   style: {
@@ -40,6 +41,7 @@ interface StoreCartProps {
 }
 
 const StoreCart: React.FC<StoreCartProps> = ({ style }) => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
   const cart = useAppSelector((state) => state.cart.cart);
@@ -95,6 +97,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ style }) => {
         border: `${style.background.border.width} ${style.background.border.style} ${style.background.border.color}`,
         borderRadius: style.background.border.radius,
       }}
+      onClick = {() => navigate(`/stores/${storeId}/cart`)}
       className={ `relative cursor-pointer w-fit`}
     >
       {renderIcon()}

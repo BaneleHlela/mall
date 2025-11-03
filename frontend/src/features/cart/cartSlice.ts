@@ -15,8 +15,14 @@ const initialState: CartState = {
 // Async thunks
 export const addToCart = createAsyncThunk<
   Cart, // return type
-  { storeId: string; productId: string; quantity: number; specialRequest?: string }, // args
-  { rejectValue: string } // thunkAPI
+  {
+    storeId: string;
+    productId: string;
+    quantity: number;
+    variation?: string; // ✅ added
+    specialRequest?: string;
+  },
+  { rejectValue: string }
 >(
   "cart/addToCart",
   async (args, thunkAPI) => {
@@ -24,7 +30,9 @@ export const addToCart = createAsyncThunk<
       const res = await axios.post(API_BASE, args);
       return res.data.cart as Cart;
     } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to add to cart");
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || "Failed to add to cart"
+      );
     }
   }
 );

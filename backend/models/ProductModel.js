@@ -34,7 +34,6 @@ const productSchema = new mongoose.Schema({
   }],
   marking: {
     type: String,
-    //enum: ['new', 'sale', 'featured', ''],
     default: '',
   },
   stockQuantity: {

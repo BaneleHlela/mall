@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks'
 import { fetchProductById } from '../../../../features/products/productsSlice'
 import { getBackgroundStyles, getTextStyles } from '../../../../utils/stylingFunctions'
@@ -9,16 +9,23 @@ import { addToCart } from '../../../../features/cart/cartSlice'
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md'
 import UnderlinedText from '../../extras/text/UnderlinedText'
 import { formatPriceWithSpaces } from '../../extras/cards/product/popular/PopularProductCard'
+import { TbLoader3 } from 'react-icons/tb'
 
 // ts errors
 // Handle Add  To Cart. (Sometimes it's gotta say "please select a variation first")
+// We gotta add toggle to next/previous product functionality.'
 
 const SingleStoreProductSection = () => {
-    const { productId } = useParams<{ productId: string }>()
+    const navigate = useNavigate();
     const dispatch = useAppDispatch()
+
+    const { productId } = useParams<{ productId: string }>()
+
     const product = useAppSelector(state => state.products.selectedProduct)
     const isLoading = useAppSelector(state => state.products.isLoading)
     const settings = useAppSelector((state) => state.layoutSettings.singleProduct);
+    const routes = useAppSelector((state) => state.layoutSettings.routes);
+    const isCartLoading = useAppSelector(state => state.cart.loading)
 
     const [selectedVariation, setSelectedVariation] = useState<string | null>(null);
     const [specialRequest, setSpecialRequest] = useState("");
@@ -34,6 +41,12 @@ const SingleStoreProductSection = () => {
             dispatch(fetchProductById(productId))
         }
     }, [dispatch, productId])
+    // Set the first variation as the default selected variation
+    useEffect(() => {
+        if (product?.variations && product.variations.length > 0) {
+            setSelectedVariation(product.variations[0]); // Set the first variation
+        }
+    }, [product]);
 
     if (isLoading) return <div>Loading...</div>
     if (!product) return <div>Error loading product</div>
@@ -75,6 +88,22 @@ const SingleStoreProductSection = () => {
         );
     };
 
+    // --- Handle "Back to home" navigation ---
+    const handleBackToHome = () => {
+        const productStore = product.store;
+        const productsRoute = routes.products?.url || "products"; // Default to "products" if not found in routes
+
+        // Determine the correct navigation path
+        const basePath = `/stores/${productStore}`;
+        const fullPath = routes.products?.url === "/products" 
+            ? `${basePath}${productsRoute}#products` 
+            : `${basePath}#products`;
+
+        navigate(fullPath); // Navigate to the determined path
+    };
+
+    
+
     return (
         <div
             style={{
@@ -88,10 +117,11 @@ const SingleStoreProductSection = () => {
                     ...getTextStyles(settings.text.exit),
                     ...getBackgroundStyles(settings.text.exit.background),
                 }}
-                className="w-fit flex flex-row items-center cursor-pointer"
+                onClick={handleBackToHome}
+                className="w-fit flex flex-row items-center cursor-pointer bg-amber-100"
             >
                 <HiArrowLeftEndOnRectangle />
-                <p>Back to Home</p>
+                <p>Back</p>
             </div>
 
             {/* Image and Details */}
@@ -110,6 +140,7 @@ const SingleStoreProductSection = () => {
                         className="object-cover transition-opacity duration-700 ease-in-out opacity-100 w-full"
                         style={{
                             ...getBackgroundStyles(settings.images.background),
+                            backgroundColor: 'transparent',
                         }}
                     />
 
@@ -232,7 +263,10 @@ const SingleStoreProductSection = () => {
                     )}
 
                     {/* Quantity Updater */}
-                    <div    
+                    <div  
+                        style={{
+                            ...getBackgroundStyles(settings.details.quantityUpdater.background.container),
+                        }}  
                         className={`w-full flex flex-col 
                             ${settings.details.quantityUpdater.background.container.position === "center" && "items-center"}
                             ${settings.details.quantityUpdater.background.container.position === "start" && "items-start"}
@@ -281,9 +315,12 @@ const SingleStoreProductSection = () => {
                                 ...getTextStyles(settings.details.addToCartBtn.style.text)
                             }}
                             onClick={handleAddToCart}
-                            className="w-full mt-2 py-3 hover:scale-103 lg:max-w-[50%]"
+                            className="w-full mt-2 py-3 lg:max-w-[50%] hover:underline hover:cursor-pointer"
                         >
-                            Add to cart | R{formatPriceWithSpaces(selectedPrice * quantity)}
+                            {isCartLoading ? 
+                                <TbLoader3 className='w-6 h-6 animate-spin mx-auto' /> : 
+                                `Add to cart | R${formatPriceWithSpaces(selectedPrice * quantity)}`
+                            }
                         </button>
                     </div>
 
@@ -302,4 +339,4 @@ const SingleStoreProductSection = () => {
     )
 }
 
-export default SingleStoreProductSection
+export default SingleStoreProductSection;

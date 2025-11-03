@@ -87,11 +87,10 @@ const SingleStoreProductSectionSettings = () => {
                                         objectPath={`${objectPath}.text.exit.background`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={["height", "width", "color", "padding"]}
+                                        allow={["height", "width", "color", "padding", "border"]}
                                         widthUnit="vw"
                                         heightUnit="vh"
                                         responsiveSize
-                                        responsivePadding
                                     />
                                 </div>
                                 }

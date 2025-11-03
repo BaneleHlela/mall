@@ -4,7 +4,12 @@ export const departments = {
     short: "Restuarants",
     full: "Food & Beverage",
     description: "Restaurants, cafés, frozen goods, and baking.",
-    thumbnails: ["https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/495371485_1238922361482703_9008209704576564623_n.jpg"]
+    thumbnails: ["https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/495371485_1238922361482703_9008209704576564623_n.jpg"],
+    content: [{
+      storeSlug: "Example Store",
+      reelyThumbnail: "https://example.com/thumbnail.jpg",
+      profilyThumbnail: "https://example.com/thumbnail.jpg",
+    }]
   },
   clothing: {
     short: "Clothing",	

@@ -26,6 +26,7 @@ import StoreMenubarIcons from "../../components/store_layout/menubars/supporting
 import StoreFloatingButton from "../../components/store_layout/extras/buttons/StoreFloatingButton";
 import { IoMdClose } from "react-icons/io";
 import ComingSoon from "../../components/the_mall/ComingSoon";
+import StoreCartModal from "../cart/StoreCartModal";
 
 const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
   const location = useLocation();
@@ -33,6 +34,7 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
   const { storeId: paramStoreId } = useParams<{ storeId: string }>();
   const storeId = propStoreId || paramStoreId 
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const isCartRoute = location.pathname.includes('/cart'); // Check if the current route is "/cart"
 
   const dispatch = useAppDispatch();
   const [store, setStore] = useState<StoreType | null>(null); // Local state for the store
@@ -142,10 +144,18 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
           // width: window.innerWidth >= 1024 ? settings.background?.width?.desktop : settings.background?.width?.mobile, // Apply width for large screens
         }}
         className={`relative w-screen h-full overflow-y-scroll hide-scrollbar overflow-x-clip`}>
-            <PopularStoreMenubar />
-            {settings?.menubar?.alertDiv?.display && (
-              <StoreAlertDiv config={settings.menubar.alertDiv} objectPath={`menubar.alertDiv`} />
+            {!isCartRoute && (
+              <>
+                {/* Store Menubar */}
+                <PopularStoreMenubar />
+                {/* Store Alert Div */}
+                {settings?.menubar?.alertDiv?.display && (
+                  <StoreAlertDiv config={settings.menubar.alertDiv} objectPath={`menubar.alertDiv`} />
+                )}
+              </>
             )}
+            
+            {/* Routes */}
             <Routes>
               <Route key="*" path="*" element={<StoreHomePage />} />
               {Object.values(routes).map((route) => (
@@ -156,9 +166,11 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
                 />
               ))}
               {store?.trades.includes("products") && <Route path="/product/:productId" element={<SingleStoreProductPage />} />}
+              {store?.trades.includes("products") && <Route path="/cart" element={<div className="flex justify-center w-full"><StoreCartModal /></div>  } />}
               {store?.trades.includes("services") && <Route path="/service/:serviceId" element={<StoreBookServicePage />} />}
             </Routes>
-            {settings?.floats?.floatingIcons?.show && (
+            {/* Floating Icons */}
+            {settings?.floats?.floatingIcons?.show && !isCartRoute && (
               <div className={`fixed z-5 
                 ${settings.floats.floatingIcons.position === "left-1/2" && "left-2 top-1/2"} 
                 ${settings.floats.floatingIcons.position === "left-1/4" && "left-2 top-1/4"} 
@@ -171,8 +183,8 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
                 />
               </div>
             )}
-
-            {settings?.floats?.floatingButton?.show !== "none" && (
+            {/* Floating Button */}
+            {settings?.floats?.floatingButton?.show !== "none" && !isCartRoute && (
               <div className={`fixed z-5
                 ${settings.floats.floatingButton.position === "left" ? "bottom-2 left-2" : "bottom-2 right-2"}`}
               >
@@ -186,6 +198,7 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
                 />
               </div>
             )}
+            {/* Chat Modal */}
             {isChatOpen && (
               <div
                 className={`

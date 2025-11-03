@@ -1,56 +1,78 @@
 import mongoose from "mongoose";
 import Cart from "../models/CartModel.js";
+import Product from "../models/ProductModel.js";
 
 export const addToCart = async (req, res) => {
-  const { storeId, productId, quantity = 1, specialRequest = "" } = req.body;
-  const  userId  = req.user._id;
-  console.log(req.user._id);
+  const { storeId, productId, variation, quantity = 1, specialRequest = "" } = req.body;
+  const userId = req.user._id;
+
   try {
-    // Find the cart for the user and store
+    // ✅ Find the product
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+
+    // ✅ Determine correct price based on variation
+    let selectedPrice = product.price || 0;
+    if (variation && product.prices?.length > 0) {
+      const matchedVariation = product.prices.find(p => p.variation === variation);
+      if (matchedVariation) {
+        selectedPrice = matchedVariation.amount;
+      } else {
+        return res.status(400).json({ success: false, message: "Invalid variation selected" });
+      }
+    }
+
+    // ✅ Find user's cart for this store
     let cart = await Cart.findOne({ user: userId, store: storeId });
 
     if (cart) {
-      // Check if the product already exists in the cart
-      const productInCart = cart.items.find((item) => item.product.toString() === productId);
+      // Check if product with the same variation already exists
+      const existingItem = cart.items.find(
+        item =>
+          item.product.toString() === productId &&
+          item.variation === (variation || null)
+      );
 
-      if (productInCart) {
-        // Update the quantity and special request if the product already exists
-        productInCart.quantity += quantity;
-        productInCart.specialRequest = specialRequest;
+      if (existingItem) {
+        // Update quantity and request
+        existingItem.quantity += quantity;
+        existingItem.specialRequest = specialRequest;
       } else {
-        // Add the product to the cart
+        // Add new item
         cart.items.push({
           product: productId,
+          variation: variation || null,
+          price: selectedPrice,
           quantity,
           specialRequest,
         });
       }
     } else {
-      // Create a new cart for the user and store
+      // Create new cart for this store
       cart = new Cart({
         user: userId,
         store: storeId,
         items: [
           {
             product: productId,
+            variation: variation || null,
+            price: selectedPrice,
             quantity,
             specialRequest,
           },
         ],
-        totalPrice: 0, // Initialize total price
+        totalPrice: 0,
       });
     }
 
-    // Calculate the total price
-    const updatedItems = await Promise.all(
-      cart.items.map(async (item) => {
-        const product = await mongoose.model("Product").findById(item.product);
-        return item.quantity * product.price;
-      })
+    // ✅ Recalculate total price based on stored item prices
+    cart.totalPrice = cart.items.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
     );
-    cart.totalPrice = updatedItems.reduce((acc, price) => acc + price, 0);
 
-    // Save the cart
     await cart.save();
 
     return res.status(200).json({
@@ -59,23 +81,27 @@ export const addToCart = async (req, res) => {
       cart,
     });
   } catch (error) {
+    console.error("Add to cart error:", error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
 
 export const getUserCart = async (req, res) => {
-  const userId = req.user._id; // Extract user ID from the request
-  const { storeId } = req.query; // Optional store filter from query parameters
+  const userId = req.user._id;
+  const { storeId } = req.query;
 
   try {
-    // Build the query object
+    // Build query
     const query = { user: userId };
-    if (storeId) {
-      query.store = storeId; // Add store filter if provided
-    }
+    if (storeId) query.store = storeId;
 
-    // Find the cart(s) for the user (and optionally the store)
-    const carts = await Cart.find(query);
+    // ✅ Fetch and populate product details
+    const carts = await Cart.find(query)
+      .populate({
+        path: "items.product",
+        select: "name images price prices", // only essential fields
+      })
+      .lean(); // optional: returns plain JS objects for lighter payload
 
     if (!carts || carts.length === 0) {
       return res.status(404).json({
@@ -90,6 +116,7 @@ export const getUserCart = async (req, res) => {
       carts,
     });
   } catch (error) {
+    console.error("Error fetching user cart:", error);
     return res.status(500).json({
       success: false,
       message: error.message,
@@ -98,14 +125,13 @@ export const getUserCart = async (req, res) => {
 };
 
 
+
 export const updateCart = async (req, res) => {
   const { storeId, productId, quantity, specialRequest } = req.body;
-  const userId = req.user._id; // Extract user ID from the request
+  const userId = req.user._id;
 
   try {
-    // Find the cart for the user and store
     const cart = await Cart.findOne({ user: userId, store: storeId });
-
     if (!cart) {
       return res.status(404).json({
         success: false,
@@ -113,8 +139,9 @@ export const updateCart = async (req, res) => {
       });
     }
 
-    // Find the product in the cart
-    const productInCart = cart.items.find((item) => item.product.toString() === productId);
+    const productInCart = cart.items.find(
+      (item) => item.product.toString() === productId
+    );
 
     if (!productInCart) {
       return res.status(404).json({
@@ -123,25 +150,28 @@ export const updateCart = async (req, res) => {
       });
     }
 
-    // Update the product details
-    if (quantity !== undefined) {
-      productInCart.quantity = quantity; // Update quantity
-    }
-    if (specialRequest !== undefined) {
-      productInCart.specialRequest = specialRequest; // Update special request
-    }
+    if (quantity !== undefined) productInCart.quantity = quantity;
+    if (specialRequest !== undefined)
+      productInCart.specialRequest = specialRequest;
 
-    // Recalculate the total price
+    // Remove items with zero quantity (optional)
+    cart.items = cart.items.filter((item) => item.quantity > 0);
+
+    // ✅ Recalculate total safely
     const updatedItems = await Promise.all(
       cart.items.map(async (item) => {
         const product = await mongoose.model("Product").findById(item.product);
-        return item.quantity * product.price;
+        const price = product?.price || 0;
+        return item.quantity * price;
       })
     );
-    cart.totalPrice = updatedItems.reduce((acc, price) => acc + price, 0);
 
-    // Save the updated cart
+    cart.totalPrice = updatedItems
+      .filter((v) => !isNaN(v))
+      .reduce((acc, price) => acc + price, 0);
+
     await cart.save();
+    await cart.populate("items.product");
 
     return res.status(200).json({
       success: true,
@@ -155,7 +185,6 @@ export const updateCart = async (req, res) => {
     });
   }
 };
-
 
 
 export const deleteUserCart = async (req, res) => {

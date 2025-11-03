@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useAppSelector } from '../../../../app/hooks'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import StoreCart from '../supporting/StoreCart'
 import StoreHamburger from '../supporting/StoreHamburger'
 import FirstStoreSidebar from '../supporting/FirstStoreSidebar'
@@ -21,6 +21,7 @@ const MobileTopBar: React.FC<{
   isOpen: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }> = ({ settings, store, isOpen, setOpen }) => {
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const user = useAppSelector((state) => state.user.user);
 

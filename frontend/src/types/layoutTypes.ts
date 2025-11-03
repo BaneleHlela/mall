@@ -85,21 +85,6 @@ export interface Route {
             section: SectionType;
         }
     ]
-    // contains: Array<
-    // | "hero"
-    // | "about"
-    // | "services"
-    // | "gallery"
-    // | "book"
-    // | "contact"
-    // | "events"
-    // | "menu"
-    // | "reviews"
-    // | "products"
-    // | "packages"
-    // | "footer"
-    // | "order" 
-    // >;
 }
   
 export interface Routes {

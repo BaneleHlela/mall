@@ -83,7 +83,9 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
           
         </button> */}
         {/* Distance */}
-        <p className="absolute bottom-[2%] left-[1%] bg-white rounded text-[1.8vh] text-center text-black min-w-[15%]">{distanceText}</p>
+        <p className="absolute bottom-[2%] left-[1%] bg-white rounded text-[1.8vh] text-center text-black min-w-[15%] px-[1%]">{distanceText}</p>
+        {/* Demo */}
+        <p className="absolute bottom-[2%] right-[1%] bg-yellow-400 rounded text-[1.8vh] text-center text-black min-w-[15%] px-[1%]">Demo</p>
         {/* Red flag */}
         {/* <div className="absolute top-1/2 left-1/2 text-red">
           <button className="text-red-600 z-10 h-full">
