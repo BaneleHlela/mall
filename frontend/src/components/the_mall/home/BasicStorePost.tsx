@@ -18,7 +18,7 @@ const BasicStorePost: React.FC<PostData> = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
-        <div className='bg-white'>
+        <div className='bg-white pb-1'>
             {/* Profily Thumbnail and Three dots */}
             <div className="flex justify-between w-full h-[5vh] px-[.5vh]">
                 {/* Picture, name, and verification sign */}
@@ -62,7 +62,7 @@ const BasicStorePost: React.FC<PostData> = ({
                 />
             </div>
             {/* Likes, Visits, or Share */}
-            <div className="flex justify-between w-full h-[5vh] px-[.5vh]">
+            <div className="flex justify-between w-full h-[5vh] px-[.8vh]">
                 {/* Like and Comments */}
                 <div className="flex items-center space-x-[1vh]">
                     {/* Likes */}
@@ -82,20 +82,20 @@ const BasicStorePost: React.FC<PostData> = ({
                 </div>
                 {/* Share */}
                 <div className="flex h-full items-center">
-                    <LiaShareSolid className='text-[3.5vh]'/>
+                    <LiaShareSolid className='text-[3.8vh]'/>
                 </div>
             </div>
             {/* Clickable Rate & Review div */}
             <div
                 onClick={() => setIsModalOpen(true)}
-                className="relative flex items-center w-full h-[5vh] p-[.5vh] cursor-pointer"
+                className="relative flex items-center w-full h-[5.3vh] p-[.8vh] cursor-pointer"
             >
-                <div className="w-full h-full rounded-full border-[.2vh] border-gray-400 px-[1.5vh] pr-[10vh] flex items-center text-gray-500 font-[500]">
-                    Rate and review
+                <div className="w-full h-full bg-blue-400 text-white rounded-full border-[.2vh] border-blue-400 px-[1.5vh] pr-[10vh] flex items-center font-[500]">
+                    Ratings & Reviews
                 </div>
 
                 {/* Stars inside the div */}
-                <div className="absolute right-[1.5vh] flex gap-[.3vh] text-gray-600">
+                <div className="absolute right-[1.5vh] flex gap-[.3vh] text-white">
                     {[...Array(5)].map((_, i) => (
                         <IoIosStarOutline key={i} className="text-[2.2vh]" />
                     ))}

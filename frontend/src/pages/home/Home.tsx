@@ -11,10 +11,7 @@ import DepartmentSelectorWithImages from './supporting/DepartmentSelectorWithIma
 import { useNavigate } from 'react-router-dom';
 import { FiPlus } from 'react-icons/fi';
 import BasicStorePost from '../../components/the_mall/home/BasicStorePost';
-import TipsAndTricks from '../../components/the_mall/home/TipsAndTricks';
-
-
-
+import TipsAndUpdates from '../../components/the_mall/home/TipsAndUpdates';
 
 
 const HomePage = () => {
@@ -207,7 +204,11 @@ const HomePage = () => {
         {/* Feed  */}
         <div className="space-y-1">
           <BasicStorePost postData={null}/>
-          <TipsAndTricks />
+          <TipsAndUpdates />
+          <BasicStorePost postData={null}/>
+          <TipsAndUpdates />
+          <BasicStorePost postData={null}/>
+          <TipsAndUpdates />
         </div>
 
         {/* Placeholder divs */}
