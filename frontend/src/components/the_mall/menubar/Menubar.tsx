@@ -1,18 +1,21 @@
 import { Link, useLocation } from "react-router-dom";
-import { House, LayoutDashboard, Store, Search, CircleUser } from "lucide-react";
 import { motion } from "framer-motion";
+import { House, LayoutDashboard, Store, Search, CircleUser } from "lucide-react";
 import { FaRegHeart } from "react-icons/fa";
+import { useNavbar } from "../../../utils/context/NavBarContext";
 
-// Utility function to check if the current route should hide the nav
 const shouldHideNav = (hiddenRoutes: string[], currentPath: string): boolean => {
   return hiddenRoutes.some((route) => currentPath.includes(route));
 };
 
 const Menubar = () => {
-  const location = useLocation(); // Get the current route
-  const hiddenRoutes = ["dashboard", "layouts", "preview", "stores", "scribbler", "signup", "business-plan", "login"]; // Add routes that should hide the nav
+  const location = useLocation();
+  const { isNavbarHidden } = useNavbar(); // 🔹 global state
 
-  const isHidden = shouldHideNav(hiddenRoutes, location.pathname); // Determine if the nav should be hidden
+  const hiddenRoutes = ["dashboard", "layouts", "preview", "stores", "scribbler", "signup", "business-plan", "login", "capture"];
+  const isHiddenByRoute = shouldHideNav(hiddenRoutes, location.pathname);
+
+  const isHidden = isHiddenByRoute || isNavbarHidden;
 
   return (
     <motion.nav

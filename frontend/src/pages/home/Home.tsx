@@ -4,14 +4,15 @@ import { fetchStores } from '../../features/stores/storeSlice';
 import type { RootState } from '../../app/store';
 import StoreCard from '../../components/the_mall/home/store_card/StoreCard';
 import TheMallTopbar from '../../components/the_mall/topbar/TheMallTopbar';
-import { departments } from '../../utils/helperObjects';
+import { departments, StoreHomePosters } from '../../utils/helperObjects';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React from 'react';
 import DepartmentSelectorWithImages from './supporting/DepartmentSelectorWithImages';
 import { useNavigate } from 'react-router-dom';
 import { FiPlus } from 'react-icons/fi';
-import BasicStorePost from '../../components/the_mall/home/BasicStorePost';
+import BasicStorePost from '../../components/the_mall/basic_store_post/BasicStorePost';
 import TipsAndUpdates from '../../components/the_mall/home/TipsAndUpdates';
+import { FaTools } from 'react-icons/fa';
 
 
 const HomePage = () => {
@@ -60,6 +61,7 @@ const HomePage = () => {
   };
 
   const handleDepartmentSelect = (deptKey: string) => {
+    console.log('Selected Department:', deptKey);
     setSelectedDepartment(deptKey === selectedDepartment ? null : deptKey);
     // You can add filtering logic here based on department
   };
@@ -99,7 +101,7 @@ const HomePage = () => {
       <div className="w-full space-y-1 lg:w-[80%] overflow-x-hidden hide-scrollbar">
         {/* Department Selector */}
         {selectedDepartment && (
-          <div className="h-[8vh] w-full bg-stone-100 flex items-center relative">
+          <div className="h-[8vh] w-full bg-white flex items-center relative">
             {/* Left scroll button */}
             <button
               onClick={scrollLeft}
@@ -111,24 +113,24 @@ const HomePage = () => {
             {/* Scrollable department buttons */}
             <div
               ref={scrollContainerRef}
-              className="flex overflow-x-auto hide-scrollbar space-x-2 w-full h-[5vh] ml-[2vh] items-center relative"
+              className="flex items-center overflow-x-auto bg-white hide-scrollbar space-x-2 w-full h-full ml-[2vh] relative"
             >
               {Object.entries(departments).map(([key, dept], index) => (
                 <React.Fragment key={key}>
                   <button
                     ref={(el) => { departmentRefs.current[key] = el; }}
                     onClick={() => handleDepartmentSelect(key)}
-                    className={`whitespace-nowrap px-[1.2vh] py-[.8vh] font-bold text-[1.8vh] text-gray-800 transition-colors ${
+                    className={`whitespace-nowrap px-[1.4vh] py-[.6vh] text-[1.8vh] text-gray-800 transition-colors ${
                       selectedDepartment === key
-                        ? 'bg-gray-900 text-white border-b-3 border-gray-500'
-                        : 'bg-stone-100 text-black  hover:bg-gray-100'
-                    }`}
+                        ? 'bg-gray-900 text-white rounded-full'
+                        : 'text-black border rounded-full  hover:bg-gray-100'
+                    } font-[500]`}
                   >
                     {dept.full}
                   </button>
                   {/* Add a gray line between buttons, except after the last button */}
                   {index < Object.entries(departments).length - 1 && (
-                    <div className="h-[80vh] w-[1px] bg-gray-300">.</div>
+                    <div className="h-[3vh] w-[1px] bg-gray-300 text-white">.</div>
                   )}
                 </React.Fragment>
               ))}
@@ -201,14 +203,43 @@ const HomePage = () => {
             ))}
           </div>
         )}
+        {/* Thumbail you clicked */}
+        {selectedDepartment && (
+          <div className="bg-white p-[.8vh]">
+            <p className="text-[2.5vh] font-[600]">The image you clicked came from: </p>
+            <div className="relative flex flex-col justify-center items-center h-[20vh] w-full mt-1 space-y-2">
+              <img 
+                src="https://storage.googleapis.com/the-mall-uploads-giza/stores/68726dde5987f5810dee5a8a/images/mall%20image.webp"
+                alt="Clicked Department Thumbnail"
+                className="absolute inset-0 h-full w-full rounded object-cover"
+              />
+              <FaTools className="animate-spin text-[3vh] text-white"/>
+              <div
+                style={{
+                  lineHeight: "1.2",
+                }} 
+                className="max-w-[50%] rounded border-gray-600 bg-stone-100 z-1 p-1 text-center"
+              >
+                Feature will be functional once slugs have be set up
+              </div>
+            </div>
+          </div>
+        )}
+        
         {/* Feed  */}
-        <div className="space-y-1">
-          <BasicStorePost postData={null}/>
+        <div className="space-y-[.35vh]">
+          {StoreHomePosters.map((post, index) => (
+            <BasicStorePost key={index} {...post} />
+          ))}
+
           <TipsAndUpdates />
-          <BasicStorePost postData={null}/>
-          <TipsAndUpdates />
-          <BasicStorePost postData={null}/>
-          <TipsAndUpdates />
+          <BasicStorePost 
+            storeId={"6895c4d6a50d393f431b9d47"}
+            status={"Just finished this painting for a client! What do you think?"}
+            poster={{
+              images: ["https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/495371485_1238922361482703_9008209704576564623_n.jpg"],
+            }}
+          />
         </div>
 
         {/* Placeholder divs */}

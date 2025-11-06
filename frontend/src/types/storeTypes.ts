@@ -79,6 +79,7 @@ export interface Store {
     red: boolean;
     level: 1 | 2 | 3 | 4 | 5;
   };
+  visits: Number;
 }
 
 export interface OperationTimes {

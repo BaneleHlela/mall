@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import type { Store, Image } from '../../types/storeTypes';
+import type { Store } from '../../types/storeTypes';
 import { API_URL } from '../context';
 
 const STORE_API_URL = `${API_URL}/api/stores`; // Adjust this based on your setup

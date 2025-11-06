@@ -2,51 +2,49 @@ import React from 'react';
 import { getBackgroundStyles, getTextStyles } from '../../../../utils/stylingFunctions';
 
 interface UnderlinedTextProps {
-    style: any;
+    style?: any; // Make style prop optional
     input?: string | number;
 }
 
 const UnderlinedText: React.FC<UnderlinedTextProps> = ({
-    style,
+    style = {},  // Default to an empty object if style is undefined
     input
 }) => {
-    const underline = style?.underline;
-
+    // Use optional chaining to safely access properties
+    const underline = style?.underline || {};  // Default to an empty object if underline is undefined
 
     return (
         <div
             style={{ ...getTextStyles(style) }} 
-            className={`w-full flex flex-row ${
-                style.position === 'center'
-                    ? 'justify-center text-center'
-                    : style.position === 'start'
-                    ? 'justify-start text-start'
-                    : 'justify-end text-end'
-            }`}
+            className={`w-full flex flex-row ${style?.position === 'center' 
+                ? 'justify-center text-center' 
+                : style?.position === 'start' 
+                ? 'justify-start text-start' 
+                : 'justify-end text-end'}`}
         >
             <div 
                 style={{
-                    maxWidth: style.width || "100%",
-                    width: "fit-content",
-                    //wordBreak: 'break-word'
+                    maxWidth: style?.width || '100%',  // Default to 100% if width is undefined
+                    width: 'fit-content',
+                    //wordBreak: 'break-word' // Uncomment if necessary
                 }}
                 className="flex flex-col items-center text-wrap"
             >
                 <h1 
                     style={{
-                        ...getBackgroundStyles(style?.background || {})
+                        ...getBackgroundStyles(style?.background || {})  // Fallback to an empty object if background is undefined
                     }}
-                    className={`${style.animation} text-wrap`}
+                    className={`${style?.animation || ''} text-wrap`} // Default to empty string if animation is not provided
                 >
-                    {input || style.input}
+                    {input || style?.input} {/* Fallback to style.input if input is undefined */}
                 </h1>
                 {underline?.show && (
                     <span
                         style={{
-                            backgroundColor: underline.color || 'black',
-                            width: underline.width || '50%',
-                            height: underline.height || '2px',
-                            marginTop: underline.marginTop || '0px',
+                            backgroundColor: underline?.color || 'black',  // Default to black if color is undefined
+                            width: underline?.width || '50%',  // Default to 50% if width is undefined
+                            height: underline?.height || '2px',  // Default to 2px if height is undefined
+                            marginTop: underline?.marginTop || '0px',  // Default to 0px if marginTop is undefined
                         }}
                         className=""
                     ></span>

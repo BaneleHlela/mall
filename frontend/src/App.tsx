@@ -21,6 +21,7 @@ import FavoriteStores from "./pages/favorites/FavoriteStores";
 import BusinessPlan from "./components/the_mall/home/BusinessPlan";
 import ForCreators from "./components/the_mall/home/ForCreators";
 import ComingSoon from "./components/the_mall/ComingSoon";
+import CaptureHomePoster from "./components/the_mall/basic_store_post/CaptureHomePoster";
 
 
 
@@ -58,6 +59,7 @@ const App: React.FC = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/scribbler/*" element={<Scribbler />} />
           <Route path="/layouts/:layoutId/*" element={<Layouts />} />
+          <Route path="/capture" element={<CaptureHomePoster />} />
           {/* <Route 
             path="/dashboard/:storeId/*" 
             element={ 

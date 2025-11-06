@@ -119,6 +119,9 @@ const storeSchema = new mongoose.Schema(
       level: {
         type: Number,
         enum: [1, 2, 3, 4, 5],
+      },
+      reason: {
+        type: String,
       }
     },
     isVerified: {
@@ -185,6 +188,20 @@ const storeSchema = new mongoose.Schema(
         min: 0,
       },
     },
+    delivers: {
+      enabled: {
+        type: Boolean,
+        default: false,
+      },
+      range: {
+        type: Number, 
+        default: 0,
+      },
+    },
+    visits: {
+      type: Number,
+      default: 0,
+    }
   },
   {
     timestamps: true,

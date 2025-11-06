@@ -6,8 +6,13 @@ interface DepartmentSelectorWithImagesProps {
     department: {
         short: string;
         full: string;
-        thumbnails: string[];
         description: string;
+        thumbnails: string[];
+        content: {
+            storeSlug: string;
+            reelyThumbnail: string;
+            profilyThumbnail: string;
+        }[];
     };
 }
 
@@ -18,20 +23,27 @@ const DepartmentSelectorWithImages: React.FC<DepartmentSelectorWithImagesProps> 
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentIndex((prevIndex) => (prevIndex + 1) % department.thumbnails.length);
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % department.content.length);
         }, SLIDE_DURATION);
 
         return () => clearInterval(interval);
-    }, [department.thumbnails.length]);
+    }, [department.content.length]);
+
+    const currentReely = department.content[currentIndex]?.reelyThumbnail;
+    const currentProfily = department.content[currentIndex]?.profilyThumbnail;
 
     return (
-        <div onClick={onSelect} className="h-[20vh] lg:h-[41vh] aspect-3/5 cursor-pointer rounded-[1vh]  hover:scale-102">
+        <div
+            onClick={onSelect}
+            className="h-[20vh] lg:h-[41vh] aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102 transition-transform duration-300"
+        >
             <div className="w-full h-full relative">
+                {/* Reely Thumbnail (main image slideshow) */}
                 <AnimatePresence mode="wait">
                     <motion.img
-                        key={department.thumbnails[currentIndex]}
-                        src={department.thumbnails[currentIndex]}
-                        alt="Department Image"
+                        key={currentReely}
+                        src={currentReely}
+                        alt={`${department.short} Department`}
                         className="absolute top-0 left-0 w-full h-full object-cover opacity-80 rounded-[1vh]"
                         initial={{ x: "100%", opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
@@ -39,22 +51,23 @@ const DepartmentSelectorWithImages: React.FC<DepartmentSelectorWithImagesProps> 
                         transition={{ duration: 0.8, ease: "easeInOut" }}
                     />
                 </AnimatePresence>
+
+                {/* Department Label */}
                 <p
                     style={{
                         lineHeight: "1",
                         fontFamily: "Bebas Neue",
-                        
                     }}
                     className="absolute rounded-b-[1vh] font-extrabold bottom-0 w-full text-white text-center text-[2.5vh] lg:text-[4.6vh] h-[20%] bg-[#0000001f] flex flex-col items-center justify-center"
                 >
                     {department.short}
-                    {/* <p style={{textShadow: "none"}} className="text-sm font-normal font-[Roboto]">{department.description}</p> */}
                 </p>
-                {/* Profily Thumbnail */}
-                <div className="absolute top-[3%] left-[4%] w-[28%] aspect-square rounded-full bg-white p-[.2vh]">
+
+                {/* Profily Thumbnail (profile image overlay) */}
+                <div className="absolute top-[3%] left-[4%] w-[28%] aspect-square rounded-full bg-white p-[.2vh] shadow-md">
                     <img
-                        src={department.thumbnails[0]}
-                        alt="Profile Thumbnail"
+                        src={currentProfily}
+                        alt={`${department.short} Profile`}
                         className="w-full h-full object-cover rounded-full"
                     />
                 </div>

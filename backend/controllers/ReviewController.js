@@ -62,7 +62,7 @@ export const createReview = asyncHandler(async (req, res) => {
 // GET store reviews
 export const getStoreReviews = asyncHandler(async (req, res) => {
   const reviews = await Review.find({ store: req.params.storeId })
-    .populate('user', 'firstName lastName') // Populate both firstName and lastName
+    .populate('user', 'firstName lastName username avatar') // Populate both firstName and lastName
     .sort({ createdAt: -1 });
 
   res.json(reviews);

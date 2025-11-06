@@ -37,4 +37,20 @@ export const captureStoreThumbnail = async (storeId) => {
   }
 };
 
+// Capture Store HomePoster
+export const captureStoreHomePoster = async () => {
+
+  //const url = `${CLIENT_URL}/stores/${storeId}`;
+  const url = `http://localhost:5173/capture`;
+  console.log(url)
+
+  try {
+    const screenshotBuffer = await captureScreenshot(url, 918, 918);
+    return screenshotBuffer;
+  } catch (error) {
+    console.error(`Failed to capture HomePoster:`, error);
+    throw error;
+  }
+};
+
 

@@ -190,6 +190,105 @@ const extractColors = (obj: any) => {
 }
 
 
+export function formatDateToNormal(dateString: string): string {
+  if (!dateString) return '';
+
+  const date = new Date(dateString);
+
+  // Get day, month, and year
+  const day = date.getDate();
+  const month = date.toLocaleString('default', { month: 'long' }); // "July"
+  const year = date.getFullYear();
+
+  return `${day} ${month} ${year}`;
+}
+
+
+interface Location {
+  lat: number;
+  lng: number;
+  nickname?: string;
+  address?: string;
+}
+
+interface Delivery {
+  enabled: boolean;
+  range: number; // in km
+}
+
+/**
+ * Returns true if the user's location is within store's delivery range
+ */
+export function isUserInDeliveryRange(
+  userLocation: Location | null | undefined,
+  storeLocation: Location,
+  delivery: Delivery | null | undefined
+): boolean {
+  if (!userLocation || !delivery?.enabled) return false;
+
+  const toRad = (x: number) => (x * Math.PI) / 180;
+
+  const lat1 = userLocation.lat;
+  const lon1 = userLocation.lng;
+  const lat2 = storeLocation.lat;
+  const lon2 = storeLocation.lng;
+
+  const R = 6371; // Earth's radius in km
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // distance in km
+
+  return distance <= delivery.range;
+}
+
+export const formatNumber = (num: number): string => {
+  if (num < 1000) {
+    // 0–999
+    return num.toString();
+  } else if (num < 10000) {
+    // 1,000–9,999 → show comma separator
+    return num.toLocaleString();
+  } else if (num < 1000000) {
+    // 10,000–999,999 → use "k"
+    return (num / 1000).toFixed(num >= 100000 ? 0 : 1).replace(/\.0$/, "") + "k";
+  } else {
+    // 1,000,000+ → use "m"
+    return (num / 1000000).toFixed(num >= 10000000 ? 0 : 1).replace(/\.0$/, "") + "m";
+  }
+};
+
+export const getPositionStyle = (position: Number) => {
+  switch (position) {
+      case 1:
+          return { top: '5%', left: '5%' };
+      case 2:
+          return { top: '45%', left: '5%' };
+      case 3:
+          return { bottom: '5%', left: '5%' };
+      case 4:
+          return { top: '5%', left: '45%' };
+      case 5:
+          return { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' };;
+      case 6:
+          return { bottom: '5%', right: '37%' };
+      case 7:
+          return { top: '5%', right: '5%' };
+      case 8:
+          return { bottom: '45%', right: '5%' };
+      case 9:
+          return { bottom: '5%', right: '5%' };
+      default:
+          return { top: '5%', left: '5%' };
+  }
+}
+
 
 
 
