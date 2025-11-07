@@ -243,7 +243,7 @@ const BasicStorePost: React.FC<PostData> = ({ storeId, status, poster }) => {
                         position: 'absolute',
                         ...getPositionStyle(poster.button.position),
                         borderWidth: '2px',
-                        borderColor: "white",
+                        borderColor: poster?.button?.style?.background?.border?.color,
                         color: poster?.button?.style?.text?.color,
                         fontSize: poster?.button?.style?.text?.size,
                         fontWeight: poster?.button?.style?.text?.bold ? 'bold' : 'normal',

@@ -45,7 +45,7 @@ export const captureStoreHomePoster = async () => {
   console.log(url)
 
   try {
-    const screenshotBuffer = await captureScreenshot(url, 918, 918);
+    const screenshotBuffer = await captureScreenshot(url, 926, 1307);
     return screenshotBuffer;
   } catch (error) {
     console.error(`Failed to capture HomePoster:`, error);

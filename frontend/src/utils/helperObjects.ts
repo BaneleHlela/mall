@@ -260,6 +260,70 @@ export const colorPalettes = {
 
 export const StoreHomePosters = [
   {
+    storeId: "690c5c1142d0f15a660caa19",
+    status: "We have posters for every season and every occassion!",
+    poster: {
+      type: "single",
+      url: "http://localhost:5173/stores/690c5c1142d0f15a660caa19",
+      images: [
+        "https://storage.googleapis.com/the-mall-uploads-giza/mall/posters/homePoster-1762533145755.png",
+        "https://storage.googleapis.com/the-mall-uploads-giza/mall/posters/homePoster-1762534023629.png"
+      ],
+      button: {
+        show: true,
+        position: 9,
+        style: {
+          text: {
+            input: "GET STARTED",
+            color: "#2a2a2a",
+          },
+          background: {
+            padding: {
+              x: "1.2vh",
+              y: ".6vh",
+            },
+            border: {
+              color: "#2a2a2a",
+              width: "2px",
+            },
+          },
+        },
+      },
+    },
+  },
+  {
+    storeId: "690c5c1142d0f15a660caa19",
+    status: "Physical posters come with a QR Code to direct customers to your website!",
+    poster: {
+      type: "slideshow",
+      url: "http://localhost:5173/stores/690c5c1142d0f15a660caa19",
+      images: [
+        "https://storage.googleapis.com/the-mall-uploads-giza/mall/posters/homePoster-1762524137608.png",
+        "https://storage.googleapis.com/the-mall-uploads-giza/mall/posters/homePoster-1762523801042.png",
+      ],
+      button: {
+        show: true,
+        position: 6,
+        style: {
+          text: {
+            input: "GET STARTED",
+            color: "white",
+          },
+          background: {
+            color: "#324e59",
+            padding: {
+              x: "1.2vh",
+              y: ".6vh",
+            },
+            border: {
+              color: "#324e59",
+            },
+          },
+        },
+      },
+    },
+  },
+  {
     storeId: "69060eacd2d36655f1e63f9e",
     status: "15% off all bags!",
     poster: {
@@ -316,7 +380,7 @@ export const StoreHomePosters = [
       ],
       button: {
         show: true,
-        position: 6,
+        position: 9,
         style: {
           text: {
             input: "GALLERY",

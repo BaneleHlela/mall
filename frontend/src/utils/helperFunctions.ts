@@ -277,7 +277,7 @@ export const getPositionStyle = (position: Number) => {
       case 5:
           return { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' };;
       case 6:
-          return { bottom: '5%', right: '37%' };
+          return { bottom: '5%', right: '33%' };
       case 7:
           return { top: '5%', right: '5%' };
       case 8:

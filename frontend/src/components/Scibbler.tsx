@@ -6,11 +6,14 @@ import HeroWithBox from './store_layout/sections/hero/hero_with_box/HeroWithBox'
 import HeroWithDivAndImage from './store_layout/sections/hero/hero_with_div_and_image/HeroWithDivAndImage'
 import CreatePackageModal from './store_dashboard/modals/CreatePosterModal'
 import AboutWithImageBehindText from './store_layout/sections/about/with_image_behind_text/AboutWithImageBehindText'
+import Pricing from '../pages/vendor_store/Pricing'
+import QRCodePosterExample from './the_mall/basic_store_post/QRCodePosterExample'
+import CaptureHomePoster from './the_mall/basic_store_post/CaptureHomePoster'
 
 const Scibbler = () => {
   return (
-    <div className='w-screen h-screen flex flex-row justify-center items-center text-[3vh]'>
-      <AboutWithImageBehindText />
+    <div className=''>
+      <CaptureHomePoster />
     </div>
   )
 }

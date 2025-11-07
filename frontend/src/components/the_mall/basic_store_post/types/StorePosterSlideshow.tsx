@@ -29,7 +29,7 @@ const StorePosterSlideshow: React.FC<StorePosterSlideshowProps> = ({ poster }) =
       <img
         src={poster.images[currentImageIndex]}
         alt={`post-image-${currentImageIndex}`}
-        className={`w-full aspect-square object-cover transition-opacity duration-500 
+        className={`w-full object-cover transition-opacity duration-500 
           
         }`}
       />
