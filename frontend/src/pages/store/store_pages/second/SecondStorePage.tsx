@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 import type { Store } from "../../../../types/storeTypes";
 import { useState, useEffect } from "react"
 import { fetchStoreServices } from "../../../../features/services/servicesSlice"
-import { fetchStoreById, setCurrentStore } from "../../../../features/stores/storeSlice"
+import { fetchStoreBySlug, setCurrentStore } from "../../../../features/stores/storeSlice"
 import StoreMenubar from "../../../../components/store_layout/menubars/StoreMenubar"
 import {noScrollbarsClassName} from "react-remove-scroll-bar";
 import PopularStoreMenubar from "../../../../components/store_layout/menubars/popular/PopularStoreMenubar"
@@ -26,7 +26,7 @@ const SecondStorePage = () => {
       if (storeId) {
         try {
           setLoading(true);
-          const result = await dispatch(fetchStoreById(storeId)).unwrap(); // Fetch store and unwrap the result
+          const result = await dispatch(fetchStoreBySlug(storeId)).unwrap(); // Fetch store and unwrap the result
           setStore(result); // Set the fetched store in local state
           dispatch(setCurrentStore(result)); // Update the global store state
         } catch (error) {

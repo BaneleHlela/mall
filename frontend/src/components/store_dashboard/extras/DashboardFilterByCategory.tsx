@@ -113,7 +113,7 @@ const DashboardFilterByCategory: React.FC<DashboardFilterByCategoryProps> = ({
     <div className="relative inline-block text-[2vh] w-[15vh] min-w-fit" ref={dropdownRef}>
       {/* Button */}
       <div
-        className="flex flex-row justify-between border rounded-md px-[1.5vh] py-[1vh] cursor-pointer select-none"
+        className="flex flex-row justify-between border px-[1.5vh] py-[1vh] font-[500] rounded-[.45vh] cursor-pointer select-none"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         {value || "Category"}
@@ -128,7 +128,7 @@ const DashboardFilterByCategory: React.FC<DashboardFilterByCategoryProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
             transition={{ duration: 0.2 }}
-            className="absolute mt-1 w-full border rounded-md bg-white shadow-lg z-10 over"
+            className="absolute mt-[.25vh] w-full border rounded-[.45vh] bg-white shadow-lg z-10 over"
           >
             {[categories.length > 0 ? { label: "All", value: "" }: {label: "", value: ""}, ...categories.map(cat => ({ label: cat, value: cat }))].map(
               (option) => (

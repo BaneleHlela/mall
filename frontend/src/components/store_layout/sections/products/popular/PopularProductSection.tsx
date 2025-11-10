@@ -27,13 +27,13 @@ const PopularProductsSection = () => {
   const [activeGroupIndex, setActiveGroupIndex] = useState(0);
   const [direction, setDirection] = useState<'left' | 'right'>('right');
 
-  const handleProductClick = (productId: string) => {
+  const handleProductClick = (productSlug: string) => {
     const currentUrl = window.location.href;
-  
+
     if (currentUrl.includes('layouts')) {
-      navigate(`/layouts/${store?._id}/preview/product/${productId}`);
-    } else if (store && store._id) {
-      navigate(`/stores/${store._id}/product/${productId}`);
+      navigate(`/layouts/${store?.slug}/preview/product/${productSlug}`);
+    } else if (store && store.slug) {
+      navigate(`/stores/${store.slug}/product/${productSlug}`);
     } else {
       console.error('Store ID is not available');
     }
@@ -135,7 +135,7 @@ const PopularProductsSection = () => {
                     marking={product.marking}
                     price={product.price}
                     style={settings.card}
-                    onClick={() => handleProductClick(product._id)}
+                    onClick={() => handleProductClick(product.slug)}
                   />
                 ))}
               </motion.div>

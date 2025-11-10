@@ -352,7 +352,7 @@ const PopularStoreMenubar: React.FC = () => {
   const layoutId = useAppSelector((state) => state.layoutSettings._id);
   const store = useAppSelector((state) => state.stores.currentStore);
   const { routes, routeOrder } = useAppSelector((state) => state.layoutSettings);
-  const storeId = store?._id as string;
+  const storeSlug = store?.slug as string;
   const [isOpen, setOpen] = useState(false);
   
   const links = React.useMemo(() => {
@@ -360,7 +360,7 @@ const PopularStoreMenubar: React.FC = () => {
     const isPreviewMode = location.pathname.startsWith(`/layouts/${layoutId}/preview`);
     const basePath = isPreviewMode
       ? `/layouts/${layoutId}/preview`
-      : `/stores/${storeId}`;
+      : `/stores/${storeSlug}`;
   
     // Home link
     const homeLink = {
@@ -387,7 +387,7 @@ const PopularStoreMenubar: React.FC = () => {
       });
   
     return [homeLink, ...inLinksArray, ...routeLinks];
-  }, [routes, routeOrder, storeId, layoutId, useLocation()]);
+  }, [routes, routeOrder, storeSlug, layoutId, useLocation()]);
   
   const {
     border,

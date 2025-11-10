@@ -234,7 +234,7 @@ const HomePage = () => {
 
           <TipsAndUpdates />
           <BasicStorePost 
-            storeId={"6895c4d6a50d393f431b9d47"}
+            storeSlug={"ennock-m-art"}
             status={"Just finished this painting for a client! What do you think?"}
             poster={{
               images: ["https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/495371485_1238922361482703_9008209704576564623_n.jpg"],

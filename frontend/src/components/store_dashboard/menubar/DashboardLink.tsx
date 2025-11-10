@@ -1,22 +1,24 @@
 import { Link, useLocation } from 'react-router-dom';
 
 interface DashboardLinkProps {
-  linkTo: string; 
-  icon: React.ReactNode; 
-  text: string; 
+  linkTo: string;
+  icon: React.ReactNode;
+  text: string;
   beta?: boolean; // New prop to conditionally display the "beta" label
+  onClick?: () => void; // New prop to handle click events
 }
 
-const DashboardLink: React.FC<DashboardLinkProps> = ({ linkTo, icon, text, beta = false }) => {
+const DashboardLink: React.FC<DashboardLinkProps> = ({ linkTo, icon, text, beta = false, onClick }) => {
     const location = useLocation(); // Get the current route
 
     const isSelected = location.pathname === linkTo;
   
     return (
-    <Link 
+    <Link
       className={`w-full flex flex-row rounded-[10px] items-center space-x-[.3vh] p-[.6vh] hover:scale-102
         ${isSelected ? "bg-gray-800 text-white" : " text-gray-700"}`}
       to={linkTo}
+      onClick={onClick}
     >
       {icon}
       <div className="relative">

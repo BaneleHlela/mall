@@ -4,11 +4,12 @@ import DashboardFilterByStatus from '../../../components/store_dashboard/extras/
 import DashboardPagination from '../../../components/store_dashboard/tables/DashboardPagination';
 import DashboardStoreItemsTable from '../../../components/store_dashboard/tables/DashboardStoreItemsTable';
 import ProductModal from '../../../components/store_dashboard/modals/ProductModal';
-
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { deleteProduct, updateProduct } from '../../../features/products/productsSlice';
+import { deleteProduct, updateProduct, updateProductIsActive } from '../../../features/products/productsSlice';
 import type { Product } from '../../../types/productTypes';
 import Swal from 'sweetalert2';
+import { clearError } from '../../../features/user/userSlice';
+import { FaPlus } from 'react-icons/fa';
 
 // My sweet alert
 
@@ -35,9 +36,9 @@ const DashBoardStoreProducts = () => {
     setEditProductOpen(true);
   };
 
-  const handleDeleteProduct = (product: Product) => {
+  const handleDeleteProduct = async (product: Product) => {
     // Show a SweetAlert confirmation dialog
-    Swal.fire({
+    const result = await Swal.fire({
       title: 'Are you sure?',
       text: `You are about to delete the product "${product.name}". This action cannot be undone.`,
       icon: 'warning',
@@ -45,18 +46,27 @@ const DashBoardStoreProducts = () => {
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Dispatch the delete action
-        dispatch(deleteProduct(product._id));  // Assuming `product.id` is the unique identifier for your product
-        Swal.fire(
-          'Deleted!',
-          'The product has been deleted.',
-          'success'
-        );
-      }
     });
+  
+    if (result.isConfirmed) {
+      try {
+        // Dispatch the delete action and wait for it to complete
+        const response = await dispatch(deleteProduct(product._id)).unwrap();
+  
+        // If successful, show success message
+        await Swal.fire('Deleted!', 'The product has been deleted.', 'success');
+  
+        // ✅ Close modal only after successful deletion
+        setEditProductOpen(false);
+        setSelectedProduct(null);
+        dispatch(clearError());
+      } catch (error: any) {
+        // If there was an error, show it
+        await Swal.fire('Error', error?.message || 'Failed to delete the product.', 'error');
+      }
+    }
   };
+  
 
 
   const handleSort = (key: string) => {
@@ -70,40 +80,52 @@ const DashBoardStoreProducts = () => {
   };
   
   const handleStatusClick = (product: Product) => {
-    let newStatus: boolean;
-    if (product.isActive) {
-      // If stock is 0 and currently active, set to inactive
-      newStatus = false;
-    } else {
-      // Toggle status
-      newStatus = !product.isActive;
-    }
-
-    // Show confirmation dialog
+    const newStatus = !product.isActive; // toggle directly
+  
     Swal.fire({
-      title: 'Change Product Status',
-      text: `Are you sure you want to change the status of "${product.name}" to ${newStatus ? 'Active' : 'Inactive'}?`,
-      icon: 'question',
+      title: "Change Product Status",
+      text: `Are you sure you want to change the status of "${product.name}" to ${
+        newStatus ? "Active" : "Inactive"
+      }?`,
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: 'Yes',
-      cancelButtonText: 'No',
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      preConfirm: async () => {
+        try {
+          // Dispatch the new thunk and wait for it to finish
+          const resultAction = await dispatch(
+            updateProductIsActive({ productId: product._id, isActive: newStatus })
+          );
+  
+          // Check if thunk was fulfilled
+          if (updateProductIsActive.fulfilled.match(resultAction)) {
+            return true; // continue to success alert
+          } else {
+            // Show error message in the modal
+            Swal.showValidationMessage(
+              resultAction.payload || "Failed to update product status"
+            );
+            return false;
+          }
+        } catch (error) {
+          Swal.showValidationMessage("An error occurred while updating status.");
+          return false;
+        }
+      },
     }).then((result) => {
       if (result.isConfirmed) {
-        // Dispatch update action here
-        // Assuming you have an updateProduct action that takes the product ID and updated fields
-        dispatch(updateProduct({ 
-          id: product._id, 
-          data: { isActive: newStatus } 
-        }));
-        
         Swal.fire(
-          'Updated!',
-          `The status of "${product.name}" has been changed to ${newStatus ? 'Active' : 'Inactive'}.`,
-          'success'
+          "Updated!",
+          `The status of "${product.name}" has been changed to ${
+            newStatus ? "Active" : "Inactive"
+          }.`,
+          "success"
         );
       }
     });
-  }
+  };
+  
   
   
   
@@ -160,17 +182,17 @@ const DashBoardStoreProducts = () => {
   );
 
   return (
-    <div className="w-fit h-fit p-1">
-      <div className="h-[88vh] w-[82vw] rounded bg-white">
+    <div className="w-fit h-fit py-1">
+      <div className="w-[100vw] h-[88vh] lg:w-[82vw] rounded bg-white">
         {/* Top bar: Add product + filters */}
         <div className="h-[10%] flex flex-row justify-between items-center w-full px-[1.2vh]">
           <button
-            className="bg-gray-900 text-white text-[2vh] font-semibold px-[2.2vh] py-[1vh] rounded-[.45vh] hover:bg-white hover:text-black hover:shadow-[0px_0px_10px_7px_rgba(0,_0,_0,_0.1)]"
+            className="flex items-center space-x-1 bg-gray-900 text-white text-[2vh] font-semibold px-[2.2vh] py-[1vh] rounded-[.45vh] hover:bg-white hover:text-black hover:shadow-[0px_0px_10px_7px_rgba(0,_0,_0,_0.1)]"
             onClick={() => setAddProductOpen(true)}
           >
-            Add Product
+            <p className="">Add</p> <FaPlus className='text-[1.8vh]'/>
           </button>
-          <div className="space-x-3 flex flex-row">
+          <div className="lg:space-x-[2vh] space-x-1 flex flex-row items-center">
             <DashboardFilterByCategory
               categories={categories ? categories : []}
               value={selectedCategory}
@@ -184,7 +206,7 @@ const DashBoardStoreProducts = () => {
         </div>
 
         {/* Product Table */}
-        <div className="w-full h-[80%] overflow-y-scroll bg-blue-600 p-2">
+        <div className="w-full h-[80%] overflow-scroll border-y-1 border-gray-400">
           <DashboardStoreItemsTable 
             items={paginatedProducts} 
             type="product" 
@@ -196,10 +218,10 @@ const DashBoardStoreProducts = () => {
         </div>
 
         {/* Pagination */}
-        <div className="h-[10%] bg-white flex justify-center items-center text-sm">
+        <div className="h-[10%] flex justify-center items-center">
           <DashboardPagination
             currentPage={currentPage}
-            totalItems={filteredProducts.length}
+            totalItems={products.length}
             itemsPerPage={itemsPerPage}
             onPageChange={setCurrentPage}
           />
@@ -210,7 +232,10 @@ const DashBoardStoreProducts = () => {
           {/* Add Product Modal */}
           <ProductModal
             open={addProductOpen}
-            onClose={() => setAddProductOpen(false)}
+            onClose={() => {
+              setAddProductOpen(false)
+              clearError()
+          }}
             categories={categories}
           />
 
@@ -220,6 +245,7 @@ const DashBoardStoreProducts = () => {
             onClose={() => {
               setEditProductOpen(false);
               setSelectedProduct(null);
+              clearError();
             }}
             categories={categories}
             product={selectedProduct ? selectedProduct : undefined}

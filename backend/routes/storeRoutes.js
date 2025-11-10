@@ -25,20 +25,20 @@ const router = express.Router();
 
 router.post('/add', /*protectRoute,*/  addStore);
 router.get("/my-stores", protectRoute, getStoresByOwner);
-router.get("/:storeId", getStore);
+router.get("/:storeSlug", getStore);
 router.get('/', getStores);
-router.put('/edit/:storeId', /*protectRoute,*/ editStore);
-router.post('/:storeId/team', uploadTeamMemberImage, addTeamMember);
-router.delete('/:storeId/team/:username', deleteTeamMember);
-router.put('/:storeId/team/:username', uploadSingleFile('image'), editTeamMember);
+router.put('/edit/:storeSlug', /*protectRoute,*/ editStore);
+router.post('/:storeSlug/team', uploadTeamMemberImage, addTeamMember);
+router.delete('/:storeSlug/team/:username', deleteTeamMember);
+router.put('/:storeSlug/team/:username', uploadSingleFile('image'), editTeamMember);
 router.get('/demo', getDemoStores);
 
-router.put("/:storeId/logo", uploadSingleFile("logo"), uploadStoreLogo);
-router.delete('/:storeId/logo', deleteStoreLogo);
+router.put("/:storeSlug/logo", uploadSingleFile("logo"), uploadStoreLogo);
+router.delete('/:storeSlug/logo', deleteStoreLogo);
 
-router.get('/:storeId/gallery', getStoreImages); 
-router.put('/:storeId/gallery', uploadSingleFile("image"), uploadStoreGalleryImage);
-router.delete('/:storeId/gallery', deleteStoreGalleryImage);
+router.get('/:storeSlug/gallery', getStoreImages);
+router.put('/:storeSlug/gallery', uploadSingleFile("image"), uploadStoreGalleryImage);
+router.delete('/:storeSlug/gallery', deleteStoreGalleryImage);
 
 
 

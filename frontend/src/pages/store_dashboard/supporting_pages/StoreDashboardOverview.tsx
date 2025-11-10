@@ -20,21 +20,23 @@ const sampleData = [
 const StoreOverview = ({ store }: { store: Store }) => {
   
   return (
-    <div className="w-full h-full max-h-[100dvh]  bg-gray-100 overflow-clip">
-      <div className="w-full px-[4vh] h-full space-y-[.7vh]">
+    <div className="w-full h-fit overflow-y-scroll lg:h-full lg:max-h-[100dvh] py-1 overflow-clip">
+      <div className="w-full px-[1vh] lg:px-[4vh] h-full space-y-[.7vh]">
           <StoreDashboardStatCardsBoard />
-          <div className="h-[50%] w-full flex flex-row justify-between">
+          {/* Desktop */}
+          <div className="lg:flex lg:h-[50%] w-full lg:flex-row justify-between space-y-2">
             {/* Graphs */}
-            <div className="h-full w-[55%]">
+            <div className="relative h-[40vh] lg:w-[55%] lg:h-full">
               <GraphCard title="Visits This Week" data={sampleData} />
+              <div className="absolute inset-0 w-full h-full shadow-lg blur-xl z-1"></div>
             </div>
             {/* Charts */}
-            <div className="h-full w-[44%] flex items-center justify-center">
+            <div className="h-[20vh] lg:h-full w-full lg:w-[44%] flex items-center justify-center overflow-clip">
               <TrafficSourcesCard />
             </div>
           </div>
-          <div className="w-full flex flex-row justify-between h-[30%]">
-            <div className="w-[65%] h-full overflow-y-scroll hide-scrollbar">
+          <div className="h-[50vh] w-full flex flex-col lg:flex-row justify-between lg:h-[30%] space-y-2">
+            <div className="w-full border-2 border-white rounded-[1.5vh] lg:w-[65%] h-full overflow-clip hide-scrollbar">
               <TopItemsTable
                 title="Top Products"
                 products={[
@@ -65,7 +67,7 @@ const StoreOverview = ({ store }: { store: Store }) => {
                 ]}
               />
             </div>
-            <div className="w-[34%] h-full">
+            <div className="border-2 rounded-[1.5vh] border-white w-full lg:w-[34%] h-[50%] lg:h-full">
               <AIQuickInsights
                 insights={[
                   { id: 1, text: "Your visits are up 15% compared to last week." },

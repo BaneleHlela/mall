@@ -3,12 +3,13 @@ import { Routes, Route, useParams } from "react-router-dom";
 import WebsiteBuilder from "./WebsiteBuilder";
 import type { RootState } from "../../app/store.ts";
 import WebsitePreview from "./WebsitePreview.tsx";
-import { getLayout } from "../../features/layouts/layoutSlice.ts";
+import { getLayout, captureLayoutScreenshot } from "../../features/layouts/layoutSlice.ts";
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
 import { setInitialLayout } from "../../features/layouts/layoutSettingsSlice";
 import { setStore } from "../../features/store_admin/storeAdminSlice.ts";
-import { fetchStoreById, setCurrentStore } from "../../features/stores/storeSlice.ts";
+import { fetchStoreBySlug, setCurrentStore } from "../../features/stores/storeSlice.ts";
 import { TbLoader3 } from "react-icons/tb";
+import CaptureLayout from "./CaptureLayout.tsx";
 
 const Layouts: React.FC = () => {
   const { layoutId } = useParams<{ layoutId: string }>();
@@ -20,7 +21,7 @@ const Layouts: React.FC = () => {
   useEffect(() => {
     const loadLayout = async () => {
       if (!layoutId) return;
-  
+        <p className="">No layout Id</p>
       try {
         const result = await dispatch(getLayout(layoutId)).unwrap();
         dispatch(setInitialLayout(result));
@@ -44,17 +45,26 @@ const Layouts: React.FC = () => {
     const fetchLayoutAndStore = async () => {
       if (layoutId) {
         try {
-          console.log("fetching layour and store")
+          // 1️⃣ Fetch layout
           setLoading(true);
           const layoutResult = await dispatch(getLayout(layoutId)).unwrap();
           dispatch(setInitialLayout(layoutResult));
-          console.log("�� Layout fetched and set", layoutResult);
+          
+          // 2️⃣ Fetch store if layout has a store
           if (layoutResult.store) {
             setStoreId(layoutResult.store);
-            const storeResult = await dispatch(fetchStoreById(layoutResult.store)).unwrap();
+            const storeResult = await dispatch(fetchStoreBySlug(layoutResult.store)).unwrap();
             console.log(storeResult);
             dispatch(setCurrentStore(storeResult));
             dispatch(setStore(storeResult));
+          }
+
+          // 3️⃣ Capture screenshot if not present
+          if (!layoutResult.screenshot) {
+            console.log("⚡ No screenshot found, capturing...");
+            const updatedLayout = await dispatch(captureLayoutScreenshot(layoutId)).unwrap();
+            dispatch(setInitialLayout(updatedLayout));
+            console.log("✅ Screenshot captured and layout updated", updatedLayout);
           }
         } catch (error) {
           console.error("Failed to fetch layout or store:", error);
@@ -66,6 +76,7 @@ const Layouts: React.FC = () => {
 
     fetchLayoutAndStore();
   }, [dispatch, layoutId, storeId]);
+  
 
   if (loading) {
     return <TbLoader3 size={45} className='animate-spin mx-auto'/>;
@@ -75,6 +86,7 @@ const Layouts: React.FC = () => {
     <Routes>
       <Route path="/" element={<WebsiteBuilder />} />
       <Route path="/preview/*" element={<WebsitePreview storeId={storeId}/>} />
+      <Route path="/capture/" element={<CaptureLayout />} />
     </Routes>
   );
 };

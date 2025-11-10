@@ -119,41 +119,19 @@ export const getStoreLayouts = createAsyncThunk(
       }
     }
 );
-  
-  
-  
 
-// New thunk for uploading image
-// export const uploadLayoutImageThunk = createAsyncThunk(
-//     'layouts/uploadLayoutImage',
-//     async ({ layoutId, file, fileName }: { layoutId: string; file: File; fileName?: string }) => {
-//       return await uploadLayoutImage(layoutId, file, fileName);
-//     }
-// );  
-
-// Update layout with image, using the response from the backend
-// export const updateLayoutWithImage = createAsyncThunk(
-// "layouts/updateLayoutWithImage",
-// async ({
-//     layoutId,
-//     file,
-//     fileName,
-//     objectPath, // Add it here too
-// }: {
-//     layoutId: string;
-//     file: File;
-//     fileName?: string;
-//     objectPath: string; // Make sure this is passed
-// }) => {
-//     const response = await uploadLayoutImage(layoutId, file, fileName);
-//     return {
-//     fileUrl: response.url,
-//     objectPath, // ✅ Return objectPath too
-//     };
-// }
-// );
-  
-
+// Capture layout screenshot and save it
+export const captureLayoutScreenshot = createAsyncThunk(
+  "layouts/captureLayoutScreenshot",
+  async (layoutId: string, thunkAPI) => {
+    try {
+      const response = await axios.put(`${API_URL}/api/layouts/capture/${layoutId}`);
+      return response.data.layout as Layout; // backend returns updated layout
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response?.data || "Failed to capture layout screenshot");
+    }
+  }
+);
   
 
 const layoutSlice = createSlice({
@@ -285,8 +263,32 @@ const layoutSlice = createSlice({
             .addCase(getStoreLayouts.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.error.message || "Failed to load multiple layouts";
+            })
+
+            // Capture screenshot
+            .addCase(captureLayoutScreenshot.pending, (state) => {
+              state.isLoading = true;
+            })
+            .addCase(captureLayoutScreenshot.fulfilled, (state, action: PayloadAction<Layout>) => {
+              state.isLoading = false;
+            
+              // Update layouts array
+              const index = state.layouts.findIndex(layout => layout._id === action.payload._id);
+              if (index >= 0) {
+                state.layouts[index] = action.payload;
+              } else {
+                state.layouts.push(action.payload);
+              }
+            
+              // Update active layout if it matches
+              if (state.activeLayout?._id === action.payload._id) {
+                state.activeLayout = action.payload;
+              }
+            })
+            .addCase(captureLayoutScreenshot.rejected, (state, action) => {
+              state.isLoading = false;
+              state.error = action.error.message || "Failed to capture layout screenshot";
             });
-  
   
             // Upload Layout Image
     //         .addCase(uploadLayoutImageThunk.pending, (state) => {

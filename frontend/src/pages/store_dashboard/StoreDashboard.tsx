@@ -1,7 +1,7 @@
 import { Routes, Route, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import StoreDashBoardMenubar from "../../components/store_dashboard/menubar/StoreDashBoardMenubar";
-import StoreLayouts from "./supporting_pages/layouts/StoreLayouts";
+import StoreDashboardLayouts from "./supporting_pages/layouts/StoreDashboardLayouts";
 import StoreTeam from "./supporting_pages/StoreDashboardTeam";
 import StoreServices from "./supporting_pages/DashboardStoreServices";
 import StoreOrders from "./supporting_pages/StoreOrders";
@@ -9,7 +9,7 @@ import StoreBookings from "./supporting_pages/StoreBookings";
 import StoreSettings from "./supporting_pages/StoreSettings";
 import StoreImages from "./supporting_pages/StoreImages";
 import { fetchStore, setStore } from "../../features/store_admin/storeAdminSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import StoreOverview from "./supporting_pages/StoreDashboardOverview";
 import StoreDashboardTopbar from "../../components/store_dashboard/menubar/StoreDashboardTopbar";
 import DashboardStoreProducts from "./supporting_pages/DashboardStoreProducts";
@@ -26,26 +26,32 @@ import StoreDashboardPosters from "./supporting_pages/StoreDashboardPosters";
 
 
 const StoreDashboard = () => {
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const dispatch = useAppDispatch();
-    const { storeId } = useParams<{ storeId: string  }>();
-    // const store = useAppSelector((state: RootState) => 
-    //     storeId ? state.stores.myStoresById[storeId] : undefined
+    const { storeSlug } = useParams<{ storeSlug: string  }>();
+    // const store = useAppSelector((state: RootState) =>
+    //     storeSlug ? state.stores.myStoresById[storeSlug] : undefined
     // );
     const store = useAppSelector((state) => state.storeAdmin.store);
+    const isLoading = useAppSelector((state) => state.storeAdmin.isLoading);
     
     useEffect(() => {
-        if (!store && storeId) {
-            dispatch(fetchStore(storeId));
+        if (!store && storeSlug) {
+            dispatch(fetchStore(storeSlug));
         } else if (store) {
             dispatch(setStore(store));
         }
-    }, [store, storeId, dispatch]);
+    }, [store, storeSlug, dispatch]);
 
     useEffect(() => {
-        if (storeId) {
-            dispatch(fetchStoreProducts({ storeId }));
+        if (storeSlug) {
+            dispatch(fetchStoreProducts({ storeSlug }));
         }
-    }, [storeId, dispatch]);
+    }, [storeSlug, dispatch]);
+
+    if (isLoading) {
+        return <>loading...</>
+    }
     
     if (!store) {
         return <p>Store not found or invalid store ID.</p>;
@@ -53,12 +59,17 @@ const StoreDashboard = () => {
 
     return (
         <div className="h-screen w-screen flex flex-row overflow-clip">
-            <StoreDashBoardMenubar store={store}/>
+            <div className={`fixed h-screen w-screen ${isMobileMenuOpen && "z-19"} lg:hidden`} >
+                <StoreDashBoardMenubar store={store} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen}/>
+            </div>
+            <div className="hidden lg:flex">
+            <StoreDashBoardMenubar store={store} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen}/>
+            </div>
             <div className="flex flex-col h-full w-full">
-                <StoreDashboardTopbar />
+                <StoreDashboardTopbar isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
                 <Routes>
                     <Route path="/" element={<StoreOverview store={store} />} />
-                    <Route path="/layouts" element={<StoreLayouts />} />
+                    <Route path="/layouts" element={<StoreDashboardLayouts />} />
                     <Route path="/team" element={<StoreTeam />} />
                     <Route path="/products" element={<DashboardStoreProducts />} />
                     <Route path="/services" element={<StoreServices />} />

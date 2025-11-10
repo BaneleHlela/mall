@@ -23,3 +23,7 @@ export const uploadToUploads = async (fileBuffer, destFileName) => {
       throw new Error('Error uploading file');
     }
 };
+
+export const deleteFromUploads = async (filePath) => {
+  await uploadsBucket.file(filePath).delete();
+};

@@ -24,7 +24,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
   const user = useAppSelector((state) => state.user.user)
   
   const handleClick = () => {
-    navigate(`/stores/${store._id}`);
+    navigate(`/stores/${store.slug}`);
   };
 
   // Calculate distance if user is provided

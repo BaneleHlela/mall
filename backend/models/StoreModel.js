@@ -8,6 +8,11 @@ const storeSchema = new mongoose.Schema(
       type: String,
       required: [true, "Store name is required"],
     },
+    slug: {
+      type: String,
+      unique: true,
+      required: true,
+    },
     logo: {
       url: {
         type: String,

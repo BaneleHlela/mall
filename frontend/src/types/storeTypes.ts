@@ -32,6 +32,7 @@ export interface Socials {
 export interface Store {
   isVerified: any;
   _id?: string;
+  slug?: string;
   description: string;
   thumbnail: string;
   name: string;

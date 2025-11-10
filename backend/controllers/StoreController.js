@@ -3,6 +3,7 @@ import  Store  from '../models/StoreModel.js';
 import { uploadToUploads, uploadsBucket } from '../config/gcsClient.js';
 import mongoose from 'mongoose';
 import User from '../models/UserModel.js';
+import { generateSlug } from '../utils/helperFunctions.js';
 
 const CLIENT_URL = process.env.CLIENT_URL;
 
@@ -10,14 +11,16 @@ const CLIENT_URL = process.env.CLIENT_URL;
 export const addStore = expressAsyncHandler(async (req, res) => {
     //const { _id, email, firstName } = req.user;
     // Create the store with the creator as the owner in the team
+    const slug = generateSlug(req.body.name);
     const created = new Store({
         //team: [{ member: _id, role: "owner" }], // Assign the creator as the owner
         ...req.body,
+        slug,
     });
 
     await created.save();
 
-    // await sendStoreCreatedEmail(email, firstName, created.name, `http://localhost:5173/dashboard/${created._id}`)    
+    // await sendStoreCreatedEmail(email, firstName, created.name, `http://localhost:5173/dashboard/${created._id}`)
     res.status(201).json(created);
 });
 
@@ -25,18 +28,27 @@ export const addStore = expressAsyncHandler(async (req, res) => {
 // get store
 export const getStore = expressAsyncHandler(async (req, res) => {
     try {
-      const storeId = req.params.storeId;
-      const store = await Store.findById(storeId);
-  
+      console.log("fetching store")
+      const storeSlug = req.params.storeSlug;
+      // Check if storeSlug is a valid ObjectId or a slug
+      let store;
+      if (mongoose.Types.ObjectId.isValid(storeSlug)) {
+        // If it's a valid ObjectId, find by _id
+        store = await Store.findById(storeSlug);
+      } else {
+        // If it's not a valid ObjectId, assume it's a slug
+        store = await Store.findOne({ slug: storeSlug });
+      }
+
       if (!store) {
         return res.status(404).json({ message: 'Store not found' });
       }
-  
+
       res.status(200).json(store);
     } catch (error) {
       res.status(500).json({ error: 'Failed to retrieve store', details: error.message });
     }
-}); 
+});
 
 
 
@@ -127,19 +139,20 @@ export const getDemoStores = expressAsyncHandler(async (req, res) => {
 
 // Edit store information
 export const editStore = expressAsyncHandler(async (req, res) => {
-  const { storeId } = req.params;
+  const { storeSlug } = req.params;
 
   console.log(req.body.locations )
 
-  const store = await Store.findById(storeId);
+  const store = await Store.findOne({ slug: storeSlug });
 
   if (!store) {
     res.status(404);
     throw new Error("Store not found");
   }
-  // Update store name
+  // Update store name and regenerate slug if name changes
   if (req.body.name) {
     store.name = req.body.name;
+    store.slug = generateSlug(req.body.name);
   }
 
   // Update store slogan
@@ -294,7 +307,7 @@ export const linkLayoutToStore = async (req, res) => {
 // Upload store logo
 export const uploadStoreLogo = expressAsyncHandler(async (req, res) => {
   try {
-    const { storeId } = req.params;
+    const { storeSlug } = req.params;
     const file = req.file;
     const fileName = req.body.fileName || file.originalname;
 
@@ -302,7 +315,7 @@ export const uploadStoreLogo = expressAsyncHandler(async (req, res) => {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const store = await Store.findById(storeId);
+    const store = await Store.findOne({ slug: storeSlug });
     if (!store) {
       return res.status(404).json({ message: "Store not found" });
     }
@@ -319,7 +332,7 @@ export const uploadStoreLogo = expressAsyncHandler(async (req, res) => {
     }
 
     // Upload new logo
-    const destination = `stores/${storeId}/logo/${Date.now()}_${fileName}`;
+    const destination = `stores/${store.slug}/logo/${Date.now()}_${fileName}`;
     await uploadToUploads(file.buffer, destination);
 
     const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${destination}`;
@@ -338,9 +351,9 @@ export const uploadStoreLogo = expressAsyncHandler(async (req, res) => {
 
 export const deleteStoreLogo = expressAsyncHandler(async (req, res) => {
   try {
-    const { storeId } = req.params;
+    const { storeSlug } = req.params;
 
-    const store = await Store.findById(storeId);
+    const store = await Store.findOne({ slug: storeSlug });
     if (!store) {
       return res.status(404).json({ message: "Store not found" });
     }
@@ -368,12 +381,12 @@ export const deleteStoreLogo = expressAsyncHandler(async (req, res) => {
 
 
 export const getStoreImages = expressAsyncHandler(async (req, res) => {
-  const { storeId } = req.params;
+  const { storeSlug } = req.params;
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 5;
   const skip = (page - 1) * limit;  // determines how many images to skip before selecting results
 
-  const store = await Store.findById(storeId).select('images');
+  const store = await Store.findOne({ slug: storeSlug }).select('images');
 
   if (!store) return res.status(404).send({ error: 'Store not found' });
 
@@ -389,7 +402,7 @@ export const getStoreImages = expressAsyncHandler(async (req, res) => {
 // Upload store gallery image
 export const uploadStoreGalleryImage = expressAsyncHandler(async (req, res) => {
   try {
-    const { storeId } = req.params;
+    const { storeSlug } = req.params;
     const { description } = req.body;
     const file = req.file;
     const fileName = req.body.fileName || file.originalname;
@@ -399,13 +412,13 @@ export const uploadStoreGalleryImage = expressAsyncHandler(async (req, res) => {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const store = await Store.findById(storeId);
+    const store = await Store.findOne({ slug: storeSlug });
     if (!store) {
       return res.status(404).json({ message: "Store not found" });
     }
 
     // Upload new image to the bucket
-    const destination = `stores/${storeId}/images/${fileName}`;
+    const destination = `stores/${store.slug}/images/${fileName}`;
     await uploadToUploads(file.buffer, destination);
 
     const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${destination}`;
@@ -432,7 +445,7 @@ export const uploadStoreGalleryImage = expressAsyncHandler(async (req, res) => {
 // Delete store gallery image
 export const deleteStoreGalleryImage = expressAsyncHandler(async (req, res) => {
   try {
-    const { storeId } = req.params;
+    const { storeSlug } = req.params;
     const { imageUrl } = req.body;
 
 
@@ -440,7 +453,7 @@ export const deleteStoreGalleryImage = expressAsyncHandler(async (req, res) => {
       return res.status(400).json({ message: "Missing image URL" });
     }
 
-    const store = await Store.findById(storeId);
+    const store = await Store.findOne({ slug: storeSlug });
     if (!store) {
       return res.status(404).json({ message: "Store not found" });
     }
@@ -475,7 +488,7 @@ export const deleteStoreGalleryImage = expressAsyncHandler(async (req, res) => {
 
 export const addTeamMember = expressAsyncHandler(async (req, res) => {
   const { username, role, about } = req.body;
-  const { storeId } = req.params;
+  const { storeSlug } = req.params;
 
 
   // Validate input
@@ -489,7 +502,7 @@ export const addTeamMember = expressAsyncHandler(async (req, res) => {
     return res.status(404).json({ message: 'User not found.' });
   }
 
-  const store = await Store.findById(storeId);
+  const store = await Store.findOne({ slug: storeSlug });
   if (!store) {
     return res.status(404).json({ message: 'Store not found.' });
   }
@@ -507,7 +520,7 @@ export const addTeamMember = expressAsyncHandler(async (req, res) => {
   let imageUrl = '';
   if (file) {
     const imageFileName = `${Date.now()}-${file.originalname}`;
-    const imagePath = `stores/${storeId}/team/${imageFileName}`;
+    const imagePath = `stores/${store.slug}/team/${imageFileName}`;
     await uploadToUploads(file.buffer, imagePath);
     imageUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${imagePath}`;
   }
@@ -530,10 +543,10 @@ export const addTeamMember = expressAsyncHandler(async (req, res) => {
 
 
 export const deleteTeamMember = expressAsyncHandler(async (req, res) => {
-  const { storeId, username } = req.params;
+  const { storeSlug, username } = req.params;
 
   // Find the store
-  const store = await Store.findById(storeId);
+  const store = await Store.findOne({ slug: storeSlug });
   if (!store) {
     return res.status(404).json({ message: 'Store not found.' });
   }
@@ -566,11 +579,11 @@ export const deleteTeamMember = expressAsyncHandler(async (req, res) => {
 
 
 export const editTeamMember = expressAsyncHandler(async (req, res) => {
-  const { storeId, username } = req.params;
+  const { storeSlug, username } = req.params;
   const { name, position, about } = req.body;
 
   // Find the store
-  const store = await Store.findById(storeId);
+  const store = await Store.findOne({ slug: storeSlug });
   if (!store) {
     return res.status(404).json({ message: 'Store not found.' });
   }
@@ -590,7 +603,7 @@ export const editTeamMember = expressAsyncHandler(async (req, res) => {
   const file = req.file;
   if (file) {
     const imageFileName = `${Date.now()}-${file.originalname}`;
-    const imagePath = `stores/${storeId}/team/${imageFileName}`;
+    const imagePath = `stores/${store.slug}/team/${imageFileName}`;
     await uploadToUploads(file.buffer, imagePath);
     member.image = `https://storage.googleapis.com/the-mall-uploads-giza/${imagePath}`;
   }

@@ -17,7 +17,7 @@ interface TopItem {
   
   const TopItemsTable: React.FC<TopItemsTableProps> = ({ title, products }) => {
     return (
-      <div className="w-full h-full overflow-y-scroll hide-scrollbar bg-white rounded-[1.2vh] hadow-[0px_0px_6px_0px_rgba(0,_0,_0,_0.1)] px-[3vh] pt-[1.5vh]">
+      <div className="blur w-full h-full overflow-y-scroll hide-scrollbar bg-white rounded-[1.2vh] hadow-[0px_0px_6px_0px_rgba(0,_0,_0,_0.1)] px-[3vh] pt-[1.5vh]">
         <h2 className="text-[2.5vh] font-semibold">{title}</h2>
         <p className="text-sm text-gray-500 mb-[1vh]">
           Best selling products in your store

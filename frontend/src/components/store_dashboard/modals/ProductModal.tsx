@@ -62,11 +62,12 @@ const ProductModal: React.FC<ProductModalProps> = ({
           return acc;
         }, {} as { [variation: string]: number }) || {}
       );
-      // Set images to [] by default; optionally preload URLs if needed
       setImages([]);
       setImageUrls([...product.images])
     }
   }, [product]);
+
+  console.log(imageUrls);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>

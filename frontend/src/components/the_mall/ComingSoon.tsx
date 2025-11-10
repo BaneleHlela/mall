@@ -23,7 +23,7 @@ const ComingSoon = ({message}: {message: string}) => {
         </h1>
         <FaTools className="animate-spin text-[7vh]"/>
         {/* Message */}
-        <p className="text-center text-gray-600 w-[80%] max-w-[800px] bg-white shadow-md rounded-[2vh] p-[2vh] z-1">{message}</p>
+        <p className="text-center text-black w-[80%] max-w-[800px] bg-white shadow-md rounded-[2vh] p-[2vh] z-1">{message}</p>
     </div>
   )
 }

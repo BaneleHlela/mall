@@ -10,7 +10,7 @@ import MyStores from "./pages/my_stores/MyStores";
 import Search from "./pages/my_stores/Search";
 import Profile from "./pages/profile/Profile";
 import StoreDashboard from "./pages/store_dashboard/StoreDashboard";
-import MyLayouts from "./pages/store_dashboard/supporting_pages/layouts/StoreLayouts";
+import MyLayouts from "./pages/store_dashboard/supporting_pages/layouts/StoreDashboardLayouts";
 import { useDispatch } from "react-redux";
 import { setInitialLayout } from "./features/layouts/layoutSettingsSlice";
 import Dashboard from "./pages/dashboard/Dashboard";
@@ -33,7 +33,6 @@ const App: React.FC = () => {
       if (event.data?.layoutSettings) {
         dispatch(setInitialLayout(event.data.layoutSettings));
         localStorage.setItem("layoutSettings", JSON.stringify(event.data.layoutSettings));
-        //console.log("📩 Received layoutSettings via postMessage");
       }
     };
 
@@ -47,7 +46,7 @@ const App: React.FC = () => {
         <Menubar /> 
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/stores/:storeId/*" element={<StorePage />} />
+          <Route path="/stores/:storeSlug/*" element={<StorePage />} />
           <Route path="/my-stores" element={<MyStores />} />
           {/* <Route path="/my-stores" 
             element={
@@ -69,7 +68,7 @@ const App: React.FC = () => {
             } 
           /> */}
           <Route 
-            path="/dashboard/:storeId/*" 
+            path="/dashboard/:storeSlug/*" 
             element={ 
               <StoreDashboard />
             } 

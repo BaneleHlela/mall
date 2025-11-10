@@ -109,11 +109,11 @@ export const updateStockAndSoldCount = createAsyncThunk(
 // Fetch products by store ID with optional category filter
 export const fetchStoreProducts = createAsyncThunk(
   'products/fetchStoreProducts',
-  async ({ storeId, category }: { storeId: string; category?: string }, thunkAPI) => {
+  async ({ storeSlug, category }: { storeSlug: string; category?: string }, thunkAPI) => {
     try {
       const url = category
-        ? `${API_BASE}/store/${storeId}?category=${category}`
-        : `${API_BASE}/store/${storeId}`;
+        ? `${API_BASE}/store/${storeSlug}?category=${category}`
+        : `${API_BASE}/store/${storeSlug}`;
       const res = await axios.get(url);
       return res.data as Product[];
     } catch (err: any) {
@@ -122,14 +122,31 @@ export const fetchStoreProducts = createAsyncThunk(
   }
 );
 
-// 🧩 Slice
+// Toggle or update product isActive status
+export const updateProductIsActive = createAsyncThunk(
+  'products/updateIsActive',
+  async ({ productId, isActive }: { productId: string; isActive: boolean }, thunkAPI) => {
+    try {
+      const res = await axios.patch(`${API_BASE}/isActive/${productId}`, { isActive });
+      return res.data as Product;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to update product status');
+    }
+  }
+);
 
+
+
+// 🧩 Slice
 const productSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
     clearSelectedProduct(state) {
       state.selectedProduct = null;
+    },
+    clearError: (state) => {
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -165,6 +182,7 @@ const productSlice = createSlice({
       // Fetch by slug
       .addCase(fetchProductBySlug.fulfilled, (state, action: PayloadAction<Product>) => {
         state.selectedProduct = action.payload;
+        state.isLoading = false;
       })
       .addCase(fetchProductBySlug.pending, (state) => {
         state.isLoading = true;
@@ -250,6 +268,27 @@ const productSlice = createSlice({
         state.products = action.payload;
       })
       .addCase(fetchStoreProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+
+      // Update isActive status
+      .addCase(updateProductIsActive.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateProductIsActive.fulfilled, (state, action: PayloadAction<Product>) => {
+        state.isLoading = false;
+        const index = state.products.findIndex(p => p._id === action.payload._id);
+        if (index !== -1) {
+          state.products[index] = action.payload;
+        }
+        // If the currently selected product is this one, update it too
+        if (state.selectedProduct?._id === action.payload._id) {
+          state.selectedProduct = action.payload;
+        }
+      })
+      .addCase(updateProductIsActive.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

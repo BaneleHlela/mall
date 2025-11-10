@@ -5,7 +5,7 @@ interface DashboardFilterByStatusProps {
   onChange: (status: string) => void;
 }
 
-const statuses = ["Published", "Inactive", "Stock Out"];
+const statuses = ["Active", "Inactive", "Stock Out"];
 
 const DashboardFilterByStatus: React.FC<DashboardFilterByStatusProps> = ({
   value,
@@ -15,7 +15,7 @@ const DashboardFilterByStatus: React.FC<DashboardFilterByStatusProps> = ({
     <select
       value={value || ""}
       onChange={(e) => onChange(e.target.value)}
-      className="border rounded-md px-3 py-2 text-sm"
+      className="border font-[500] rounded-[.45vh] text-[2vh] w-[15vh] px-[1.5vh] py-[1.1vh] min-w-fit"
     >
       <option value="">Status</option>
       {statuses.map((status) => (

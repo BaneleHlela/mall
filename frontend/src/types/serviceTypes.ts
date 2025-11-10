@@ -8,6 +8,7 @@ export interface Service {
     thumbnail?: string;
     images?: string[];
     category?: string;
+    slug: string;
     performers?: Performer[]; // Added performers field
     createdAt?: string;
     updatedAt?: string;

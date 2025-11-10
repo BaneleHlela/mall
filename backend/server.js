@@ -27,6 +27,7 @@ import sectionRoutes from "./routes/sectionRoutes.js";
 import posterRoutes from "./routes/posterRoutes.js"
 
 import "./config/passportConfig.js";
+import initSlugs from "./utils/initSlugs.js";
 
 
 dotenv.config();
@@ -90,7 +91,7 @@ app.use(notFound);
 app.use(errorHandler);
 
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`Server started on port ${PORT}`);
-    dbConnect();
+    await dbConnect();
 });

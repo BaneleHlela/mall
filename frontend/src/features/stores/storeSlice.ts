@@ -72,11 +72,11 @@ export const fetchStoresByOwner = createAsyncThunk<Store[], string>(
   }
 );
 
-export const fetchStoreById = createAsyncThunk<Store, string>(
-  'store/fetchStoreById',
-  async (storeId, thunkAPI) => {
+export const fetchStoreBySlug = createAsyncThunk<Store, string>(
+  'store/fetchStoreBySlug',
+  async (storeSlug, thunkAPI) => {
     try {
-      const response = await axios.get(`${STORE_API_URL}/${storeId}`);
+      const response = await axios.get(`${STORE_API_URL}/${storeSlug}`);
       return response.data;
     } catch (error) {
       console.error("Error fetching store:", error);
@@ -86,14 +86,14 @@ export const fetchStoreById = createAsyncThunk<Store, string>(
 );
 
 // --- Upload Store Logo ---
-export const uploadStoreLogo = createAsyncThunk<string, { storeId: string; logoFile: File }>(
+export const uploadStoreLogo = createAsyncThunk<string, { storeSlug: string; logoFile: File }>(
   'stores/uploadStoreLogo',
-  async ({ storeId, logoFile }) => {
+  async ({ storeSlug, logoFile }) => {
     const formData = new FormData();
     formData.append('logo', logoFile);
 
     try {
-      const response = await axios.put(`${STORE_API_URL}/${storeId}/logo`, formData, {
+      const response = await axios.put(`${STORE_API_URL}/${storeSlug}/logo`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -112,12 +112,12 @@ export const uploadStoreLogo = createAsyncThunk<string, { storeId: string; logoF
 );
 
 // --- Delete Store Logo ---
-export const deleteStoreLogo = createAsyncThunk<string, { storeId: string }>(
+export const deleteStoreLogo = createAsyncThunk<string, { storeSlug: string }>(
   'stores/deleteStoreLogo',
-  async ({ storeId }) => {
+  async ({ storeSlug }) => {
     try {
-      const response = await axios.delete(`${STORE_API_URL}/${storeId}/logo`);
-      return response.data.storeId; // or simply: return storeId;
+      const response = await axios.delete(`${STORE_API_URL}/${storeSlug}/logo`);
+      return response.data.storeId; // or simply: return storeSlug;
     } catch (error) {
       console.error('Error deleting store logo:', error);
       throw new Error('Failed to delete store logo');
@@ -127,12 +127,12 @@ export const deleteStoreLogo = createAsyncThunk<string, { storeId: string }>(
 
 export const deleteStoreGalleryImage = createAsyncThunk<
   string, // returns the imageUrl of the deleted image
-  { storeId: string; imageUrl: string }
+  { storeSlug: string; imageUrl: string }
 >(
   'stores/deleteStoreGalleryImage',
-  async ({ storeId, imageUrl }, thunkAPI) => {
+  async ({ storeSlug, imageUrl }, thunkAPI) => {
     try {
-      await axios.delete(`${STORE_API_URL}/${storeId}/gallery`, {
+      await axios.delete(`${STORE_API_URL}/${storeSlug}/gallery`, {
         data: { imageUrl },
       });
 
@@ -148,20 +148,20 @@ export const deleteStoreGalleryImage = createAsyncThunk<
 
 
 export const fetchStoreImages = createAsyncThunk<
-  { storeId: string; images: { url: string }[]; hasMore: boolean },  // Added `hasMore`
-  { storeId: string; page: number; limit: number }  // Accept `page` and `limit` as parameters
+  { storeSlug: string; images: { url: string }[]; hasMore: boolean },  // Added `hasMore`
+  { storeSlug: string; page: number; limit: number }  // Accept `page` and `limit` as parameters
 >(
   'stores/fetchStoreImages',
-  async ({ storeId, page, limit }, thunkAPI) => {
+  async ({ storeSlug, page, limit }, thunkAPI) => {
     try {
       // Make the request with pagination parameters
-      const response = await axios.get(`${STORE_API_URL}/${storeId}/gallery`, {
+      const response = await axios.get(`${STORE_API_URL}/${storeSlug}/gallery`, {
         params: { page, limit }
       });
 
       // Assuming the response contains the images and a `hasMore` boolean
       return {
-        storeId,
+        storeSlug,
         images: response.data.images,  // Ensure your backend returns an array of images
         hasMore: response.data.hasMore // Make sure your backend provides this field
       };
@@ -265,27 +265,29 @@ const storeSlice = createSlice({
         }
       })
 
+      // Fetch Store
+
       // Fetch Store Images
       .addCase(fetchStoreImages.fulfilled, (state, action) => {
         state.isLoading = false;
-        const { storeId, images, hasMore } = action.payload;
+        const { storeSlug, images, hasMore } = action.payload;
       
         // Append the new images to the existing images in the store
-        if (state.storesById[storeId]) {
-          state.storesById[storeId].images = [
-            ...(state.storesById[storeId].images || []),  // Existing images (or an empty array if none)
-            ...images.filter(img => !state.storesById[storeId].images.some(existingImg => existingImg.url === img.url)),  // Only append new images
+        if (state.storesById[storeSlug]) {
+          state.storesById[storeSlug].images = [
+            ...(state.storesById[storeSlug].images || []),  // Existing images (or an empty array if none)
+            ...images.filter(img => !state.storesById[storeSlug].images.some(existingImg => existingImg.url === img.url)),  // Only append new images
           ];
         }
-      
-        if (state.myStoresById[storeId]) {
-          state.myStoresById[storeId].images = [
-            ...(state.myStoresById[storeId].images || []),
-            ...images.filter(img => !state.myStoresById[storeId].images.some(existingImg => existingImg.url === img.url)), // Prevent duplicates
+
+        if (state.myStoresById[storeSlug]) {
+          state.myStoresById[storeSlug].images = [
+            ...(state.myStoresById[storeSlug].images || []),
+            ...images.filter(img => !state.myStoresById[storeSlug].images.some(existingImg => existingImg.url === img.url)), // Prevent duplicates
           ];
         }
-      
-        if (state.currentStore && state.currentStore._id === storeId) {
+
+        if (state.currentStore && state.currentStore._id === storeSlug) {
           state.currentStore.images = [
             ...(state.currentStore.images || []),
             ...images.filter(img => !state.currentStore.images.some(existingImg => existingImg.url === img.url)), // Prevent duplicates

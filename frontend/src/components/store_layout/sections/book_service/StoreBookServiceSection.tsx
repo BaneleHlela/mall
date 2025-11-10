@@ -1,24 +1,24 @@
 import { useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import { fetchServiceById } from "../../../../features/services/servicesSlice"
+import { fetchServiceBySlug } from "../../../../features/services/servicesSlice"
 import MainBookWithOpenCalendar from "../book/main/MainBookWithOpenCalender"
 import { HiArrowLeftEndOnRectangle } from "react-icons/hi2"
 import { getTextStyles, getBackgroundStyles } from "../../../../utils/stylingFunctions"
 import UnderlinedText from "../../extras/text/UnderlinedText"
 
 const StoreBookServiceSection = () => {
-    const { serviceId } = useParams<{ serviceId: string }>()
+    const { serviceSlug } = useParams<{ serviceSlug: string }>()
     const settings = useAppSelector((state) => state.layoutSettings.bookService)
     const dispatch = useAppDispatch()
     const service = useAppSelector(state => state.services.selectedService)
     const isLoading = useAppSelector(state => state.services.isLoading)
 
     useEffect(() => {
-        if (serviceId) {
-            dispatch(fetchServiceById(serviceId))
+        if (serviceSlug) {
+            dispatch(fetchServiceBySlug(serviceSlug))
         }
-    }, [dispatch, serviceId])
+    }, [dispatch, serviceSlug])
 
     if (isLoading) {
         return <div>Loading...</div>

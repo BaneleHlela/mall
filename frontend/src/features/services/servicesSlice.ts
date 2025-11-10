@@ -18,13 +18,13 @@ const API_BASE = `${API_URL}/api/services`;
 export const fetchStoreServices = createAsyncThunk(
   'services/fetchStoreServices',
   async (
-    { storeId, category }: { storeId: string; category?: string },
+    { storeSlug, category }: { storeSlug: string; category?: string },
     thunkAPI
   ) => {
     try {
       const url = category
-        ? `${API_BASE}/store/${storeId}?category=${category}`
-        : `${API_BASE}/store/${storeId}`;
+        ? `${API_BASE}/store/${storeSlug}?category=${category}`
+        : `${API_BASE}/store/${storeSlug}`;
       const res = await axios.get(url);
       return res.data as Service[];
     } catch (err: any) {
@@ -45,6 +45,21 @@ export const fetchServiceById = createAsyncThunk(
     } catch (err: any) {
       return thunkAPI.rejectWithValue(
         err.response?.data?.message || 'Failed to fetch service by ID'
+      );
+    }
+  }
+);
+
+export const fetchServiceBySlug = createAsyncThunk(
+  'services/fetchServiceBySlug',
+  async (serviceSlug: string, thunkAPI) => {
+    try {
+      const url = `${API_BASE}/slug/${serviceSlug}`;
+      const res = await axios.get(url);
+      return res.data as Service;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || 'Failed to fetch service by slug'
       );
     }
   }
@@ -136,6 +151,20 @@ const servicesSlice = createSlice({
         state.selectedService = action.payload;
       })
       .addCase(fetchServiceById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+
+      // Fetch by slug
+      .addCase(fetchServiceBySlug.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchServiceBySlug.fulfilled, (state, action: PayloadAction<Service>) => {
+        state.isLoading = false;
+        state.selectedService = action.payload;
+      })
+      .addCase(fetchServiceBySlug.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

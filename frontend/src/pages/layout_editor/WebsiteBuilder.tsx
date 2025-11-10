@@ -5,7 +5,7 @@ import { useAppSelector } from '../../app/hooks.ts';
 import LayoutSettings from '../../components/layout_settings/LayoutSettings.tsx';
 import TopBar from '../../components/layout_settings/topbar/TopBar.tsx';
 import { useAppDispatch } from '../../app/hooks.ts';
-import { fetchStoreById, setCurrentStore } from '../../features/stores/storeSlice';
+import { fetchStoreBySlug, setCurrentStore } from '../../features/stores/storeSlice';
 import { TbLoader3 } from "react-icons/tb";
 import { setStore } from '../../features/store_admin/storeAdminSlice.ts';
 import { editLayout, getLayout } from '../../features/layouts/layoutSlice.ts';
@@ -106,7 +106,7 @@ const WebsiteBuilderContent: React.FC = () => {
           
           if (layoutResult.store) {
             setStoreId(layoutResult.store);
-            const storeResult = await dispatch(fetchStoreById(layoutResult.store)).unwrap();
+            const storeResult = await dispatch(fetchStoreBySlug(layoutResult.store)).unwrap();
             console.log(storeResult);
             dispatch(setCurrentStore(storeResult));
             dispatch(setStore(storeResult));

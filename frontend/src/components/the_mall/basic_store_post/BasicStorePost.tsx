@@ -6,7 +6,7 @@ import { IoIosStarOutline, IoMdClose } from 'react-icons/io';
 import { LiaShareSolid } from 'react-icons/lia';
 import { MdOutlineDeliveryDining, MdVerified } from 'react-icons/md';
 import HomePageReviewsModal from '../home/HomePageReviewsModal';
-import { fetchStoreById } from '../../../features/stores/storeSlice';
+import { fetchStoreBySlug } from '../../../features/stores/storeSlice';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { RiPinDistanceLine } from 'react-icons/ri';
 import { IoLocationOutline } from 'react-icons/io5';
@@ -21,12 +21,13 @@ import StorePosterSlideshow from './types/StorePosterSlideshow';
 
 
 export interface PostData {
-  storeId: string;
+  storeSlug: string;
   status: string;
   poster: {
     url: string;
     type: 'single' | 'rowDouble' | 'columnDouble' | 'triple' | 'slideshow';
     images: string[];
+    aspectRatio?: string; 
     button: {
         url: string;
         show: boolean;
@@ -56,7 +57,7 @@ export interface PostData {
 }
 export type Poster = PostData['poster'];
 
-const BasicStorePost: React.FC<PostData> = ({ storeId, status, poster }) => {
+const BasicStorePost: React.FC<PostData> = ({ storeSlug, status, poster }) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -79,8 +80,8 @@ const BasicStorePost: React.FC<PostData> = ({ storeId, status, poster }) => {
         const getStore = async () => {
         try {
             setLoading(true);
-            const resultAction = await dispatch(fetchStoreById(storeId));
-            if (fetchStoreById.fulfilled.match(resultAction)) {
+            const resultAction = await dispatch(fetchStoreBySlug(storeSlug));
+            if (fetchStoreBySlug.fulfilled.match(resultAction)) {
               setStore(resultAction.payload);
             } else {
             console.error('Failed to fetch store:', resultAction);
@@ -92,8 +93,8 @@ const BasicStorePost: React.FC<PostData> = ({ storeId, status, poster }) => {
         }
         };
 
-        if (storeId) getStore();
-    }, [dispatch, storeId]);
+        if (storeSlug) getStore();
+    }, [dispatch, storeSlug]);
 
     const handleShare = async (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -167,7 +168,7 @@ const BasicStorePost: React.FC<PostData> = ({ storeId, status, poster }) => {
         dispatch(
           updateUser({
               user: user._id, // userId
-              favoriteStore: store._id, // storeId
+              favoriteStore: store._id, // storeSlug
             })
         );
     };

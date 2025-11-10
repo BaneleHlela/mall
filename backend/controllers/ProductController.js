@@ -1,7 +1,8 @@
 import Product from '../models/ProductModel.js';
 import asyncHandler from 'express-async-handler'; 
 import mongoose from 'mongoose';
-import { uploadToUploads } from '../config/gcsClient.js';
+import { uploadToUploads, deleteFromUploads } from '../config/gcsClient.js';
+import { ConsoleMessage } from 'puppeteer';
 
 
 export const createProduct = asyncHandler(async (req, res) => {
@@ -99,63 +100,102 @@ export const createProduct = asyncHandler(async (req, res) => {
 });
 
 
+
 // Update product
 export const updateProduct = asyncHandler(async (req, res) => {
-  const { name, description, stockQuantity, variations, price, prices, category, isActive, tags, store } = req.body;
-  const files = req.files; // array of images
-  console.log(req.body.isActive);
+  let {
+    name,
+    description,
+    stockQuantity,
+    variations,
+    price,
+    prices,
+    category,
+    isActive,
+    tags,
+    store,
+    imageUrls: retainedImages = [], 
+  } = req.body;
 
-  
-  if (!req.body.isActive && (!files || files.length === 0) && (req.body.imageUrls.length === 0)) {
-    return res.status(400).json({ message: 'At least one product image is required.' });
+  console.log(retainedImages);
+
+  const files = req.files; // newly uploaded images
+
+  console.log(files);
+
+  // 🧩 Parse JSON fields if they came in as strings
+  try {
+    if (typeof variations === "string") variations = JSON.parse(variations);
+    if (typeof prices === "string") prices = JSON.parse(prices);
+    if (typeof tags === "string") tags = JSON.parse(tags);
+    if (typeof retainedImages === "string") retainedImages = JSON.parse(retainedImages);
+  } catch (err) {
+    console.error("Error parsing product fields:", err);
+    return res.status(400).json({ message: "Invalid JSON format in request body." });
   }
 
-  const productId = req.params.id;
+  // ✅ Validation
+  if (!isActive && (!files || files.length === 0) && retainedImages.length === 0) {
+    return res.status(400).json({ message: "At least one product image is required." });
+  }
 
-  // Find the existing product
+  // ✅ Find existing product
+  const productId = req.params.id;
   const product = await Product.findById(productId);
   if (!product) {
-    return res.status(404).json({ message: 'Product not found.' });
+    return res.status(404).json({ message: "Product not found." });
   }
 
-  // Array to store image URLs
-  const imageUrls = [];
+  // 1️⃣ Identify images to delete
+  const oldImages = product.images || [];
+  const removedImages = oldImages.filter((url) => !retainedImages.includes(url));
 
-  if (files && files.length > 0) {
-    // Upload new images
-    for (const file of files) {
-      const imageFileName = `${Date.now()}-${file.originalname}`;
-      const imagePath = `stores/${store}/products/${product.slug}/${imageFileName}`;
-
-      await uploadToUploads(file.buffer, imagePath); // assuming uploadToUploads handles file upload
-
-      const imageUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${imagePath}`;
-      imageUrls.push(imageUrl);
+  // 2️⃣ Delete removed images from Google Cloud Storage
+  for (const imageUrl of removedImages) {
+    try {
+      const path = imageUrl.split("the-mall-uploads-giza/")[1];
+      if (path) {
+        await deleteFromUploads(path);
+        console.log(`🗑️ Deleted from GCS: ${path}`);
+      }
+    } catch (err) {
+      console.error(`⚠️ Failed to delete image: ${imageUrl}`, err.message);
     }
   }
 
-  // Merge new images with the existing ones (if any)
-  const updatedImages = [...product.images, ...imageUrls];
-  
-  // Prepare updated product data
+  // 3️⃣ Upload new images (if any)
+  const newImageUrls = [];
+  if (files && files.length > 0) {
+    for (const file of files) {
+      const imageFileName = `${Date.now()}-${file.originalname}`;
+      const imagePath = `stores/${store}/products/${product.slug}/${imageFileName}`;
+      await uploadToUploads(file.buffer, imagePath);
+      const imageUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${imagePath}`;
+      newImageUrls.push(imageUrl);
+    }
+  }
+
+  // 4️⃣ Merge remaining and new images
+  const updatedImages = [...retainedImages, ...newImageUrls];
+
+  // 5️⃣ Prepare updated product data
   const updatedProductData = {
     name: name || product.name,
     description: description || product.description,
-    stockQuantity: stockQuantity || product.stockQuantity,
+    stockQuantity: stockQuantity ?? product.stockQuantity,
     variations: variations || product.variations,
-    price: price || product.price,
+    price: price ?? product.price,
     prices: prices || product.prices,
     category: category || product.category,
-    isActive: isActive || product.isActive,
+    isActive: isActive ?? product.isActive,
     tags: tags || product.tags,
     images: updatedImages,
   };
 
-  // Update product
+  // 6️⃣ Save updated product
   const updatedProduct = await Product.findByIdAndUpdate(productId, updatedProductData, { new: true });
-
   if (!updatedProduct) {
-    return res.status(500).json({ message: 'Failed to update product.' });
+    return res.status(500).json({ message: "Failed to update product." });
   }
 
   res.status(200).json(updatedProduct);
@@ -168,24 +208,27 @@ export const getProductById = asyncHandler(async (req, res) => {
   res.status(200).json(product);
 });
 
-
 // Get store products with optional category filter
 export const getStoreProducts =asyncHandler(async (req, res) => {
-  const { storeId } = req.params; 
-  const { category } = req.query; 
+  const { storeId } = req.params;
+  const { category } = req.query;
 
-  // Validate storeId
-  if (!storeId || !mongoose.Types.ObjectId.isValid(storeId)) {
-    res.status(400);
-    throw new Error("Invalid Store ID");
+  // Check if storeId is a valid ObjectId or a slug
+  let query = {};
+  if (mongoose.Types.ObjectId.isValid(storeId)) {
+    // If it's a valid ObjectId, use it directly
+    query = { store: new mongoose.Types.ObjectId(storeId) };
+  } else {
+    // If it's not a valid ObjectId, assume it's a slug and find the store by slug
+    const Store = (await import('../models/StoreModel.js')).default;
+    const store = await Store.findOne({ slug: storeId });
+    if (!store) {
+      res.status(404);
+      throw new Error("Store not found");
+    }
+    query = { store: store._id };
   }
 
-
-  // Convert storeId to ObjectId
-  const storeObjectId = new mongoose.Types.ObjectId(storeId);
-
-  // Build the query object
-  const query = { store: storeObjectId }; // Filter by store ObjectId
   if (category) {
     query.category = category; // Add category filter if provided
   }
@@ -202,7 +245,6 @@ export const getStoreProducts =asyncHandler(async (req, res) => {
   }
 });
 
-
 // Get product by slug
 export const getProductBySlug = asyncHandler(async (req, res) => {
   const product = await Product.findOne({ slug: req.params.slug }).populate('store');
@@ -210,15 +252,38 @@ export const getProductBySlug = asyncHandler(async (req, res) => {
   res.status(200).json(product);
 });
 
-
-
-// Delete product
+// Delete product and its images from Google Cloud
 export const deleteProduct = asyncHandler(async (req, res) => {
-  const removed = await Product.findByIdAndDelete(req.params.id);
-  if (!removed) throw new Error('Product not found');
-  res.status(200).json({ message: 'Product deleted' });
-});
+  const productId = req.params.id;
 
+  // 1️⃣ Find product first
+  const product = await Product.findById(productId);
+  if (!product) {
+    return res.status(404).json({ message: "Product not found." });
+  }
+
+  // 2️⃣ Delete all images from Google Cloud Storage
+  const images = product.images || [];
+  for (const imageUrl of images) {
+    try {
+      const path = imageUrl.split("the-mall-uploads-giza/")[1];
+      if (path) {
+        await deleteFromUploads(path);
+        console.log(`🗑️ Deleted from GCS: ${path}`);
+      }
+    } catch (err) {
+      console.error(`⚠️ Failed to delete image: ${imageUrl}`, err.message);
+    }
+  }
+
+  // 3️⃣ Delete the product document from MongoDB
+  const removed = await Product.findByIdAndDelete(productId);
+  if (!removed) {
+    return res.status(500).json({ message: "Failed to delete product." });
+  }
+
+  res.status(200).json({ message: "Product and its images deleted successfully." });
+});
 
 export const getAllProducts = asyncHandler(async (req, res) => {
   const { store, category, search, featured, page = 1, limit = 20 } = req.query;
@@ -286,4 +351,30 @@ export const updateStockAndSoldCount = asyncHandler(async (req, res) => {
   });
 });
 
+export const updateIsActive = asyncHandler(async (req, res) => {
+  const { productId } = req.params;
+  const { isActive } = req.body;
+
+  // Validate input
+  if (typeof isActive !== 'boolean') {
+    res.status(400);
+    throw new Error('isActive must be a boolean value.');
+  }
+
+  // Find product
+  const product = await Product.findById(productId);
+  if (!product) {
+    res.status(404);
+    throw new Error('Product not found.');
+  }
+
+  // Update and save
+  product.isActive = isActive;
+  const updatedProduct = await product.save();
+
+  res.status(200).json({
+    message: 'Product status updated successfully.',
+    product: updatedProduct,
+  });
+});
 

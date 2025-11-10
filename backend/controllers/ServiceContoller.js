@@ -15,7 +15,7 @@ export const createService = async (req, res) => {
       category,
       performers, // Added performers
     } = req.body;
-    
+
     // Validate required fields
     if (!name || !description || !price || !duration || !store) {
       return res.status(400).json({ message: 'Missing required fields' });
@@ -36,6 +36,17 @@ export const createService = async (req, res) => {
       }
     }
 
+    // Create slug: <slug-name>-<Date.now>
+    const baseSlug = name
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .substring(0, 100);
+
+    const timestamp = Date.now();
+    const slug = `${baseSlug}-${timestamp}`;
+
     const service = new Service({
       name,
       description,
@@ -45,6 +56,7 @@ export const createService = async (req, res) => {
       thumbnail,
       images,
       category,
+      slug,
       performers, // Include performers in the service object
     });
 
@@ -136,17 +148,22 @@ export const getStoreServices = asyncHandler(async (req, res) => {
   const { storeId } = req.params;
   const { category } = req.query;
 
-  // Validate storeId
-  if (!storeId || !mongoose.Types.ObjectId.isValid(storeId)) {
-    res.status(400);
-    throw new Error("Invalid Store ID");
+  // Check if storeId is a valid ObjectId or a slug
+  let query = {};
+  if (mongoose.Types.ObjectId.isValid(storeId)) {
+    // If it's a valid ObjectId, use it directly
+    query = { store: new mongoose.Types.ObjectId(storeId) };
+  } else {
+    // If it's not a valid ObjectId, assume it's a slug and find the store by slug
+    const Store = (await import('../models/StoreModel.js')).default;
+    const store = await Store.findOne({ slug: storeId });
+    if (!store) {
+      res.status(404);
+      throw new Error("Store not found");
+    }
+    query = { store: store._id };
   }
 
-  // Convert storeId to ObjectId
-  const storeObjectId = new mongoose.Types.ObjectId(storeId);
-
-  // Build query
-  const query = { store: storeObjectId };
   if (category) {
     query.category = category;
   }
@@ -161,6 +178,12 @@ export const getStoreServices = asyncHandler(async (req, res) => {
   }
 });
 
+
+export const getServiceBySlug = asyncHandler(async (req, res) => {
+  const service = await Service.findOne({ slug: req.params.slug }).populate('store');
+  if (!service) throw new Error('Service not found');
+  res.status(200).json(service);
+});
 
 export const deleteService = async (req, res) => {
   try {

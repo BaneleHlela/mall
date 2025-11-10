@@ -34,9 +34,13 @@ const serviceSchema = new mongoose.Schema({
   category: {
     type: String
   },
+  slug: {
+    type: String,
+    unique: true,
+  },
   isActive: {
     type: Boolean,
-    default: false, 
+    default: false,
   },
   reviews: [{
     type: mongoose.Schema.Types.ObjectId,

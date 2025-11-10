@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks'
-import { fetchProductById } from '../../../../features/products/productsSlice'
+import { fetchProductBySlug } from '../../../../features/products/productsSlice'
 import { getBackgroundStyles, getTextStyles } from '../../../../utils/stylingFunctions'
 import { HiArrowLeftEndOnRectangle, HiOutlineMinus, HiOutlinePlus } from 'react-icons/hi2'
 import VariationDropdown from './supporting/VariationDropdown'
@@ -19,7 +19,7 @@ const SingleStoreProductSection = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch()
 
-    const { productId } = useParams<{ productId: string }>()
+    const { productSlug } = useParams<{ productSlug: string }>()
 
     const product = useAppSelector(state => state.products.selectedProduct)
     const isLoading = useAppSelector(state => state.products.isLoading)
@@ -37,10 +37,10 @@ const SingleStoreProductSection = () => {
     }, [selectedVariation]);
         
     useEffect(() => {
-        if (productId) {
-            dispatch(fetchProductById(productId))
+        if (productSlug) {
+            dispatch(fetchProductBySlug(productSlug))
         }
-    }, [dispatch, productId])
+    }, [dispatch, productSlug])
     // Set the first variation as the default selected variation
     useEffect(() => {
         if (product?.variations && product.variations.length > 0) {
@@ -83,7 +83,7 @@ const SingleStoreProductSection = () => {
                 productId: product ? product._id : '', 
                 quantity,
                 specialRequest,
-                variation: selectedVariation || null,
+                variation: selectedVariation || undefined,
             })
         );
     };

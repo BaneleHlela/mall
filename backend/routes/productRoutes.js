@@ -7,7 +7,8 @@ import {
   createProduct,
   getAllProducts,
   updateStockAndSoldCount,
-  getStoreProducts
+  getStoreProducts,
+  updateIsActive
 } from '../controllers/ProductController.js';
 import { uploadProductImages } from '../middlewares/uploadMiddleware.js';
 
@@ -21,5 +22,6 @@ router.put('/update-stock', updateStockAndSoldCount);
 router.get('/slug/:slug', getProductBySlug);
 router.put('/:id',  uploadProductImages, updateProduct);
 router.delete('/:id', deleteProduct);
+router.patch('/isActive/:productId', updateIsActive);
 
 export default router;

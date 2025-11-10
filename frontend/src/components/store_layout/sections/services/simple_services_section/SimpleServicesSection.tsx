@@ -30,14 +30,14 @@ const SimpleServicesSection = () => {
     currentGroup = [...currentGroup, ...padding];
   }
 
-  const handleServiceButtonClick = (serviceId: string) => {
+  const handleServiceButtonClick = (serviceSlug: string) => {
     const currentUrl = window.location.href;
-  
+
     if (currentUrl.includes('layouts')) {
       console.log("navigating")
-      navigate(`/layouts/${layoutId}/preview/service/${serviceId}`);
-    } else if (store && store._id) {
-      navigate(`/stores/${store._id}/service/${serviceId}#book`);
+      navigate(`/layouts/${layoutId}/preview/service/${serviceSlug}`);
+    } else if (store && store.slug) {
+      navigate(`/stores/${store.slug}/service/${serviceSlug}#book`);
     } else {
       console.error('Store ID is not available');
     }
@@ -133,7 +133,7 @@ const SimpleServicesSection = () => {
                     imageUrl={settings.card.image.urls[index]}
                     price={service.price}
                     style={settings.card}
-                    onClick={() => handleServiceButtonClick(service._id || "")}
+                    onClick={() => handleServiceButtonClick(service.slug || "")}
                   />
                 ))}
               </motion.div>
@@ -207,7 +207,7 @@ const SimpleServicesSection = () => {
                 imageUrl={settings.card.image.urls[index]}
                 price={service.price}
                 style={settings.card}
-                onClick={() => handleServiceButtonClick(service._id || "")}
+                onClick={() => handleServiceButtonClick(service.slug || "")}
               />
             ))}
           </div>

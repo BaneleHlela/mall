@@ -288,9 +288,9 @@ const storeAdminSlice = createSlice({
             state.error = null;
           })
           .addCase(fetchStore.fulfilled, (state, action: PayloadAction<Store>) => {
+            state.store = action.payload;
             state.isLoading = false;
             state.error = null;
-            state.store = action.payload;
           })
           .addCase(fetchStore.rejected, (state, action) => {
             state.isLoading = false;

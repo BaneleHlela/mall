@@ -1,7 +1,7 @@
 import { setCurrentStore } from '../../../../features/stores/storeSlice';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { fetchStoreServices } from '../../../../features/services/servicesSlice';
-import { fetchStoreById } from '../../../../features/stores/storeSlice'; // Import the fetchStoreById action
+import { fetchStoreBySlug } from '../../../../features/stores/storeSlice'; // Import the fetchStoreBySlug action
 import type { RootState } from '../../../../app/store';
 import { useEffect, useState } from 'react';
 import { useParams, Routes, Route } from 'react-router-dom';
@@ -22,7 +22,7 @@ const FirstStorePage = () => {
       if (storeId) {
         try {
           setLoading(true);
-          const result = await dispatch(fetchStoreById(storeId)).unwrap(); // Fetch store and unwrap the result
+          const result = await dispatch(fetchStoreBySlug(storeId)).unwrap(); // Fetch store and unwrap the result
           setStore(result); // Set the fetched store in local state
           setCurrentStore(result); // Update the global store state
         } catch (error) {

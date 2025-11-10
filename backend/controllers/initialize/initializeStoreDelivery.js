@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import Store from "../../models/StoreModel.js";
+import StoreLayout from "../../models/StoreLayout.js";
+import { captureStoreLayoutScreenshot } from "../../utils/helperFunctions.js";
+import { uploadToUploads } from "../../config/gcsClient.js";
 
 dotenv.config({ path: "../../../.env" });
 
-const initializeStoreDelivery = async () => {
+const initializeLayoutScreenshots = async () => {
   console.log("MONGODB_URL:", process.env.MONGODB_URL);
 
   try {
@@ -15,42 +17,50 @@ const initializeStoreDelivery = async () => {
     });
     console.log("✅ Connected to MongoDB");
 
-    // 2️⃣ Find stores missing 'delivers' field
-    const storesWithoutDelivery = await Store.find({
-      $or: [{ delivers: { $exists: false } }, { delivers: null }],
+    // 2️⃣ Find layouts missing screenshots
+    const layoutsWithoutScreenshots = await StoreLayout.find({
+      $or: [{ screenshot: { $exists: false } }, { screenshot: "" }, { screenshot: null }],
     });
 
-    if (storesWithoutDelivery.length === 0) {
-      console.log("🎉 All stores already have delivery info!");
+    if (layoutsWithoutScreenshots.length === 0) {
+      console.log("🎉 All layouts already have screenshots!");
       return;
     }
 
-    console.log(`Found ${storesWithoutDelivery.length} stores without delivery info.`);
+    console.log(`🧩 Found ${layoutsWithoutScreenshots.length} layouts without screenshots.`);
 
-    // 3️⃣ Initialize 'delivers' field for each store
-    for (const store of storesWithoutDelivery) {
+    // 3️⃣ Capture and upload screenshots
+    for (const layout of layoutsWithoutScreenshots) {
       try {
-        store.delivers = {
-          enabled: true,
-          range: 15,
-        };
-        await store.save();
-        console.log(`✅ Delivery info initialized for store: ${store._id} (${store.name || "Unnamed"})`);
+        console.log(`⚡ Capturing screenshot for layout ${layout._id}...`);
+
+        // Capture screenshot buffer
+        const screenshotBuffer = await captureStoreLayoutScreenshot(layout._id);
+
+        // Upload to Google Cloud
+        const fileName = `store-layouts/${layout._id}/layout-${Date.now()}.png`;
+        await uploadToUploads(screenshotBuffer, fileName);
+        const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${fileName}`;
+
+        // Save URL in DB
+        layout.screenshot = publicUrl;
+        await layout.save();
+
+        console.log(`✅ Screenshot initialized for layout: ${layout._id}`);
       } catch (error) {
-        console.error(`❌ Failed to initialize delivery for store ${store._id}:`, error.message);
+        console.error(`❌ Failed to capture screenshot for layout ${layout._id}:`, error.message);
       }
     }
 
-    console.log("🎯 Store delivery initialization complete!");
+    console.log("🎯 Layout screenshot initialization complete!");
   } catch (error) {
-    console.error("❌ Error initializing store delivery:", error.message);
+    console.error("❌ Error initializing layout screenshots:", error.message);
   } finally {
     await mongoose.disconnect();
     console.log("🔌 Disconnected from MongoDB");
   }
 };
 
+initializeLayoutScreenshots();
 
-initializeStoreDelivery();
-
-export default initializeStoreDelivery;
+export default initializeLayoutScreenshots;

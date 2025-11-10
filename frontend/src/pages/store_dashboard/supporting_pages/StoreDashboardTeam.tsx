@@ -5,6 +5,7 @@ import TeamMemberCard from "../../../components/the_mall/store_dashboard/cards/T
 import { deleteTeamMember } from "../../../features/store_admin/storeAdminSlice";
 import Swal from "sweetalert2";
 import EditTeamMemberModal from "../../../components/store_dashboard/modals/EditTeamMemberModal";
+import ComingSoon from "../../../components/the_mall/ComingSoon";
 
 
 const StoreTeam = () => {
@@ -13,6 +14,7 @@ const StoreTeam = () => {
   const [addPackageOpen, setAddPackageOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<any | null>(null);
+  const ready = false;
   
   const teamMembers = store?.team || [];
 
@@ -31,6 +33,16 @@ const StoreTeam = () => {
       dispatch(deleteTeamMember({ storeId: store._id, username }));
     }
   };
+
+  if (!ready) {
+    return (
+      <div className="h-full w-full p-[.3vh] rounded-[2vh] overflow-hidden">
+        <div className="w-full h-full lg:px-[4vh] rounded overflow-hidden">
+           <ComingSoon message="Team management features are coming soon. You’ll soon be able to add, edit, and manage your store staff here." />
+        </div>
+      </div>
+    )
+  }
 
   
   return (

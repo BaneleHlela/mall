@@ -260,11 +260,11 @@ export const colorPalettes = {
 
 export const StoreHomePosters = [
   {
-    storeId: "690c5c1142d0f15a660caa19",
+    storeSlug: "themall",
     status: "We have posters for every season and every occassion!",
     poster: {
       type: "single",
-      url: "http://localhost:5173/stores/690c5c1142d0f15a660caa19",
+      url: "http://localhost:5173/stores/themall",
       images: [
         "https://storage.googleapis.com/the-mall-uploads-giza/mall/posters/homePoster-1762533145755.png",
         "https://storage.googleapis.com/the-mall-uploads-giza/mall/posters/homePoster-1762534023629.png"
@@ -292,11 +292,11 @@ export const StoreHomePosters = [
     },
   },
   {
-    storeId: "690c5c1142d0f15a660caa19",
+    storeSlug: "themall",
     status: "Physical posters come with a QR Code to direct customers to your website!",
     poster: {
       type: "slideshow",
-      url: "http://localhost:5173/stores/690c5c1142d0f15a660caa19",
+      url: "http://localhost:5173/stores/themall",
       images: [
         "https://storage.googleapis.com/the-mall-uploads-giza/mall/posters/homePoster-1762524137608.png",
         "https://storage.googleapis.com/the-mall-uploads-giza/mall/posters/homePoster-1762523801042.png",
@@ -324,11 +324,11 @@ export const StoreHomePosters = [
     },
   },
   {
-    storeId: "69060eacd2d36655f1e63f9e",
+    storeSlug: "tote-bags",
     status: "15% off all bags!",
     poster: {
       type: "slideshow",
-      url: "http://localhost:5173/stores/69060eacd2d36655f1e63f9e#products",
+      url: "http://localhost:5173/stores/tote-bags#products",
       images: [
         "https://storage.googleapis.com/the-mall-uploads-giza/stores/687f8600418ddcb1548a210f/products/leafy-tote-bag/1753189052920-Screenshot%202025-07-22%20142843.png",
         "https://storage.googleapis.com/the-mall-uploads-giza/stores/687f8600418ddcb1548a210f/products/pink-tote-bag/1753188999247-Screenshot%202025-07-22%20142856.png",
@@ -357,7 +357,7 @@ export const StoreHomePosters = [
     },
   },
   {
-    storeId: "686e76aa96f14c28650b671d",
+    storeSlug: "ennock-m-art",
     status: "Just finished this painting for a client! What do you think?",
     poster: {
       type: "single",
@@ -370,11 +370,11 @@ export const StoreHomePosters = [
     },
   },
   {
-    storeId: "686e76aa96f14c28650b671d",
+    storeSlug: "ennock-m-art",
     status: "Paintings come in various frames. Like this one!",
     poster: {
       type: "single",
-      url: "http://localhost:5173/stores/686e76aa96f14c28650b671d/gallery",
+      url: "http://localhost:5173/stores/ennock-m-art/gallery",
       images: [
         "https://storage.googleapis.com/the-mall-uploads-giza/stores/686e76aa96f14c28650b671d/images/painting-frame.webp"
       ],
@@ -400,11 +400,11 @@ export const StoreHomePosters = [
     },
   },
   {
-    storeId: "686e76aa96f14c28650b671d",
+    storeSlug: "ennock-m-art",
     status: "A sofa and a painting is you need to build beautiful living room!",
     poster: {
       type: "single",
-      url: "http://localhost:5173/stores/686e76aa96f14c28650b671d/products",
+      url: "http://localhost:5173/stores/ennock-m-artd/products",
       images: [
         "https://storage.googleapis.com/the-mall-uploads-giza/stores/686e76aa96f14c28650b671d/images/task_01k9d1pggffvjbttcrp1f31qzd_1762448444_img_0.webp"
       ],
@@ -430,11 +430,12 @@ export const StoreHomePosters = [
     },
   },
   {
-    storeId: "686e76aa96f14c28650b671d",
+    storeSlug: "ennock-m-art",
     status: "Potraits!",
     poster: {
       type: "slideshow",
-      url: "http://localhost:5173/stores/686e76aa96f14c28650b671d/contact",
+      url: "http://localhost:5173/stores/ennock-m-art/contact",
+      aspectRatio: "square",
       images: [
         "https://storage.googleapis.com/the-mall-uploads-giza/stores/686e76aa96f14c28650b671d/images/Screenshot%202025-07-12%20150202.png",
         "https://storage.googleapis.com/the-mall-uploads-giza/stores/686e76aa96f14c28650b671d/images/Screenshot%202025-07-12%20150210.png",
@@ -463,11 +464,12 @@ export const StoreHomePosters = [
     },
   },
   {
-    storeId: "686e76aa96f14c28650b671d",
+    storeSlug: "ennock-m-art",
     status: "Fashion Designers! Why not add my work to your art?",
     poster: {
       type: "slideshow",
-      url: "http://localhost:5173/stores/686e76aa96f14c28650b671d/contact",
+      url: "http://localhost:5173/stores/ennock-m-art/contact",
+      aspectRatio: "square",
       images: [
         "https://storage.googleapis.com/the-mall-uploads-giza/stores/686e76aa96f14c28650b671d/images/Screenshot%202025-07-12%20150246.png",
         "https://storage.googleapis.com/the-mall-uploads-giza/stores/686e76aa96f14c28650b671d/images/Screenshot%202025-07-12%20150314.png",

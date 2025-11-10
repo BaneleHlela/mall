@@ -13,6 +13,7 @@ export interface Product {
     sold: number;
     variations: string[],
     images: string[];
+    slug: string;
 }
 
 export interface  StockUpdatePayload {

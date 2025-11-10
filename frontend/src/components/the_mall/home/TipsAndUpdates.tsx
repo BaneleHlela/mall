@@ -8,7 +8,7 @@ import HomePageReviewsModal from './HomePageReviewsModal';
 import StorePosterRatingStars from '../basic_store_post/StorePosterRatingStars';
 import { fetchStore } from '../../../features/store_admin/storeAdminSlice';
 import { useNavbar } from '../../../utils/context/NavBarContext';
-import { fetchStoreById, setLoading } from '../../../features/stores/storeSlice';
+import { fetchStoreBySlug, setLoading } from '../../../features/stores/storeSlice';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { updateUser } from '../../../features/user/userSlice';
@@ -32,8 +32,8 @@ const TipsAndUpdates: React.FC<TipsAndUpdatesProps> = () => {
         const getStore = async () => {
         try {
             setLoading(true);
-            const resultAction = await dispatch(fetchStoreById("690c5c1142d0f15a660caa19"));
-            if (fetchStoreById.fulfilled.match(resultAction)) {
+            const resultAction = await dispatch(fetchStoreBySlug("themall"));
+            if (fetchStoreBySlug.fulfilled.match(resultAction)) {
             setStore(resultAction.payload);
             } else {
             console.error('Failed to fetch store:', resultAction);
@@ -45,8 +45,8 @@ const TipsAndUpdates: React.FC<TipsAndUpdatesProps> = () => {
         }
         };
 
-        if ("690c5c1142d0f15a660caa19") getStore();
-    }, [dispatch, "690c5c1142d0f15a660caa19"]);
+        if ("themall") getStore();
+    }, [dispatch, "themall"]);
   
     useEffect(() => {
         if (isModalOpen) hideNavbar();

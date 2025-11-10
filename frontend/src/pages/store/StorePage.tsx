@@ -5,7 +5,7 @@ import { Route, Routes, useLocation, useParams } from "react-router-dom";
 import WebFont from "webfontloader";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { fetchStoreServices } from "../../features/services/servicesSlice";
-import { fetchStoreById, setCurrentStore } from "../../features/stores/storeSlice";
+import { fetchStoreBySlug, setCurrentStore } from "../../features/stores/storeSlice";
 
 import { 
   StoreProductsPage, StoreAboutPage, StoreBookPage,
@@ -28,11 +28,11 @@ import { IoMdClose } from "react-icons/io";
 import ComingSoon from "../../components/the_mall/ComingSoon";
 import StoreCartModal from "../cart/StoreCartModal";
 
-const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
+const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
   const location = useLocation();
   const settings = useAppSelector((state) => state.layoutSettings);
-  const { storeId: paramStoreId } = useParams<{ storeId: string }>();
-  const storeId = propStoreId || paramStoreId 
+  const { storeSlug: paramStoreSlug } = useParams<{ storeSlug: string }>();
+  const storeSlug = propStoreSlug || paramStoreSlug 
   const [isChatOpen, setIsChatOpen] = useState(false);
   const isCartRoute = location.pathname.includes('/cart'); // Check if the current route is "/cart"
 
@@ -55,10 +55,10 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
   // Fetch store by ID
   useEffect(() => {
     const fetchStore = async () => {
-      if (storeId) {
+      if (storeSlug) {
         try {
           setLoading(true);
-          const result = await dispatch(fetchStoreById(storeId)).unwrap(); // Fetch store and unwrap the result
+          const result = await dispatch(fetchStoreBySlug(storeSlug)).unwrap(); // Fetch store and unwrap the result
           setStore(result); // Set the fetched store in local state
           dispatch(setCurrentStore(result)); // Update the global store state
           if (result?.layouts[0] && !location.pathname.includes("layouts")) {
@@ -76,19 +76,19 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
     };
 
     fetchStore();
-  }, [storeId, dispatch]);
+  }, [storeSlug, dispatch]);
 
   useEffect(() => {
-    if (storeId) {
-        dispatch(fetchStoreServices({ storeId }));
+    if (storeSlug) {
+        dispatch(fetchStoreServices({ storeSlug }));
     }
   }, [dispatch]);
 
   useEffect(() => {
-    if (storeId) {
-      dispatch(fetchStoreProducts({ storeId }));
+    if (storeSlug && store?.slug) {
+      dispatch(fetchStoreProducts({ storeSlug: store.slug }));
     }
-  }, [storeId, dispatch]);
+  }, [storeSlug, dispatch, store]);
 
   useEffect(() => {
     if (location.hash) {
@@ -101,10 +101,10 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
 
   // Fetch store services if applicable
   useEffect(() => {
-    if (store?.trades.includes("services") && storeId) {
-      dispatch(fetchStoreServices({ storeId })); // Fetch services if needed
+    if (store?.trades.includes("services") && storeSlug) {
+      dispatch(fetchStoreServices({ storeSlug })); // Fetch services if needed
     }
-  }, [store, storeId, dispatch]);
+  }, [store, storeSlug, dispatch]);
 
   if (loading) {
     return <TbLoader3  size={45} className='animate-spin mx-auto'/>;
@@ -165,9 +165,9 @@ const StorePage = ({ storeId: propStoreId }: { storeId?: string }) => {
                   element={routeComponents[route.url] ?? null}
                 />
               ))}
-              {store?.trades.includes("products") && <Route path="/product/:productId" element={<SingleStoreProductPage />} />}
+              {store?.trades.includes("products") && <Route path="/product/:productSlug" element={<SingleStoreProductPage />} />}
               {store?.trades.includes("products") && <Route path="/cart" element={<div className="flex justify-center w-full"><StoreCartModal /></div>  } />}
-              {store?.trades.includes("services") && <Route path="/service/:serviceId" element={<StoreBookServicePage />} />}
+              {store?.trades.includes("services") && <Route path="/service/:serviceSlug" element={<StoreBookServicePage />} />}
             </Routes>
             {/* Floating Icons */}
             {settings?.floats?.floatingIcons?.show && !isCartRoute && (

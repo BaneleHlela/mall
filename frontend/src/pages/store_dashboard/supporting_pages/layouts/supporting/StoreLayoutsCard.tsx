@@ -5,8 +5,8 @@ interface StoreLayoutCardProps {
   layout: {
     _id: string;
     store: string;
-    imageUrl: string;
     name?: string;
+    screenshot: string;
   };
   onSelect: (layoutId: string) => void;
 }
@@ -38,18 +38,18 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect }) =
   return (
     <div
       onClick={handleClick}
-      className="relative w-full sm:w-[300px] h-[200px] overflow-hidden rounded-lg shadow-md group cursor-pointer"
+      className="relative w-full aspect-9/18 overflow-hidden rounded-lg shadow-md group cursor-pointer"
     >
       <img
-        src={layout.imageUrl}
+        src={layout.screenshot}
         alt={layout.name || "Store Layout"}
         className="w-full h-full object-cover"
       />
 
       {/* Name */}
-      <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-2 text-center">
+      {/* <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-2 text-center">
         <h3 className="text-lg font-semibold">{layout.name || "Store Layout"}</h3>
-      </div>
+      </div> */}
 
       {/* Overlay buttons */}
       <div

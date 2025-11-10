@@ -8,7 +8,8 @@ import {
     getDemoLayouts,
     replaceLayoutColor,
     createLayoutConfigWithSettings,
-    getStoreLayouts
+    getStoreLayouts,
+    captureLayoutScreenshot
 } from "../controllers/StoreLayoutController.js";
 import { protectRoute } from "../middlewares/authMiddleware.js";
 
@@ -25,6 +26,7 @@ router.patch('/:layoutId', /*protectRoute,*/ /*isAdmin,*/ updateLayoutConfig);
 router.put('/:layoutId', /*protectRoute,*/ /*isAdmin,*/ updateLayoutConfig);
 router.get('/:layoutId', /*protectRoute,*/ getLayoutConfig);
 router.delete('/:layoutId', /*protectRoute,*/ deleteLayoutConfig);
+router.put('/capture/:layoutId', captureLayoutScreenshot);
 
 router.get('/demo-store/:storeId', getLayoutByDemoStore);
 router.put('/replace-color/:layoutId', replaceLayoutColor);

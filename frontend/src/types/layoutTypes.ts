@@ -36,6 +36,7 @@ export interface Fonts {
 export interface Layout {
     routes: Routes;
     routeOrder: string[]; 
+    screenshot: string;
     practice: any;
     imageUrl: string;
     background: BackgroundSettings;

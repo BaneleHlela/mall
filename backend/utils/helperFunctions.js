@@ -1,5 +1,16 @@
+
 import { captureScreenshot } from "../config/puppeteerConfig.js";
-import dotenv from "dotenv";
+
+// Generate slug from store name
+export const generateSlug = (name) => {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '') // Remove special characters except spaces and hyphens
+    .replace(/[\s_-]+/g, '-') // Replace spaces, underscores, and multiple hyphens with single hyphen
+    .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+};
+
 
 
 
@@ -54,3 +65,18 @@ export const captureStoreHomePoster = async () => {
 };
 
 
+// Capture Store screenshot layout
+export const captureStoreLayoutScreenshot = async (layoutId) => {
+
+  //const url = `${CLIENT_URL}/stores/${storeId}`;
+  const url = `http://localhost:5173/layouts/${layoutId}/capture`;
+  console.log(url)
+
+  try {
+    const screenshotBuffer = await captureScreenshot(url, 360, 660);
+    return screenshotBuffer;
+  } catch (error) {
+    console.error(`Failed to capture HomePoster:`, error);
+    throw error;
+  }
+};
