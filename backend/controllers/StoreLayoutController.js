@@ -191,8 +191,6 @@ export const getDemoLayouts = expressAsyncHandler(async (req, res) => {
     // Fetch all demo layouts
     const demoLayouts = await StoreLayout.find({ isDemo: true });
 
-    console.log("Demo Layouts:", demoLayouts);
-
     if (!demoLayouts || demoLayouts.length === 0) {
         res.status(404);
         throw new Error("No demo layouts found.");

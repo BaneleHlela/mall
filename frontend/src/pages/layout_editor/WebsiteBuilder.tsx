@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { IoPower } from 'react-icons/io5';
-import { useAppSelector } from '../../app/hooks.ts';
+import { useAppSelector, useAppDispatch } from '../../app/hooks.ts';
 import LayoutSettings from '../../components/layout_settings/LayoutSettings.tsx';
 import TopBar from '../../components/layout_settings/topbar/TopBar.tsx';
-import { useAppDispatch } from '../../app/hooks.ts';
 import { fetchStoreBySlug, setCurrentStore } from '../../features/stores/storeSlice';
 import { TbLoader3 } from "react-icons/tb";
 import { setStore } from '../../features/store_admin/storeAdminSlice.ts';
@@ -56,12 +55,9 @@ const WebsiteBuilderContent: React.FC = () => {
 
   const store = useAppSelector((state) => state.stores.currentStore);
   const fonts = useAppSelector((state) => state.layoutSettings.fonts);
-
-
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
-  const layoutId = useParams<{ layoutId: string }>().layoutId;
-
   const settings = useAppSelector((state) => state.layoutSettings);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const { layoutId } = useParams<{ layoutId: string }>();
   const { width, height, scale } = sizeMap[device];
 
   useEffect(() => {
@@ -73,7 +69,8 @@ const WebsiteBuilderContent: React.FC = () => {
       const saveLayout = async () => {
         try {
           await dispatch(
-            editLayout({ // @ts-ignore-next-line
+            editLayout({
+              // @ts-ignore
               layoutId: settings._id,
               layoutConfig: settings,
             })
@@ -82,19 +79,12 @@ const WebsiteBuilderContent: React.FC = () => {
           console.error('Failed to save layout:', error);
         }
       };
-  
-      // Save immediately
+
       saveLayout();
-  
-      // Save after 5 seconds
-      const timeoutId = setTimeout(() => {
-        saveLayout();
-      }, 5000);
-  
-      // Cleanup timeout on unmount or dependency change
+      const timeoutId = setTimeout(saveLayout, 5000);
       return () => clearTimeout(timeoutId);
     }
-  }, [settings]);
+  }, [settings, dispatch]);
 
   useEffect(() => {
     const fetchLayoutAndStore = async () => {
@@ -103,11 +93,10 @@ const WebsiteBuilderContent: React.FC = () => {
           setLoading(true);
           const layoutResult = await dispatch(getLayout(layoutId)).unwrap();
           dispatch(setInitialLayout(layoutResult));
-          
+
           if (layoutResult.store) {
             setStoreId(layoutResult.store);
             const storeResult = await dispatch(fetchStoreBySlug(layoutResult.store)).unwrap();
-            console.log(storeResult);
             dispatch(setCurrentStore(storeResult));
             dispatch(setStore(storeResult));
           }
@@ -120,16 +109,18 @@ const WebsiteBuilderContent: React.FC = () => {
     };
 
     fetchLayoutAndStore();
-  }, [dispatch, layoutId, storeId]);
+  }, [dispatch, layoutId]);
 
-  if (loading) {
-    return <TbLoader3 size={45} className='animate-spin mx-auto'/>;
-  }
-  
-  if (!store) {
-    return <div className="p-6 text-red-500">Store not found.</div>;
+  // Handle loading and missing store
+  if (loading) return <TbLoader3 size={45} className='animate-spin mx-auto' />;
+  if (!store) return <div className="p-6 text-red-500">Store not found.</div>;
+
+  // Handle small window (mobile builder mode)
+  if (typeof window !== "undefined" && window.innerWidth < 720) {
+    return <div className="p-6 text-center">Mobile Website Builder</div>;
   }
 
+  // Main builder layout
   return (
     <div className="h-screen w-screen overflow-hidden bg-stone-100 font-[Outfit]">
       <TopBar setDevice={setDevice} zoom={zoom} setZoom={setZoom} />
@@ -148,7 +139,7 @@ const WebsiteBuilderContent: React.FC = () => {
               ...deviceStyles[device],
             }}
           >
-            {/* Mobile Extras */}
+            {/* Mobile extras */}
             {device === 'mobile' && (
               <>
                 <div style={{
@@ -169,30 +160,20 @@ const WebsiteBuilderContent: React.FC = () => {
               </>
             )}
 
-            {/* Tablet Extras */}
+            {/* Tablet extras */}
             {device === 'tablet' && (
               <>
                 <div style={{
                   position: 'absolute', bottom: '-48px', left: '50%',
                   transform: 'translateX(-50%)', width: '40px', height: '40px',
-                  borderRadius: '50%', background: 'rgba(255, 255, 255, 0.2)',
+                  borderRadius: '50%', background: 'rgba(255,255,255,0.2)',
                   backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.3)', zIndex: 10
-                }} />
-                <div style={{
-                  position: 'absolute', top: '140px', right: '-22px',
-                  transform: 'translateX(-50%)', width: '10px', height: '95px',
-                  borderRadius: '5px', backgroundColor: '#000', zIndex: 10
-                }} />
-                <div style={{
-                  position: 'absolute', top: '250px', left: '-14px',
-                  transform: 'translateX(-50%)', width: '8px', height: '55px',
-                  borderRadius: '5px', backgroundColor: '#000', zIndex: 10
+                  border: '1px solid rgba(255,255,255,0.3)', zIndex: 10
                 }} />
               </>
             )}
 
-            {/* Desktop Extras */}
+            {/* Desktop extras */}
             {device === 'desktop' && (
               <>
                 <div style={{
@@ -202,16 +183,6 @@ const WebsiteBuilderContent: React.FC = () => {
                 }}>
                   <IoPower color="white" size={32} />
                 </div>
-                <div style={{
-                  position: 'absolute', bottom: '-58px', right: '-25px',
-                  transform: 'translateX(-50%)', width: '8px', height: '60px',
-                  borderRadius: '3px', backgroundColor: '#000', zIndex: 10
-                }} />
-                <div style={{
-                  position: 'absolute', bottom: '-58px', left: '-18px',
-                  transform: 'translateX(-50%)', width: '8px', height: '60px',
-                  borderRadius: '3px', backgroundColor: '#000', zIndex: 10
-                }} />
               </>
             )}
 

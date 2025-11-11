@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import { fetchDemoLayouts } from "../../../../../features/layouts/layoutSlice";
 import { useNavigate } from "react-router-dom";
-import LayoutCard from "./LayoutCard";
 import CustomizeLayout from "./CustomizeLayout";
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoIosArrowRoundBack } from "react-icons/io";
+import StoreLayoutCard from "./StoreLayoutsCard";
 
 const LayoutCreator = () => {
   const dispatch = useAppDispatch();
@@ -46,18 +46,19 @@ const LayoutCreator = () => {
   }
 
   return (
-    <div className="px-[.8vh] relative w-full h-full text-center lg:max-w-[40vw]">
-      <h1 className="py-[3vh] text-[4vh]">Layout creator</h1>
+    <div className="px-[.8vh] relative w-full h-full text-center lg:max-w-[50vw]">
+      <h1 className="py-[3vh] text-[4vh] text-shadow-xs">Layout creator</h1>
       {step === 1 && (
         <>
           <h3 className="py-[2vh]">Select a design you like from these Demo Stores</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-[1vh] lg:gap-[1vh]">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[1vh] lg:gap-[1vh]">
             {availableLayouts.map((layout) => (
-              <LayoutCard
+              <StoreLayoutCard
                 key={layout._id} 
                 layout={layout}
                 onSelect={() => handleSelect(layout)}
                 onView={handleView}
+                edit={false}
               />
             ))}
           </div>

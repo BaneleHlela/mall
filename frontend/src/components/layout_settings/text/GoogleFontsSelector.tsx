@@ -10,8 +10,9 @@ interface Font {
 interface GoogleFontsSelectorProps {
   onFontSelect: (font: string) => void;
   selectedFont: string;
+  fullWidth?: boolean;
 }
-const GoogleFontsSelector: React.FC<GoogleFontsSelectorProps> = ({ onFontSelect, selectedFont }) => {
+const GoogleFontsSelector: React.FC<GoogleFontsSelectorProps> = ({ onFontSelect, selectedFont, fullWidth = false }) => {
   const [fonts, setFonts] = useState<Font[]>([]);
   const [search, setSearch] = useState<string>('');
   
@@ -50,13 +51,13 @@ const GoogleFontsSelector: React.FC<GoogleFontsSelectorProps> = ({ onFontSelect,
   };
 
   return (
-    <div className="relative w-[50%]"> {/* Added relative positioning */}
+    <div className={`relative ${fullWidth ? "w-full" : "w-1.2"}`}> {/* Added relative positioning */}
       <input
         type="text"
         placeholder={`${selectedFont ||  "Search fonts..."}`}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="px-1 py-[1.5px] border rounded-[7px] w-full"
+        className="px-1 py-[1.5px] border rounded-[.45vh] w-full"
       />
       {search && (
         <select

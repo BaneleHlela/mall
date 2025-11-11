@@ -55,8 +55,8 @@ const StoreImages: React.FC<StoreImagesProps> = ({onImageSelect}) => {
   };
 
   return (
-    <div className="h-full w-full m-1 rounded-xl bg-white shadow-md p-2">
-      <div className="h-fit flex flex-row justify-center w-full">
+    <div className="h-full w-full mt-1 lg:m-1 shadow-md p-2">
+      <div className="h-fit flex flex-row justify-center w-full py-1">
         <UploadStoreImage />
       </div>
 

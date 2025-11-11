@@ -13,11 +13,11 @@ const StoreDashboardLayouts = () => {
   const { storeId } = useParams<{ storeId: string }>();
   const store = useAppSelector((state) => state.storeAdmin.store);
   const layouts = useAppSelector((state) => state.layout.layouts);
+  const isLoading = useAppSelector((state) => state.layout.isLoading);
 
   // Fetch layouts for the store
   useEffect(() => {
     if (store?.layouts?.length) {
-      console.log(store.layouts);
       dispatch(getStoreLayouts(store.layouts));
     }
   }, [dispatch, store?.layouts]);
@@ -46,6 +46,10 @@ const StoreDashboardLayouts = () => {
     return <p>Store not found or invalid store ID: {storeId}.</p>;
   }
 
+  if (isLoading) {
+    return <p>loading...</p>;
+  }
+
   const handleClick = async () => {
     navigate(`/layouts/create`);
   };
@@ -59,9 +63,9 @@ const StoreDashboardLayouts = () => {
   };
 
   return (
-    <div className="flex flex-col justify-between w-full h-screen px-[1vh] mt-1 overflow-y-scroll">
+    <div className="relative flex flex-col items-center justify-between w-full h-screen px-[1vh] mt-1 overflow-y-scroll">
       <div>
-        <h1 className="text-center text-[2.4vh] font-semibold py-[1.5vh] font-[Lato]">
+        <h1 className="text-center text-[2.4vh] font-semibold py-[1.5vh] font-[Lato] text-shadow-xs">
           {store.name} Layouts
         </h1>
         {store.layouts.length === 0 ? (
@@ -88,8 +92,8 @@ const StoreDashboardLayouts = () => {
         )}
       </div>
 
-      <div className="w-full flex flex-col justify-center items-center my-4">
-        <button onClick={handleClick} className="flex items-center bg-black text-white rounded-[.45vh] p-[1vh] space-x-1">
+      <div className="absolute bottom-0 w-fit h-[10vh] flex flex-col justify-center items-center">
+        <button onClick={handleClick} className="flex items-center bg-black text-white rounded-[.45vh] p-[1vh] space-x-1 shadow">
           <p className="">New Layout</p> <FaPlus className="text-[1.8vh]"/>
         </button>
       </div>

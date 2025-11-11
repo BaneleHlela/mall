@@ -75,7 +75,7 @@ const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeId }) => {
 
 
   return (
-    <div className="shadow space-y-1 w-[250px] font-[Outfit] my-8 p-3 bg-white rounded-lg text-sm">
+    <div className="shadow space-y-1 w-[250px] font-[Outfit] p-3 bg-white rounded text-sm">
       <h4 className="text-center font-semibold mb-4">Upload Store Image</h4>
 
       {/* Styled file input */}

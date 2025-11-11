@@ -19,7 +19,7 @@ const initializeLayoutScreenshots = async () => {
 
     // 2️⃣ Find layouts missing screenshots
     const layoutsWithoutScreenshots = await StoreLayout.find({
-      $or: [{ screenshot: { $exists: false } }, { screenshot: "" }, { screenshot: null }],
+      $or: [{ screenshot: { $exists: true } }, { screenshot: "" }, { screenshot: null }],
     });
 
     if (layoutsWithoutScreenshots.length === 0) {

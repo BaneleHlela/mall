@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { LuScanEye } from "react-icons/lu";
+import { FaEdit } from "react-icons/fa";
+import { MdModeEditOutline } from "react-icons/md";
 
 interface StoreLayoutCardProps {
   layout: {
@@ -9,9 +12,10 @@ interface StoreLayoutCardProps {
     screenshot: string;
   };
   onSelect: (layoutId: string) => void;
+  edit?: boolean;
 }
 
-const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect }) => {
+const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect , edit = true }) => {
   const navigate = useNavigate();
   const [showButtons, setShowButtons] = useState(false);
 
@@ -21,7 +25,7 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect }) =
     if (showButtons) {
       timer = setTimeout(() => {
         setShowButtons(false);
-      }, 5000); // hide after 5 seconds
+      }, 3000); // hide after 5 seconds
     }
 
     return () => clearTimeout(timer);
@@ -36,48 +40,56 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect }) =
   };
 
   return (
-    <div
-      onClick={handleClick}
-      className="relative w-full aspect-9/18 overflow-hidden rounded-lg shadow-md group cursor-pointer"
-    >
-      <img
-        src={layout.screenshot}
-        alt={layout.name || "Store Layout"}
-        className="w-full h-full object-cover"
-      />
-
-      {/* Name */}
-      {/* <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-2 text-center">
-        <h3 className="text-lg font-semibold">{layout.name || "Store Layout"}</h3>
-      </div> */}
-
-      {/* Overlay buttons */}
+    <div className="">
+      <p className="text-center font-[400] text-[1.8vh] line-clamp-1 lg:py-[1vh] text-shadow-sm">{layout.name || "Store Layout"}</p>
+      
       <div
-        className={`
-          absolute inset-0 bg-black bg-opacity-50 
-          transition-all duration-300 flex items-center justify-center gap-4
-          ${showButtons ? "opacity-100" : "opacity-0"}
-          sm:opacity-0 sm:group-hover:opacity-100
-        `}
+        onClick={handleClick}
+        className="relative w-full pt-1 bg-white aspect-9/18 max-h-[400px] overflow-hidden rounded-lg shadow-md group cursor-pointer"
       >
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate(`/stores/${layout.store}`);
-          }}
-          className="bg-white text-black px-3 py-1 rounded hover:bg-gray-200"
-        >
-          View
-        </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onSelect(layout._id);
-          }}
-          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-        >
-          Edit
-        </button>
+        <div className="flex justify-center h-[4%] w-full items-center text-center text-[1.6vh] font-semibold line-clamp-1">
+        </div>
+        <div className="relative h-[90%]">
+          <img
+            src={layout.screenshot}
+            alt={layout.name || "Store Layout"}
+            className="w-full h-full object-contain"
+          />
+
+          {/* Overlay buttons appear only over image */}
+          <div
+            className={`
+              absolute inset-0 bg-[#00000043] 
+              transition-all duration-300 flex flex-col items-center justify-center gap-2
+              ${showButtons ? "opacity-100" : "opacity-0"}
+              sm:opacity-0 sm:group-hover:opacity-100
+            px-2`}
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/stores/${layout.store}`);
+              }}
+              className="flex items-center justify-center w-full bg-white text-green-500 px-[.85vh] py-[.35vh] rounded-[.45vh] hover:bg-gray-200 space-x-1"
+            >
+              <LuScanEye /> <p className="">View</p>
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelect(layout._id);
+              }}
+              className="flex items-center justify-center w-full bg-blue-500 text-white px-[.85vh] py-[.35vh] rounded-[.45vh] hover:bg-blue-600 space-x-1"
+            >
+              <MdModeEditOutline /> <p className="">{edit ? "Edit" : "Select"}</p>
+            </button>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="flex justify-center h-[6%] w-full items-center text-center text-[1.6vh] font-semibold line-clamp-1">
+          <span className="w-10 h-[.25vh] bg-gray-300 rounded"></span>
+        </div>
       </div>
     </div>
   );

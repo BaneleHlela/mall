@@ -100,7 +100,7 @@ const DashboardStoreItemsTable: React.FC<DashboardStoreItemsTableProps> = ({
                 </td>
               )}
 
-              <td className="p-[1.5vh]">
+              <td className="p-[1.5vh] w-fit">
                 {type === 'product' && renderStock((item as Product).stockQuantity)}
                 {type === 'service' && formatDuration((item as Service).duration || 0)}
                 {type === 'package' && formatPackageDuration((item as Package).duration)}
@@ -126,7 +126,7 @@ const DashboardStoreItemsTable: React.FC<DashboardStoreItemsTableProps> = ({
                   return (
                     <span
                       onClick={() => onStatusClick(item)}
-                      className={`${getStatusBadgeClass(status)}`}
+                      className={`${getStatusBadgeClass(status)} line-clamp-1`}
                     >
                       {status}
                     </span>
