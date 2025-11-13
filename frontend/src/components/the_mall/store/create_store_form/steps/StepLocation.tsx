@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormContext } from '../context/FormContext';
 import LocationPicker from '../../../location/LocationPicker';
 
 const StepLocation: React.FC = () => {
-  const { form, handleChange } = useFormContext();
+  const { form, handleChange, setStepValidator, nextClicked } = useFormContext();
+  const [validation, setValidation] = useState({
+    locationValid: true
+  });
+
+  const validateLocation = () => {
+    const hasLocation = !!(form.location.lat !== 0 && form.location.lng !== 0 && form.location.address);
+    setValidation({ locationValid: hasLocation });
+    return hasLocation;
+  };
+
+  useEffect(() => {
+    setStepValidator(() => validateLocation);
+  }, [form.location]);
 
   return (
     <div className="space-y-[1.2vh] text-[2vh]">
@@ -42,6 +55,13 @@ const StepLocation: React.FC = () => {
       {form.location.address && (
         <div className="text-gray-700 text-sm mt-2">
           <span className="font-semibold">Selected Address:</span> {form.location.address}
+        </div>
+      )}
+
+      {/* Validation error */}
+      {nextClicked && !validation.locationValid && (
+        <div className="text-center text-red-500 text-sm mt-2">
+          Please select a location for your store
         </div>
       )}
     </div>

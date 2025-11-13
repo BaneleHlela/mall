@@ -5,7 +5,7 @@ import { useFormContext } from '../context/FormContext';
 import { departments } from '../../../../../utils/helperObjects';
 
 const StepBasic: React.FC = () => {
-  const { form, handleChange, setForm, setStepValidator } = useFormContext();
+  const { form, handleChange, setForm, setStepValidator, nextClicked } = useFormContext();
   const [isDeptOpen, setIsDeptOpen] = useState(false);
   const [validation, setValidation] = useState({
     phoneValid: true,
@@ -52,7 +52,7 @@ const StepBasic: React.FC = () => {
   };
 
   // Set the step validator
-  useEffect(() => {//@ts-ignore
+  useEffect(() => {
     setStepValidator(() => validateFields);
   }, [form]);
 
@@ -71,7 +71,7 @@ const StepBasic: React.FC = () => {
                 }}
                 className="w-full border-b p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none focus:ring-0"
             />
-            {!validation.nameValid && <p className="text-red-500 text-sm">Store name is required</p>}
+            {nextClicked && !validation.nameValid && <p className="text-red-500 text-sm">Store name is required</p>}
         </div>
         <div className="w-full">
             <label className="w-full text-left text-black mt-[.9vh]">Department *</label>
@@ -79,13 +79,13 @@ const StepBasic: React.FC = () => {
                 <button
                     type="button"
                     onClick={() => setIsDeptOpen(prev => !prev)}
-                    className="w-full flex justify-between items-center border p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none"
+                    className="w-full flex justify-between items-center border h-[5vh] p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none"
                 >
                 {// @ts-ignore
                     form.departments[0] ? departments[form.departments[0]].full : 'Select Department'}
                 <MdOutlineKeyboardArrowDown size={20} />
                 </button>
-                {!validation.departmentValid && <p className="text-red-500 text-sm">Department selection is required</p>}
+                {nextClicked && !validation.departmentValid && <p className="text-red-500 text-sm">Department selection is required</p>}
                 <AnimatePresence>
                   {isDeptOpen && (
                       <motion.ul
@@ -93,7 +93,7 @@ const StepBasic: React.FC = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute mt-1 w-full bg-white border rounded shadow max-h-[250px] overflow-y-auto z-10"
+                      className="absolute top-0 w-full bg-white border rounded shadow max-h-[250px] overflow-y-auto z-10"
                       >
                       {Object.entries(departments).map(([key, { full, description }]) => (
                           <li
@@ -136,7 +136,7 @@ const StepBasic: React.FC = () => {
           }}
           className={`w-full border-b p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none ${!validation.phoneValid ? 'border-red-500' : ''}`}
         />
-        {!validation.phoneValid && <p className="text-red-500 text-sm">Enter a valid phone number (10 digits)</p>}
+        {nextClicked && !validation.phoneValid && <p className="text-red-500 text-sm">Enter a valid phone number (10 digits)</p>}
       </div>
 
       <div className='w-full flex flex-col items-start'>
@@ -153,7 +153,7 @@ const StepBasic: React.FC = () => {
           }}
           className={`w-full border-b p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none ${!validation.emailValid ? 'border-red-500' : ''}`}
         />
-        {!validation.emailValid && <p className="text-red-500 text-sm">Enter a valid email address</p>}
+        {nextClicked && !validation.emailValid && <p className="text-red-500 text-sm">Enter a valid email address</p>}
       </div>
     </div>
   );

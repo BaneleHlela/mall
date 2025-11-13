@@ -1,8 +1,9 @@
-
 import React, { useState } from 'react';
 import { useFormContext } from '../context/FormContext';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPinterest, FaYoutube, FaWhatsapp, FaPhone } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
+
+// Use toaster for ther alert
 
 interface SocialLink {
     platform: 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'pinterest' | 'youtube' | 'whatsapp' | 'phone';
@@ -28,8 +29,8 @@ const DisplaySocialLink: React.FC<{
 }> = ({ platform, deletable, onDeleteClick, onClick }) => {
     const Icon = socialIcons[platform];
     return (
-        <div className="relative border border-gray-400 p-[1.2vh] rounded flex flex-row justify-center items-center cursor-pointer shadow-md" onClick={onClick}>
-            <Icon className="h-[7vh] w-[7vh] text-gray-600" />
+        <div className="relative aspect-square border border-gray-400 p-[1.2vh] rounded-[.45vh] flex flex-row justify-center items-center cursor-pointer shadow bg-blue-500" onClick={onClick}>
+            <Icon className="h-[7vh] w-[7vh] text-white" />
             {deletable && (
                 <button
                     className="absolute -top-[.6vh] -right-[.6vh] bg-red-500 text-white rounded-full w-[2.5vh] h-[2.5vh] flex items-center justify-center text-[.8vh]"
@@ -75,11 +76,17 @@ const StepSocials: React.FC = () => {
     };
 
     const handleSaveSocial = (social: SocialLink) => {
+        // Validate that the URL is not empty
+        if (!social.url.trim()) {
+            alert("URL cannot be empty."); // Display an error message
+            return; // Prevent saving
+        }
+    
         const formattedSocial = {
             ...social,
             url: formatSocialUrl(social.platform, social.url)
         };
-
+    
         let newSocials;
         if (currentSocial && form.socials.some(s => s.platform === currentSocial.platform)) {
             // Edit existing
@@ -92,7 +99,7 @@ const StepSocials: React.FC = () => {
         setIsModalOpen(false);
         setCurrentSocial(null);
     };
-    console.log(form)
+
 
     const availablePlatforms = Object.keys(socialIcons).filter(
         platform => !form.socials.some(s => s.platform === platform)

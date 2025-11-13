@@ -7,7 +7,7 @@ const StepBusinessHours: React.FC = () => {
 
   return (
     <div className="space-y-[1.2vh] text-[2vh]">
-      <p className="text-[2.5vh] text-center">Operating Hours</p>
+      <p className="text-[2.5vh] text-center py-4 text-shadow-2xs">Operating Hours</p>
 
       {/* Always Open toggle */}
       <div className="flex justify-between mx-[1.8vh] pb-[.8vh] mb-[1.5vh] border-b-[.3vh] border-gray-700">

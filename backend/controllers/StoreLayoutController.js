@@ -35,7 +35,7 @@ export const createLayoutConfig = async (req, res) => {
 
 export const createLayoutConfigWithSettings = async (req, res) => {
     try {
-      const { layoutId, newColors, oldColors, newFonts, store } = req.body;
+      const { layoutId, newColors, oldColors, newFonts, sectionUpdates, store } = req.body;
   
       // Fetch the original layout
       const originalLayout = await StoreLayout.findById(layoutId);
@@ -48,61 +48,70 @@ export const createLayoutConfigWithSettings = async (req, res) => {
       const fonts = { ...originalLayout.fonts }; // Clone fonts if needed
   
       // === Replace Colors Recursively ===
-      const replaceColors = (node) => {
-        if (typeof node === 'object' && node !== null) {
-          for (const key in node) {
-            if (typeof node[key] === 'string') {
-              const colorIndex = oldColors.indexOf(node[key]);
-              if (colorIndex !== -1 && newColors[colorIndex]) {
-                node[key] = newColors[colorIndex];
+      if (newColors && oldColors) {
+        const replaceColors = (node) => {
+          if (typeof node === 'object' && node !== null) {
+            for (const key in node) {
+              if (typeof node[key] === 'string') {
+                const colorIndex = oldColors.indexOf(node[key]);
+                if (colorIndex !== -1 && newColors[colorIndex]) {
+                  node[key] = newColors[colorIndex];
+                }
+              } else {
+                replaceColors(node[key]);
               }
-            } else {
-              replaceColors(node[key]);
             }
           }
-        }
-      };
+        };
+        replaceColors(clonedLayout);
+      }
   
       // === Replace Fonts ===
       const updatedFonts = { ...fonts };
   
-      if (newFonts.primary && fonts.primary && newFonts.primary !== fonts.primary) {
+      if (newFonts?.primary && fonts.primary && newFonts.primary !== fonts.primary) {
         updatedFonts.primary = newFonts.primary;
       }
-      if (newFonts.secondary && fonts.secondary && newFonts.secondary !== fonts.secondary) {
+      if (newFonts?.secondary && fonts.secondary && newFonts.secondary !== fonts.secondary) {
         updatedFonts.secondary = newFonts.secondary;
       }
-      if (newFonts.tertiary && fonts.tertiary && newFonts.tertiary !== fonts.tertiary) {
+      if (newFonts?.tertiary && fonts.tertiary && newFonts.tertiary !== fonts.tertiary) {
         updatedFonts.tertiary = newFonts.tertiary;
       }
   
-      const replaceFonts = (node) => {
-        if (typeof node === 'object' && node !== null) {
-          for (const key in node) {
-            if (typeof node[key] === 'string') {
-              const fontIndex = Object.values(fonts).indexOf(node[key]);
-              const newFont = Object.values(newFonts)[fontIndex];
-              if (fontIndex !== -1 && newFont) {
-                node[key] = newFont;
+      if (newFonts) {
+        const replaceFonts = (node) => {
+          if (typeof node === 'object' && node !== null) {
+            for (const key in node) {
+              if (typeof node[key] === 'string') {
+                const fontIndex = Object.values(fonts).indexOf(node[key]);
+                const newFont = Object.values(newFonts)[fontIndex];
+                if (fontIndex !== -1 && newFont) {
+                  node[key] = newFont;
+                }
+              } else {
+                replaceFonts(node[key]);
               }
-            } else {
-              replaceFonts(node[key]);
             }
           }
-        }
-      };
-      
-  
-      // Apply replacements
-      replaceColors(clonedLayout);
-      replaceFonts(clonedLayout);
+        };
+        replaceFonts(clonedLayout);
+      }
 
+      // === Apply Section Updates ===
+      if (sectionUpdates) {
+        Object.keys(sectionUpdates).forEach(sectionKey => {
+          if (clonedLayout[sectionKey]) {
+            clonedLayout[sectionKey] = { ...clonedLayout[sectionKey], ...sectionUpdates[sectionKey] };
+          }
+        });
+      }
   
       // === Create New Layout ===
       const newLayout = await StoreLayout.create({
         ...clonedLayout,
         fonts: updatedFonts,
-        colors: newColors,
+        colors: newColors || clonedLayout.colors,
         name: "New Layout with Updated Settings",
         store
       });
@@ -117,8 +126,15 @@ export const createLayoutConfigWithSettings = async (req, res) => {
       const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${fileName}`;
   
       newLayout.imageUrl = publicUrl;
-      // Assuming storeId is passed in the request body
       await newLayout.save();
+
+      // === Add layout ID to store's layouts array ===
+      const Store = (await import('../models/StoreModel.js')).default;
+      await Store.findByIdAndUpdate(
+        store,
+        { $addToSet: { layouts: newLayoutId } }, // $addToSet prevents duplicates
+        { new: true }
+      );
   
       res.status(201).json(newLayout);
     } catch (error) {
@@ -126,18 +142,96 @@ export const createLayoutConfigWithSettings = async (req, res) => {
       res.status(500).json({ message: 'Failed to create layout.' });
     }
 };
+
+export const updateLayoutConfigWithSettings = async (req, res) => {
+    try {
+      const { layoutId, newColors, oldColors, newFonts, sectionUpdates, store } = req.body;
+  
+      // Fetch the existing layout
+      const existingLayout = await StoreLayout.findById(layoutId);
+      if (!existingLayout) {
+        return res.status(404).json({ message: 'Layout not found.' });
+      }
+  
+      let updatedLayout = JSON.parse(JSON.stringify(existingLayout));
+  
+      // Apply color changes if provided
+      if (newColors && oldColors) {
+        const replaceColors = (node) => {
+          if (typeof node === 'object' && node !== null) {
+            for (const key in node) {
+              if (typeof node[key] === 'string') {
+                const colorIndex = oldColors.indexOf(node[key]);
+                if (colorIndex !== -1 && newColors[colorIndex]) {
+                  node[key] = newColors[colorIndex];
+                }
+              } else {
+                replaceColors(node[key]);
+              }
+            }
+          }
+        };
+        replaceColors(updatedLayout);
+        updatedLayout.colors = newColors;
+      }
+  
+      // Apply font changes if provided
+      if (newFonts) {
+        const replaceFonts = (node) => {
+          if (typeof node === 'object' && node !== null) {
+            for (const key in node) {
+              if (typeof node[key] === 'string') {
+                const fontIndex = Object.values(existingLayout.fonts || {}).indexOf(node[key]);
+                const newFont = Object.values(newFonts)[fontIndex];
+                if (fontIndex !== -1 && newFont) {
+                  node[key] = newFont;
+                }
+              } else {
+                replaceFonts(node[key]);
+              }
+            }
+          }
+        };
+        replaceFonts(updatedLayout);
+        updatedLayout.fonts = { ...existingLayout.fonts, ...newFonts };
+      }
+  
+      // Apply section updates if provided
+      if (sectionUpdates) {
+        Object.keys(sectionUpdates).forEach(sectionKey => {
+          if (updatedLayout[sectionKey]) {
+            updatedLayout[sectionKey] = { ...updatedLayout[sectionKey], ...sectionUpdates[sectionKey] };
+          }
+        });
+      }
+  
+      // Update the layout in the database
+      const savedLayout = await StoreLayout.findByIdAndUpdate(
+        layoutId,
+        { $set: updatedLayout },
+        { new: true }
+      );
+  
+      res.status(200).json(savedLayout);
+    } catch (error) {
+      console.error('Error updating layout with settings:', error);
+      res.status(500).json({ message: 'Failed to update layout.' });
+    }
+};
   
   
 export const getStoreLayouts = expressAsyncHandler(async (req, res) => {
-  const layoutIds  = req.body; 
+  const { storeId } = req.params;
 
-  if (!Array.isArray(layoutIds) || layoutIds.length === 0) {
+  if (!storeId) {
     res.status(400);
-    throw new Error("Request body must be a non-empty array of layout IDs.");
+    throw new Error("Store ID is required.");
   }
+  
   const layouts = await StoreLayout.find({
-    _id: { $in: layoutIds }
-  });
+    store: storeId
+  }).populate('store', '_id name slug');
+  
   res.json(layouts);
 });
 
@@ -145,7 +239,7 @@ export const getStoreLayouts = expressAsyncHandler(async (req, res) => {
 export const getLayoutConfig = expressAsyncHandler(async (req, res) => {
     const { layoutId } = req.params;  // Assume you're passing layoutId instead of storeId
 
-    const layout = await StoreLayout.findById(layoutId);  // populate('store', '_id slug');
+    const layout = await StoreLayout.findById(layoutId).populate('store', '_id name slug');
 
     if (!layout) {
         res.status(404);
@@ -161,7 +255,7 @@ export const getLayoutByDemoStore = expressAsyncHandler(async (req, res) => {
     const { storeId } = req.params;
 
     // Find the layout where the store field matches the given storeId
-    const layout = await StoreLayout.findOne({ store: storeId });
+    const layout = await StoreLayout.findOne({ store: storeId }).populate('store', '_id name slug');
 
     if (!layout) {
         res.status(404);
@@ -177,7 +271,7 @@ export const getLayoutByStore = expressAsyncHandler(async (req, res) => {
     const { storeId } = req.params;
 
     // Find the layout where the store field matches the given storeId
-    const layout = await StoreLayout.findOne({ store: storeId });
+    const layout = await StoreLayout.findOne({ store: storeId }).populate('store', '_id name slug');
 
     if (!layout) {
         res.status(404);
@@ -189,7 +283,7 @@ export const getLayoutByStore = expressAsyncHandler(async (req, res) => {
 
 export const getDemoLayouts = expressAsyncHandler(async (req, res) => {
     // Fetch all demo layouts
-    const demoLayouts = await StoreLayout.find({ isDemo: true });
+    const demoLayouts = await StoreLayout.find({ isDemo: true }).populate('store', '_id name slug');
 
     if (!demoLayouts || demoLayouts.length === 0) {
         res.status(404);

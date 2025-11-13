@@ -41,7 +41,7 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect , ed
 
   return (
     <div className="">
-      <p className="text-center font-[400] text-[1.8vh] line-clamp-1 lg:py-[1vh] text-shadow-sm">{layout.name || "Store Layout"}</p>
+      <p className="text-center font-[400] text-[1.8vh] line-clamp-1 lg:py-[1vh] text-shadow-2xs">{layout.name || "Store Layout"}</p>
       
       <div
         onClick={handleClick}
@@ -68,7 +68,7 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect , ed
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/stores/${layout.store}`);
+                navigate(`/layouts/${layout._id}/preview`);
               }}
               className="flex items-center justify-center w-full bg-white text-green-500 px-[.85vh] py-[.35vh] rounded-[.45vh] hover:bg-gray-200 space-x-1"
             >

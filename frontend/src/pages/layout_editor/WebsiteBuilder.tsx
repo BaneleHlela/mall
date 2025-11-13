@@ -95,8 +95,8 @@ const WebsiteBuilderContent: React.FC = () => {
           dispatch(setInitialLayout(layoutResult));
 
           if (layoutResult.store) {
-            setStoreId(layoutResult.store);
-            const storeResult = await dispatch(fetchStoreBySlug(layoutResult.store)).unwrap();
+            setStoreId(layoutResult.store._id);
+            const storeResult = await dispatch(fetchStoreBySlug(layoutResult.store.slug)).unwrap();
             dispatch(setCurrentStore(storeResult));
             dispatch(setStore(storeResult));
           }

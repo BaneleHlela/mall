@@ -2,9 +2,10 @@ import { useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../../../app/hooks";
 import type { RootState } from "../../../../app/store";
 import { useNavigate } from "react-router-dom";
-import { getStoreLayouts, captureLayoutScreenshot } from "../../../../features/layouts/layoutSlice";
-import { useEffect } from "react";
+import { getStoreLayouts, captureLayoutScreenshot, getLayout } from "../../../../features/layouts/layoutSlice";
+import { useEffect, useState } from "react";
 import StoreLayoutCard from "./supporting/StoreLayoutsCard";
+import CustomizeLayout from "./supporting/CustomizeLayout";
 import { FaPlus } from "react-icons/fa";
 
 const StoreDashboardLayouts = () => {
@@ -13,14 +14,31 @@ const StoreDashboardLayouts = () => {
   const { storeId } = useParams<{ storeId: string }>();
   const store = useAppSelector((state) => state.storeAdmin.store);
   const layouts = useAppSelector((state) => state.layout.layouts);
+  const activeLayout = useAppSelector((state) => state.layout.activeLayout);
   const isLoading = useAppSelector((state) => state.layout.isLoading);
+  const [isMobile, setIsMobile] = useState(false);
+  const [editingLayout, setEditingLayout] = useState<string | null>(null);
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Fetch layouts for the store
   useEffect(() => {
-    if (store?.layouts?.length) {
-      dispatch(getStoreLayouts(store.layouts));
+    if (store?._id) {
+      dispatch(getStoreLayouts(store._id));
     }
-  }, [dispatch, store?.layouts]);
+  }, [dispatch, store?._id]);
+
+  // Since we're now fetching layouts directly by store ID, no need to filter
+  const storeLayouts = layouts;
 
   // Capture missing screenshots
   // useEffect(() => {
@@ -55,12 +73,36 @@ const StoreDashboardLayouts = () => {
   };
 
   const handleEdit = async (layoutId: string) => {
-    navigate(`/layouts/${layoutId}`);
+    if (isMobile) {
+      // Use CustomizeLayout for mobile editing
+      dispatch(getLayout(layoutId));
+      setEditingLayout(layoutId);
+    } else {
+      // Use WebsiteBuilder for desktop editing
+      navigate(`/layouts/${layoutId}`);
+    }
+  };
+
+  const handleBackFromEdit = () => {
+    setEditingLayout(null);
   };
 
   const handleView = async () => {
     console.log();
   };
+
+  // Show CustomizeLayout for mobile editing
+  if (editingLayout && activeLayout && isMobile) {
+    return (
+      <div className="w-full h-screen">
+        <CustomizeLayout
+          layout={activeLayout}
+          onBack={handleBackFromEdit}
+          edit={true}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="relative flex flex-col items-center justify-between w-full h-screen px-[1vh] mt-1 overflow-y-scroll">
@@ -68,26 +110,33 @@ const StoreDashboardLayouts = () => {
         <h1 className="text-center text-[2.4vh] font-semibold py-[1.5vh] font-[Lato] text-shadow-xs">
           {store.name} Layouts
         </h1>
-        {store.layouts.length === 0 ? (
+        {storeLayouts.length === 0 ? (
           <p>No layouts available for this store.</p>
         ) : (
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 px-4">
-            {layouts.map((layout) => (
-              <>
+            {storeLayouts.map((layout) => {
+              let storeId = '';
+              if (typeof layout.store === 'object' && layout.store !== null) {
+                storeId = String(layout.store._id);
+              } else if (typeof layout.store === 'string') {
+                storeId = layout.store;
+              } else if (layout.store) {
+                storeId = String(layout.store);
+              }
+              
+              return (
                 <StoreLayoutCard
                   key={layout._id}
-                  layout={layout}
-                  onSelect={() => handleEdit(layout._id)}
-                  onView={handleView}
+                  layout={{
+                    _id: layout._id || '',
+                    store: storeId,
+                    name: layout.name,
+                    screenshot: layout.screenshot
+                  }}
+                  onSelect={() => handleEdit(layout._id || '')}
                 />
-                <StoreLayoutCard
-                  key={layout._id}
-                  layout={layout}
-                  onSelect={() => handleEdit(layout._id)}
-                  onView={handleView}
-                />
-              </>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

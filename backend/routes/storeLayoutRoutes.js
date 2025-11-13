@@ -8,6 +8,7 @@ import {
     getDemoLayouts,
     replaceLayoutColor,
     createLayoutConfigWithSettings,
+    updateLayoutConfigWithSettings,
     getStoreLayouts,
     captureLayoutScreenshot
 } from "../controllers/StoreLayoutController.js";
@@ -19,7 +20,8 @@ const router = express.Router();
 router.post("/", /*protectRoute,*/ createLayoutConfig);
 router.get('/demo', getDemoLayouts);
 router.post('/with-settings', createLayoutConfigWithSettings);
-router.post('/store', getStoreLayouts)
+router.put('/update-with-settings', updateLayoutConfigWithSettings);
+router.get('/store/:storeId', getStoreLayouts)
 
 // Dynamic routes
 router.patch('/:layoutId', /*protectRoute,*/ /*isAdmin,*/ updateLayoutConfig);

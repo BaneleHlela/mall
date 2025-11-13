@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const defaultTime = { start: '07:00', end: '17:00', closed: false };
 
@@ -12,6 +12,7 @@ interface FormState {
   departments: string[];
   socials: { platform: string; url: string }[];
   location: { nickname: string; lat: number; lng: number; address: string };
+  delivers: { enabled: boolean; range: number };
   about: string;
   team: { member: string; role: string }[];
   trades: string[];
@@ -30,6 +31,8 @@ interface FormContextType {
   setDirection: React.Dispatch<React.SetStateAction<number>>;
   validateCurrentStep: () => boolean;
   setStepValidator: (validator: () => boolean) => void;
+  nextClicked: boolean;
+  setNextClicked: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
@@ -38,18 +41,20 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(0);
   const [stepValidator, setStepValidator] = useState<() => boolean>(() => () => true);
+  const [nextClicked, setNextClicked] = useState(false);
 
 
   const [form, setForm] = useState<FormState>({
-    name: '',
+    name: 'Banele',
     logo: { url: '', text: '' },
     businessType: 'sole',
     thumbnail: '//example.com/images/thumbnails/product5.jpg',
     slogan: '',
-    contact: { phone: '', email: '' },
-    departments: [],
+    contact: { phone: '0797604204', email: 'g@gmail.com' },
+    departments: ["clothing"],
     socials: [{ platform: 'whatsapp', url: 'wa.me' }],
     location: { nickname: '', lat: 0, lng: 0, address: '' },
+    delivers: { enabled: false, range: 0 },
     about: '',
     team: [{ member: '', role: '' }],
     trades: [''],
@@ -80,7 +85,8 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const nextStep = () => {
     setDirection(1);
-    setStep(prev => Math.min(prev + 1, 5));
+    setStep(prev => Math.min(prev + 1, 6));
+    setNextClicked(false); // Reset nextClicked when moving to next step
   };
 
   const prevStep = () => {
@@ -93,18 +99,20 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
   
   return (
-    <FormContext.Provider value={{ 
-        form, 
-        setForm, 
-        handleChange, 
-        step, 
-        setStep, 
-        nextStep, 
-        prevStep, 
-        direction, 
-        setDirection, 
+    <FormContext.Provider value={{
+        form,
+        setForm,
+        handleChange,
+        step,
+        setStep,
+        nextStep,
+        prevStep,
+        direction,
+        setDirection,
         setStepValidator,
-        validateCurrentStep  
+        validateCurrentStep,
+        nextClicked,
+        setNextClicked
     }}>
       {children}
     </FormContext.Provider>

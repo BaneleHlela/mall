@@ -7,7 +7,7 @@ interface SingleLayoutImageHandlerProps {
     label: string;
     image?: string; // Add this prop to display the current image
     onImageSelect: (imageUrl: string) => void;
-    onDelete: () => void | undefined;
+    onDelete: () => void | Promise<void>;
 }
 
 const SingleLayoutImageHandler: React.FC<SingleLayoutImageHandlerProps> = ({ label, image, onImageSelect, onDelete }) => {
@@ -27,7 +27,7 @@ const SingleLayoutImageHandler: React.FC<SingleLayoutImageHandlerProps> = ({ lab
             <div className="flex flex-row justify-center items-center text-[17px] w-[50%] space-x-1">
                 <button 
                     className=" border-red-500 text-red-600 w-[30%] h-[75%] rounded shadow flex flex-row justify-center items-center px-2 hover:scale-105 hover:bg-red-200"
-                    onDoubleClick={onDelete}
+                    onClick={onDelete}
                     >
                     <FiTrash />
                 </button>

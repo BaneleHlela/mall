@@ -176,7 +176,7 @@ const HomePage = () => {
             className="flex bg-white pl-[.5vh] overflow-x-auto space-x-1 py-4 hide-scrollbar lg:hidden"
           >
             {/* Add your store */}
-            <div className="relative flex justify-center h-[20vh] bg-amber-500 aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102">
+            <div onClick={() => navigate("/add-store")} className="relative flex justify-center h-[20vh] bg-amber-500 aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102">
               {/* Image */}
               <div className="w-full">
                 <img 
@@ -191,7 +191,6 @@ const HomePage = () => {
                   <FiPlus className='text-[2.5vh]'/>
                 </button>
               </div>
-              
             </div>
             <div className=""></div>
             {Object.entries(departments).map(([key, dept]) => (

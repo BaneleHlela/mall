@@ -16,7 +16,7 @@ const Layouts: React.FC = () => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState<boolean>(true);
   const settings = useAppSelector((state: RootState) => state.layoutSettings);
-  const [storeId, setStoreId] = useState<string | null>(null);
+  const [storeSlug, setStoreSlug] = useState<string | null>(null);
   
   useEffect(() => {
     const loadLayout = async () => {
@@ -52,9 +52,8 @@ const Layouts: React.FC = () => {
           
           // 2️⃣ Fetch store if layout has a store
           if (layoutResult.store) {
-            setStoreId(layoutResult.store);
-            const storeResult = await dispatch(fetchStoreBySlug(layoutResult.store)).unwrap();
-            console.log(storeResult);
+            setStoreSlug(layoutResult.store._id);
+            const storeResult = await dispatch(fetchStoreBySlug(layoutResult.store.slug)).unwrap();
             dispatch(setCurrentStore(storeResult));
             dispatch(setStore(storeResult));
           }
@@ -75,7 +74,7 @@ const Layouts: React.FC = () => {
     };
 
     fetchLayoutAndStore();
-  }, [dispatch, layoutId, storeId]);
+  }, [dispatch, layoutId, storeSlug]);
   
 
   if (loading) {
@@ -85,7 +84,7 @@ const Layouts: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<WebsiteBuilder />} />
-      <Route path="/preview/*" element={<WebsitePreview storeId={storeId}/>} />
+      <Route path="/preview/*" element={<WebsitePreview storeSlug={storeSlug || ''} />} />
       <Route path="/capture/" element={<CaptureLayout />} />
     </Routes>
   );

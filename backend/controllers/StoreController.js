@@ -7,11 +7,23 @@ import { generateSlug } from '../utils/helperFunctions.js';
 
 const CLIENT_URL = process.env.CLIENT_URL;
 
+// Generate unique slug
+const generateUniqueSlug = async (name) => {
+  let slug = generateSlug(name);
+  let existingStore = await Store.findOne({ slug });
+  let counter = 1;
+  while (existingStore) {
+    slug = `${generateSlug(name)}-${counter}`;
+    existingStore = await Store.findOne({ slug });
+    counter++;
+  }
+  return slug;
+};
+
 // add store
 export const addStore = expressAsyncHandler(async (req, res) => {
-    //const { _id, email, firstName } = req.user;
     // Create the store with the creator as the owner in the team
-    const slug = generateSlug(req.body.name);
+    const slug = await generateUniqueSlug(req.body.name);
     const created = new Store({
         //team: [{ member: _id, role: "owner" }], // Assign the creator as the owner
         ...req.body,
@@ -152,7 +164,7 @@ export const editStore = expressAsyncHandler(async (req, res) => {
   // Update store name and regenerate slug if name changes
   if (req.body.name) {
     store.name = req.body.name;
-    store.slug = generateSlug(req.body.name);
+    store.slug = await generateUniqueSlug(req.body.name);
   }
 
   // Update store slogan

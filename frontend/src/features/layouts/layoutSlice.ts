@@ -79,13 +79,15 @@ export const createLayoutWithSettings = createAsyncThunk(
         newColors,
         oldColors,
         newFonts,
+        sectionUpdates,
         store
       }: {
         layoutId: string;
         newColors: string[];
         oldColors?: string[];
         newFonts?: Fonts;
-        store: string; 
+        sectionUpdates?: any;
+        store: string;
       },
       thunkAPI
     ) => {
@@ -95,6 +97,7 @@ export const createLayoutWithSettings = createAsyncThunk(
           newColors,
           oldColors,
           newFonts,
+          sectionUpdates,
           store
         });
         return response.data; // Adjust as needed depending on what the backend returns
@@ -106,15 +109,53 @@ export const createLayoutWithSettings = createAsyncThunk(
     }
 );
 
+export const updateLayoutWithSettings = createAsyncThunk(
+    'layouts/updateLayoutWithSettings',
+    async (
+      {
+        layoutId,
+        newColors,
+        oldColors,
+        newFonts,
+        sectionUpdates,
+        store
+      }: {
+        layoutId: string;
+        newColors?: string[];
+        oldColors?: string[];
+        newFonts?: any;
+        sectionUpdates?: any;
+        store: string;
+      },
+      thunkAPI
+    ) => {
+      try {
+        const response = await axios.put(`${API_URL}/api/layouts/update-with-settings`, {
+          layoutId,
+          newColors,
+          oldColors,
+          newFonts,
+          sectionUpdates,
+          store
+        });
+        return response.data;
+      } catch (error: any) {
+        return thunkAPI.rejectWithValue(
+          error.response?.data || 'Failed to update layout with settings'
+        );
+      }
+    }
+);
+
 export const getStoreLayouts = createAsyncThunk(
     "layouts/getStoreLayouts",
-    async (layoutIds: string[], thunkAPI) => {
+    async (storeId: string, thunkAPI) => {
       try {
-        const response = await axios.post(`${API_URL}/api/layouts/store`, layoutIds);
+        const response = await axios.get(`${API_URL}/api/layouts/store/${storeId}`);
         return response.data as Layout[];
       } catch (error: any) {
         return thunkAPI.rejectWithValue(
-          error.response?.data || "Failed to fetch multiple layouts"
+          error.response?.data || "Failed to fetch store layouts"
         );
       }
     }
@@ -288,6 +329,23 @@ const layoutSlice = createSlice({
             .addCase(captureLayoutScreenshot.rejected, (state, action) => {
               state.isLoading = false;
               state.error = action.error.message || "Failed to capture layout screenshot";
+            })
+
+            // Update layout with settings
+            .addCase(updateLayoutWithSettings.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateLayoutWithSettings.fulfilled, (state, action: PayloadAction<Layout>) => {
+                state.isLoading = false;
+                const index = state.layouts.findIndex(layout => layout._id === action.payload._id);
+                if (index >= 0) {
+                    state.layouts[index] = action.payload;
+                }
+                state.activeLayout = action.payload;
+            })
+            .addCase(updateLayoutWithSettings.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.error.message || "Failed to update layout with settings";
             });
   
             // Upload Layout Image

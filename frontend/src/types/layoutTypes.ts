@@ -35,7 +35,7 @@ export interface Fonts {
 
 export interface Layout {
     routes: Routes;
-    routeOrder: string[]; 
+    routeOrder: string[];
     screenshot: string;
     practice: any;
     imageUrl: string;
@@ -43,7 +43,11 @@ export interface Layout {
     fonts: Fonts;
     name: string;
     _id?: string;
-    store?: Types.ObjectId | null;
+    store?: Types.ObjectId | null | {
+        _id: string;
+        name: string;
+        slug: string;
+    };
     floats: {
         floatingIcons: {
             show: boolean;
@@ -51,7 +55,7 @@ export interface Layout {
             icons: typeof defaultStoreIconsConfig;
         };
         floatingButton: any;
-    };    
+    };
     menubar?: any;
     gallery?: any;
     products?: any;

@@ -6,6 +6,7 @@ import CustomizeLayout from "./CustomizeLayout";
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import StoreLayoutCard from "./StoreLayoutsCard";
+import { TbLoader3 } from "react-icons/tb";
 
 const LayoutCreator = () => {
   const dispatch = useAppDispatch();
@@ -13,6 +14,7 @@ const LayoutCreator = () => {
 
   const availableLayouts = useAppSelector((state) => state.layout.layouts);
   const store = useAppSelector((state) => state.storeAdmin.store);
+  const isLoading = useAppSelector((state) => state.layout.isLoading);
 
   const [step, setStep] = useState(1);
   const [selectedLayout, setSelectedLayout] = useState<any>(null);
@@ -51,17 +53,34 @@ const LayoutCreator = () => {
       {step === 1 && (
         <>
           <h3 className="py-[2vh]">Select a design you like from these Demo Stores</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[1vh] lg:gap-[1vh]">
-            {availableLayouts.map((layout) => (
-              <StoreLayoutCard
-                key={layout._id} 
-                layout={layout}
-                onSelect={() => handleSelect(layout)}
-                onView={handleView}
-                edit={false}
-              />
-            ))}
+          {isLoading ? <TbLoader3 className='w-6 h-6 animate-spin mx-auto' /> : (
+            <div className="px-[2vh] grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[2.5vh] lg:gap-[1vh]">
+            {availableLayouts.map((layout) => {
+              let storeId = '';
+              if (typeof layout.store === 'object' && layout.store !== null) {
+                storeId = String(layout.store._id);
+              } else if (typeof layout.store === 'string') {
+                storeId = layout.store;
+              } else if (layout.store) {
+                storeId = String(layout.store);
+              }
+              
+              return (
+                <StoreLayoutCard
+                  key={layout._id}
+                  layout={{
+                    _id: layout._id || '',
+                    store: storeId,
+                    name: layout.name,
+                    screenshot: layout.screenshot
+                  }}
+                  onSelect={() => handleSelect(layout)}
+                  edit={false}
+                />
+              );
+            })}
           </div>
+          ) } 
         </>
       )}
 

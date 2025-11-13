@@ -7,7 +7,6 @@ import Layouts from "./pages/layout_editor/Layouts";
 import StorePage from "./pages/store/StorePage";
 import Menubar from "./components/the_mall/menubar/Menubar";
 import MyStores from "./pages/my_stores/MyStores";
-import Search from "./pages/my_stores/Search";
 import Profile from "./pages/profile/Profile";
 import StoreDashboard from "./pages/store_dashboard/StoreDashboard";
 import MyLayouts from "./pages/store_dashboard/supporting_pages/layouts/StoreDashboardLayouts";
@@ -22,6 +21,7 @@ import BusinessPlan from "./components/the_mall/home/BusinessPlan";
 import ForCreators from "./components/the_mall/home/ForCreators";
 import ComingSoon from "./components/the_mall/ComingSoon";
 import CaptureHomePoster from "./components/the_mall/basic_store_post/CaptureHomePoster";
+import AddStorePage from "./pages/store/AddStorePage";
 
 
 
@@ -78,6 +78,14 @@ const App: React.FC = () => {
           <Route path="/creators-dashboard/*" element={<Dashboard />} />
           <Route path="/business-plan" element={<BusinessPlan />} />
           <Route path="/creators" element={<ForCreators />} />
+          <Route 
+            path="/add-store"
+            element={ 
+            <ProtectedRoute>
+              <AddStorePage />
+            </ProtectedRoute>
+            } 
+          />
           {authRoutes}
         </Routes>
       </Router>

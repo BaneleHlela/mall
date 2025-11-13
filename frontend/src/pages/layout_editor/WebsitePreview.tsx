@@ -3,11 +3,11 @@ import { store } from '../../app/store';
 import StorePage from '../store/StorePage';
 
 
-const WebsitePreview = ({storeId}: {storeId: string}) => {
+const WebsitePreview = ({storeSlug}: {storeSlug: string}) => {
 
   return (
     <div className='relative h-screen w-screen bg-stone-200'>
-      <StorePage storeId={storeId}/>
+      <StorePage storeSlug={storeSlug}/>
     </div>
   );
 };

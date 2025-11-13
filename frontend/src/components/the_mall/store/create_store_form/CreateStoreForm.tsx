@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { FormProvider, useFormContext } from './context/FormContext';
 import StepBasic from './steps/StepBasic';
 import StepTrade from './steps/StepTrade';
@@ -13,21 +14,25 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { createLayout } from '../../../../features/layouts/layoutSlice';
 import { defaultLayoutConfig } from '../../../../utils/defaults/defaultLayoutConfig';
 import StepSocials from './steps/StepSocials';
+import StepDelivers from './steps/StepDelivers';
 import { TbLoader3 } from 'react-icons/tb';
 
-const steps = [StepBasic, StepTrade, StepBusinessHours, StepLocation, StepAbout, StepSocials];
+const steps = [StepBasic, StepTrade, StepBusinessHours, StepLocation, StepDelivers, StepAbout, StepSocials];
 interface CreateStoreFormInnerProps {
     isDemo?: boolean;
 }
 
-const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo }) => {
-  const dispatch = useAppDispatch(); 
-  const { step, direction, nextStep, prevStep, validateCurrentStep, form } = useFormContext();
+const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = false, }) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { step, direction, nextStep, prevStep, validateCurrentStep, form, setNextClicked } = useFormContext();
   const [isSuccess, setIsSuccess] = useState(false);
   const isLoading = useAppSelector((state) => state.stores.isLoading || state.layout.isLoading); // Combine loading states for both store and layout creation
+  const user = useAppSelector((state) => state.user.user);
   
   const StepComponent = steps[step];
   const handleNextStep = () => {
+    setNextClicked(true);
     if (validateCurrentStep()) {
       nextStep();
     }
@@ -59,7 +64,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo }) =
       createStore({ 
         ...form,
         isDemo,
-        team: [{ member: '684195da0cad691799f2ee7a', role: 'owner' }],
+        team: [{ member: user?._id, role: 'owner' }],
         layouts: [newLayoutId], 
       })
     );
@@ -67,13 +72,22 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo }) =
     // if successful
     if (createStore.fulfilled.match(result)) {
       setIsSuccess(true);
-      console.log('Store created successfully with new layout');
     }
   };
 
+  console.log(form);
+  
   return (
-    <div className="relative flex flex-col justify-between w-full h-full border max-w-[70vh] mx-auto p-[1.2vh] bg-white">
-      <p className="w-full text-center text-[4vh] font-[500] h-[15%]">Create Your Store</p>
+    <div className="relative flex flex-col justify-evenly w-full h-full max-w-[70vh] mx-auto p-[1.2vh] bg-white">
+      <div className="relative flex items-center justify-center w-full text-cenrte text-[4vh] font-[500] h-[15%]">
+        <img 
+          src="https://storage.googleapis.com/the-mall-uploads-giza/stores/68726dde5987f5810dee5a8a/images/mall%20image.webp" 
+          alt="Mall theme image" 
+          className="absolute inset-0 w-full h-full object-cover rounded-[.55vh]" 
+        />
+        {/* Only show this if next clicked is true */}
+        <p className="font-[Lato] text-white text-[4vh] z-1 text-shadow-2xs font-[500] opacity-85">Create Your Store</p>
+      </div>
       <AnimatePresence custom={direction} mode="wait">
         <motion.div
           key={step}
@@ -87,26 +101,25 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo }) =
           animate="center"
           exit="exit"
           transition={{ duration: 0.3 }}
-          className="w-full h-[70%] z-10"
+          className="w-full h-[70%] z-10 "
         >
           <StepComponent />
         </motion.div>
       </AnimatePresence>
 
-      <div className="flex flex-row justify-between items-center h-[15%] z-10">
-        <button 
-            type="button" 
-            onClick={prevStep} 
-            disabled={step === 0}
-            className="px-[1.2vh] py-[.3vh] text-[2vh] text-white bg-[#74546a] disabled:opacity-40"
+      <div className="flex flex-row justify-between items-center h-[7%] z-10">
+        <button
+            type="button"
+            onClick={step === 0 ? () => navigate('/') : prevStep}
+            className="px-[1.2vh] py-[.3vh] text-[2vh] text-black border rounded-[.45vh]"
             >
-            Back
+            {step === 0 ? 'Close' : 'Back'}
         </button>
         {step === steps.length - 1 ? (
             <button
                 type="button"
                 onClick={handleSubmit} 
-                className="px-[1.2vh] py-[.3vh] text-[2vh] text-white bg-[#0b032d] hover:scale-105 hover:opacity-80 disabled:bg-gray-500"
+                className="px-[1.2vh] py-[.3vh] text-[2vh] text-white bg-black rounded-[.45vh] hover:scale-105 hover:opacity-80 disabled:bg-gray-500"
             >
                 {isLoading ? (
                   <TbLoader3 className="w-6 h-6 animate-spin mx-auto" />
@@ -119,7 +132,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo }) =
                 onClick={handleNextStep}
                 disabled={step === steps.length - 1}
                 className={`px-[1.2vh] py-[.3vh] text-[2vh] text-white 
-                  ${validateCurrentStep() && `bg-[#0b032d]`} bg-[#0b032d33] hover:scale-105 hover:opacity-80 disabled:bg-gray-500`}
+                  ${validateCurrentStep() && `bg-[#0b032d]`} bg-black rounded-[.45vh] hover:scale-105 hover:opacity-80 disabled:bg-gray-500`}
             >
                 Next
             </button>
