@@ -10,8 +10,8 @@ const StepDelivers: React.FC = () => {
   const [validation, setValidation] = useState({
     deliversValid: true
   });
+  const selected = form.delivers.enabled;
 
-  console.log(circleRef)
 
   const validateDelivers = () => {
     // Always valid since delivers is optional
@@ -39,10 +39,10 @@ const StepDelivers: React.FC = () => {
         // Create or update the circle
         if (!circleRef.current) {
         circleRef.current = new google.maps.Circle({
-            strokeColor: '#FF0000',
+            strokeColor: '#02baf2',
             strokeOpacity: 0.8,
             strokeWeight: 2,
-            fillColor: '#FF0000',
+            fillColor: '#02baf2',
             fillOpacity: 0.35,
             map: mapInstance.current,
             center: { lat: form.location.lat, lng: form.location.lng },
@@ -67,10 +67,10 @@ const StepDelivers: React.FC = () => {
       // Add circle if enabled
       if (mapInstance.current && form.delivers.range > 0) {
         circleRef.current = new google.maps.Circle({
-          strokeColor: '#FF0000',
+          strokeColor: '#02baf2',
           strokeOpacity: 0.8,
           strokeWeight: 2,
-          fillColor: '#FF0000',
+          fillColor: '#02baf2',
           fillOpacity: 0.35,
           map: mapInstance.current,
           center: { lat: form.location.lat, lng: form.location.lng },
@@ -80,16 +80,57 @@ const StepDelivers: React.FC = () => {
     }
   };
 
+  // Initialize map
+  useEffect(() => {
+    if (mapRef.current && !mapInstance.current) {
+      mapInstance.current = new google.maps.Map(mapRef.current, {
+        center: {
+          lat: form.location.lat || -26.2041,
+          lng: form.location.lng || 28.0473,
+        },
+        zoom: 12,
+        mapTypeControl: false,
+        streetViewControl: false,
+      });
+
+      markerRef.current = new google.maps.Marker({
+        position: {
+          lat: form.location.lat,
+          lng: form.location.lng,
+        },
+        map: mapInstance.current,
+        title: 'Store Location',
+      });
+    }
+  }, [form.location]);
+
+  //Trigger a Resize When Map Becomes Visible
+  useEffect(() => {
+    if (form.delivers.enabled && mapInstance.current) {
+      // Wait a moment for the DOM to finish rendering
+      setTimeout(() => {
+        google.maps.event.trigger(mapInstance.current!, 'resize');
+        mapInstance.current!.setCenter({
+          lat: form.location.lat,
+          lng: form.location.lng,
+        });
+      }, 100);
+    }
+  }, [form.delivers.enabled]);
+  
+
+  
+
   const handleRangeChange = (range: number) => {
     handleChange('delivers', { ...form.delivers, range });
     if (circleRef.current) {
       circleRef.current.setRadius(range * 1000);
     } else if (mapInstance.current && form.delivers.enabled) {
       circleRef.current = new google.maps.Circle({
-        strokeColor: '#FF0000',
+        strokeColor: '#02baf2',
         strokeOpacity: 0.8,
         strokeWeight: 2,
-        fillColor: '#FF0000',
+        fillColor: '#02baf2',
         fillOpacity: 0.35,
         map: mapInstance.current,
         center: { lat: form.location.lat, lng: form.location.lng },
@@ -99,7 +140,7 @@ const StepDelivers: React.FC = () => {
   };
 
   return (
-    <div className="space-y-[1.2vh] text-[2vh] bg-[#ffffff4d]">
+    <div className="flex flex-col items-center space-y-[1.2vh] text-[2vh] bg-[#ffffff4d]">
       <h3 className="text-[2.5vh] text-center">Delivery Settings</h3>
 
       {/* Enable delivery toggle */}
@@ -109,7 +150,7 @@ const StepDelivers: React.FC = () => {
           id="delivers-enabled"
           checked={form.delivers.enabled}
           onChange={(e) => handleEnabledChange(e.target.checked)}
-          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+          className="w-[2.2vh] h-[2.2vh] accent-[#0b032d] cursor-pointer"
         />
         <label htmlFor="delivers-enabled" className="text-[1.8vh] font-semibold text-gray-600">
           Enable delivery for this store
@@ -119,8 +160,9 @@ const StepDelivers: React.FC = () => {
       {form.delivers.enabled && (
         <>
           {/* Range slider */}
-          <div>
-            <label className="text-[1.8vh] font-semibold text-gray-600">
+          <div className='w-full text-center'>
+            <label className={`text-[1.8vh] font-medium text-[#0b032d]`}
+            >
               Delivery Range: {form.delivers.range} km
             </label>
             <input
@@ -130,11 +172,16 @@ const StepDelivers: React.FC = () => {
               max="35"
               value={form.delivers.range}
               onChange={(e) => handleRangeChange(Number(e.target.value))}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              className="w-full h-[0.8vh] rounded-full appearance-none bg-gray-200 cursor-pointer accent-[#0b032d]
+                [&::-webkit-slider-thumb]:appearance-none
+                [&::-webkit-slider-thumb]:w-[2vh]
+                [&::-webkit-slider-thumb]:h-[2vh]
+                [&::-webkit-slider-thumb]:rounded-full
+                [&::-webkit-slider-thumb]:bg-[#0b032d]"
             />
             <div className="flex justify-between text-sm text-gray-500">
               <span>1 km</span>
-              <span>50 km</span>
+              <span>35 km</span>
             </div>
           </div>
 
