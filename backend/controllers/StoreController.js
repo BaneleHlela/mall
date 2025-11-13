@@ -22,7 +22,9 @@ const generateUniqueSlug = async (name) => {
 
 // add store
 export const addStore = expressAsyncHandler(async (req, res) => {
+    //const { _id, email, firstName } = req.user;
     // Create the store with the creator as the owner in the team
+    console.log(req.body.name);
     const slug = await generateUniqueSlug(req.body.name);
     const created = new Store({
         //team: [{ member: _id, role: "owner" }], // Assign the creator as the owner
@@ -40,7 +42,6 @@ export const addStore = expressAsyncHandler(async (req, res) => {
 // get store
 export const getStore = expressAsyncHandler(async (req, res) => {
     try {
-      console.log("fetching store")
       const storeSlug = req.params.storeSlug;
       // Check if storeSlug is a valid ObjectId or a slug
       let store;
