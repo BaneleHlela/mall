@@ -34,7 +34,7 @@ const StepBusinessHours: React.FC = () => {
         const label = day.slice(0, 3).toUpperCase();
 
         return (
-          <div key={day} className="grid grid-cols-4 gap-[1.2vh] items-center">
+          <div key={day} className="grid grid-cols-4 gap-[1.2vh] items-center min-h-fit p-[.3vh] border">
             <span className="text-md">{label}</span>
             <input
               type="time"

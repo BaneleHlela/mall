@@ -46,13 +46,13 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 
   const [form, setForm] = useState<FormState>({
-    name: 'Banele',
+    name: '',
     logo: { url: '', text: '' },
     businessType: 'sole',
     thumbnail: '//example.com/images/thumbnails/product5.jpg',
     slogan: '',
-    contact: { phone: '0797604204', email: 'g@gmail.com' },
-    departments: ["clothing"],
+    contact: { phone: '', email: '' },
+    departments: [""],
     socials: [{ platform: 'whatsapp', url: 'wa.me' }],
     location: { nickname: '', lat: 0, lng: 0, address: '' },
     delivers: { enabled: false, range: 0 },
@@ -129,7 +129,6 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     localStorage.setItem('createStoreDraft', JSON.stringify(form));
     localStorage.setItem('createStoreStep', step.toString());
-    console.log('🟢 Draft saved:', form);
   }, [form, step]);
 
   return (
