@@ -192,39 +192,11 @@ const storeSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-      builder
-        // --- Create Store ---
-      .addCase(createStore.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(createStore.fulfilled, (state, action: PayloadAction<Store>) => {
-        state.isLoading = false;
-        const newStore = action.payload;
-
-        // Add the new store to `storesById` and `storeIds`
-        if (newStore._id) {
-          state.storesById[newStore._id] = newStore;
-          if (!state.storeIds.includes(newStore._id)) {
-            state.storeIds.push(newStore._id);
-          }
-        }
-
-        // Also add to `myStoresById` and `myStoreIds`
-        if (newStore._id) {
-          state.myStoresById[newStore._id] = newStore;
-          if (!state.myStoreIds.includes(newStore._id)) {
-            state.myStoreIds.push(newStore._id);
-          }
-        }
-
-        // Set it as the current store
-        state.currentStore = newStore;
-      })
-      .addCase(createStore.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message || 'Failed to create store';
-      })
+    builder
+      // Add Store
+      // .addCase(createStore.fulfilled, (state, action: PayloadAction<Store>) => {
+      //   state.currentStore = action.payload;
+      // })
       // Fetch Stores
       .addCase(fetchStores.pending, (state) => {
         state.isLoading = true;

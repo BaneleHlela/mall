@@ -33,6 +33,7 @@ interface FormContextType {
   setStepValidator: (validator: () => boolean) => void;
   nextClicked: boolean;
   setNextClicked: React.Dispatch<React.SetStateAction<boolean>>;
+  clearDraft: () => void;
 }
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
@@ -97,7 +98,40 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const validateCurrentStep = () => {
     return stepValidator();
   };
-  
+
+  const clearDraft = () => {
+    localStorage.removeItem('createStoreDraft');
+    localStorage.removeItem('createStoreStep');
+  };
+
+  // Load draft from localStorage on mount
+  useEffect(() => {
+    const savedForm = localStorage.getItem('createStoreDraft');
+    const savedStep = localStorage.getItem('createStoreStep');
+    
+    if (savedForm) {
+      try {
+        setForm(JSON.parse(savedForm));
+      } catch (error) {
+        console.error('Failed to parse saved form data:', error);
+      }
+    }
+    if (savedStep) {
+      try {
+        setStep(parseInt(savedStep, 10));
+      } catch (error) {
+        console.error('Failed to parse saved step:', error);
+      }
+    }
+  }, []);
+
+  // Save to localStorage whenever form or step changes
+  useEffect(() => {
+    localStorage.setItem('createStoreDraft', JSON.stringify(form));
+    localStorage.setItem('createStoreStep', step.toString());
+    console.log('🟢 Draft saved:', form);
+  }, [form, step]);
+
   return (
     <FormContext.Provider value={{
         form,
@@ -112,7 +146,8 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setStepValidator,
         validateCurrentStep,
         nextClicked,
-        setNextClicked
+        setNextClicked,
+        clearDraft
     }}>
       {children}
     </FormContext.Provider>

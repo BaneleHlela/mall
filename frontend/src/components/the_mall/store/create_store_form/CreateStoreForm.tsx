@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { FormProvider, useFormContext } from './context/FormContext';
 import StepBasic from './steps/StepBasic';
 import StepTrade from './steps/StepTrade';
@@ -16,6 +15,8 @@ import { defaultLayoutConfig } from '../../../../utils/defaults/defaultLayoutCon
 import StepSocials from './steps/StepSocials';
 import StepDelivers from './steps/StepDelivers';
 import { TbLoader3 } from 'react-icons/tb';
+import { useNavigate } from 'react-router-dom';
+import { IoClose } from 'react-icons/io5';
 
 const steps = [StepBasic, StepTrade, StepBusinessHours, StepLocation, StepDelivers, StepAbout, StepSocials];
 interface CreateStoreFormInnerProps {
@@ -23,14 +24,16 @@ interface CreateStoreFormInnerProps {
 }
 
 const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = false, }) => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const { step, direction, nextStep, prevStep, validateCurrentStep, form, setNextClicked } = useFormContext();
-  const [isSuccess, setIsSuccess] = useState(false);
-  const isLoading = useAppSelector((state) => state.stores.isLoading || state.layout.isLoading); // Combine loading states for both store and layout creation
-  const user = useAppSelector((state) => state.user.user);
+   const dispatch = useAppDispatch();
+   const navigate = useNavigate();
+   const { step, direction, nextStep, prevStep, validateCurrentStep, form, setNextClicked, clearDraft } = useFormContext();
+   const [isSuccess, setIsSuccess] = useState(false);
+   const isLoading = useAppSelector((state) => state.stores.isLoading || state.layout.isLoading); // Combine loading states for both store and layout creation
+   const user = useAppSelector((state) => state.user.user);
   
   const StepComponent = steps[step];
+
+  
   const handleNextStep = () => {
     setNextClicked(true);
     if (validateCurrentStep()) {
@@ -72,10 +75,11 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
     // if successful
     if (createStore.fulfilled.match(result)) {
       setIsSuccess(true);
+      clearDraft();
+      console.log('Store created successfully with new layout');
     }
   };
 
-  console.log(form);
   
   return (
     <div className="relative flex flex-col justify-evenly w-full h-full max-w-[70vh] mx-auto p-[1.2vh] bg-white">
@@ -110,10 +114,10 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
       <div className="flex flex-row justify-between items-center h-[7%] z-10">
         <button
             type="button"
-            onClick={step === 0 ? () => navigate('/') : prevStep}
-            className="px-[1.2vh] py-[.3vh] text-[2vh] text-black border rounded-[.45vh]"
+            onClick={step === 0 ? () => navigate(-1) : prevStep}
+            className="px-[1.2vh] py-[.3vh] text-[2vh] text-black border rounded-[.45vh] flex items-center gap-1"
             >
-            {step === 0 ? 'Close' : 'Back'}
+            {step === 0 ? "Close" : "Back"}
         </button>
         {step === steps.length - 1 ? (
             <button
