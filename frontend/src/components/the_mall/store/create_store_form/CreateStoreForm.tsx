@@ -41,34 +41,34 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
     }
   };
   
-  const createNewLayout = async () => {
-    try {// @ts-ignore-next-line
-      const result = await dispatch(createLayout(defaultLayoutConfig)).unwrap();
-      return result._id;
-    } catch (error) {
-      console.error('Failed to create layout:', error);
-      return null;
-    }
-  };
+  // const createNewLayout = async () => {
+  //   try {// @ts-ignore-next-line
+  //     const result = await dispatch(createLayout(defaultLayoutConfig)).unwrap();
+  //     return result._id;
+  //   } catch (error) {
+  //     console.error('Failed to create layout:', error);
+  //     return null;
+  //   }
+  // };
 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Create a new layout
-    const newLayoutId = await createNewLayout();
+    // const newLayoutId = await createNewLayout();
     
-    if (!newLayoutId) {
-      console.error('Failed to create layout. Aborting store creation.');
-      return;
-    }
+    // if (!newLayoutId) {
+    //   console.error('Failed to create layout. Aborting store creation.');
+    //   return;
+    // }
 
     const result = await dispatch( 
       createStore({ 
         ...form,
         isDemo,
         team: [{ member: user?._id, role: 'owner' }],
-        layouts: [newLayoutId], 
+        // layouts: [newLayoutId], 
       })
     );
     
