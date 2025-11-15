@@ -24,6 +24,8 @@ export const createLayoutConfig = async (req, res) => {
       const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${fileName}`;
       layout.imageUrl = publicUrl;
       await layout.save();
+
+      console.log("Layout Created")
   
       res.status(201).json(layout);
     } catch (error) {
