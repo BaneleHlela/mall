@@ -20,7 +20,7 @@ const sampleData = [
 const StoreOverview = ({ store }: { store: Store }) => {
   
   return (
-    <div className="w-full h-fit overflow-y-scroll lg:h-full lg:max-h-[100dvh] py-1 overflow-clip">
+    <div className="relative w-full h-fit overflow-y-scroll lg:h-full lg:max-h-[100dvh] py-1 overflow-clip">
       <div className="w-full px-[1vh] lg:px-[4vh] h-full space-y-[.7vh]">
           <StoreDashboardStatCardsBoard />
           {/* Desktop */}
@@ -77,7 +77,8 @@ const StoreOverview = ({ store }: { store: Store }) => {
               />
             </div>
           </div>          
-      </div>    
+      </div>
+      <div className=""></div>    
     </div>
   );
 };

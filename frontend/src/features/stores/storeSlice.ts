@@ -194,9 +194,37 @@ const storeSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Add Store
-      // .addCase(createStore.fulfilled, (state, action: PayloadAction<Store>) => {
-      //   state.currentStore = action.payload;
-      // })
+      .addCase(createStore.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(createStore.fulfilled, (state, action: PayloadAction<Store>) => {
+        state.isLoading = false;
+
+        const store = action.payload;
+
+        if (!store._id) return;
+
+        // Set as current store
+        state.currentStore = store;
+
+        // Add to all stores list
+        state.storesById[store._id] = store;
+        if (!state.storeIds.includes(store._id)) {
+          state.storeIds.push(store._id);
+        }
+
+        // Add to "my stores" list
+        state.myStoresById[store._id] = store;
+        if (!state.myStoreIds.includes(store._id)) {
+          state.myStoreIds.push(store._id);
+        }
+      })
+      .addCase(createStore.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to create store';
+      })
+
       // Fetch Stores
       .addCase(fetchStores.pending, (state) => {
         state.isLoading = true;
@@ -264,8 +292,6 @@ const storeSlice = createSlice({
           removeImage(state.currentStore);
         }
       })
-
-      // Fetch Store
 
       // Fetch Store Images
       .addCase(fetchStoreImages.fulfilled, (state, action) => {

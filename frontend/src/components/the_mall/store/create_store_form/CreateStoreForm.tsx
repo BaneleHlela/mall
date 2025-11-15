@@ -82,7 +82,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
 
   
   return (
-    <div className="relative flex flex-col justify-evenly w-full h-full max-w-[70vh] mx-auto p-[1.2vh] bg-white">
+    <div className="relative flex flex-col justify-evenly w-full h-full lg:max-w-[50vh] mx-auto p-[1.2vh] bg-white">
       <div className="relative flex items-center justify-center w-full text-cenrte text-[4vh] font-[500] h-[15%]">
         <img 
           src="https://storage.googleapis.com/the-mall-uploads-giza/stores/68726dde5987f5810dee5a8a/images/mall%20image.webp" 
@@ -147,8 +147,8 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
           {isSuccess && <StoreSuccessOverlay onClose={() => setIsSuccess(false)}/>}
       </AnimatePresence>
       {/* Background Icon */}
-      <div className="absolute z-0 top-10 left-[10%] h-full w-[500px] flex flex-col justify-center opacity-10">
-        <LiaStoreSolid size={700} className='mb-60 mr-80'/>
+      <div className="absolute z-0 top-10 left-[10%] w-[500px] flex flex-col justify-center opacity-10">
+        <LiaStoreSolid size={700} className='mr-80'/>
       </div>
     </div>
   );

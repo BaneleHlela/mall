@@ -4,10 +4,13 @@ import {
   ClockArrowUp, CalendarArrowUp, UsersRound, 
   HandHelping, Settings, Images, LogOut,
 } from "lucide-react";
-import { IoStar, IoStarHalf } from "react-icons/io5";
+import { IoSettings, IoSettingsOutline, IoStar, IoStarHalf } from "react-icons/io5";
 import { LuFileImage } from "react-icons/lu";
 import DashboardLink from "./DashboardLink";
 import type { Store } from "../../../types/storeTypes";
+import { IoMdClose } from "react-icons/io";
+import StorePosterRatingStars from "../../the_mall/basic_store_post/StorePosterRatingStars";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   store: Store;
@@ -16,6 +19,7 @@ interface Props {
 }
 
 const StoreDashBoardMenubar = ({ store, isMobileMenuOpen = false, setIsMobileMenuOpen }: Props) => {
+  const navigate = useNavigate();
   const handleLinkClick = () => {
     // Close mobile menu when a link is clicked
     if (isMobileMenuOpen && setIsMobileMenuOpen) {
@@ -24,38 +28,32 @@ const StoreDashBoardMenubar = ({ store, isMobileMenuOpen = false, setIsMobileMen
   };
 
   return (
-    <div className={`relative pl-2 pr-2 min-w-[18vw] h-full shadow-sm bg-white flex-col ${isMobileMenuOpen ? 'flex lg:flex' : 'hidden lg:flex'} ${isMobileMenuOpen ? 'fixed lg:relative top-0 left-0 z-50 w-full lg:w-auto h-full lg:h-full bg-white lg:bg-white' : ''}`}>
+    <div className={`relative pl-2 pr-2 pb-10 min-w-[18vw] h-full shadow-sm bg-white flex flex-col justify-between lg:justify-start ${isMobileMenuOpen ? 'flex lg:flex' : 'hidden lg:flex'} ${isMobileMenuOpen ? 'fixed lg:relative top-0 left-0 z-50 w-full lg:w-auto h-full lg:h-full lg:bg-white' : ''}`}>
       {/* Mobile close button */}
       {isMobileMenuOpen && (
         <button
           onClick={() => setIsMobileMenuOpen?.(false)}
-          className="lg:hidden absolute top-4 right-4 z-60 text-gray-600 hover:text-gray-800 text-2xl"
+          className="bg-black lg:hidden absolute top-4 right-4 z-60 rounded-[.45vh]  text-white hover:text-gray-800 text-2xl"
         >
-          ✕
+          <IoMdClose size={32}/>
         </button>
       )}
       {/* Store name and reviews */}
-      <div className="h-[13%] font-[600] font-[ubuntu] text-3xl  text-center border-b-1 border-gray-300 flex flex-col justify-center mt-12 lg:mt-0">
-        {store.name}
-        <div className="flex flex-row justify-center w-full mt-1">
-          <IoStar color="gold"/>
-          <IoStar color="gold"/>
-          <IoStar color="gold"/>
-          <IoStar color="gold"/>
-          <IoStarHalf color="gold"/>
-        </div>
+      <div className="flex items-end justify-between lg:items-center w-full h-[12%] pb-4 lg:pb-0 font-[500]   text-center border-b-1 border-gray-300 lg:mt-0 g-amber-600">
+        <p style={{lineHeight: "1"}} className="line-clamp-1 text-[3vh]">{store.name}</p>
+        <div className="mb-1"><StorePosterRatingStars rating={store.rating.averageRating} color='text-black'/></div>
       </div>
       {/* Links */}
-      <div className="font-[ubuntu] mt-[2vh] text-[2vh]">
+      <div className="lg:mt-[5vh] text-[2vh]">
           <DashboardLink
             linkTo={`/dashboard/${store.slug}`}
-            icon={<ChartArea className="text-blue-600 text-[2vh]"/>}
+            icon={<ChartArea size={20} className="text-[2vh]"/>}
             text="overview"
             onClick={handleLinkClick}
           />
           <DashboardLink 
             linkTo={`/dashboard/${store.slug}/team`} 
-            icon={<UsersRound className="text-blue-600"/>} 
+            icon={<UsersRound size={20} className=""/>} 
             beta={true}
             text="Team" 
             onClick={handleLinkClick}
@@ -63,7 +61,7 @@ const StoreDashBoardMenubar = ({ store, isMobileMenuOpen = false, setIsMobileMen
           {store.trades.includes("products") && (
             <DashboardLink 
               linkTo={`/dashboard/${store.slug}/orders`} 
-              icon={<ClockArrowUp className="text-green-600"/>} 
+              icon={<ClockArrowUp className=""/>} 
               text="Orders" 
               onClick={handleLinkClick}
             />
@@ -71,7 +69,7 @@ const StoreDashBoardMenubar = ({ store, isMobileMenuOpen = false, setIsMobileMen
         {store.trades.includes("services") && (
           <DashboardLink 
             linkTo={`/dashboard/${store.slug}/bookings`} 
-            icon={<CalendarArrowUp size={20} className="text-green-600" />} 
+            icon={<CalendarArrowUp size={20} className="" />} 
             text="Bookings" 
             onClick={handleLinkClick}
           />
@@ -80,7 +78,7 @@ const StoreDashBoardMenubar = ({ store, isMobileMenuOpen = false, setIsMobileMen
         {store.trades.includes("packages") && (
           <DashboardLink 
             linkTo={`/dashboard/${store.slug}/subscriptions`} 
-            icon={<UserCheck size={20} className="text-green-600" />} 
+            icon={<UserCheck size={20} className="" />} 
             text="Subscriptions" 
             onClick={handleLinkClick}
           />
@@ -88,7 +86,7 @@ const StoreDashBoardMenubar = ({ store, isMobileMenuOpen = false, setIsMobileMen
         {store.trades.includes("products") && (
           <DashboardLink 
             linkTo={`/dashboard/${store.slug}/products`} 
-            icon={<ShoppingBag className="text-yellow-500" />} 
+            icon={<ShoppingBag  size={20} className="" />} 
             text="Products" 
             onClick={handleLinkClick}
           />
@@ -96,7 +94,7 @@ const StoreDashBoardMenubar = ({ store, isMobileMenuOpen = false, setIsMobileMen
         {store.trades.includes("services") && (
           <DashboardLink 
             linkTo={`/dashboard/${store.slug}/services`} 
-            icon={<HandHelping className="text-yellow-500" />} 
+            icon={<HandHelping size={20} className="" />} 
             text="Services" 
             onClick={handleLinkClick}
           />
@@ -104,47 +102,44 @@ const StoreDashBoardMenubar = ({ store, isMobileMenuOpen = false, setIsMobileMen
         {store.trades.includes("packages") && (
           <DashboardLink 
             linkTo={`/dashboard/${store.slug}/packages`} 
-            icon={<Package className="text-yellow-500" />} 
+            icon={<Package size={20} className="" />} 
             text="Packages" 
             onClick={handleLinkClick}
           />
         )}
         <DashboardLink 
           linkTo={`/dashboard/${store.slug}/layouts`} 
-          icon={<LayoutDashboard className="text-red-600"/>} 
+          icon={<LayoutDashboard size={20} className=""/>} 
           text="Layouts" 
           onClick={handleLinkClick}
         />
         <DashboardLink 
           linkTo={`/dashboard/${store.slug}/posters`} 
-          icon={<LuFileImage className="text-black"/>} 
+          icon={<LuFileImage size={20} className="text-black"/>} 
           text="Posters" 
           onClick={handleLinkClick}
         />
         <DashboardLink 
           linkTo={`/dashboard/${store.slug}/images`} 
-          icon={<Images className="text-red-600"/>} 
+          icon={<Images size={20} className=""/>} 
           text="Images" 
           onClick={handleLinkClick}
         />
       </div>
       {/* Tools Links */}
-      <div className="font-[ubuntu] absolute bottom-[10vh] left-1 w-full scale-95">
-        <DashboardLink 
-          linkTo={`/dashboard/${store.slug}/settings`} 
-          icon={<Settings />} 
-          text="Store Settings" 
-        />
-        <DashboardLink 
-          linkTo={`/dashboard/${store.slug}/store-help`} 
-          icon={<MessageCircleQuestion />} 
-          text="Help" 
-        />
-        <DashboardLink 
-          linkTo={`/dashboard/${store.slug}/exit`} 
-          icon={<LogOut />} 
-          text="exit" 
-        />
+      <div className="w-full flex justify-evenly lg:absolute lg:bottom-[2vh] lg:left-1 ">
+        <div onClick={() => navigate(`/dashboard/${store.slug}/settings`)} className="flex flex-col items-center justify-evenly w-[10vh]  aspect-square bg-gray-200 p-3 rounded">
+          <IoSettingsOutline className="text-[3vh]"/>
+          <p style={{lineHeight: "1"}} className="font-[500]">Settings</p>
+        </div>
+        <div onClick={() => navigate(`/dashboard/${store.slug}/store-help`)} className="flex flex-col items-center justify-evenly w-[10vh]  aspect-square bg-gray-200 p-3 rounded">
+          <MessageCircleQuestion className="text-[3vh]"/>
+          <p style={{lineHeight: "1"}} className="font-[500]">Help</p>
+        </div>
+        <div onClick={() =>{}} className="flex flex-col items-center justify-evenly w-[10vh]  aspect-square bg-red-200 p-3 rounded text-red-600">
+          <LogOut className="text-[3vh] "/>
+          <p style={{lineHeight: "1"}} className="font-[500]">Exit</p>
+        </div>
       </div>
     </div>
   );

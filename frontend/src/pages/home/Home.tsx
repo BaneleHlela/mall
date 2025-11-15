@@ -173,7 +173,7 @@ const HomePage = () => {
             onWheel={handleImageWheel}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
-            className="flex bg-white pl-[.5vh] overflow-x-auto space-x-1 py-4 hide-scrollbar lg:hidden"
+            className="flex bg-white pl-[.5vh] overflow-x-auto space-x-[.55vh] py-[2vh] hide-scrollbar lg:hidden"
           >
             {/* Add your store */}
             <div onClick={() => navigate("/add-store")} className="relative flex justify-center h-[20vh] bg-amber-500 aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102">

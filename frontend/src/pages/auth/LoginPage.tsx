@@ -84,7 +84,7 @@ const LoginPage = () => {
 						type='submit'
 						disabled={isLoading}
 					>
-						{isLoading ? <TbLoader3 className='w-6 h-6 animate-spin mx-auto' /> : "Sign in"}
+						{isLoading ? <TbLoader3 className='w-[3vh] h-[3vh] animate-spin mx-auto' /> : "Sign in"}
 					</motion.button>
 				</form>
 			</div>

@@ -4,9 +4,9 @@ import {
   ClockArrowUp, CalendarArrowUp, UsersRound, 
   HandHelping, Settings, Images, LogOut,
 } from "lucide-react";
-import DashboardLink from "./DashboardLink";
 import { TbSection } from "react-icons/tb";
 import { FaStore } from "react-icons/fa";
+import DashboardLink from "../../store_dashboard/menubar/DashboardLink";
 
 
 

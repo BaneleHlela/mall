@@ -63,8 +63,14 @@ const StoreImages: React.FC<StoreImagesProps> = ({onImageSelect}) => {
       {/* Add a horizontal line here */}
       <hr className="w-5/5 mx-auto border-gray-300" />
 
-      <div className="h-[55%] overflow-y-scroll hide-scrollbar">
+      <div className="flex items-center justify-center h-[55%] overflow-y-scroll hide-scrollbar">
         {isLoading && <p>Loading images...</p>}
+
+        {!isLoading && images.length === 0 && (
+          <p className="text-center text-gray-500 py-4">
+            No images yet — start uploading!
+          </p>
+        )}
 
         <div className="grid grid-cols-2 gap-2 py-2 md:grid-cols-3 lg:grid-cols-5 auto-rows-fr">          
           {images.map((img: Image) => (

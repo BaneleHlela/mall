@@ -12,7 +12,7 @@ const Input: FC<InputProps> = ({ icon: Icon, ...props }) => {
       </div>
       <input
         {...props}
-        className="w-full pl-10 pr-[2vh] py-[1vh] bg-[#ffffff] rounded-[.5vh] border-[.15vh] border-gray-800 focus:bg-[#ffffff30] focus:outline-none focus:border-[.3vh] focus:ring-0 placeholder-gray-400 transition duration-200"
+        className="w-full pl-[4.5vh] pr-[2vh] py-[1vh] bg-[#ffffff] rounded-[.5vh] border-[.15vh] border-gray-800 focus:bg-[#ffffff30] focus:outline-none focus:border-[.3vh] focus:ring-0 placeholder-gray-400 transition duration-200"
       />
     </div>
   );

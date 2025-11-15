@@ -15,14 +15,14 @@ const DashboardLink: React.FC<DashboardLinkProps> = ({ linkTo, icon, text, beta 
   
     return (
     <Link
-      className={`w-full flex flex-row rounded-[10px] items-center space-x-[.3vh] p-[.6vh] hover:scale-102
-        ${isSelected ? "bg-gray-800 text-white" : " text-gray-700"}`}
+      className={`w-full flex flex-row rounded-[.45vh] text-black items-center space-x-[.3vh] px-[.6vh] py-[1.2vh] hover:scale-102 font-[400]
+        ${isSelected ? "bg-gray-100" : " "}`}
       to={linkTo}
       onClick={onClick}
     >
       {icon}
       <div className="relative">
-        <p className="capitalize text-[2vh] font-[400] 3xl:text-[1.2em]">{text}</p>
+        <p className="capitalize text-[2.1vh] font-[500] 3xl:text-[1.2em]">{text}</p>
         {beta && ( 
           <p className='absolute text-white bottom-0 -right-9 bg-amber-700 text-xs rounded-lg pl-1 pr-1 scale-70'>
             beta

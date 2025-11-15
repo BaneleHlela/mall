@@ -23,7 +23,7 @@ const StepLocation: React.FC = () => {
       <h3 className="text-[2,5vh] text-center">Pick store location</h3>
 
       {/* Nickname input */}
-      <div>
+      <div className='w-full'>
         <label className="text-[1.8vh] font-semibold text-gray-600">🏷 Nickname</label>
         <input
           type="text"
@@ -53,14 +53,14 @@ const StepLocation: React.FC = () => {
 
       {/* Show picked address */}
       {form.location.address && (
-        <div className="text-gray-700 text-sm mt-2">
+        <div className="text-center text-gray-700 text-[1.8vh] mt-2">
           <span className="font-semibold">Selected Address:</span> {form.location.address}
         </div>
       )}
 
       {/* Validation error */}
       {nextClicked && !validation.locationValid && (
-        <div className="text-center text-red-500 text-sm mt-2">
+        <div className="text-center text-red-500 text-[1.8vh] mt-2">
           Please select a location for your store
         </div>
       )}

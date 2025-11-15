@@ -92,6 +92,6 @@ app.use(errorHandler);
 
 
 app.listen(PORT, async () => {
-    console.log(`Server started on  ${PORT} port.js`);
+    console.log(`Server started on port ${PORT}`);
     await dbConnect();
 });

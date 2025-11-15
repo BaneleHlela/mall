@@ -54,7 +54,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
     contact: { phone: '0797604204', email: 'g@gmail.com' },
     departments: ["clothing"],
     socials: [{ platform: 'whatsapp', url: 'wa.me' }],
-    location: { nickname: '', lat: 0, lng: 0, address: '' },
+    location: { nickname: '', lat: -27.74885549999999, lng: 30.08534999999999, address: '' },
     delivers: { enabled: false, range: 0 },
     about: '',
     team: [{ member: '', role: '' }],

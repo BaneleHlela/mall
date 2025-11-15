@@ -82,27 +82,44 @@ const StepDelivers: React.FC = () => {
 
   // Initialize map
   useEffect(() => {
-    if (mapRef.current && !mapInstance.current) {
+    if (form.delivers.enabled && mapRef.current && !mapInstance.current) {
       mapInstance.current = new google.maps.Map(mapRef.current, {
         center: {
-          lat: form.location.lat || -26.2041,
-          lng: form.location.lng || 28.0473,
+          lat: form.location.lat,
+          lng: form.location.lng,
         },
         zoom: 12,
         mapTypeControl: false,
         streetViewControl: false,
       });
-
+  
       markerRef.current = new google.maps.Marker({
         position: {
           lat: form.location.lat,
           lng: form.location.lng,
         },
         map: mapInstance.current,
-        title: 'Store Location',
       });
     }
-  }, [form.location]);
+  }, [form.delivers.enabled]);
+
+  useEffect(() => {
+    if (form.delivers.enabled && mapInstance.current) {
+      setTimeout(() => {
+        google.maps.event.trigger(mapInstance.current!, 'resize');
+        mapInstance.current!.setCenter({
+          lat: form.location.lat,
+          lng: form.location.lng
+        });
+      }, 50);
+    }
+    if (!form.delivers.enabled) {
+      mapInstance.current = null;
+      markerRef.current = null;
+      circleRef.current = null;
+    }    
+  }, [form.delivers.enabled]);  
+  
 
   //Trigger a Resize When Map Becomes Visible
   useEffect(() => {
