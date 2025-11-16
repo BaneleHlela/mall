@@ -15,7 +15,7 @@ import "swiper/css/navigation";
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
-      <NavbarProvider>   {/* 👈 Wrap your app here */}
+      <NavbarProvider>   
         <App />
       </NavbarProvider>
     </Provider>
