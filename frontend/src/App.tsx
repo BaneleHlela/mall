@@ -7,7 +7,7 @@ import Layouts from "./pages/layout_editor/Layouts";
 import StorePage from "./pages/store/StorePage";
 import Menubar from "./components/the_mall/menubar/Menubar";
 import MyStores from "./pages/my_stores/MyStores";
-import Profile from "./pages/profile/Profile";
+import Account from "./pages/account/Account";
 import StoreDashboard from "./pages/store_dashboard/StoreDashboard";
 import MyLayouts from "./pages/store_dashboard/supporting_pages/layouts/StoreDashboardLayouts";
 import { useDispatch } from "react-redux";
@@ -55,7 +55,7 @@ const App: React.FC = () => {
           /> */}
           <Route path="/search" element={<MallSearchPage />} />
           <Route path="/favorites" element={<FavoriteStores />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/account" element={<Account />} />
           <Route path="/scribbler/*" element={<Scribbler />} />
           <Route path="/layouts/:layoutId/*" element={<Layouts />} />
           <Route path="/capture" element={<CaptureHomePoster />} />

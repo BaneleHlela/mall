@@ -10,7 +10,9 @@ import { setCookies } from "../config/setCookies.js";
 import { sendVerificationEmail, sendWelcomeEmail, sendPasswordResetEmail, sendResetSuccessEmail } from "../emails/email.js";
 import User from "../models/UserModel.js";
 import Store from "../models/StoreModel.js";
+import { uploadToUploads, uploadsBucket } from "../config/gcsClient.js";
 
+// Create a user 
 export const signup = expressAsyncHandler(async (req, res) => {
     const { email, password, firstName, lastName } = req.body;
   
@@ -53,7 +55,80 @@ export const signup = expressAsyncHandler(async (req, res) => {
   
     // Exclude "verificationToken" as res
 });
-  
+
+export const manageAvatar = expressAsyncHandler(async (req, res) => {
+  try {
+    const userId = req.user._id; // from protectRoute
+    const file = req.file;
+    const { remove } = req.body;
+
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+
+    // DELETE AVATAR
+    if (remove === "true" || remove === true) {
+      if (user.avatar && !user.avatar.includes("default-avatar")) {
+        try {
+          const oldPath = user.avatar.split(`the-mall-uploads-giza/`)[1];
+          await uploadsBucket.file(oldPath).delete();
+          console.log("Old avatar deleted:", oldPath);
+        } catch (error) {
+          console.error("Failed deleting old avatar:", error.message);
+        }
+      }
+
+      user.avatar = "default-avatar-url.jpg";
+      await user.save();
+
+      return res.status(200).json({
+        message: "Avatar removed successfully",
+        avatar: user.avatar,
+      });
+    }
+
+    // ADD / REPLACE AVATAR
+    if (!file) {
+      return res.status(400).json({ message: "No file provided" });
+    }
+
+    // If a custom avatar exists → delete it first
+    if (user.avatar && !user.avatar.includes("default-avatar")) {
+      try {
+        const oldPath = user.avatar.split(`the-mall-uploads-giza/`)[1];
+        await uploadsBucket.file(oldPath).delete();
+        console.log("Old avatar deleted:", oldPath);
+      } catch (error) {
+        console.error("Failed deleting old avatar:", error.message);
+      }
+    }
+
+    const extension = file.originalname.split(".").pop();
+    const fileName = `${user.username}.${extension}`;
+
+    const destination = `users/${user.username}/avatar/${fileName}`;
+
+    // Upload new avatar
+    await uploadToUploads(file.buffer, destination);
+
+    // Build Google Cloud public URL
+    const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${destination}`;
+    
+    user.avatar = publicUrl;
+    await user.save();
+    
+    res.status(200).json({
+      message: "Avatar updated successfully",
+      avatar: publicUrl,
+    });
+  } catch (error) {
+    console.error("Manage avatar error:", error);
+    res.status(500).json({ message: "Failed to manage avatar" });
+  }
+});
 
 // Login a user
 export const login = expressAsyncHandler(async (req, res) => {
@@ -95,7 +170,6 @@ export const logout = async (req, res) => {
 		res.status(500).json({ message: "Server error", error: error.message });
 	}
 };
-
 
 // forgot password
 export const forgotPassword = expressAsyncHandler(async (req, res) => {
@@ -178,7 +252,6 @@ export const searchUsersByUsername = expressAsyncHandler(async (req, res) => {
   res.json(users);
 });
 
-
 // user login status
 export const userLoginStatus = expressAsyncHandler(async (req, res) => {
     const accessToken = req.cookies.accessToken;
@@ -215,7 +288,7 @@ export const updateUser = expressAsyncHandler(async (req, res) => {
     if (req.body.mobile) user.mobile = req.body.mobile;
 
     // Append new locations if provided
-    if (req.body.locations && Array.isArray(req.body.locations)) {
+    if (req.body.locations && Array.isArray(req.body.locations) && req.body.locations.length === 1 ) {
       req.body.locations.forEach((loc) => {
         if (loc.lat && loc.lng && loc.address) {
           user.locations.push({
@@ -226,6 +299,11 @@ export const updateUser = expressAsyncHandler(async (req, res) => {
           });
         }
       });
+    }
+
+    // Update the whole array if locations have been rearranged
+    if (req.body.locations && Array.isArray(req.body.locations) && req.body.locations.length > 1 ) {
+      user.locations = req.body.locations;
     }
 
     // Update favoriteStores and store.likes
@@ -374,7 +452,8 @@ export const checkAuth = expressAsyncHandler(async (req, res) => {
   
     res.status(200).json({ success: true, user });
 });
-  
+
+// refresh access token
 export const refreshAccessToken = async (req, res) => {
 	try {
 		const refreshToken = req.cookies.refreshToken;

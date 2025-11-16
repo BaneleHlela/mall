@@ -6,15 +6,17 @@ import { signup, login, logout,
     getProfile, userLoginStatus, updateUser,
     deleteUser, blockUser, unblockUser,
     verifyEmail, checkAuth, refreshAccessToken,
-    searchUsersByUsername
+    searchUsersByUsername, manageAvatar
  } from "../controllers/UserController.js";
 import { checkBlocked, isAdmin, protectRoute } from "../middlewares/authMiddleware.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
+import { uploadSingleFile } from "../middlewares/uploadMiddleware.js";
 
 const router = express.Router();
 
 
 router.post("/signup", signup);
+router.put("/avatar", protectRoute, uploadSingleFile('avatar'), manageAvatar);
 router.post("/login", checkBlocked, login);
 router.get("/check-auth", verifyToken, checkAuth);
 router.post("/logout", logout);

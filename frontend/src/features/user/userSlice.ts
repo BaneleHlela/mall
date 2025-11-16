@@ -181,6 +181,46 @@ export const resetPassword = createAsyncThunk(
   }
 );
 
+// updateAvatar
+export const updateAvatar = createAsyncThunk(
+  "user/updateAvatar",
+  async (
+    payload: { file?: File | null; remove?: boolean },  thunkAPI
+  ) => {
+    try {
+      const formData = new FormData();
+
+      // Handle delete request
+      if (payload.remove) {
+        formData.append("remove", "true");
+      }
+
+      // Handle upload request
+      if (payload.file) {
+        formData.append("avatar", payload.file);
+      }
+
+      const response = await axios.put(
+        `${USER_API_URL}/avatar`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+
+      return response.data.avatar; // returns URL
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || "Failed to update avatar"
+      );
+    }
+  }
+);
+
+
 
 // --- Slice ---
 const userSlice = createSlice({
@@ -321,6 +361,22 @@ const userSlice = createSlice({
       })
       .addCase(deleteUser.rejected, (state, action) => {
         state.error = action.payload as string;
+      })
+      
+      // Manage Avatar
+      .addCase(updateAvatar.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateAvatar.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user.avatar = action.payload; // avatar URL returned
+        }
+        state.isLoading = false;
+      })
+      .addCase(updateAvatar.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.isLoading = false;
       })      
   },
 });

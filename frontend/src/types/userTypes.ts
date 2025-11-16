@@ -3,7 +3,8 @@ import type { ObjectId } from "mongoose";
 export interface User {
     _id: string | ObjectId; 
     firstName: string; 
-    lastName: string; 
+    lastName: string;
+    username: string; 
     email: string; 
     mobile?: string; 
     password: string; 

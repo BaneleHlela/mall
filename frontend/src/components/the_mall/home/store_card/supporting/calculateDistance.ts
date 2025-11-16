@@ -1,6 +1,5 @@
 import type { User } from '../../../../../types/userTypes';
 import type { Store } from '../../../../../types/storeTypes';
-import { Store } from 'lucide-react';
 
 /**
  * Calculate the distance between two points on Earth using the Haversine formula
@@ -35,7 +34,6 @@ function haversineDistance(lat1: number, lng1: number, lat2: number, lng2: numbe
  */
 export function calculateDistanceToStore(user: User, store: Store): number | null {
   // Check if user has locations and store has location
-  console.log(store, user)
   if (!user.locations || user.locations.length === 0 || !store.location) {
     return null;
   }
