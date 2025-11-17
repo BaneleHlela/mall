@@ -143,7 +143,7 @@ const StoreDashboardLayouts = () => {
 
       <div className="absolute bottom-0 w-fit h-[10vh] flex flex-col justify-center items-center">
         <button onClick={handleClick} className="flex items-center bg-black text-white rounded-[.45vh] p-[1vh] space-x-1 shadow">
-          <p className="">New Layout</p> <FaPlus className="text-[1.8vh]"/>
+          <p className="">New Layout</p> <FaPlus className="text-[1.5vh]"/>
         </button>
       </div>
     </div>

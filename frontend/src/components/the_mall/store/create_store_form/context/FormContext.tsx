@@ -4,6 +4,7 @@ const defaultTime = { start: '07:00', end: '17:00', closed: false };
 
 interface FormState {
   name: string;
+  nickname: string;
   logo: { url: string; text: string };
   businessType: string;
   thumbnail: string;
@@ -34,6 +35,7 @@ interface FormContextType {
   nextClicked: boolean;
   setNextClicked: React.Dispatch<React.SetStateAction<boolean>>;
   clearDraft: () => void;
+  resetForm: () => void;
 }
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
@@ -47,6 +49,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [form, setForm] = useState<FormState>({
     name: 'Banele',
+    nickname: '',
     logo: { url: '', text: '' },
     businessType: 'sole',
     thumbnail: '//example.com/images/thumbnails/product5.jpg',
@@ -93,43 +96,100 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const prevStep = () => {
     setDirection(-1);
     setStep(prev => Math.max(prev - 1, 0));
+    setNextClicked(false); // Reset nextClicked when going back
   };
 
   const validateCurrentStep = () => {
-    return stepValidator();
+    if (typeof stepValidator === 'function') {
+      return stepValidator();
+    }
+    return true; // Default to valid if no validator is set
   };
 
   const clearDraft = () => {
-    localStorage.removeItem('createStoreDraft');
-    localStorage.removeItem('createStoreStep');
+    try {
+      localStorage.removeItem('createStoreDraft');
+      localStorage.removeItem('createStoreStep');
+    } catch (error) {
+      console.warn('Failed to clear draft from localStorage:', error);
+    }
+  };
+
+  const resetForm = () => {
+    setForm({
+      name: '',
+      nickname: '',
+      logo: { url: '', text: '' },
+      businessType: 'sole',
+      thumbnail: '',
+      slogan: '',
+      contact: { phone: '', email: '' },
+      departments: [],
+      socials: [],
+      location: { nickname: '', lat: 0, lng: 0, address: '' },
+      delivers: { enabled: false, range: 0 },
+      about: '',
+      team: [{ member: '', role: '' }],
+      trades: [],
+      operationTimes: {
+        alwaysOpen: false,
+        monday: { ...defaultTime },
+        tuesday: { ...defaultTime },
+        wednesday: { ...defaultTime },
+        thursday: { ...defaultTime },
+        friday: { ...defaultTime },
+        saturday: { start: '08:00', end: '14:00', closed: false },
+        sunday: { start: '', end: '', closed: true },
+      },
+    });
+    setStep(0);
+    setNextClicked(false);
+    clearDraft();
   };
 
   // Load draft from localStorage on mount
   useEffect(() => {
-    const savedForm = localStorage.getItem('createStoreDraft');
-    const savedStep = localStorage.getItem('createStoreStep');
-    
-    if (savedForm) {
-      try {
-        setForm(JSON.parse(savedForm));
-      } catch (error) {
-        console.error('Failed to parse saved form data:', error);
+    try {
+      const savedForm = localStorage.getItem('createStoreDraft');
+      const savedStep = localStorage.getItem('createStoreStep');
+      
+      if (savedForm) {
+        try {
+          const parsedForm = JSON.parse(savedForm);
+          // Validate that the parsed form has required structure
+          if (parsedForm && typeof parsedForm === 'object' && parsedForm.name !== undefined) {
+            setForm(parsedForm);
+          }
+        } catch (error) {
+          console.error('Failed to parse saved form data:', error);
+          clearDraft(); // Clear corrupted data
+        }
       }
-    }
-    if (savedStep) {
-      try {
-        setStep(parseInt(savedStep, 10));
-      } catch (error) {
-        console.error('Failed to parse saved step:', error);
+      
+      if (savedStep) {
+        try {
+          const stepNumber = parseInt(savedStep, 10);
+          if (!isNaN(stepNumber) && stepNumber >= 0 && stepNumber <= 6) {
+            setStep(stepNumber);
+          }
+        } catch (error) {
+          console.error('Failed to parse saved step:', error);
+        }
       }
+    } catch (error) {
+      console.error('Error accessing localStorage:', error);
     }
   }, []);
 
   // Save to localStorage whenever form or step changes
   useEffect(() => {
-    localStorage.setItem('createStoreDraft', JSON.stringify(form));
-    localStorage.setItem('createStoreStep', step.toString());
-    console.log('🟢 Draft saved:', form);
+    try {
+      localStorage.setItem('createStoreDraft', JSON.stringify(form));
+      localStorage.setItem('createStoreStep', step.toString());
+      console.log('🟢 Draft saved:', form);
+    } catch (error) {
+      console.warn('Failed to save draft to localStorage:', error);
+    }
   }, [form, step]);
 
   return (
@@ -147,7 +207,8 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
         validateCurrentStep,
         nextClicked,
         setNextClicked,
-        clearDraft
+        clearDraft,
+        resetForm
     }}>
       {children}
     </FormContext.Provider>

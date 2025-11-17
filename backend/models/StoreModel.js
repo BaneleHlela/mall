@@ -8,6 +8,10 @@ const storeSchema = new mongoose.Schema(
       type: String,
       required: [true, "Store name is required"],
     },
+    nickname: {
+      type: String,
+      required: false,
+    },
     slug: {
       type: String,
       unique: true,
@@ -133,9 +137,15 @@ const storeSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
-    thumbnail:{
-      type:String,
-      default: "gooapi.mythumbnail"
+    thumbnails:{
+      storeCard: { 
+        type: String,
+        default: "",
+      },
+      profily: {
+        type: String,
+        default: "",
+      },
     },
     isBlocked: {
       type: Boolean,
@@ -158,10 +168,7 @@ const storeSchema = new mongoose.Schema(
         default: [],
       },
     },
-    operationTimes: {
-      type: operationTimesSchema,
-      default: () => ({}), // Default to an empty object
-    },
+    operationTimes: operationTimesSchema,
     images: [{
       category: {
         type: String,
@@ -206,6 +213,24 @@ const storeSchema = new mongoose.Schema(
     visits: {
       type: Number,
       default: 0,
+    },
+    manualStatus: {
+      isOverridden: {
+        type: Boolean,
+        default: false,
+      },
+      status: {
+        type: String,
+        enum: ['open', 'closed'],
+        default: 'open',
+      },
+      overriddenAt: {
+        type: Date,
+      },
+      overriddenBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      }
     }
   },
   {

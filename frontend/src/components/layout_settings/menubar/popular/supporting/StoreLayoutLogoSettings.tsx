@@ -26,7 +26,7 @@ const LogoSettings: React.FC<LogoSettingsProps> = ({ objectPath, device }) => {
   };
 
   return (
-    <div className="space-y-1 px-2">
+    <div className="flex flex-col items-center space-y-1 px-2">
       <OptionsToggler
         label="Logo Type"
         options={['logo', 'text']}

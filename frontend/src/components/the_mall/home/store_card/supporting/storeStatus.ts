@@ -92,7 +92,17 @@ function getNextOpeningTime(operationTimes: OperationTimes, currentDay: string, 
 /**
  * Calculate store status based on operation times and current time
  */
-export function getStoreStatus(operationTimes?: OperationTimes): StoreStatusResult {
+export function getStoreStatus(operationTimes?: OperationTimes, manualStatus?: { isOverridden: boolean; status: 'open' | 'closed' }): StoreStatusResult {
+  // Check for manual override first
+  if (manualStatus?.isOverridden) {
+    return {
+      status: manualStatus.status,
+      message: manualStatus.status === 'open' ? 'Open (Manual)' : 'Closed (Manual)',
+      color: manualStatus.status === 'open' ? 'green' : 'red',
+      isOpen: manualStatus.status === 'open'
+    };
+  }
+
   // Default closed status if no operation times provided
   if (!operationTimes) {
     return {

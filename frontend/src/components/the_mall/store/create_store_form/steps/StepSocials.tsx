@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFormContext } from '../context/FormContext';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPinterest, FaYoutube, FaWhatsapp, FaPhone } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
-
-// Use toaster for ther alert
 
 interface SocialLink {
     platform: 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'pinterest' | 'youtube' | 'whatsapp' | 'phone';
@@ -47,9 +45,23 @@ const DisplaySocialLink: React.FC<{
 };
 
 const StepSocials: React.FC = () => {
-    const { form, setForm } = useFormContext();
+    const { form, setForm, setStepValidator, nextClicked } = useFormContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentSocial, setCurrentSocial] = useState<SocialLink | null>(null);
+    const [validation, setValidation] = useState({
+        socialsValid: true,
+        urlError: ''
+    });
+
+    const validateSocials = () => {
+        // Socials are optional, so always valid
+        setValidation(prev => ({ ...prev, socialsValid: true }));
+        return true;
+    };
+
+    useEffect(() => {
+        setStepValidator(validateSocials);
+    }, [form.socials]);
 
     const handleSocialClick = (social: SocialLink | null) => {
         setCurrentSocial(social);
@@ -78,9 +90,12 @@ const StepSocials: React.FC = () => {
     const handleSaveSocial = (social: SocialLink) => {
         // Validate that the URL is not empty
         if (!social.url.trim()) {
-            alert("URL cannot be empty."); // Display an error message
+            setValidation(prev => ({ ...prev, urlError: "URL cannot be empty." }));
             return; // Prevent saving
         }
+
+        // Clear any previous error
+        setValidation(prev => ({ ...prev, urlError: '' }));
     
         const formattedSocial = {
             ...social,
@@ -148,10 +163,19 @@ const StepSocials: React.FC = () => {
                         <input
                             type="text"
                             value={currentSocial.url}
-                            onChange={(e) => setCurrentSocial({ ...currentSocial, url: e.target.value })}
-                            className="w-full p-2 border rounded mb-4"
+                            onChange={(e) => {
+                                setCurrentSocial({ ...currentSocial, url: e.target.value });
+                                // Clear error when user starts typing
+                                if (validation.urlError) {
+                                    setValidation(prev => ({ ...prev, urlError: '' }));
+                                }
+                            }}
+                            className={`w-full p-2 border rounded mb-4 ${validation.urlError ? 'border-red-500' : ''}`}
                             placeholder={`Enter ${currentSocial.platform} URL`}
                         />
+                        {validation.urlError && (
+                            <p className="text-red-500 text-sm mb-4">{validation.urlError}</p>
+                        )}
                         <div className="w-full flex justify-between gap-2">
                             <button
                                 onClick={() => setIsModalOpen(false)}
@@ -167,6 +191,13 @@ const StepSocials: React.FC = () => {
                             </button>
                         </div>
                     </div>
+                </div>
+            )}
+
+            {/* Validation error (though socials are optional) */}
+            {nextClicked && !validation.socialsValid && (
+                <div className="text-center text-red-500 text-[1.8vh] mt-2">
+                    Please configure your social media links
                 </div>
             )}
         </div>

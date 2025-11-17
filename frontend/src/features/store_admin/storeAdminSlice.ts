@@ -29,13 +29,12 @@ const initialState: StoreAdmin = {
 
 export const editStore = createAsyncThunk<
   Store,
-  { storeId: string; updatedStore: Omit<Store, 'id'> }
+  { storeSlug: string; updatedStore: Omit<Store, 'id'> }
 >(
   'store_admin/editStore',
-  async ({ storeId, updatedStore }, thunkAPI) => {
-    console.log(updatedStore)
+  async ({ storeSlug, updatedStore }, thunkAPI) => {
     try {
-      const response = await axios.put(`${STORE_URL}/edit/${storeId}`, updatedStore);
+      const response = await axios.put(`${STORE_URL}/edit/${storeSlug}`, updatedStore);
       return response.data; // should be the updated store
     } catch (error) {
       console.error('Error editing store:', error);
@@ -80,8 +79,8 @@ export const linkLayoutToStore = createAsyncThunk<string, string>(
 
 export const fetchStore = createAsyncThunk<Store, string>(
   'store_admin/fetchStore',
-  async (storeId) => {
-    const response = await axios.get(`${STORE_URL}/${storeId}`);
+  async (storeSlug) => {
+    const response = await axios.get(`${STORE_URL}/${storeSlug}`);
     return response.data;
   }
 );
@@ -231,13 +230,83 @@ export const getDemoStores = createAsyncThunk<
   }
 );
 
+// --- Upload Store Logo ---
+export const uploadStoreLogo = createAsyncThunk<string, { storeSlug: string; logoFile: File }>(
+  'stores/uploadStoreLogo',
+  async ({ storeSlug, logoFile }) => {
+    const formData = new FormData();
+    formData.append('logo', logoFile);
+
+    try {
+      const response = await axios.put(`${STORE_URL}/${storeSlug}/logo`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status !== 200 || !response.data.url) {
+        throw new Error('Invalid response from server');
+      }
+
+      return response.data.url;
+    } catch (error) {
+      console.error('Error uploading store logo:', error);
+      throw new Error('Failed to upload store logo');
+    }
+  }
+);
 
 
+// --- Delete Store Logo ---
+export const deleteStoreLogo = createAsyncThunk<string, { storeSlug: string }>(
+  'stores/deleteStoreLogo',
+  async ({ storeSlug }) => {
+    try {
+      const response = await axios.delete(`${STORE_URL}/${storeSlug}/logo`);
+      return response.data.storeId; // or simply: return storeSlug;
+    } catch (error) {
+      console.error('Error deleting store logo:', error);
+      throw new Error('Failed to delete store logo');
+    }
+  }
+);
 
+// Toggle Store Status
+export const toggleStoreStatus = createAsyncThunk<
+  Store,
+  { storeSlug: string; status: 'open' | 'closed' }
+>(
+  'store_admin/toggleStoreStatus',
+  async ({ storeSlug, status }, thunkAPI) => {
+    try {
+      const response = await axios.put(`${STORE_URL}/${storeSlug}/status`, { status });
+      return response.data.store;
+    } catch (error: any) {
+      console.error('Error toggling store status:', error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to update store status'
+      );
+    }
+  }
+);
 
+// Reset Store Status
+export const resetStoreStatus = createAsyncThunk<Store, { storeSlug: string }>(
+  'store_admin/resetStoreStatus',
+  async ({ storeSlug }, thunkAPI) => {
+    try {
+      const response = await axios.delete(`${STORE_URL}/${storeSlug}/status`);
+      return response.data.store;
+    } catch (error: any) {
+      console.error('Error resetting store status:', error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to reset store status'
+      );
+    }
+  }
+);
 
 // --- Slice ---
-
 const storeAdminSlice = createSlice({
     name: "storeAdmin",
     initialState,
@@ -451,9 +520,57 @@ const storeAdminSlice = createSlice({
             state.error = action.payload || 'Failed to fetch demo stores';
           })
           
+          // Upload Store Logo
+        .addCase(uploadStoreLogo.pending, (state) => {
+          state.isLoading = true;
+          state.error = null;
+        })
+        .addCase(uploadStoreLogo.fulfilled, (state, action: PayloadAction<string>) => {
+          state.isLoading = false;
+          state.error = null;
+
+          if (state.store) {
+            state.store.logo = { url: action.payload }; // set logo URL as an object
+          }
+        })
+        .addCase(uploadStoreLogo.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action.error.message || 'Failed to upload store logo';
+        })
+
+        // Toggle Store Status
+        .addCase(toggleStoreStatus.pending, (state) => {
+          state.isLoading = true;
+          state.error = null;
+        })
+        .addCase(toggleStoreStatus.fulfilled, (state, action: PayloadAction<Store>) => {
+          state.isLoading = false;
+          state.error = null;
+          state.store = action.payload;
+        })
+        .addCase(toggleStoreStatus.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload as string || 'Failed to update store status';
+        })
+
+        // Reset Store Status
+        .addCase(resetStoreStatus.pending, (state) => {
+          state.isLoading = true;
+          state.error = null;
+        })
+        .addCase(resetStoreStatus.fulfilled, (state, action: PayloadAction<Store>) => {
+          state.isLoading = false;
+          state.error = null;
+          state.store = action.payload;
+        })
+        .addCase(resetStoreStatus.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload as string || 'Failed to reset store status';
+        })
     }
 });
 
 export const { setLoading, setError, updateStoreSetting, setStore, updateStoreImages, addImageToStore } = storeAdminSlice.actions;
+
 
 export default storeAdminSlice.reducer;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { updateSetting } from '../../../../../features/layouts/layoutSettingsSlice';
 import OrderDnD from '../../../extras/OrderDnD';
-import LogoSettings from './LogoSettings';
+import LogoSettings from './StoreLayoutLogoSettings';
 import MenubarLinksSettings from './MenubarLinksSettings';
 import IconsSettingsHandler from './IconsSettingsHandler';
 import StoreButtonSettings from '../../../extras/StoreButtonSettings';

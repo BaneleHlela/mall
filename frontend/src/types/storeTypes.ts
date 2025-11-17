@@ -32,10 +32,15 @@ export interface Socials {
 export interface Store {
   isVerified: any;
   _id?: string;
-  slug?: string;
+  slug: string;
   description: string;
   thumbnail: string;
+  thumbnails: {
+    storeCard: string;
+    profily: string;
+  };
   name: string;
+  nickname?: string;
   logo: Logo;
   isDemo?: boolean;
   trades: string[];
@@ -81,6 +86,12 @@ export interface Store {
     level: 1 | 2 | 3 | 4 | 5;
   };
   visits: Number;
+  manualStatus?: {
+    isOverridden: boolean;
+    status: 'open' | 'closed';
+    overriddenAt?: Date;
+    overriddenBy?: string;
+  };
 }
 
 export interface OperationTimes {

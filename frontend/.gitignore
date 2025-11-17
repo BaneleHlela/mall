@@ -22,4 +22,4 @@ node_modules
 *.sw?
 
 
-/src/features/context.ts
+src/features/context.ts

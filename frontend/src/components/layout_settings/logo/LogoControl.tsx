@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import type { RootState } from "../../../app/store";
 import { fetchStore } from "../../../features/store_admin/storeAdminSlice";
-import { uploadStoreLogo, deleteStoreLogo } from "../../../features/stores/storeSlice";
+import { uploadStoreLogo, deleteStoreLogo } from "../../../features/store_admin/storeAdminSlice";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { TbLoader3 } from "react-icons/tb";
 
@@ -9,9 +9,16 @@ const LogoControl: React.FC = () => {
   const dispatch = useAppDispatch();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
-  const store = useAppSelector((state: RootState) => state.storeAdmin.store) || useAppSelector((state: RootState) => state.stores.currentStore);
-  const isLoading = useAppSelector((state: RootState) => state.storeAdmin.isLoading || state.stores.isLoading);
+  const { store, isLoading, error } = useAppSelector((state) => state.storeAdmin);
+
+  // const store =
+  //   useAppSelector((state: RootState) => state.storeAdmin.store) ||
+  //   useAppSelector((state: RootState) => state.stores.currentStore);
+
+  // const isLoading = useAppSelector(
+  //   (state: RootState) => state.storeAdmin.isLoading || state.stores.isLoading
+  // );
+
   const logo = store?.logo || {};
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,12 +29,12 @@ const LogoControl: React.FC = () => {
 
   const handleUpload = async (file: File) => {
     const MAX_FILE_SIZE = 2024 * 2024;
-  
+
     if (file.size > MAX_FILE_SIZE) return alert("File too large (max 1MB).");
     if (!store?._id) return alert("Store ID missing.");
-  
+
     try {
-      await dispatch(uploadStoreLogo({ storeId: store._id, logoFile: file })).unwrap();
+      await dispatch(uploadStoreLogo({ storeSlug: store.slug, logoFile: file })).unwrap();
       await dispatch(fetchStore(store._id));
       alert("Logo uploaded successfully.");
       setSelectedFile(null);
@@ -38,14 +45,11 @@ const LogoControl: React.FC = () => {
   };
 
   const handleDelete = async () => {
-    if (!store?._id) {
-      alert("Store ID missing.");
-      return;
-    }
-  
+    if (!store?._id) return alert("Store ID missing.");
+
     const confirmed = window.confirm("Are you sure you want to delete the current logo?");
     if (!confirmed) return;
-  
+
     try {
       await dispatch(deleteStoreLogo({ storeId: store._id })).unwrap();
       alert("Logo deleted successfully.");
@@ -64,29 +68,54 @@ const LogoControl: React.FC = () => {
   const hasExistingLogo = !!logo?.url;
 
   return (
-    <div className="flex flex-col items-center border rounded-md shadow-md w-full bg-white py-1">
-      <h2 className="text-lg font-semibold mb-2">Store Logo</h2>
+    <div className="flex flex-col items-center border-2 border-gray-200 rounded-md shadow-md w-full max-w-md py-4 px-2">
+      <h2 className="text-lg font-semibold mb-4">Store Logo</h2>
 
-      <div className="flex flex-row h-22 w-full justify-between px-2">
-        {logo?.url && (
-          <div className="mb-4">
-            <img src={logo.url} alt="Current Logo" className="h-22 w-22 rounded border object-cover" />
+      {/* LOGO DISPLAY */}
+      <div className="flex flex-col items-center w-full gap-4">
+
+        {/* When replacing logo (old + new side by side) */}
+        {selectedFile && hasExistingLogo ? (
+          <div className="flex flex-row justify-center gap-4 w-full ">
+            <img
+              src={logo.url}
+              alt="Old Logo"
+              className="w-[40%] bg-amber-400 aspect-square object-cover border rounded"
+            />
+            <img
+              src={URL.createObjectURL(selectedFile)}
+              alt="New Logo Preview"
+              className="w-[40%] bg-amber-400  aspect-square object-cover border rounded"
+            />
           </div>
+        ) : (
+          hasExistingLogo && (
+            <img
+              src={logo.url}
+              alt="Current Logo"
+              className="w-[40%] aspect-square bg-amber-400  object-cover border rounded mx-auto"
+            />
+          )
         )}
-        <div className="flex flex-col w-[60%] h-full justify-between py-1">
-          <input 
-            type="file" 
-            ref={fileInputRef}
-            onChange={handleFileChange} 
-            className="hidden" 
-            accept="image/*"
-          />
 
+        {/* FILE INPUT */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          className="hidden"
+          accept="image/*"
+        />
+        {error && <p className="text-sm text-red-600">{error}</p>}
+        {/* BUTTONS */}
+        <div className="flex flex-col w-full gap-2">
           <button
             onClick={triggerFileInput}
             disabled={isLoading}
             className={`w-full px-4 py-2 text-white text-sm rounded transition duration-300 ${
-              isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+              isLoading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
             {isLoading ? (
@@ -102,10 +131,10 @@ const LogoControl: React.FC = () => {
             <button
               onClick={handleDelete}
               disabled={isLoading}
-              className={`w-full px-4 py-2 text-sm rounded transition duration-300 ${
+              className={`w-full px-4 py-2 text-sm rounded border transition duration-300 ${
                 isLoading
-                  ? 'text-gray-400 border-gray-300 cursor-not-allowed'
-                  : 'text-red-600 border-red-500 hover:bg-red-100'
+                  ? "text-gray-400 border-gray-300 cursor-not-allowed"
+                  : "text-red-600 border-red-500 hover:bg-red-100"
               }`}
             >
               Delete Logo

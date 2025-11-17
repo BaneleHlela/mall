@@ -19,9 +19,9 @@ const StepDelivers: React.FC = () => {
     return true;
   };
 
-//   useEffect(() => {
-//     setStepValidator(validateDelivers);
-//   }, []);
+  useEffect(() => {
+    setStepValidator(validateDelivers);
+  }, [form.delivers]);
 
   // 2️⃣ Manage circle updates when range/enabled changes
     useEffect(() => {

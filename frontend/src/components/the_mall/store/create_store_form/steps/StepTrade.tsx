@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormContext } from '../context/FormContext';
 
 const StepTrade: React.FC = () => {
-  const { form, handleChange } = useFormContext();
+  const { form, handleChange, setStepValidator, nextClicked } = useFormContext();
+  const [validation, setValidation] = useState({
+    tradesValid: true
+  });
+
+  const validateTrades = () => {
+    // Trades are optional, so always valid
+    setValidation({ tradesValid: true });
+    return true;
+  };
+
+  useEffect(() => {
+    setStepValidator(validateTrades);
+  }, [form.trades]);
 
   const handleTradeToggle = (trade: string, checked: boolean) => {
     if (checked) {
@@ -61,6 +74,13 @@ const StepTrade: React.FC = () => {
           <p className="text-[1.6vh] text-gray-500 italic">
             No trade types selected. You can skip this step or choose the ones that match your business.
           </p>
+        </div>
+      )}
+
+      {/* Validation error (though trades are optional) */}
+      {nextClicked && !validation.tradesValid && (
+        <div className="text-center text-red-500 text-[1.8vh] mt-2">
+          Please select at least one trade type
         </div>
       )}
     </div>

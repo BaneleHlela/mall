@@ -5,6 +5,10 @@ const storeLayoutSchema = new mongoose.Schema({
         type: String,
         required: [true, "Store layout name is required"],
     },
+    nickname: {
+        type: String,
+        required: false,
+    },
     screenshot: {
         type: String,
         default: "",

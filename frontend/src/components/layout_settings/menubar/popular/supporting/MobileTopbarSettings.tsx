@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { updateSetting } from '../../../../../features/layouts/layoutSettingsSlice';
-import LogoSettings from './LogoSettings';
+import LogoSettings from './StoreLayoutLogoSettings';
 import IconsSettingsHandler from './IconsSettingsHandler';
 import StoreButtonSettings from '../../../extras/StoreButtonSettings';
 import OptionsToggler from '../../../supporting/OptionsToggler';

@@ -3,10 +3,11 @@ import { IoMdNotifications, IoMdSearch } from "react-icons/io";
 import { Fade as Hamburger } from 'hamburger-react'
 import { IoNotificationsOutline, IoSearch } from 'react-icons/io5';
 import { useState } from 'react';
-import { FaDoorOpen, FaDoorClosed } from 'react-icons/fa6'; // ✅ Added closed door icon
-import { useAppSelector } from '../../../app/hooks';
+import { FaDoorOpen, FaDoorClosed } from 'react-icons/fa6';
+import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { getStoreStatus } from '../../the_mall/home/store_card/supporting/storeStatus';
-import toast, { Toaster } from 'react-hot-toast'; // ✅ Import toast
+import { toggleStoreStatus } from '../../../features/store_admin/storeAdminSlice';
+import toast, { Toaster } from 'react-hot-toast';
 
 interface Props {
   isMobileMenuOpen?: boolean;
@@ -14,8 +15,10 @@ interface Props {
 }
 
 const StoreDashboardTopbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }: Props) => {
+  const dispatch = useAppDispatch();
   const store = useAppSelector((state) => state.storeAdmin.store);
-  const storeStatus = getStoreStatus(store?.operationTimes);
+  const isLoading = useAppSelector((state) => state.storeAdmin.isLoading);
+  const storeStatus = getStoreStatus(store?.operationTimes, store?.manualStatus);
 
   // Check if the current URL contains 'posters/view'
   const shouldHideTopbar = window.location.href.includes('posters/view');
@@ -24,16 +27,47 @@ const StoreDashboardTopbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }:
     return null; // Return null to hide the component
   }
 
-  // ✅ Click handler for the open/closed div
-  const handleStatusClick = () => {
-    toast.error('Cannot open store for now.', {
-      style: {
-        background: '#fef2f2',
-        color: '#991b1b',
-        fontFamily: 'Outfit',
-      },
-      icon: '🚫',
-    });
+  // Handle status toggle
+  const handleStatusClick = async () => {
+    if (!store?.slug) {
+      toast.error('Store not found', {
+        style: {
+          background: '#fef2f2',
+          color: '#991b1b',
+          fontFamily: 'Outfit',
+        },
+        icon: '❌',
+      });
+      return;
+    }
+
+    const currentStatus = storeStatus.status;
+    const newStatus = currentStatus === 'open' ? 'closed' : 'open';
+
+    try {
+      await dispatch(toggleStoreStatus({
+        storeSlug: store.slug,
+        status: newStatus
+      })).unwrap();
+
+      toast.success(`Store is now ${newStatus}`, {
+        style: {
+          background: newStatus === 'open' ? '#f0fdf4' : '#fef2f2',
+          color: newStatus === 'open' ? '#166534' : '#991b1b',
+          fontFamily: 'Outfit',
+        },
+        icon: newStatus === 'open' ? '✅' : '🔒',
+      });
+    } catch (error) {
+      toast.error(`Failed to ${newStatus === 'open' ? 'open' : 'close'} store`, {
+        style: {
+          background: '#fef2f2',
+          color: '#991b1b',
+          fontFamily: 'Outfit',
+        },
+        icon: '❌',
+      });
+    }
   };
 
   const isOpen = storeStatus.status === 'open';
@@ -71,12 +105,13 @@ const StoreDashboardTopbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }:
         {/* Notifs and account */}
         <div className="h-full flex flex-row justify-end items-center lg:w-[30%] ">
 
-          {/* ✅ Open/Closed Status */}
+          {/* Open/Closed Status */}
           <div
             onClick={handleStatusClick}
-            className={`flex flex-col items-center font-bold py-[.5vh] px-[1vh] space-x-1 text-white mr-[2vh] rounded-[.5vh] border transition-colors duration-200 cursor-pointer
-              ${isOpen ? 'bg-green-600 border-green-600' : 'bg-red-600 border-red-600'}
-            `}
+            className={`flex flex-col items-center font-bold py-[.5vh] px-[1vh] space-x-1 text-white mr-[2vh] rounded-[.5vh] border transition-colors duration-200 cursor-pointer hover:opacity-80 ${
+              isLoading ? 'opacity-50 cursor-not-allowed' : ''
+            } ${isOpen ? 'bg-green-600 border-green-600' : 'bg-red-600 border-red-600'}`}
+            title={`Click to ${isOpen ? 'close' : 'open'} store manually`}
           >
             {isOpen ? (
               <FaDoorOpen className='text-[3vh]' />
@@ -86,6 +121,10 @@ const StoreDashboardTopbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }:
             <p style={{ lineHeight: "1" }} className="text-[1.5vh]">
               {isOpen ? 'open' : 'closed'}
             </p>
+            {store?.manualStatus?.isOverridden && (
+              <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full"
+                   title="Manual override active" />
+            )}
           </div>
 
           <div className="relative flex flex-col justify-center mr-[3vh]">

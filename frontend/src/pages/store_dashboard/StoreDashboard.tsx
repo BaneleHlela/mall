@@ -49,12 +49,12 @@ const StoreDashboard = () => {
         }
     }, [storeSlug, dispatch]);
 
-    if (isLoading) {
+    if (isLoading && !store) {
         return <>loading...</>
     }
     
     if (!store) {
-        return <p>Store not found or invalid store ID.</p>;
+        return <p>Store not found or invalid store Slug.</p>;
     }
 
     return (

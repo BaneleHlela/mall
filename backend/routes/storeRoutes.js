@@ -17,7 +17,9 @@ import {
     addTeamMember,
     deleteTeamMember,
     editTeamMember,
-    getDemoStores
+    getDemoStores,
+    toggleStoreStatus,
+    resetStoreStatus
 } from "../controllers/StoreController.js";
 import { uploadSingleFile, uploadTeamMemberImage } from "../middlewares/uploadMiddleware.js";
 
@@ -40,6 +42,8 @@ router.get('/:storeSlug/gallery', getStoreImages);
 router.put('/:storeSlug/gallery', uploadSingleFile("image"), uploadStoreGalleryImage);
 router.delete('/:storeSlug/gallery', deleteStoreGalleryImage);
 
-
+// Store status routes
+router.put('/:storeSlug/status', protectRoute, toggleStoreStatus);
+router.delete('/:storeSlug/status', protectRoute, resetStoreStatus);
 
 export default router;

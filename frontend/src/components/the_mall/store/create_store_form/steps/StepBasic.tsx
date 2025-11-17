@@ -36,7 +36,12 @@ const StepBasic: React.FC = () => {
         isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
         break;
     }
-    setValidation(prev => ({ ...prev, [`${field}Valid`]: isValid }));
+    
+    // Update validation state based on field name
+    const validationKey = field.includes('.') ?
+      field.replace('contact.', '') + 'Valid' :
+      field + 'Valid';
+    setValidation(prev => ({ ...prev, [validationKey]: isValid }));
     return isValid;
   };
 
@@ -53,7 +58,7 @@ const StepBasic: React.FC = () => {
 
   // Set the step validator
   useEffect(() => {
-    setStepValidator(() => validateFields);
+    setStepValidator(validateFields);
   }, [form]);
 
   return (
@@ -72,6 +77,16 @@ const StepBasic: React.FC = () => {
                 className="w-full border-b p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none focus:ring-0"
             />
             {nextClicked && !validation.nameValid && <p className="text-red-500 text-sm">Store name is required</p>}
+        </div>
+        <div className="w-full">
+            <label htmlFor='text' className="w-full text-left text-black text-[100%]">Store Nickname</label>
+            <input
+                type="text"
+                placeholder="Store Nickname (optional)"
+                value={form.nickname}
+                onChange={e => handleChange('nickname', e.target.value)}
+                className="w-full border-b p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none focus:ring-0"
+            />
         </div>
         <div className="w-full">
             <label className="w-full text-left text-black mt-[.9vh]">Department *</label>
@@ -129,10 +144,8 @@ const StepBasic: React.FC = () => {
           placeholder="Phone"
           value={form.contact.phone || ''}
           onChange={e => {
-            const phone = e.target.value;
-            const updatedForm = { ...form, contact: { ...form.contact, phone } };
-            setForm(updatedForm);
-            validateField('contact.phone', phone);
+            handleChange('contact.phone', e.target.value);
+            validateField('contact.phone', e.target.value);
           }}
           className={`w-full border-b p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none ${!validation.phoneValid ? 'border-red-500' : ''}`}
         />
@@ -146,10 +159,8 @@ const StepBasic: React.FC = () => {
           placeholder="Email"
           value={form.contact.email || ''}
           onChange={e => {
-            const email = e.target.value;
-            const updatedForm = { ...form, contact: { ...form.contact, email } };
-            setForm(updatedForm);
-            validateField('contact.email', email);
+            handleChange('contact.email', e.target.value);
+            validateField('contact.email', e.target.value);
           }}
           className={`w-full border-b p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none ${!validation.emailValid ? 'border-red-500' : ''}`}
         />

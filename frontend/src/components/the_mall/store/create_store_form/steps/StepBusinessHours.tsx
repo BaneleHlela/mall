@@ -1,9 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormContext } from '../context/FormContext';
 import ToggleSwitch from '../../../extras/ToggleSwitch';
 
 const StepBusinessHours: React.FC = () => {
-  const { form, handleChange } = useFormContext();
+  const { form, handleChange, setStepValidator, nextClicked } = useFormContext();
+  const [validation, setValidation] = useState({
+    businessHoursValid: true
+  });
+
+  const validateBusinessHours = () => {
+    // Business hours are optional if always open is selected
+    if (form.operationTimes.alwaysOpen) {
+      setValidation({ businessHoursValid: true });
+      return true;
+    }
+
+    // Check if at least one day has valid hours
+    const hasValidDay = Object.entries(form.operationTimes).some(([day, time]) => {
+      if (day === 'alwaysOpen') return false;
+      const timeObj = time as any;
+      return !timeObj.closed && timeObj.start && timeObj.end;
+    });
+
+    setValidation({ businessHoursValid: hasValidDay });
+    return hasValidDay;
+  };
+
+  useEffect(() => {
+    setStepValidator(validateBusinessHours);
+  }, [form.operationTimes]);
 
   return (
     <div className="space-y-[1.2vh] text-[2vh]">
@@ -63,6 +88,13 @@ const StepBusinessHours: React.FC = () => {
           </div>
         );
       })}
+
+      {/* Validation error */}
+      {nextClicked && !validation.businessHoursValid && (
+        <div className="text-center text-red-500 text-[1.8vh] mt-2">
+          Please set operating hours for at least one day or enable "Always Open"
+        </div>
+      )}
     </div>
   );
 };

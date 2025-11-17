@@ -85,45 +85,8 @@ export const fetchStoreBySlug = createAsyncThunk<Store, string>(
   }
 );
 
-// --- Upload Store Logo ---
-export const uploadStoreLogo = createAsyncThunk<string, { storeSlug: string; logoFile: File }>(
-  'stores/uploadStoreLogo',
-  async ({ storeSlug, logoFile }) => {
-    const formData = new FormData();
-    formData.append('logo', logoFile);
 
-    try {
-      const response = await axios.put(`${STORE_API_URL}/${storeSlug}/logo`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
 
-      if (response.status !== 200 || !response.data.url) {
-        throw new Error('Invalid response from server');
-      }
-
-      return response.data.url;
-    } catch (error) {
-      console.error('Error uploading store logo:', error);
-      throw new Error('Failed to upload store logo');
-    }
-  }
-);
-
-// --- Delete Store Logo ---
-export const deleteStoreLogo = createAsyncThunk<string, { storeSlug: string }>(
-  'stores/deleteStoreLogo',
-  async ({ storeSlug }) => {
-    try {
-      const response = await axios.delete(`${STORE_API_URL}/${storeSlug}/logo`);
-      return response.data.storeId; // or simply: return storeSlug;
-    } catch (error) {
-      console.error('Error deleting store logo:', error);
-      throw new Error('Failed to delete store logo');
-    }
-  }
-);
 
 export const deleteStoreGalleryImage = createAsyncThunk<
   string, // returns the imageUrl of the deleted image

@@ -95,7 +95,7 @@ const HomePage = () => {
   return (
     <div className="relative  w-full h-full bg-gray-100 flex flex-col items-center">
       {/* Menubar */}
-      <nav className="w-[100vw] h-[15vh] z-11 sticky inset-0 bg-gray-900 flex flex-col items-center lg:h-[9vh]">
+      <nav className="w-[100vw] h-[15vh] z-11 sticky inset-0 bg-black flex flex-col items-center lg:h-[9vh]">
         <TheMallTopbar />
       </nav>
       <div className="w-full space-y-1 lg:w-[80%] overflow-x-hidden hide-scrollbar">

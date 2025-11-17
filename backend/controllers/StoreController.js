@@ -154,8 +154,6 @@ export const getDemoStores = expressAsyncHandler(async (req, res) => {
 export const editStore = expressAsyncHandler(async (req, res) => {
   const { storeSlug } = req.params;
 
-  console.log(req.body.locations )
-
   const store = await Store.findOne({ slug: storeSlug });
 
   if (!store) {
@@ -163,9 +161,14 @@ export const editStore = expressAsyncHandler(async (req, res) => {
     throw new Error("Store not found");
   }
   // Update store name and regenerate slug if name changes
-  if (req.body.name) {
+  if (req.body.name !== store.name) {
     store.name = req.body.name;
     store.slug = await generateUniqueSlug(req.body.name);
+  }
+
+  // Update store nickname
+  if (req.body.nickname !== undefined) {
+    store.nickname = req.body.nickname;
   }
 
   // Update store slogan
@@ -201,8 +204,6 @@ export const editStore = expressAsyncHandler(async (req, res) => {
     } else {
       console.log('Invalid location data provided');
     }
-  } else {
-    console.log('No valid locations provided');
   }
 
   // Update socials
@@ -627,4 +628,70 @@ export const editTeamMember = expressAsyncHandler(async (req, res) => {
     message: 'Team member updated successfully.',
     store,
   });
+});
+
+// Toggle store manual status (open/closed)
+export const toggleStoreStatus = expressAsyncHandler(async (req, res) => {
+  try {
+    const { storeSlug } = req.params;
+    const { status } = req.body; // 'open' or 'closed'
+    const userId = req.user?._id; // Assuming user is available from auth middleware
+
+    if (!status || !['open', 'closed'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status. Must be "open" or "closed".' });
+    }
+
+    const store = await Store.findOne({ slug: storeSlug });
+    if (!store) {
+      return res.status(404).json({ message: 'Store not found' });
+    }
+
+    // Update manual status
+    store.manualStatus = {
+      isOverridden: true,
+      status: status,
+      overriddenAt: new Date(),
+      overriddenBy: userId
+    };
+
+    await store.save();
+
+    res.status(200).json({
+      message: `Store status updated to ${status}`,
+      store: store
+    });
+  } catch (error) {
+    console.error('Toggle store status error:', error);
+    res.status(500).json({ message: 'Failed to update store status' });
+  }
+});
+
+// Reset store status to automatic (based on operation times)
+export const resetStoreStatus = expressAsyncHandler(async (req, res) => {
+  try {
+    const { storeSlug } = req.params;
+
+    const store = await Store.findOne({ slug: storeSlug });
+    if (!store) {
+      return res.status(404).json({ message: 'Store not found' });
+    }
+
+    // Reset manual status override
+    store.manualStatus = {
+      isOverridden: false,
+      status: 'open',
+      overriddenAt: undefined,
+      overriddenBy: undefined
+    };
+
+    await store.save();
+
+    res.status(200).json({
+      message: 'Store status reset to automatic',
+      store: store
+    });
+  } catch (error) {
+    console.error('Reset store status error:', error);
+    res.status(500).json({ message: 'Failed to reset store status' });
+  }
 });

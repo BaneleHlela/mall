@@ -8,7 +8,7 @@ node_modules/
 secrets/
 
 # Ignore the context file
-/frontend/src/features/context.ts
+frontend/src/features/context.ts
 
 # Logs
 logs/
