@@ -29,21 +29,23 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
 }) => {
 
   // --- Determine what price to show ---
-  const displayPrice = () => {
-    if (prices && prices.length > 0) {
-      const amounts = prices.map(p => p.amount);
-      const minPrice = Math.min(...amounts);
-      const maxPrice = Math.max(...amounts);
+const displayPrice = () => {
+  if (prices && prices.length > 0) {
+    const amounts = prices.map(p => p.amount);
+    const minPrice = Math.min(...amounts);
+    const maxPrice = Math.max(...amounts);
 
-      // If all variation prices are the same
-      if (minPrice === maxPrice) return `R${formatPriceWithSpaces(minPrice)}.00`;
-      return `R${formatPriceWithSpaces(minPrice)} - R${formatPriceWithSpaces(maxPrice)}.00`;
-    } 
-    if (typeof price === 'number') {
-      return `R${formatPriceWithSpaces(price)}.00`;
+    // If all variation prices are the same
+    if (minPrice === maxPrice) {
+      return `R${formatPriceWithSpaces(minPrice)}${minPrice % 1 === 0 ? '.00' : ''}`;
     }
-    return '';
-  };
+    return `R${formatPriceWithSpaces(minPrice)}${minPrice % 1 === 0 ? '.00' : ''} - R${formatPriceWithSpaces(maxPrice)}${maxPrice % 1 === 0 ? '.00' : ''}`;
+  } 
+  if (typeof price === 'number') {
+    return `R${formatPriceWithSpaces(price)}${price % 1 === 0 ? '.00' : ''}`;
+  }
+  return '';
+};
 
   return (
     <div 
@@ -84,9 +86,10 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
       {/* Text and button */}
       <div
         style={{
-          ...getBackgroundStyles(calculateTextDimensions(style.stack, style.image))
+          ...getBackgroundStyles(calculateTextDimensions(style.stack, style.image)),
+          ...getBackgroundStyles(style.textAndButton.background),
         }} 
-        className="px-[1.3vh] flex flex-col justify-evenly min-h-fit"
+        className="px-[1.3vh] flex flex-col justify-between min-h-fit"
       >
         {/* Name */}
         <UnderlinedText style={style.textAndButton.text.name} input={title}/>

@@ -9,13 +9,13 @@ const StepLocation: React.FC = () => {
   });
 
   const validateLocation = () => {
-    const hasLocation = !!(form.location.lat !== 0 && form.location.lng !== 0 && form.location.address);
+    const hasLocation = !!(form.location.coordinates[0] !== 0 && form.location.coordinates[1] !== 0 && form.location.address);
     setValidation({ locationValid: hasLocation });
     return hasLocation;
   };
 
   useEffect(() => {
-    setStepValidator(() => validateLocation);
+    setStepValidator(validateLocation);
   }, [form.location]);
 
   return (
@@ -44,8 +44,7 @@ const StepLocation: React.FC = () => {
         onLocationSelect={(selected: { lat: number; lng: number; address: string }) =>
           handleChange('location', {
             ...form.location,
-            lat: selected.lat,
-            lng: selected.lng,
+            coordinates: [selected.lng, selected.lat], // [lng, lat]
             address: selected.address,
           })
         }

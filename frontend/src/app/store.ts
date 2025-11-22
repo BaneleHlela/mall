@@ -8,13 +8,14 @@ import storeAdminReducer from "../features/store_admin/storeAdminSlice";
 import serviceReducer from "../features/services/servicesSlice.ts";
 import productReducer from "../features/products/productsSlice.ts";
 import packageReducer from "../features/packages/packagesSlice.ts";
-import bookingReducer from "../features/bookings/bookingsSlice.ts"; 
+import bookingReducer from "../features/bookings/bookingsSlice.ts";
 import categoryReducer from "../features/categories/categorySlice.ts";
 import cartReducer from "../features/cart/cartSlice.ts";
 import reviewReducer from "../features/reviews/reviewSlice.ts";
 import emailReducer from "../features/emails/emailSlice.ts";
 import sectionReducer from "../features/sections/sectionSlice.ts";
 import posterReducer from "../features/posters/posterSlice.ts";
+import rangeReducer from "../features/rangeSlice.ts";
 
 export const store = configureStore({
     reducer: {
@@ -34,6 +35,7 @@ export const store = configureStore({
         email: emailReducer,
         sections: sectionReducer,
         posters: posterReducer,
+        range: rangeReducer,
     },
 });
 

@@ -1,13 +1,13 @@
 import express from "express";
 
 
-import { signup, login, logout, 
-    forgotPassword, resetPassword, fetchAllUsers, 
-    getProfile, userLoginStatus, updateUser,
+import { signup, login, logout,
+    forgotPassword, resetPassword, fetchAllUsers,
+    getProfile, getAddresses, userLoginStatus, updateUser,
     deleteUser, blockUser, unblockUser,
     verifyEmail, checkAuth, refreshAccessToken,
     searchUsersByUsername, manageAvatar
- } from "../controllers/UserController.js";
+} from "../controllers/UserController.js";
 import { checkBlocked, isAdmin, protectRoute } from "../middlewares/authMiddleware.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
 import { uploadSingleFile } from "../middlewares/uploadMiddleware.js";
@@ -21,6 +21,7 @@ router.post("/login", checkBlocked, login);
 router.get("/check-auth", verifyToken, checkAuth);
 router.post("/logout", logout);
 router.get("/profile", protectRoute, getProfile);
+router.get("/addresses", protectRoute, getAddresses);
 router.put("/edit-user", protectRoute, updateUser);
 router.get("/login-status", userLoginStatus);
 router.post("/verify-email", verifyEmail);

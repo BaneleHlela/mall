@@ -56,9 +56,13 @@ export const fetchProductBySlug = createAsyncThunk(
 // Create product
 export const createProduct = createAsyncThunk(
   'products/create',
-  async (productData: Partial<Product>, thunkAPI) => {
+  async (productData: FormData, thunkAPI) => {
     try {
-      const res = await axios.post(API_BASE, productData);
+      const res = await axios.post(API_BASE, productData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return res.data as Product;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to create product');
@@ -69,10 +73,14 @@ export const createProduct = createAsyncThunk(
 // Update product
 export const updateProduct = createAsyncThunk(
   'products/update',
-  async ({ id, data }: { id: string; data: Partial<Product> }, thunkAPI) => {
+  async ({ id, data }: { id: string; data: FormData }, thunkAPI) => {
     try {
       console.log(data)
-      const res = await axios.put(`${API_BASE}/${id}`, data);
+      const res = await axios.put(`${API_BASE}/${id}`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return res.data as Product;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to update product');

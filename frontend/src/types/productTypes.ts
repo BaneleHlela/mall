@@ -14,6 +14,9 @@ export interface Product {
     variations: string[],
     images: string[];
     slug: string;
+    category?: string;
+    isActive?: boolean;
+    tags?: string[];
 }
 
 export interface  StockUpdatePayload {

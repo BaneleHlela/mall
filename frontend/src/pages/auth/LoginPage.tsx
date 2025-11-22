@@ -47,7 +47,7 @@ const LoginPage = () => {
 				<h2 className='text-[3vh] font-semibold'>
 					Welcome Back! 
 				</h2>
-				<p style={{lineHeight: "1.1"}} className="text-[2.2vh]">It's a great pleasure to have you login again. Remember, you can do anything!</p>
+				<p style={{lineHeight: "1.1"}} className="text-[2.2vh]">It's a great pleasure to have you login. Remember, you can do anything!</p>
 			</div>
 			
 			<div className=''>

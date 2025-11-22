@@ -25,7 +25,7 @@ const StoreImageItem: React.FC<StoreImageItemProps> = ({ img, onDelete, onUse })
       <img
         src={img.url}
         alt={`Store Image`}
-        className="w-full h-full object-cover aspect-square"
+        className="w-full aspect-square object-cover aspect-square"
       />
       {showOptions && (
         <div className="absolute top-0 left-0 w-full h-full rounded  flex flex-col justify-center items-center space-y-2 py-5 z-10">

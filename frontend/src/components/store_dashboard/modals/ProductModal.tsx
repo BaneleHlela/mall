@@ -116,7 +116,46 @@ const ProductModal: React.FC<ProductModalProps> = ({
 
   const handleFormSubmit = async () => {
     setError(null);
-  
+
+    // Validation
+    if (!form.name.trim()) {
+      setError('Product name is required.');
+      return;
+    }
+
+    if (!form.description.trim()) {
+      setError('Product description is required.');
+      return;
+    }
+
+    if (!form.category) {
+      setError('Please select a category.');
+      return;
+    }
+
+    if (variations.length === 0) {
+      if (form.price <= 0) {
+        setError('Product price must be greater than 0.');
+        return;
+      }
+    } else {
+      const missingPrices = variations.filter(v => !priceByVariation[v] || priceByVariation[v] <= 0);
+      if (missingPrices.length > 0) {
+        setError(`Prices are required for variations: ${missingPrices.join(', ')}`);
+        return;
+      }
+    }
+
+    if (imageUrls.length === 0 && images.length === 0) {
+      setError('At least one image is required for the product.');
+      return;
+    }
+
+    if (form.stockQuantity < 0) {
+      setError('Stock quantity cannot be negative.');
+      return;
+    }
+
     if (!store?._id) {
       setError('Store not found');
       return;
@@ -381,3 +420,4 @@ const ProductModal: React.FC<ProductModalProps> = ({
 };
 
 export default ProductModal;
+

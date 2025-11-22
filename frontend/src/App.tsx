@@ -22,8 +22,7 @@ import ForCreators from "./components/the_mall/home/ForCreators";
 import ComingSoon from "./components/the_mall/ComingSoon";
 import CaptureHomePoster from "./components/the_mall/basic_store_post/CaptureHomePoster";
 import AddStorePage from "./pages/store/AddStorePage";
-
-
+import AddUserAddressPage from "./pages/profile/address/AddUserAddressPage";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -78,13 +77,21 @@ const App: React.FC = () => {
           <Route path="/creators-dashboard/*" element={<Dashboard />} />
           <Route path="/business-plan" element={<BusinessPlan />} />
           <Route path="/creators" element={<ForCreators />} />
-          <Route 
+          <Route
             path="/add-store"
-            element={ 
+            element={
             <ProtectedRoute>
               <AddStorePage />
             </ProtectedRoute>
-            } 
+            }
+          />
+          <Route
+            path="/add-user-address"
+            element={
+            <ProtectedRoute>
+              <AddUserAddressPage />
+            </ProtectedRoute>
+            }
           />
           {authRoutes}
         </Routes>

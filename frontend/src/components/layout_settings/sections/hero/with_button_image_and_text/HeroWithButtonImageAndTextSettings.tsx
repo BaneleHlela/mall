@@ -25,7 +25,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
   const closePanel = () => setActivePanel(null);
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-[.5vh]">
       {/* Background Settings */}
       <SubSettingsContainer
         name="Background"
@@ -48,11 +48,11 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
       <SubSettingsContainer
         name="Image"
         SettingsComponent={
-          <div className="px-2 space-y-1 py-1">
+          <div className="px-2 space-y-[.5vh] py-1">
             <MultipleLayoutImagesHandler
               objectPath={`${objectPath}.image`}
               min={1}
-              max={1}
+              max={2}
               images={getSetting("image", settings, objectPath)}
             />
           </div>
@@ -80,7 +80,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
             onClose={closePanel}
             title="Text Lines"
           >
-            <div className="px-2 space-y-1 py-1">
+            <div className="px-2 space-y-[.5vh] py-1">
               {/* Text Width Settings */}
               <SubSettingsContainer
                 name="Text Width"

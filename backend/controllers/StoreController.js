@@ -96,8 +96,7 @@ export const getStores = expressAsyncHandler(async (req, res) => {
     // ✅ requires location as a 2dsphere index
     stores = await Store.find({
       ...searchFilter,
-      'location.lat': { $exists: true },
-      'location.lng': { $exists: true },
+      'location.coordinates': { $exists: true },
     }).aggregate([
       {
         $geoNear: {
@@ -134,6 +133,38 @@ export const getStores = expressAsyncHandler(async (req, res) => {
   res.status(200).json(stores);
 });
 
+// Get stores nearby
+export const getStoresNearby = expressAsyncHandler(async (req, res) => {
+  try {
+    const { lat, lng, range } = req.query;
+
+    if (!lat || !lng || !range) {
+      return res.status(400).json({ message: 'lat, lng, and range are required' });
+    }
+
+    const latitude = parseFloat(lat);
+    const longitude = parseFloat(lng);
+    const searchRange = parseFloat(range) * 1000; // Convert km to meters
+
+    const stores = await Store.find({
+      location: {
+        $near: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [longitude, latitude] // Note: [lng, lat]
+          },
+          $maxDistance: searchRange
+        }
+      }
+    });
+
+    res.status(200).json(stores);
+  } catch (error) {
+    console.error('Error fetching nearby stores:', error);
+    res.status(500).json({ message: 'Server error while fetching nearby stores' });
+  }
+});
+
 // Get demo stores
 export const getDemoStores = expressAsyncHandler(async (req, res) => {
   try {
@@ -156,12 +187,15 @@ export const editStore = expressAsyncHandler(async (req, res) => {
 
   const store = await Store.findOne({ slug: storeSlug });
 
+  console.log(req.body.categories);
+
   if (!store) {
     res.status(404);
     throw new Error("Store not found");
   }
+
   // Update store name and regenerate slug if name changes
-  if (req.body.name !== store.name) {
+  if (req.body.name && (req.body.name !== store.name)) {
     store.name = req.body.name;
     store.slug = await generateUniqueSlug(req.body.name);
   }
@@ -189,21 +223,6 @@ export const editStore = expressAsyncHandler(async (req, res) => {
   // Update store about
   if (req.body.about) {
     store.about = req.body.about;
-  }
-
-  // Merge locations
-  if (req.body.locations && Array.isArray(req.body.locations) && req.body.locations.length > 0) {
-    const newLocation = req.body.locations[0];
-    if (newLocation.lat && newLocation.lng && newLocation.address) {
-      store.locations = [{
-        nickname: newLocation.nickname || '',
-        lat: newLocation.lat,
-        lng: newLocation.lng,
-        address: newLocation.address,
-      }];
-    } else {
-      console.log('Invalid location data provided');
-    }
   }
 
   // Update socials
@@ -430,6 +449,8 @@ export const uploadStoreGalleryImage = expressAsyncHandler(async (req, res) => {
     if (!store) {
       return res.status(404).json({ message: "Store not found" });
     }
+
+    console.log(store.location);
 
     // Upload new image to the bucket
     const destination = `stores/${store.slug}/images/${fileName}`;

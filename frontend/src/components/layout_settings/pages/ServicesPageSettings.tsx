@@ -3,6 +3,7 @@ import { useAppSelector } from '../../../app/hooks'
 import ServicesSectionSettings from '../sections/services/ServicesSectionSettings';
 import SettingsContainer from '../SettingsContainer';
 import SlidingPanel from '../supporting/SlidingPanel';
+import StoreFooterSectionSettings from '../sections/footer/StoreFooterSectionSettings';
 
 const ServicesPageSettings = () => {
   const routes = useAppSelector((state) => state.layoutSettings.routes);
@@ -28,9 +29,14 @@ const ServicesPageSettings = () => {
           <ServicesSectionSettings/>
         </SlidingPanel>
       )}
-      {activePanel  === "Footer" && (
-        <SlidingPanel key="services_footer" isOpen={true} onClose={closePanel} title="Footer Settings">
-          <>Displaying Footer Settings in Services</>
+      {activePanel === "Footer" && (
+        <SlidingPanel
+          key="services_footer"
+          isOpen={true}
+          onClose={closePanel}
+          title="Footer Settings"
+        >
+          <StoreFooterSectionSettings />
         </SlidingPanel>
       )}
     </div>

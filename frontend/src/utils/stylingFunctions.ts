@@ -9,6 +9,11 @@ export const getTextStyles = (text: TextSettings) => {
   if (text.color) styles.color = text.color;
   if (text.weight) styles.fontWeight = text.weight;
 
+  // Box shadow
+  if (text.textShadow === true) {
+    styles.textShadow = "2px 2px 5px rgba(0,0,0,0.4)";
+  }
+
   if (typeof text.fontSize === "object") {
     // Use getResponsiveDimension for responsive font sizes
     styles.fontSize = getResponsiveDimension(text.fontSize);

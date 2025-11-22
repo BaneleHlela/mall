@@ -50,7 +50,7 @@ const MenubarLinksSettings: React.FC<MenubarLinksSettingsProps> = ({ type, allow
                     objectPath={`${objectPath}.text`}
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={['fontFamily', 'color', 'fontSize', 'weight', 'letterSpacing', "textDecoration", "textTransform", "lineHeight", "animation"]}
+                    allow={['fontFamily', "textShadow", 'color', 'fontSize', 'weight', 'letterSpacing', "textDecoration", "textTransform", "lineHeight", "animation"]}
                 />} 
             />
             

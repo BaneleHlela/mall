@@ -93,8 +93,8 @@ const FooterWithStoreDetailsFormAndButton = () => {
               <div className="w-full h-full flex flex-col justify-center items-center">
                 <MapComponent // @ts-ignore-next-line
                   name={store?.name} // @ts-ignore-next-line
-                  lat={store?.location.lat} // @ts-ignore-next-line
-                  lng={store?.location.lng}
+                  lat={store?.location.coordinates[1]} // @ts-ignore-next-line
+                  lng={store?.location.coordinates[0]}
                   style={settings.location}
                 />
               </div>
@@ -198,8 +198,8 @@ const FooterWithStoreDetailsFormAndButton = () => {
             <div className="w-full h-[60vh] flex flex-col justify-center items-center">
               <MapComponent // @ts-ignore-next-line
                 name={store?.name} // @ts-ignore-next-line
-                lat={store?.location.lat} // @ts-ignore-next-line
-                lng={store?.location.lng}
+                lat={store?.location.coordinates[1]} // @ts-ignore-next-line
+                lng={store?.location.coordinates[0]}
                 style={settings.location}
               />
             </div>

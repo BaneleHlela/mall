@@ -45,12 +45,12 @@ const StepDelivers: React.FC = () => {
             fillColor: '#02baf2',
             fillOpacity: 0.35,
             map: mapInstance.current,
-            center: { lat: form.location.lat, lng: form.location.lng },
+            center: { lat: form.location.coordinates[1], lng: form.location.coordinates[0] },
             radius: form.delivers.range * 1000,
         });
         } else {
         circleRef.current.setRadius(form.delivers.range * 1000);
-        circleRef.current.setCenter({ lat: form.location.lat, lng: form.location.lng });
+        circleRef.current.setCenter({ lat: form.location.coordinates[1], lng: form.location.coordinates[0] });
         }
     }, [form.delivers.enabled, form.delivers.range, form.location]);
     
@@ -73,7 +73,7 @@ const StepDelivers: React.FC = () => {
           fillColor: '#02baf2',
           fillOpacity: 0.35,
           map: mapInstance.current,
-          center: { lat: form.location.lat, lng: form.location.lng },
+          center: { lat: form.location.coordinates[1], lng: form.location.coordinates[0] },
           radius: form.delivers.range * 1000,
         });
       }
@@ -85,8 +85,8 @@ const StepDelivers: React.FC = () => {
     if (form.delivers.enabled && mapRef.current && !mapInstance.current) {
       mapInstance.current = new google.maps.Map(mapRef.current, {
         center: {
-          lat: form.location.lat,
-          lng: form.location.lng,
+          lat: form.location.coordinates[1],
+          lng: form.location.coordinates[0],
         },
         zoom: 12,
         mapTypeControl: false,
@@ -95,8 +95,8 @@ const StepDelivers: React.FC = () => {
   
       markerRef.current = new google.maps.Marker({
         position: {
-          lat: form.location.lat,
-          lng: form.location.lng,
+          lat: form.location.coordinates[1],
+          lng: form.location.coordinates[0],
         },
         map: mapInstance.current,
       });
@@ -108,8 +108,8 @@ const StepDelivers: React.FC = () => {
       setTimeout(() => {
         google.maps.event.trigger(mapInstance.current!, 'resize');
         mapInstance.current!.setCenter({
-          lat: form.location.lat,
-          lng: form.location.lng
+          lat: form.location.coordinates[1],
+          lng: form.location.coordinates[0]
         });
       }, 50);
     }
@@ -128,8 +128,8 @@ const StepDelivers: React.FC = () => {
       setTimeout(() => {
         google.maps.event.trigger(mapInstance.current!, 'resize');
         mapInstance.current!.setCenter({
-          lat: form.location.lat,
-          lng: form.location.lng,
+          lat: form.location.coordinates[1],
+          lng: form.location.coordinates[0],
         });
       }, 100);
     }
@@ -150,7 +150,7 @@ const StepDelivers: React.FC = () => {
         fillColor: '#02baf2',
         fillOpacity: 0.35,
         map: mapInstance.current,
-        center: { lat: form.location.lat, lng: form.location.lng },
+        center: { lat: form.location.coordinates[1], lng: form.location.coordinates[0] },
         radius: range * 1000,
       });
     }

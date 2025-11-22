@@ -1,3 +1,4 @@
+import { useNavigate, useParams } from "react-router-dom";
 import DeviceSelector from "./DeviceSelector";
 import ZoomControls from "./ZoomControls";
 import { IoIosArrowRoundBack } from "react-icons/io";
@@ -11,6 +12,9 @@ type TopBarProps = {
 };
 
 const TopBar = ({ setDevice, zoom, setZoom }: TopBarProps) => {
+  const navigate = useNavigate();
+  const { layoutId } = useParams<{ layoutId: string }>();
+  
   return (
     <div className="relative h-[8vh] bg-stone-50 shadow-md flex items-center justify-center px-4">
       <div className="absolute left-10 flex flex-row gap-4">
@@ -23,7 +27,7 @@ const TopBar = ({ setDevice, zoom, setZoom }: TopBarProps) => {
       </div>
       <div className="absolute h-full right-10 flex flex-row items-center">
         {/* Preview Button */}
-        <button className="bg-black text-white rounded-[20px] px-8 shadow-md hover:scale-103 hover:opacity-85">
+        <button onClick={() => window.open(`/layouts/${layoutId}/preview`, '_blank')} className="bg-black text-white rounded-[20px] px-8 shadow-md hover:scale-103 hover:opacity-85">
           Preview
         </button>
         <ZoomControls zoom={zoom} setZoom={setZoom} />

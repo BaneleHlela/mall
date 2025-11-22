@@ -74,18 +74,12 @@ const storeSchema = new mongoose.Schema(
         ref: "User",
       }],
     },
-    // locations: [{
-		// 	nickname: {type: String},
-		// 	lat: Number,
-		// 	lng: Number,
-		// 	address: String,
-		// }],
     location: {
-			nickname: {type: String},
-			lat: Number,
-			lng: Number,
-			address: String,
-		},
+      type: { type: String, default: "Point" },
+      coordinates: { type: [Number], required: true }, // [lng, lat]
+      nickname: { type: String },
+      address: { type: String },
+    },
     about: {
       type: String,
     }, 

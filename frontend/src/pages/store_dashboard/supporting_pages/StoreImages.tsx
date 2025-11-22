@@ -22,7 +22,7 @@ const StoreImages: React.FC<StoreImagesProps> = ({onImageSelect}) => {
 
   useEffect(() => {
     if (currentStore?._id) {
-      dispatch(fetchStoreImages({ storeId: currentStore._id, page, limit })).then((res: any) => {
+      dispatch(fetchStoreImages({ storeSlug: currentStore.slug, page, limit })).then((res: any) => {
         setHasMore(res.payload.hasMore); // Update `hasMore` with the response
       });
     }
@@ -31,7 +31,7 @@ const StoreImages: React.FC<StoreImagesProps> = ({onImageSelect}) => {
 
   const handleDeleteImage = (imageUrl: string) => {
     if (currentStore?._id) {
-      dispatch(deleteStoreGalleryImage({ storeId: currentStore._id, imageUrl }))
+      dispatch(deleteStoreGalleryImage({ storeSlug: currentStore.slug, imageUrl }))
         .unwrap()
         .then(() => {
           console.log("Image deleted successfully:", imageUrl);
@@ -55,7 +55,7 @@ const StoreImages: React.FC<StoreImagesProps> = ({onImageSelect}) => {
   };
 
   return (
-    <div className="h-full w-full mt-1 lg:m-1 shadow-md p-2">
+    <div className="h-full w-full mt-1 lg:m-1 shadow-md p-2 overflow-y-scroll">
       <div className="h-fit flex flex-row justify-center w-full py-1">
         <UploadStoreImage />
       </div>
@@ -63,7 +63,7 @@ const StoreImages: React.FC<StoreImagesProps> = ({onImageSelect}) => {
       {/* Add a horizontal line here */}
       <hr className="w-5/5 mx-auto border-gray-300" />
 
-      <div className="flex items-center justify-center h-[55%] overflow-y-scroll hide-scrollbar">
+      <div className="flex items-center justify-center h-[55%] lg:h-fit overflow-y-scroll hide-scrollbar">
         {isLoading && <p>Loading images...</p>}
 
         {!isLoading && images.length === 0 && (
@@ -72,7 +72,7 @@ const StoreImages: React.FC<StoreImagesProps> = ({onImageSelect}) => {
           </p>
         )}
 
-        <div className="grid grid-cols-2 gap-2 py-2 md:grid-cols-3 lg:grid-cols-5 auto-rows-fr">          
+        <div className="grid h-fit grid-cols-2 gap-2 py-2 md:grid-cols-3 lg:grid-cols-5 auto-rows-fr">          
           {images.map((img: Image) => (
             <StoreImageItem
               key={img._id}

@@ -85,10 +85,12 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                     className="w-full object-cover cursor-pointer hover:opacity-80 transition-opacity duration-300"
                     onClick={() => setShowGrid(true)}
                 />
-                <div className="w-full">
-                    <UnderlinedText style={textStyle} input={groupName} />
-                </div>
-                {!addModal && (
+                {textStyle.input && (
+                    <div className="w-full">
+                        <UnderlinedText style={textStyle} input={groupName} />
+                    </div>
+                )}
+                {!addModal && descriptionTextStyle.input && (
                     <div className="w-full">
                         <UnderlinedText style={descriptionTextStyle} input={groupDescrition} />
                     </div>

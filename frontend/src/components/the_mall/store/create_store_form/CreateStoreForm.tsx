@@ -29,7 +29,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
    const { step, direction, nextStep, prevStep, validateCurrentStep, form, setNextClicked, clearDraft, resetForm } = useFormContext();
    const [isSuccess, setIsSuccess] = useState(false);
    const [submitError, setSubmitError] = useState<string | null>(null);
-   const [isSubmitting, setIsSubmitting] = useState(false);
+   const [ isSubmitting, setIsSubmitting ] = useState(false);
    const isLoading = useAppSelector((state) => state.stores.isLoading || state.layout.isLoading);
    const storeError = useAppSelector((state) => state.stores.error);
    const user = useAppSelector((state) => state.user.user);
@@ -139,7 +139,12 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
           about: '',
           role: 'owner' as const
         }],
-        locations: [form.location],
+        location: {
+          type: 'Point',
+          coordinates: [form.location.lng, form.location.lat], // [lng, lat]
+          nickname: form.location.nickname,
+          address: form.location.address
+        },
         socials: form.socials?.map(social => ({
           platform: social.platform as "facebook" | "twitter" | "instagram" | "linkedin" | "pinterest" | "youtube" | "whatsapp" | "phone",
           url: social.url

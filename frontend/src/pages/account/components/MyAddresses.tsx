@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import type { RootState } from '../../../app/store';
 import { updateUser } from '../../../features/user/userSlice';
 import { FaArrowLeft, FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaStar, FaRegStar } from 'react-icons/fa';
@@ -17,12 +18,13 @@ interface Address {
   lng: number;
   address: string;
 }
-
 const MyAddresses: React.FC<MyAddressesProps> = ({ onBack }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user, isLoading } = useSelector((state: RootState) => state.user);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
   const [newAddress, setNewAddress] = useState<Address>({
     nickname: '',
     lat: 0,
@@ -82,7 +84,7 @@ const MyAddresses: React.FC<MyAddressesProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="min-h-screen bg-white py-[2.3vh] px-[.8vh]">
+    <div className="w-full min-h-screen  bg-white py-[2.3vh] px-[.8vh]">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-[1vh]">
@@ -183,10 +185,13 @@ const MyAddresses: React.FC<MyAddressesProps> = ({ onBack }) => {
           </div>
         )}
 
-        {/* Add adress button */}
-        <button className="flex items-center w-full shadow my-[2vh] rounded-full p-[1vh] space-x-[1vh] border-2 border-stone-200">
+        {/* Add address button */}
+        <button
+          onClick={() => navigate('/add-user-address')}
+          className="flex items-center w-full shadow my-[2vh] rounded-full p-[1vh] space-x-[1vh] border-2 border-stone-200 hover:bg-stone-50 transition-colors"
+        >
             <GrSearchAdvanced className='ml-1 text-[2.5vh]'/>
-            <p className="">Search locations</p>
+            <p className="">Add Address</p>
         </button>
 
         {/* Addresses List */}
@@ -285,8 +290,20 @@ const EditAddressForm: React.FC<EditAddressFormProps> = ({ address, onSave, onCa
     e.preventDefault();
     onSave(editedAddress);
   };
-
-  return (
+return (
+  <div className="space-y-4">
+    <div className="bg-stone-50 p-4 rounded-lg">
+      <div className="flex items-center mb-2">
+        <h4 className="text-sm font-medium text-stone-700">Full Address</h4>
+      </div>
+      <p className="text-stone-600 text-sm">{address.address}</p>
+      {(address.lat !== 0 || address.lng !== 0) && (
+        <p className="text-xs text-stone-500 mt-1">
+          Coordinates: {address.lat}, {address.lng}
+        </p>
+      )}
+    </div>
+    
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-stone-700 mb-2">
@@ -299,44 +316,6 @@ const EditAddressForm: React.FC<EditAddressFormProps> = ({ address, onSave, onCa
           className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-stone-700 mb-2">
-          Full Address
-        </label>
-        <textarea
-          value={editedAddress.address}
-          onChange={(e) => setEditedAddress({ ...editedAddress, address: e.target.value })}
-          className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          rows={3}
-          required
-        />
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-stone-700 mb-2">
-            Latitude
-          </label>
-          <input
-            type="number"
-            step="any"
-            value={editedAddress.lat}
-            onChange={(e) => setEditedAddress({ ...editedAddress, lat: parseFloat(e.target.value) })}
-            className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-stone-700 mb-2">
-            Longitude
-          </label>
-          <input
-            type="number"
-            step="any"
-            value={editedAddress.lng}
-            onChange={(e) => setEditedAddress({ ...editedAddress, lng: parseFloat(e.target.value) })}
-            className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
       </div>
       <div className="flex space-x-3">
         <button
@@ -355,6 +334,7 @@ const EditAddressForm: React.FC<EditAddressFormProps> = ({ address, onSave, onCa
         </button>
       </div>
     </form>
+  </div>
   );
 };
 

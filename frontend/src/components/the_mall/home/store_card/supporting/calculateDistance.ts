@@ -43,19 +43,21 @@ export function calculateDistanceToStore(user: User, store: Store): number | nul
   
   // Check if coordinates are valid
   if (
-    typeof userLocation.lat !== 'number' || 
+    typeof userLocation.lat !== 'number' ||
     typeof userLocation.lng !== 'number' ||
-    typeof storeLocation.lat !== 'number' || 
-    typeof storeLocation.lng !== 'number'
+    !storeLocation.coordinates ||
+    storeLocation.coordinates.length !== 2 ||
+    typeof storeLocation.coordinates[0] !== 'number' ||
+    typeof storeLocation.coordinates[1] !== 'number'
   ) {
     return null;
   }
-  
+
   const distance = haversineDistance(
     userLocation.lat,
     userLocation.lng,
-    storeLocation.lat,
-    storeLocation.lng
+    storeLocation.coordinates[1], // lat
+    storeLocation.coordinates[0]  // lng
   );
   
   // Round to 2 decimal places

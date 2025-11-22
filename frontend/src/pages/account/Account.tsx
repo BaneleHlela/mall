@@ -90,7 +90,7 @@ const Account: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen w-full bg-stone-100 flex flex-col">
+    <div className="min-h-screen w-full max-w-md bg-stone-100 flex flex-col">
       {/* Top Section - Avatar + User Info */}
       <div className="bg-white  py-[4vh] px-[1vh] flex flex-col items-center">
         <div 
@@ -160,7 +160,7 @@ const Account: React.FC = () => {
       </div>
 
       {/* Bottom Section - Sign In/Out */}
-      <div className="p-6 bg-white mb-[5.5vh]">
+      <div className="p-6 bg-white mb-[5.5vh] lg:mb-0">
         <div className="max-w-md mx-auto">
           {isAuthenticated ? (
             <button

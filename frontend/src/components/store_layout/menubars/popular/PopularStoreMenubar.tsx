@@ -42,14 +42,14 @@ const MobileTopBar: React.FC<{
     const renderLogo = () => {
         const logoSettings = settings.topbar.mobile.logo;
         const location = useLocation();
-      const layoutId = useAppSelector((state) => state.layoutSettings._id);
-      const isPreviewMode = location.pathname.startsWith(`/layouts/${layoutId}/preview`);
-      const linkTo = isPreviewMode
-        ? `/layouts/${layoutId}/preview`
-        : `/stores/${store?._id}`;
+        const layoutId = useAppSelector((state) => state.layoutSettings._id);
+        const isPreviewMode = location.pathname.startsWith(`/layouts/${layoutId}/preview`);
+        const linkTo = isPreviewMode
+          ? `/layouts/${layoutId}/preview`
+          : `/stores/${store?.slug}`;
         
         return (
-          <Link to={linkTo} className='w-fit h-full pl-1 pr-1 flex flex-col justify-center text-center'>
+          <Link to={linkTo} className={`w-fit h-full pl-1 pr-1 flex flex-row ${settings.topbar.mobile.hamburgerFirst ? "justify-end" : "justify-start"} text-center`}>
             {logoSettings.use === 'logo' && store?.logo?.url ? (
               <img
                 style={{ 
@@ -144,7 +144,6 @@ const MobileTopBar: React.FC<{
   return (
     <div 
       style={{
-        backgroundColor: settings.topbar.mobile?.background?.color || "",
         ...getBackgroundStyles(settings.topbar.mobile?.background || {}),
       }}
       className="flex flex-row w-full justify-between items-center h-full lg:hidden"
@@ -398,8 +397,6 @@ const PopularStoreMenubar: React.FC = () => {
     <nav
       style={{
         // height: getBackgroundHeight(),
-        backgroundColor: settings.background.color,
-        ...getBackgroundStyles(backgroundStylesWithoutBorder),
         height: "fit-content",
         borderBottom: `${settings.background.border.width} ${settings.background.border.style} ${settings.background.border.color}`,
         width: "100%"

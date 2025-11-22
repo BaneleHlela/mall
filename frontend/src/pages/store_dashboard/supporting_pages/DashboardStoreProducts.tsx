@@ -27,7 +27,7 @@ const DashBoardStoreProducts = () => {
     direction: 'asc',
   });
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 15;
 
   const products = useAppSelector(state => state.products.products);
 

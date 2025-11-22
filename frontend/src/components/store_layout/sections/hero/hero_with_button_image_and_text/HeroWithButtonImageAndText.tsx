@@ -57,7 +57,11 @@ const HeroWithButtonImageAndText = () => {
                         height: style.background.height.desktop,
                     }} 
                     className="absolute inset-0 w-full bg-white">
-                    <img src={style.image[0]} alt="Hero Image" className="w-full h-full object-cover" />
+                    <img 
+                        src={window.innerWidth < 686 || !style.image[1] ? style.image[0] : style.image[1]} 
+                        alt="Hero Image" 
+                        className="w-full h-full object-cover" 
+                    />
                 </div>
                 {/* Opacity adjuster */}
                 <div 

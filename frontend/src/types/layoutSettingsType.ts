@@ -6,7 +6,7 @@ export interface TextSettings {
     };
     weight?: string;
     color?: string;
-    textShadow?: string;
+    textShadow?: boolean;
     lineHeight?: string;
     letterSpacing?: string;
     textDecoration?: string;

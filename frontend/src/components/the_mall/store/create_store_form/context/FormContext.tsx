@@ -12,7 +12,7 @@ interface FormState {
   contact: { phone: string; email: string };
   departments: string[];
   socials: { platform: string; url: string }[];
-  location: { nickname: string; lat: number; lng: number; address: string };
+  location: { type: string; coordinates: [number, number]; nickname?: string; address?: string };
   delivers: { enabled: boolean; range: number };
   about: string;
   team: { member: string; role: string }[];
@@ -57,7 +57,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
     contact: { phone: '0797604204', email: 'g@gmail.com' },
     departments: ["clothing"],
     socials: [{ platform: 'whatsapp', url: 'wa.me' }],
-    location: { nickname: '', lat: -27.74885549999999, lng: 30.08534999999999, address: '' },
+    location: { type: 'Point', coordinates: [30.08534999999999, -27.74885549999999], nickname: '', address: '' },
     delivers: { enabled: false, range: 0 },
     about: '',
     team: [{ member: '', role: '' }],
@@ -126,7 +126,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
       contact: { phone: '', email: '' },
       departments: [],
       socials: [],
-      location: { nickname: '', lat: 0, lng: 0, address: '' },
+      location: { type: 'Point', coordinates: [0, 0], nickname: '', address: '' },
       delivers: { enabled: false, range: 0 },
       about: '',
       team: [{ member: '', role: '' }],

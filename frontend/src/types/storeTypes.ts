@@ -47,9 +47,9 @@ export interface Store {
   slogan: string;
   departments: string[];
   layouts: Types.ObjectId[] | string[];
-  categories: {
-    products: string[];
-    services: string[];
+  categories?: {
+    products?: string[];
+    services?: string[];
   };
   about: string;
   team: TeamMember[];
@@ -59,17 +59,11 @@ export interface Store {
     phone: string;
     email: string;
   },
-  locations: Array<{
-    nickname: string;
-    lat: number;
-    lng: number
-    address: string;
-  }>;
   location: {
-    nickname: string;
-    lat: number;
-    lng: number
-    address: string;
+    type: string;
+    coordinates: [number, number]; // [lng, lat]
+    nickname?: string;
+    address?: string;
   }
   images?: Image[];
   operationTimes?: OperationTimes;

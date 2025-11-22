@@ -25,12 +25,7 @@ const TopbarSettings = () => {
   };
 
   return (
-    <div className="p-1.5 space-y-1">
-      {/* Background, Desktop, Mobile */}
-      <FirstOrderSubSettingsContainer
-        name="Background"
-        onClick={() => setActivePanel("background")}
-      />
+    <div className="p-[.7vh] space-y-[.5vh]">
       <FirstOrderSubSettingsContainer
         name="heart"
         onClick={() => setActivePanel("heart")}

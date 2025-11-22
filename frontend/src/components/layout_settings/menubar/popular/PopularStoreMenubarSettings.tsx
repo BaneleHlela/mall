@@ -23,14 +23,14 @@ const PopularStoreMenubarSettings = () => {
   return (
     <div className="p-[.6vh] space-y-[.3vh] w-full">
       {/* Shared Settings */}
-      <div className="w-full border border-black text-black rounded-sm">
+      {/* <div className="w-full border border-black text-black rounded-sm">
         <BackgroundEditor
           objectPath="menubar.background"
           handleSettingChange={handleSettingChange}
           settings={settings}
           allow={['color']}
         />
-      </div>
+      </div> */}
 
       {/* Topbar */}
       <FirstOrderSubSettingsContainer

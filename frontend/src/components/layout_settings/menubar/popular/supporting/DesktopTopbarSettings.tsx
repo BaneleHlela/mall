@@ -95,7 +95,7 @@ const DesktopTopbarSettings: React.FC = () => {
               objectPath="menubar.topbar.desktop.background"
               handleSettingChange={handleSettingChange}
               settings={settings}
-              allow={['color', "padding", "height"]}
+              allow={['color', "padding", "height", "border"]}
               heightUnit='vh'
             />
           </SlidingPanel>

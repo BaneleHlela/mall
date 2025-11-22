@@ -3,11 +3,12 @@ import express from "express";
 import { 
     protectRoute,
 } from "../middlewares/authMiddleware.js";
-import { 
+import {
     addStore,
     getStoresByOwner,
     getStore,
     getStores,
+    getStoresNearby,
     uploadStoreLogo,
     deleteStoreLogo,
     getStoreImages,
@@ -27,8 +28,9 @@ const router = express.Router();
 
 router.post('/add', /*protectRoute,*/  addStore);
 router.get("/my-stores", protectRoute, getStoresByOwner);
-router.get("/:storeSlug", getStore);
+router.get('/nearby', getStoresNearby);
 router.get('/', getStores);
+router.get("/:storeSlug", getStore);
 router.put('/edit/:storeSlug', /*protectRoute,*/ editStore);
 router.post('/:storeSlug/team', uploadTeamMemberImage, addTeamMember);
 router.delete('/:storeSlug/team/:username', deleteTeamMember);

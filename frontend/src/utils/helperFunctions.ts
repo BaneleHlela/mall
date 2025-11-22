@@ -221,7 +221,7 @@ interface Delivery {
  */
 export function isUserInDeliveryRange(
   userLocation: Location | null | undefined,
-  storeLocation: Location,
+  storeLocation: any, // Store location can be old format (lat/lng) or new format (coordinates)
   delivery: Delivery | null | undefined
 ): boolean {
   if (!userLocation || !delivery?.enabled) return false;
@@ -230,8 +230,18 @@ export function isUserInDeliveryRange(
 
   const lat1 = userLocation.lat;
   const lon1 = userLocation.lng;
-  const lat2 = storeLocation.lat;
-  const lon2 = storeLocation.lng;
+
+  // Handle both old and new location formats
+  let lat2: number, lon2: number;
+  if (storeLocation.coordinates && Array.isArray(storeLocation.coordinates)) {
+    // New GeoJSON format: [lng, lat]
+    lon2 = storeLocation.coordinates[0];
+    lat2 = storeLocation.coordinates[1];
+  } else {
+    // Old format: direct lat/lng properties
+    lat2 = storeLocation.lat;
+    lon2 = storeLocation.lng;
+  }
 
   const R = 6371; // Earth's radius in km
   const dLat = toRad(lat2 - lat1);

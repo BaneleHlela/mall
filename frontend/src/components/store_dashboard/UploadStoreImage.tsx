@@ -4,14 +4,14 @@ import { uploadStoreGalleryImage } from '../../features/store_admin/storeAdminSl
 import { TbLoader3 } from 'react-icons/tb';
 
 interface UploadStoreImageProps {
-  storeId?: string;
+  storeSlug?: string;
 }
 
-const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeId }) => {
+const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeSlug }) => {
   const dispatch = useAppDispatch();
-  const currentStoreId = useAppSelector((state) => state.storeAdmin.store?._id);
-  const isLoading = useAppSelector((state) => state.storeAdmin.isLoading);
-  // const currentStoreId = "684c15bca0f98a1d13a7ff00";
+  const currentStoreSlug = useAppSelector((state) => state.storeAdmin.store?.slug);
+  const { error, isLoading } = useAppSelector((state) => state.storeAdmin);
+  // const currentStoreSlug = "684c15bca0f98a1d13a7ff00";
   // const currentImages = useAppSelector((state) => state.storeAdmin?.store?.images) || [];
   
   // const categories: StoreCategories = useAppSelector((state) => state.storeAdmin.store?.categories) || {};
@@ -32,17 +32,17 @@ const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeId }) => {
   const handleUpload = async () => {
     if (!imageFile) return;
   
-    const id = storeId || currentStoreId;
+    const id = storeSlug || currentStoreSlug;
     if (!id) {
       console.error('No store ID available');
       return;
     }
 
-    console.log(currentStoreId);
+    console.log(currentStoreSlug);
   
     try {
       const result = await dispatch(uploadStoreGalleryImage({ 
-        storeId: id, 
+        storeSlug: id, 
         imageFile,
         description: description || '',
         category: category || ''
@@ -64,7 +64,6 @@ const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeId }) => {
         //   category: uploadedImage.category,
         // }));
   
-        console.log('Image uploaded successfully:', uploadedImage);
       } else {
         console.error('Image upload failed:', result.payload);
       }
@@ -111,6 +110,7 @@ const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeId }) => {
           />
         </div>
       )}
+      {error && <p className='text-sm text-center text-red-600'>{error}</p>}
       
       <button
         onClick={handleUpload}

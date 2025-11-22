@@ -10,8 +10,8 @@ const StoreLocationSettings = () => {
   const { store, isLoading, error } = useAppSelector((state) => state.storeAdmin);
 
   const [location, setLocation] = useState<Store['location']>({
-    lat: 0,
-    lng: 0,
+    type: 'Point',
+    coordinates: [0, 0], // [lng, lat]
     address: '',
     nickname: '',
   });
@@ -28,6 +28,14 @@ const StoreLocationSettings = () => {
     setLocation(prev => ({
       ...prev,
       [field]: value
+    }));
+  };
+
+  const handleLocationSelect = (selected: { lat: number; lng: number; address: string }) => {
+    setLocation(prev => ({
+      ...prev,
+      coordinates: [selected.lng, selected.lat], // [lng, lat]
+      address: selected.address
     }));
   };
 
@@ -67,16 +75,7 @@ const StoreLocationSettings = () => {
         </div>
 
         {/* Location picker */}
-        <LocationPicker
-          onLocationSelect={(selected: { lat: number; lng: number; address: string }) =>
-            setLocation(prev => ({
-              ...prev,
-              lat: selected.lat,
-              lng: selected.lng,
-              address: selected.address
-            }))
-          }
-        />
+        <LocationPicker onLocationSelect={handleLocationSelect} />
 
         {/* Show picked address */}
         {location.address && (

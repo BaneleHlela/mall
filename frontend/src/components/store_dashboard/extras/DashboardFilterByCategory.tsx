@@ -48,7 +48,7 @@ const DashboardFilterByCategory: React.FC<DashboardFilterByCategoryProps> = ({
   
       // Dispatch the action to add the new category to the Redux store
     dispatch(editStore({
-      storeId: store?._id, // Pass the storeId
+      storeSlug: store?.slug as string, // Pass the storeSlug
       updatedStore: {
         categories: {
           products: [...categories, newCategory], // Assuming categories are part of the store schema
@@ -79,7 +79,7 @@ const DashboardFilterByCategory: React.FC<DashboardFilterByCategoryProps> = ({
         const updatedCategories = categories.filter(cat => cat !== categoryToDelete);
   
         dispatch(editStore({
-          storeId: store?._id,
+          storeSlug: store?.slug as string,
           updatedStore: {
             categories: {
               products: updatedCategories,

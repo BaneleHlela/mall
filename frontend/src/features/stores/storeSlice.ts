@@ -51,14 +51,27 @@ export const fetchStores = createAsyncThunk<
   'stores/fetchStores',
   async (params) => {
     let queryParams: Record<string, string | undefined> = {};
-    
+
     if (typeof params === 'string') {
       queryParams = { search: params };
     } else if (params && typeof params === 'object') {
       queryParams = params;
     }
-    
+
     const response = await axios.get(STORE_API_URL, { params: queryParams });
+    return response.data;
+  }
+);
+
+export const fetchStoresInRange = createAsyncThunk<
+  Store[],
+  { lat: number; lng: number; range: number }
+>(
+  'stores/fetchStoresInRange',
+  async ({ lat, lng, range }) => {
+    const response = await axios.get(`${STORE_API_URL}/nearby`, {
+      params: { lat, lng, range }
+    });
     return response.data;
   }
 );
@@ -220,23 +233,49 @@ const storeSlice = createSlice({
       })
       .addCase(fetchStoresByOwner.fulfilled, (state, action) => {
         state.isLoading = false;
-      
+
         const newMyStoresById: Record<string, Store> = {};
         const newMyStoreIds: string[] = [];
-      
+
         for (const store of action.payload) {
           if (store._id) {
             newMyStoresById[store._id] = store;
             newMyStoreIds.push(store._id);
           }
         }
-      
+
         state.myStoresById = newMyStoresById;
         state.myStoreIds = newMyStoreIds;
-      })      
+      })
       .addCase(fetchStoresByOwner.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || 'Failed to fetch stores by owner';
+      })
+
+      // Fetch Stores in Range
+      .addCase(fetchStoresInRange.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchStoresInRange.fulfilled, (state, action) => {
+        state.isLoading = false;
+
+        const newStoresById: Record<string, Store> = {};
+        const newStoreIds: string[] = [];
+
+        for (const store of action.payload) {
+          if (store._id) {
+            newStoresById[store._id] = store;
+            newStoreIds.push(store._id);
+          }
+        }
+
+        state.storesById = newStoresById;
+        state.storeIds = newStoreIds;
+      })
+      .addCase(fetchStoresInRange.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to fetch stores in range';
       })
       
       // Delete gallery image

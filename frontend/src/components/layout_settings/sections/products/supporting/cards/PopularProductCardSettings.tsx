@@ -47,9 +47,10 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
                         objectPath={`${objectPath}.background`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["color", "border", "height"]}
+                        allow={["color", "border", "height", "padding"]}
                         heightUnit="vh"
                         responsiveSize
+                        responsivePadding
                     />
                 </div>
             }
@@ -83,11 +84,23 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
           name="Marking Button"
           onClick={() => setActivePanel("marking_button")}
       />
+      <FirstOrderSubSettingsContainer
+          name="Text & Button Padding"
+          onClick={() => setActivePanel("text_button_padding")}
+      />
       <AnimatePresence>
         {activePanel === "Text" && (
           <SlidingPanel onClose={closePanel} isOpen={true} title="Card Text Settings">
             <div className="space-y-[.3vh] ">
-                <SubSettingsContainer
+                <FirstOrderSubSettingsContainer
+                    name="Product Name"
+                    onClick={() => setActivePanel("product_name")}
+                />
+                <FirstOrderSubSettingsContainer
+                    name="Product price"
+                    onClick={() => setActivePanel("product_price")}
+                />
+                {/* <SubSettingsContainer
                   name="Product Name"
                   SettingsComponent={
                     <UnderlinedTextSettings
@@ -108,10 +121,30 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
                       responsiveSize
                     />
                   }
-                />
+                /> */}
             </div>
           </SlidingPanel>
           
+        )}
+        {activePanel === "product_name" && (
+          <SlidingPanel onClose={() => setActivePanel("text")} isOpen={true} title="Product Name Settings">
+              <UnderlinedTextSettings
+                objectPath={`${objectPath}.textAndButton.text.name`}
+                settings={settings}
+                handleSettingChange={handleSettingChange}
+                responsiveSize
+              />
+          </SlidingPanel>
+        )}
+        {activePanel === "product_price" && (
+          <SlidingPanel onClose={() => setActivePanel("text")} isOpen={true} title="Product Price Settings">
+              <UnderlinedTextSettings
+                objectPath={`${objectPath}.textAndButton.text`}
+                settings={settings}
+                handleSettingChange={handleSettingChange}
+                responsiveSize
+              />
+          </SlidingPanel>
         )}
         {activePanel === "Button" && (
             <SlidingPanel onClose={closePanel} isOpen={true} title="Book Button Settings">
@@ -149,6 +182,17 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
                     }
                   />
               </div>
+            </SlidingPanel>
+        )}
+        {activePanel === "text_button_padding" && (
+            <SlidingPanel onClose={closePanel} isOpen={true} title="Text & Button Padding Settings">
+              <BackgroundEditor
+                objectPath={`${objectPath}.textAndButton.background`}
+                settings={settings}
+                handleSettingChange={handleSettingChange}
+                allow={["padding"]}
+                responsivePadding
+              />
             </SlidingPanel>
         )}
       </AnimatePresence>

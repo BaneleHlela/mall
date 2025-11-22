@@ -134,6 +134,7 @@ const PopularProductsSection = () => {
                     imageUrl={product.images[0]}
                     marking={product.marking}
                     price={product.price}
+                    prices={product.prices}
                     style={settings.card}
                     onClick={() => handleProductClick(product.slug)}
                   />
@@ -205,10 +206,11 @@ const PopularProductsSection = () => {
                 key={product._id}
                 title={product.name}
                 imageUrl={product.images[0]}
-                price={product.prices[0].amount}
+                price={product.price}
+                prices={product.prices}
                 marking={product.marking}
                 style={settings.card}
-                onClick={() => handleProductClick(product._id)}
+                onClick={() => handleProductClick(product.slug)}
               />
             ))}
           </div>

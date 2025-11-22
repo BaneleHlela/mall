@@ -6,6 +6,8 @@ import StoreCard from "../home/store_card/StoreCard";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import type { RootState } from "../../../app/store";
 import { fetchStores } from "../../../features/stores/storeSlice";
+import { openRangeModal, closeRangeModal } from "../../../features/rangeSlice";
+import RangeModal from "../../modals/RangeModal";
 
 // Popular searches div gotta be functional 
 // ui
@@ -21,6 +23,7 @@ const TheMallTopbar = () => {
     (state: RootState) => state.stores
   );
   const user = useAppSelector((state: RootState) => state.user.user);
+  const { isOpen: isRangeModalOpen } = useAppSelector((state: RootState) => state.range);
 
   // Fetch stores whenever search term changes
   useEffect(() => {
@@ -152,12 +155,18 @@ const TheMallTopbar = () => {
             </div>
 
             {/* Range */}
-            <button className="text-[1vh] text-white">
+            <button
+              onClick={() => dispatch(openRangeModal())}
+              className="text-[1vh] text-white hover:bg-white hover:bg-opacity-10 rounded p-1 transition-colors"
+            >
               <MdLocationSearching className="text-[3.2vh]" />
             </button>
 
             {/* Location */}
-            <button className="text-[1vh] text-black">
+            <button
+              onClick={() => navigate('/account')}
+              className="text-[1vh] text-black hover:bg-white hover:bg-opacity-10 rounded p-1 transition-colors"
+            >
               <SlLocationPin className="text-[3vh] text-white" />
             </button>
           </div>
@@ -177,10 +186,16 @@ const TheMallTopbar = () => {
 
             {/* Range and Location */}
             <div className="space-x-1">
-              <button className="text-[1vh] text-white">
+              <button
+                onClick={() => dispatch(openRangeModal())}
+                className="text-[1vh] text-white hover:bg-white hover:bg-opacity-10 rounded p-1 transition-colors"
+              >
                 <MdLocationSearching className="text-[3.2vh]" />
               </button>
-              <button className="text-[1vh] text-black">
+              <button
+                onClick={() => navigate('/account')}
+                className="text-[1vh] text-black hover:bg-white hover:bg-opacity-10 rounded p-1 transition-colors"
+              >
                 <SlLocationPin className="text-[3vh] text-white" />
               </button>
             </div>
@@ -196,6 +211,12 @@ const TheMallTopbar = () => {
           </div>
         </div>
       </div>
+
+      {/* Modals */}
+      <RangeModal
+        open={isRangeModalOpen}
+        onClose={() => dispatch(closeRangeModal())}
+      />
     </div>
   );
 };

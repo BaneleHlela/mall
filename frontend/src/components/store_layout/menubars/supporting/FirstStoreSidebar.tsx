@@ -8,6 +8,7 @@ import {
 } from "../../../../utils/stylingFunctions";
 import StoreMenubarIcons from "./StoreMenubarIcons";
 import StoreButton from "../../extras/buttons/StoreButton";
+import { useStoreButtonClickHandler } from "../../extras/buttons/useStoreButtonClickHandler";
 
 type NavLink = {
   to: string;
@@ -24,6 +25,8 @@ const FirstStoreSidebar = ({
   links: NavLink[];
 }) => {
   const style = useAppSelector((state) => state.layoutSettings.menubar.sidebar);
+  const store = useAppSelector((state) => state.stores.currentStore);
+  const handleStoreButtonClick = useStoreButtonClickHandler();
 
   return (
     isOpen && (
@@ -71,7 +74,21 @@ const FirstStoreSidebar = ({
           {style.extras.include === "icons" && (
             <StoreMenubarIcons style={style.extras.icons} />
           )}
-          {style.extras.include === "button" && <StoreButton style={style.extras.button} onClick={() => {}} />}
+          {style.extras.include === "button" && (
+            <StoreButton
+              style={style.extras.button}
+              onClick={() => {
+                  handleStoreButtonClick({
+                    type: style.extras.button.function,                 // or services/subscribe/etc.
+                    routes: {},                  // whatever you're passing
+                    contactNumber: store?.contact.phone || "",
+                    storeSlug: store?.slug || "",
+                  })
+                  onClose();
+                }
+              }
+            />
+          )}
         </div>
       </motion.div>
     )

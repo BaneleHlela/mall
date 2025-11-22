@@ -19,15 +19,20 @@ const FooterAddressDisplay = ({location, headingStyle, headingInput, addressStyl
                 style={{
                     ...getTextStyles(addressStyle),
                 }}
-                className="whitespace-pre-line">
-                {address.map((line, index) => (
-                    <p
-                        key={index}
-                        className=""
-                    >
-                        {line}
-                    </p>
-                ))}
+                className="whitespace-pre-line"
+            >
+                {!addressStyle.textArea && (
+                    <>
+                        {address.map((line, index) => (
+                            <p
+                                key={index}
+                                className=""
+                            >
+                                {line}
+                            </p>
+                        ))}
+                    </>
+                )}
                 {addressStyle.textArea}
             </div>
         </div>

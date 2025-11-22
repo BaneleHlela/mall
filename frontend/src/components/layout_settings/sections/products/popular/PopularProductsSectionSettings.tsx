@@ -14,6 +14,7 @@ import PopularProductCardSettings from '../supporting/cards/PopularProductCardSe
 import BorderEditor from '../../../background/BorderEditor';
 import { Underline } from 'lucide-react';
 import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings';
+import ColorPicker from '../../../supporting/ColorPicker';
 
 
 const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
@@ -201,6 +202,7 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                                         handleSettingChange={handleSettingChange}
                                         allow={["width", "position", "color", "padding", "border", "shadow", "position", "zIndex"]}
                                         responsiveSize
+                                        responsivePadding
                                         widthUnit="%"
                                     />
                                 }
@@ -259,25 +261,84 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                                 objectPath={`${objectPath}.categorySelector`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                allow={["width"]}
+                                allow={["width", "color", "padding"]}
                                 widthUnit='%'
                                 responsiveSize
+                                responsivePadding
                             />
                         </div>
                         <div className="space-y-[.3vh]">
-                            <SubSettingsContainer
-                                name="Text"
+                             <SubSettingsContainer
+                                 name="Text"
+                                 SettingsComponent={
+                                     <TextEditor
+                                         objectPath={`${objectPath}.categorySelector.text`}
+                                         settings={settings}
+                                         handleSettingChange={handleSettingChange}
+                                         allow={["fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight", "textDecoration"]}
+                                         responsiveSize
+                                     />
+                                 }
+                             />
+                             <SubSettingsContainer
+                                 name="Border"
+                                 SettingsComponent={
+                                     <BorderEditor
+                                         objectPath={`${objectPath}.categorySelector.border`}
+                                         settings={settings}
+                                         handleSettingChange={handleSettingChange}
+                                     />
+                                 }
+                             />
+                             <SubSettingsContainer
+                                name="Colors"
                                 SettingsComponent={
-                                    <TextEditor
-                                        objectPath={`${objectPath}.categorySelector.text`}
-                                        settings={settings}
-                                        handleSettingChange={handleSettingChange}
-                                        allow={["fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight", "textDecoration"]}
-                                        responsiveSize
-                                    />
+                                    <div className="space-y-[.3vh]">
+                                        <ColorPicker
+                                            label="Selected Color"
+                                            value={getSetting("categorySelector.selectedColor.color", settings, objectPath)}
+                                            onChange={(newValue) => handleSettingChange(`${objectPath}.categorySelector.selectedColor.color`, newValue)}
+                                            onClear={() => handleSettingChange(`${objectPath}.categorySelector.selectedColor.color`, "transparent")}
+                                        />
+                                        <ColorPicker
+                                            label="Unselected Color"
+                                            value={getSetting("categorySelector.unselectedColor.color", settings, objectPath)}
+                                            onChange={(newValue) => handleSettingChange(`${objectPath}.categorySelector.unselectedColor.color`, newValue)}
+                                            onClear={() => handleSettingChange(`${objectPath}.categorySelector.unselectedColor.color`, "transparent")}
+                                        />
+                                        <ColorPicker
+                                            label="Underline Color"
+                                            value={getSetting("categorySelector.underlineColor.color", settings, objectPath)}
+                                            onChange={(newValue) => handleSettingChange(`${objectPath}.categorySelector.underlineColor.color`, newValue)}
+                                            onClear={() => handleSettingChange(`${objectPath}.categorySelector.underlineColor.color`, "transparent")}
+                                        />
+                                    </div>
                                 }
                             />
-                        </div>
+
+                             <SubSettingsContainer
+                                 name="Layout"
+                                 SettingsComponent={
+                                     <div className="space-y-[.3vh]">
+                                         <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
+                                             <OptionsToggler
+                                                 label="Alignment"
+                                                 options={["space-between", "center", "start", "end"]}
+                                                 value={getSetting("alignment", settings, `${objectPath}.categorySelector`)}
+                                                 onChange={(value) => handleSettingChange(`${objectPath}.categorySelector.alignment`, value)}
+                                             />
+                                         </div>
+                                         <BackgroundEditor
+                                             objectPath={`${objectPath}.categorySelector.spacing`}
+                                             settings={settings}
+                                             handleSettingChange={handleSettingChange}
+                                             allow={["padding"]}
+                                             responsivePadding
+                                         />
+                                     </div>
+                                 }
+                             />
+                         </div>
                     </SlidingPanel>
                 )}
                 {activePanel === "card" && (

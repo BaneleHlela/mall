@@ -276,6 +276,17 @@ const TextEditor: React.FC<EditorProps> = ({
               }}
             />
           )}
+          {/* Text shadow */}
+          {isAllowed("textShadow") && (
+            <OptionsToggler
+              label="Text Shadow"
+              options={["On", "Off"]}
+              value={getSetting("textShadow", settings, objectPath) ? "On" : "Off"}
+              onChange={(newValue) =>
+                handleSettingChange(`${objectPath}.textShadow`, newValue === "On")
+              }
+            />
+          )}
           {/* PADDING */}
           {isAllowed("padding") && (
             responsivePadding ? (
@@ -341,8 +352,7 @@ const TextEditor: React.FC<EditorProps> = ({
             )
           )}
         </div>
-      );
-      
+      );  
 }
 
 export default TextEditor;

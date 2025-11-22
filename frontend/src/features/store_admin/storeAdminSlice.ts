@@ -87,19 +87,19 @@ export const fetchStore = createAsyncThunk<Store, string>(
 
 export const uploadStoreGalleryImage = createAsyncThunk<
   {
-    _id: string; url: string; description: string; category: string 
+    slug: string; url: string; description: string; category: string 
 },
-  { storeId: string; imageFile: File; description: string; category: string }
+  { storeSlug: string; imageFile: File; description: string; category: string }
 >(
   'stores/uploadStoreGalleryImage',
-  async ({ storeId, imageFile, description, category }, thunkAPI) => {
+  async ({ storeSlug, imageFile, description, category }, thunkAPI) => {
     try {
       const formData = new FormData();
       formData.append('image', imageFile);
       formData.append('description', description);
       formData.append('category', category);
 
-      const response = await axios.put(`${STORE_URL}/${storeId}/gallery`, formData, {
+      const response = await axios.put(`${STORE_URL}/${storeSlug}/gallery`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
@@ -165,12 +165,12 @@ export const deleteTeamMember = createAsyncThunk<
 
 export const deleteStoreGalleryImage = createAsyncThunk<
   string, // returns the imageUrl of the deleted image
-  { storeId: string; imageUrl: string }
+  { storeSlug: string; imageUrl: string }
 >(
   'stores/deleteStoreGalleryImage',
-  async ({ storeId, imageUrl }, thunkAPI) => {
+  async ({ storeSlug, imageUrl }, thunkAPI) => {
     try {
-      await axios.delete(`${STORE_API_URL}/${storeId}/gallery`, {
+      await axios.delete(`${STORE_API_URL}/${storeSlug}/gallery`, {
         data: { imageUrl },
       });
 

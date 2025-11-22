@@ -14,9 +14,7 @@ const StoreGallerySection = () => {
   }
   if (variation === "galleryWithGroupedImages") {
     return (
-      <div id="gallery">
-        <GalleryWithGroupedImages/>
-      </div>
+      <GalleryWithGroupedImages/>
     )
   }
   if (variation === "galleryWithHorizontalImages") {

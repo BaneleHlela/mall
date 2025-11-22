@@ -52,20 +52,23 @@ const GalleryWithGroupedImages = () => {
     }
 
   return (
-    <div style={getBackgroundStyles(settings.background)} className='min-h-fit'>
+    <div id="gallery" style={getBackgroundStyles(settings.background)} className='min-h-fit'>
       {/* Heading & Subheading */}
-      <div 
+      {settings.text.heading.input || settings.text.subheading.input && (
+        <div 
             className='w-full'
         >   
-          {/* Heading + Subheading */}
-          <div className="w-full">
-            <UnderlinedText style={settings.text.heading} />
-            
-            {settings.text.subheading.input && (
-              <UnderlinedText style={settings.text.subheading} />
-            )}
-          </div>
-      </div>
+            {/* Heading + Subheading */}
+            <div className="w-full">
+              <UnderlinedText style={settings.text.heading} />
+              
+              {settings.text.subheading.input && (
+                <UnderlinedText style={settings.text.subheading} />
+              )}
+            </div>
+        </div>
+      )}
+      
       {/* Stack Layouts */}
       {isHorizontal ? (
         <div className="w-full relative flex flex-col items-center overflow-hidden">
