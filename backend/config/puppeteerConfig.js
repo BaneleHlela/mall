@@ -3,10 +3,7 @@ import puppeteer from 'puppeteer';
 export const captureScreenshot = async (url, width = 1280, height = 800) => {
   let browser;
   try {
-    browser = await puppeteer.launch({
-      headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+    browser = await puppeteer.launch({});
 
     const page = await browser.newPage();
 

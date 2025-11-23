@@ -291,30 +291,30 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                                  }
                              />
                              <SubSettingsContainer
-                                name="Colors"
-                                SettingsComponent={
-                                    <div className="space-y-[.3vh]">
-                                        <ColorPicker
-                                            label="Selected Color"
-                                            value={getSetting("categorySelector.selectedColor.color", settings, objectPath)}
-                                            onChange={(newValue) => handleSettingChange(`${objectPath}.categorySelector.selectedColor.color`, newValue)}
-                                            onClear={() => handleSettingChange(`${objectPath}.categorySelector.selectedColor.color`, "transparent")}
-                                        />
-                                        <ColorPicker
-                                            label="Unselected Color"
-                                            value={getSetting("categorySelector.unselectedColor.color", settings, objectPath)}
-                                            onChange={(newValue) => handleSettingChange(`${objectPath}.categorySelector.unselectedColor.color`, newValue)}
-                                            onClear={() => handleSettingChange(`${objectPath}.categorySelector.unselectedColor.color`, "transparent")}
-                                        />
-                                        <ColorPicker
-                                            label="Underline Color"
-                                            value={getSetting("categorySelector.underlineColor.color", settings, objectPath)}
-                                            onChange={(newValue) => handleSettingChange(`${objectPath}.categorySelector.underlineColor.color`, newValue)}
-                                            onClear={() => handleSettingChange(`${objectPath}.categorySelector.underlineColor.color`, "transparent")}
-                                        />
-                                    </div>
-                                }
-                            />
+                                 name="Colors"
+                                 SettingsComponent={
+                                     <div className="space-y-[.3vh]">
+                                         <ColorPicker
+                                             label="Selected Color"
+                                             value={getSetting("categorySelector.selectedColor", settings, objectPath)}
+                                             onChange={(newValue) => handleSettingChange(`${objectPath}.categorySelector.selectedColor`, newValue)}
+                                             onClear={() => handleSettingChange(`${objectPath}.categorySelector.selectedColor`, "transparent")}
+                                         />
+                                         <ColorPicker
+                                             label="Unselected Color"
+                                             value={getSetting("categorySelector.unselectedColor", settings, objectPath)}
+                                             onChange={(newValue) => handleSettingChange(`${objectPath}.categorySelector.unselectedColor`, newValue)}
+                                             onClear={() => handleSettingChange(`${objectPath}.categorySelector.unselectedColor`, "transparent")}
+                                         />
+                                         <ColorPicker
+                                             label="Underline Color"
+                                             value={getSetting("categorySelector.underlineColor", settings, objectPath)}
+                                             onChange={(newValue) => handleSettingChange(`${objectPath}.categorySelector.underlineColor`, newValue)}
+                                             onClear={() => handleSettingChange(`${objectPath}.categorySelector.underlineColor`, "transparent")}
+                                         />
+                                     </div>
+                                 }
+                             />
 
                              <SubSettingsContainer
                                  name="Layout"

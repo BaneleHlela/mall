@@ -54,7 +54,7 @@ const LayoutCreator = () => {
         <>
           <h3 className="py-[2vh]">Select a design you like from these Demo Stores</h3>
           {isLoading ? <TbLoader3 className='w-6 h-6 animate-spin mx-auto' /> : (
-            <div className="px-[2vh] grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[2.5vh] lg:gap-[1vh]">
+            <div className="px-[2vh] grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-[2.5vh] lg:gap-[1vh]">
             {availableLayouts.map((layout) => {
               let storeId = '';
               if (typeof layout.store === 'object' && layout.store !== null) {
