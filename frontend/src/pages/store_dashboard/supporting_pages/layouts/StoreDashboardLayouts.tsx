@@ -11,8 +11,8 @@ import { FaPlus } from "react-icons/fa";
 const StoreDashboardLayouts = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { storeId } = useParams<{ storeId: string }>();
   const store = useAppSelector((state) => state.storeAdmin.store);
+  const storeId = store?._id;
   const layouts = useAppSelector((state) => state.layout.layouts);
   const activeLayout = useAppSelector((state) => state.layout.activeLayout);
   const isLoading = useAppSelector((state) => state.layout.isLoading);
@@ -38,7 +38,18 @@ const StoreDashboardLayouts = () => {
   }, [dispatch, store?._id]);
 
   // Since we're now fetching layouts directly by store ID, no need to filter
-  const storeLayouts = layouts;
+  const storeLayouts = layouts.filter((layout) => {
+    if (!layout.store) return false;
+  
+    // layout.store can be ID string or populated object
+    const layoutStoreId =
+      typeof layout.store === "object" && layout.store !== null
+        ? layout.store._id
+        : layout.store;
+  
+    return layoutStoreId === storeId;
+  });
+  
 
   // Capture missing screenshots
   // useEffect(() => {

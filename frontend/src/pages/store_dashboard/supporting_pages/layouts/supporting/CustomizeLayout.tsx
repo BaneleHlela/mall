@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import type { Layout } from "../../../../../types/layoutTypes";
 import { IoIosArrowRoundForward, IoIosColorPalette, IoIosImages } from "react-icons/io";
 import GoogleFontsSelector from "../../../../../components/layout_settings/text/GoogleFontsSelector";
@@ -15,6 +15,7 @@ import { TiLockClosed } from "react-icons/ti";
 import { MdEdit } from "react-icons/md";
 import type { SectionType } from "../../../../../utils/defaults/sections/getSectionDefaults";
 import SectionEditor from "./SectionEditor";
+import LayoutSuccessModal from "../../../../../components/layout_settings/supporting/LayoutSuccessModal";
 
 interface CustomizeLayoutProps {
   layout: Layout;
@@ -27,6 +28,7 @@ const CustomizeLayout: React.FC<CustomizeLayoutProps> = ({ layout, onBack, edit 
     const colorMap = extractLayoutColors(layout);
     const storeId = useAppSelector((state) => state.storeAdmin.store?._id)
     const isLoading = useAppSelector((state) => state.layout.isLoading);
+    const activeLayout = useAppSelector((state) => state.layout.activeLayout);
     const [step, setStep] = useState<"fonts" | "colors" | "sections">("fonts");
     const [colors, setColors] = useState<string[]>(colorMap);
     const [selectedFonts, setSelectedFonts] = useState({
@@ -38,6 +40,7 @@ const CustomizeLayout: React.FC<CustomizeLayoutProps> = ({ layout, onBack, edit 
     const [selectedSectionType, setSelectedSectionType] = useState<SectionType | null>(null);
     const [showSectionEditor, setShowSectionEditor] = useState(false);
     const [sectionUpdates, setSectionUpdates] = useState<Record<string, any>>({});
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     // Extract sections from layout routes
     const getLayoutSections = () => {
@@ -62,6 +65,12 @@ const CustomizeLayout: React.FC<CustomizeLayoutProps> = ({ layout, onBack, edit 
     };
 
     const layoutSections = getLayoutSections();
+
+    useEffect(() => {
+        if (!edit && activeLayout && activeLayout._id) {
+            setShowSuccessModal(true);
+        }
+    }, [activeLayout, edit]);
 
     const handleColorChange = (index: number, newColor: string) => {
         const updated = [...colors];
@@ -322,7 +331,15 @@ const CustomizeLayout: React.FC<CustomizeLayoutProps> = ({ layout, onBack, edit 
                     onSave={handleSectionSave}
                 />
             )}
-            
+
+            {/* Success Modal */}
+            {showSuccessModal && activeLayout && activeLayout._id && (
+                <LayoutSuccessModal
+                    layoutId={activeLayout._id}
+                    onClose={() => setShowSuccessModal(false)}
+                />
+            )}
+
         </div>
     );
 };
