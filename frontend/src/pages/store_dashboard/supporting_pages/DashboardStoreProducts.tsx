@@ -7,6 +7,8 @@ import ProductModal from '../../../components/store_dashboard/modals/ProductModa
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { deleteProduct, updateProduct, updateProductIsActive } from '../../../features/products/productsSlice';
 import type { Product } from '../../../types/productTypes';
+import type { Service } from '../../../types/serviceTypes';
+import type { Package } from '../../../types/packageTypes';
 import Swal from 'sweetalert2';
 import { clearError } from '../../../features/user/userSlice';
 import { FaPlus } from 'react-icons/fa';
@@ -15,7 +17,7 @@ import { FaPlus } from 'react-icons/fa';
 
 const DashBoardStoreProducts = () => {
   const dispatch = useAppDispatch();
-  const categories  = useAppSelector(state => state.storeAdmin.store?.categories.products);
+  const categories  = useAppSelector(state => state.storeAdmin.store?.categories?.products);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -210,10 +212,10 @@ const DashBoardStoreProducts = () => {
           <DashboardStoreItemsTable 
             items={paginatedProducts} 
             type="product" 
-            onEditClick={handleEditProduct} 
-            onDeleteClick={handleDeleteProduct}
+            onEditClick={handleEditProduct as (item: Product | Service | Package) => void}
+            onDeleteClick={handleDeleteProduct as (item: Product | Service | Package) => void}
             onSort={handleSort}
-            onStatusClick={handleStatusClick}
+            onStatusClick={handleStatusClick as (item: Product | Service | Package) => void}
           />
         </div>
 

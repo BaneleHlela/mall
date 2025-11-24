@@ -10,6 +10,7 @@ export interface Service {
     category?: string;
     slug: string;
     performers?: Performer[]; // Added performers field
+    isActive?: boolean;
     createdAt?: string;
     updatedAt?: string;
 }

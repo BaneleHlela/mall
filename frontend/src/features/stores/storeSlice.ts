@@ -148,6 +148,19 @@ export const fetchStoreImages = createAsyncThunk<
   }
 );
 
+export const editStore = createAsyncThunk<Store, { storeSlug: string; updates: Partial<Store> }>(
+  'stores/editStore',
+  async ({ storeSlug, updates }, thunkAPI) => {
+    try {
+      const response = await axios.put(`${STORE_API_URL}/${storeSlug}`, updates);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating store:', error);
+      return thunkAPI.rejectWithValue('Failed to update store');
+    }
+  }
+);
+
 
 
 
@@ -299,29 +312,54 @@ const storeSlice = createSlice({
       .addCase(fetchStoreImages.fulfilled, (state, action) => {
         state.isLoading = false;
         const { storeSlug, images, hasMore } = action.payload;
-      
+
         // Append the new images to the existing images in the store
         if (state.storesById[storeSlug]) {
           state.storesById[storeSlug].images = [
             ...(state.storesById[storeSlug].images || []),  // Existing images (or an empty array if none)
-            ...images.filter(img => !state.storesById[storeSlug].images.some(existingImg => existingImg.url === img.url)),  // Only append new images
+            ...images.filter(img => !state.storesById[storeSlug].images?.some(existingImg => existingImg.url === img.url)),  // Only append new images
           ];
         }
 
         if (state.myStoresById[storeSlug]) {
           state.myStoresById[storeSlug].images = [
             ...(state.myStoresById[storeSlug].images || []),
-            ...images.filter(img => !state.myStoresById[storeSlug].images.some(existingImg => existingImg.url === img.url)), // Prevent duplicates
+            ...images.filter(img => !state.myStoresById[storeSlug].images?.some(existingImg => existingImg.url === img.url)), // Prevent duplicates
           ];
         }
 
         if (state.currentStore && state.currentStore._id === storeSlug) {
           state.currentStore.images = [
             ...(state.currentStore.images || []),
-            ...images.filter(img => !state.currentStore.images.some(existingImg => existingImg.url === img.url)), // Prevent duplicates
+            ...images.filter(img => !state.currentStore.images?.some(existingImg => existingImg.url === img.url)), // Prevent duplicates
           ];
-          state.currentStore.hasMore = hasMore; // Set hasMore flag
+          (state.currentStore as any).hasMore = hasMore; // Set hasMore flag
         }
+      })
+
+      // Edit Store
+      .addCase(editStore.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(editStore.fulfilled, (state, action: PayloadAction<Store>) => {
+        state.isLoading = false;
+        const updatedStore = action.payload;
+
+        if (updatedStore._id) {
+          // Update in all stores list
+          state.storesById[updatedStore._id] = updatedStore;
+          // Update in my stores list
+          state.myStoresById[updatedStore._id] = updatedStore;
+          // Update current store if it's the same
+          if (state.currentStore?._id === updatedStore._id) {
+            state.currentStore = updatedStore;
+          }
+        }
+      })
+      .addCase(editStore.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to update store';
       })
   },
 });

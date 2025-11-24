@@ -62,15 +62,15 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
     }
   };
   
-  // const createNewLayout = async () => {
-  //   try {// @ts-ignore-next-line
-  //     const result = await dispatch(createLayout(defaultLayoutConfig)).unwrap();
-  //     return result._id;
-  //   } catch (error) {
-  //     console.error('Failed to create layout:', error);
-  //     return null;
-  //   }
-  // };
+  const createNewLayout = async () => {
+    try {// @ts-ignore-next-line
+      const result = await dispatch(createLayout(defaultLayoutConfig)).unwrap();
+      return result._id;
+    } catch (error) {
+      console.error('Failed to create layout:', error);
+      return null;
+    }
+  };
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -110,6 +110,13 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
         return;
       }
 
+      // Create a default layout for internal stores
+      const layoutId = await createNewLayout();
+      if (!layoutId) {
+        setSubmitError('Failed to create store layout. Please try again.');
+        return;
+      }
+
       const storeData = {
         ...form,
         isDemo,
@@ -119,7 +126,10 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
           storeCard: form.thumbnail || '',
           profily: form.thumbnail || ''
         },
-        layouts: [],
+        website: {
+          source: 'internal',
+          layoutId: layoutId
+        },
         categories: {
           products: [],
           services: []
@@ -141,7 +151,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
         }],
         location: {
           type: 'Point',
-          coordinates: [form.location.lng, form.location.lat], // [lng, lat]
+          coordinates: [form.location.coordinates[0], form.location.coordinates[1]], // [lng, lat]
           nickname: form.location.nickname,
           address: form.location.address
         },

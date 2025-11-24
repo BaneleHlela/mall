@@ -9,12 +9,12 @@ import { useAppSelector } from '../../../app/hooks';
 type ItemType = 'product' | 'service' | 'package';
 
 interface DashboardStoreItemsTableProps {
-  items: Product[];
+  items: (Product | Service | Package)[];
   type: ItemType;
-  onEditClick: (item: Product) => void;
-  onDeleteClick: (item: Product) => void;
+  onEditClick: (item: Product | Service | Package) => void;
+  onDeleteClick: (item: Product | Service | Package) => void;
   onSort: (key: string) => void;
-  onStatusClick: (productId: string) => void;
+  onStatusClick: (item: Product | Service | Package) => void;
 }
 
 const DashboardStoreItemsTable: React.FC<DashboardStoreItemsTableProps> = ({
@@ -32,8 +32,8 @@ const DashboardStoreItemsTable: React.FC<DashboardStoreItemsTableProps> = ({
     (type === 'product' && store?.categories?.products?.length > 0) ||
     (type === 'service' && store?.categories?.services?.length > 0);
 
-  const getDisplayPrice = (item: Product): string => {
-    if (item.prices && item.prices.length > 0) {
+  const getDisplayPrice = (item: Product | Service | Package): string => {
+    if ('prices' in item && item.prices && item.prices.length > 0) {
       const firstPrice = item.prices[0].amount;
       return firstPrice !== undefined ? `R${firstPrice}` : 'N/A';
     }
@@ -81,7 +81,7 @@ const DashboardStoreItemsTable: React.FC<DashboardStoreItemsTableProps> = ({
               
 
               <td className="p-[1.5vh] flex items-center space-x-2 lg:space-x-10 w-[40vw] lg:w-fit">
-                {type === 'product' ? (
+                {type === 'product' && 'images' in item && item.images ? (
                   <img
                     src={item.images.length > 0 ? item.images[0] : '/placeholder.png'}
                     alt={item.name}
@@ -96,7 +96,7 @@ const DashboardStoreItemsTable: React.FC<DashboardStoreItemsTableProps> = ({
               {/* ✅ Conditionally render Category cell */}
               {showCategoryColumn && (
                 <td className="p-[1.5vh]">
-                  {item.category?.trim() ? item.category : 'N/A'}
+                  {'category' in item && item.category?.trim() ? item.category : 'N/A'}
                 </td>
               )}
 
@@ -120,7 +120,7 @@ const DashboardStoreItemsTable: React.FC<DashboardStoreItemsTableProps> = ({
                       status = product.isActive ? 'Active' : 'Inactive';
                     }
                   } else {
-                    status = item.isActive ? 'Active' : 'Inactive';
+                    status = 'isActive' in item && item.isActive ? 'Active' : 'Inactive';
                   }
 
                   return (

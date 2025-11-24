@@ -400,7 +400,7 @@ export const captureLayoutScreenshot = expressAsyncHandler(async (req, res) => {
   }
 
   try {
-    // 1️⃣ Retrieve the existing layout document to check for the old screenshot
+    // 1️⃣ Retrieve existing layout
     const layout = await StoreLayout.findById(layoutId);
     if (!layout) {
       res.status(404);
@@ -408,29 +408,45 @@ export const captureLayoutScreenshot = expressAsyncHandler(async (req, res) => {
     }
 
     const oldScreenshotUrl = layout.screenshot;
-    
-    // If there's an existing screenshot, delete it from Google Cloud Storage
+
+    // 2️⃣ Delete old screenshot ONLY if it matches this layoutId
     if (oldScreenshotUrl) {
-      const oldScreenshotFileName = oldScreenshotUrl.split('/').pop(); // Extract file name from URL
-      await deleteFromUploads(`store-layouts/${layoutId}/${oldScreenshotFileName}`);
+      // Extract the path after the bucket domain
+      const urlPath = oldScreenshotUrl.split("the-mall-uploads-giza/")[1] || "";
+
+      // Example urlPath = "store-layouts/abc123/layout-999.png"
+      const screenshotLayoutId = urlPath.split("/")[1];  // should equal layoutId
+
+      // Compare folder layout ID
+      if (screenshotLayoutId === layoutId) {
+        const oldScreenshotFileName = urlPath.split("/").pop();
+
+        console.log("Deleting old screenshot:", urlPath);
+
+        await deleteFromUploads(`store-layouts/${layoutId}/${oldScreenshotFileName}`);
+        console.log("🖼️ Old screenshot deleted from GCS.");
+      } else {
+        console.log("⚠️ Old screenshot belongs to another layout. Not deleting.");
+      }
     }
 
-    // 2️⃣ Capture new screenshot as a Buffer
+    // 3️⃣ Capture screenshot as Buffer
     const screenshotBuffer = await captureStoreLayoutScreenshot(layoutId);
     if (!screenshotBuffer) {
       res.status(500);
       throw new Error("Failed to capture layout screenshot");
     }
 
-    // 3️⃣ Upload the new screenshot to Google Cloud
+    // 4️⃣ Upload new screenshot
     const fileName = `store-layouts/${layoutId}/layout-${Date.now()}.png`;
     await uploadToUploads(screenshotBuffer, fileName);
+
     const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${fileName}`;
 
-    // 4️⃣ Update the layout document in the database with the new screenshot URL
+    // 5️⃣ Update DB
     const updatedLayout = await StoreLayout.findByIdAndUpdate(
       layoutId,
-      { screenshot: publicUrl }, // Save new screenshot URL in DB
+      { screenshot: publicUrl },
       { new: true }
     );
 
@@ -439,17 +455,18 @@ export const captureLayoutScreenshot = expressAsyncHandler(async (req, res) => {
       throw new Error("Layout not found after update");
     }
 
-    // 5️⃣ Respond with success message and updated layout
     res.status(200).json({
       message: "Screenshot captured, uploaded, and saved successfully",
       layout: updatedLayout,
     });
+
   } catch (error) {
     console.error("❌ Failed to capture and upload layout screenshot:", error);
     res.status(500);
     throw new Error("Failed to capture and upload layout screenshot");
   }
 });
+
 
 
   

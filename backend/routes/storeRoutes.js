@@ -20,7 +20,8 @@ import {
     editTeamMember,
     getDemoStores,
     toggleStoreStatus,
-    resetStoreStatus
+    resetStoreStatus,
+    initializeStoreWebsites
 } from "../controllers/StoreController.js";
 import { uploadSingleFile, uploadTeamMemberImage } from "../middlewares/uploadMiddleware.js";
 
@@ -47,5 +48,8 @@ router.delete('/:storeSlug/gallery', deleteStoreGalleryImage);
 // Store status routes
 router.put('/:storeSlug/status', protectRoute, toggleStoreStatus);
 router.delete('/:storeSlug/status', protectRoute, resetStoreStatus);
+
+// Initialize website objects for existing stores
+router.post('/initialize-websites', initializeStoreWebsites);
 
 export default router;

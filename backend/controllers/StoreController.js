@@ -187,7 +187,6 @@ export const editStore = expressAsyncHandler(async (req, res) => {
 
   const store = await Store.findOne({ slug: storeSlug });
 
-  console.log(req.body.categories);
 
   if (!store) {
     res.status(404);
@@ -270,6 +269,19 @@ export const editStore = expressAsyncHandler(async (req, res) => {
   // Update OperationTimes
   if (req.body.operationTimes) {
     store.operationTimes = req.body.operationTimes;
+  }
+
+  // Update website
+  if (req.body.website) {
+    store.website = req.body.website;
+  }
+
+  // Update thumbnails
+  if (req.body.thumbnails) {
+    store.thumbnails = {
+      ...store.thumbnails,
+      ...req.body.thumbnails
+    };
   }
 
   // Save the updated store
@@ -714,5 +726,45 @@ export const resetStoreStatus = expressAsyncHandler(async (req, res) => {
   } catch (error) {
     console.error('Reset store status error:', error);
     res.status(500).json({ message: 'Failed to reset store status' });
+  }
+});
+
+// Initialize website object for existing stores
+export const initializeStoreWebsites = expressAsyncHandler(async (req, res) => {
+  try {
+    // Find all stores that don't have website object set
+    const storesWithoutWebsite = await Store.find({
+      $or: [
+        { website: { $exists: false } },
+        { website: null }
+      ]
+    });
+
+    let updatedCount = 0;
+
+    for (const store of storesWithoutWebsite) {
+      if (store.layouts && store.layouts.length > 0) {
+        // Set website to internal with first layout
+        store.website = {
+          source: 'internal',
+          layoutId: store.layouts[0]
+        };
+      } else {
+        // If no layouts, set to internal but without layoutId (will need to be set later)
+        store.website = {
+          source: 'internal'
+        };
+      }
+      await store.save();
+      updatedCount++;
+    }
+
+    res.status(200).json({
+      message: `Initialized website object for ${updatedCount} stores`,
+      updatedCount
+    });
+  } catch (error) {
+    console.error('Initialize store websites error:', error);
+    res.status(500).json({ message: 'Failed to initialize store websites' });
   }
 });

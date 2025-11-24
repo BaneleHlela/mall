@@ -38,9 +38,16 @@ export interface Store {
   thumbnails: {
     storeCard: string;
     profily: string;
+    reely: string;
   };
   name: string;
   nickname?: string;
+  website?: {
+    source: 'internal' | 'custom' | 'external';
+    layoutId?: string;
+    websiteName?: string;
+    websiteUrl?: string;
+  };
   logo: Logo;
   isDemo?: boolean;
   trades: string[];

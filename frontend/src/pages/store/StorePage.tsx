@@ -61,8 +61,21 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
           const result = await dispatch(fetchStoreBySlug(storeSlug)).unwrap(); // Fetch store and unwrap the result
           setStore(result); // Set the fetched store in local state
           dispatch(setCurrentStore(result)); // Update the global store state
-          if (result?.layouts[0] && !location.pathname.includes("layouts")) {
-            console.log("Fetching layout from store page.")
+
+          // Handle website object instead of layouts
+          if (result?.website) {
+            if (result.website.source === 'external' && result.website.websiteUrl) {
+              // Redirect to external website
+              window.location.href = result.website.websiteUrl;
+              return;
+            } else if ((result.website.source === 'internal' || result.website.source === 'custom') && result.website.layoutId && !location.pathname.includes("layouts")) {
+              console.log("Fetching layout from store page.")
+              const layoutResult = await dispatch(getLayout(result.website.layoutId)).unwrap(); // Fetch layout and unwrap the result
+              dispatch(setInitialLayout(layoutResult)); // Update the global layout state if available
+            }
+          } else if (result?.layouts[0] && !location.pathname.includes("layouts")) {
+            // Fallback to old logic if website object not set
+            console.log("Fetching layout from store page (fallback).")
             const layoutResult = await dispatch(getLayout(result.layouts[0] as string)).unwrap(); // Fetch layout and unwrap the result
             dispatch(setInitialLayout(layoutResult)); // Update the global layout state if available
           }

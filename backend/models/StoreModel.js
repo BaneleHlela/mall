@@ -54,6 +54,23 @@ const storeSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "StoreLayout"
     }],
+    website: {
+      source: {
+        type: String,
+        enum: ['internal', 'custom', 'external'],
+        default: 'internal'
+      },
+      layoutId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "StoreLayout"
+      },
+      websiteName: {
+        type: String
+      },
+      websiteUrl: {
+        type: String
+      }
+    },
     socials: [{
       platform: {
         type: String,
@@ -137,6 +154,10 @@ const storeSchema = new mongoose.Schema(
         default: "",
       },
       profily: {
+        type: String,
+        default: "",
+      },
+      reely: {
         type: String,
         default: "",
       },

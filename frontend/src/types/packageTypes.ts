@@ -4,6 +4,12 @@ export interface Package {
     price: number;
     storeId: string;
     deleted?: boolean;
+    isActive?: boolean;
+    duration?: {
+      expires: boolean;
+      format: 'days' | 'weeks' | 'months' | 'years';
+      count: number;
+    };
     // ...any other fields
   }
   

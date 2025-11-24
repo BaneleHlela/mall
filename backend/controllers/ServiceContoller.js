@@ -101,6 +101,7 @@ export const updateService = async (req, res) => {
     if (thumbnail) service.thumbnail = thumbnail;
     if (images) service.images = images;
     if (category) service.category = category;
+    if (req.body.isActive !== undefined) service.isActive = req.body.isActive;
 
     // Validate and update performers if provided
     if (performers) {

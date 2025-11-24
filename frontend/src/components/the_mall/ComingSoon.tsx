@@ -8,7 +8,7 @@ const ComingSoon = ({message}: {message: string}) => {
             <img 
                 src="https://storage.googleapis.com/the-mall-uploads-giza/stores/68726dde5987f5810dee5a8a/images/mall%20image.webp" 
                 alt="" 
-                className="h-full w-full object-cover opacity-50" 
+                className="h-full w-full object-cover opacity-50 rounded" 
             />
         </div>
         {/* Coming Soon */}

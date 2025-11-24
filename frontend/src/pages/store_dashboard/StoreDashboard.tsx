@@ -16,6 +16,7 @@ import DashboardStoreProducts from "./supporting_pages/DashboardStoreProducts";
 import DashboardStorePackages from "./supporting_pages/DashboardStorePackages";
 import { fetchStoreProducts } from "../../features/products/productsSlice";
 import StoreLogoSettings from "./supporting_pages/settings/StoreLogoSettings";
+import StoreThumbnailsSettings from "./supporting_pages/settings/StoreThumbnailsSettings";
 import StoreBasicSettings from "./supporting_pages/settings/StoreBasicSettings";
 import StoreTradeSettings from "./supporting_pages/settings/StoreTradeSettings";
 import StoreBusinessHoursSettings from "./supporting_pages/settings/StoreBusinessHoursSettings";
@@ -23,6 +24,7 @@ import StoreLocationSettings from "./supporting_pages/settings/StoreLocationSett
 import StoreSocialSettings from "./supporting_pages/settings/StoreSocialSettings";
 import StoreAboutSettings from "./supporting_pages/settings/StoreAboutSettings";
 import StoreDashboardPosters from "./supporting_pages/StoreDashboardPosters";
+import StoreSubscriptions from "./supporting_pages/StoreSubscriptions";
 
 
 const StoreDashboard = () => {
@@ -76,10 +78,12 @@ const StoreDashboard = () => {
                     <Route path="/packages" element={<DashboardStorePackages />} />
                     <Route path="/orders" element={<StoreOrders />} />
                     <Route path="/bookings" element={<StoreBookings />} />
+                    <Route path="/subscriptions" element={<StoreSubscriptions />} />
                     <Route path="/images" element={<StoreImages onImageSelect={() => {}}/>} /> 
                     <Route path="/posters/*" element={<StoreDashboardPosters />} />
                     <Route path="/settings" element={<StoreSettings />} />
                     <Route path="/settings/logo" element={<StoreLogoSettings />} />
+                    <Route path="/settings/thumbnails" element={<StoreThumbnailsSettings />} />
                     <Route path="/settings/basic" element={<StoreBasicSettings />} />
                     <Route path="/settings/trade" element={<StoreTradeSettings />} />
                     <Route path="/settings/operating-hours" element={<StoreBusinessHoursSettings />} />

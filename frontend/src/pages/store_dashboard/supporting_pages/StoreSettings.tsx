@@ -20,6 +20,7 @@ const StoreSettings = () => {
 
   const settingsOptions = [
     { id: 'logo', label: 'Logo', icon: FaImage, linkTo: `/dashboard/${storeSlug}/settings/logo` },
+    { id: 'thumbnails', label: 'Thumbnails', icon: FaImage, linkTo: `/dashboard/${storeSlug}/settings/thumbnails` },
     { id: 'basic', label: 'Name & Contact', icon: FaPhone, linkTo: `/dashboard/${storeSlug}/settings/basic` },
     { id: 'trade', label: 'Trade Options', icon: FaCog, linkTo: `/dashboard/${storeSlug}/settings/trade` },
     { id: 'operating-hours', label: 'Operating Hours', icon: FaClock, linkTo: `/dashboard/${storeSlug}/settings/operating-hours` },

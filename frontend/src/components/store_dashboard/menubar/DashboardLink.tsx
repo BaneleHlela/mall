@@ -15,7 +15,7 @@ const DashboardLink: React.FC<DashboardLinkProps> = ({ linkTo, icon, text, beta 
   
     return (
     <Link
-      className={`w-full flex flex-row rounded-[.45vh] text-black items-center space-x-[.3vh] px-[.6vh] py-[1.2vh] hover:scale-102 font-[400]
+      className={`w-full flex flex-row rounded-[.45vh] text-black items-center space-x-[.8vh] px-[.6vh] py-[1.2vh] hover:scale-102 font-[400]
         ${isSelected ? "bg-gray-100" : " "}`}
       to={linkTo}
       onClick={onClick}

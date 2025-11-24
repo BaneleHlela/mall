@@ -1,85 +1,218 @@
 import React, { useState } from 'react';
-import DashboardFilterByCategory from '../../../components/store_dashboard/extras/DashboardFilterByCategory';
 import DashboardFilterByStatus from '../../../components/store_dashboard/extras/DashboardFilterByStatus';
 import DashboardPagination from '../../../components/store_dashboard/tables/DashboardPagination';
 import DashboardStoreItemsTable from '../../../components/store_dashboard/tables/DashboardStoreItemsTable';
 import AddPackageModal from '../../../components/store_dashboard/modals/AddPackageModal';
-import { useAppSelector } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { deletePackage, updatePackage } from '../../../features/packages/packagesSlice';
+import type { Package } from '../../../types/packageTypes';
+import type { Product } from '../../../types/productTypes';
+import type { Service } from '../../../types/serviceTypes';
+import Swal from 'sweetalert2';
+import { clearError } from '../../../features/user/userSlice';
+import { FaPlus } from 'react-icons/fa';
 
-
-const categories = ['Clothes', 'Shoes', 'Electronic', 'Watch'];
-
-const DashboardStorePackages = () => {
-  const [selectedCategory, setSelectedCategory] = useState('');
+const DashBoardStorePackages = () => {
+  const dispatch = useAppDispatch();
   const [selectedStatus, setSelectedStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [addPackageOpen, setAddPackageOpen] = useState(false);
-  const itemsPerPage = 10;
+  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' | 'cycle' }>({
+    key: '',
+    direction: 'asc',
+  });
+
+  const itemsPerPage = 15;
 
   const packages = useAppSelector(state => state.packages.packages);
 
-  const filteredPackages = packages.filter((pack) => {
-    const categoryMatch = selectedCategory === '' || pack.category === selectedCategory;
-  
+  const handleDeletePackage = async (pkg: Package) => {
+    if (!pkg._id) return;
+    // Show a SweetAlert confirmation dialog
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: `You are about to delete the package "${pkg.name}". This action cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        // Dispatch the delete action and wait for it to complete
+        const response = await dispatch(deletePackage(pkg._id)).unwrap();
+
+        // If successful, show success message
+        await Swal.fire('Deleted!', 'The package has been deleted.', 'success');
+
+        dispatch(clearError());
+      } catch (error: any) {
+        // If there was an error, show it
+        await Swal.fire('Error', error?.message || 'Failed to delete the package.', 'error');
+      }
+    }
+  };
+
+
+  const handleSort = (key: string) => {
+    setSortConfig(prev => {
+      if (prev.key === key) {
+        // toggle direction
+        return { key, direction: prev.direction === 'asc' ? 'desc' : 'asc' };
+      }
+      return { key, direction: 'asc' };
+    });
+  };
+
+  const handleStatusClick = (pkg: Package) => {
+    if (!pkg._id) return;
+    const newStatus = !pkg.isActive; // toggle directly
+
+    Swal.fire({
+      title: "Change Package Status",
+      text: `Are you sure you want to change the status of "${pkg.name}" to ${
+        newStatus ? "Active" : "Inactive"
+      }?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      preConfirm: async () => {
+        try {
+          // Dispatch the update action
+          const resultAction = await dispatch(
+            updatePackage({ id: pkg._id, data: { isActive: newStatus } })
+          );
+
+          // Check if thunk was fulfilled
+          if (updatePackage.fulfilled.match(resultAction)) {
+            return true; // continue to success alert
+          } else {
+            // Show error message in the modal
+            Swal.showValidationMessage(
+              (resultAction.payload as string) || "Failed to update package status"
+            );
+            return false;
+          }
+        } catch (error) {
+          Swal.showValidationMessage("An error occurred while updating status.");
+          return false;
+        }
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          "Updated!",
+          `The status of "${pkg.name}" has been changed to ${
+            newStatus ? "Active" : "Inactive"
+          }.`,
+          "success"
+        );
+      }
+    });
+  };
+
+
+  // ✅ Filter using isActive
+  const filteredPackages = packages.filter((pkg) => {
     const statusMatch =
       selectedStatus === '' ||
-      (selectedStatus === 'Active' && pack.isActive) ||
-      (selectedStatus === 'Inactive' && !pack.isActive);
-  
-    return categoryMatch && statusMatch;
-  });
-  
+      (selectedStatus === 'Active' && pkg.isActive) ||
+      (selectedStatus === 'Inactive' && !pkg.isActive);
 
-  const paginatedProducts = filteredPackages.slice(
+    return statusMatch;
+  });
+
+  // ✅ Sorting function
+  const sortedPackages = [...filteredPackages].sort((a, b) => {
+    if (!sortConfig.key) return 0;
+
+    switch (sortConfig.key) {
+      case 'name':
+        return sortConfig.direction === 'asc'
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name);
+
+      case 'price':
+        return sortConfig.direction === 'asc' ? a.price - b.price : b.price - a.price;
+
+      case 'status': {
+        const order = ['Active', 'Inactive'];
+        const getStatus = (item: Package) => item.isActive ? 'Active' : 'Inactive';
+        const statusA = getStatus(a);
+        const statusB = getStatus(b);
+
+        return order.indexOf(statusA) - order.indexOf(statusB);
+      }
+
+      default:
+        return 0;
+    }
+  });
+
+  // ✅ Apply pagination after sorting
+  const paginatedPackages = sortedPackages.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
   return (
-    <div className="h-[88vh] w-[82vw] bg-amber-300 rounded m-1">
-      {/* Top bar: Add product + filters */}
-      <div className="h-[10%] flex flex-row justify-between items-center w-full bg-pink-600 px-4">
-        <button
-          className="bg-white text-sm font-semibold px-4 py-2 rounded"
-          onClick={() => setAddPackageOpen(true)}
-        >
-          Add Package
-        </button>
-        <div className="space-x-3">
-          <DashboardFilterByCategory
-            categories={categories}
-            value={selectedCategory}
-            onChange={setSelectedCategory}
+    <div className="w-fit h-fit py-1">
+      <div className="w-[100vw] h-[88vh] lg:w-[82vw] rounded bg-white">
+        {/* Top bar: Add package + filters */}
+        <div className="h-[10%] flex flex-row justify-between items-center w-full px-[1.2vh]">
+          <button
+            className="flex items-center space-x-1 bg-gray-900 text-white text-[2vh] font-semibold px-[2.2vh] py-[1vh] rounded-[.45vh] hover:bg-white hover:text-black hover:shadow-[0px_0px_10px_7px_rgba(0,_0,_0,_0.1)]"
+            onClick={() => setAddPackageOpen(true)}
+          >
+            <p className="">Add</p> <FaPlus className='text-[1.8vh]'/>
+          </button>
+          <div className="lg:space-x-[2vh] space-x-1 flex flex-row items-center">
+            <DashboardFilterByStatus
+              value={selectedStatus}
+              onChange={setSelectedStatus}
+            />
+          </div>
+        </div>
+
+        {/* Package Table */}
+        <div className="w-full h-[80%] overflow-scroll border-y-1 border-gray-400">
+          <DashboardStoreItemsTable
+            items={paginatedPackages}
+            type="package"
+            onEditClick={() => {}}
+            onDeleteClick={handleDeletePackage as (item: Product | Service | Package) => void}
+            onSort={handleSort}
+            onStatusClick={handleStatusClick as (item: Product | Service | Package) => void}
           />
-          <DashboardFilterByStatus
-            value={selectedStatus}
-            onChange={setSelectedStatus}
+        </div>
+
+        {/* Pagination */}
+        <div className="h-[10%] flex justify-center items-center">
+          <DashboardPagination
+            currentPage={currentPage}
+            totalItems={packages.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+          />
+        </div>
+
+        {/* Add Package Modal */}
+        <div className="h-screen w-screen">
+          <AddPackageModal
+            open={addPackageOpen}
+            onClose={() => {
+              setAddPackageOpen(false)
+              clearError()
+          }}
           />
         </div>
       </div>
-
-      {/* Product Table */}
-      <div className="w-full h-[80%] overflow-y-scroll bg-blue-600 p-2">
-        <DashboardStoreItemsTable items={filteredPackages} type="package"/>
-      </div>
-
-      {/* Pagination (placeholder) */}
-      <div className="h-[10%] bg-white flex justify-center items-center text-sm">
-        <DashboardPagination
-          currentPage={currentPage}
-          totalItems={filteredPackages.length}
-          itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
-        />
-      </div>
-      <div className="h-screen w-screen">
-        <AddPackageModal
-          open={addPackageOpen}
-          onClose={() => setAddPackageOpen(false)}
-        />
-      </div>
     </div>
+
   );
 };
 
-export default DashboardStorePackages;
+export default DashBoardStorePackages;
