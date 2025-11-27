@@ -24,13 +24,14 @@ const generateUniqueSlug = async (name) => {
 export const addStore = expressAsyncHandler(async (req, res) => {
     //const { _id, email, firstName } = req.user;
     // Create the store with the creator as the owner in the team
-    console.log(req.body.name);
     const slug = await generateUniqueSlug(req.body.name);
     const created = new Store({
         //team: [{ member: _id, role: "owner" }], // Assign the creator as the owner
         ...req.body,
         slug,
     });
+
+    console.log(created);
 
     await created.save();
 

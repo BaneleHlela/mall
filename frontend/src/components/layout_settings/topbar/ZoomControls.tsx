@@ -25,8 +25,8 @@ const ZoomControls: React.FC<ZoomControlsProps> = ({ zoom, setZoom }) => {
         <BsZoomOut className='text-gray-900 text-[110%]'/>
       </button>
       <motion.div
-                layoutId="underline"
-                className="absolute bottom-0 left-0 right-0 h-[.5px] bg-gray-900"
+        layoutId="underline"
+        className="hidden lg:absolute bottom-0 left-0 right-0 h-[.5px] bg-gray-900"
       />
     </div>
   );

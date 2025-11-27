@@ -27,6 +27,15 @@ import StoreFloatingButton from "../../components/store_layout/extras/buttons/St
 import { IoMdClose } from "react-icons/io";
 import ComingSoon from "../../components/the_mall/ComingSoon";
 import StoreCartModal from "../cart/StoreCartModal";
+import StoreMenubar from "../../components/store_layout/menubars/StoreMenubar";
+import HorizontalProductsSection from "../../components/store_layout/sections/products/horizontal_products/HorizontalProductsSection";
+import ShortAbout from "../../components/store_layout/sections/about/short_about/ShortAbout";
+import FirstFAQs from "../../components/store_layout/sections/FAQs/first_faqs/FirstFAQs";
+import StylishHero from "../../components/store_layout/sections/hero/styling_hero/StylishHero";
+import MaxThreeGallery from "../../components/store_layout/sections/gallery/max_three_gallery/MaxThreeGallery";
+import DoctorAbout from "../../components/store_layout/sections/about/doctor_about/DoctorAbout";
+import ArtMenubar from "../../components/store_layout/menubars/art_menubar/ArtMenubar";
+import EnnockHero from "../../components/store_layout/sections/hero/ennock_hero/EnnockHero";
 
 const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
   const location = useLocation();
@@ -40,6 +49,7 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
   const [store, setStore] = useState<StoreType | null>(null); // Local state for the store
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const routes  = settings.routes;
+  
   // Load fonts dynamically
   useEffect(() => {
     if (settings.fonts) {
@@ -69,7 +79,6 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
               window.location.href = result.website.websiteUrl;
               return;
             } else if ((result.website.source === 'internal' || result.website.source === 'custom') && result.website.layoutId && !location.pathname.includes("layouts")) {
-              console.log("Fetching layout from store page.")
               const layoutResult = await dispatch(getLayout(result.website.layoutId)).unwrap(); // Fetch layout and unwrap the result
               dispatch(setInitialLayout(layoutResult)); // Update the global layout state if available
             }
@@ -77,6 +86,7 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
             // Fallback to old logic if website object not set
             console.log("Fetching layout from store page (fallback).")
             const layoutResult = await dispatch(getLayout(result.layouts[0] as string)).unwrap(); // Fetch layout and unwrap the result
+            console.log(layoutResult);
             dispatch(setInitialLayout(layoutResult)); // Update the global layout state if available
           }
         } catch (error) {
@@ -148,28 +158,39 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
     <div 
       className={`w-screen h-screen flex flex-row justify-center`}
       style={{
-        backgroundColor: settings.background.color,
+        backgroundColor: settings.colors.primary,
       }}
     >
       <div 
         style={{
-          ...getBackgroundStyles(settings.background),
+          //...getBackgroundStyles(settings.background),
           // width: window.innerWidth >= 1024 ? settings.background?.width?.desktop : settings.background?.width?.mobile, // Apply width for large screens
         }}
         className={`relative w-screen h-full overflow-y-scroll hide-scrollbar overflow-x-clip`}>
             {!isCartRoute && (
               <>
                 {/* Store Menubar */}
-                <PopularStoreMenubar />
+                <StoreMenubar />
+                {/* <ArtMenubar /> */}
                 {/* Store Alert Div */}
                 {settings?.menubar?.alertDiv?.display && (
                   <StoreAlertDiv config={settings.menubar.alertDiv} objectPath={`menubar.alertDiv`} />
                 )}
               </>
             )}
+            <div className="w-full h-[40vh] bg-pink-400"></div>
+            <EnnockHero />
+            <StylishHero />
+            <DoctorAbout />
+            <ShortAbout />
+            <HorizontalProductsSection />
+            <MaxThreeGallery />
+            <FirstFAQs />
+            
+            
             
             {/* Routes */}
-            <Routes>
+            {/* <Routes>
               <Route key="*" path="*" element={<StoreHomePage />} />
               {Object.values(routes).map((route) => (
                 <Route
@@ -181,9 +202,9 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
               {store?.trades.includes("products") && <Route path="/product/:productSlug" element={<SingleStoreProductPage />} />}
               {store?.trades.includes("products") && <Route path="/cart" element={<div className="flex justify-center w-full"><StoreCartModal /></div>  } />}
               {store?.trades.includes("services") && <Route path="/service/:serviceSlug" element={<StoreBookServicePage />} />}
-            </Routes>
+            </Routes> */}
             {/* Floating Icons */}
-            {settings?.floats?.floatingIcons?.show && !isCartRoute && (
+            {/* {settings?.floats?.floatingIcons?.show && !isCartRoute && (
               <div className={`fixed z-5 
                 ${settings.floats.floatingIcons.position === "left-1/2" && "left-2 top-1/2"} 
                 ${settings.floats.floatingIcons.position === "left-1/4" && "left-2 top-1/4"} 
@@ -195,22 +216,22 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
                   asFloat={true}
                 />
               </div>
-            )}
+            )} */}
             {/* Floating Button */}
-            {settings?.floats?.floatingButton?.show !== "none" && !isCartRoute && (
+            {/* {settings?.floats?.floatingButton?.show !== "none" && !isCartRoute && (
               <div className={`fixed z-5
-                ${settings.floats.floatingButton.position === "left" ? "bottom-2 left-2" : "bottom-2 right-2"}`}
+                ${settings.floats.floatingButton?.position === "left" ? "bottom-2 left-2" : "bottom-2 right-2"}`}
               >
                 <StoreFloatingButton
                   config={settings.floats.floatingButton}
                   onClick={() => {
-                    if (settings.floats.floatingButton.show === "chat") {
+                    if (settings.floats.floatingButton?.show === "chat") {
                       setIsChatOpen(true);
                     }
                   }}
                 />
               </div>
-            )}
+            )} */}
             {/* Chat Modal */}
             {isChatOpen && (
               <div

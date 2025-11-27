@@ -299,6 +299,43 @@ export const getPositionStyle = (position: Number) => {
   }
 }
 
+export function getDynamicSizeMap() {
+  const screenWidth = window.innerWidth;
+
+  // Extremely small screens (phones)
+  if (screenWidth <= 496) {
+    return {
+      mobile:  { width: 320, height: 650, scale: 0.65 },
+      tablet:  { width: 600, height: 900, scale: 0.55 },
+      desktop: { width: 1280, height: 720, scale: 0.3 },
+    };
+  }
+
+  // Medium screens (small laptops/tablets)
+  if (screenWidth <= 1024) {
+    return {
+      mobile:  { width: 360, height: 740, scale: 0.65 },
+      tablet:  { width: 700, height: 1024, scale: 0.52 },
+      desktop: { width: 1440, height: 900, scale: 0.38 },
+    };
+  }
+  if (screenWidth > 1800) {
+    return {
+      mobile:  { width: 360, height: 740, scale: 1.1 },
+      tablet:  { width: 700, height: 1024, scale: 0.72 },
+      desktop: { width: 1440, height: 900, scale: 0.48 },
+    };
+  }
+
+
+  // Large screens (desktop)
+  return {
+    mobile:  { width: 412, height: 840, scale: 0.75 },
+    tablet:  { width: 775, height: 1024, scale: 0.62 },
+    desktop: { width: 1920, height: 1080, scale: 0.45 },
+  };
+}
+
 
 
 

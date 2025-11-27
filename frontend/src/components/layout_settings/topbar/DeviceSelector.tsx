@@ -29,7 +29,7 @@ const DeviceSelector: React.FC<DeviceSelectorProps> = ({ setDevice }) => {
                 setDevice(value);
                 setSelected(value);
               }}
-              className="relative w-[75px] px-2 py-2 h-full flex items-center justify-center cursor-pointer"
+              className="relative w-[75px] lg:p-2 h-full flex items-center justify-center cursor-pointer"
               initial={false}
               animate={{
                 backgroundColor: value === selected ? "" : "transparent", // tailwind gray-200

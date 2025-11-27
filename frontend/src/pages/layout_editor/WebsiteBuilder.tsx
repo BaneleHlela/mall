@@ -9,12 +9,8 @@ import { TbLoader3 } from "react-icons/tb";
 import { setStore } from '../../features/store_admin/storeAdminSlice.ts';
 import { editLayout, getLayout } from '../../features/layouts/layoutSlice.ts';
 import { setInitialLayout } from '../../features/layouts/layoutSettingsSlice.ts';
+import { getDynamicSizeMap } from '../../utils/helperFunctions.ts';
 
-const sizeMap = {
-  mobile: { width: 412, height: 840, scale: 0.75 },
-  tablet: { width: 775, height: 1024, scale: 0.62 },
-  desktop: { width: 1920, height: 1080, scale: 0.45 },
-};
 
 const deviceStyles = {
   mobile: {
@@ -48,10 +44,13 @@ const deviceStyles = {
 
 const WebsiteBuilderContent: React.FC = () => {
   const dispatch = useAppDispatch();
-  const [device, setDevice] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [sizeMap, setSizeMap] = useState(getDynamicSizeMap());
+  const [device, setDevice] = useState<'mobile' | 'tablet' | 'desktop'>('mobile');
   const [zoom, setZoom] = useState(sizeMap[device].scale);
   const [loading, setLoading] = useState<boolean>(true);
   const [storeId, setStoreId] = useState<string | null>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(true);
+  
 
   const store = useAppSelector((state) => state.stores.currentStore);
   const fonts = useAppSelector((state) => state.layoutSettings.fonts);
@@ -115,18 +114,15 @@ const WebsiteBuilderContent: React.FC = () => {
   if (loading) return <TbLoader3 size={45} className='animate-spin mx-auto' />;
   if (!store) return <div className="p-6 text-red-500">Store not found.</div>;
 
-  // Handle small window (mobile builder mode)
-  if (typeof window !== "undefined" && window.innerWidth < 720) {
-    return <div className="p-6 text-center">Mobile Website Builder</div>;
-  }
+  console.log(window.innerWidth)
 
   // Main builder layout
   return (
     <div className="h-screen w-screen overflow-hidden bg-stone-100 font-[Outfit]">
-      <TopBar setDevice={setDevice} zoom={zoom} setZoom={setZoom} />
+      <TopBar setDevice={setDevice} zoom={zoom} setZoom={setZoom} showDeviceSelector={!isSettingsOpen} onClick={() => setIsSettingsOpen(!isSettingsOpen)}/>
 
-      <div className="website-builder h-[93vh] flex flex-row">
-        <LayoutSettings />
+      <div className="w-full website-builder h-[93vh] flex flex-row">
+        <LayoutSettings isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
         <div className="overflow-auto relative w-full max-h-full flex flex-row items-center justify-center">
           <div
             className="relative bg-black"

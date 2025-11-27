@@ -42,7 +42,7 @@ const SettingsContainer: React.FC<SettingsContainerProps> = ({
   return (
     <div className="relative">
       <div
-        className="w-full h-[7vh] text-[1.8vh] rounded-sm border-[.3vh] border-white text-gray-900 shadow-xl hover:bg-gray-900 hover:border-[.3vh] hover:border-white hover:text-white hover:scale-101 cursor-move"        
+        className="w-full h-[7vh] text-[1.8vh] rounded-sm border-[.3vh] border-white bg-stone-50 text-gray-900 shadow-sm hover:bg-gray-900 hover:border-[.3vh] hover:border-white hover:text-white hover:scale-101 cursor-move"        
       >
         <div className="w-full h-full flex justify-between items-center pl-[1.8vh] pr-[1vh]">
           {renamable ? (

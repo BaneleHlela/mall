@@ -11,7 +11,7 @@ interface ColorPickerProps {
 const ColorPicker: React.FC<ColorPickerProps> = ({ label, value, onChange, onClear }) => {
   return (
     <div className="flex flex-row justify-between items-center h-[3vh] text-[2vh]">
-      <div className="w-[50%] flex flex-row justify-between">
+      <div className="max-w-[50%] flex flex-row justify-between ">
         {label && <label className="">{label}</label>}
         <p className="mr-1">:</p>
       </div>

@@ -128,10 +128,10 @@ const ProductModal: React.FC<ProductModalProps> = ({
       return;
     }
 
-    if (!form.category) {
-      setError('Please select a category.');
-      return;
-    }
+    // if (!form.category) {
+    //   setError('Please select a category.');
+    //   return;
+    // }
 
     if (variations.length === 0) {
       if (form.price <= 0) {

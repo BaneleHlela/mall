@@ -110,13 +110,6 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
         return;
       }
 
-      // Create a default layout for internal stores
-      const layoutId = await createNewLayout();
-      if (!layoutId) {
-        setSubmitError('Failed to create store layout. Please try again.');
-        return;
-      }
-
       const storeData = {
         ...form,
         isDemo,
@@ -128,7 +121,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
         },
         website: {
           source: 'internal',
-          layoutId: layoutId
+          layoutId: '',
         },
         categories: {
           products: [],

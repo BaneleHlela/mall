@@ -34,16 +34,21 @@ export interface Fonts {
   
 
 export interface Layout {
+    name: string;
+    _id?: string;
     routes: Routes;
     routeOrder: string[];
     screenshot: string;
-    practice: any;
-    imageUrl: string;
-    background: BackgroundSettings;
+    colors: {
+        primary: string;
+        secondary: string;
+        accent: string;
+        quad: string;
+        pent: string;
+    },
+    //background: BackgroundSettings;
     fonts: Fonts;
-    name: string;
-    _id?: string;
-    store?: Types.ObjectId | null | {
+    store?: Types.ObjectId | string |  null | {
         _id: string;
         name: string;
         slug: string;
@@ -57,21 +62,23 @@ export interface Layout {
         floatingButton: any;
     };
     menubar?: any;
-    gallery?: any;
-    products?: any;
-    services?: any;
-    hero?: any;
-    book?: any;
-    bookWithCalendar?: any;
-    team?: any;
-    about: any;
-    menu: any;
-    order: any;
-    reviews: any;
-    contact: any;
-    footer: any;
-    singleProduct: any;
-    bookService: any;
+    sections: {
+        gallery?: any;
+        products?: any;
+        services?: any;
+        hero?: any;
+        book?: any;
+        bookWithCalendar?: any;
+        team?: any;
+        about: any;
+        menu: any;
+        order: any;
+        reviews: any;
+        contact: any;
+        footer: any;
+        singleProduct: any;
+        bookService: any;
+    };
 }
   
 

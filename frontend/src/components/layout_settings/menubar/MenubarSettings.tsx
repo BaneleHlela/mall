@@ -9,6 +9,7 @@ import { updateSetting } from "../../../features/layouts/layoutSettingsSlice";
 import StoreAlertDivSettings from "../extras/alert_div/StoreAlertDivSettings";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import MenubarWithSearchbarSettings from "./with_searchbar/MenubarWithSearchbarSettings";
 
 const MenubarSettings = () => {
     const settings = useAppSelector((state) => state.layoutSettings)
@@ -52,8 +53,10 @@ const MenubarSettings = () => {
             </button>
             <PopularStoreMenubarSettings/>
           </div>
-         
       )
+    }
+    if (variation === "menubarWithSearchbar") {
+      return (<MenubarWithSearchbarSettings />)
     }
 
     if (variation === "popular" && alertDiv.display === true) {
@@ -96,13 +99,10 @@ const MenubarSettings = () => {
                 </SlidingPanel>
               )}
             </AnimatePresence>
-            
-
         </div>
-        
       )
-    }
-  
+  }
+
   
   return (
     <div>MenubarSettings</div>

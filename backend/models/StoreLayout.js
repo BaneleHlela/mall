@@ -13,54 +13,58 @@ const storeLayoutSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
-    routes: {},
-    floats: {},
-    routeOrder: [{
-        type: String,
-    }],
-    background: {},
-    fonts: {},
-    imageUrl: {
-        type: String,
-        default: "",
-    },
     store: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Store",
+    },
+    routes: {},
+    routeOrder: [{
+        type: String,
+    }],
+    colors: {
+        primary: {
+            type: String,
+            default: "#000000",
+        },
+        secondary: {
+            type: String,
+            default: "#FFFFFF",
+        },
+        accent: {
+            type: String,
+            default: "#FF0000",
+        },
+        quad: {
+            type: String,
+            default: "#000000",
+        },
+        pent: {
+            type: String,
+            default: "#FFFFFF",
+        }
+    },
+    fonts: {
+        primary: {
+            type: String,
+            default: "Arial",
+        },
+        secondary: {
+            type: String,
+            default: "Helvetica",
+        },
+        tertiary: {
+            type: String,
+            default: "Times New Roman",
+        }
     },
     isDemo: {
         type: Boolean,
         default: true,
     },
     menubar: {},
-    hero: {
-        type: Object,
-    },
-    order: {
-        type: Object,
-    },
-    book: {},
-    about: {
-
-    },
-    gallery: {},
-    products: {},
-    services: {},
-    reviews: {},
-    contact: {},
-    singleProduct: {},
-    bookWithCalender: {},
-    menu: {},
-    bookService: {},
-    footer: {
-        
-    },
-    colors: {
-        type: Array,
-        default: [],
-    },
+    sections: {},
 }, { 
-        timestamps: true 
+    timestamps: true 
 });
 
 const StoreLayout = mongoose.model("StoreLayout", storeLayoutSchema);

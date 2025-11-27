@@ -21,7 +21,7 @@ export interface User {
         address: string; 
     }>;
     wishlist: string[];
-    favoriteStore?: string[];
+    favoriteStores?: string[];
     refreshToken?: string;
     createdAt: string;
     updatedAt: string;
