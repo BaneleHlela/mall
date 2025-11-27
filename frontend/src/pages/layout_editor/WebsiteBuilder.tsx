@@ -182,20 +182,15 @@ const WebsiteBuilderContent: React.FC = () => {
               </>
             )}
 
-            <iframe
-              ref={iframeRef}
-              src={`/layouts/${layoutId}/preview/*`}
-              title="Responsive Preview"
-              className="relative"
-              style={{
-                width: '100%',
-                height: '100%',
-                backgroundColor: '#d0e6ff',
-                overflow: 'hidden',
-                border: 'none',
-                borderRadius: '8px',
-              }}
-            />
+            {layoutId && store && (
+              <iframe
+                ref={iframeRef}
+                src={`/layouts/${layoutId}/preview`}
+                title="Responsive Preview"
+                style={{ width: '100%', height: '100%', border: 'none' }}
+                onLoad={() => setLoading(false)}
+              />
+            )}
           </div>
         </div>
       </div>

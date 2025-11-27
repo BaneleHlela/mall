@@ -225,7 +225,7 @@ const HomePage = () => {
           </div>
         )}
         <div onClick={() => navigate("/layouts/692623c23eec25fc3b7e2c58")} className="w-ful h-[20vh] bg-white"></div>
-        
+        <div onClick={() => navigate("/layouts/692623c23eec25fc3b7e2c58/preview")} className="w-ful h-[20vh] bg-white"></div>
         {/* Feed  */}
         <div className="space-y-[.35vh]">
           {StoreHomePosters.map((post, index) => (
