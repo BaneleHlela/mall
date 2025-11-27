@@ -52,7 +52,7 @@ const Layouts: React.FC = () => {
           
           // 2️⃣ Fetch store if layout has a store
           if (layoutResult.store) {
-            setStoreSlug(layoutResult.store._id);
+            setStoreSlug(layoutResult.store.slug);
             const storeResult = await dispatch(fetchStoreBySlug(layoutResult.store.slug)).unwrap();
             dispatch(setCurrentStore(storeResult));
             dispatch(setStore(storeResult));

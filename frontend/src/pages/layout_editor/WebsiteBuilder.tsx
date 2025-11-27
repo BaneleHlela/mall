@@ -183,7 +183,6 @@ const WebsiteBuilderContent: React.FC = () => {
             )}
 
             <iframe
-              key={JSON.stringify(fonts)}
               ref={iframeRef}
               src={`/layouts/${layoutId}/preview/*`}
               title="Responsive Preview"
