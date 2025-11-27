@@ -89,6 +89,11 @@ export const defaultLayoutConfig = {
       },
     },
     description: "",
+    colors: {
+      primary: "#ffffff",
+      secondary: "#000000",
+      tertiary: "#f0f0f0",
+    },
     background: {
       color: "white",
       width: {
