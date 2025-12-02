@@ -1,39 +1,43 @@
-import { motion, type HTMLMotionProps } from "framer-motion";
-import { TbLoader3 } from "react-icons/tb";
-import React from "react";
+import React from 'react';
+import { TbLoader3 } from 'react-icons/tb';
 
-// Remove conflicting native drag events
-type RemoveNativeDragEvents<T> = Omit<
-  T,
-  "onDrag" | "onDragStart" | "onDragEnd"
->;
+interface LoadingButtonProps {
+  isLoading: boolean;
+  label?: string; // Optional string label
+  icon?: React.ReactNode; // Optional icon
+  onClick?: (e?: React.MouseEvent) => void;
+  className?: string;
+}
 
-type LoadingButtonProps = RemoveNativeDragEvents<
-  HTMLMotionProps<"button">
-> & {
-  isLoading?: boolean;
-  label?: string;
-};
-
-export const LoadingButton: React.FC<LoadingButtonProps> = ({
-  isLoading = false,
-  label = "Sign in",
-  disabled,
-  className = "",
-  ...props
+const LoadingButton: React.FC<LoadingButtonProps> = ({
+  isLoading,
+  label,
+  icon,
+  onClick,
+  className,
 }) => {
   return (
-    <motion.button
-      whileTap={{ scale: 0.97 }}
-      disabled={disabled || isLoading}
-      className={`flex items-center justify-center ${className}`}
-      {...props}
+    <button
+      onClick={onClick}
+      className={`flex items-center justify-center px-4 py-2 rounded ${className}`}
+      disabled={isLoading}
     >
       {isLoading ? (
         <TbLoader3 className="w-[3vh] h-[3vh] animate-spin mx-auto" />
       ) : (
-        label
+        <>
+          {icon ? (
+            <span className="flex items-center space-x-2">
+              {icon}
+              {label && <span>{label}</span>}
+            </span>
+          ) : (
+            label
+          )}
+        </>
       )}
-    </motion.button>
+    </button>
   );
 };
+
+export default LoadingButton;

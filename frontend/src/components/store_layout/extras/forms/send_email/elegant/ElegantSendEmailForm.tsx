@@ -18,6 +18,7 @@ interface SendEmailFormProps {
 
 const ElegantSendEmailForm: React.FC<SendEmailFormProps> = ({style}) => {
   const dispatch = useAppDispatch();
+  const colors = useAppSelector((state) => state.layoutSettings.colors)
   const emailState = useAppSelector((state) => state.email);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -110,7 +111,7 @@ const ElegantSendEmailForm: React.FC<SendEmailFormProps> = ({style}) => {
                 onChange={handleChange}
                 required
                 style={{
-                  borderBottom: `${style.background.senderInfo.border.width} ${style.background.senderInfo.border.style} ${style.background.senderInfo.border.color}`,
+                  borderBottom: `${style.background.senderInfo.border.width} ${style.background.senderInfo.border.style} ${colors[style.background.senderInfo.border.color as keyof typeof colors]}`,
                   borderRadius: style.background.senderInfo.border.radius,
                 }}
                 className="mt-[.3vh] block w-full p-[.65vh] focus:bg-[#ffffff30] focus:bg-opacity-30 focus:outline-none focus:ring-0 focus:border-none"
@@ -144,7 +145,7 @@ const ElegantSendEmailForm: React.FC<SendEmailFormProps> = ({style}) => {
                 onChange={handleChange}
                 required
                 style={{
-                  borderBottom: `${style.background.senderInfo.border.width} ${style.background.senderInfo.border.style} ${style.background.senderInfo.border.color}`,
+                  borderBottom: `${style.background.senderInfo.border.width} ${style.background.senderInfo.border.style} ${colors[style.background.senderInfo.border.color as keyof typeof colors]}`,
                   borderRadius: style.background.senderInfo.border.radius,
                 }}
                 className="mt-[.32vh] h-[15vh] block w-full p-[.65vh] focus:bg-[#ffffff11] focus:bg-opacity-30 focus:outline-none focus:ring-0 focus:border-none"
@@ -158,7 +159,7 @@ const ElegantSendEmailForm: React.FC<SendEmailFormProps> = ({style}) => {
                 onChange={handleChange}
                 required
                 style={{
-                  borderBottom: `${style.background.senderInfo.border.width} ${style.background.senderInfo.border.style} ${style.background.senderInfo.border.color}`,
+                  borderBottom: `${style.background.senderInfo.border.width} ${style.background.senderInfo.border.style} ${colors[style.background.senderInfo.border.color as keyof typeof colors]}`,
                   borderRadius: style.background.senderInfo.border.radius,
                 }}
                 className="mt-[.32vh] block w-full p-[.65vh] focus:bg-[#ffffff2a] focus:bg-opacity-30 focus:outline-none focus:ring-0 focus:border-none"

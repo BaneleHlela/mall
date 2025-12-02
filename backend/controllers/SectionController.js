@@ -28,6 +28,7 @@ export const uploadStoreSection = expressAsyncHandler(async (req, res) => {
     const newSection = await Section.create({
       name,
       variation,
+      layout,
       images: {
         mobile: mobileUrl,
         desktop: desktopUrl,

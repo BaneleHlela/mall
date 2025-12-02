@@ -82,7 +82,7 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({
         SettingsComponent={
             <div className="px-2">
                 <TextEditor
-                    objectPath={`${objectPath}.style.text`}
+                    objectPath={`${objectPath}.text`}
                     settings={settings}
                     handleSettingChange={handleSettingChange}
                     allow={["input", "fontFamily", "color", "fontSize", "weight", "animation", "lineHeight"]}
@@ -96,10 +96,10 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({
         name="Background"
         SettingsComponent={
           <BackgroundEditor
-            objectPath={`${objectPath}.style.background`}
+            objectPath={`${objectPath}.background`}
             settings={settings}
             handleSettingChange={handleSettingChange}
-            allow={["color", "width", "height", "shadow", "border", "padding", "shadow", ]}
+            allow={["color",  "shadow", "border", "padding", "shadow", ]}
             widthUnit='%'
             responsiveSize={responsiveBackground}
           />

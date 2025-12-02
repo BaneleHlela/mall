@@ -20,8 +20,8 @@ const LayoutCreator = () => {
   const [selectedLayout, setSelectedLayout] = useState<any>(null);
 
   useEffect(() => {
-    dispatch(fetchDemoLayouts());
-  }, [dispatch]);
+    dispatch(fetchDemoLayouts(store?.trades || []));
+  }, [dispatch, store?.trades]);
 
   const handleView = (storeId: string) => {
     navigate(`/stores/${storeId}`);
@@ -75,6 +75,8 @@ const LayoutCreator = () => {
                     screenshot: layout.screenshot
                   }}
                   onSelect={() => handleSelect(layout)}
+                  onSetActive={() => {}} // Add appropriate function here
+                  onRename={() => {}} // Add appropriate function here
                   edit={false}
                 />
               );

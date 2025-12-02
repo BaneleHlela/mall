@@ -41,18 +41,18 @@ const StoreLayoutButton: React.FC<StoreButtonProps> = ({
 
     return (
         <button
-            className=""
+            className="z-10"
             onClick={() => onclick}
             style={{
-                ...getTextStyles(text),
+                ...getTextStyles(style.text),
                 ...getBackgroundStyles(background),
             }}
         >
-            <p className={`${text.animation || ''} flex flex-col justify-center items-center h-full w-full hover:underline`}>
+            <p className={`${text.animation || ''} flex flex-col justify-center items-center h-full w-full hover:underline z-10`}>
                 {text.input || 'Click Me'}  {/* Fallback to 'Click Me' if text.input is undefined */}
             </p>
         </button>
     )
 }
 
-export default StoreLayoutButton
+export default StoreLayoutButton;

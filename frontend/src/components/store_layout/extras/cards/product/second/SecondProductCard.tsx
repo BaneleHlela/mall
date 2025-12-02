@@ -19,7 +19,7 @@ interface StoreProductCardProps {
   onClick?: () => void;
 }
 
-const PopularProductCard: React.FC<StoreProductCardProps> = ({
+const SecondProductCard: React.FC<StoreProductCardProps> = ({
   title,
   price,
   prices,
@@ -58,13 +58,12 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
         ...getBackgroundStyles(style.background),
         backgroundColor: "transparent",
       }}
-      className={`flex group h-[60vh]  flex-col hover:scale-101 bg-amber-600`}
+      className={`flex group flex-col hover:scale-101`}
     >
       {/* Image */}
       <div 
         style={{
           ...getBackgroundStyles(style.image.background),
-          borderColor: colors.secondary,
         }}
         className='w-full lg:h-[85%] aspect-square overflow-hidden relative'
       >
@@ -73,15 +72,13 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
           alt="Product Image" 
           className='w-full  aspect-square object-cover transition-transform duration-500 ease-in-out hover:scale-110'
         />
-        {/* {marking && (
+        {marking && (
           <button
-            style={{
-            }} 
-            className="absolute top-[.5vh] left-[.5vh] bg-black text-white"
+            className="absolute top-[5%] left-[5%] bg-black rounded px-1 text-white"
           >
             {marking || "New"}
           </button>
-        )} */}
+        )}
       </div>
 
       {/* Text and button */}
@@ -95,7 +92,6 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
         {/* Name */}
         <p 
           style={{
-            color: colors.secondary,
             ...getTextStyles(style.details.name),
           }} 
           className={`text-start`}
@@ -106,7 +102,6 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
         {/* Price */}
         <p 
           style={{
-            color: colors.secondary,
             ...getTextStyles(style.details.price)
           }} 
           className={`text-start`}
@@ -143,7 +138,7 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
   )
 }
 
-export default PopularProductCard;
+export default SecondProductCard;
 
 
 // Helper Functions (unchanged)

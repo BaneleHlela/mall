@@ -35,6 +35,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
     isActive: false,
     tags: '',
     price: 0,
+    marking: '',
   });
 
   const [variations, setVariations] = useState<string[]>([]);
@@ -54,6 +55,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
         isActive: product.isActive || false,
         tags: (product.tags || []).join(', '),
         price: product.price || 0,
+        marking: product.marking || '',
       });
       setVariations(product.variations || []);
       setPriceByVariation(
@@ -167,6 +169,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
     formData.append('stockQuantity', String(form.stockQuantity));
     formData.append('category', form.category);
     formData.append('isActive', String(form.isActive));
+    formData.append('marking', form.marking);
     formData.append('store', store._id);
     formData.append('imageUrls', JSON.stringify(imageUrls));
   
@@ -258,6 +261,16 @@ const ProductModal: React.FC<ProductModalProps> = ({
               onChange={handleChange}
               className="w-full px-3 py-2 rounded border mt-1"
               required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium">Marking</label>
+            <input
+              name="marking"
+              value={form.marking}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded border mt-1"
             />
           </div>
 

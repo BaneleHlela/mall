@@ -13,9 +13,8 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 const HorizontalProductsSection = () => {
-  const settingsTest = mockLayout.sections.products;
+  const config = useAppSelector((state) => state.layoutSettings.sections.products);
   const colors = useAppSelector((state) => state.layoutSettings.colors);
-  const fonts = useAppSelector((state) => state.layoutSettings.fonts);
   const products = useAppSelector((state) => state.products.products);
   const store = useAppSelector((state) => state.stores.currentStore);
   const navigate = useNavigate();
@@ -32,24 +31,21 @@ const HorizontalProductsSection = () => {
 
   return (
     <div
+      id="products"
       style={{
-        '--swiper-pagination-color': colors.secondary,
-        '--swiper-pagination-bullet-inactive-color': colors.secondary + "55",
-        '--swiper-navigation-color': colors.secondary,
-        backgroundColor: colors.primary,
-        ...getBackgroundStyles(settingsTest.background),
-        borderColor: colors.secondary,
+        '--swiper-pagination-color': colors[config.text.header.color as keyof typeof colors],
+        '--swiper-pagination-bullet-inactive-color': colors[config.text.header.color as keyof typeof colors] + "55",
+        '--swiper-navigation-color': colors[config.text.header.color as keyof typeof colors],
+        ...getBackgroundStyles(config.background),
       }}
       className="w-full pl-2 h-fit border-y-2"
     >
       <p
         style={{
-          color: colors.secondary,
-          fontFamily: fonts.primary,
-          ...getTextStyles(settingsTest.text.header),
+          ...getTextStyles(config.text.header),
         }}
       >
-        {settingsTest.text.header.input}
+        {config.text.header.input}
       </p>
       <div className="h-[80%] hidden lg:flex space-x-[2vh] ml-2">
           {products.map((product) => (
@@ -60,7 +56,7 @@ const HorizontalProductsSection = () => {
                 price={product.price}
                 prices={product.prices}
                 marking={product.marking}
-                style={settingsTest.card}
+                style={config.card}
                 onClick={() => handleProductClick(product.slug)}
               />
           ))}
@@ -83,7 +79,7 @@ const HorizontalProductsSection = () => {
                 price={product.price}
                 prices={product.prices}
                 marking={product.marking}
-                style={settingsTest.card}
+                style={config.card}
                 onClick={() => handleProductClick(product.slug)}
               />
             </SwiperSlide>

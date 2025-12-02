@@ -10,10 +10,12 @@ import StoreAlertDivSettings from "../extras/alert_div/StoreAlertDivSettings";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import MenubarWithSearchbarSettings from "./with_searchbar/MenubarWithSearchbarSettings";
+import { mockLayout } from "../../../major_updates/mockLayout";
+import { defaultStoreAlertDivConfig } from "../../../utils/defaults/extras/defaultStoreAlertDivConfig";
 
 const MenubarSettings = () => {
     const settings = useAppSelector((state) => state.layoutSettings)
-    const { variation, alertDiv } = useAppSelector((state) => state.layoutSettings.menubar );
+    const { variation, alertDiv } = useAppSelector((state) => state.layoutSettings.menubar || {} );
     const [activePanel, setActivePanel] = useState<string | null>(null);
     const closePanel = () => setActivePanel(null);
     const dispatch = useAppDispatch();
@@ -25,7 +27,7 @@ const MenubarSettings = () => {
   const MySwal = withReactContent(Swal);
 
     const handleAddAlertDivClick = () => {
-      handleSettingChange('menubar.alertDiv.display', true)
+      handleSettingChange('menubar.alertDiv', defaultStoreAlertDivConfig);
     }
     const handleDeleteAlertDivClick = async () => {
       const result = await MySwal.fire({
@@ -42,7 +44,7 @@ const MenubarSettings = () => {
       }
     }
 
-    if (variation === "popular" && alertDiv.display !== true) {
+    if (!alertDiv || alertDiv.display != true) {
       return (
           <div className="space-y-[.3vh] flex flex-col w-full items-center">
             <button
@@ -51,21 +53,24 @@ const MenubarSettings = () => {
             >
               Add Alert Div <FaPlus className="ml-[.6vh]" />
             </button>
-            <PopularStoreMenubarSettings/>
+            {variation === "popular" && (
+              <PopularStoreMenubarSettings/>
+            )}
+            {variation === "menubarWithSearchbar" && (
+              <MenubarWithSearchbarSettings />
+            )}
           </div>
       )
     }
-    if (variation === "menubarWithSearchbar") {
-      return (<MenubarWithSearchbarSettings />)
-    }
 
-    if (variation === "popular" && alertDiv.display === true) {
+    
+    if (alertDiv && alertDiv.display == true) {
       
       return (
         <div className="space-y-[.3vh]">
             <FirstOrderSubSettingsContainer
                 name="Menubar"
-                onClick={() => setActivePanel("menubar")}
+                onClick={() => setActivePanel("menubar_settings")}
             />
             <FirstOrderSubSettingsContainer
                 name="Alert Div"
@@ -74,14 +79,19 @@ const MenubarSettings = () => {
                 onDeleteClick={handleDeleteAlertDivClick}
             />
             <AnimatePresence>
-              {activePanel === "menubar" && (
+              {activePanel === "menubar_settings" && (
                 <SlidingPanel
                     key="menubar"
                     isOpen={true}
                     onClose={closePanel}
                     title="Menubar Settings"
                 > 
-                  <PopularStoreMenubarSettings/>
+                  {variation === "popular" && (
+                    <PopularStoreMenubarSettings/>
+                  )}
+                  {variation === "menubarWithSearchbar" && (
+                    <MenubarWithSearchbarSettings />
+                  )}
                 </SlidingPanel>
               )}
               {activePanel === "alert_div" && (

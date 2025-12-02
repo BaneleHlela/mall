@@ -114,7 +114,8 @@ export const updateProduct = asyncHandler(async (req, res) => {
     isActive,
     tags,
     store,
-    imageUrls: retainedImages = [], 
+    marking,
+    imageUrls: retainedImages = [],
   } = req.body;
 
   console.log(retainedImages);
@@ -189,6 +190,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
     category: category || product.category,
     isActive: isActive ?? product.isActive,
     tags: tags || product.tags,
+    marking: marking || product.marking,
     images: updatedImages,
   };
 

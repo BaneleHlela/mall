@@ -4,7 +4,7 @@ import { editStore } from '../../../../features/store_admin/storeAdminSlice';
 import type { Store } from '../../../../types/storeTypes';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-import { LoadingButton } from '../../../../components/the_mall/buttons/LoadingButton';
+import LoadingButton  from '../../../../components/the_mall/buttons/LoadingButton';
 
 const mysweetalert = withReactContent(Swal);
 

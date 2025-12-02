@@ -101,4 +101,4 @@ const ContactWithBackgroundImageTextAndSocials = () => {
   )
 }
 
-export default ContactWithBackgroundImageTextAndSocials
+export default ContactWithBackgroundImageTextAndSocials;

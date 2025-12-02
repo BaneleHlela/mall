@@ -26,70 +26,60 @@ export const defaultAlertIconConfig = {
 
 export const defaultStoreAlertDivConfig = {
     display: true,
-    animation: "loop",
     position: "fixed",
-    loopDirection: "left",
+    loopDirection: "right",
     background: {
-      color: "red",
-      height: {
-        mobile: "10vh",
-        desktop: "10vh",
-      },
+        color: "secondary",
+        height: {
+            mobile: "10vh",
+            desktop: "10vh",
+        },
     },
     items: {
-        buttonA: defaultStoreButtonConfig,
-        buttonB: defaultStoreButtonConfig,
-        iconA: { 
+        text: {
+            input: "Free shipping for first time buyers!",
+            fontSize: { mobile: "2.5vh", desktop: "3vh" },
+            color: "primary",
+        },
+        icon: {
+            show: true,
             name: "FaTruck",
-            color: "white",
-            height: "5.4vh",
-        },
-        iconB: {
-            name: "BsTruckFlatbed",
-            color: "white",
-            height: "5.4vh",
-        },
-        textA: {
-            input: "We Deliver",
-            fontSize: {
-            mobile: "20px",
-            desktop: "25px",
+            color: "primary",
+            height: {
+                mobile: "5vh",
+                desktop: "5vh",
             },
-            fontWeight: "bold",
-            color: "white",
-            position: "center",
-            underline: {
+        },
+        button: {
+            button: {
+                function: 'book',
                 show: true,
-                color: "white",
-                width: "50%",
-                style: "solid",
-                thickness: "2px",
-                marginTop: "10px",
+                text: {
+                    input: "Book Now",
+                },
+                background: {
+                    width: {
+                        desktop: "17vh",
+                        mobile: "20vh"
+                    },
+                    padding: {
+                        x: {
+                            mobile: "3vh",
+                            desktop: "3vh"
+                        },
+                        y: {
+                            mobile: "1.5vh",
+                            desktop: "2vh"
+                        },
+                    },
+                    border: {
+                        width: "0px",
+                        style: "solid",
+                        radius: "30px",
+                    }
+                }
             },
-        },
-        textB: {
-            input: "Fast & Reliable",
-            fontSize: {
-            mobile: "18px",
-            desktop: "22px",
-            },
-            fontWeight: "normal",
-            color: "white",
-            underline: {
-                show: true,
-                color: "white",
-                width: "50%",
-                style: "solid",
-                thickness: "2px",
-                marginTop: "10px",
-            },
-        },
-        // This defines the order of components displayed
-        order: [ "iconB", "textB", "buttonB", "iconA", "textA", "buttonA" ],
-        gap: {
-            item: "100px",
-            allItems: "20px",
-        },
-    },
+        }
+    }
 };
   

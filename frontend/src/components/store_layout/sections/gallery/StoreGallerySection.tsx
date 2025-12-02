@@ -3,9 +3,16 @@ import FirstStoreGallerySection from "./first/FirstStoreGallerySection"
 import GalleryWithGroupedImages from "./gallery_with_grouped_images/GalleryWithGroupedImages";
 import GalleryWithHorizontalImages from "./gallery_with_horizontal_images/GalleryWithHorizontalImages";
 import GalleryWithImageSlider from "./gallery_with_image_slider/GalleryWithImageSlider";
+import MaxThreeGallery from "./max_three_gallery/MaxThreeGallery";
 
 const StoreGallerySection = () => {
-  const variation = useAppSelector((state) => state.layoutSettings.gallery.variation);
+  const variation = useAppSelector((state) => state.layoutSettings.sections.gallery.variation);
+  
+  if (variation === "maxThreeGallery") {
+    return (
+      <MaxThreeGallery/>
+    )
+  }
   
   if ( variation === "galleryWithImageSlider") {
     return (

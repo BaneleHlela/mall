@@ -4,7 +4,7 @@ import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice'
 
 const ContactSectionSettings = () => {
     const dispatch = useAppDispatch();
-    const variation = useAppSelector((state) => state.layoutSettings.contact.variation);
+    const variation = useAppSelector((state) => state.layoutSettings.sections.contact.variation);
     const settings = useAppSelector((state) => state.layoutSettings);
     const handleSettingChange = (field: string, value: any) => {
         dispatch(updateSetting({ field, value }));

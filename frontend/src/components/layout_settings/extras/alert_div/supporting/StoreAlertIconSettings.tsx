@@ -4,6 +4,7 @@ import TextEditor from '../../../text/TextEditor'
 import { getSetting } from '../../../../../utils/helperFunctions'
 import SettingsSlider from '../../../supporting/SettingsSlider'
 import InputHandler from '../../../supporting/InputHandler'
+import OptionsToggler from '../../../supporting/OptionsToggler'
 
 const StoreAlertIconSettings: React.FC<SupportingSettingsProps> = ({
     settings,
@@ -15,6 +16,13 @@ const StoreAlertIconSettings: React.FC<SupportingSettingsProps> = ({
     <div
         className='space-y-[.3vh]'
     >
+        {/* Show */}
+        <OptionsToggler
+            label="Show Icon"
+            options={["No", "Yes"]}
+            value={getSetting("show", settings, objectPath)}
+            onChange={(value) => handleSettingChange(`${objectPath}.show`, value === "Yes")}
+        />
         <InputHandler
             label="Icon Name"
             value={getSetting("name", settings, objectPath)}
@@ -24,21 +32,8 @@ const StoreAlertIconSettings: React.FC<SupportingSettingsProps> = ({
             objectPath={`${objectPath}`}
             settings={settings}
             handleSettingChange={handleSettingChange}
-            allow={["color"]}
+            allow={["color", "fontSize"]}
         />
-        <div className="px-[.65vh]">
-            <SettingsSlider
-                label="Font Size"
-                value={parseFloat(getSetting("size", settings, objectPath))}
-                step={0.1}
-                min={0.5}
-                max={15}
-                onChange={
-                    (value) => handleSettingChange(`${objectPath}.size`, `${value}vh`)
-                }
-            />
-        </div>
-        
     </div>  
   )
 }

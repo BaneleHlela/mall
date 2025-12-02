@@ -1,143 +1,120 @@
 import React from 'react'
 import { mockLayout } from '../../../../../major_updates/mockLayout';
-import { getTextStyles, getBackgroundStyles } from '../../../../../utils/stylingFunctions';
+import { getTextStyles, getBackgroundStyles, getBorderStyles } from '../../../../../utils/stylingFunctions';
 import { useStoreButtonClickHandler } from '../../../extras/buttons/useStoreButtonClickHandler';
 import StoreLayoutButton from '../../../shared_layout_components/StoreLayoutButton';
 import { useAppSelector } from '../../../../../app/hooks';
+import { motion } from 'framer-motion';
 
 
 const StylishHero = () => {
-    const { colors, fonts } = useAppSelector(state => state.layoutSettings);
+    const colors = useAppSelector((state) => state.layoutSettings.colors)
+    const config = useAppSelector((state) => state.layoutSettings.sections.hero);
     const handleButtonClick = useStoreButtonClickHandler();
 
     return (
         <div className='w-full h-fit bg-white'>
             {/* Mobile */}
-            <div className="relative flex flex-col justify-between w-full h-[80vh] p-[2vh] lg:hidden">
+            <div
+                style={{
+                    ...getBackgroundStyles(config.background || {})
+                }} 
+                className="relative flex flex-col justify-between w-full p-[2vh] lg:hidden z-[1]">
                 {/* Text */}
                 <p 
-                    style={{...getTextStyles(mockLayout.sections.hero.header), fontFamily: fonts.secondary}} 
+                    style={{...getTextStyles(config.header), color: colors[config.box.background.color as keyof typeof colors]}} 
                     className=""
                 >
-                        {mockLayout.sections.hero.header.input}
+                        {config.header.input}
                 </p>
                 {/* Box */}
-                <div 
-                    style={{
-                        ...getBackgroundStyles(mockLayout.sections.hero.box.background),
-                        backgroundColor: colors.primary,
-                        height: "35%",
-                    }} 
-                    className="flex flex-col justify-evenly items-center opacity-80 px-[2vh]"
-                >
-                    <p 
+                <div className="flex items-center justify-center w-full h-[50%] opacity-90">
+                    <div 
                         style={{
-                            color: colors.secondary,
-                            fontFamily: fonts.primary,
+                            ...getBackgroundStyles(config.box.background),
                         }} 
-                        className="text-center"
-                    >{mockLayout.sections.hero.box.text.input}</p>
-                    <StoreLayoutButton 
-                        onClick={() => //@ts-ignore
-                            handleButtonClick({ 
-                                type: 'buy',
-                                routes: mockLayout.routes,  //@ts-ignore
-                                contactNumber: store?.contact.phone, 
-                            })
-                        }
-                        style={{
-                            text: {
-                                color: colors.primary,
-                                input: mockLayout.sections.hero.box.button.text.input
-                            },
-                            background: {
-                                color: colors.secondary,
-                                padding: {
-                                    x: {
-                                        mobile: "10px"
-                                    },
-                                    y: {
-                                        mobile: "15px", 
-                                    }
-                                },
-                                width: {
-                                    desktop: "17vh",
-                                    mobile: "50%",
-                                },
-                                border: {
-                                    width: '1px',
-                                    style: 'solid',
-                                    color: colors.secondary,
-                                    radius: '30px',
-                                },
-                            },
-                        }}
-                    />
+                        className="flex flex-col justify-evenly items-center opacity-90 px-[2vh]"
+                    >
+                        <p 
+                            style={{
+                                ...getTextStyles(config.box.text),
+                            }} 
+                            className="text-center"
+                        >{config.box.text.input}</p>
+                        <StoreLayoutButton 
+                            onClick={() => //@ts-ignore
+                                handleButtonClick({ 
+                                    type: config.box.button.type, 
+                                    routes: mockLayout.routes,  //@ts-ignore
+                                    contactNumber: store?.contact.phone,
+                                })
+                            }
+                            style={config.box.button}
+                        />
+                    </div>
                 </div>
-                {/* Background image */}
-                <div className="absolute inset-0 w-full h-full">
-                    <img src="" alt="Hero Image" className="w-full h-full object-cover" />
+                {/* Background Image (Mobile) */}
+                <div className="absolute inset-0 w-full h-full z-[-1]">
+                    <img 
+                        src={config.backgroundImage?.[0]} 
+                        alt="Hero Image" 
+                        className="w-full h-full object-cover" 
+                    />
                 </div>
             </div>
             {/* Desktop */}
-            <div className="hidden relative lg:flex items-center justify-end w-full h-[80vh] px-[10%]">
-                {/* Box */}
-                <div 
-                    style={{
-                        ...getBackgroundStyles(mockLayout.sections.hero.box.background),
-                        backgroundColor: colors.primary,
-                    }}
-                    className="flex flex-col items-center justify-evenly w-[35%] h-[70%] opacity-80 px-[5%]"
-                >
-                    <p style={{...getTextStyles(mockLayout.sections.hero.header), fontFamily: fonts.secondary, color: colors.secondary}} className="text-center">{mockLayout.sections.hero.header.input}</p>
-                    <p 
+            <div 
+                style={{
+                    ...getBackgroundStyles(config.background || {})
+                }} 
+                className="hidden relative lg:flex items-center justify-end w-full h-[80vh] z-[1]">
+                <div className="flex items-center justify-center w-[50%] h-full">
+                    {/* Box */}
+                    <motion.div
+                        initial={{ y: -200, rotateZ: -90, opacity: 0, scale: 0.5 }}
+                        animate={{ y: 0, rotateZ: 0, opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.6, ease: "easeOut" }} 
                         style={{
-                            color: colors.secondary,
-                            fontFamily: fonts.primary,
-                            fontSize: "2.5vh"
-                        }} 
-                        className="text-center"
-                    >{mockLayout.sections.hero.box.text.input}</p>
-                    <StoreLayoutButton 
-                        onClick={() => //@ts-ignore
-                            handleButtonClick({ 
-                                type: 'buy', 
-                                routes: mockLayout.routes,  //@ts-ignore
-                                contactNumber: store?.contact.phone,
-                            })
-                        }
-                        style={{
-                            text: {
-                                color: colors.primary,
-                                input: mockLayout.sections.hero.box.button.text.input
-                            },
-                            background: {
-                                color: colors.secondary,
-                                padding: {
-                                    x: {
-                                        desktop: "10px",
-                                    },
-                                    y: {
-                                        desktop: "15px", 
-                                    }
-                                },
-                                width: {
-                                    desktop: "17vh",
-                                    mobile: "50%",
-                                },
-                                border: {
-                                    width: '1px',
-                                    style: 'solid',
-                                    color: colors.secondary,
-                                    radius: '30px',
-                                },
-                            },
+                            ...getBackgroundStyles(config.box.background),
+                            backgroundColor: "transparent"
                         }}
-                    />
+                        className="relative flex flex-col items-center justify-evenly w-[35%] h-[70%] px-[5%] z-[1]"
+                    >
+                        <div 
+                            style={{
+                                ...getBackgroundStyles(config.box.background), 
+                                width: "100%",
+                                height: "100%",                               
+                            }} 
+                            className="absolute inset-0 w-full h-full opacity-80"
+                        >
+                        </div>
+                        <p style={{...getTextStyles(config.header),}} className="text-center z-1 texxt-shadow-2xs">{config.header.input}</p>
+                        <p 
+                            style={{
+                                ...getTextStyles(config.box.text),
+                            }} 
+                            className="text-center z-1"
+                        >{config.box.text.input}</p>
+                        <StoreLayoutButton 
+                            onClick={() => //@ts-ignore
+                                handleButtonClick({ 
+                                    type: config.box.button.type, 
+                                    routes: mockLayout.routes,  //@ts-ignore
+                                    contactNumber: store?.contact.phone,
+                                })
+                            }
+                            style={config.box.button}
+                        />
+                        
+                    </motion.div>
                 </div>
-                {/* Background image */}
-                <div className="absolute inset-0 w-full h-full">
-                    <img src="" alt="Hero Image" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 w-full h-full z-[-1]">
+                    <img 
+                        src={window.innerWidth < 768 ? config.backgroundImage[0] : config.backgroundImage[1]} 
+                        alt="Hero Image" 
+                        className="w-full h-full object-cover" 
+                    />
                 </div>
             </div>
         </div>

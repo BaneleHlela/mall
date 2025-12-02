@@ -8,6 +8,8 @@ import HeroWithButtonImageAndTextSettings from "./with_button_image_and_text/Her
 import HeroWithReviewCardAndEmailFormSettings from "./with_review_card_and_email_form/HeroWithReviewCardAndEmailFormSettings";
 import HeroWithBoxSettings from "./hero_with_box/HeroWithBoxSettings";
 import HeroWithDivAndImageSettings from "./hero_with_div_and_image/HeroWithDivAndImageSettings";
+import StylishHero from "../../../store_layout/sections/hero/styling_hero/StylishHero";
+import StylishHeroSettings from "./stylish_hero/StylishHeroSettings";
 
 export const handleAddSectionToLinks = (
   dispatch: any,
@@ -36,63 +38,83 @@ export const handleAddSectionToLinks = (
 
 const HeroSettings = () => {
   const dispatch = useAppDispatch();
-  const variation = useAppSelector((state) => state.layoutSettings.hero.variation);
+  const variation = useAppSelector((state) => state.layoutSettings.sections.hero.variation);
   const settings = useAppSelector((state) => state.layoutSettings);
+
   const handleSettingChange = (field: string, value: any) => {
-      dispatch(updateSetting({ field, value }));
+    dispatch(updateSetting({ field, value }));
   };
+  console.log(variation);
+  switch (variation) {
+    case "first":
+      return <FirstHeroSettings />;
 
-  if (variation === "first") {
-    return <FirstHeroSettings />
-  }
+    case "heroWithImagePatternAndBox":
+      return (
+        <div className="space-y-1">
+          <HeroWithImagePatternAndBoxSettings
+            settings={settings}
+            handleSettingChange={handleSettingChange}
+          />
+        </div>
+      );
 
-  if (variation === "heroWithImagePatternAndBox") {
-    return (
-      <div className="space-y-1">
-        <HeroWithImagePatternAndBoxSettings settings={settings} handleSettingChange={handleSettingChange}/>
-      </div>
-    )
-  }
+    case "heroWithSlidingImages":
+      return <HeroWithSlidingImages />;
 
-  if (variation === "heroWithSlidingImages") {
-    return <HeroWithSlidingImages />
-  }
+    case "heroWithButtonBetweenImages":
+      return (
+        <HeroWithButtonBetweenImagesSettings
+          settings={settings}
+          handleSettingChange={handleSettingChange}
+        />
+      );
 
-  if (variation === "heroWithButtonBetweenImages") {
-    return <HeroWithButtonBetweenImagesSettings settings={settings} handleSettingChange={handleSettingChange}/>
-  }
-  
-  if (variation === "heroWithButtonImageAndText") {
-    return (
-      <>
-        <HeroWithButtonImageAndTextSettings settings={settings} handleSettingChange={handleSettingChange}/>
-      </>
-    )
-  }
+    case "heroWithButtonImageAndText":
+      return (
+        <HeroWithButtonImageAndTextSettings
+          settings={settings}
+          handleSettingChange={handleSettingChange}
+        />
+      );
 
-  if (variation === "heroWithBox") {
-    return (
-      <>
-        <HeroWithBoxSettings settings={settings} handleSettingChange={handleSettingChange}  />
-      </>
-    )
-  }
+    case "heroWithBox":
+      return (
+        <HeroWithBoxSettings
+          settings={settings}
+          handleSettingChange={handleSettingChange}
+        />
+      );
 
-  if (variation === "heroWithReviewCardAndEmailForm") {
-    return (
-      <div className="space-y-1">
-        <HeroWithReviewCardAndEmailFormSettings settings={settings} handleSettingChange={handleSettingChange} />
-      </div>
-    )
-  }
+    case "heroWithReviewCardAndEmailForm":
+      return (
+        <div className="space-y-1">
+          <HeroWithReviewCardAndEmailFormSettings
+            settings={settings}
+            handleSettingChange={handleSettingChange}
+          />
+        </div>
+      );
 
-  if (variation === "heroWithDivAndImage") {
-    return <HeroWithDivAndImageSettings settings={settings} handleSettingChange={handleSettingChange} />
+    case "heroWithDivAndImage":
+      return (
+        <HeroWithDivAndImageSettings
+          settings={settings}
+          handleSettingChange={handleSettingChange}
+        />
+    );
+      
+    case "stylishHero": 
+      return (
+        <StylishHeroSettings
+          settings={settings}
+          handleSettingChange={handleSettingChange}
+        />
+      );
+      
+    default:
+      return <>No Settings for this hero</>;
   }
-
-  return (
-    <FirstHeroSettings />
-  )
-}
+};
 
 export default HeroSettings;

@@ -1,50 +1,124 @@
+import { useAppSelector } from "../app/hooks";
 import type { BackgroundSettings, ResponsiveValue, TextSettings } from "../types/layoutSettingsType";
 
-export const getTextStyles = (text: TextSettings) => {
+export const getTextStyles = (text: TextSettings, fonts?: any, colors?: any) => {
+  const resolvedFonts = fonts || useAppSelector((state) => state.layoutSettings.fonts);
+  const resolvedColors = colors || useAppSelector((state) => state.layoutSettings.colors);
+
   if (!text) return {};
 
   const styles: any = {};
 
+  // 🎨 COLOR (SWITCH CASE)
+  if (text.color) {
+    let mappedColor = text.color;
 
-  if (text.color) styles.color = text.color;
+    switch (text.color) {
+      case "primary":
+        mappedColor = resolvedColors?.primary ?? text.color;
+        break;
+      case "secondary":
+        mappedColor = resolvedColors?.secondary ?? text.color;
+        break;
+      case "accent":
+        mappedColor = resolvedColors?.accent ?? text.color;
+        break;
+      case "quad":
+        mappedColor = resolvedColors?.quad ?? text.color;
+        break;
+      case "pent":
+        mappedColor = resolvedColors?.pent ?? text.color;
+        break;
+      default:
+        mappedColor = text.color;
+    }
+
+    styles.color = mappedColor;
+  }
+
   if (text.weight) styles.fontWeight = text.weight;
 
-  // Box shadow
   if (text.textShadow === true) {
     styles.textShadow = "2px 2px 5px rgba(0,0,0,0.4)";
   }
 
+  // Font size
   if (typeof text.fontSize === "object") {
-    // Use getResponsiveDimension for responsive font sizes
     styles.fontSize = getResponsiveDimension(text.fontSize);
   } else if (text.fontSize) {
     styles.fontSize = text.fontSize;
   }
-  if (text.backgroundColor) styles.backgroundColor = text.backgroundColor;
-  if (text.fontFamily) styles.fontFamily = text.fontFamily;
+
+  // 🎯 FONT FAMILY (SWITCH CASE)
+  if (text.fontFamily) {
+    let mappedFont = "";
+
+    switch (text.fontFamily) {
+      case "primary":
+        mappedFont = resolvedFonts?.primary ?? "";
+        break;
+      case "secondary":
+        mappedFont = resolvedFonts?.secondary ?? "";
+        break;
+      case "tertiary":
+        mappedFont = resolvedFonts?.tertiary ?? "";
+        break;
+      default:
+        mappedFont = text.fontFamily;
+    }
+
+    if (mappedFont) styles.fontFamily = mappedFont;
+  }
+
+  // background
+  if (text.backgroundColor) {
+    let mappedBg = text.backgroundColor;
+
+    switch (text.backgroundColor) {
+      case "primary":
+        mappedBg = resolvedColors?.primary ?? text.backgroundColor;
+        break;
+      case "secondary":
+        mappedBg = resolvedColors?.secondary ?? text.backgroundColor;
+        break;
+      case "accent":
+        mappedBg = resolvedColors?.accent ?? text.backgroundColor;
+        break;
+      case "quad":
+        mappedBg = resolvedColors?.quad ?? text.backgroundColor;
+        break;
+      case "pent":
+        mappedBg = resolvedColors?.pent ?? text.backgroundColor;
+        break;
+      default:
+        mappedBg = text.backgroundColor;
+    }
+
+    styles.backgroundColor = mappedBg;
+  }
+
   if (text.fontStyle) styles.fontStyle = text.fontStyle;
   if (text.lineHeight) styles.lineHeight = text.lineHeight;
   if (text.letterSpacing) styles.letterSpacing = text.letterSpacing;
   if (text.textDecoration) styles.textDecoration = text.textDecoration;
   if (text.textTransform) styles.textTransform = text.textTransform;
-  if (text.textShadow) styles.textShadow = text.textShadow;
 
-  // Responsive Padding
+  if (typeof text.textShadow === "string") {
+    styles.textShadow = text.textShadow;
+  }
+
+  // Padding (responsive)
   if (typeof text.padding === "object") {
-    // Responsive padding Y
     if (typeof text.padding.y === "object") {
-      const responsiveY = getResponsiveDimension(text.padding.y);
-      styles.paddingTop = responsiveY;
-      styles.paddingBottom = responsiveY;
+      const y = getResponsiveDimension(text.padding.y);
+      styles.paddingTop = styles.paddingBottom = y;
     } else if (text.padding.y) {
       styles.paddingTop = styles.paddingBottom = text.padding.y;
     }
 
-    // Responsive padding X
     if (typeof text.padding.x === "object") {
-      const responsiveX = getResponsiveDimension(text.padding.x);
-      styles.paddingLeft = responsiveX;
-      styles.paddingRight = responsiveX;
+      const x = getResponsiveDimension(text.padding.x);
+      styles.paddingLeft = styles.paddingRight = x;
     } else if (text.padding.x) {
       styles.paddingLeft = styles.paddingRight = text.padding.x;
     }
@@ -53,85 +127,109 @@ export const getTextStyles = (text: TextSettings) => {
   return styles;
 };
 
-
-export const getBorderStyles = (border: { width?: string; style?: string; color?: string; radius?: string }) => {
+export const getBorderStyles = (border: { width?: string; style?: string; color?: string; radius?: string }, colors?: any) => {
+  const resolvedColors = colors || useAppSelector((state) => state.layoutSettings.colors);
   const styles: React.CSSProperties = {};
 
   if (border.width) styles.borderWidth = border.width;
   if (border.style) styles.borderStyle = border.style;
-  if (border.color) styles.borderColor = border.color;
+
+  if (border.color) {
+    let mappedColor = border.color;
+    switch (border.color) {
+      case "primary": mappedColor = resolvedColors?.primary ?? border.color; break;
+      case "secondary": mappedColor = resolvedColors?.secondary ?? border.color; break;
+      case "accent": mappedColor = resolvedColors?.accent ?? border.color; break;
+      case "quad": mappedColor = resolvedColors?.quad ?? border.color; break;
+      case "pent": mappedColor = resolvedColors?.pent ?? border.color; break;
+      default: mappedColor = border.color;
+    }
+    styles.borderColor = mappedColor;
+  }
+
   if (border.radius) styles.borderRadius = border.radius;
 
   return styles;
 };
 
-
-export const getBackgroundStyles = (bg: BackgroundSettings = {}) => {
+export const getBackgroundStyles = (bg: BackgroundSettings = {}, colors?: any) => {
+  const resolvedColors = colors || useAppSelector((state) => state.layoutSettings.colors);
   const styles: any = {};
 
-  // Background color
-  if (bg.color) styles.backgroundColor = bg.color;
 
-  // Box shadow
+  // 🎨 BG COLOR (SWITCH CASE)
+  if (bg.color) {
+    let mappedColor = bg.color;
+
+    switch (bg.color) {
+      case "primary": mappedColor = resolvedColors?.primary ?? bg.color; break;
+      case "secondary": mappedColor = resolvedColors?.secondary ?? bg.color; break;
+      case "accent": mappedColor = resolvedColors?.accent ?? bg.color; break;
+      case "quad": mappedColor = resolvedColors?.quad ?? bg.color; break;
+      case "pent": mappedColor = resolvedColors?.pent ?? bg.color; break;
+      default: mappedColor = bg.color;
+    }
+
+    styles.backgroundColor = mappedColor;
+  }
+
   if (bg.shadow === true || bg.shadow === "true") {
-    styles.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.1)";
-  }
-  // Responsive Height
-  if (typeof bg.height === "object") {
-    styles.height = getResponsiveDimension(bg.height);
-  } else if (bg.height) {
-    styles.height = bg.height;
+    styles.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
   }
 
-  // Responsive Width
-  if (typeof bg.width === "object") {
-    styles.width = getResponsiveDimension(bg.width);
-  } else if (bg.width) {
-    styles.width = bg.width;
-  }
-  // Responsive Margin
-  if (typeof bg.margin === "object") {
-    styles.margin = getResponsiveDimension(bg.margin);
-  } else if (bg.margin) {
-    styles.margin = bg.margin;
-  }
+  if (typeof bg.height === "object") styles.height = getResponsiveDimension(bg.height);
+  else if (bg.height) styles.height = bg.height;
 
-  // Responsive Padding
+  if (typeof bg.width === "object") styles.width = getResponsiveDimension(bg.width);
+  else if (bg.width) styles.width = bg.width;
+
+  if (typeof bg.margin === "object") styles.margin = getResponsiveDimension(bg.margin);
+  else if (bg.margin) styles.margin = bg.margin;
+
+  // padding
   if (typeof bg.padding === "object") {
-    // Responsive padding Y
     if (typeof bg.padding.y === "object") {
-      const responsiveY = getResponsiveDimension(bg.padding.y);
-      styles.paddingTop = responsiveY;
-      styles.paddingBottom = responsiveY;
+      const y = getResponsiveDimension(bg.padding.y);
+      styles.paddingTop = styles.paddingBottom = y;
     } else if (bg.padding.y) {
       styles.paddingTop = styles.paddingBottom = bg.padding.y;
     }
 
-    // Responsive padding X
     if (typeof bg.padding.x === "object") {
-      const responsiveX = getResponsiveDimension(bg.padding.x);
-      styles.paddingLeft = responsiveX;
-      styles.paddingRight = responsiveX;
+      const x = getResponsiveDimension(bg.padding.x);
+      styles.paddingLeft = styles.paddingRight = x;
     } else if (bg.padding.x) {
       styles.paddingLeft = styles.paddingRight = bg.padding.x;
     }
   }
 
-  // Opacity
-  if (bg.opacity !== undefined) {
-    styles.opacity = bg.opacity; // Convert percentage to decimal
-  }
+  if (bg.opacity !== undefined) styles.opacity = bg.opacity;
 
-  // Optional border styles
   if (bg.border) {
     if (bg.border.width) styles.borderWidth = bg.border.width;
     if (bg.border.style) styles.borderStyle = bg.border.style;
-    if (bg.border.color) styles.borderColor = bg.border.color;
+
+    if (bg.border.color) {
+      let mappedColor = bg.border.color;
+
+      switch (bg.border.color) {
+        case "primary": mappedColor = resolvedColors?.primary ?? bg.border.color; break;
+        case "secondary": mappedColor = resolvedColors?.secondary ?? bg.border.color; break;
+        case "accent": mappedColor = resolvedColors?.accent ?? bg.border.color; break;
+        case "quad": mappedColor = resolvedColors?.quad ?? bg.border.color; break;
+        case "pent": mappedColor = resolvedColors?.pent ?? bg.border.color; break;
+        default: mappedColor = bg.border.color;
+      }
+
+      styles.borderColor = mappedColor;
+    }
+
     if (bg.border.radius) styles.borderRadius = bg.border.radius;
   }
 
   return styles;
 };
+
 
 
 export const getDivAnimation = (transition: string | undefined) => {

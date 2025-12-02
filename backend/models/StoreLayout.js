@@ -61,12 +61,24 @@ const storeLayoutSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
     },
+    floats: {},
     menubar: {},
-    sections: {},
+    sections: {
+        hero: {},
+        about: {},
+        nabout: {},
+        products: {},
+        FAQs: {},
+        gallery: {},
+        contact: {},
+        footer: {},
+        searchResults: {},
+        singleProduct: {},
+    },
 }, { 
     timestamps: true 
 });
 
-const StoreLayout = mongoose.model("StoreLayout", storeLayoutSchema);
+const StoreLayout = mongoose.models.StoreLayout || mongoose.model("StoreLayout", storeLayoutSchema);
 
 export default StoreLayout;

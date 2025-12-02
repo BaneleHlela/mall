@@ -49,7 +49,7 @@ export const createLayout = createAsyncThunk('layouts/createLayout', async (layo
 export const editLayout = createAsyncThunk(
     'layouts/editLayout',
     async ({ layoutId, layoutConfig }: { layoutId: string; layoutConfig: Layout }) => {
-        const response = await axios.patch(`${API_URL}/api/layouts/${layoutId}`, layoutConfig);
+        const response = await axios.put(`${API_URL}/api/layouts/${layoutId}`, layoutConfig);
         return response.data;
     }
 );
@@ -61,9 +61,10 @@ export const removeLayout = createAsyncThunk('layouts/removeLayout', async (layo
 
 export const fetchDemoLayouts = createAsyncThunk(
     "layouts/fetchDemoLayouts",
-    async (_, thunkAPI) => {
+    async (trades: string[], thunkAPI) => {
       try {
-        const response = await axios.get(`${API_URL}/api/layouts/demo`);
+        const tradesQuery = trades ? `?trades=${trades.join(',')}` : '';
+        const response = await axios.get(`${API_URL}/api/layouts/demo${tradesQuery}`);
         return response.data as Layout[];
       } catch (error: any) {
         return thunkAPI.rejectWithValue(error.response?.data || "Failed to fetch demo layouts");
@@ -83,7 +84,7 @@ export const createLayoutWithSettings = createAsyncThunk(
         store
       }: {
         layoutId: string;
-        newColors: string[];
+        newColors?: { primary: string; secondary: string; accent: string; quad: string; pent: string };
         oldColors?: string[];
         newFonts?: Fonts;
         sectionUpdates?: any;
@@ -121,7 +122,7 @@ export const updateLayoutWithSettings = createAsyncThunk(
         store
       }: {
         layoutId: string;
-        newColors?: string[];
+        newColors?: { primary: string; secondary: string; accent: string; quad: string; pent: string };
         oldColors?: string[];
         newFonts?: any;
         sectionUpdates?: any;

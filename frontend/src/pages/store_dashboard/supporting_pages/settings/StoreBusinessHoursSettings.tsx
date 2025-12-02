@@ -5,7 +5,7 @@ import type { Store, OperationTimes } from '../../../../types/storeTypes';
 import ToggleSwitch from '../../../../components/the_mall/extras/ToggleSwitch';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-import { LoadingButton } from '../../../../components/the_mall/buttons/LoadingButton';
+import LoadingButton  from '../../../../components/the_mall/buttons/LoadingButton';
 
 const mysweetalert = withReactContent(Swal);
 

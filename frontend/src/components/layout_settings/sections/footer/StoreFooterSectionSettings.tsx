@@ -3,10 +3,11 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks'
 import FooterWithStoreDetailsButtonAndFormOrLocationSettings from './with_store_details_button_and_form_or_location/FooterWithStoreDetailsButtonAndFormOrLocationSettings';
 import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice';
 import AddToMenuBarToggler from '../../extras/AddToMenubarToggler';
+import FooterWithSocialsAndEmailSettings from './footer_with_socials_and_email/FooterWithSocialsAndEmailSettings';
 
 const StoreFooterSectionSettings = () => {
   const dispatch = useAppDispatch();
-  const variation = useAppSelector((state) => state.layoutSettings.footer.variation);
+  const variation = useAppSelector((state) => state.layoutSettings.sections.footer.variation);
   const settings = useAppSelector((state) => state.layoutSettings);
   const handleSettingChange = (field: string, value: any) => {
       dispatch(updateSetting({ field, value }));
@@ -16,6 +17,15 @@ const StoreFooterSectionSettings = () => {
       <>
         <AddToMenuBarToggler section='footer' />
         <FooterWithStoreDetailsButtonAndFormOrLocationSettings handleSettingChange={handleSettingChange} settings={settings}/>
+      </>
+    )
+  }
+
+  if ( variation === "footerWithSocialsAndEmail") {
+    return (
+      <>
+        <AddToMenuBarToggler section='footer' />
+        <FooterWithSocialsAndEmailSettings handleSettingChange={handleSettingChange} settings={settings}/>
       </>
     )
   }

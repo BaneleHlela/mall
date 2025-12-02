@@ -24,7 +24,7 @@ const SubSettingsContainer: React.FC<SubSettingsContainerProps> = ({
           className={`flex flex-row pl-[1.2vh] justify-between w-full h-full border-[.3vh] border-white text-black shadow-md
           ${isSettingsOpen ? "rounded-t-sm bg-gray-900 text-white" : "rounded-sm bg-stone-50"} hover:bg-gray-900 hover:text-white hover:border-white hover:border-[.3vh]`}
         >
-          <div className="flex flex-col justify-center">
+          <div className="capitalize flex flex-col justify-center">
             {name}
           </div>
 

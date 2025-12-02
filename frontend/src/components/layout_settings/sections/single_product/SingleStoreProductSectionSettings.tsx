@@ -20,7 +20,7 @@ const SingleStoreProductSectionSettings = () => {
     };
     const [activePanel, setActivePanel] = useState<string | null>(null);
     const closePanel = () => setActivePanel(null);
-    const objectPath = "singleProduct"
+    const objectPath = "sections.singleProduct"
     return (
         <div className='text-[2vh] space-y-[.3vh]'>
             {/* Background Settings */}
@@ -32,7 +32,7 @@ const SingleStoreProductSectionSettings = () => {
                         objectPath={`${objectPath}.background`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["height", "width", "color", "padding"]}
+                        allow={["color", "padding"]}
                         widthUnit="vw"
                         heightUnit="vh"
                         responsiveSize
@@ -73,7 +73,7 @@ const SingleStoreProductSectionSettings = () => {
                                         objectPath={`${objectPath}.text.exit`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={[ "color", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing" ]}
+                                        allow={[ "color", "fontFamily", "fontSize"]}
                                         responsiveSize
                                     />
                                 </div>
@@ -87,7 +87,7 @@ const SingleStoreProductSectionSettings = () => {
                                         objectPath={`${objectPath}.text.exit.background`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={["height", "width", "color", "padding", "border"]}
+                                        allow={["color", "padding", "border"]}
                                         widthUnit="vw"
                                         heightUnit="vh"
                                         responsiveSize
@@ -114,7 +114,7 @@ const SingleStoreProductSectionSettings = () => {
                                             objectPath={`${objectPath}.images.background`}
                                             settings={settings}
                                             handleSettingChange={handleSettingChange}
-                                            allow={["height", "width"]}
+                                            allow={["height", "width", "border"]}
                                             widthUnit="%"
                                             heightUnit="vh"
                                             responsiveSize
@@ -123,24 +123,8 @@ const SingleStoreProductSectionSettings = () => {
                                     </div>
                                     }
                             />
-                            {/* Back to home text settings */}
-                            <FirstOrderSubSettingsContainer
-                                name="Toggle Button"
-                                onClick={() => setActivePanel("toggle_button")}
-                            />
-                        </div>
-                    </SlidingPanel>
-                )}
-                {activePanel === "toggle_button" && (
-                    <SlidingPanel
-                        key="toggle_button"
-                        isOpen={true}
-                        onClose={() => setActivePanel("images")}
-                        title="Image Toggle Button"
-                    >    
-                        <div className="space-y-[.3vh]">
                             <SubSettingsContainer
-                                name="Text"
+                                name="Toggle Button"
                                 SettingsComponent={
                                 <div className="px-[.15vh] space-y-[.3vh]">
                                     <TextEditor
@@ -152,23 +136,7 @@ const SingleStoreProductSectionSettings = () => {
                                 </div>
                                 }
                             />
-                            <SubSettingsContainer
-                                name="Background"
-                                SettingsComponent={
-                                <div className="px-[.15vh] space-y-[.3vh]">
-                                    <BackgroundEditor
-                                        objectPath={`${objectPath}.images.toggleButton.background`}
-                                        settings={settings}
-                                        handleSettingChange={handleSettingChange}
-                                        allow={["color", "padding", "border"]}
-                                        widthUnit="vw"
-                                        heightUnit="vh"
-                                        responsiveSize
-                                    />
-                                </div>
-                                }
-                            />
-                        </div> 
+                        </div>
                     </SlidingPanel>
                 )}
                 {activePanel === "details" && (
@@ -518,6 +486,7 @@ const SingleStoreProductSectionSettings = () => {
                             handleSettingChange={handleSettingChange}
                             allow={[ "color", "fontSize", "weight", "padding", "fontFamily" ]}
                             responsivePadding
+                            responsiveSize
                         />      
                     </SlidingPanel>
                 )}

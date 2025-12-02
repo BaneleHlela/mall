@@ -24,7 +24,6 @@ router.put('/update-with-settings', updateLayoutConfigWithSettings);
 router.get('/store/:storeId', getStoreLayouts)
 
 // Dynamic routes
-router.patch('/:layoutId', /*protectRoute,*/ /*isAdmin,*/ updateLayoutConfig);
 router.put('/:layoutId', /*protectRoute,*/ /*isAdmin,*/ updateLayoutConfig);
 router.get('/:layoutId', /*protectRoute,*/ getLayoutConfig);
 router.delete('/:layoutId', /*protectRoute,*/ deleteLayoutConfig);

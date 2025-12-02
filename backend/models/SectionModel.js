@@ -9,6 +9,10 @@ const sectionSchema = new mongoose.Schema({
         type: String,
         required: [true, "Section variation is required"],
     },
+    layout: {
+        type: mongoose.Schema.Types.Mixed,
+        required: [true, "Section layout is required"],
+    },
     images: {
         mobile: {
             type: String,

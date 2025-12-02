@@ -20,7 +20,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
   settings,
   handleSettingChange,
 }) => {
-  const objectPath = "hero";
+  const objectPath = "sections.hero";
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
 

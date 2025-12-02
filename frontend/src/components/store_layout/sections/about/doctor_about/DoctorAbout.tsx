@@ -7,61 +7,54 @@ import { useStoreButtonClickHandler } from '../../../extras/buttons/useStoreButt
 
 const DoctorAbout = () => {
     const { colors, fonts, routes } = useAppSelector(state => state.layoutSettings);
-    const about = mockLayout.sections.nabout;
+    const config = useAppSelector(state => state.layoutSettings.sections.about);
     const handleButtonClick = useStoreButtonClickHandler();
+
+    console.log(config)
 
     return (
         <div
             style={{
-                backgroundColor: colors.primary,
-                ...getBackgroundStyles(about.background)
+                ...getBackgroundStyles(config.background)
             }}
-            className='flex flex-col lg:flex-row w-full border-y-2 h-fit'
+            className='flex flex-col lg:flex-row w-full border-y h-fit'
         >
-            {/* About */}
+            {/* config */}
             <div className="flex flex-col items-center lg:space-y-[4vh] px-[2vh] justify-between lg:justify-center w-full h-[60%] lg:h-full lg:w-[50%] lg:px-[15vh]">
                 <div className="text-center lg:text-start">
                     <h2 
                         style={{
-                            ...getTextStyles(about.text.firstSection.header),
-                            fontFamily: fonts.primary,
-                            color: colors.secondary,
+                            ...getTextStyles(config.text.firstSection.header),
                         }}
                         className=""
                     >
-                        {about.text.firstSection.header.input}
+                        {config.text.firstSection.header.input}
                     </h2>
                     <p 
                         style={{
-                            ...getTextStyles(about.text.firstSection.paragraph),
-                            fontFamily: fonts.primary,
-                            color: colors.secondary,
+                            ...getTextStyles(config.text.firstSection.paragraph),
                         }}
                         className=""
                     >
-                        {about.text.firstSection.paragraph.input}
+                        {config.text.firstSection.paragraph.input}
                     </p>
                 </div>
                 <div className="text-center lg:text-start">
                     <h2 
                         style={{
-                            ...getTextStyles(about.text.secondSection.header),
-                            fontFamily: fonts.primary,
-                            color: colors.secondary,
+                            ...getTextStyles(config.text.secondSection.header),
                         }}
                         className="mt-[3vh]"
                     >
-                        {about.text.secondSection.header.input}
+                        {config.text.secondSection.header.input}
                     </h2>
                     <p 
                         style={{
-                            ...getTextStyles(about.text.secondSection.details),
-                            fontFamily: fonts.primary,
-                            color: colors.secondary,
+                            ...getTextStyles(config.text.secondSection.details),
                         }}
                         className=""
                     >
-                        {about.text.secondSection.details.input}
+                        {config.text.secondSection.details.input}
                     </p>
                 </div>
                 <div className="my-[2vh] lg:my-0">
@@ -77,17 +70,17 @@ const DoctorAbout = () => {
                         style={{
                             text: {
                                 color: colors.primary,
-                                input: about.button.text.input,
+                                input: config.button.text.input,
                             },
                             background: {
                                 color: colors.accent,
-                                padding: about.button.background.padding,
-                                width: about.button.background.width,
+                                padding: config.button.background.padding,
+                                width: config.button.background.width,
                                 border: {
-                                    width: about.button.background.border.width,
-                                    style: about.button.background.border.style,
+                                    width: config.button.background.border.width,
+                                    style: config.button.background.border.style,
                                     color: colors.secondary,
-                                    radius: about.button.background.border.radius,
+                                    radius: config.button.background.border.radius,
                                 },
                             },
                         }}
@@ -95,21 +88,21 @@ const DoctorAbout = () => {
                 </div>
             </div>
             {/* Image */}
-            <div className="w-full h-fit lg:w-[50%] lg:h-full">
+            <div className="w-full aspect-square lg:w-[50%] lg:h-full">
                 <img 
                     src={
-                        about.imageUrl.length === 1 
-                            ? about.imageUrl[0] 
+                        config.imageUrl.length === 1 
+                            ? config.imageUrl[0] 
                             : window.innerWidth < 768 
-                                ? about.imageUrl[0] 
-                                : about.imageUrl[1] 
+                                ? config.imageUrl[0] 
+                                : config.imageUrl[1] 
                     } 
-                    alt="About Section Image" 
-                    className="w-full h-auto lg:h-full lg:object-cover"
+                    alt="config Section Image" 
+                    className="w-full aspect-square lg:h-full object-cover"
                 />
             </div>
         </div>
     )
 }
 
-export default DoctorAbout
+export default DoctorAbout;

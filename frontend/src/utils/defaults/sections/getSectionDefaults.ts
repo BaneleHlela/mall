@@ -22,7 +22,7 @@ import { defaultSingleProductSectionConfig } from "./single_product/defaultSingl
 import HeroWithBox from "../../../components/store_layout/sections/hero/hero_with_box/HeroWithBox";
 import { defaultHeroWithBoxConfig } from "./hero/defaultHeroWithBox";
 
-export type SectionType = 'book' | 'products' | 'services' | 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer' | 'gallery' | 'contact' | 'singleProduct';
+export type SectionType = 'book' | 'products' | 'services' | 'about' | 'hero' | 'menu' | 'bookWithCalendar' | 'order' | 'reviews' | 'footer' | 'gallery' | 'contact' | 'singleProduct' | 'FAQs';
 type VariationType = string;
 
 
@@ -150,10 +150,68 @@ export const getSectionDefaults = async (section: SectionType, variation: Variat
     },
     singleProduct: {
       singleProductPopular: async () => {
-        const demoStoreId = "6895c4cfa50d393f431b9d40"; 
+        const demoStoreId = "6895c4cfa50d393f431b9d40";
         const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'singleProduct');
         return demoLayout || defaultSingleProductSectionConfig;
       },
+    },
+    FAQs: {
+      firstFAQs: {
+        variation: "firstFAQs",
+        background: {
+          color: "primary",
+        },
+        text: {
+          header: {
+            color: "secondary",
+            input: "FAQs",
+            fontSize: {
+              mobile: "4vh",
+              desktop: "6vh",
+            },
+          },
+          QnAs: {
+            inputs: {
+              first: {
+                title: "Shipping & Returns",
+                paragraph: "Our shipping is fast and reliable, and we offer hassle-free returns to ensure you're completely satisfied with your purchase."
+              },
+              second: {
+                title: "Hat Care Instructions",
+                paragraph: "To maintain the quality of your hat, we recommend spot cleaning with a damp cloth. Avoid submerging in water or using harsh chemicals."
+              },
+              third: {
+                title: "Customization Options",
+                paragraph: "We provide customized fittings to ensure your hat fits perfectly. Contact us for personalized options and bespoke hat designs."
+              }
+            },
+            style: {
+              title: {
+                color: "secondary",
+                fontFamily: "primary",
+                fontSize: {
+                  mobile: "3vh",
+                  desktop: "3.5vh"
+                }
+              },
+              paragraph: {
+                color: "secondary",
+                fontFamily: "primary",
+                fontSize: {
+                  mobile: "2.4vh",
+                  desktop: "2.8vh"
+                },
+                padding: {
+                  y: {
+                    mobile: "3vh",
+                    desktop: "5vh"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   };
 

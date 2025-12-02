@@ -5,7 +5,7 @@ import { useStoreButtonClickHandler } from "../../../extras/buttons/useStoreButt
 import UnderlinedText from "../../../extras/text/UnderlinedText";
 
 const HeroWithBox = () => {
-    const style = useAppSelector((state) => state.layoutSettings.hero);
+    const style = useAppSelector((state) => state.layoutSettings.sections.hero);
     const routes = useAppSelector((state) => state.layoutSettings.routes);
     const store = useAppSelector((state) => state.stores.currentStore);
     const handleButtonClick = useStoreButtonClickHandler();

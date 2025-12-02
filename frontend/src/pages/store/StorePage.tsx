@@ -7,12 +7,13 @@ import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { fetchStoreServices } from "../../features/services/servicesSlice";
 import { fetchStoreBySlug, setCurrentStore } from "../../features/stores/storeSlice";
 
-import { 
+import {
   StoreProductsPage, StoreAboutPage, StoreBookPage,
   StoreHomePage, StorePackagesPage, StoreServicesPage,
   StoreContactPage, StoreEventsPage, StoreGalleryPage,
-  StoreMenuPage, StoreReviewsPage 
+  StoreMenuPage, StoreReviewsPage
 } from "./supporting/StorePagesCentral";
+import BasicStoreSearchResultsPage from "./supporting/BasicStoreSearchResultsPage";
 import PopularStoreMenubar from "../../components/store_layout/menubars/popular/PopularStoreMenubar";
 import StoreOrderOnlinePage from "./supporting/order_online/StoreOrderOnlinePage";
 import { getBackgroundStyles } from "../../utils/stylingFunctions";
@@ -24,6 +25,7 @@ import StoreBookServicePage from "./supporting/book_service/StoreBookServicePage
 import StoreAlertDiv from "../../components/store_layout/extras/alert_div/StoreAlertDiv";
 import StoreMenubarIcons from "../../components/store_layout/menubars/supporting/StoreMenubarIcons";
 import StoreFloatingButton from "../../components/store_layout/extras/buttons/StoreFloatingButton";
+import StoreWelcomeDiv from "../../components/store_layout/extras/StoreWelcomeDiv";
 import { IoMdClose } from "react-icons/io";
 import ComingSoon from "../../components/the_mall/ComingSoon";
 import StoreCartModal from "../cart/StoreCartModal";
@@ -36,13 +38,19 @@ import MaxThreeGallery from "../../components/store_layout/sections/gallery/max_
 import DoctorAbout from "../../components/store_layout/sections/about/doctor_about/DoctorAbout";
 import ArtMenubar from "../../components/store_layout/menubars/art_menubar/ArtMenubar";
 import EnnockHero from "../../components/store_layout/sections/hero/ennock_hero/EnnockHero";
+import BasicSearchResults from "../../components/store_layout/sections/search_results/basic_search_results/InStoreBasicSearchResults";
+import SecondSingleStoreProductSection from "../../components/store_layout/sections/single_product/second_single _product/SecondSingleStoreProductSection";
+import ErrorBoundary from "../../components/ErrorBoundary";
+import FooterWithSocialsAndEmail from "../../components/store_layout/sections/footer/footer_with_socials_and_email/FooterWithSocialsAndEmail";
+import HeroWithBox from "../../components/store_layout/sections/hero/hero_with_box/HeroWithBox";
 
 const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
   const location = useLocation();
   const settings = useAppSelector((state) => state.layoutSettings);
   const { storeSlug: paramStoreSlug } = useParams<{ storeSlug: string }>();
-  const storeSlug = propStoreSlug || paramStoreSlug 
+  const storeSlug = propStoreSlug || paramStoreSlug
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [showWelcomeDiv, setShowWelcomeDiv] = useState(settings?.welcomeDiv?.display || false);
   const isCartRoute = location.pathname.includes('/cart'); // Check if the current route is "/cart"
 
   const dispatch = useAppDispatch();
@@ -129,6 +137,36 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
     }
   }, [store, storeSlug, dispatch]);
 
+  // --- Guarantee section scroll after page fully renders ---
+  useEffect(() => {
+    if (!location.hash) return;
+
+    const hash = location.hash;
+
+    // Try immediately
+    const tryScroll = () => {
+      const el = document.querySelector(hash);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+        return true;
+      }
+      return false;
+    };
+
+    // First attempt
+    if (tryScroll()) return;
+
+    // Retry a few times until the section is mounted
+    let attempts = 0;
+    const interval = setInterval(() => {
+      attempts++;
+      if (tryScroll() || attempts > 20) {
+        clearInterval(interval);
+      }
+    }, 150); // retry every 150ms
+  }, [location, store, settings.routes]);
+
+
   if (loading) {
     return <TbLoader3  size={45} className='animate-spin mx-auto'/>;
   }
@@ -139,19 +177,19 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
 
 
   const routeComponents: { [key: string]: React.ReactNode } = {
-    "/": <StoreHomePage />,
-    "/about": <StoreAboutPage />,
-    "/menu": <StoreMenuPage />,
-    "/order-online": <StoreOrderOnlinePage />,
-    "/contact": <StoreContactPage />,
-    "/reviews": <StoreReviewsPage />,
-    "/products": <StoreProductsPage />,
-    "/packages": <StorePackagesPage />,
-    "/services": <StoreServicesPage />,
-    "/events": <StoreEventsPage />,
-    "/gallery": <StoreGalleryPage />,
-    "/book": <StoreBookPage />,
-  };
+   "/": <StoreHomePage />,
+   "/about": <StoreAboutPage />,
+   "/menu": <StoreMenuPage />,
+   "/order-online": <StoreOrderOnlinePage />,
+   "/contact": <StoreContactPage />,
+   "/reviews": <StoreReviewsPage />,
+   "/products": <StoreProductsPage />,
+   "/packages": <StorePackagesPage />,
+   "/services": <StoreServicesPage />,
+   "/events": <StoreEventsPage />,
+   "/gallery": <StoreGalleryPage />,
+   "/book": <StoreBookPage />,
+ };
 
 
   return (
@@ -172,25 +210,16 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
                 {/* Store Menubar */}
                 <StoreMenubar />
                 {/* <ArtMenubar /> */}
-                {/* Store Alert Div */}
-                {settings?.menubar?.alertDiv?.display && (
-                  <StoreAlertDiv config={settings.menubar.alertDiv} objectPath={`menubar.alertDiv`} />
-                )}
               </>
             )}
-            <div className="w-full h-[40vh] bg-pink-400"></div>
-            <EnnockHero />
-            <StylishHero />
-            <DoctorAbout />
-            <ShortAbout />
-            <HorizontalProductsSection />
-            <MaxThreeGallery />
-            <FirstFAQs />
+            {settings?.menubar?.alertDiv?.display && (
+                  <StoreAlertDiv config={settings.menubar.alertDiv} />
+            )}
             
             
             
             {/* Routes */}
-            {/* <Routes>
+            <Routes>
               <Route key="*" path="*" element={<StoreHomePage />} />
               {Object.values(routes).map((route) => (
                 <Route
@@ -202,21 +231,24 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
               {store?.trades.includes("products") && <Route path="/product/:productSlug" element={<SingleStoreProductPage />} />}
               {store?.trades.includes("products") && <Route path="/cart" element={<div className="flex justify-center w-full"><StoreCartModal /></div>  } />}
               {store?.trades.includes("services") && <Route path="/service/:serviceSlug" element={<StoreBookServicePage />} />}
-            </Routes> */}
+              <Route path="/search" element={<BasicStoreSearchResultsPage />} />
+            </Routes>
             {/* Floating Icons */}
-            {/* {settings?.floats?.floatingIcons?.show && !isCartRoute && (
-              <div className={`fixed z-5 
-                ${settings.floats.floatingIcons.position === "left-1/2" && "left-2 top-1/2"} 
-                ${settings.floats.floatingIcons.position === "left-1/4" && "left-2 top-1/4"} 
-                ${settings.floats.floatingIcons.position === "right-1/2" && "right-2 top-1/2"} 
-                ${settings.floats.floatingIcons.position === "right-1/4" && "right-2 top-1/4"} 
-              `}>
-                <StoreMenubarIcons
-                  style={settings.floats.floatingIcons.icons}
-                  asFloat={true}
-                />
-              </div>
-            )} */}
+            <ErrorBoundary>
+              {settings?.floats?.floatingIcons?.show && !isCartRoute && (
+                <div className={`fixed z-5 
+                  ${settings.floats.floatingIcons.position === "left-1/2" && "left-2 top-1/2"} 
+                  ${settings.floats.floatingIcons.position === "left-1/4" && "left-2 top-1/4"} 
+                  ${settings.floats.floatingIcons.position === "right-1/2" && "right-2 top-1/2"} 
+                  ${settings.floats.floatingIcons.position === "right-1/4" && "right-2 top-1/4"} 
+                `}>
+                  <StoreMenubarIcons
+                    style={settings.floats.floatingIcons.icons}
+                    asFloat={true}
+                  />
+                </div>
+              )}
+            </ErrorBoundary>
             {/* Floating Button */}
             {/* {settings?.floats?.floatingButton?.show !== "none" && !isCartRoute && (
               <div className={`fixed z-5
@@ -267,6 +299,15 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
                 </div>
               </div>
             )}
+            {/* Welcome Div */}
+            {/* {(
+              <StoreWelcomeDiv
+                //config={settings.welcomeDiv}
+                store={store}
+                onClose={() => setShowWelcomeDiv(false)}
+              />
+            )} */}
+
       </div> 
     </div>
   );

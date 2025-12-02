@@ -7,7 +7,6 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
 
     const page = await browser.newPage();
 
-    // Set the viewport size
     await page.setViewport({
       width,
       height,
@@ -15,34 +14,72 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
     });
 
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 0 });
-    
+
+    // ----- WAIT FOR PAGE TO FULLY STABILIZE -----
     await page.evaluate(async () => {
-      // Wait for all images to load
-      const imagePromises = Array.from(document.images).map(img => {
+
+      // -------------------------
+      // WAIT FOR IMAGES TO LOAD
+      // -------------------------
+      const imagePromises = Array.from(document.images).map((img) => {
         if (img.complete) return;
-        return new Promise(resolve => {
-          img.addEventListener('load', resolve);
-          img.addEventListener('error', resolve);
+        return new Promise((resolve) => {
+          img.addEventListener("load", resolve);
+          img.addEventListener("error", resolve);
         });
       });
-    
-      // Wait for all animations to complete
-      const animationPromises = Array.from(document.querySelectorAll('*')).map(element => {
-        const computedStyle = window.getComputedStyle(element);
-        const animationDuration = parseFloat(computedStyle.animationDuration) || 0;
-        const animationDelay = parseFloat(computedStyle.animationDelay) || 0;
-        const totalAnimationTime = (animationDuration + animationDelay) * 1000;
-    
-        if (totalAnimationTime > 0) {
-          return new Promise(resolve => setTimeout(resolve, totalAnimationTime));
+
+      // -------------------------
+      // WAIT FOR ANIMATIONS
+      // -------------------------
+      const animationPromises = Array.from(
+        document.querySelectorAll("*")
+      ).map((element) => {
+        const style = window.getComputedStyle(element);
+        const dur = parseFloat(style.animationDuration) || 0;
+        const delay = parseFloat(style.animationDelay) || 0;
+        const total = (dur + delay) * 1000;
+
+        if (total > 0) {
+          return new Promise((resolve) => setTimeout(resolve, total));
         }
       });
-    
-      await Promise.all([...imagePromises, ...animationPromises]);
+
+      // -------------------------
+      // WAIT FOR SCROLLING TO FINISH
+      // -------------------------
+      const waitForScrollEnd = new Promise((resolve) => {
+        let timer;
+        let lastY = window.scrollY;
+
+        const onScroll = () => {
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            if (window.scrollY === lastY) {
+              window.removeEventListener("scroll", onScroll);
+              resolve(true);
+            } else {
+              lastY = window.scrollY;
+            }
+          }, 350);
+        };
+
+        window.addEventListener("scroll", onScroll);
+        onScroll(); // run immediately in case scroll already happened
+      });
+
+      // -------------------------
+      // FINAL WAIT
+      // -------------------------
+      await Promise.all([
+        ...imagePromises,
+        ...animationPromises,
+        waitForScrollEnd,
+      ]);
     });
 
-
-    const screenshotBuffer = await page.screenshot({ fullPage: true }); // or fullPage: false
+    // ----- TAKE STABLE SCREENSHOT -----
+    const screenshotBuffer = await page.screenshot({ fullPage: true });
     return screenshotBuffer;
   } catch (error) {
     console.error('Error capturing screenshot with Puppeteer:', error);

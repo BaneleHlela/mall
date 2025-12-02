@@ -1,11 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { LuScanEye } from "react-icons/lu";
-import { FaEdit, FaMousePointer } from "react-icons/fa";
 import { MdModeEditOutline } from "react-icons/md";
 import { IoCamera } from "react-icons/io5";
-import { useAppDispatch } from "../../../../../app/hooks";
+import { FiEdit } from "react-icons/fi";
+import { HiDotsVertical } from "react-icons/hi";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import { captureLayoutScreenshot } from "../../../../../features/layouts/layoutSlice";
+import { GrSelect } from "react-icons/gr";
+import LoadingButton from "../../../../../components/the_mall/buttons/LoadingButton";
+import { TbLoader3 } from "react-icons/tb";
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+import { GoHomeFill } from "react-icons/go";
+import { GiHamburgerMenu } from "react-icons/gi";
+
+const mysweetalert = withReactContent(Swal);
 
 interface StoreLayoutCardProps {
   layout: {
@@ -15,52 +25,106 @@ interface StoreLayoutCardProps {
     screenshot: string;
   };
   onSelect: (layoutId: string) => void;
+  onSetActive: () => void;
+  onRename: () => void;
   edit?: boolean;
 }
 
-const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect , edit = true }) => {
+const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onSetActive, onRename, edit = true }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [showButtons, setShowButtons] = useState(false);
+  const [isSettingActive, setIsSettingActive] = useState(false);
+  const isLoading = useAppSelector((state) => state.layout.isLoading);
 
-  const handleCaptureScreenshot = async (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleSetActive = async () => {
+    const result = await mysweetalert.fire({
+      title: "Set as Active Layout?",
+      text: "This will set this layout as your store's active website layout. Are you sure?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, set as active",
+      cancelButtonText: "Cancel"
+    });
+
+    if (!result.isConfirmed) return;
+
+    setIsSettingActive(true);
     try {
-      await dispatch(captureLayoutScreenshot(layout._id)).unwrap();
-      console.log('Screenshot captured successfully');
+      await onSetActive();
+      mysweetalert.fire({
+        icon: "success",
+        title: "Layout Set Active!",
+        text: "This layout has been set as your store's active layout.",
+        confirmButtonColor: "#3085d6"
+      });
     } catch (error) {
-      console.error('Failed to capture screenshot:', error);
-      // Could add user notification here if needed
+      console.error('Failed to set active layout:', error);
+      mysweetalert.fire({
+        icon: "error",
+        title: "Set Active Failed",
+        text: "Something went wrong while setting the active layout. Please try again.",
+        confirmButtonColor: "#d33"
+      });
+    } finally {
+      setIsSettingActive(false);
     }
   };
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
+  const handleSetActiveClick = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    handleSetActive();
+  };
 
-    if (showButtons) {
-      timer = setTimeout(() => {
-        setShowButtons(false);
-      }, 3000); // hide after 5 seconds
+  const handleCaptureScreenshot = async (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+
+    const result = await mysweetalert.fire({
+      title: "Capture Screenshot?",
+      text: "This will update the layout's screenshot. Are you sure?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, capture",
+      cancelButtonText: "Cancel"
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      await dispatch(captureLayoutScreenshot(layout._id)).unwrap();
+      mysweetalert.fire({
+        icon: "success",
+        title: "Screenshot Captured!",
+        text: "Layout screenshot has been updated successfully.",
+        confirmButtonColor: "#3085d6"
+      });
+    } catch (error) {
+      console.error('Failed to capture screenshot:', error);
+      mysweetalert.fire({
+        icon: "error",
+        title: "Capture Failed",
+        text: "Something went wrong while capturing the screenshot. Please try again.",
+        confirmButtonColor: "#d33"
+      });
     }
+  };
 
-    return () => clearTimeout(timer);
-  }, [showButtons]);
 
-  // Detect screen size for conditional behavior
-  const handleClick = () => {
-    if (window.innerWidth < 640) {
-      setShowButtons(true);
-    }
+  // Toggle menu visibility
+  const toggleMenu = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowButtons(!showButtons);
   };
 
   return (
     <div className="">
       <p className="text-center font-[400] text-[1.8vh] line-clamp-1 lg:py-[1vh] text-shadow-2xs">{layout.name || "Store Layout"}</p>
-      
-      <div
-        onClick={handleClick}
-        className="relative w-full pt-1 bg-white aspect-9/18 lg:max-h-[60vh] overflow-hidden rounded-lg shadow-md group cursor-pointer"
-      >
+
+      <div className="relative w-full pt-1 bg-white aspect-9/18 lg:max-h-[60vh] overflow-hidden rounded-lg shadow-md">
         <div className="flex justify-center h-[4%] w-full items-center text-center text-[1.6vh] font-semibold line-clamp-1">
         </div>
         <div className="relative h-[90%]">
@@ -70,53 +134,92 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect , ed
             className="w-full h-full object-contain"
           />
 
-          {/* Overlay buttons appear only over image */}
-          <div
-            className={`
-              absolute inset-0 bg-[#00000043] 
-              transition-all duration-300 flex flex-col
-              ${showButtons ? "opacity-100" : "opacity-0"}
-              sm:opacity-0 sm:group-hover:opacity-100
-              px-2 py-3
-            `}
+          {/* Menu Icon at bottom right */}
+          <button
+            onClick={toggleMenu}
+            className="absolute bottom-1 right-[45%] bg-white/20 backdrop-blur-sm text-white p-1 rounded transition-colors z-10"
           >
-            {/* CENTER — View + Edit */}
-            <div className="flex flex-col items-center gap-2 mt-auto mb-auto w-full">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(`/layouts/${layout._id}/preview`);
-                }}
-                className="flex items-center justify-center w-full bg-white text-green-500 px-[.85vh] py-[.35vh] rounded-[.45vh] hover:bg-gray-200 space-x-1"
-              >
-                <LuScanEye /> <p>View</p>
-              </button>
+            <GiHamburgerMenu className="lg:text-[2.6vh]"/>
+          </button>
 
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onSelect(layout._id);
-                }}
-                className="flex items-center justify-center w-full bg-blue-500 text-white px-[.85vh] py-[.35vh] rounded-[.45vh] hover:bg-blue-600 space-x-1"
-              >
-                <MdModeEditOutline /> <p>{edit ? "Edit" : "Select"}</p>
-              </button>
-            </div>
+          {/* Phone-like menu overlay */}
+          {showButtons && (
+            <div className="absolute inset-0 bg-white/20 backdrop-blur flex items-center justify-center">
+              <div className="rounded-2xl p-4 lg:shadow-2xl lg:max-w-[80%]">
+                <div className={`grid ${edit ? 'grid-cols-2' : 'grid-cols-1'} gap-1 lg:gap-4`}>
+                  {/* View */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowButtons(false);
+                      navigate(`/layouts/${layout._id}/preview`);
+                    }}
+                    className="flex flex-col aspect-square items-center justify-center p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-colors"
+                  >
+                    <LuScanEye className="text-[3vh] text-green-600 mb-1" />
+                    <span className="text-[1.5vh] font-medium text-green-700">View</span>
+                  </button>
 
-            {/* BOTTOM — Use + Capture */}
-            <div className="flex justify-evenly w-full h-[12%] mb-1">
-              <button className="flex items-center justify-center h-full aspect-square rounded bg-stone-100">
-                <FaMousePointer className="text-[3vh]" />
-              </button>
-              {/* Capture layout screenshot */}
-              <button
-                onClick={handleCaptureScreenshot}
-                className="flex items-center justify-center h-full aspect-square rounded bg-stone-100"
-              >
-                <IoCamera className="text-[3vh]" />
-              </button>
+                  {/* Edit */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowButtons(false);
+                      onSelect(layout._id);
+                    }}
+                    className="flex flex-col items-center justify-center p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
+                  >
+                    <MdModeEditOutline className="text-[3vh] text-blue-600 mb-1" />
+                    <span className="text-[1.5vh] font-medium text-blue-700">{edit ? "Edit" : "Select"}</span>
+                  </button>
+
+                  {edit && (
+                    <>
+                      {/* Rename */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowButtons(false);
+                          onRename();
+                        }}
+                        className="flex flex-col items-center justify-center p-3 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors"
+                      >
+                        <FiEdit className="text-[3vh] text-purple-600 mb-1" />
+                        <span className="text-[1.5vh] font-medium text-purple-700">Rename</span>
+                      </button>
+
+                      {/* Set Active */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowButtons(false);
+                          handleSetActiveClick(e);
+                        }}
+                        className="flex flex-col items-center justify-center lg:p-3 bg-orange-50 hover:bg-orange-100 rounded-xl transition-colors"
+                      >
+                        <GrSelect className="text-[3vh] text-orange-600 mb-1" />
+                        <p className="text-[1.5vh] font-medium text-orange-700 line-clamp-1">Set Active</p>
+                      </button>
+
+                      {/* Capture */}
+                      <button
+                        style={{lineHeight: "1.1"}}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowButtons(false);
+                          handleCaptureScreenshot(e);
+                        }}
+                        className="flex flex-col items-center justify-center p-3 bg-red-50 hover:bg-red-100 rounded-xl transition-colors col-span-2"
+                      >
+                        <IoCamera className="text-[3vh] text-red-600 mb-1" />
+                        <span className="text-[1.5vh] font-medium text-red-700">Capture Screenshot</span>
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Bottom bar */}

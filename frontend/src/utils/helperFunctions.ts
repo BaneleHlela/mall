@@ -307,7 +307,7 @@ export function getDynamicSizeMap() {
     return {
       mobile:  { width: 320, height: 650, scale: 0.65 },
       tablet:  { width: 600, height: 900, scale: 0.55 },
-      desktop: { width: 1280, height: 720, scale: 0.3 },
+      desktop: { width: 1380, height: 700, scale: 0.65 },
     };
   }
 
@@ -316,14 +316,14 @@ export function getDynamicSizeMap() {
     return {
       mobile:  { width: 360, height: 740, scale: 0.65 },
       tablet:  { width: 700, height: 1024, scale: 0.52 },
-      desktop: { width: 1440, height: 900, scale: 0.38 },
+      desktop: { width: 1380, height: 700, scale: 0.7 },
     };
   }
   if (screenWidth > 1800) {
     return {
       mobile:  { width: 360, height: 740, scale: 1.1 },
       tablet:  { width: 700, height: 1024, scale: 0.72 },
-      desktop: { width: 1440, height: 900, scale: 0.48 },
+      desktop: { width: 1380, height: 700, scale: 0.8 },
     };
   }
 
@@ -332,7 +332,7 @@ export function getDynamicSizeMap() {
   return {
     mobile:  { width: 412, height: 840, scale: 0.75 },
     tablet:  { width: 775, height: 1024, scale: 0.62 },
-    desktop: { width: 1920, height: 1080, scale: 0.45 },
+    desktop: { width: 1380, height: 700, scale: 0.7 },
   };
 }
 

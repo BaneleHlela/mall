@@ -44,8 +44,11 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
   };
 
   const getSliderProps = (unit: string) => {
-    if (unit === 'vw' || unit === 'vh' || unit === "%") {
+    if (unit === 'vw' || unit === 'vh' ) {
       return { min: 0, max: 150, step: 1 };
+    }
+    if (unit === "%") {
+      return { min: 0, max: 100, step: 1 };
     }
     return { min: .1, max: 35, step: .1 };
   };
@@ -61,14 +64,18 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
 
   return (
     <div className="space-y-1 px-2">
-      {isAllowed("color") && (
-        <ColorPicker
-          label="Color"
-          value={getSetting("color", settings, objectPath)}
-          onChange={handleChange("color")}
-          onClear={handleClear("color")} // 👈 added
-        />
-      )}
+        {isAllowed("color") && (
+          <OptionsToggler
+            label="Color"
+            options={["primary", "secondary", "accent", "quad", "pent", "transparent"]}
+            value={getSetting("color", settings, objectPath)}
+            onChange={(newValue) =>
+              handleChange("color")({
+                target: { value: newValue }
+              } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
+            }
+          />
+        )}
        {/* ANIMATION */}
        {isAllowed("animation") && (
           <OptionsToggler

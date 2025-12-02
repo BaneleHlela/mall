@@ -55,10 +55,15 @@ const BorderEditor: React.FC<EditorProps> = ({
       )}
 
       {isAllowed("color") && (
-        <ColorPicker
-          label="Border Color"
+        <OptionsToggler
+          label="Text Color"
+          options={["primary", "secondary", "accent", "quad", "pent"]}
           value={getSetting("color", settings, objectPath)}
-          onChange={handleChange("color")}
+          onChange={(newValue) =>
+            handleChange("color")({
+              target: { value: newValue }
+            } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
+          }
         />
       )}
 
@@ -68,7 +73,7 @@ const BorderEditor: React.FC<EditorProps> = ({
           value={parseFloat(getSetting("radius", settings, objectPath) || "0")}
           unit="vh"
           min={0}
-          max={15}
+          max={30}
           step={.1}
           onChange={(newVal) => {
             const event = {

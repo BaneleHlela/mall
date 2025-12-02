@@ -2,11 +2,16 @@ import { useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../../../app/hooks";
 import type { RootState } from "../../../../app/store";
 import { useNavigate } from "react-router-dom";
-import { getStoreLayouts, captureLayoutScreenshot, getLayout } from "../../../../features/layouts/layoutSlice";
+import { getStoreLayouts, captureLayoutScreenshot, getLayout, editLayout } from "../../../../features/layouts/layoutSlice";
+import { editStore } from "../../../../features/store_admin/storeAdminSlice";
 import { useEffect, useState } from "react";
 import StoreLayoutCard from "./supporting/StoreLayoutsCard";
 import CustomizeLayout from "./supporting/CustomizeLayout";
 import { FaPlus } from "react-icons/fa";
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+
+const mysweetalert = withReactContent(Swal);
 
 const StoreDashboardLayouts = () => {
   const dispatch = useAppDispatch();
@@ -16,19 +21,7 @@ const StoreDashboardLayouts = () => {
   const layouts = useAppSelector((state) => state.layout.layouts);
   const activeLayout = useAppSelector((state) => state.layout.activeLayout);
   const isLoading = useAppSelector((state) => state.layout.isLoading);
-  const [isMobile, setIsMobile] = useState(false);
   const [editingLayout, setEditingLayout] = useState<string | null>(null);
-
-  // Detect mobile screen size
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   // Fetch layouts for the store
   useEffect(() => {
@@ -75,7 +68,7 @@ const StoreDashboardLayouts = () => {
     return <p>Store not found or invalid store ID: {storeId}.</p>;
   }
 
-  if (isLoading) {
+  if (isLoading && !store) {
     return <p>loading...</p>;
   }
 
@@ -84,36 +77,91 @@ const StoreDashboardLayouts = () => {
   };
 
   const handleEdit = async (layoutId: string) => {
-    if (isMobile) {
-      // Use CustomizeLayout for mobile editing
-      dispatch(getLayout(layoutId));
-      setEditingLayout(layoutId);
-    } else {
-      // Use WebsiteBuilder for desktop editing
-      navigate(`/layouts/${layoutId}`);
-    }
+    navigate(`/layouts/${layoutId}`);
   };
 
   const handleBackFromEdit = () => {
     setEditingLayout(null);
   };
 
-  const handleView = async () => {
-    console.log();
+  const handleSetActiveLayout = async (layoutId: string) => {
+    if (!store?.slug) return;
+
+    try {
+      await dispatch(editStore({
+        storeSlug: store.slug,
+        updatedStore: {
+          website: {
+            source: store.website?.source || 'internal',
+            layoutId: layoutId
+          }
+        } as any
+      })).unwrap();
+      console.log('Layout set as active successfully');
+    } catch (error) {
+      console.error('Failed to set active layout:', error);
+    }
   };
 
-  // Show CustomizeLayout for mobile editing
-  if (editingLayout && activeLayout && isMobile) {
-    return (
-      <div className="w-full h-screen">
-        <CustomizeLayout
-          layout={activeLayout}
-          onBack={handleBackFromEdit}
-          edit={true}
-        />
-      </div>
-    );
-  }
+  const handleRenameLayout = async (layoutId: string, currentName: string) => {
+    const { value: newName } = await mysweetalert.fire({
+      title: 'Rename Layout',
+      input: 'text',
+      inputLabel: 'New layout name',
+      inputValue: currentName || 'Store Layout',
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Rename",
+      cancelButtonText: "Cancel",
+      inputValidator: (value) => {
+        if (!value || value.trim().length === 0) {
+          return 'Layout name cannot be empty!';
+        }
+        if (value.length > 50) {
+          return 'Layout name must be less than 50 characters!';
+        }
+      }
+    });
+
+    if (!newName || newName === currentName) return;
+
+    try {
+      await dispatch(editLayout({
+        layoutId,
+        layoutConfig: { name: newName.trim() } as any
+      })).unwrap();
+
+      mysweetalert.fire({
+        icon: "success",
+        title: "Layout Renamed!",
+        text: `Layout has been renamed to "${newName.trim()}".`,
+        confirmButtonColor: "#3085d6"
+      });
+    } catch (error) {
+      console.error('Failed to rename layout:', error);
+      mysweetalert.fire({
+        icon: "error",
+        title: "Rename Failed",
+        text: "Something went wrong while renaming the layout. Please try again.",
+        confirmButtonColor: "#d33"
+      });
+    }
+  };
+
+
+  // // Show CustomizeLayout for mobile editing
+  // if (editingLayout && activeLayout) {
+  //   return (
+  //     <div className="w-full h-screen">
+  //       <CustomizeLayout
+  //         layout={activeLayout}
+  //         onBack={handleBackFromEdit}
+  //         edit={true}
+  //       />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="relative flex flex-col items-center justify-between w-full h-screen px-[1vh] mt-1 overflow-y-scroll">
@@ -122,7 +170,18 @@ const StoreDashboardLayouts = () => {
           {store.name} Layouts
         </h1>
         {storeLayouts.length === 0 ? (
-          <p>No layouts available for this store.</p>
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/4076/4076503.png"
+            alt="Empty layouts"
+            className="w-32 opacity-80 mb-6"
+          />
+        
+          <h2 className="text-2xl font-semibold text-gray-700">No Layouts Yet</h2>
+          <p className="text-gray-500 mt-2 max-w-xs">
+            Your store doesn't have any layouts created. Build a custom layout to design your storefront.
+          </p>
+        </div>        
         ) : (
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 px-4">
             {storeLayouts.map((layout) => {
@@ -145,6 +204,8 @@ const StoreDashboardLayouts = () => {
                     screenshot: layout.screenshot
                   }}
                   onSelect={() => handleEdit(layout._id || '')}
+                  onSetActive={() => handleSetActiveLayout(layout._id || '')}
+                  onRename={() => handleRenameLayout(layout._id || '', layout.name || 'Store Layout')}
                 />
               );
             })}

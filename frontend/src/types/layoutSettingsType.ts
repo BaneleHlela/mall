@@ -14,15 +14,16 @@ export interface TextSettings {
     fontStyle?: string;
     padding?: PaddingValue;
     backgroundColor?: string;
-  }
+}
   
 export interface EditorProps {
     objectPath: string;
-    settings: any; 
+    settings: any;
     handleSettingChange: (field: string, value: any) => void;
     allow?: string[];
     responsiveSize?: boolean;
     responsivePadding?: boolean;
+    useTextarea?: boolean;
 }
 
 export interface ResponsiveValue {
@@ -31,8 +32,8 @@ export interface ResponsiveValue {
 }
 
 interface PaddingValue {
-  x?: string;
-  y?: string;
+  x?: string | ResponsiveValue;
+  y?: string | ResponsiveValue;
 }
 
 export interface BackgroundSettings {

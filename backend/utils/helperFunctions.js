@@ -69,8 +69,7 @@ export const captureStoreHomePoster = async () => {
 export const captureStoreLayoutScreenshot = async (layoutId) => {
 
   //const url = `${CLIENT_URL}/stores/${storeId}`;
-  const url = `http://localhost:5173/layouts/${layoutId}/capture`;
-  console.log(url)
+  const url = `http://localhost:5173/layouts/${layoutId}/preview`;
 
   try {
     const screenshotBuffer = await captureScreenshot(url, 360, 660);

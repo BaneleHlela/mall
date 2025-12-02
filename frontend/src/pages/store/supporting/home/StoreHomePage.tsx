@@ -15,6 +15,7 @@ import {
 
 import { useAppSelector } from "../../../../app/hooks";
 import StoreTeamSection from "../../../../components/store_layout/sections/team/StoreTeamSection";
+import StoreFAQsSection from "../../../../components/store_layout/sections/FAQs/StoreFAQsSection";
 
 const StoreHome = () => {
   const settings = useAppSelector((state) => state.layoutSettings);
@@ -35,6 +36,7 @@ const StoreHome = () => {
     book: <StoreBookSection />,
     packages: <StorePackagesSection />,
     team: <StoreTeamSection />,
+    FAQs: <StoreFAQsSection />,
   };
 
   return (

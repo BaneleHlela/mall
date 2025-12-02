@@ -3,6 +3,7 @@ import expressAsyncHandler from "express-async-handler";
 import { captureScreenshot } from "../config/puppeteerConfig.js";
 import { uploadToUploads, deleteFromUploads } from "../config/gcsClient.js";
 import { captureStoreLayoutScreenshot } from "../utils/helperFunctions.js";
+import _ from "lodash";
 
 const CLIENT_URL = process.env.CLIENT_URL
 
@@ -35,68 +36,16 @@ export const createLayoutConfig = async (req, res) => {
 
 export const createLayoutConfigWithSettings = async (req, res) => {
     try {
-      const { layoutId, newColors, oldColors, newFonts, sectionUpdates, store } = req.body;
-  
+      const { layoutId, newColors, newFonts, sectionUpdates, store } = req.body;
+
       // Fetch the original layout
       const originalLayout = await StoreLayout.findById(layoutId);
       if (!originalLayout) {
         return res.status(404).json({ message: 'Original layout not found.' });
       }
-  
+
       const clonedLayout = JSON.parse(JSON.stringify(originalLayout)); // Deep clone layout
       delete clonedLayout._id;
-      const fonts = { ...originalLayout.fonts }; // Clone fonts if needed
-  
-      // === Replace Colors Recursively ===
-      if (newColors && oldColors) {
-        const replaceColors = (node) => {
-          if (typeof node === 'object' && node !== null) {
-            for (const key in node) {
-              if (typeof node[key] === 'string') {
-                const colorIndex = oldColors.indexOf(node[key]);
-                if (colorIndex !== -1 && newColors[colorIndex]) {
-                  node[key] = newColors[colorIndex];
-                }
-              } else {
-                replaceColors(node[key]);
-              }
-            }
-          }
-        };
-        replaceColors(clonedLayout);
-      }
-  
-      // === Replace Fonts ===
-      const updatedFonts = { ...fonts };
-  
-      if (newFonts?.primary && fonts.primary && newFonts.primary !== fonts.primary) {
-        updatedFonts.primary = newFonts.primary;
-      }
-      if (newFonts?.secondary && fonts.secondary && newFonts.secondary !== fonts.secondary) {
-        updatedFonts.secondary = newFonts.secondary;
-      }
-      if (newFonts?.tertiary && fonts.tertiary && newFonts.tertiary !== fonts.tertiary) {
-        updatedFonts.tertiary = newFonts.tertiary;
-      }
-  
-      if (newFonts) {
-        const replaceFonts = (node) => {
-          if (typeof node === 'object' && node !== null) {
-            for (const key in node) {
-              if (typeof node[key] === 'string') {
-                const fontIndex = Object.values(fonts).indexOf(node[key]);
-                const newFont = Object.values(newFonts)[fontIndex];
-                if (fontIndex !== -1 && newFont) {
-                  node[key] = newFont;
-                }
-              } else {
-                replaceFonts(node[key]);
-              }
-            }
-          }
-        };
-        replaceFonts(clonedLayout);
-      }
 
       // === Apply Section Updates ===
       if (sectionUpdates) {
@@ -106,11 +55,11 @@ export const createLayoutConfigWithSettings = async (req, res) => {
           }
         });
       }
-  
+
       // === Create New Layout ===
       const newLayout = await StoreLayout.create({
         ...clonedLayout,
-        fonts: updatedFonts,
+        fonts: newFonts || clonedLayout.fonts,
         colors: newColors || clonedLayout.colors,
         name: "New Layout with Updated Settings",
         store
@@ -145,57 +94,26 @@ export const createLayoutConfigWithSettings = async (req, res) => {
 
 export const updateLayoutConfigWithSettings = async (req, res) => {
     try {
-      const { layoutId, newColors, oldColors, newFonts, sectionUpdates, store } = req.body;
-  
+      const { layoutId, newColors, newFonts, sectionUpdates, store } = req.body;
+
       // Fetch the existing layout
       const existingLayout = await StoreLayout.findById(layoutId);
       if (!existingLayout) {
         return res.status(404).json({ message: 'Layout not found.' });
       }
-  
+
       let updatedLayout = JSON.parse(JSON.stringify(existingLayout));
-  
+
       // Apply color changes if provided
-      if (newColors && oldColors) {
-        const replaceColors = (node) => {
-          if (typeof node === 'object' && node !== null) {
-            for (const key in node) {
-              if (typeof node[key] === 'string') {
-                const colorIndex = oldColors.indexOf(node[key]);
-                if (colorIndex !== -1 && newColors[colorIndex]) {
-                  node[key] = newColors[colorIndex];
-                }
-              } else {
-                replaceColors(node[key]);
-              }
-            }
-          }
-        };
-        replaceColors(updatedLayout);
+      if (newColors) {
         updatedLayout.colors = newColors;
       }
-  
+
       // Apply font changes if provided
       if (newFonts) {
-        const replaceFonts = (node) => {
-          if (typeof node === 'object' && node !== null) {
-            for (const key in node) {
-              if (typeof node[key] === 'string') {
-                const fontIndex = Object.values(existingLayout.fonts || {}).indexOf(node[key]);
-                const newFont = Object.values(newFonts)[fontIndex];
-                if (fontIndex !== -1 && newFont) {
-                  node[key] = newFont;
-                }
-              } else {
-                replaceFonts(node[key]);
-              }
-            }
-          }
-        };
-        replaceFonts(updatedLayout);
         updatedLayout.fonts = { ...existingLayout.fonts, ...newFonts };
       }
-  
+
       // Apply section updates if provided
       if (sectionUpdates) {
         Object.keys(sectionUpdates).forEach(sectionKey => {
@@ -204,14 +122,14 @@ export const updateLayoutConfigWithSettings = async (req, res) => {
           }
         });
       }
-  
+
       // Update the layout in the database
       const savedLayout = await StoreLayout.findByIdAndUpdate(
         layoutId,
         { $set: updatedLayout },
         { new: true }
       );
-  
+
       res.status(200).json(savedLayout);
     } catch (error) {
       console.error('Error updating layout with settings:', error);
@@ -282,39 +200,128 @@ export const getLayoutByStore = expressAsyncHandler(async (req, res) => {
 });
 
 export const getDemoLayouts = expressAsyncHandler(async (req, res) => {
-    // Fetch all demo layouts
-    const demoLayouts = await StoreLayout.find({ isDemo: true }).populate('store', '_id name slug');
+    const { trades } = req.query;
 
-    if (!demoLayouts || demoLayouts.length === 0) {
+    // Fetch all demo layouts
+    const demoLayouts = await StoreLayout.find({ isDemo: true, store: { $ne: null } }).populate('store', '_id name slug trades');
+
+    let filteredLayouts = demoLayouts;
+
+    if (trades) {
+        const tradesArray = trades.split(',');
+        // Filter layouts where the store has at least one matching trade
+        filteredLayouts = demoLayouts.filter(layout => {
+            const storeTrades = layout.store?.trades || [];
+            return tradesArray.some(trade => storeTrades.includes(trade));
+        });
+    }
+
+    if (!filteredLayouts || filteredLayouts.length === 0) {
         res.status(404);
         throw new Error("No demo layouts found.");
     }
 
-    res.json(demoLayouts);
+    res.json(filteredLayouts);
 });
 
 
 // Update Layout Configuration
 export const updateLayoutConfig = expressAsyncHandler(async (req, res) => {
-    const { layoutId } = req.params;
-    const  layoutConfig  = req.body;
+  const { layoutId } = req.params;
+  const body = req.body;
+  const layout = await StoreLayout.findById(layoutId);
+  if (!layout) {
+    return res.status(404).json({ message: "Layout not found" });
+  }
+  
+  if (body.store) {
+    layout.store = body.store;
+  };
 
-    // Update the layouts in the Layouts collection
-    const updatedLayout = await StoreLayout.findByIdAndUpdate(
-        layoutId,
-        { $set: layoutConfig },
-        { new: true } // Return the updated document
-    );
+  if (body.floats) {
+    layout.floats = body.floats;
+  }
 
-    if (!updatedLayout) {
-        res.status(404);
-        throw new Error("Layout configuration not found.");
-    }
+  if (body.routes) {
+    layout.routes = body.routes;
+  }
 
-    res.json({
-        message: "Layout updated successfully.",
-        layout: updatedLayout,
-    });
+  if (body.routeOrder) {
+    layout.routeOrder = body.routeOrder;
+  }
+
+  if (body.name) {
+    layout.name = body.name;
+  };
+
+  if (body.menubar) {
+    layout.menubar = body.menubar;
+  };
+
+  if (body.colors) {
+    layout.colors = body.colors;
+  };
+
+  if (body.fonts) {
+    layout.fonts = body.fonts;
+  };
+
+  if (body.sections?.footer) {
+    layout.sections.footer = body.sections.footer;
+  };
+  if (body.sections?.about) {
+    layout.sections.about = body.sections.about;
+  }
+
+  // Example: update sections.hero only if present
+  if (body.sections?.hero) {
+    layout.sections.hero = body.sections.hero;
+  }
+
+  if (body.sections?.products) {
+    layout.sections.products = body.sections.products;
+  }
+
+  if (body.sections?.FAQs) {
+    layout.sections.FAQs = body.sections.FAQs;
+  }
+
+  if (body.sections?.searchResults) {
+    layout.sections.searchResults = body.sections.searchResults;
+  }
+
+  if (body.sections?.contact) {
+    layout.sections.contact = body.sections.contact;
+  }
+
+  if (body.sections?.reviews) {
+    layout.sections.reviews = body.sections.reviews;
+  }
+
+  if (body.sections?.gallery) {
+    layout.sections.gallery = body.sections.gallery;
+  }
+
+  if (body.sections?.singleProduct) {
+    layout.sections.singleProduct = body.sections.singleProduct;
+  }
+
+  // Example: update layout settings
+  if (body.settings) {
+    Object.assign(layout.settings, body.settings);
+  }
+
+  // Save
+  const updatedLayout = await StoreLayout.findByIdAndUpdate(
+    layoutId,
+    { $set: layout },
+    { new: true, runValidators: true }
+  );
+
+  res.json({
+    message: "Layout updated successfully",
+    layout: updatedLayout,
+  });
 });
 
 // Delete Layout Configuration

@@ -93,7 +93,7 @@ const MenubarWithSearchbar = () => {
             backgroundColor: layout.colors.primary,    
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="w-full h-fit bg-amber-50 fixed top-0 left-0 z-50 shadow opacity-90"
+        className="w-full h-fit bg-amber-50 sticky top-0 left-0 z-50 shadow"
     >
         {/* Mobile */}
         <div className="w-full h-[13.5vh] lg:hidden">
@@ -155,11 +155,11 @@ const MenubarWithSearchbar = () => {
                                         />
                                     )}
                                     {item === 'heart' && (
-                                        <div className="flex">
+                                        <div className="flex px-[.2vh]">
                                             <StoreMenubarCart
                                                 style={{
                                                     variation: layout.menubar.topbar.cart.variation,
-                                                    size: "4vh",
+                                                    size: "4.5vh",
                                                     color: layout.colors.secondary,
                                                     count: {
                                                         backgroundColor: 'black',
@@ -168,7 +168,7 @@ const MenubarWithSearchbar = () => {
                                                 }}
                                             />
                                             <StoreMenubarHeart
-                                                size="4vh"
+                                                size="4.5vh"
                                                 color={layout.colors.secondary}
                                             />
                                         </div>
@@ -311,7 +311,7 @@ const MenubarWithSearchbar = () => {
                 links: {
                     color: layout.colors.secondary,
                     alignment: "center",
-                    fontFamily: layout.fonts.primary,
+                    fontFamily: layout.fonts.primary || "Arial",
                     borderColor: layout.colors.quad,
                 },
                 backgroundColor: layout.colors.primary,

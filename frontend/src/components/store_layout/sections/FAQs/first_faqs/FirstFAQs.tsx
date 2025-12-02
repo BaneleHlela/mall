@@ -1,21 +1,18 @@
 import React from 'react'
-import { mockLayout } from '../../../../../major_updates/mockLayout';
-import { getTextStyles } from '../../../../../utils/stylingFunctions';
+import { getBackgroundStyles, getTextStyles } from '../../../../../utils/stylingFunctions';
 import { useAppSelector } from '../../../../../app/hooks';
 
 const FirstFAQs = () => {
-    const { colors, fonts } = useAppSelector(state => state.layoutSettings);
-    const FAQs = mockLayout.sections.FAQs;
+    const colors = useAppSelector((state) => state.layoutSettings.colors);
+    const FAQs = useAppSelector((state) => state.layoutSettings.sections.FAQs);
 
     return (
-        <div style={{backgroundColor: colors.primary}}>
+        <div id="FAQs" style={{...getBackgroundStyles(FAQs.background)}}>
             {/* Mobile */}
             <div className="py-[7vh] px-[3vh] space-y-[3vh] lg:hidden">
                 <p 
                     style={{
                         ...getTextStyles(FAQs.text.header), 
-                        color: colors.secondary, 
-                        fontFamily: fonts.primary,
                     }}
                     className="font-bold py-[1vh] "
                 >{FAQs.text.header.input}</p>
@@ -23,16 +20,12 @@ const FirstFAQs = () => {
                     <p 
                         style={{
                             ...getTextStyles(FAQs.text.QnAs.style.title),
-                            fontFamily: fonts.primary,
-                            color: colors.secondary,
                         }}
                         className="font-bold"
                     >{FAQs.text.QnAs.inputs.first.title}</p>
                     <p 
                         style={{
                             ...getTextStyles(FAQs.text.QnAs.style.paragraph),
-                            fontFamily: fonts.primary,
-                            color: colors.secondary,
                         }}
                         className="py-[1vh] font-light"
                     >{FAQs.text.QnAs.inputs.first.paragraph}</p>
@@ -41,16 +34,12 @@ const FirstFAQs = () => {
                     <p 
                         style={{
                             ...getTextStyles(FAQs.text.QnAs.style.title),
-                            fontFamily: fonts.primary,
-                            color: colors.secondary,
                         }}
                         className="font-bold "
                     >{FAQs.text.QnAs.inputs.second.title}</p>
                     <p 
                         style={{
                             ...getTextStyles(FAQs.text.QnAs.style.paragraph),
-                            fontFamily: fonts.primary,
-                            color: colors.secondary,
                         }}
                         className="py-[1vh] font-light"
                     >{FAQs.text.QnAs.inputs.second.paragraph}</p>
@@ -59,16 +48,12 @@ const FirstFAQs = () => {
                     <p 
                         style={{
                             ...getTextStyles(FAQs.text.QnAs.style.title),
-                            fontFamily: fonts.primary,
-                            color: colors.secondary,
                         }}
                         className="font-bold"
                     >{FAQs.text.QnAs.inputs.third.title}</p>
                     <p 
                         style={{
                             ...getTextStyles(FAQs.text.QnAs.style.paragraph),
-                            fontFamily: fonts.primary,
-                            color: colors.secondary,
                         }}
                         className="py-[1vh] font-light"
                     >{FAQs.text.QnAs.inputs.third.paragraph}</p>
@@ -80,8 +65,6 @@ const FirstFAQs = () => {
                     <p 
                         style={{
                             ...getTextStyles(FAQs.text.header), 
-                            color: colors.secondary, 
-                            fontFamily: fonts.primary,
                         }}
                         className="font-bold py-[1vh] "
                     >{FAQs.text.header.input}</p>
@@ -91,16 +74,12 @@ const FirstFAQs = () => {
                         <p 
                             style={{
                                 ...getTextStyles(FAQs.text.QnAs.style.title),
-                                fontFamily: fonts.primary,
-                                color: colors.secondary,
                             }}
                             className="font-bold"
                         >{FAQs.text.QnAs.inputs.first.title}</p>
                         <p 
                             style={{
                                 ...getTextStyles(FAQs.text.QnAs.style.paragraph),
-                                fontFamily: fonts.primary,
-                                color: colors.secondary,
                             }}
                             className="py-[1vh] font-light"
                         >{FAQs.text.QnAs.inputs.first.paragraph}</p>
@@ -109,16 +88,12 @@ const FirstFAQs = () => {
                         <p 
                             style={{
                                 ...getTextStyles(FAQs.text.QnAs.style.title),
-                                fontFamily: fonts.primary,
-                                color: colors.secondary,
                             }}
                             className="font-bold "
                         >{FAQs.text.QnAs.inputs.second.title}</p>
                         <p 
                             style={{
                                 ...getTextStyles(FAQs.text.QnAs.style.paragraph),
-                                fontFamily: fonts.primary,
-                                color: colors.secondary,
                             }}
                             className="py-[1vh] font-light"
                         >{FAQs.text.QnAs.inputs.second.paragraph}</p>
@@ -127,16 +102,12 @@ const FirstFAQs = () => {
                         <p 
                             style={{
                                 ...getTextStyles(FAQs.text.QnAs.style.title),
-                                fontFamily: fonts.primary,
-                                color: colors.secondary,
                             }}
                             className="font-bold"
                         >{FAQs.text.QnAs.inputs.third.title}</p>
                         <p 
                             style={{
                                 ...getTextStyles(FAQs.text.QnAs.style.paragraph),
-                                fontFamily: fonts.primary,
-                                color: colors.secondary,
                             }}
                             className="py-[1vh] font-light"
                         >{FAQs.text.QnAs.inputs.third.paragraph}</p>

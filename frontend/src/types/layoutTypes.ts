@@ -62,6 +62,7 @@ export interface Layout {
         floatingButton: any;
     };
     menubar?: any;
+    welcomeDiv?: any;
     sections: {
         gallery?: any;
         products?: any;
@@ -78,6 +79,8 @@ export interface Layout {
         footer: any;
         singleProduct: any;
         bookService: any;
+        FAQs?: any;
+        searchResults?: any;
     };
 }
   
@@ -114,6 +117,7 @@ export interface Routes {
 }
 
 export interface TextProps {
+    input?: string;
     fontFamily?: string;
     fontWeight?: string;
     color?: string;

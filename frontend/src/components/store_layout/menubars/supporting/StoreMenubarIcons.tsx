@@ -19,7 +19,7 @@ interface StoreMenubarIconsProps {
       platforms: any;
       //show: string[];
       size: string;
-      color: string;
+      color: 'primary' | 'secondary' | 'accent' | 'quad' | 'pent';
       background: {
         padding?: {
             x: string;
@@ -56,31 +56,37 @@ export const socials = [
 
 
 const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({ style, asFloat }) => {
+    // Safeguard against missing style object
+    if (!style) return null;
+
     const socials = useAppSelector((state) => state.stores?.currentStore?.socials);
-    const platforms = style.platforms
+    const platforms = style?.platforms || {};
+    const colors = useAppSelector((state) => state.layoutSettings.colors);
     
     const renderIcon = (platform: string) => {
+        const iconSize = style?.size || "20";
+        const iconColor = colors?.[style?.color] || colors?.primary || "#000";
         switch (platform) {
             case "facebook":
-                return <FaFacebook size={style.size} color={style.color} />;
+                return <FaFacebook size={iconSize} color={iconColor} />;
             case "twitter":
-                return <BsTwitterX size={style.size} color={style.color} />;
+                return <BsTwitterX size={iconSize} color={iconColor} />;
             case "instagram":
-                return <FaInstagram size={style.size} color={style.color} />;
+                return <FaInstagram size={iconSize} color={iconColor} />;
             case "linkedin":
-                return <FaLinkedin size={style.size} color={style.color} />;
+                return <FaLinkedin size={iconSize} color={iconColor} />;
             case "pinterest":
-                return <FaPinterest size={style.size} color={style.color} />;
+                return <FaPinterest size={iconSize} color={iconColor} />;
             case "youtube":
-                return <FaYoutube size={style.size} color={style.color} />;
+                return <FaYoutube size={iconSize} color={iconColor} />;
             case "whatsapp":
-                return <FaWhatsapp size={style.size} color={style.color} className="scale-108"/>;
+                return <FaWhatsapp size={iconSize} color={iconColor} className="scale-108"/>;
             case "phone":
-                return <FaPhoneAlt size={style.size} color={style.color} />;
+                return <FaPhoneAlt size={iconSize} color={iconColor} />;
             case "email":
-                return <SiGmail size={style.size} color={style.color} />;
+                return <SiGmail size={iconSize} color={iconColor} />;
             default:
-                return null; 
+                return null;
         }
     };
 
@@ -91,18 +97,17 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({ style, asFloat })
           window.location.href = url; // Handle phone or email links
         }
     };
-    const platformOrder = [platforms.first, platforms.second, platforms.third];
-
+    const platformOrder = [platforms?.first, platforms?.second, platforms?.third].filter(Boolean);
     return (
-        <div 
+        <div
             style={{
-                ...getBorderStyles(style.background.border),
-                ...getBackgroundStyles(style.background)
+                ...getBorderStyles(style?.background?.border || {}),
+                ...getBackgroundStyles(style?.background || {})
             }}
             className={`w-fit flex ${ asFloat ? "flex-col" : "flex-row" } justify-center gap-2`}
         >
             {platformOrder
-            .slice(0, Math.min(style.number, 3)) // ✅ limit the number of icons
+            .slice(0, Math.min(style?.number || 3, 3)) // ✅ limit the number of icons
             .map((platform) => {
                 const social = socials?.find(s => s.platform === platform);
                 if (!social) return null;
@@ -111,7 +116,7 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({ style, asFloat })
                     <div
                         key={platform}
                         style={{
-                            ...getBackgroundStyles(style.iconBackground),
+                            ...getBackgroundStyles(style?.iconBackground || {}),
                         }}
                         className="flex items-center justify-between rounded-full cursor-pointer hover:scale-110"
                         onClick={() => handleRedirect(social.url)}

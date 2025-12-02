@@ -8,19 +8,21 @@ const VariationDropdown: React.FC<{
   selectedVariation: string | null;
   onVariationChange: (variation: string) => void;
   style: any;
-}> = ({ variations, selectedVariation, onVariationChange, style }) => {
+  colors: any;
+  fonts: any;
+}> = ({ variations, selectedVariation, onVariationChange, style, colors, fonts }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div
       style={{
-        ...getTextStyles(style.text.dropdown),
-      }} 
+        ...getTextStyles(style.text.dropdown, fonts, colors),
+      }}
       className="w-full relative capitalize"
     >
       <button
         style={{
-          ...getBackgroundStyles(style.background.button)
+          ...getBackgroundStyles(style.background.button, colors)
         }}
         type="button"
         onClick={() => setIsOpen(prev => !prev)}
@@ -33,7 +35,7 @@ const VariationDropdown: React.FC<{
         {isOpen && (
           <motion.ul
             style={{
-              ...getBackgroundStyles(style.background.dropdown),
+              ...getBackgroundStyles(style.background.dropdown, colors),
             }}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}

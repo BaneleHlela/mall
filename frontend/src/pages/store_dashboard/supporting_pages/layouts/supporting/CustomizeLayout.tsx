@@ -25,7 +25,7 @@ interface CustomizeLayoutProps {
 
 const CustomizeLayout: React.FC<CustomizeLayoutProps> = ({ layout, onBack, edit = false }) => {
     const dispatch = useAppDispatch();
-    const colorMap = extractLayoutColors(layout);
+    const colorMap = layout.colors ? Object.values(layout.colors) : extractLayoutColors(layout);
     const storeId = useAppSelector((state) => state.storeAdmin.store?._id)
     const isLoading = useAppSelector((state) => state.layout.isLoading);
     const activeLayout = useAppSelector((state) => state.layout.activeLayout);
@@ -79,9 +79,14 @@ const CustomizeLayout: React.FC<CustomizeLayoutProps> = ({ layout, onBack, edit 
     };
 
     const handleCreateOrUpdateLayout = () => {
-        const oldColors = colorMap;
-        const newColors = colors;
-        
+        const newColorsObj = colors.length > 0 ? {
+            primary: colors[0] || layout.colors?.primary,
+            secondary: colors[1] || layout.colors?.secondary,
+            accent: colors[2] || layout.colors?.accent,
+            quad: colors[3] || layout.colors?.quad,
+            pent: colors[4] || layout.colors?.pent,
+        } : undefined;
+
         if (!layout._id) {
             console.error('Layout ID is required');
             return;
@@ -91,8 +96,7 @@ const CustomizeLayout: React.FC<CustomizeLayoutProps> = ({ layout, onBack, edit 
             // Update existing layout
             dispatch(updateLayoutWithSettings({
                 layoutId: layout._id,
-                newColors: colors.length > 0 ? newColors : undefined,
-                oldColors: colors.length > 0 ? oldColors : undefined,
+                newColors: newColorsObj,
                 newFonts: selectedFonts,
                 sectionUpdates: Object.keys(sectionUpdates).length > 0 ? sectionUpdates : undefined,
                 store: storeId || ''
@@ -101,8 +105,7 @@ const CustomizeLayout: React.FC<CustomizeLayoutProps> = ({ layout, onBack, edit 
             // Create new layout
             dispatch(createLayoutWithSettings({
                 layoutId: layout._id,
-                newColors,
-                oldColors,
+                newColors: newColorsObj,
                 newFonts: selectedFonts,
                 sectionUpdates: Object.keys(sectionUpdates).length > 0 ? sectionUpdates : undefined,
                 store: storeId || ''
@@ -203,13 +206,13 @@ const CustomizeLayout: React.FC<CustomizeLayoutProps> = ({ layout, onBack, edit 
                         <p className="block text-[2vh] font-medium mb-1">Secondary Font</p>
                         <div className="flex flex-col items-center justify-between gap-2">
                             <div className="flex justify-evenly items-center gap-1 w-full">
-                                <p style={{lineHeight: "1.1"}} className="line-camp-1">{layout.fonts.primary}</p>
+                                <p style={{lineHeight: "1.1"}} className="line-camp-1">{layout.fonts.secondary}</p>
                                 <GrLinkNext className="text-[1.5vh]"/>
-                                <span className="line-camp-1">{selectedFonts.primary || "None selected"}</span>             
+                                <span className="line-camp-1">{selectedFonts.secondary || "None selected"}</span>             
                             </div>
                             <div className="w-full">
                                 <GoogleFontsSelector
-                                    selectedFont={selectedFonts.primary}
+                                    selectedFont={selectedFonts.secondary}
                                     onFontSelect={(font) => handleFontChange("secondary", font)}
                                 />
                             </div>
@@ -221,13 +224,13 @@ const CustomizeLayout: React.FC<CustomizeLayoutProps> = ({ layout, onBack, edit 
                         <p className="block text-[2vh] font-medium mb-1">Tertiary Font</p>
                         <div className="flex flex-col items-center justify-between gap-2">
                             <div className="flex justify-evenly items-center gap-1 w-full">
-                                <p style={{lineHeight: "1.1"}} className="line-camp-1">{layout.fonts.primary}</p>
+                                <p style={{lineHeight: "1.1"}} className="line-camp-1">{layout.fonts.tertiary}</p>
                                 <GrLinkNext className="text-[1.5vh]"/>
-                                <span className="line-camp-1">{selectedFonts.primary || "None selected"}</span>             
+                                <span className="line-camp-1">{selectedFonts.tertiary || "None selected"}</span>             
                             </div>
                             <div className="w-full">
                                 <GoogleFontsSelector
-                                    selectedFont={selectedFonts.primary}
+                                    selectedFont={selectedFonts.tertiary}
                                     onFontSelect={(font) => handleFontChange("tertiary", font)}
                                 />
                             </div>

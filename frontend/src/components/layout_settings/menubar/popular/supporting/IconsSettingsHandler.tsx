@@ -1,8 +1,8 @@
+import { useEffect } from "react";
 import { useAppSelector } from "../../../../../app/hooks";
 import { getSetting } from "../../../../../utils/helperFunctions";
 import BackgroundEditor from "../../../background/BackgroundEditor";
 import SubSettingsContainer from "../../../extras/SubSettingsContainer";
-import ColorPicker from "../../../supporting/ColorPicker";
 import OptionsToggler from "../../../supporting/OptionsToggler";
 import SettingsSlider from "../../../supporting/SettingsSlider";
 
@@ -26,18 +26,41 @@ const IconsSettingsHandler: React.FC<IconsSettingsHandlerProps> = ({
 
   const currentNumber = getSetting("number", settings, objectPath) || 1;
   const platformsObj: Record<string, string> =
-  getSetting("platforms", settings, objectPath) || {};
+  (typeof getSetting("platforms", settings, objectPath) === 'object' && getSetting("platforms", settings, objectPath) !== null)
+    ? getSetting("platforms", settings, objectPath)
+    : {};
   const MAX_ICONS = 3;
   const indexKeyMap = ["first", "second", "third"];
-  const socials = useAppSelector((state) => state.stores.currentStore?.socials);
-  const availablePlatforms = socials?.map((item) => item.platform);
+  const socials = useAppSelector((state) => state.stores?.currentStore?.socials);
+  const availablePlatforms = socials?.map((item) => item.platform) || [];
+  const maxIcons = Math.min(MAX_ICONS, availablePlatforms.length);
+
+  useEffect(() => {
+    if (currentNumber > availablePlatforms.length) {
+      handleSettingChange(`${objectPath}.number`, availablePlatforms.length);
+    }
+  }, [availablePlatforms.length, currentNumber, handleSettingChange, objectPath]);
+
+  useEffect(() => {
+    if (typeof platformsObj !== 'object' || platformsObj === null) return;
+    const newPlatforms = { ...platformsObj };
+    indexKeyMap.forEach((key, i) => {
+      if (i >= currentNumber) {
+        delete newPlatforms[key];
+      }
+    });
+    if (JSON.stringify(newPlatforms) !== JSON.stringify(platformsObj)) {
+      handleSettingChange(`${objectPath}.platforms`, newPlatforms);
+    }
+  }, [currentNumber, platformsObj, handleSettingChange, objectPath, indexKeyMap]);
 
   console.log(socials)
 
   const handlePlatformChange = (index: number, value: string) => {
     const key = indexKeyMap[index];
+    const safePlatformsObj = (typeof platformsObj === 'object' && platformsObj !== null) ? platformsObj : {};
     const newPlatforms = {
-      ...platformsObj,
+      ...safePlatformsObj,
       [key]: value,
     };
     handleSettingChange(`${objectPath}.platforms`, newPlatforms);
@@ -46,12 +69,13 @@ const IconsSettingsHandler: React.FC<IconsSettingsHandlerProps> = ({
   const renderPlatformTogglers = () =>
     Array.from({ length: currentNumber }).map((_, i) => {
       const key = indexKeyMap[i];
+      const safePlatformsObj = (typeof platformsObj === 'object' && platformsObj !== null) ? platformsObj : {};
       return (
         <div key={i} className="my-2">
           <OptionsToggler
             label={`Icon ${String.fromCharCode(65 + i)}`} //@ts-ignore
             options={availablePlatforms}
-            value={platformsObj[key] || ""}
+            value={safePlatformsObj[key] || ""}
             onChange={(val) => handlePlatformChange(i, val)}
           />
         </div>
@@ -76,7 +100,7 @@ const IconsSettingsHandler: React.FC<IconsSettingsHandlerProps> = ({
             label="Number of icons"
             value={currentNumber}
             min={1}
-            max={MAX_ICONS}
+            max={maxIcons}
             step={1}
             onChange={(newVal) =>
               handleSettingChange(`${objectPath}.number`, newVal)
@@ -97,10 +121,11 @@ const IconsSettingsHandler: React.FC<IconsSettingsHandlerProps> = ({
               }
           />
 
-          <ColorPicker
+          <OptionsToggler
               label="Color"
-              value={getSetting("color", settings, objectPath)}
-              onChange={handleChange("color")}
+              options={["primary", "secondary", "accent", "quad", "pent"]}
+              value={getSetting("color", settings, objectPath) || "primary"}
+              onChange={(val) => handleSettingChange(`${objectPath}.color`, val)}
           />
           <SubSettingsContainer
               name="Icons Container"

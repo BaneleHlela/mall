@@ -4,9 +4,11 @@ import StoreAboutSection from "../../../../components/store_layout/sections/abou
 import StoreFooterSection from "../../../../components/store_layout/sections/footer/StoreFooterSection.tsx";
 
 const StoreAboutPage = () => {
+
   const aboutSections = useAppSelector(
     (state) => state.layoutSettings.routes.about?.contains || []
   );
+
 
   return (
     <div className="w-full flex flex-col justify-center items-center">

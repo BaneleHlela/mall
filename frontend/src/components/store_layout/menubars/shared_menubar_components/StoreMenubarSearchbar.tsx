@@ -4,13 +4,14 @@ import { useAppSelector, useAppDispatch } from "../../../../app/hooks";
 import { fetchStoreProducts } from "../../../../features/products/productsSlice";
 import type { Product } from "../../../../types/productTypes";
 import { IoMdClose } from "react-icons/io";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface StoreMenubarSearchbarProps {
     isOpen: boolean;
     onClose: () => void;
     style?: {
         input: {
-            fontFamily: string;
+            fontFamily?: string;
             backgroundColor: string;
             border: {
                 width: string;
@@ -34,6 +35,10 @@ interface SearchItemProps {
     description: string;
     imageUrl: string;
     fontFamily: string;
+    productSlug: string;
+    store: any;
+    layoutId?: string;
+    onClose: () => void;
 }
 
 const SearchItem: React.FC<SearchItemProps> = ({
@@ -41,11 +46,31 @@ const SearchItem: React.FC<SearchItemProps> = ({
     description,
     imageUrl,
     fontFamily,
+    productSlug,
+    store,
+    layoutId,
+    onClose,
 }) => {
     const { colors } = useAppSelector((state) => state.layoutSettings)
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        const currentUrl = window.location.href;
+
+        if (currentUrl.includes('layouts')) {
+          navigate(`/layouts/${layoutId}/preview/product/${productSlug}`);
+        } else if (store && store.slug) {
+          navigate(`/stores/${store.slug}/product/${productSlug}`);
+        } else {
+          console.error('Store ID is not available');
+        }
+        onClose();
+    };
+
     return (
         <div
-            className="flex w-full h-[10vh] overflow-hidden"
+            className="flex w-full h-[10vh] overflow-hidden cursor-pointer hover:bg-gray-100"
+            onClick={handleClick}
         >
             {/* Image Url */}
             <div className="w-[20%] aspect-square h-full">
@@ -74,6 +99,8 @@ const StoreMenubarSearchbar: React.FC<StoreMenubarSearchbarProps> = ({
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
     const overlayRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
+    const { layoutId } = useParams<{ layoutId: string }>();
 
     useEffect(() => {
         if (store?.slug) {
@@ -106,6 +133,21 @@ const StoreMenubarSearchbar: React.FC<StoreMenubarSearchbarProps> = ({
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [isOverlayOpen]);
+
+    const handleSearchAllClick = () => {
+        const currentUrl = window.location.href;
+
+        if (currentUrl.includes('layouts')) {
+            navigate(`/layouts/${layoutId}/preview/search?q=${encodeURIComponent(searchTerm)}`);
+        } else if (store && store.slug) {
+            navigate(`/stores/${store.slug}/search?q=${encodeURIComponent(searchTerm)}`);
+        } else {
+            navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+        }
+
+        setIsOverlayOpen(false);
+    };
+    
 
     return (
         <div className="relative w-full h-full">
@@ -165,6 +207,10 @@ const StoreMenubarSearchbar: React.FC<StoreMenubarSearchbarProps> = ({
                                         description={product.description}
                                         imageUrl={product.images[0] || ''}
                                         fontFamily={style?.input.fontFamily || 'inherit'}
+                                        productSlug={product.slug}
+                                        store={store}
+                                        layoutId={layoutId}
+                                        onClose={() => setIsOverlayOpen(false)}
                                     />
                                 ))
                             ) : (
@@ -173,13 +219,14 @@ const StoreMenubarSearchbar: React.FC<StoreMenubarSearchbarProps> = ({
                         </div>
                         {searchTerm && (
                             <div className="p-4 border-t">
-                                <button 
+                                <button
+                                    onClick={handleSearchAllClick}
                                     style={{
                                         backgroundColor: style?.overlay.button.backgroundColor || 'blue',
                                         color: style?.overlay.button.color || 'white',
                                         fontFamily: style?.input.fontFamily || 'inherit',
-                                    }} 
-                                    className="w-full p-[1vh] bg-blue-500 text-white rounded"
+                                    }}
+                                    className="w-full p-[1vh] bg-blue-500 text-white rounded hover:cursor-pointer hover:opacity-90 transition-all duration-200"
                                 >
                                     Search all '{searchTerm}'
                                 </button>

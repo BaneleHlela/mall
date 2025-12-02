@@ -38,6 +38,7 @@ import ContactPageSettings from "./ContactPageSettings";
 import SingleStoreProductPageSettings from "./SingleStoreProductPageSettings";
 import BookPageSettings from "./BookPageSettings";
 import BookServicePageSettings from "./BookServicePageSettings";
+import StoreSearchResultsPageSettings from "./StoreSearchResultsPageSettings";
 
 
 const SortableItem = ({
@@ -94,6 +95,7 @@ const PagesSettings: React.FC = () => {
   const routes: Routes = useAppSelector((state) => state.layoutSettings.routes);
   const routeOrder: string[] = useAppSelector((state) => state.layoutSettings.routeOrder);
   const store = useAppSelector((state) => state.storeAdmin.store);
+  const settings = useAppSelector((state) => state.layoutSettings);
   const MySwal = withReactContent(Swal);
 
   const [activePanel, setActivePanel] = useState<string | null>(null);
@@ -137,7 +139,7 @@ const PagesSettings: React.FC = () => {
         return <ReviewsPageSettings />;
       case "gallery":
         return <GalleryPageSettings />;
-      case "contact": 
+      case "contact":
         return <ContactPageSettings />;
       case "book":
         return <BookPageSettings />;
@@ -258,8 +260,17 @@ const PagesSettings: React.FC = () => {
           />
       )}
 
+      {settings.menubar?.variation === "menubarWithSearchbar" && (settings.sections as any).searchResults && (
+          <SettingsContainer
+            name="Search Results Page"
+            onClick={() => setActivePanel("search_results")}
+            deletable={false}
+            renamable={false}
+          />
+      )}
+
       <AnimatePresence>
-        {activePanel && activePanel !== "single_product" && activePanel !== "service" && (
+        {activePanel && activePanel !== "single_product" && activePanel !== "service" && activePanel !== "search_results" && (
           <SlidingPanel
             key={activePanel}
             isOpen={true}
@@ -287,6 +298,16 @@ const PagesSettings: React.FC = () => {
             title={`Service Page Settings`}
           >
             <BookServicePageSettings />
+          </SlidingPanel>
+        )}
+        {activePanel === "search_results" && (
+          <SlidingPanel
+            key="search_results"
+            isOpen={true}
+            onClose={closePanel}
+            title={`Search Results Page Settings`}
+          >
+            <StoreSearchResultsPageSettings />
           </SlidingPanel>
         )}
       </AnimatePresence>

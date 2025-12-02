@@ -1,29 +1,14 @@
 import React, { useState } from 'react'
 import type { SupportingSettingsProps } from '../../sections/gallery/with_grouped_images/SupportingImagesSettings'
 import { getSetting } from '../../../../utils/helperFunctions'
-import OptionsToggler from '../../supporting/OptionsToggler'
-import { FaPlus } from 'react-icons/fa'
 import FirstOrderSubSettingsContainer from '../../FirstOrderSubSettingsContainer'
-import { defaultStoreButtonConfig } from '../../../../utils/defaults/extras/defaultStoreButtonConfig'
-import { defaultAlertTextConfig, defaultAlertIconConfig } from '../../../../utils/defaults/extras/defaultStoreAlertDivConfig'
 import SlidingPanel from '../../supporting/SlidingPanel'
-import UnderlinedTextSettings from '../text/UnderlinedTextSettings'
 import StoreButtonSettings from '../StoreButtonSettings'
 import StoreAlertIconSettings from './supporting/StoreAlertIconSettings'
 import BackgroundEditor from '../../background/BackgroundEditor'
 import SubSettingsContainer from '../SubSettingsContainer'
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 import { AnimatePresence } from 'framer-motion'
-import SettingsSlider from '../../supporting/SettingsSlider'
-
-const MySwal = withReactContent(Swal);
-
-const itemTypes = [
-  { label: "Text", type: "text", defaultConfig: defaultAlertTextConfig },
-  { label: "Button", type: "button", defaultConfig: defaultStoreButtonConfig },
-  { label: "Icon", type: "icon", defaultConfig: defaultAlertIconConfig },
-];
+import TextEditor from '../../text/TextEditor'
 
 
 
@@ -34,97 +19,49 @@ const StoreAlertDivSettings: React.FC<SupportingSettingsProps> = ({
 }) => {
     const [activePanel, setActivePanel] = useState<string | null>(null);
     const closePanel = () => setActivePanel(null);
-    const [showDropdown, setShowDropdown] = useState(false);
 
-    const getNextKey = (type: string) => {
-        const currentItems = Object.keys(getSetting("items", settings, objectPath) || {});
-        const prefix = type;
-        let suffix = "A";
-      
-        while (currentItems.includes(prefix + suffix)) {
-          suffix = String.fromCharCode(suffix.charCodeAt(0) + 1); // A → B → C
+    // Ensure the three items exist with defaults
+    const ensureItems = () => {
+        const items = getSetting("items", settings, objectPath) || {};
+        if (!items.text) {
+            handleSettingChange(`${objectPath}.items.text`, {
+                input: "Free shipping for first time buyers!",
+                fontSize: { mobile: "2.5vh", desktop: "3vh" },
+                color: "primary",
+            });
         }
-      
-        return prefix + suffix;
-    };
-      
-    const handleDeleteItemClick = async (itemKey: string) => {
-        const result = await MySwal.fire({
-          title: "Are you sure?",
-          text: `Delete ${itemKey}?`,
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#d33",
-          cancelButtonColor: "#aaa",
-          confirmButtonText: "Yes, delete it!",
-        });
-      
-        if (result.isConfirmed) {
-            const items = { ...getSetting("items", settings, objectPath) };
-            // Remove the item key from the items object
-            delete items[itemKey];
-            // Also remove it from the order array
-            const updatedOrder = (items.order || []).filter((key: string) => key !== itemKey);
-            // Clean up lingering 'order' key before setting
-            delete items.order;
-            // Apply the updated items and order
-            handleSettingChange(`${objectPath}.items`, {
-              ...items,
-              order: updatedOrder,
-            });            
+        if (!items.icon) {
+            handleSettingChange(`${objectPath}.items.icon`, {
+                show: true,
+                name: "FaTruck",
+                color: "primary",
+                height: { mobile: "5vh", desktop: "5vh" },
+            });
+        }
+        if (!items.button) {
+            handleSettingChange(`${objectPath}.items.button`, {
+                button: {
+                    function: 'book',
+                    show: true,
+                    text: { input: "Book Now" },
+                    background: {
+                        width: { desktop: "17vh", mobile: "20vh" },
+                        padding: { x: { mobile: "3vh", desktop: "3vh" }, y: { mobile: "1.5vh", desktop: "2vh" } },
+                        border: { width: "0px", style: "solid", radius: "30px" }
+                    }
+                }
+            });
         }
     };
-      
 
-    const handleAddItem = (type: string, defaultConfig: any) => {
-        const newKey = getNextKey(type);
-        const fullItemsPath = `${objectPath}.items`;
-      
-        handleSettingChange(`${fullItemsPath}.${newKey}`, defaultConfig);
-      
-        const newOrder = [
-          ...(getSetting("items.order", settings, objectPath) || []),
-          newKey,
-        ];
-      
-        handleSettingChange(`${fullItemsPath}.order`, newOrder);
-      
-        setShowDropdown(false);
-    };
+    // Call ensureItems on mount
+    React.useEffect(() => {
+        ensureItems();
+    }, []);
 
 
     return (
         <div className='space-y-[.3vh] w-full flex flex-col items-center'>
-            {/* Add Item Button and Dropdown */}
-            <div className="relative">
-                <button
-                    className="text-[2vh] mb-[2vh] flex flex-row justify-between items-center bg-stone-50 border-[.35vh] border-white text-black rounded px-[5vh] py-[.6vh] shadow-md hover:scale-103 hover:opacity-85"
-                    onClick={() => setShowDropdown((prev) => !prev)}
-                >
-                    Add item <FaPlus className="ml-[.6vh]" />
-                </button>
-
-                {showDropdown && (
-                    <div className="absolute top-[70%] z-10 bg-stone-50 border-[.6vh] border-white shadow-lg rounded w-full">
-                    {itemTypes.map(({ label, type, defaultConfig }) => (
-                        <div
-                        key={type}
-                        onClick={() => handleAddItem(type, defaultConfig)}
-                        className="px-[1.2vh] py-[.6vh] hover:bg-stone-100 cursor-pointer text-black"
-                        >
-                        {label}
-                        </div>
-                    ))}
-                    </div>
-                )}
-            </div>
-            {/* Animation */}
-            <OptionsToggler
-                label="Mobile stack"
-                options={["loop", "flash", "none"]}
-                value={getSetting("animation", settings, objectPath)}
-                onChange={(value) => handleSettingChange(`${objectPath}.animation`, value)}
-            />
             <SubSettingsContainer
                 name="Background"
                 SettingsComponent={
@@ -140,96 +77,60 @@ const StoreAlertDivSettings: React.FC<SupportingSettingsProps> = ({
                 </div>
                 }
             />
-            <SubSettingsContainer
-                name="Gaps"
-                SettingsComponent={
-                <div className="px-[.6vh] space-y-[.3vh]">
-                    <SettingsSlider
-                        label="Gap (Container)"
-                        value={getSetting('items.gap.allItems', settings, objectPath)}
-                        min={.1}
-                        max={50}
-                        onChange={(newValue) =>
-                            handleSettingChange(`${objectPath}.items.gap.allItems`, newValue)
-                        }
-                    />
-                    <SettingsSlider
-                        label="Gap (Item)"
-                        value={getSetting('items.gap.item', settings, objectPath)}
-                        min={.1}
-                        max={50}
-                        onChange={(newValue) =>
-                            handleSettingChange(`${objectPath}.items.gap.item`, newValue)
-                        }
-                    />
-                </div>
-                }
+            <FirstOrderSubSettingsContainer
+                name="Icon"
+                onClick={() => setActivePanel("icon")}
             />
-            {getSetting("items.order", settings, objectPath)?.map((key: string) => {
-                const type = key.startsWith("text")
-                    ? "text"
-                    : key.startsWith("button")
-                    ? "button"
-                    : "icon";
-
-                const title = type === "text"
-                    ? "Text Settings"
-                    : type === "button"
-                    ? "Button Settings"
-                    : "Icon Settings";
-
-                const onClick = () => setActivePanel(key);
-
-                return (
-                    <FirstOrderSubSettingsContainer
-                    key={key}
-                    name={key}
-                    onClick={onClick}
-                    deletable
-                    onDeleteClick={() => handleDeleteItemClick(key)}
-                    />
-                );
-            })}
+            <FirstOrderSubSettingsContainer
+                name="Text"
+                onClick={() => setActivePanel("text")}
+            />
+            <FirstOrderSubSettingsContainer
+                name="Button"
+                onClick={() => setActivePanel("button")}
+            />
 
             <AnimatePresence>
-                {activePanel && activePanel.startsWith("text") && (
+                {activePanel === "text" && (
                     <SlidingPanel
                         isOpen={true}
                         onClose={closePanel}
-                        title={`Text Settings (${activePanel})`}
+                        title="Text Settings"
                     >
-                        <UnderlinedTextSettings
-                        settings={settings}
-                        handleSettingChange={handleSettingChange}
-                        objectPath={`${objectPath}.items.${activePanel}`}
-                        allowInput
+                        <TextEditor
+                            settings={settings}
+                            objectPath={`${objectPath}.items.text`}
+                            handleSettingChange={handleSettingChange}
+                            allow={["fontFamily", "color", "fontSize", "weight", "input"]}
+                            responsiveSize
                         />
                     </SlidingPanel>
-                    )}
+                )}
 
-                    {activePanel && activePanel.startsWith("button") && (
+                {activePanel === "button" && (
                     <SlidingPanel
                         isOpen={true}
                         onClose={closePanel}
-                        title={`Button Settings (${activePanel})`}
+                        title="Button Settings"
                     >
                         <StoreButtonSettings
-                        settings={settings}
-                        objectPath={`${objectPath}.items.${activePanel}`}
+                            settings={settings}
+                            objectPath={`${objectPath}.items.button`}
+                            allowSimpleShow
                         />
                     </SlidingPanel>
-                    )}
+                )}
 
-                    {activePanel && activePanel.startsWith("icon") && (
+                {activePanel === "icon" && (
                     <SlidingPanel
                         isOpen={true}
                         onClose={closePanel}
-                        title={`Icon Settings (${activePanel})`}
+                        title="Icon Settings"
                     >
                         <StoreAlertIconSettings
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            objectPath={`${objectPath}.items.${activePanel}`}
+                            objectPath={`${objectPath}.items.icon`}
                         />
                     </SlidingPanel>
                 )}

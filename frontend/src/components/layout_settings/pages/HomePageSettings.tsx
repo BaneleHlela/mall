@@ -32,6 +32,7 @@ import ServicesSectionSettings from "../sections/services/ServicesSectionSetting
 import StoreFooterSectionSettings from "../sections/footer/StoreFooterSectionSettings";
 import StoreTeamSectionSettings from "../sections/team/StoreTeamSectionSettings";
 import ProductsSectionSettings from "../sections/products/ProductsSectionSettings";
+import FAQsSectionSettings from "../sections/FAQs/FAQsSectionSettings";
 
 const SortableItem = ({
   id,
@@ -177,12 +178,14 @@ const HomePageSettings = () => {
         return <StoreReviewsSectionSettings />;
       case "services": 
         return <ServicesSectionSettings />;
-      case "products": 
+      case "products":
         return <ProductsSectionSettings />
       case "footer":
         return <StoreFooterSectionSettings />
       case "team":
         return <StoreTeamSectionSettings />
+      case "FAQs":
+        return <FAQsSectionSettings />
       default:
         return <div>No settings available for section "{section}".</div>;
     }

@@ -14,10 +14,10 @@ const TextEditor: React.FC<EditorProps> = ({
     handleSettingChange,
     allow,
     responsiveSize = false,
-    responsivePadding = false
+    responsivePadding = false,
+    useTextarea = false
 }) => {
     const isAllowed = (key: string) => !allow || allow.includes(key);
-    const availableFonts = useAppSelector((state) => state.layoutSettings.fonts);
 
 
     const handleChange =
@@ -48,33 +48,30 @@ const TextEditor: React.FC<EditorProps> = ({
       handleChange(field)(event);
     };
 
-    const handleClear = (field: string) => () => {
-      handleSettingChange(`${objectPath}.${field}`, "transparent");
-    };
-
     return (
         <div className="space-y-1 px-2">
           {isAllowed("input") && (
-            <InputHandler
-              label="Custom Text"
-              value={getSetting("input", settings, objectPath)}
-              onChange={(newValue) =>
-                handleChange("input")({
-                  target: { value: newValue },
-                } as React.ChangeEvent<HTMLInputElement>)
-              }
-            />
-          )}
-          {isAllowed("textArea") && (
-            <TextareaHandler
-              label="Custom Long Text"
-              value={getSetting("textArea", settings, objectPath)}
-              onChange={(newValue) =>
-                handleChange("textArea")({
-                  target: { value: newValue },
-                } as React.ChangeEvent<HTMLInputElement>)
-              }
-            />
+            useTextarea ? (
+              <TextareaHandler
+                label="Custom Text"
+                value={getSetting("input", settings, objectPath)}
+                onChange={(newValue) =>
+                  handleChange("input")({
+                    target: { value: newValue },
+                  } as React.ChangeEvent<HTMLInputElement>)
+                }
+              />
+            ) : (
+              <InputHandler
+                label="Custom Text"
+                value={getSetting("input", settings, objectPath)}
+                onChange={(newValue) =>
+                  handleChange("input")({
+                    target: { value: newValue },
+                  } as React.ChangeEvent<HTMLInputElement>)
+                }
+              />
+            )
           )}
           {isAllowed("show") && (
             <OptionsToggler
@@ -98,10 +95,10 @@ const TextEditor: React.FC<EditorProps> = ({
                   }
               />
           )}
-          {isAllowed("fontFamily") && (
+           {isAllowed("fontFamily") && (
             <OptionsToggler
               label="Font Family"
-              options={Object.values(availableFonts || {})}
+              options={["primary", "secondary", "tertiary"]}
               value={getSetting("fontFamily", settings, objectPath)}
               onChange={(newValue) =>
                 handleChange("fontFamily")({
@@ -112,11 +109,15 @@ const TextEditor: React.FC<EditorProps> = ({
           )}
           
           {isAllowed("color") && (
-            <ColorPicker
-              label="Color"
+            <OptionsToggler
+              label="Text Color"
+              options={["primary", "secondary", "accent", "quad", "pent"]}
               value={getSetting("color", settings, objectPath)}
-              onChange={handleChange("color")}
-              onClear={handleClear("color")}
+              onChange={(newValue) =>
+                handleChange("color")({
+                  target: { value: newValue }
+                } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
+              }
             />
           )}
 
@@ -148,11 +149,15 @@ const TextEditor: React.FC<EditorProps> = ({
           )}
 
           {isAllowed("backgroundColor") && (
-            <ColorPicker
+            <OptionsToggler
               label="Background Color"
+              options={["primary", "secondary", "accent", "quad", "pent"]}
               value={getSetting("backgroundColor", settings, objectPath)}
-              onChange={handleChange("backgroundColor")}
-              onClear={handleClear("backgroundColor")} // 👈 added
+              onChange={(newValue) =>
+                handleChange("backgroundColor")({
+                  target: { value: newValue }
+                } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
+              }
             />
           )}
       

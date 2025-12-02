@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { IoIosArrowRoundBack } from 'react-icons/io';
+import ErrorBoundary from '../../ErrorBoundary';
 
 interface SlidingPanelProps {
   isOpen: boolean;
@@ -17,14 +18,14 @@ const SlidingPanel: React.FC<SlidingPanelProps> = ({ isOpen, onClose, title, chi
       transition={{ type: 'tween', duration: 0.3 }}
       className="absolute top-0 right-0 w-full h-full bg-stone-50 overflow-y-auto"
     >
-      <div className="p-2">
+      <div className="p-2 space-y-[.25vh]">
         <div className="flex items-center mb-4">
           <button onClick={onClose} className="mr-2">
             <IoIosArrowRoundBack className="text-[4vh]"/>
           </button>
           <h2 className="text-[2.8vh] font-[500] capitalize">{title}</h2>
         </div>
-        {children}
+        <ErrorBoundary>{children}</ErrorBoundary>
       </div>
     </motion.div>
   );

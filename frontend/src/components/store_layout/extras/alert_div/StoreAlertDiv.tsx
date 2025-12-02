@@ -6,46 +6,20 @@ import * as BiIcons from "react-icons/bi";
 import * as AiIcons from "react-icons/ai";
 import * as BsIcons from "react-icons/bs";
 // Add more if needed
-import { getBackgroundStyles } from "../../../../utils/stylingFunctions";
+import { getBackgroundStyles, getTextStyles } from "../../../../utils/stylingFunctions";
 import StoreButton from "../buttons/StoreButton";
-import UnderlinedText from "../text/UnderlinedText";
-import { useAppSelector } from "../../../../app/hooks";
-import { getSetting } from "../../../../utils/helperFunctions";
+import LoopingMarqueeEffect from "../../../layout_settings/supporting/LoopingMarqueeEffect";
+import StoreLayoutButton from "../../shared_layout_components/StoreLayoutButton";
+import { useStoreButtonClickHandler } from "../buttons/useStoreButtonClickHandler";
 
 interface StoreAlertDivProps {
   config: any;
-  objectPath: string;
 }
 
-const StoreAlertDiv: FC<StoreAlertDivProps> = ({ config, objectPath }) => {
-  const { animation, background, items, loopDirection = "right", loopSpeed = 30 } = config;
-  const settings = useAppSelector(state => state.layoutSettings);
-  const [animateKey, setAnimateKey] = useState(0);
+const StoreAlertDiv: FC<StoreAlertDivProps> = ({ config }) => {
+  const { background, items, loopDirection = "right"} = config;
+  const handleButtonClick = useStoreButtonClickHandler();
 
-  const loopVariants = {
-    animate: {
-      x: loopDirection === "right" ? ["-100%", "100%"] : ["0", "-100%"],
-      transition: {
-        x: {
-          repeat: 0,
-          duration: loopSpeed,
-          ease: "linear",
-        },
-      },
-    },
-  };
-  
-  
-  const flashVariants = {
-    flash: {
-      opacity: [1, 0, 1],
-      transition: {
-        repeat: Infinity,
-        duration: 1, // 1 second for full flash cycle
-        ease: "easeInOut",
-      },
-    },
-  };
   const iconLibraries: Record<string, Record<string, React.ComponentType<any>>> = {
     Md: MdIcons,
     Fa: FaIcons,
@@ -56,64 +30,50 @@ const StoreAlertDiv: FC<StoreAlertDivProps> = ({ config, objectPath }) => {
   };
 
 
-  const renderItem = (key: string) => {
-    if (key.startsWith("icon")) {
-        const iconName = (items as any)[key]?.name; // e.g. "FaBeer" or "MdHome"
-      
-        if (!iconName) return null;
-      
-        const prefix = iconName.slice(0, 2); // "Fa", "Md", etc.
-        const iconPack = iconLibraries[prefix];
-      
-        const IconComponent = iconPack?.[iconName] ?? null;
-      
-        return IconComponent ? (
-          <div key={key}>
-            <IconComponent
-              className="w-6 h-6"
-              style={{
-                width: getSetting(`${key}.size`, settings, `${objectPath}.items`),
-                height: getSetting(`${key}.size`, settings, `${objectPath}.items`),
-                color: config.items[key]?.color || "black",
-              }}
-            />
-          </div>
-        ) : null;
-    }
-      
+  const renderIcon = () => {
+    const iconName = items.icon?.name;
+    if (!iconName) return null;
 
-    if (key.startsWith("text")) {
-      return (
-        <div className="min-w-fit text-center" key={key}>
-          <UnderlinedText style={getSetting(`${key}`, settings, `${objectPath}.items`)} />
-        </div>
-      );
-    }
+    const prefix = iconName.slice(0, 2);
+    const iconPack = iconLibraries[prefix];
+    const IconComponent = iconPack?.[iconName] ?? null;
 
-    if (key.startsWith("button")) {
-      return (
-        <div className="w-fit" key={key}>
-          <StoreButton
-            style={getSetting(`${key}`, settings, `${objectPath}.items`)}
-            onClick={() => {}}
-          />
-        </div>
-      );
-    }
-
-    return null;
+    return IconComponent ? (
+      <div>
+        <IconComponent
+          style={{
+            ...getTextStyles(items.icon),
+          }}
+        />
+      </div>
+    ) : null;
   };
 
-  const handleAnimationComplete = () => {
-    setAnimateKey(prev => prev + 1);
-  };
-  // Render full content block once
+  const renderText = () => (
+    <div className="min-w-fit text-center">
+      <p
+        style={{
+          ...getTextStyles(items.text),
+        }}
+      >
+        {items.text.input}
+      </p>
+    </div>
+  );
+
+  const renderButton = () => (
+    <div className="w-fit">
+      <StoreLayoutButton
+        style={items.button}
+        onClick={() => handleButtonClick}
+      />
+    </div>
+  );
   const content = (
-    <div
-      className="flex flex-row items-center m-10"
-      style={{ gap: config.items.gap.item }}
-    >
-      {config.items.order.map((key: string) => renderItem(key))}
+    <div className="flex flex-row items-center gap-20">
+      {items.icon.show && renderIcon()}
+      {renderText()}
+      {items.button.show && renderButton()}
     </div>
   );
 
@@ -122,48 +82,13 @@ const StoreAlertDiv: FC<StoreAlertDivProps> = ({ config, objectPath }) => {
       style={{
         ...getBackgroundStyles(background),
       }}
-      className="overflow-hidden flex flex-row w-full"
+      className="flex flex-row w-full overflow-hidden"
     >
-      {animation === "loop" ? (
-        <motion.div
-          key={animateKey}
-          className="flex flex-row items-center w-full"
-          variants={loopVariants}
-          animate="animate"
-          onAnimationComplete={handleAnimationComplete}
-          style={{ gap: config.items.gap.allItems }}
-        >
-            {content}
-                <div style={{ width: config.items.gap.allItems }} /> 
-            {content}
-                <div style={{ width: config.items.gap.allItems }} />
-            {content}
-                <div style={{ width: config.items.gap.allItems }} /> 
-            {content}
-                <div style={{ width: config.items.gap.allItems }} /> 
-            {content}
-                <div style={{ width: config.items.gap.allItems }} /> 
-            {content}
-                <div style={{ width: config.items.gap.allItems }} />
-            {content}
-                <div style={{ width: config.items.gap.allItems }} /> 
-            {content}
-                <div style={{ width: config.items.gap.allItems }} /> 
-        </motion.div>
-      ) : animation === "flash" ? (
-        <motion.div
-          className="flex flex-row items-center w-full justify-center"
-          variants={flashVariants}
-          animate="flash"
-          style={{ gap: config.items.gap.item }}
-        >
-          {config.items.order.map((key: string) => renderItem(key))}
-        </motion.div>
-      ) : (
-        <div className="w-full flex flex-row justify-evenly items-center" style={{ gap: config.items.gap.item }}>
-          {config.items.order.map((key: string) => renderItem(key))}
-        </div>
-      )}
+      <LoopingMarqueeEffect
+        items={[content, content, content, content, content, content, content, content, content, content, content, content,  ]}
+        from={loopDirection === "right" ? "-100%" : "0%"}
+        to={loopDirection === "right" ? "100%" : "-100%"}
+      />
     </div>
   );
 };

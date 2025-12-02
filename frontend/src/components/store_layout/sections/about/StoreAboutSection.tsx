@@ -16,6 +16,8 @@ const StoreAboutSection = ({id}: SectionProps) => {
   if ( variation === "shortAbout" ) {
     return <ShortAbout />
   }
+
+  
   if (variation === "aboutWithImageBehindText") {
     return (
       <AboutWithImageBehindText />
