@@ -14,7 +14,7 @@ interface GalleryGroup {
 }
 
 const GalleryWithGroupedImages = () => {
-  const settings = useAppSelector((state) => state.layoutSettings.gallery);
+  const settings = useAppSelector((state) => state.layoutSettings.sections.gallery);
   const groups: Record<string, GalleryGroup> = settings.imagesModal.images;
 
   const stack = settings.imagesModal.grids.thumbnail.stack;

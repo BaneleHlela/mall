@@ -17,10 +17,12 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
     settings,
     handleSettingChange,
 }) => {
-    const objectPath = 'footer'
+    const objectPath = 'sections.footer'
     const [activePanel, setActivePanel] = useState<string | null>(null)
     const closePanel = () => setActivePanel(null)
     
+    console.log(getSetting('show', settings, objectPath))
+
     return (
         <div className='text-[2vh] space-y-[.5vh]'>
             {/* Show */}
@@ -56,14 +58,14 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                 onClick={() => setActivePanel("text")}
             />
             {/* Location */}
-            {settings.footer.show === 'location' && (
+            {settings.sections.footer.show === 'location' && (
                 <FirstOrderSubSettingsContainer
                     name="Location"
                     onClick={() => setActivePanel("location")}
                 />
             )}
             {/* Form */}
-            {settings.footer.show === 'form' && (
+            {settings.sections.footer.show === 'form' && (
                 <FirstOrderSubSettingsContainer
                     name="Form"
                     onClick={() => setActivePanel("form")}
@@ -208,7 +210,7 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                             settings={settings}
                             allowSimpleShow
                             allowFunction
-                            
+                            responsiveBackground
                         />
                     </SlidingPanel>
                 )}

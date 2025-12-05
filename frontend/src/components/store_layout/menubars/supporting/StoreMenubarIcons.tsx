@@ -19,7 +19,7 @@ interface StoreMenubarIconsProps {
       platforms: any;
       //show: string[];
       size: string;
-      color: 'primary' | 'secondary' | 'accent' | 'quad' | 'pent';
+      color: string;
       background: {
         padding?: {
             x: string;
@@ -65,7 +65,7 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({ style, asFloat })
     
     const renderIcon = (platform: string) => {
         const iconSize = style?.size || "20";
-        const iconColor = colors?.[style?.color] || colors?.primary || "#000";
+        const iconColor = colors?.[style?.color as keyof typeof colors] || colors?.primary || "#000";
         switch (platform) {
             case "facebook":
                 return <FaFacebook size={iconSize} color={iconColor} />;

@@ -6,6 +6,7 @@ import GalleryWithGroupedImagesSettings from "./with_grouped_images/GalleryWithG
 import GalleryWithHorizontalImagesSettings from "./with_horizontal_images/GalleryWithHorizontalImagesSettings";
 import GalleryWithImageSliderSettings from "./with_image_slider/GalleryWithImageSliderSettings";
 import MaxThreeGallerySettings from "./max_three_gallery/MaxThreeGallerySettings";
+import SimpleGallerySectionSettings from "./simple_gallery/SimpleGallerySectionSettings";
 const StoreGallerySettings = () => {
     const dispatch = useAppDispatch();
     const variation = useAppSelector((state) => state.layoutSettings.sections.gallery.variation);
@@ -14,8 +15,24 @@ const StoreGallerySettings = () => {
         dispatch(updateSetting({ field, value }));
     };
 
+    if (variation === "simpleGallery") {
+        return (
+            <div className="space-y-[.8vh]">
+                <div className="px-2 py-1 border-[.1vh] rounded-[.5vh]">
+                    <OptionsToggler
+                        label="Add to Menubar ?"
+                        options={['yes', 'no']}
+                        value={settings.routes?.home?.inLinks?.some(link => link.section === 'gallery') ? 'yes' : 'no'}
+                        onChange={(option) => handleAddSectionToLinks(dispatch, settings, 'gallery', option)}
+                    />
+                </div>
+                <SimpleGallerySectionSettings settings={settings} handleSettingChange={handleSettingChange} />
+            </div>
+        )
+    }
+
     if (variation === "galleryWithImageSlider") {
-        
+
         return (
         <div className="space-y-[.8vh]">
             <div className="px-2 py-1 border-[.1vh] rounded-[.5vh]">

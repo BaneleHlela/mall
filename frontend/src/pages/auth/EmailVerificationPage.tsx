@@ -57,7 +57,7 @@ const EmailVerificationPage = () => {
 		try {
 			await dispatch(verifyEmail(verificationCode)).unwrap();
 			toast.success("Email verified successfully");
-			navigate("/home");
+			navigate("/");
 		} catch (err) {
 			console.error("Verification failed", err);
 			toast.error("Verification failed");
@@ -65,20 +65,26 @@ const EmailVerificationPage = () => {
 	};
 
 	useEffect(() => {
-		const searchParams = new URLSearchParams(location.search);
+		const searchParams = new URLSearchParams(window.location.search);
 		const token = searchParams.get("token");
 		if (token && token.length === 6 && /^[0-9]+$/.test(token)) {
 			const tokenDigits = token.split("");
 			setCode(tokenDigits);
 		}
-	}, [location.search]);
+	}, []);
 
 	useEffect(() => {
 		if (code.every((digit) => digit !== "")) {
-			console.log("All digits recieved")
-			handleSubmit(new Event("submit") as unknown as FormEvent);
+			const verificationCode = code.join("");
+			dispatch(verifyEmail(verificationCode)).unwrap().then(() => {
+				toast.success("Email verified successfully");
+				navigate("/");
+			}).catch((err) => {
+				console.error("Verification failed", err);
+				toast.error("Verification failed");
+			});
 		}
-	}, [code]);
+	}, [code, dispatch, navigate]);
 
 	return (
 		<motion.div
@@ -110,7 +116,7 @@ const EmailVerificationPage = () => {
 					{code.map((digit, index) => (
 						<input
 							key={index}
-							ref={(el) => (inputRefs.current[index] = el)}
+							ref={(el) => { inputRefs.current[index] = el; }}
 							type="text"
 							maxLength={1}
 							value={digit}
@@ -118,7 +124,7 @@ const EmailVerificationPage = () => {
 								handleChange(index, e.target.value)
 							}
 							onKeyDown={(e) => handleKeyDown(index, e)}
-							className="w-[7vh] h-[7vh] text-center text-[3vh] font-semibold bg-gray-700 text-white border-2 border-gray-600 rounded-[1vh] focus:border-green-500 focus:outline-none"
+							className="w-1/7 aspect-square text-center text-[3vh] font-semibold bg-gray-700 text-white border-2 border-gray-600 rounded-[1vh] focus:border-green-500 focus:outline-none"
 						/>
 					))}
 				</div>

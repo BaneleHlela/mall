@@ -1,8 +1,18 @@
 import { Types } from "mongoose";
 
 export interface Logo {
-  url?: string;
+  imageUrls: string[];
   text?: string;
+  background?: {
+    color?: string;
+    opacity?: number;
+    border?: {
+      width?: number;
+      color?: string;
+      style?: string;
+      radius?: number;
+    };
+  };
 }
 
 export interface TeamMember {

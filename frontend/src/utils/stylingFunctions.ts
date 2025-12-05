@@ -102,6 +102,7 @@ export const getTextStyles = (text: TextSettings, fonts?: any, colors?: any) => 
   if (text.letterSpacing) styles.letterSpacing = text.letterSpacing;
   if (text.textDecoration) styles.textDecoration = text.textDecoration;
   if (text.textTransform) styles.textTransform = text.textTransform;
+  if (text.textAlign) styles.textAlign = text.textAlign;
 
   if (typeof text.textShadow === "string") {
     styles.textShadow = text.textShadow;

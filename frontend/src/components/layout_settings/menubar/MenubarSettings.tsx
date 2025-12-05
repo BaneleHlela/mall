@@ -12,6 +12,7 @@ import withReactContent from "sweetalert2-react-content";
 import MenubarWithSearchbarSettings from "./with_searchbar/MenubarWithSearchbarSettings";
 import { mockLayout } from "../../../major_updates/mockLayout";
 import { defaultStoreAlertDivConfig } from "../../../utils/defaults/extras/defaultStoreAlertDivConfig";
+import RestuarantMenubarSettings from "./restuarant_menubar/RestuarantMenubarSettings";
 
 const MenubarSettings = () => {
     const settings = useAppSelector((state) => state.layoutSettings)
@@ -58,6 +59,9 @@ const MenubarSettings = () => {
             )}
             {variation === "menubarWithSearchbar" && (
               <MenubarWithSearchbarSettings />
+            )}
+            {variation === "restuarantMenubar" && (
+              <RestuarantMenubarSettings />
             )}
           </div>
       )

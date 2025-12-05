@@ -113,7 +113,7 @@ const SingleStoreProductSection = () => {
             style={{
                 ...getBackgroundStyles(settings.background, colors),
             }}
-            className='flex flex-col justify-between min-h-fit bg-amber-500'
+            className='flex flex-col justify-between min-h-fit '
         >
             {/* Back to home */}
             <div
@@ -141,7 +141,7 @@ const SingleStoreProductSection = () => {
                         key={currentImageIndex}
                         src={product.images[currentImageIndex]}
                         alt={`Product image ${currentImageIndex + 1}`}
-                        className="object-contain transition-opacity duration-700 ease-in-out opacity-100 w-full"
+                        className="object-cover transition-opacity duration-700 ease-in-out opacity-100 w-full"
                         style={{
                             ...getBackgroundStyles(settings.images.background, colors),
                             backgroundColor: 'transparent',
@@ -182,7 +182,7 @@ const SingleStoreProductSection = () => {
                     style={{
                         ...getBackgroundStyles(settings.details.background, colors),
                     }}
-                    className="w-[100%] lg:w-[50%] min-h-fit flex flex-col"
+                    className="w-[100%] lg:w-[50%] min-h-fit flex flex-col justify-between"
                 >
                     {/* Name and Price */}
                     <div
@@ -275,30 +275,7 @@ const SingleStoreProductSection = () => {
                         </div>
                     </div>
 
-                    {/* Add to Cart Button */}
-                    <div    
-                        className={`w-full flex flex-row 
-                            ${settings.details.addToCartBtn.position === "center" && "justify-center"}
-                            ${settings.details.addToCartBtn.position === "start" && "justify-start"}
-                            ${settings.details.addToCartBtn.position === "end" && "justify-end"}
-                            
-                        `} 
-                    >
-                        <button
-                            style={{
-                                ...getBackgroundStyles(settings.details.addToCartBtn.style.background, colors),
-                                ...getTextStyles(settings.details.addToCartBtn.style.text, fonts, colors),
-                                color: "white"
-                            }}
-                            onClick={handleAddToCart}
-                            className="w-full mt-2 py-3 lg:max-w-[50%] hover:underline hover:cursor-pointer"
-                        >
-                            {isCartLoading ? 
-                                <TbLoader3 className='w-6 h-6 animate-spin mx-auto' /> : 
-                                `Add to cart | R${formatPriceWithSpaces(selectedPrice * quantity)}`
-                            }
-                        </button>
-                    </div>
+                    
                     {/* Special Request Box */}
                     {settings.details.messageBox.show && (
                         <div
@@ -326,7 +303,7 @@ const SingleStoreProductSection = () => {
                                     ...getBackgroundStyles(settings.details.messageBox.background.box, colors),
                                 }}
                                 className="w-full h-[13vh] p-2 mt-2"
-                                placeholder={settings.details.messageBox.placeholder.textArea || "We'll do our best to accommodate any requests when possible"}
+                                placeholder={settings.details.messageBox.placeholder.input || "We'll do our best to accommodate any requests when possible"}
                             />
                         </div>
                     )}
@@ -340,6 +317,30 @@ const SingleStoreProductSection = () => {
                     >
                         {product.description}
                     </p>
+                    {/* Add to Cart Button */}
+                    <div    
+                        className={`w-full flex flex-row py-4
+                            ${settings.details.addToCartBtn.position === "center" && "justify-center"}
+                            ${settings.details.addToCartBtn.position === "start" && "justify-start"}
+                            ${settings.details.addToCartBtn.position === "end" && "justify-end"}
+                            
+                        `} 
+                    >
+                        <button
+                            style={{
+                                ...getBackgroundStyles(settings.details.addToCartBtn.background, colors),
+                                ...getTextStyles(settings.details.addToCartBtn.text, fonts, colors),
+                                color: "white"
+                            }}
+                            onClick={handleAddToCart}
+                            className="w-full mt-2 py-3 lg:max-w-[50%] hover:underline hover:cursor-pointer"
+                        >
+                            {isCartLoading ? 
+                                <TbLoader3 className='w-6 h-6 animate-spin mx-auto' /> : 
+                                `Add to cart | R${formatPriceWithSpaces(selectedPrice * quantity)}`
+                            }
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

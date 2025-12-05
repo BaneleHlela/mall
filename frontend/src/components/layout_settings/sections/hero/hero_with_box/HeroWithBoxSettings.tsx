@@ -21,7 +21,7 @@ const HeroWithBoxSettings: React.FC<HeroWithBoxSettingsProps> = ({
   settings,
   handleSettingChange,
 }) => {
-  const objectPath = "hero";
+  const objectPath = "sections.hero";
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
 
@@ -53,7 +53,7 @@ const HeroWithBoxSettings: React.FC<HeroWithBoxSettingsProps> = ({
             <MultipleLayoutImagesHandler
               objectPath={`${objectPath}.image`}
               min={1}
-              max={1}
+              max={2}
               images={getSetting("image", settings, objectPath)}
             />
           </div>
@@ -92,7 +92,7 @@ const HeroWithBoxSettings: React.FC<HeroWithBoxSettingsProps> = ({
               value={parseInt(getSetting("box.position.mobile.top", settings, objectPath) || "10")} 
               unit="%"
               min={0}
-              max={150}
+              max={100}
               onChange={(value) => 
                 handleSettingChange(`${objectPath}.box.position.mobile.top`, `${value}%`)
               }
@@ -103,7 +103,7 @@ const HeroWithBoxSettings: React.FC<HeroWithBoxSettingsProps> = ({
               value={parseInt(getSetting("box.position.mobile.left", settings, objectPath) || "10")} 
               unit="%"
               min={0}
-              max={150}
+              max={100}
               onChange={(value) => 
                 handleSettingChange(`${objectPath}.box.position.mobile.left`, `${value}%`)
               }
@@ -113,7 +113,7 @@ const HeroWithBoxSettings: React.FC<HeroWithBoxSettingsProps> = ({
               value={parseInt(getSetting("box.position.desktop.top", settings, objectPath) || "10")} 
               unit="%"
               min={0}
-              max={150}
+              max={100}
               onChange={(value) => 
                 handleSettingChange(`${objectPath}.box.position.desktop.top`, `${value}%`)
               }
@@ -124,7 +124,7 @@ const HeroWithBoxSettings: React.FC<HeroWithBoxSettingsProps> = ({
               value={parseInt(getSetting("box.position.desktop.left", settings, objectPath) || "10")} 
               unit="%"
               min={0}
-              max={150}
+              max={100}
               onChange={(value) => 
                 handleSettingChange(`${objectPath}.box.position.desktop.left`, `${value}%`)
               }

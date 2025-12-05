@@ -60,7 +60,7 @@ const FirstFAQs = () => {
                 </div>
             </div>
             {/* Desktop */}
-            <div className="hidden lg:flex h-[85vh] px-[10vh] pt-[10vh] pb-[15vh]">
+            <div className="hidden lg:flex h-[85vh] px-[10vh] py-[10vh] pb-[15vh]">
                 <div className="w-[40%] h-full">
                     <p 
                         style={{

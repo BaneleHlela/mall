@@ -25,7 +25,7 @@ const SecondStoreMenubar = () => {
     { to: `/stores/${storeId}/menu`, label: "menu" },
     { to: `/stores/${storeId}/order-online`, label: "order online" },
     { to: `/stores/${storeId}/reviews`, label: "reviews" },
-];
+  ];
 
   return (
     <nav
@@ -50,11 +50,13 @@ const SecondStoreMenubar = () => {
           }}
           className='relative overflow-x-visible w-full h-full text-center'
         >
-          <img
-            src={store?.logo.url}
-            alt='store logo'
-            className='absolute bottom-0 object-cover scale-130 mb-3 left-1/2 -translate-x-1/2'
-          />
+          {(store?.logo?.imageUrls?.length || 0) > 0 && (
+            <img
+              src={window.innerWidth < 589 ? store.logo.imageUrls[0] : (store.logo.imageUrls[1] || store.logo.imageUrls[0])}
+              alt='store logo'
+              className='absolute bottom-0 object-cover scale-130 mb-3 left-1/2 -translate-x-1/2'
+            />
+          )}
         </div>
 
         {/* Hamburger */}
@@ -90,11 +92,13 @@ const SecondStoreMenubar = () => {
             }}
             className='relative overflow-x-visible w-full h-full text-center'
           >
-            <img
-              src={store?.logo.url}
-              alt='store logo'
-              className='absolute bottom-[-150px] object-cover mb-3 scale-[0.7] left-1/2 -translate-x-1/2'
-            />
+            {(store?.logo?.imageUrls?.length || 0) > 0 && (
+              <img
+                src={window.innerWidth < 589 ? store.logo.imageUrls[0] : (store.logo.imageUrls[1] || store.logo.imageUrls[0])}
+                alt='store logo'
+                className='absolute bottom-[-150px] object-cover mb-3 scale-[0.7] left-1/2 -translate-x-1/2'
+              />
+            )}
           </div>
 
           {/* Cart */}

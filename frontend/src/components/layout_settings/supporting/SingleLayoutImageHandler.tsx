@@ -40,7 +40,7 @@ const SingleLayoutImageHandler: React.FC<SingleLayoutImageHandlerProps> = ({ lab
             </div>
             {image && (
                 <div className="ml-1 w-[30%]">
-                    <img src={image} alt={label} className="w-full h-full object-cover rounded" />
+                    <img src={image} alt={label} className="w-full h-full object-cover rounded bg-amber-300" />
                 </div>
             )}
             {showStoreImages && (

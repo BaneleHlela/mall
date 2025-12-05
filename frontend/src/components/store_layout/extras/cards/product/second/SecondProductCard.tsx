@@ -33,23 +33,23 @@ const SecondProductCard: React.FC<StoreProductCardProps> = ({
   const fonts = useAppSelector((state) => state.layoutSettings.fonts);
 
   // --- Determine what price to show ---
-    const displayPrice = () => {
-    if (prices && prices.length > 0) {
-        const amounts = prices.map(p => p.amount);
-        const minPrice = Math.min(...amounts);
-        const maxPrice = Math.max(...amounts);
+  const displayPrice = () => {
+  if (prices && prices.length > 0) {
+      const amounts = prices.map(p => p.amount);
+      const minPrice = Math.min(...amounts);
+      const maxPrice = Math.max(...amounts);
 
-        // If all variation prices are the same
-        if (minPrice === maxPrice) {
-        return `R${formatPriceWithSpaces(minPrice)}${minPrice % 1 === 0 ? '.00' : ''}`;
-        }
-        return `R${formatPriceWithSpaces(minPrice)}${minPrice % 1 === 0 ? '.00' : ''} - R${formatPriceWithSpaces(maxPrice)}${maxPrice % 1 === 0 ? '.00' : ''}`;
-    } 
-    if (typeof price === 'number') {
-        return `R${formatPriceWithSpaces(price)}${price % 1 === 0 ? '.00' : ''}`;
-    }
+      // If all variation prices are the same
+      if (minPrice === maxPrice) {
+      return `R${formatPriceWithSpaces(minPrice)}${minPrice % 1 === 0 ? '.00' : ''}`;
+      }
+      return `R${formatPriceWithSpaces(minPrice)}${minPrice % 1 === 0 ? '.00' : ''} - R${formatPriceWithSpaces(maxPrice)}${maxPrice % 1 === 0 ? '.00' : ''}`;
+  } 
+  if (typeof price === 'number') {
+      return `R${formatPriceWithSpaces(price)}${price % 1 === 0 ? '.00' : ''}`;
+  }
     return '';
-    };
+  };
 
   return (
     <div 

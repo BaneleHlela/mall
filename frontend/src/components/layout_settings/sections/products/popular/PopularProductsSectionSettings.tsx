@@ -21,7 +21,7 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
     settings,
     handleSettingChange,
 }) => {
-    const objectPath ='products';
+    const objectPath ='sections.products';
     const [activePanel, setActivePanel] = useState<string | null>(null);
     const closePanel = () => setActivePanel(null);
     
@@ -110,7 +110,7 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                         <div className="space-y-[.3vh]">
                             {/* Container */}
                             <FirstOrderSubSettingsContainer
-                                name="Container"
+                                name="Contaner (Background for all cards)"
                                 onClick={() => setActivePanel("container")}
                             />
                             {/* Card */}
@@ -119,23 +119,23 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                                 onClick={() => setActivePanel("card")}
                             />
                             {/* Toggle Buttons */}
-                            {((getSetting("stack.mobile", settings, objectPath) === "horizontal") ||
+                            {/* {((getSetting("stack.mobile", settings, objectPath) === "horizontal") ||
                                 (getSetting("stack.desktop", settings, objectPath) === "horizontal")) && 
                                 (
                                     <FirstOrderSubSettingsContainer
                                         name="Toggle Buttons"
                                         onClick={() => setActivePanel("toggle_buttons")}
                                     />
-                            )}
+                            )} */}
                             {/* Step Indicator */}
-                            {((getSetting("stack.mobile", settings, objectPath) === "horizontal") ||
+                            {/* {((getSetting("stack.mobile", settings, objectPath) === "horizontal") ||
                                 (getSetting("stack.desktop", settings, objectPath) === "horizontal")) && 
                                 (
                                     <FirstOrderSubSettingsContainer
                                         name="Step Indicator"
                                         onClick={() => setActivePanel("step_indicator")}
                                     />
-                            )}
+                            )} */}
                         </div>
                     </SlidingPanel>    
                 )}
@@ -257,14 +257,18 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                                     }
                                 />
                             </div>
-                            <BackgroundEditor
-                                objectPath={`${objectPath}.categorySelector`}
-                                settings={settings}
-                                handleSettingChange={handleSettingChange}
-                                allow={["width", "color", "padding"]}
-                                widthUnit='%'
-                                responsiveSize
-                                responsivePadding
+                            <SubSettingsContainer
+                                name="Width"
+                                SettingsComponent={
+                                    <BackgroundEditor
+                                        objectPath={`${objectPath}.categorySelector`}
+                                        settings={settings}
+                                        handleSettingChange={handleSettingChange}
+                                        allow={["width"]}
+                                        widthUnit='%'
+                                        responsiveSize
+                                    />
+                                }
                             />
                         </div>
                         <div className="space-y-[.3vh]">
@@ -275,65 +279,20 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                                          objectPath={`${objectPath}.categorySelector.text`}
                                          settings={settings}
                                          handleSettingChange={handleSettingChange}
-                                         allow={["fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight", "textDecoration"]}
+                                         allow={["fontFamily", "fontSize", "color", "weight"]}
                                          responsiveSize
                                      />
                                  }
                              />
                              <SubSettingsContainer
-                                 name="Border"
+                                 name="Selected Color"
                                  SettingsComponent={
-                                     <BorderEditor
-                                         objectPath={`${objectPath}.categorySelector.border`}
-                                         settings={settings}
-                                         handleSettingChange={handleSettingChange}
-                                     />
-                                 }
-                             />
-                             <SubSettingsContainer
-                                 name="Colors"
-                                 SettingsComponent={
-                                     <div className="space-y-[.3vh]">
-                                         <ColorPicker
+                                     <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
+                                         <OptionsToggler
                                              label="Selected Color"
+                                             options={["primary", "secondary", "accent", "quad", "pent"]}
                                              value={getSetting("categorySelector.selectedColor", settings, objectPath)}
                                              onChange={(newValue) => handleSettingChange(`${objectPath}.categorySelector.selectedColor`, newValue)}
-                                             onClear={() => handleSettingChange(`${objectPath}.categorySelector.selectedColor`, "transparent")}
-                                         />
-                                         <ColorPicker
-                                             label="Unselected Color"
-                                             value={getSetting("categorySelector.unselectedColor", settings, objectPath)}
-                                             onChange={(newValue) => handleSettingChange(`${objectPath}.categorySelector.unselectedColor`, newValue)}
-                                             onClear={() => handleSettingChange(`${objectPath}.categorySelector.unselectedColor`, "transparent")}
-                                         />
-                                         <ColorPicker
-                                             label="Underline Color"
-                                             value={getSetting("categorySelector.underlineColor", settings, objectPath)}
-                                             onChange={(newValue) => handleSettingChange(`${objectPath}.categorySelector.underlineColor`, newValue)}
-                                             onClear={() => handleSettingChange(`${objectPath}.categorySelector.underlineColor`, "transparent")}
-                                         />
-                                     </div>
-                                 }
-                             />
-
-                             <SubSettingsContainer
-                                 name="Layout"
-                                 SettingsComponent={
-                                     <div className="space-y-[.3vh]">
-                                         <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
-                                             <OptionsToggler
-                                                 label="Alignment"
-                                                 options={["space-between", "center", "start", "end"]}
-                                                 value={getSetting("alignment", settings, `${objectPath}.categorySelector`)}
-                                                 onChange={(value) => handleSettingChange(`${objectPath}.categorySelector.alignment`, value)}
-                                             />
-                                         </div>
-                                         <BackgroundEditor
-                                             objectPath={`${objectPath}.categorySelector.spacing`}
-                                             settings={settings}
-                                             handleSettingChange={handleSettingChange}
-                                             allow={["padding"]}
-                                             responsivePadding
                                          />
                                      </div>
                                  }

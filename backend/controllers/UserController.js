@@ -11,22 +11,29 @@ import { sendVerificationEmail, sendWelcomeEmail, sendPasswordResetEmail, sendRe
 import User from "../models/UserModel.js";
 import Store from "../models/StoreModel.js";
 import { uploadToUploads, uploadsBucket } from "../config/gcsClient.js";
+import { generateUniqueUsername } from "../utils/helperFunctions.js";
 
-// Create a user 
+
+
+// Create a user
 export const signup = expressAsyncHandler(async (req, res) => {
     const { email, password, firstName, lastName } = req.body;
-  
+
     const userAlreadyExists = await User.findOne({ email });
-  
+
     if (userAlreadyExists) {
       res.status(400);
-      throw new Error("User already exists");
+      throw new Error("User already exists. Please login instead.");
     }
-  
+
+    // Generate unique username
+    const username = await generateUniqueUsername(firstName, lastName);
+
     const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
-  
+
     const user = new User({
       email,
+      username,
       password,
       firstName,
       lastName,
@@ -42,7 +49,7 @@ export const signup = expressAsyncHandler(async (req, res) => {
 
     setCookies(res, accessToken, refreshToken);
     
-    //await sendVerificationEmail(user.email, verificationToken);
+    await sendVerificationEmail(user.email, verificationToken);
 
     res.status(201).json({
       success: true,

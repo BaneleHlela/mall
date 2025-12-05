@@ -1,4 +1,5 @@
 import { Description } from "@headlessui/react";
+import { pick } from "lodash";
 import { LineChart, Weight } from "lucide-react";
 
 export const mockLayout = {
@@ -119,27 +120,151 @@ export const mockLayout = {
         }
     },
     menubar: {
-        variation: "menubarWithSearchbar",
         topbar: {
-            stack: ["searchbar", "heartLogo"],
-            order: ["hamburger", "logo", "heart"],
+            background: {
+                color: "primary",
+                height: {
+                    mobile: "20vh",
+                    desktop: "6vh"
+                },
+                padding: {
+                    x: {
+                        mobile: "0vh",
+                        desktop: "0vh"
+                    },
+                    y: {
+                        mobile: "1vh",
+                        desktop: "1vh"
+                    }
+                },
+            },
+            order: [
+                "heart",
+                "logo",
+                "hamburger"
+            ],
             cart: {
-                variation: 'basket',
+                variation: "paperbag",
+                size: "4.5vh",
+                color: "#0027f6"
+            },
+            heart: {
+                size: "4.5vh",
+                color: "#0027f6"
             },
             logo: {
                 use: "text",
+                logoText: "C. ShopEasy",
+                fontFamily: "Arial",
+                logoUrl: ["HTTPS://example.com/mobile-logo.png", "HTTPS://example.com/desktop-logo.png"],
                 text: {
-                    input: "L.thompson",
+                    input: "EasyHeadwear",
+                    fontSize: {
+                        mobile: "2.900000000000001vh",
+                        desktop: "2.4000000000000004vh"
+                    },
+                    letterSpacing: "NaNpx",
+                    textDecoration: "overline"
                 },
+                background: {
+                    color: "primary",
+                }
             },
             search: {
                 border: {
-                    width: '1px',
-                    style: 'solid',
-                    radius: '0px',
+                    width: "0.1vh",
+                    style: "solid",
+                    radius: "3.8vh",
+                    color: "#d4dde4"
+                }
+            },
+            button: {
+                function: 'buy',
+                text: {
+                    input: 'Shop Now',
+                    color: 'primary',
+                    fontSize: {
+                        mobile: '2vh',
+                        desktop: '2vh'
+                    },
+                    fontFamily: 'primary',
+                    fontWeight: 'normal'
+                },
+                background: {
+                    color: 'secondary',
+                    width: {
+                        desktop: '17vh'
+                    },
+                    padding: {
+                        x: '1vh',
+                        y: '0.5vh'
+                    },
+                    border: {
+                        width: '1px',
+                        style: 'solid',
+                        color: 'secondary',
+                        radius: '30px'
+                    }
                 }
             }
         },
+        sidebar: {
+            background: {
+                color: "secondary",
+            },
+            animation: "leftToRight",
+            links: {
+                color: "accent",
+                alignment: "center",
+                fontFamily: "primary",
+                borderColor: "accent",
+            },
+            image: {
+                imageUrl: ["https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/495371485_1238922361482703_9008209704576564623_n.jpg"],
+                background: {
+                    border: {
+                        style: "solid",
+                        width: "1vh",
+                        color: "primary"
+                    }
+                },
+            },
+            div: {
+                background: {
+                    color: "primary",
+                },
+            },
+            button: {
+                function: 'buy',
+                text: {
+                    input: 'Shop Now',
+                    color: 'primary',
+                    fontSize: {
+                        mobile: '2vh',
+                        desktop: '2vh'
+                    },
+                    fontFamily: 'primary',
+                    fontWeight: 'normal'
+                },
+                background: {
+                    color: 'secondary',
+                    width: {
+                        desktop: '17vh'
+                    },
+                    padding: {
+                        x: '1vh',
+                        y: '0.5vh'
+                    },
+                    border: {
+                        width: '1px',
+                        style: 'solid',
+                        color: 'secondary',
+                        radius: '30px'
+                    }
+                }
+            }
+        },
+        variation: "menubarWithSearchbar",
         alertDiv: {
             display: true,
             position: "fixed",
@@ -147,15 +272,19 @@ export const mockLayout = {
             background: {
                 color: "secondary",
                 height: {
-                    mobile: "10vh",
-                    desktop: "10vh",
-                },
+                    mobile: "8vh",
+                    desktop: "6vh"
+                }
             },
             items: {
                 text: {
                     input: "Free shipping for first time buyers!",
-                    fontSize: { mobile: "2.5vh", desktop: "3vh" },
+                    fontSize: {
+                        mobile: "2.6999999999999993vh",
+                        desktop: "3.8vh"
+                    },
                     color: "primary",
+                    fontFamily: "tertiary"
                 },
                 icon: {
                     show: true,
@@ -163,15 +292,17 @@ export const mockLayout = {
                     color: "primary",
                     height: {
                         mobile: "5vh",
-                        desktop: "5vh",
+                        desktop: "5vh"
                     },
+                    size: "4.7vh",
+                    fontSize: "4.900000000000002vh"
                 },
                 button: {
                     button: {
-                        function: 'book',
+                        function: "book",
                         show: true,
                         text: {
-                            input: "Book Now",
+                            input: "Book Now"
                         },
                         background: {
                             width: {
@@ -186,72 +317,133 @@ export const mockLayout = {
                                 y: {
                                     mobile: "1.5vh",
                                     desktop: "2vh"
-                                },
+                                }
                             },
                             border: {
                                 width: "0px",
                                 style: "solid",
-                                radius: "30px",
+                                radius: "30px"
                             }
                         }
                     },
+                    text: {
+                        input: "Order Now"
+                    },
+                    show: false,
+                    background: {
+                        color: "primary",
+                        border: {
+                            radius: "1.7vh"
+                        },
+                        padding: {
+                            x: "3.8vh",
+                            y: "5vh"
+                        }
+                    }
                 }
             }
         }
     },
     sections: {
         hero: {
-            variation:"stylishHero",
-            backgroundImage: ["", ""],
-            background: {},
-            header: {
-                color: "secondary",
-                input: "Step into Style",
-                fontFamily: "Arial",
-                fontWeight: "600",
-                fontSize: "8vh",
-                lineHeight: "1.1",
+            variation: "heroWithButtonBetweenImages",
+            background: {
+            color: "primary",
+            width: {
+                desktop: "100%"
+            }
             },
-            box: {
+            fontFamilly: "primary",
+            topDiv: {
+                display: true,
                 text: {
-                    input: "L.thompson is a hat store for every style at any occasion",
-                },
-                button: {
-                    function: 'buy',
-                    show: true,
-                    text: {
-                        input: "Shop Now",
+                    style: {
+                    fontFamily: "secondary",
+                    input: "Sweetslice events",
+                    fontSize: {
+                        mobile: "5.199999999999997vh",
+                        desktop: "6.499999999999992vh"
                     },
-                    background: {
-                        width: {
-                            desktop: "17vh",
-                            mobile: "20vh"
-                        },
-                        padding: {
-                            x: {
-                                mobile: "3vh",
-                                desktop: "3vh"
-                            },
-                            y: {
-                                mobile: "1.5vh",
-                                desktop: "2vh"
-                            },
-                        },
-                        border: {
-                            width: "0px",
-                            style: "solid",
-                            radius: "30px",
-                        }
+                    color: "secondary",
+                    weight: "lighter",
+                    position: "center"
                     }
+                },
+                background: {}
+            },
+            images: {
+            animation: {
+                image1: "leftToRight",
+                image2: "rightToLeft"
+            },
+            imageUrl: [
+                "https://storage.googleapis.com/the-mall-uploads-giza/stores/6883116947fc791fc7b89df9/images/assets_task_01k0zzvtsfe2fa9m4r0dtdc803_1753420374_img_1.webp",
+                "https://storage.googleapis.com/the-mall-uploads-giza/stores/6883116947fc791fc7b89df9/images/hero image.webp"
+            ],
+            url: {
+                image1: "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100115.png",
+                image2: "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100200.png"
+            }
+            },
+            midDiv: {
+            backgroundColor: "quad",
+            animation: "leftToRight",
+            text: {
+                style: {
+                input: "Baked with Love, Crafted for Memories",
+                fontFamily: "tertiary",
+                fontSize: {
+                    mobile: "3.8000000000000016vh",
+                    desktop: "5.2vh"
+                },
+                color: "accent",
+                lineHeight: "1.2",
+                weight: "normal"
+                },
+                input: "Baked with Love - Crafted for Memories",
+                fontFamily: "secondary",
+                color: "pent"
+            },
+            button: {
+                function: "orderNow",
+                style: {
+                text: {
+                    input: "Order Now",
+                    fontFamily: "secondary",
+                    color: "secondary",
+                    fontSize: "3.6000000000000014vh",
+                    fontWeight: "bold",
+                    letterSpacing: "0px",
+                    animation: "fade-in",
+                    lineHeight: "0.5",
+                    weight: "lighter"
                 },
                 background: {
+                    height: "5.800000000000003vh",
+                    width: "43%",
+                    color: "primary",
+                    shadow: false,
                     border: {
-                        width: "0px",
-                        radius: "50px",
+                    width: "0vh",
+                    style: "solid",
+                    color: "accent",
+                    radius: "0px"
+                    },
+                    padding: {
+                    x: "0.1vh",
+                    y: "0.1vh"
                     }
                 }
+                },
+                show: {
+                desktop: "never"
+                }
+            },
+            background: {
+                color: "primary"
             }
-        },
+            }
+        },                                 
         about: {
             variation: "shortAbout",
             background: {
@@ -437,161 +629,259 @@ export const mockLayout = {
             }
         },
         products: {
+            variation: "productWithVerySimpleCard",
             background: {
                 color: "primary",
-                padding: {
-                    x: {
-                        mobile: "1vh",
-                        desktop: "0vh"
-                    },
-                    y: {
-                        mobile: "3vh",
-                        desktop: "5vh"
-                    },
-                }
+                width: {
+                    mobile: "100%",
+                    desktop: "100%",
+                },
             },
             text: {
-                header: {
-                    input: "Shop All",
-                    color: "secondary",
+                heading: {
+                    input: "Selected Work",
+                    position: "center",
                     fontSize: {
-                        mobile: "4vh",
-                        desktop: "5vh"
+                        mobile: "35px",
+                        desktop: "35px",
                     },
-                    weight: "600",
+                    fontFamily: "secondary",
+                    color: "secondary",
+                    lineHeight: "1.3",
+                    underline: {
+                        show: true,
+                        color: "primary",
+                        width: "50%",
+                        style: "solid",
+                        thickness: "10px",
+                        marginTop: "10px",
+                    }
+                },
+                subheading: {
+                    input: "Some work",
+                    position: "center",
+                    fontSize: {
+                        mobile: "35px",
+                        desktop: "35px",
+                    },
+                    fontFamily: "secondary",
+                    color: "secondary",
+                    lineHeight: "1.3",
+                    underline: {
+                        show: false,
+                        color: "primary",
+                        width: "50%",
+                        style: "solid",
+                        thickness: "10px",
+                        marginTop: "10px",
+                    }
+                },
+            },
+            acceptingOrdersButton: {
+                position: "center",
+                text: {
+                    fontFamily: "primary",
+                    color: "secondary",
+                    fontSize: "1rem",
+                },
+                background: {
+                    color: "primary",
+                },
+            },
+            pickupOrDelivery: {
+                position: "center",
+                fontFamily: "primary",
+                background: {
                     padding: {
-                        x: {
-                            mobile: "1vh",
-                            desktop: "5vh"
-                        },
                         y: {
                             mobile: "1vh",
-                            desktop: "2vh"
+                            desktop: "1vh"
                         },
+                        x: {
+                            mobile: "1vh",
+                            desktop: "1vh"
+                        },
+                    },
+                    width: {
+                        mobile: "100%",
+                        desktop: "25%",
+                    },
+                    border: {
+                        width: "1px",
+                        style: "solid",
+                        color: "secondary",
+                        radius: "0px"
                     }
                 }
+            },
+            categorySelector: {
+                show: true,
+                text: {
+                    fontFamily: "primary",
+                    fontSize: {
+                        mobile: "1.5rem",
+                        desktop: "1.5rem"
+                    },
+                    color: "primary",
+                    fontWeight: "bold",
+                },
+                width: {
+                    mobile: "100%",
+                    desktop: "70%",
+                },
+                alignment: "center",
+                underlineColor: "secondary",
+                selectedColor: "secondary",
+            },
+            categoryDivider: {
+                show: true,
+                color: "secondary",
+                fontFamily: "primary",
+                textAlign: "center",
             },
             card: {
                 background: {
                     height: {
-                        mobile: "60vh",
-                        desktop: "60vh", 
+                        mobile: "25vh",
+                        desktop: "30vh"
                     },
                     border: {
-                        width: "0px",
+                        width: "1px",
                         style: "solid",
-                    }
-                },
-                image: {
-                    background: {
-                        border: {
-                            width: "1px",
-                            style: "solid",
-                            radius: "60px"
-                        }
-                    }
-                },
-                details: {
-                    price: {
                         color: "secondary",
-                        weight: "normal",
-                        fontSize: {
-                            mobile: "2.2vh",
-                            desktop: "2.2vh"
-                        },
+                        radius: "0px"
                     },
+                    padding: {
+                        x: {
+                            mobile: "1vh",
+                            desktop: "1vh"
+                        },
+                        y: {
+                            mobile: "1vh",
+                            desktop: "1vh"
+                        },
+                    }
+                },
+                text: {
                     name: {
+                        fontSize: {
+                            mobile: "1.5rem",
+                            desktop: "1.5rem"
+                        },
                         color: "secondary",
-                        weight: "normal",
-                        fontSize: {
-                            mobile: "2.2vh",
-                            desktop: "2.2vh"
-                        },
-                    }
-                }
-            }
-        },
-        gallery: {
-            variation: "maxThreeGallery",
-            background: {
-                border: {
-                    color: "secondary",
-                    width: "1px",
-                    style: "solid",
-                },
-                padding: {
-                    x: {
-                        mobile: "1vh",
-                        desktop: "10vh"
-                    },
-                    y: {
-                        mobile: "5vh",
-                        desktop: "10vh"
-                    }
-                }
-            },
-            heading: {
-                input: "Headwear Gallery",
-                fontSize: {
-                    mobile: "4vh",
-                    desktop: "6vh",
-                },
-                padding: {
-                    x: {
-                        mobile: "0vh",
-                        desktop: "0vh"
-                    },
-                    y: {
-                        mobile: "3.5vh",
-                        desktop: "5vh"
-                    }
-                },
-                weight: "600",
-            },
-            cards: {
-                style: {
-                    image: {
-                        border: {
-                            width: "1px",
-                            style: "solid",
-                            radius: "50px",
+                        fontFamily: "primary",
+                        textAlign: "center",
+                        padding: {
+                            x: {
+                                mobile: "1vh",
+                                desktop: "1vh"
+                            },
+                            y: {
+                                mobile: "1vh",
+                                desktop: "1vh"
+                            },
                         }
-                    },
-                    title: {
-                        fontFamily: "secondary",
-                        fontSize: {
-                            mobile: "3.5vh",
-                            desktop: "4vh",
-                        },
-                        weight: "900",
                     },
                     description: {
                         fontSize: {
-                            mobile: "2.2vh",
-                            desktop: "2.5vh",
+                            mobile: "1.5rem",
+                            desktop: "1.5rem"
                         },
-                        lineHeight: "1.2",
+                        color: "secondary",
+                        fontFamily: "primary",
+                        textAlign: "center",
+                    },
+                    price: {
+                        fontSize: {
+                            mobile: "1.5rem",
+                            desktop: "1.5rem"
+                        },
+                        color: "secondary",
+                        fontFamily: "primary",
+                        textAlign: "center",
+                    }
+                }
+            },
+        },          
+        gallery: {
+            variation: "simpleGallery",
+            background: {
+                color: "primary",
+                width: {
+                    mobile: "100%",
+                    desktop: "100%",
+                },
+            },
+            text: {
+                heading: {
+                    input: "Selected Work",
+                    position: "center",
+                    fontSize: {
+                        mobile: "35px",
+                        desktop: "35px",
+                    },
+                    fontFamily: "primary",
+                    color: "primary",
+                    lineHeight: "1.3",
+                    underline: {
+                        show: true,
+                        color: "primary",
+                        width: "50%",
+                        style: "solid",
+                        thickness: "10px",
+                        marginTop: "10px",
                     }
                 },
-                firstGroup: {
-                    show: true,
-                    title: "Vintage",
-                    imageUrls: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/easyheadwear/images/galler3.avif"],
-                    description: "Explore our trendy beanies, ideal for keeping you warm and stylish during the cooler seasons, available in a variety of colors and designs."
+                subheading: {
+                    input: "Some work",
+                    position: "center",
+                    fontSize: {
+                        mobile: "35px",
+                        desktop: "35px",
+                    },
+                    fontFamily: "primary",
+                    color: "primary",
+                    lineHeight: "1.3",
+                    underline: {
+                        show: false,
+                        color: "primary",
+                        width: "50%",
+                        style: "solid",
+                        thickness: "10px",
+                        marginTop: "10px",
+                    }
                 },
-                secondGroup: {
-                    show: true,
-                    title: "Kids Headwear",
-                    imageUrls: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/easyheadwear/images/galler2.avif"],
-                    description: "Explore our trendy beanies, ideal for keeping you warm and stylish during the cooler seasons, available in a variety of colors and designs."
+            },
+            images: {
+                background: {
+                    border: {
+                        width: "2px",
+                        style: "solid",
+                        color: "secondary",
+                        radius: "10px",
+                    },
+                    height: {
+                        mobile: "25vh",
+                        desktop: "25vh",
+                    }
                 },
-                thirdGroup: {
-                    show: true,
-                    title: "Fisherman Hats",
-                    imageUrls: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/easyheadwear/images/galler1.avif"],
-                    description: "Explore our trendy beanies, ideal for keeping you warm and stylish during the cooler seasons, available in a variety of colors and designs."
+                stack: {
+                    mobile: "horizontal",
+                    desktop: "horizontal",
                 },
-
+                columns: {
+                    mobile: 1,
+                    desktop: 1,
+                },
+                gap: {
+                    mobile: "5px",
+                    desktop: "0px",
+                },
+                urls: [
+                    "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100115.png",
+                    "https://storage.cloud.google.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100136.png",
+                    "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100200.png" 
+                ],
             }
         },
         ennockHero: {
@@ -1108,7 +1398,7 @@ export const mockLayout = {
                     text: {
                         input: "Submit",
                         fontFamily: "tertiary",
-                        color: "#000000",
+                        color: "primary",
                         fontSize: "1.2em",
                         fontWeight: "bold",
                         letterSpacing: "0px",

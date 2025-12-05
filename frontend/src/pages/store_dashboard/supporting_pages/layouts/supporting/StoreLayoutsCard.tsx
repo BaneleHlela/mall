@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { LuScanEye } from "react-icons/lu";
 import { MdModeEditOutline } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { IoCamera } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
 import { HiDotsVertical } from "react-icons/hi";
@@ -27,10 +28,12 @@ interface StoreLayoutCardProps {
   onSelect: (layoutId: string) => void;
   onSetActive: () => void;
   onRename: () => void;
+  onDelete: () => void;
   edit?: boolean;
+  isActive?: boolean;
 }
 
-const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onSetActive, onRename, edit = true }) => {
+const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onSetActive, onRename, onDelete, edit = true, isActive = false }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [showButtons, setShowButtons] = useState(false);
@@ -76,6 +79,39 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
   const handleSetActiveClick = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     handleSetActive();
+  };
+
+  const handleDelete = async () => {
+    const result = await mysweetalert.fire({
+      title: "Delete Layout?",
+      text: "This will permanently delete this layout. Are you sure?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete",
+      cancelButtonText: "Cancel"
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      await onDelete();
+      mysweetalert.fire({
+        icon: "success",
+        title: "Layout Deleted!",
+        text: "The layout has been deleted successfully.",
+        confirmButtonColor: "#3085d6"
+      });
+    } catch (error) {
+      console.error('Failed to delete layout:', error);
+      mysweetalert.fire({
+        icon: "error",
+        title: "Delete Failed",
+        text: "Something went wrong while deleting the layout. Please try again.",
+        confirmButtonColor: "#d33"
+      });
+    }
   };
 
   const handleCaptureScreenshot = async (e?: React.MouseEvent) => {
@@ -124,7 +160,7 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
     <div className="">
       <p className="text-center font-[400] text-[1.8vh] line-clamp-1 lg:py-[1vh] text-shadow-2xs">{layout.name || "Store Layout"}</p>
 
-      <div className="relative w-full pt-1 bg-white aspect-9/18 lg:max-h-[60vh] overflow-hidden rounded-lg shadow-md">
+      <div className={`relative w-full pt-1 ${isActive ? 'bg-gray-700 border-white' : 'bg-white border-white'} border-2 aspect-9/18 lg:max-h-[60vh] overflow-hidden rounded-lg shadow-md`}>
         <div className="flex justify-center h-[4%] w-full items-center text-center text-[1.6vh] font-semibold line-clamp-1">
         </div>
         <div className="relative h-[90%]">
@@ -199,6 +235,19 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
                       >
                         <GrSelect className="text-[3vh] text-orange-600 mb-1" />
                         <p className="text-[1.5vh] font-medium text-orange-700 line-clamp-1">Set Active</p>
+                      </button>
+
+                      {/* Delete */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowButtons(false);
+                          handleDelete();
+                        }}
+                        className="flex flex-col items-center justify-center p-3 bg-red-50 hover:bg-red-100 rounded-xl transition-colors"
+                      >
+                        <MdDelete className="text-[3vh] text-red-600 mb-1" />
+                        <span className="text-[1.5vh] font-medium text-red-700">Delete</span>
                       </button>
 
                       {/* Capture */}

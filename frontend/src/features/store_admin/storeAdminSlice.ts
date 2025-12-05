@@ -87,8 +87,8 @@ export const fetchStore = createAsyncThunk<Store, string>(
 
 export const uploadStoreGalleryImage = createAsyncThunk<
   {
-    slug: string; url: string; description: string; category: string 
-},
+    url: string; description: string;
+  },
   { storeSlug: string; imageFile: File; description: string; category: string }
 >(
   'stores/uploadStoreGalleryImage',
@@ -432,11 +432,17 @@ const storeAdminSlice = createSlice({
             state.isLoading = true;
             state.error = null;
           })
-          .addCase(uploadStoreGalleryImage.fulfilled, (state, action: PayloadAction<Image>) => {
+          .addCase(uploadStoreGalleryImage.fulfilled, (state, action: PayloadAction<{ url: string; description: string }>) => {
             state.isLoading = false;
             state.error = null;
             if (state.store) {
-              state.store.images = [...(state.store.images || []), action.payload];
+              const newImage: Image = {
+                _id: Date.now().toString(), // temporary id
+                url: action.payload.url,
+                description: action.payload.description,
+                category: '',
+              };
+              state.store.images = [...(state.store.images || []), newImage];
             }
           })
           .addCase(uploadStoreGalleryImage.rejected, (state, action) => {
@@ -526,13 +532,13 @@ const storeAdminSlice = createSlice({
           state.error = null;
         })
         .addCase(uploadStoreLogo.fulfilled, (state, action: PayloadAction<string>) => {
-          state.isLoading = false;
-          state.error = null;
+           state.isLoading = false;
+           state.error = null;
 
-          if (state.store) {
-            state.store.logo = { url: action.payload }; // set logo URL as an object
-          }
-        })
+           if (state.store) {
+             state.store.logo = { ...state.store.logo, imageUrls: [action.payload] }; // set logo imageUrls array
+           }
+         })
         .addCase(uploadStoreLogo.rejected, (state, action) => {
           state.isLoading = false;
           state.error = action.error.message || 'Failed to upload store logo';

@@ -1,10 +1,10 @@
 import { useAppSelector } from "../../../../../app/hooks";
-import StoreButton from "../../../extras/buttons/StoreButton";
+import StoreLayoutButton from "../../../shared_layout_components/StoreLayoutButton";
 import { useStoreButtonClickHandler } from "../../../extras/buttons/useStoreButtonClickHandler";
 import UnderlinedText from "../../../extras/text/UnderlinedText";
 
 const HeroWithButtonImageAndText = () => {
-    const style = useAppSelector((state) => state.layoutSettings.hero);
+    const style = useAppSelector((state) => state.layoutSettings.sections.hero);
     const routes = useAppSelector((state) => state.layoutSettings.routes);
     const store = useAppSelector((state) => state.stores.currentStore);
     const handleButtonClick = useStoreButtonClickHandler();
@@ -39,7 +39,7 @@ const HeroWithButtonImageAndText = () => {
                 </div>
                 {/* Button */}
                 <div className="w-[400px] flex flex-row justify-center mt-8 z-2">
-                    <StoreButton
+                    <StoreLayoutButton
                         style={style.button}
                         onClick={() =>
                             handleButtonClick({
@@ -58,7 +58,13 @@ const HeroWithButtonImageAndText = () => {
                     }} 
                     className="absolute inset-0 w-full bg-white">
                     <img 
-                        src={window.innerWidth < 686 || !style.image[1] ? style.image[0] : style.image[1]} 
+                        src={
+                            style.image.length === 1 
+                                ? style.image[0] 
+                                : window.innerWidth < 768 
+                                    ? style.image[0] 
+                                    : style.image[1] 
+                        } 
                         alt="Hero Image" 
                         className="w-full h-full object-cover" 
                     />
@@ -99,7 +105,7 @@ const HeroWithButtonImageAndText = () => {
                 </div>
                 {/* Button */}
                 <div className="w-full flex flex-row justify-center mt-5  z-2">
-                    <StoreButton
+                    <StoreLayoutButton
                         style={style.button}
                         onClick={() =>
                             handleButtonClick({

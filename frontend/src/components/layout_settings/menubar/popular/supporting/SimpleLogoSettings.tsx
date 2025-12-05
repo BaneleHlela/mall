@@ -6,6 +6,8 @@ import TextEditor from '../../../text/TextEditor';
 import BackgroundEditor from '../../../background/BackgroundEditor';
 import SubSettingsContainer from '../../../extras/SubSettingsContainer';
 import LogoControl from '../../../logo/LogoControl';
+import { getSetting } from '../../../../../utils/helperFunctions';
+import MultipleLayoutImagesHandler from '../../../supporting/MultipleLayoutImagesHandler';
 
 interface SimpleLogoSettingsProps {
   objectPath: string;
@@ -15,12 +17,11 @@ const SimpleLogoSettings: React.FC<SimpleLogoSettingsProps> = ({ objectPath }) =
   const dispatch = useAppDispatch();
   const settings = useAppSelector((state) => state.layoutSettings);
   const logoSettings = useAppSelector((state) => state.layoutSettings.menubar.topbar.logo);
-  
-  console.log(logoSettings)
-  
+    
   const handleSettingChange = (field: string, value: any) => {
     dispatch(updateSetting({ field, value }));
   };
+
 
   return (
     <div className="flex flex-col items-center space-y-[1vh]">
@@ -30,9 +31,14 @@ const SimpleLogoSettings: React.FC<SimpleLogoSettingsProps> = ({ objectPath }) =
         value={logoSettings.use}
         onChange={(value) => handleSettingChange(`${objectPath}.use`, value)}
       />
-
+      {/* Logo Images */}
       {logoSettings.use === 'logo' && (
-        <LogoControl />
+        <MultipleLayoutImagesHandler
+          objectPath={`${objectPath}.logoUrl`}
+          min={2}
+          max={2}
+          images={getSetting("logoUrl", settings, objectPath)}
+        />
       )}
 
       {logoSettings.use === 'text' && (
@@ -40,7 +46,7 @@ const SimpleLogoSettings: React.FC<SimpleLogoSettingsProps> = ({ objectPath }) =
           name="Text"
           SettingsComponent={
             <TextEditor
-              objectPath={`${objectPath}.text`}
+              objectPath={`${objectPath}.style.text`}
               settings={settings}
               handleSettingChange={handleSettingChange}
               allow={['input', 'fontSize', 'weight', 'letterSpacing', "textDecoration"]}
@@ -49,6 +55,21 @@ const SimpleLogoSettings: React.FC<SimpleLogoSettingsProps> = ({ objectPath }) =
           }
         />
       )}
+      <SubSettingsContainer
+        name="Background"
+        SettingsComponent={
+          <BackgroundEditor
+            objectPath={`${objectPath}.style.background`}
+            settings={settings}
+            handleSettingChange={handleSettingChange}
+            allow={['color', "width", "padding"]}
+            responsiveSize
+            responsivePadding
+            widthUnit='%'
+            heightUnit='%'
+          />
+        }
+      />
     </div>
   );
 };

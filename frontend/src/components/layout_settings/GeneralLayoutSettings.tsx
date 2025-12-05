@@ -18,7 +18,7 @@ const GeneralLayoutSettings = () => {
     <div
         className='p-2 space-y-1'
     >
-        {/* <div className="shadow-sm border border-black text-black rounded-sm px-2 py-1">
+        <div className="shadow-sm border border-black text-black rounded-sm px-2 py-1">
           <div className="w-full text-center font-semibold mb-2">
             Store Background Settings
           </div>
@@ -27,10 +27,10 @@ const GeneralLayoutSettings = () => {
             handleSettingChange={handleSettingChange}
             settings={settings}
             allow={["width", "color"]}
-            widthUnit='vw'
+            widthUnit='%'
             responsiveSize={true}
           />
-        </div> */}
+        </div>
         <SubSettingsContainer 
             name="Fonts" 
             SettingsComponent={<LayoutFontsSelector />}

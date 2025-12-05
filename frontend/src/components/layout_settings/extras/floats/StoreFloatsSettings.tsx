@@ -32,7 +32,7 @@ const StoreFloatsSettings = () => {
                     key="socials"
                     isOpen={true}
                     onClose={closePanel}
-                    title="Floating Socials Settings"
+                    title="Floating Button Settings"
                 >
                     <StoreFloatingButtonSettings />
                 </SlidingPanel>

@@ -8,7 +8,7 @@ import SendEmailForm from "../../../extras/forms/send_email/SendEmailForm";
 
 const HeroWithReviewCardAndEmailForm = () => {
   const dispatch = useAppDispatch();
-  const style = useAppSelector(state => state.layoutSettings.hero);
+  const style = useAppSelector(state => state.layoutSettings.sections.hero);
   const store = useAppSelector((state) => state.stores.currentStore);
   const ratingStats = useAppSelector((state) => state.reviews.ratingStats);
 
@@ -25,7 +25,13 @@ const HeroWithReviewCardAndEmailForm = () => {
         {/* backgroundImage */}
         <div className="absolute inset-0 w-full h-full z-[-1]">
           <img 
-            src={style.background.image} 
+            src={
+              style.background.image.length === 1 
+                  ? style.background.image[0] 
+                  : window.innerWidth < 768 
+                      ? style.background.image[0] 
+                      : style.background.image[1] 
+            } 
             alt="Contact Backgroung Image" 
             className="w-full h-full object-cover" 
           />

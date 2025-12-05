@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../app/store';
 import { logout, getProfile } from '../../features/user/userSlice';
 import { FaUser, FaMapMarkerAlt, FaCog, FaHome, FaShoppingBag, FaCreditCard, FaHistory, FaGift, FaQuestionCircle, FaSignOutAlt, FaSignInAlt } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 import EditAvatarModal from './components/EditAvatarModal';
 import MyAddresses from './components/MyAddresses';
 import MyPurchases from './components/MyPurchases';
@@ -33,7 +34,20 @@ const Account: React.FC = () => {
   }, [dispatch, isAuthenticated, user]);
 
   const handleLogout = () => {
-    dispatch(logout() as any);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will be signed out of your account.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, sign out',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(logout() as any);
+      }
+    });
   };
 
   const handleAvatarClick = () => {

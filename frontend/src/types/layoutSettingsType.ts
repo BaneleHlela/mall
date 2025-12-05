@@ -14,6 +14,7 @@ export interface TextSettings {
     fontStyle?: string;
     padding?: PaddingValue;
     backgroundColor?: string;
+    textAlign?: string;
 }
   
 export interface EditorProps {

@@ -20,7 +20,7 @@ const AboutWithImageBehindTextSettings: React.FC<AboutWithImageBehindTextSetting
   settings,
   handleSettingChange,
 }) => {
-  const objectPath = "about";
+  const objectPath = "sections.about";
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
 
@@ -192,8 +192,9 @@ const AboutWithImageBehindTextSettings: React.FC<AboutWithImageBehindTextSetting
                             settings={settings}
                             handleSettingChange={handleSettingChange}
                             responsiveSize
-                            allow={["fontFamily", "fontSize", "fontWeight", "color", "letterSpacing", "lineHeight", "textArea", "padding"]}
+                            allow={["fontFamily", "fontSize", "fontWeight", "color", "letterSpacing", "lineHeight", "input", "padding"]}
                             responsivePadding
+                            useTextarea
                         />
                     </div>
                 </SlidingPanel>

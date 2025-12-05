@@ -4,14 +4,15 @@ import StoreButton from "../../../extras/buttons/StoreButton";
 import SendEmailForm from "../../../extras/forms/send_email/SendEmailForm";
 import MapComponent from "../../../extras/MapComponent";
 import UnderlinedText from "../../../extras/text/UnderlinedText";
+import StoreLayoutButton from "../../../shared_layout_components/StoreLayoutButton";
 import FooterAddressDisplay from "./supporting/FooterAddressDisplay";
 import FooterContactDetailsDisplay from "./supporting/FooterContactDetailsDisplay";
 import FooterOperationTimesDisplay from "./supporting/FooterOperationTimesDisplay";
 
 const FooterWithStoreDetailsFormAndButton = () => {
-  const settings = useAppSelector((state) => state.layoutSettings.footer);
+  const settings = useAppSelector((state) => state.layoutSettings.sections.footer);
   const store = useAppSelector((state) => state.stores.currentStore);
-  console.log(store?.location)
+
   return (
     <div 
       id="footer"
@@ -31,7 +32,7 @@ const FooterWithStoreDetailsFormAndButton = () => {
             <UnderlinedText style={settings.title.text} />
             {/* Button*/}
             {settings.button.show && (
-                <StoreButton style={settings.button} onClick={() => {}}/>
+                <StoreLayoutButton style={settings.button} onClick={() => {}}/>
             )}
           </div>
         )}
@@ -177,7 +178,7 @@ const FooterWithStoreDetailsFormAndButton = () => {
           <div
             className="w-full flex flex-row justify-center mt-5"
           >
-            <StoreButton style={settings.button} onClick={() => {}}/>
+            <StoreLayoutButton style={settings.button} onClick={() => {}}/>
           </div>
         )}
         {/* Email send, copyright, and social */}

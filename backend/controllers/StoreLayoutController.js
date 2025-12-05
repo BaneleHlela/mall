@@ -136,8 +136,7 @@ export const updateLayoutConfigWithSettings = async (req, res) => {
       res.status(500).json({ message: 'Failed to update layout.' });
     }
 };
-  
-  
+   
 export const getStoreLayouts = expressAsyncHandler(async (req, res) => {
   const { storeId } = req.params;
 
@@ -167,7 +166,6 @@ export const getLayoutConfig = expressAsyncHandler(async (req, res) => {
     res.json(layout);
 });
 
-
 // Get Layout by Demo Store
 export const getLayoutByDemoStore = expressAsyncHandler(async (req, res) => {
     const { storeId } = req.params;
@@ -182,7 +180,6 @@ export const getLayoutByDemoStore = expressAsyncHandler(async (req, res) => {
 
     res.json(layout);
 });
-
 
 // Get Layout by Store
 export const getLayoutByStore = expressAsyncHandler(async (req, res) => {
@@ -224,7 +221,6 @@ export const getDemoLayouts = expressAsyncHandler(async (req, res) => {
     res.json(filteredLayouts);
 });
 
-
 // Update Layout Configuration
 export const updateLayoutConfig = expressAsyncHandler(async (req, res) => {
   const { layoutId } = req.params;
@@ -236,6 +232,9 @@ export const updateLayoutConfig = expressAsyncHandler(async (req, res) => {
   
   if (body.store) {
     layout.store = body.store;
+  };
+  if (body.background) {
+    layout.background = body.background;
   };
 
   if (body.floats) {

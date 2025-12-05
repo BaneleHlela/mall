@@ -44,7 +44,7 @@ const StoreWelcomeDiv: React.FC<StoreWelcomeDivProps> = ({  store, onClose }) =>
                 {/* Logo */}
                 {config.logo.show && (
                     <img
-                        src={store?.logo || config.logo.imageUrl}
+                        src={store?.logo?.imageUrls?.[0] || config.logo.imageUrl}
                         alt="Store Logo"
                         style={{
                             width: isMobile ? config.logo.size.mobile : config.logo.size.desktop,

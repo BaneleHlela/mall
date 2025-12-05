@@ -1,3 +1,22 @@
+import User from "../models/UserModel.js";
+
+// Generate unique username
+export const generateUniqueUsername = async (firstName, lastName) => {
+  // Create base username: lowercase, alphanumeric only
+  const base = `${firstName || "user"}${lastName || ""}`.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+  let username = base;
+  let counter = 0;
+
+  // Ensure uniqueness by checking DB and appending number if needed
+  while (await User.findOne({ username })) {
+    counter++;
+    username = `${base}${counter}`;
+  }
+
+  return username;
+};
+
 
 import { captureScreenshot } from "../config/puppeteerConfig.js";
 

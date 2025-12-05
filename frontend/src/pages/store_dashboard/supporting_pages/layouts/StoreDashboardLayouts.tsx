@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../../../app/hooks";
 import type { RootState } from "../../../../app/store";
 import { useNavigate } from "react-router-dom";
-import { getStoreLayouts, captureLayoutScreenshot, getLayout, editLayout } from "../../../../features/layouts/layoutSlice";
+import { getStoreLayouts, captureLayoutScreenshot, getLayout, editLayout, removeLayout } from "../../../../features/layouts/layoutSlice";
 import { editStore } from "../../../../features/store_admin/storeAdminSlice";
 import { useEffect, useState } from "react";
 import StoreLayoutCard from "./supporting/StoreLayoutsCard";
@@ -149,6 +149,38 @@ const StoreDashboardLayouts = () => {
     }
   };
 
+  const handleDeleteLayout = async (layoutId: string) => {
+    // Prevent deletion of active layout
+    if (store?.website?.layoutId === layoutId) {
+      mysweetalert.fire({
+        icon: "warning",
+        title: "Cannot Delete Active Layout",
+        text: "This layout is currently set as your store's active layout. Please set another layout as active before deleting this one.",
+        confirmButtonColor: "#3085d6"
+      });
+      return;
+    }
+
+    try {
+      await dispatch(removeLayout(layoutId)).unwrap();
+
+      mysweetalert.fire({
+        icon: "success",
+        title: "Layout Deleted!",
+        text: "The layout has been deleted successfully.",
+        confirmButtonColor: "#3085d6"
+      });
+    } catch (error) {
+      console.error('Failed to delete layout:', error);
+      mysweetalert.fire({
+        icon: "error",
+        title: "Delete Failed",
+        text: "Something went wrong while deleting the layout. Please try again.",
+        confirmButtonColor: "#d33"
+      });
+    }
+  };
+
 
   // // Show CustomizeLayout for mobile editing
   // if (editingLayout && activeLayout) {
@@ -164,7 +196,7 @@ const StoreDashboardLayouts = () => {
   // }
 
   return (
-    <div className="relative flex flex-col items-center justify-between w-full h-screen px-[1vh] mt-1 overflow-y-scroll">
+    <div className="relative flex flex-col items-center justify-between w-full h-full px-[1vh] mt-1 overflow-y-scroll">
       <div>
         <h1 className="text-center text-[2.4vh] font-semibold py-[1.5vh] font-[Lato] text-shadow-xs">
           {store.name} Layouts
@@ -183,7 +215,7 @@ const StoreDashboardLayouts = () => {
           </p>
         </div>        
         ) : (
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 px-4">
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 px-4 max-h-[90%]">
             {storeLayouts.map((layout) => {
               let storeId = '';
               if (typeof layout.store === 'object' && layout.store !== null) {
@@ -206,6 +238,8 @@ const StoreDashboardLayouts = () => {
                   onSelect={() => handleEdit(layout._id || '')}
                   onSetActive={() => handleSetActiveLayout(layout._id || '')}
                   onRename={() => handleRenameLayout(layout._id || '', layout.name || 'Store Layout')}
+                  onDelete={() => handleDeleteLayout(layout._id || '')}
+                  isActive={store?.website?.layoutId === layout._id}
                 />
               );
             })}
@@ -213,7 +247,7 @@ const StoreDashboardLayouts = () => {
         )}
       </div>
 
-      <div className="absolute bottom-0 w-fit h-[10vh] flex flex-col justify-center items-center">
+      <div className="fixed bottom-0 w-fit h-[10vh] flex flex-col justify-center items-center">
         <button onClick={handleClick} className="flex items-center bg-black text-white rounded-[.45vh] p-[1vh] space-x-1 shadow">
           <p className="">New Layout</p> <FaPlus className="text-[1.5vh]"/>
         </button>

@@ -1,9 +1,10 @@
 import passport from 'passport';
 import GoogleStrategy from "passport-google-oauth20";
-import { v4 as uuidv4 } from 'uuid'; 
-import bcrypt from 'bcryptjs';       
+import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcryptjs';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import  User  from '../models/UserModel.js';
+import { generateUniqueUsername } from '../utils/helperFunctions.js';
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -38,10 +39,12 @@ passport.use(
 
           const randomPassword = uuidv4();
           const hashedPassword = await bcrypt.hash(randomPassword, 10);
+          const username = await generateUniqueUsername(firstName, lastName);
 
           user = await User.create({
             googleId: profile.id,
             email: profile.emails?.[0].value,
+            username,
             firstName,
             lastName,
             password: hashedPassword,
@@ -81,9 +84,11 @@ passport.use(new FacebookStrategy(
 
         const randomPassword = uuidv4();
         const hashedPassword = await bcrypt.hash(randomPassword, 10);
+        const username = await generateUniqueUsername(firstName, lastName);
 
         user = await User.create({
           facebookId: profile.id,
+          username,
           firstName,
           lastName,
           password: hashedPassword,

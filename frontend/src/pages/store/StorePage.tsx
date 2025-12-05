@@ -27,7 +27,7 @@ import StoreMenubarIcons from "../../components/store_layout/menubars/supporting
 import StoreFloatingButton from "../../components/store_layout/extras/buttons/StoreFloatingButton";
 import StoreWelcomeDiv from "../../components/store_layout/extras/StoreWelcomeDiv";
 import { IoMdClose } from "react-icons/io";
-import ComingSoon from "../../components/the_mall/ComingSoon";
+import { FaTools } from "react-icons/fa";
 import StoreCartModal from "../cart/StoreCartModal";
 import StoreMenubar from "../../components/store_layout/menubars/StoreMenubar";
 import HorizontalProductsSection from "../../components/store_layout/sections/products/horizontal_products/HorizontalProductsSection";
@@ -39,7 +39,6 @@ import DoctorAbout from "../../components/store_layout/sections/about/doctor_abo
 import ArtMenubar from "../../components/store_layout/menubars/art_menubar/ArtMenubar";
 import EnnockHero from "../../components/store_layout/sections/hero/ennock_hero/EnnockHero";
 import BasicSearchResults from "../../components/store_layout/sections/search_results/basic_search_results/InStoreBasicSearchResults";
-import SecondSingleStoreProductSection from "../../components/store_layout/sections/single_product/second_single _product/SecondSingleStoreProductSection";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import FooterWithSocialsAndEmail from "../../components/store_layout/sections/footer/footer_with_socials_and_email/FooterWithSocialsAndEmail";
 import HeroWithBox from "../../components/store_layout/sections/hero/hero_with_box/HeroWithBox";
@@ -166,8 +165,25 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
     }, 150); // retry every 150ms
   }, [location, store, settings.routes]);
 
+ const isStoreOpen = (store: StoreType) => {
+   if (!store.operationTimes) return false;
+   if (store.manualStatus?.isOverridden) {
+     return store.manualStatus.status === 'open';
+   }
+   if (store.operationTimes.alwaysOpen) return true;
+   const now = new Date();
+   const day = now.getDay(); // 0 = sunday, 1 = monday, etc.
+   const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+   const today = days[day];
+   const todayHours = (store.operationTimes as any)[today];
+   if (todayHours.closed) return false;
+   const start = todayHours.start;
+   const end = todayHours.end;
+   const currentTime = now.toTimeString().slice(0,5); // HH:MM
+   return currentTime >= start && currentTime <= end;
+ };
 
-  if (loading) {
+ if (loading) {
     return <TbLoader3  size={45} className='animate-spin mx-auto'/>;
   }
 
@@ -201,7 +217,7 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
     >
       <div 
         style={{
-          //...getBackgroundStyles(settings.background),
+          ...getBackgroundStyles(settings.background, settings.colors),
           // width: window.innerWidth >= 1024 ? settings.background?.width?.desktop : settings.background?.width?.mobile, // Apply width for large screens
         }}
         className={`relative w-screen h-full overflow-y-scroll hide-scrollbar overflow-x-clip`}>
@@ -250,7 +266,7 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
               )}
             </ErrorBoundary>
             {/* Floating Button */}
-            {/* {settings?.floats?.floatingButton?.show !== "none" && !isCartRoute && (
+            {settings?.floats?.floatingButton && settings.floats.floatingButton.show !== "none" && !isCartRoute && (
               <div className={`fixed z-5
                 ${settings.floats.floatingButton?.position === "left" ? "bottom-2 left-2" : "bottom-2 right-2"}`}
               >
@@ -263,42 +279,114 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
                   }}
                 />
               </div>
-            )} */}
+            )}
             {/* Chat Modal */}
             {isChatOpen && (
-              <div
-                className={`
-                  fixed 
-                  ${settings.floats.floatingButton.position === "left" ? "bottom-0 left-0 lg:bottom-2 lg:left-2" : "bottom-0 right-0 lg:bottow-2 lg:right-2"}
-                  z-50
-                `}
-              >
+              <>
+                {/* Backdrop */}
                 <div
-                  className={`w-[60w] h-[80vh] 
-                    bg-white rounded-lg shadow-lg
-                    flex flex-col
-                    relative lg:w-[20vw] lg:h-[60vh]
+                  className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+                  onClick={() => setIsChatOpen(false)}
+                />
+
+                {/* Floating Chat Container */}
+                <div
+                  className={`
+                    fixed z-50 
+                    ${settings.floats.floatingButton.position === "left"
+                      ? "bottom-0 left-0 lg:bottom-0 lg:left-3"
+                      : "bottom-0 right-0 lg:bottom-0 lg:right-3"
+                    }
                   `}
                 >
-                  <button
-                    onClick={() => setIsChatOpen(false)}
-                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl"
+                  <div
+                    className="
+                      relative flex flex-col
+                      w-[90vw] h-[80vh]
+                      lg:w-[22vw] lg:h-[60vh]
+                      bg-white rounded-2xl shadow-2xl
+                    "
                   >
-                    <IoMdClose />
-                  </button>
-                  <div className="p-4 overflow-y-auto h-full">
-                    <div className="border-b h-[12%]">
-                      <h2 className="text-lg font-semibold mb-2">{store?.name}</h2>
-                      <p className="text-sm text-gray-600">Online</p>
+                    {/* Close Button */}
+                    <button
+                      onClick={() => setIsChatOpen(false)}
+                      className="
+                        absolute top-3 right-3 z-20
+                        text-gray-600 hover:text-gray-800
+                        transition-colors duration-200
+                        text-2xl
+                      "
+                    >
+                      <IoMdClose />
+                    </button>
+
+                    {/* Header */}
+                    <div className="p-4 bg-white border-b rounded-t-2xl z-10">
+                      <h2 className="text-lg font-semibold">{store?.name}</h2>
+
+                      <div
+                        className="mt-1 flex items-center text-[2vh] text-gray-600"
+                        aria-live="polite"
+                        aria-atomic="true"
+                      >
+                        {/* Dot */}
+                        <span
+                          className={
+                            "inline-block w-[1.2vh] h-[1.2vh] rounded-full mr-2 " +
+                            (isStoreOpen(store) ? "bg-green-500" : "bg-red-500")
+                          }
+                          title={isStoreOpen(store) ? "Online" : "Offline"}
+                          aria-hidden="true"
+                        />
+
+                        {/* Status text */}
+                        <p className="m-0">
+                          {isStoreOpen(store) ? "Online" : "Offline"}
+                        </p>
+                      </div>
                     </div>
-                    <div className="h-[88%] w-full">
-                      <ComingSoon message="Soon you'll be able to chat directly with vendors right here on the website!" />
+
+                    {/* Chat Body — ONLY THIS HAS BG IMAGE */}
+                    <div
+                      className="
+                        flex flex-col items-center justify-center text-center
+                        flex-1 p-6 relative
+                      "
+                      style={{
+                        backgroundImage:
+                          "url(https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Screenshot%202025-12-05%20113609.png)",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
+                    >
+                      {/* Optional overlay for contrast */}
+                      <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]"></div>
+
+                      {/* Actual content */}
+                      <div className="relative z-10 flex flex-col items-center">
+                        <h1
+                          className="text-[8vh] lg:text-6xl font-bold mb-4 drop-shadow-lg text-white"
+                          style={{ lineHeight: 1, fontFamily: "Roboto" }}
+                        >
+                          Coming Soon
+                        </h1>
+
+                        <FaTools className="animate-bounce text-4xl lg:text-5xl text-white mb-6 drop-shadow-md" />
+
+                        <p className="
+                          text-sm text-gray-800 bg-white/90 
+                          shadow-md rounded-lg p-4
+                          w-[80%] max-w-[300px]
+                        ">
+                          Soon you'll be able to chat directly with vendors right here on the website!
+                        </p>
+                      </div>
                     </div>
                   </div>
-                  
                 </div>
-              </div>
-            )}
+              </>
+              )}
+
             {/* Welcome Div */}
             {/* {(
               <StoreWelcomeDiv

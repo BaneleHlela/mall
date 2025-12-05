@@ -179,6 +179,7 @@ const ElegantSendEmailFormSettings: React.FC<EmailFormSettingsProps> = ({
                     allow={["color", "shadow", "border", "padding", "width"]}
                     responsiveSize={false}
                     widthUnit="%"
+                    responsivePadding
                   />
                 }
               />

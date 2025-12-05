@@ -1,146 +1,84 @@
-import React, { useRef, useState } from "react";
-import type { RootState } from "../../../app/store";
-import { fetchStore } from "../../../features/store_admin/storeAdminSlice";
-import { uploadStoreLogo, deleteStoreLogo } from "../../../features/store_admin/storeAdminSlice";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { TbLoader3 } from "react-icons/tb";
+import React, { useState } from "react";
+import { useAppSelector, useAppDispatch } from "../../../app/hooks";
+import { fetchStore, updateStoreSetting } from "../../../features/store_admin/storeAdminSlice";
+import MultipleLayoutImagesHandler from "../supporting/MultipleLayoutImagesHandler";
+import SubSettingsContainer from "../extras/SubSettingsContainer";
+import ColorPicker from "../supporting/ColorPicker";
+import SettingsSlider from "../supporting/SettingsSlider";
 
 const LogoControl: React.FC = () => {
   const dispatch = useAppDispatch();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const { store, isLoading, error } = useAppSelector((state) => state.storeAdmin);
+  const { store, isLoading } = useAppSelector((state) => state.storeAdmin);
+  const images = useAppSelector((state) => state.storeAdmin.store?.images) || [];
 
-  // const store =
-  //   useAppSelector((state: RootState) => state.storeAdmin.store) ||
-  //   useAppSelector((state: RootState) => state.stores.currentStore);
+  const logo = store?.logo || { imageUrls: [] };
 
-  // const isLoading = useAppSelector(
-  //   (state: RootState) => state.storeAdmin.isLoading || state.stores.isLoading
-  // );
 
-  const logo = store?.logo || {};
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-    setSelectedFile(file);
-    if (file) handleUpload(file);
+  const handleBackgroundChange = (field: string, value: any) => {
+    dispatch(updateStoreSetting({ field: `logo.background.${field}`, value }));
   };
-
-  const handleUpload = async (file: File) => {
-    const MAX_FILE_SIZE = 2024 * 2024;
-
-    if (file.size > MAX_FILE_SIZE) return alert("File too large (max 1MB).");
-    if (!store?._id) return alert("Store ID missing.");
-
-    try {
-      await dispatch(uploadStoreLogo({ storeSlug: store.slug, logoFile: file })).unwrap();
-      await dispatch(fetchStore(store._id));
-      alert("Logo uploaded successfully.");
-      setSelectedFile(null);
-    } catch (error) {
-      console.error("Upload failed:", error);
-      alert("Failed to upload logo. Please try again.");
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!store?._id) return alert("Store ID missing.");
-
-    const confirmed = window.confirm("Are you sure you want to delete the current logo?");
-    if (!confirmed) return;
-
-    try {
-      await dispatch(deleteStoreLogo({ storeId: store._id })).unwrap();
-      alert("Logo deleted successfully.");
-      setSelectedFile(null);
-      await dispatch(fetchStore(store._id));
-    } catch (error) {
-      console.error("Failed to delete logo:", error);
-      alert("Failed to delete logo. Please try again.");
-    }
-  };
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
-  };
-
-  const hasExistingLogo = !!logo?.url;
 
   return (
     <div className="flex flex-col items-center border-2 border-gray-200 rounded-md shadow-md w-full max-w-md py-4 px-2">
       <h2 className="text-lg font-semibold mb-4">Store Logo</h2>
 
-      {/* LOGO DISPLAY */}
-      <div className="flex flex-col items-center w-full gap-4">
-
-        {/* When replacing logo (old + new side by side) */}
-        {selectedFile && hasExistingLogo ? (
-          <div className="flex flex-row justify-center gap-4 w-full ">
-            <img
-              src={logo.url}
-              alt="Old Logo"
-              className="w-[40%] bg-amber-400 aspect-square object-cover border rounded"
-            />
-            <img
-              src={URL.createObjectURL(selectedFile)}
-              alt="New Logo Preview"
-              className="w-[40%] bg-amber-400  aspect-square object-cover border rounded"
-            />
-          </div>
-        ) : (
-          hasExistingLogo && (
-            <img
-              src={logo.url}
-              alt="Current Logo"
-              className="w-[40%] aspect-square bg-amber-400  object-cover border rounded mx-auto"
-            />
-          )
-        )}
-
-        {/* FILE INPUT */}
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          className="hidden"
-          accept="image/*"
-        />
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        {/* BUTTONS */}
-        <div className="flex flex-col w-full gap-2">
-          <button
-            onClick={triggerFileInput}
-            disabled={isLoading}
-            className={`w-full px-4 py-2 text-white text-sm rounded transition duration-300 ${
-              isLoading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
-            }`}
-          >
-            {isLoading ? (
-              <TbLoader3 size={20} className="animate-spin mx-auto" />
-            ) : hasExistingLogo ? (
-              "Replace Logo"
-            ) : (
-              "Upload Logo"
-            )}
-          </button>
-
-          {hasExistingLogo && (
-            <button
-              onClick={handleDelete}
-              disabled={isLoading}
-              className={`w-full px-4 py-2 text-sm rounded border transition duration-300 ${
-                isLoading
-                  ? "text-gray-400 border-gray-300 cursor-not-allowed"
-                  : "text-red-600 border-red-500 hover:bg-red-100"
-              }`}
-            >
-              Delete Logo
-            </button>
-          )}
+      <div className="w-full space-y-4">
+        {/* Image URLs */}
+        <div>
+          <label className="font-semibold">Logo Images</label>
+          <MultipleLayoutImagesHandler
+            images={logo.imageUrls}
+            max={2}
+            min={0}
+            onChange={(newUrls) => dispatch(updateStoreSetting({ field: 'logo.imageUrls', value: newUrls }))}
+          />
         </div>
+
+        {/* Background Settings */}
+        <SubSettingsContainer
+          name="Background Settings"
+          SettingsComponent={
+            <div className="space-y-2 p-2">
+              <ColorPicker
+                label="Background Color"
+                value={logo.background?.color || 'transparent'}
+                onChange={(value) => handleBackgroundChange('color', value)}
+              />
+              <SettingsSlider
+                label="Opacity"
+                value={logo.background?.opacity || 100}
+                unit="%"
+                min={0}
+                max={100}
+                step={1}
+                onChange={(value) => handleBackgroundChange('opacity', value)}
+              />
+              <SettingsSlider
+                label="Border Width"
+                value={logo.background?.border?.width || 0}
+                unit="px"
+                min={0}
+                max={10}
+                step={1}
+                onChange={(value) => handleBackgroundChange('border.width', value)}
+              />
+              <ColorPicker
+                label="Border Color"
+                value={logo.background?.border?.color || 'transparent'}
+                onChange={(value) => handleBackgroundChange('border.color', value)}
+              />
+              <SettingsSlider
+                label="Border Radius"
+                value={logo.background?.border?.radius || 0}
+                unit="px"
+                min={0}
+                max={50}
+                step={1}
+                onChange={(value) => handleBackgroundChange('border.radius', value)}
+              />
+            </div>
+          }
+        />
       </div>
     </div>
   );

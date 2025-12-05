@@ -4,16 +4,23 @@ import GalleryWithGroupedImages from "./gallery_with_grouped_images/GalleryWithG
 import GalleryWithHorizontalImages from "./gallery_with_horizontal_images/GalleryWithHorizontalImages";
 import GalleryWithImageSlider from "./gallery_with_image_slider/GalleryWithImageSlider";
 import MaxThreeGallery from "./max_three_gallery/MaxThreeGallery";
+import SimpleGallerySection from "./simple_gallery/SimpleGallerySection";
 
 const StoreGallerySection = () => {
   const variation = useAppSelector((state) => state.layoutSettings.sections.gallery.variation);
   
+  if (variation === "simpleGallery") {
+    return (
+      <SimpleGallerySection/>
+    )
+  }
+
   if (variation === "maxThreeGallery") {
     return (
       <MaxThreeGallery/>
     )
   }
-  
+
   if ( variation === "galleryWithImageSlider") {
     return (
       <GalleryWithImageSlider/>
@@ -29,7 +36,7 @@ const StoreGallerySection = () => {
       <div id="gallery">
         <GalleryWithHorizontalImages />
       </div>
-      
+
     )
   }
   return (

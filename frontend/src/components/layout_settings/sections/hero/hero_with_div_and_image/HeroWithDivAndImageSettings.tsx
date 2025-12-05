@@ -19,7 +19,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
     settings,
     handleSettingChange,
 }) => {
-    const objectPath = "hero";
+    const objectPath = "sections.hero";
     const [activePanel, setActivePanel] = useState<string | null>(null);
     const closePanel = () => setActivePanel(null);
     
@@ -57,34 +57,10 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                 </div>
                 }
             />
-            <SubSettingsContainer
-                name="Images"
-                SettingsComponent={
-                <div className="px-[.3vh] space-y-[.3vh] py-[.15vh]">
-                    <SubSettingsContainer
-                        name="Mobile"
-                        SettingsComponent = {
-                            <MultipleLayoutImagesHandler
-                                objectPath={`${objectPath}.image.url.mobile`}
-                                min={1}
-                                max={5}
-                                images={getSetting("image.url.mobile", settings, objectPath)}
-                            />
-                        }
-                    />
-                    <SubSettingsContainer
-                        name="Desktop"
-                        SettingsComponent = {
-                            <MultipleLayoutImagesHandler
-                                objectPath={`${objectPath}.image.url.desktop`}
-                                min={1}
-                                max={5}
-                                images={getSetting("image.url.desktop", settings, objectPath)}
-                            />
-                        }
-                    />
-                </div>
-                }
+            {/* Image */}
+            <FirstOrderSubSettingsContainer
+                name="images"
+                onClick={() => setActivePanel("images")}
             />
             {/* Container*/}
             <FirstOrderSubSettingsContainer
@@ -92,6 +68,39 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                 onClick={() => setActivePanel("container")}
             />
             <AnimatePresence>
+                {activePanel === "images" && (
+                    <SlidingPanel
+                        key="images"
+                        title="Images"
+                        onClose={closePanel}
+                        isOpen
+                    >
+                        <div className="px-[.3vh] space-y-[.3vh] py-[.15vh]">
+                            <SubSettingsContainer
+                                name="Mobile"
+                                SettingsComponent = {
+                                    <MultipleLayoutImagesHandler
+                                        objectPath={`${objectPath}.image.url.mobile`}
+                                        min={1}
+                                        max={5}
+                                        images={getSetting("image.url.mobile", settings, objectPath)}
+                                    />
+                                }
+                            />
+                            <SubSettingsContainer
+                                name="Desktop"
+                                SettingsComponent = {
+                                    <MultipleLayoutImagesHandler
+                                        objectPath={`${objectPath}.image.url.desktop`}
+                                        min={1}
+                                        max={5}
+                                        images={getSetting("image.url.desktop", settings, objectPath)}
+                                    />
+                                }
+                            />
+                        </div>
+                    </SlidingPanel>
+                )}
                 {activePanel === "container" && (
                     <SlidingPanel
                         key="container"

@@ -9,6 +9,7 @@ import { defaultHeroWithImageButtonAndBox } from "./hero/defaultHeroWithImagePat
 import { defaultBasicBookWithOpenCalendarConfig } from "./book/defaultBasicBookWithOpenCalenderConfig";
 import { defaultGalleryWithGroupedImagesConfig } from "./gallery/defaultGalleryWithGroupedImagesConfig";
 import { defaultGalleryWithImageSliderConfig } from "./gallery/defaultGalleryWithImageSliderConfig";
+import { defaultSimpleGalleryConfig } from "./gallery/defaultSimpleGalleryConfig";
 import { defaultHeroWithButtonImageAndTextConfig } from "./hero/defaultHeroWithButtonImageAndTextConfig";
 import { store } from "../../../app/store";
 import { getLayoutByDemoStore } from "../../../features/layouts/layoutSlice";
@@ -94,13 +95,14 @@ export const getSectionDefaults = async (section: SectionType, variation: Variat
       first: defaultFirstBookWithCalandarConfig,
     },
     gallery: {
+      simpleGallery: defaultSimpleGalleryConfig,
       galleryWithImageSlider: async () => {
-        const demoStoreId = "6883116947fc791fc7b89df9"; 
+        const demoStoreId = "6883116947fc791fc7b89df9";
         const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'gallery');
         return demoLayout || defaultGalleryWithImageSliderConfig;
       },
       galleryWithGroupedImages: async () => {
-        const demoStoreId = "686e76aa96f14c28650b671d"; 
+        const demoStoreId = "686e76aa96f14c28650b671d";
         const demoLayout = await fetchDemoStoreLayout(demoStoreId, 'gallery');
         return demoLayout || defaultGalleryWithGroupedImagesConfig;
       },

@@ -36,7 +36,14 @@ export const defaultFirstStoreProductsConfig = {
     },
     acceptingOrdersButton: {
         position: "center",
-        fontFamily: "Patrick Hand",
+        text: {
+            fontFamily: "Patrick Hand",
+            color: "black",
+            fontSize: "1rem",
+        },
+        background: {
+            color: "white",
+        },
     },
     productsDisplay: {
         grid: {
@@ -51,6 +58,7 @@ export const defaultFirstStoreProductsConfig = {
         }
     },
     categorySelector: {
+        show: true,
         text: {
             fontFamily: "Patrick Hand",
             fontSize: "1.5rem",
@@ -60,7 +68,11 @@ export const defaultFirstStoreProductsConfig = {
         width: {
             mobile: "100%",
             desktop: "70%",
-        }
+        },
+        alignment: "center",
+        underlineColor: "secondary",
+        selectedColor: "secondary",
+        unselectedColor: "primary",
     },
     productCard: {
         text: {

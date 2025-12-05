@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import { Lock, Mail, User } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/the_mall/authentication/components/Input";
 import PasswordStrengthMeter from "../../components/the_mall/authentication/components/PasswordStrengthMeter";
-import { signup } from "../../features/user/userSlice";
+import { signup, clearError } from "../../features/user/userSlice";
 import { TbLoader3 } from "react-icons/tb";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
@@ -15,8 +15,19 @@ const SignUpPage = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+
   const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector((state: any) => state.user);
+
+  const isPasswordStrong = (pass: string): boolean => {
+    return pass.length >= 6 && /[A-Z]/.test(pass) && /[a-z]/.test(pass) && /\d/.test(pass) && /[^A-Za-z0-9]/.test(pass);
+  };
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearError());
+    };
+  }, [dispatch]);
 
   const handleSignUp = async (e: FormEvent) => {
     e.preventDefault();
@@ -92,13 +103,13 @@ const SignUpPage = () => {
 
         {password && <PasswordStrengthMeter password={password} />}
 
-        {error && <p className="text-red-500 font-semibold mt-2 text-[2vh]">{error && "Something went wrong. Did you fill all the details?"}</p>}
+        {error && <p className="text-red-500 font-semibold mt-2 text-[2vh]">{error || "Something went wrong. Did you fill all the details?"}</p>}
 		<motion.button
 			whileHover={{ scale: 1.02 }}
 			whileTap={{ scale: 0.98 }}
 			className="w-full mt-[1.5vh] py-[1.3vh] bg-gray-800 text-white font-bold rounded-[.5vh] shadow-lg focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200"
 			type="submit"
-			disabled={isLoading}
+			disabled={isLoading || !isPasswordStrong(password)}
 		>
 			{isLoading ? (
 			<TbLoader3 className="w-6 h-6 animate-spin mx-auto" />

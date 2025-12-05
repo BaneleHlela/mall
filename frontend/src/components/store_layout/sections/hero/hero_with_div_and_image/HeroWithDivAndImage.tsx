@@ -7,7 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 
 const HeroWithDivAndImage = () => {
-  const config = useAppSelector((state) => state.layoutSettings.hero);
+  const config = useAppSelector((state) => state.layoutSettings.sections.hero);
   const handleButtonClick = useStoreButtonClickHandler();
   const routes = useAppSelector((state) => state.layoutSettings.routes);
   const store = useAppSelector((state) => state.stores.currentStore);

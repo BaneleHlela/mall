@@ -48,14 +48,17 @@ const MobileTopBar: React.FC<{
           ? `/layouts/${layoutId}/preview`
           : `/stores/${store?.slug}`;
         
+        const logoImageUrls = store?.logo?.imageUrls || [];
+        const hasLogoImages = logoImageUrls.length > 0;
+
         return (
           <Link to={linkTo} className={`w-fit h-full pl-1 pr-1 flex flex-row ${settings.topbar.mobile.hamburgerFirst ? "justify-end" : "justify-start"} text-center`}>
-            {logoSettings.use === 'logo' && store?.logo?.url ? (
+            {logoSettings.use === 'logo' && hasLogoImages ? (
               <img
-                style={{ 
+                style={{
                   ...getBackgroundStyles(logoSettings.background),
                 }}
-                src={store.logo.url}
+                src={window.innerWidth < 589 ? logoImageUrls[0] : (logoImageUrls[1] || logoImageUrls[0])}
                 alt='store logo'
                 className='object-cover'
               />
@@ -204,14 +207,17 @@ const DesktopTopBar: React.FC<{
       ? `/layouts/${layoutId}/preview`
       : `/stores/${store?._id}`;
 
+    const logoImageUrls = store?.logo?.imageUrls || [];
+    const hasLogoImages = logoImageUrls.length > 0;
+
     return (
       <Link to={linkTo} className='w-fit h-full pl-1 pr-1 flex flex-col justify-center'>
-        {logoSettings.use === 'logo' && store?.logo?.url ? (
+        {logoSettings.use === 'logo' && hasLogoImages ? (
           <img
-            style={{ 
+            style={{
               ...getBackgroundStyles(logoSettings.background),
             }}
-            src={store.logo.url}
+            src={window.innerWidth < 589 ? logoImageUrls[0] : (logoImageUrls[1] || logoImageUrls[0])}
             alt='store logo'
             className='object-cover'
           />

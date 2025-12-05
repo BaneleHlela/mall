@@ -281,6 +281,20 @@ const TextEditor: React.FC<EditorProps> = ({
               }}
             />
           )}
+
+          {/* Text Align */}
+          {isAllowed("textAlign") && (
+            <OptionsToggler
+              label="Text Align"
+              options={["center", "left", "right", "justify"]}
+              value={getSetting("textAlign", settings, objectPath)}
+              onChange={(newValue) =>
+                handleSettingChange(`${objectPath}.textAlign`, newValue)
+              }
+            />
+          )}
+
+          
           {/* Text shadow */}
           {isAllowed("textShadow") && (
             <OptionsToggler

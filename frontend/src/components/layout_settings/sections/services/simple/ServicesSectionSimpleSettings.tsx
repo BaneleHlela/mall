@@ -12,6 +12,7 @@ import OptionsToggler from '../../../supporting/OptionsToggler';
 import { getSetting } from '../../../../../utils/helperFunctions';
 import BorderEditor from '../../../background/BorderEditor';
 import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings';
+import ColorPicker from '../../../supporting/ColorPicker';
 
 
 const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
@@ -256,13 +257,18 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                                     }
                                 />
                             </div>
-                            <BackgroundEditor
-                                objectPath={`${objectPath}.categorySelector`}
-                                settings={settings}
-                                handleSettingChange={handleSettingChange}
-                                allow={["width"]}
-                                widthUnit='%'
-                                responsiveSize
+                            <SubSettingsContainer
+                                name="Width"
+                                SettingsComponent={
+                                    <BackgroundEditor
+                                        objectPath={`${objectPath}.categorySelector`}
+                                        settings={settings}
+                                        handleSettingChange={handleSettingChange}
+                                        allow={["width"]}
+                                        widthUnit='%'
+                                        responsiveSize
+                                    />
+                                }
                             />
                         </div>
                         <div className="space-y-[.3vh]">
@@ -273,9 +279,22 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                                         objectPath={`${objectPath}.categorySelector.text`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={["fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight", "textDecoration"]}
+                                        allow={["fontFamily", "fontSize", "color", "weight"]}
                                         responsiveSize
                                     />
+                                }
+                            />
+                            <SubSettingsContainer
+                                name="Selected Color"
+                                SettingsComponent={
+                                    <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
+                                        <OptionsToggler
+                                            label="Selected Color"
+                                            options={["primary", "secondary", "accent", "quad", "pent"]}
+                                            value={getSetting("categorySelector.selectedColor", settings, objectPath)}
+                                            onChange={(newValue) => handleSettingChange(`${objectPath}.categorySelector.selectedColor`, newValue)}
+                                        />
+                                    </div>
                                 }
                             />
                         </div>

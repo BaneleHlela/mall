@@ -11,6 +11,7 @@ import { getSetting } from '../../../../../utils/helperFunctions';
 import SettingsSlider from '../../../supporting/SettingsSlider';
 import ServiceCardSettings from '../cards/ServiceCardSettings';
 import ResponsiveGridSettings from '../../../extras/ResponsiveGridSettings';
+import ColorPicker from '../../../supporting/ColorPicker';
 
 const FirstStoreServicesSectionSettings: React.FC<SectionEditorProps> = ({
     settings,
@@ -89,6 +90,31 @@ const FirstStoreServicesSectionSettings: React.FC<SectionEditorProps> = ({
                 )}
                 {activePanel === "categorySelector" && (
                     <SlidingPanel key="categorySelector" isOpen={true} onClose={closePanel} title="Category Selector">
+                        <div className="space-y-1 border-[.15vh] rounded-[.6vh]">
+                            <div className="px-[.65vh]">
+                                <OptionsToggler
+                                    label="Show"
+                                    options={["Yes", "No"]}
+                                    value={getSetting("categorySelector.show", settings, objectPath) ? "Yes" : "No"}
+                                    onChange={(newValue) =>
+                                        handleSettingChange(`${objectPath}.categorySelector.show`, newValue === "Yes")
+                                    }
+                                />
+                            </div>
+                            <SubSettingsContainer
+                                name="Width"
+                                SettingsComponent={
+                                    <BackgroundEditor
+                                        objectPath={`${objectPath}.categorySelector`}
+                                        settings={settings}
+                                        handleSettingChange={handleSettingChange}
+                                        allow={["width"]}
+                                        widthUnit='%'
+                                        responsiveSize
+                                    />
+                                }
+                            />
+                        </div>
                         <div className="space-y-1">
                             <SubSettingsContainer
                                 name="Text"
@@ -97,20 +123,23 @@ const FirstStoreServicesSectionSettings: React.FC<SectionEditorProps> = ({
                                         objectPath={`${objectPath}.categorySelector.text`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={["fontFamily", "fontSize", "color", "weight", "fontStyle", "letterSpacing", "textTransform", "lineHeight", "textDecoration"]}
+                                        allow={["fontFamily", "fontSize", "color", "weight"]}
                                         responsiveSize
                                     />
                                 }
                             />
-                        </div>
-                        <div className="space-y-1">
-                            <BackgroundEditor
-                                objectPath={`${objectPath}.categorySelector`}
-                                settings={settings}
-                                handleSettingChange={handleSettingChange}
-                                allow={["width"]}
-                                widthUnit='%'
-                                responsiveSize
+                            <SubSettingsContainer
+                                name="Selected Color"
+                                SettingsComponent={
+                                    <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
+                                        <OptionsToggler
+                                            label="Selected Color"
+                                            options={["primary", "secondary", "accent", "quad", "pent"]}
+                                            value={getSetting("categorySelector.selectedColor", settings, objectPath)}
+                                            onChange={(newValue) => handleSettingChange(`${objectPath}.categorySelector.selectedColor`, newValue)}
+                                        />
+                                    </div>
+                                }
                             />
                         </div>
                     </SlidingPanel>

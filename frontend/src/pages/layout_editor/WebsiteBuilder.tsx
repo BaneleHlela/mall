@@ -114,7 +114,6 @@ const WebsiteBuilderContent: React.FC = () => {
   if (loading) return <TbLoader3 size={45} className='animate-spin mx-auto' />;
   if (!store) return <div className="p-6 text-red-500">Store not found.</div>;
 
-  console.log(window.innerWidth)
 
   // Main builder layout
   return (

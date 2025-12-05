@@ -19,7 +19,6 @@ import MallSearchPage from "./pages/search/MallSearchPage";
 import FavoriteStores from "./pages/favorites/FavoriteStores";
 import BusinessPlan from "./components/the_mall/home/BusinessPlan";
 import ForCreators from "./components/the_mall/home/ForCreators";
-import ComingSoon from "./components/the_mall/ComingSoon";
 import CaptureHomePoster from "./components/the_mall/basic_store_post/CaptureHomePoster";
 import AddStorePage from "./pages/store/AddStorePage";
 import AddUserAddressPage from "./pages/profile/address/AddUserAddressPage";
@@ -38,6 +37,7 @@ const App: React.FC = () => {
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
   }, [dispatch]);
+
 
   return (
     <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-screen w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar">  

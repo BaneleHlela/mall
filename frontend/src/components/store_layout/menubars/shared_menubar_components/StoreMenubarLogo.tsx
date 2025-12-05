@@ -1,7 +1,8 @@
 import React from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { Link } from 'react-router-dom';
-import { getTextStyles } from '../../../../utils/stylingFunctions';
+import { getBackgroundStyles, getTextStyles } from '../../../../utils/stylingFunctions';
+import type { BackgroundSettings, TextSettings } from '../../../../types/layoutSettingsType';
 
 interface StoreMenubarLogoProps {
     width?: string;
@@ -9,11 +10,8 @@ interface StoreMenubarLogoProps {
     logoUrl?: string[];
     logoText?: string;
     style?: {
-        color: string;
-        fontSize: string;
-        fontWeight: string;
-        letterSpacing: string;
-        textDecoration: string;
+        text: TextSettings,
+        background: BackgroundSettings
     }
 }
 
@@ -25,6 +23,7 @@ const StoreMenubarLogo: React.FC<StoreMenubarLogoProps> = ({
     style,
 }) => {
     const store = useAppSelector((state) => state.stores.currentStore);
+    const colors = useAppSelector((state) => state.layoutSettings.colors);  
     const layoutId = useAppSelector((state) => state.layoutSettings._id);
     const isPreviewMode = location.pathname.startsWith(`/layouts/${layoutId}/preview`);
 
@@ -32,23 +31,25 @@ const StoreMenubarLogo: React.FC<StoreMenubarLogoProps> = ({
       ? `/layouts/${layoutId}/preview`
       : `/stores/${store?._id}`;
 
+    const hasLogoImages = logoUrl.length > 0;
+
     return (
-        <Link to={linkTo} className='w-fit h-full pl-1 pr-1 flex flex-col justify-center items-center'>
-            {use === 'logo' && store?.logo?.url ? (
-            <img
-                style={{ 
-                  width: width,
-                }}
-                src={window.innerWidth < 589 ? logoUrl[0] : logoUrl[1]}
-                alt='store logo'
-                className='object-cover'
-            />
+        <Link style={{...getBackgroundStyles(style?.background, colors)}} to={linkTo} className='flex h-full max-w-fit pl-1 pr-1 bg-amber-200'>
+            {use === 'logo' && hasLogoImages ? (
+                <div className="w-full h-full">
+                    <img
+                        style={{
+                        }}
+                        src={window.innerWidth < 589 ? logoUrl[0] : (logoUrl[1] || logoUrl[0])}
+                        alt='store logo'
+                        className='h-full w-full object-cover'
+                    />
+                </div>
             ) : (
             <div
                 style={{
-                    color: style?.color || 'black',
-                    ...getTextStyles(style),
-                    fontWeight: style?.fontWeight || 'bold',
+                    ...(style ? getTextStyles(style.text, colors) : {}),
+                    ...getBackgroundStyles(style?.background, colors)
                 }}
                 className='min-w-fit flex flex-col justify-center'
             >

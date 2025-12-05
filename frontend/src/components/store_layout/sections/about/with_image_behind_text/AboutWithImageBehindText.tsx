@@ -1,56 +1,12 @@
 import React from 'react'
 import UnderlinedText from '../../../extras/text/UnderlinedText';
-import StoreButton from '../../../extras/buttons/StoreButton';
+import StoreLayoutButton from '../../../shared_layout_components/StoreLayoutButton';
 import { getBackgroundStyles, getTextStyles } from '../../../../../utils/stylingFunctions';
-import { m } from 'framer-motion';
 import { useAppSelector } from '../../../../../app/hooks';
 
-const style = {
-    background: {
-        color: 'orange',
-        height: {
-            mobile: '100vh',
-            desktop: '100vh',
-        },
-        width: {
-            mobile: "100%",
-            desktop: "80%",
-        },
-    },
-    image: {
-        imageUrl: ["image.com"],
-        opacity: "100%",
-        background: {
-            color: "black",
-            border: {
-                width: "10px",
-                style: "solid",
-                color: "white",
-                radius: "0px",
-            }
-        }
-    },
-    div: {
-        background: {
-            color: "pink",
-        },
-        text: {
-            header: {
-
-            },
-            paragraph: {
-
-            }
-        },
-        button: {
-
-        }
-    }
-}
-
 const AboutWithImageBehindText = () => {
-    const config = useAppSelector((state) => state.layoutSettings.about);
-
+    const config = useAppSelector((state) => state.layoutSettings.sections.about);
+    const  { colors }  = useAppSelector((state) => state.layoutSettings);
     return (
         <div
             style={{
@@ -96,24 +52,24 @@ const AboutWithImageBehindText = () => {
                     {/* Text */}
                     <div className="flex items-center w-[49.7%]  text-center">
                         <p style={{...getTextStyles(config.div.text.paragraph)}} className="">
-                            {config.div.text.paragraph.textArea}
+                            {config.div.text.paragraph.input}
                         </p>
                     </div>
                     {/* Line Between */}
-                    <div style={{backgroundColor: config.div.text.paragraph.color}} className="w-[.3%] h-[92%] text-white bg-amber-600"></div>
+                    <div style={{backgroundColor: colors[config.div.text.paragraph.color as keyof typeof colors]}} className="w-[.3%] h-[92%] text-white bg-amber-600"></div>
                     {/* Button */}
                     <div className="flex flex-col justify-center items-center w-[50%]">
-                        <StoreButton style={config.div.button}/>
+                        <StoreLayoutButton style={config.div.button} onClick={() => {}}/>
                     </div>
                 </div>
                 {/*Mobile Text and header */}
                 <div className="flex flex-col justify-evenly w-full h-[85%] lg:hidden">
                     <UnderlinedText style={config.div.text.heading.style}/>
                     <p style={{...getTextStyles(config.div.text.paragraph)}} className="text-center">
-                            {config.div.text.paragraph.textArea}
+                            {config.div.text.paragraph.input}
                     </p>                </div>
                 <div className="flex items-center justify-center w-full h-[15%] lg:hidden">
-                    <StoreButton style={config.div.button}/>
+                    <StoreLayoutButton style={config.div.button} onClick={() => {}}/>
                 </div>
             </div>
         </div>

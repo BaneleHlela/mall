@@ -357,13 +357,14 @@ const SingleStoreProductSectionSettings = () => {
                                         objectPath={`${objectPath}.details.messageBox.placeholder`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={[ "textArea" ]}
+                                        allow={[ "input" ]}
                                         responsivePadding
+                                        useTextarea
                                     />
                                 </div>
                                 }
                             />
-                            <SubSettingsContainer
+                            {/* <SubSettingsContainer
                                 name="Container"
                                 SettingsComponent={
                                 <div className="px-[.15vh] space-y-[.3vh]">
@@ -379,7 +380,7 @@ const SingleStoreProductSectionSettings = () => {
                                     />
                                 </div>
                                 }
-                            />
+                            /> */}
                             <SubSettingsContainer
                                 name="Text"
                                 SettingsComponent={
@@ -484,7 +485,7 @@ const SingleStoreProductSectionSettings = () => {
                             objectPath={`${objectPath}.details.description.text`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={[ "color", "fontSize", "weight", "padding", "fontFamily" ]}
+                            allow={[ "color", "lineHeight", "textAlign", "fontSize", "weight", "padding", "fontFamily" ]}
                             responsivePadding
                             responsiveSize
                         />      

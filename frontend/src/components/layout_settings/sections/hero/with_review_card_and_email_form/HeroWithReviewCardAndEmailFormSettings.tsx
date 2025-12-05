@@ -19,7 +19,7 @@ const HeroWithReviewCardAndEmailFormSettings: React.FC<HeroSettingsProps> = ({
   settings,
   handleSettingChange,
 }) => {
-  const objectPath = 'hero'
+  const objectPath = 'sections.hero'
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
   
@@ -50,7 +50,7 @@ const HeroWithReviewCardAndEmailFormSettings: React.FC<HeroSettingsProps> = ({
             <MultipleLayoutImagesHandler
               objectPath={`${objectPath}.background.image`}
               min={1}
-              max={1}
+              max={2}
               images={getSetting("background.image", settings, objectPath)}
             />
           </div>
@@ -153,7 +153,11 @@ const HeroWithReviewCardAndEmailFormSettings: React.FC<HeroSettingsProps> = ({
                 settings={settings}
                 handleSettingChange={handleSettingChange}
                 objectPath={`${objectPath}.sendEmailForm`}
-                variation={settings.contact.sendEmailForm.variation} 
+                variation={getSetting(
+                  `variation`, 
+                  settings,
+                  `${objectPath}.sendEmailForm.`
+                )}
               />
             </SlidingPanel>
           )}

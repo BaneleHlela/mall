@@ -59,10 +59,14 @@ const StoreFloatingButtonSettings = () => {
                             handleSettingChange(`${objectPath}.style.icon.size`, `${val}vh`)
                         }
                     />
-                    <ColorPicker
+                    {/* Color Using Option Toggler */}
+                    <OptionsToggler
                         label="Color"
+                        options={["primary", "secondary", "accent", "quad", "pent"]}
                         value={getSetting("style.icon.color", settings, objectPath)}
-                        onChange={handleChange("style.icon.color")}
+                        onChange={(newValue) =>
+                            handleSettingChange(`${objectPath}.style.icon.color`, newValue)
+                        }
                     />
                 </div>
                 }

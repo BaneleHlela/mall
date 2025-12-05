@@ -62,6 +62,7 @@ const storeLayoutSchema = new mongoose.Schema({
         default: true,
     },
     floats: {},
+    background: {},
     menubar: {},
     sections: {
         hero: {},

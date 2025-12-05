@@ -1,10 +1,10 @@
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Input from "../../components/the_mall/authentication/components/Input";
-import { login } from "../../features/user/userSlice";
+import { login, clearError } from "../../features/user/userSlice";
 import { type AppDispatch, type RootState } from "../../app/store";
 import SocialLoginButtons from "../../components/the_mall/authentication/components/SocialLoginButtons";
 import { TbLoader3 } from "react-icons/tb";
@@ -13,12 +13,19 @@ const LoginPage = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const from = (location.state as any)?.from?.pathname || '/';
+	
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
 	const dispatch = useDispatch<AppDispatch>();
 	const { isLoading, error } = useSelector((state: RootState) => state.user);
+
+	useEffect(() => {
+		return () => {
+			dispatch(clearError());
+		};
+	}, [dispatch]);
 
 	const handleLogin = async (e: FormEvent) => {
 		e.preventDefault();
@@ -47,7 +54,7 @@ const LoginPage = () => {
 				<h2 className='text-[3vh] font-semibold'>
 					Welcome Back! 
 				</h2>
-				<p style={{lineHeight: "1.1"}} className="text-[2.2vh]">It's a great pleasure to have you login. Remember, you can do anything!</p>
+				<p style={{lineHeight: "1.1"}} className="text-[2.2vh]">It's a great pleasure to have you login. Remember, you're on top of the world!</p>
 			</div>
 			
 			<div className=''>
@@ -75,7 +82,7 @@ const LoginPage = () => {
 						</Link>
 					</div>
 
-					{error && <p className="text-red-500 font-semibold mt-2 text-[2vh] mb-2">{error && "Something went wrong. Did you fill all the details?"}</p>}
+					{error && <p className="text-red-500 font-semibold mt-2 text-[2vh]">{error || "Something went wrong. Did you fill all the details?"}</p>}
 
 					<motion.button
 						whileHover={{ scale: 1.02 }}

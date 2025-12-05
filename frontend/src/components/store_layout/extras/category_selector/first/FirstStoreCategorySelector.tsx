@@ -1,70 +1,120 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setCategory } from '../../../../../features/categories/categorySlice';
 import type { FirstStoreCategorySelectorProps } from '../CategorySelector';
 import { getResponsiveDimension, getTextStyles, getBackgroundStyles, getBorderStyles } from '../../../../../utils/stylingFunctions';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
 
 
 
 const FirstStoreCategorySelector: React.FC<FirstStoreCategorySelectorProps> = ({ categories, style }) => {
   const dispatch = useAppDispatch();
   const selectedCategory = useAppSelector(state => state.categories.selectedCategory);
+  const { colors, fonts } = useAppSelector((state) => state.layoutSettings);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const backgroundStyles = getBackgroundStyles({
-    width: style.width,
-    color: style.color,
-    padding: style.padding as any,
-  });
-
-  const borderStyles = getBorderStyles(style.border || {});
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const containerStyle = {
-    ...backgroundStyles,
-    ...borderStyles,
+    width: getResponsiveDimension(style.width),
   };
 
   const buttonStyle = (isSelected: boolean) => ({
-    color: isSelected ? (style.selectedColor?.color || (style.text as any)?.color || 'inherit') : (style.unselectedColor?.color || (style.text as any)?.color || 'inherit'),
-    marginRight: getResponsiveDimension((style.spacing as any)?.x || { mobile: '0', desktop: '0' }),
+    color: isSelected ? colors[style.selectedColor as keyof typeof colors] : colors[style.text.color as keyof typeof colors],
   });
 
-  const underlineStyle = {
-    backgroundColor: style.underlineColor?.color || '#000000',
+
+  const handleCategoryClick = (category: string) => {
+    if (selectedCategory === category) {
+      dispatch(setCategory('all'));
+    } else {
+      dispatch(setCategory(category));
+    }
   };
 
-  const justifyClass = style.alignment === 'center' ? 'justify-center' :
-                      style.alignment === 'start' ? 'justify-start' :
-                      style.alignment === 'end' ? 'justify-end' :
-                      'justify-between';
-
-  console.log(style.selectedColor)
-
   return (
-    <div className="w-full ml-1 mr-1 flex flex-row justify-center">
-      <div
-        style={containerStyle}
-        className={`flex ${justifyClass} border-b`}
-      >
-        {categories.map((category) => (
-          <button
-            key={category}
-            style={{
-              ...getTextStyles(style.text as any),
-              ...buttonStyle(selectedCategory === category),
-            }}
-            onClick={() => dispatch(setCategory(category))}
-            className={`relative capitalize pb-2 text-lg font-medium transition-colors duration-300`}
-          >
-            {category}
-            {selectedCategory === category && (
-              <span
-                className="absolute left-0 bottom-0 w-full h-[3px]"
-                style={underlineStyle}
-              />
-            )}
-          </button>
-        ))}
-      </div>
+    <div className="w-full m-1 flex flex-row justify-center">
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .swiper-button-next, .swiper-button-prev {
+            color: ${colors[style.text.color as keyof typeof colors]} !important;
+          }
+        `
+      }} />
+      {isMobile ? (
+        <Swiper
+          slidesPerView={2}
+          spaceBetween={10}
+          modules={[Navigation]}
+          navigation={true}
+          style={{
+            ...containerStyle,
+            borderColor: colors[style.text.color as keyof typeof colors],
+          }}
+          className="border-b"
+        >
+          {categories.map((category) => (
+            <SwiperSlide key={category}>
+              <button
+                style={{
+                  ...getTextStyles(style.text, fonts),
+                  ...buttonStyle(selectedCategory === category),
+                }}
+                onClick={() => handleCategoryClick(category)}
+                className="relative capitalize pb-1 text-lg font-medium transition-fonts duration-300 w-full text-center"
+              >
+                {category}
+                {selectedCategory === category && (
+                  <span
+                    className="absolute left-0 bottom-0 w-full h-[2px] bg-amber-500"
+                    style={{
+                      backgroundColor: colors[style.text.color as keyof typeof colors],
+                    }}
+                  />
+                )}
+              </button>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      ) : (
+        <div
+          className="flex flex-row justify-between overflow-x-auto border-b"
+          style={{
+            ...containerStyle,
+            borderColor: colors[style.text.color as keyof typeof colors],
+          }}
+        >
+          {categories.map((category) => (
+            <button
+              key={category}
+              style={{
+                ...getTextStyles(style.text, fonts),
+                ...buttonStyle(selectedCategory === category),
+              }}
+              onClick={() => handleCategoryClick(category)}
+              className="relative capitalize text-lg font-medium transition-fonts duration-300 flex-shrink-0"
+            >
+              {category}
+              {selectedCategory === category && (
+                <span
+                  className="absolute left-0 bottom-0 w-full h-[2px] bg-amber-500"
+                  style={{
+                    backgroundColor: colors[style.text.color as keyof typeof colors],
+                  }}
+                />
+              )}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

@@ -90,7 +90,7 @@ const FirstStoreProductsSection = () => {
               ${settings.acceptingOrdersButton.position === "end" && "items-end"}
               ${settings.acceptingOrdersButton.position === "start" && "items-start"}
             mb-2`}>
-            <AcceptingOrdersButton operationTimes={store?.operationTimes} style={settings.title} />
+            <AcceptingOrdersButton operationTimes={store?.operationTimes} manualStatus={store?.manualStatus} style={settings.acceptingOrdersButton} />
           </div>
           {/* Categories */}
           <div className="w-full py-4 flex flex-row justify-center">

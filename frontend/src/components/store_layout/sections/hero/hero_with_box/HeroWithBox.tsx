@@ -1,6 +1,6 @@
 import { useAppSelector } from "../../../../../app/hooks";
 import { getBackgroundStyles, getBorderStyles } from "../../../../../utils/stylingFunctions";
-import StoreButton from "../../../extras/buttons/StoreButton";
+import StoreLayoutButton from "../../../shared_layout_components/StoreLayoutButton";
 import { useStoreButtonClickHandler } from "../../../extras/buttons/useStoreButtonClickHandler";
 import UnderlinedText from "../../../extras/text/UnderlinedText";
 
@@ -29,7 +29,6 @@ const HeroWithBox = () => {
                         position: "absolute",
                         top: style.box.position.desktop.top,
                         left: style.box.position.desktop.left,
-                        padding: "100px"
                     }} 
                     className="flex flex-col justify-center items-center w-full z-2"
                 >
@@ -56,7 +55,7 @@ const HeroWithBox = () => {
                             ${style.button?.position === "end" && "justify-end"}
                         `}
                         >
-                            <StoreButton
+                            <StoreLayoutButton
                                 style={style.button}
                                 onClick={() =>
                                     handleButtonClick({
@@ -70,12 +69,13 @@ const HeroWithBox = () => {
                     )}
                 </div>
                 {/* Background Image */}
-                <div 
+                <div
                     style={{
                         height: style.background.height.desktop,
-                    }} 
-                    className="absolute inset-0 w-full bg-white">
-                    <img src={style.image[0]} alt="Hero Image" className="w-full h-full object-cover" />
+                        
+                    }}
+                    className="absolute inset-0 w-full bg-white ">
+                    <img src={style.image[1] || style.image[0]} alt="Hero Image" className="w-full h-full object-cover" />
                 </div>
                 {/* Opacity adjuster */}
                 <div 
@@ -120,7 +120,7 @@ const HeroWithBox = () => {
                     {/* Button */}
                     {style.button.show && (
                         <div className="w-full flex flex-row justify-center mt-5  z-2">
-                            <StoreButton
+                            <StoreLayoutButton
                                 style={style.button}
                                 onClick={() =>
                                     handleButtonClick({

@@ -78,7 +78,7 @@ const FirstStoreOrderOnlineSection = () => {
           </div>
           {/* Accepting Order button (red if closed, orange if pickup only, green if both) */}
           <div className="w-full pb-4">
-            <AcceptingOrdersButton operationTimes={store?.operationTimes} style={settings.categorySelector} />
+            <AcceptingOrdersButton operationTimes={store?.operationTimes} manualStatus={store?.manualStatus} style={settings.categorySelector} />
           </div>
           {/* Categories */}
           <div className="pt-4 pb-4">

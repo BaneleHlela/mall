@@ -1,64 +1,44 @@
 import React from "react";
 import type { OperationTimes } from "../../../../types/storeTypes";
 import { CircleSmall } from 'lucide-react';
+import { getStoreStatus } from "../../../the_mall/home/store_card/supporting/storeStatus";
+import { getBackgroundStyles, getTextStyles } from "../../../../utils/stylingFunctions";
 
 
 interface AcceptingOrdersButtonProps {
   operationTimes: OperationTimes | undefined;
+  manualStatus?: { isOverridden: boolean; status: 'open' | 'closed' };
   style: any;
 }
 
-const AcceptingOrdersButton: React.FC<AcceptingOrdersButtonProps> = ({ operationTimes, style }) => {
-  const getCurrentDay = () => {
-    const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-    const today = new Date().getDay(); // 0 = Sunday, 1 = Monday, etc.
-    return days[today];
-  };
+const AcceptingOrdersButton: React.FC<AcceptingOrdersButtonProps> = ({ operationTimes, manualStatus, style }) => {
+  const storeStatus = getStoreStatus(operationTimes, manualStatus);
 
-  const isStoreOpen = () => {
-    if (operationTimes?.alwaysOpen) {
-      return true;
-    }
-
-    const currentDay = getCurrentDay();
-    const currentTime = new Date().toLocaleTimeString("en-US", { hour12: false }); // Format: HH:mm
-    const daySchedule = operationTimes ? operationTimes[currentDay as keyof OperationTimes] : undefined;
-    
-    if (typeof daySchedule === "object" && daySchedule?.closed) {
-      return false;
-    }
-
-    if (typeof daySchedule === "object" && daySchedule.start && daySchedule.end) {
-      return currentTime >= daySchedule.start && currentTime <= daySchedule.end;
-    }
-    return false;
-  };
-  	
-  if (isStoreOpen()) {
+  if (storeStatus.isOpen) {
     return (
         <div
             style={{
-                backgroundColor: style.backgroundColor || "white",
-                fontFamily: style.fontFamily,
+                ...getBackgroundStyles(style.background),
+                ...getTextStyles(style.text),
             }}
-            className="flex flex-row justify-between w-fit px-4 py-2 rounded-4xl text-black border-1 border-green-400 hover:bg-green-600 transition-colors duration-300"
-        >   
+            className="flex flex-row justify-between w-fit px-4 py-2 rounded-4xl text-black border-1 border-green-400 hover:bg-green-600 transition-colors duration-300 "
+        >
             <CircleSmall color={"green"} />
             <p className="ml-2">Accepting Orders</p>
-        </ div>
+        </div>
     )
   }
   return (
     <div
         style={{
-            backgroundColor: style.backgroundColor || "white",
-            fontFamily: style.fontFamily,
+            ...getBackgroundStyles(style.background),
+            ...getTextStyles(style.text),
         }}
-        className="flex flex-row justify-between w-fit px-4 py-2 rounded-4xl text-black border-1 border-red-400 hover:bg-red-600 transition-colors duration-300"
-    >   
+        className="flex flex-row justify-between w-fit px-4 py-2 rounded-4xl text-black border-1 border-red-400 hover:bg-red-600 transition-colors duration-300 opacity-80"
+    >
         <CircleSmall color={"red"} />
         <p className="ml-2">Store Closed</p>
-    </ div>
+    </div>
   );
 };
 

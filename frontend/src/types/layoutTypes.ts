@@ -48,6 +48,7 @@ export interface Layout {
     },
     //background: BackgroundSettings;
     fonts: Fonts;
+    background: BackgroundSettings;
     store?: Types.ObjectId | string |  null | {
         _id: string;
         name: string;

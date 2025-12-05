@@ -5,44 +5,18 @@ import FirstStoreCategorySelector from "./first/FirstStoreCategorySelector";
 export interface FirstStoreCategorySelectorProps {
     categories: string[];
     style: {
-      text: TextProps,
-      fontFamily: string;
+      show: boolean;
+      text: {
+        fontFamily: string;
+        fontSize: string;
+        color: string;
+        fontWeight: string;
+      };
       width: {
-        desktop: string;
         mobile: string;
+        desktop: string;
       };
-      border?: Border;
-      underlineColor?: {
-        color: string;
-      };
-      selectedColor?: {
-        color: string;
-      };
-      unselectedColor?: {
-        color: string;
-      };
-      color?: string;
-      padding?: {
-        x?: {
-          mobile: string;
-          desktop: string;
-        };
-        y?: {
-          mobile: string;
-          desktop: string;
-        };
-      };
-      alignment?: string;
-      spacing?: {
-        x?: {
-          mobile: string;
-          desktop: string;
-        };
-        y?: {
-          mobile: string;
-          desktop: string;
-        };
-      };
+      selectedColor: string;
     };
 }
 

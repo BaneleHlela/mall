@@ -3,6 +3,7 @@ import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice'
 import AddToMenuBarToggler from '../../extras/AddToMenubarToggler';
 import HorizontalProductSettings from './horizontal_products/HorizontalProductSettings';
 import PopularProductsSectionSettings from './popular/PopularProductsSectionSettings';
+import ProductsWithVerySimpleCardSettings from './products_with_very_simple_card/ProductsWithVerySimpleCardSettings';
 
 const ProductsSectionSettings = () => {
     const dispatch = useAppDispatch();
@@ -30,7 +31,16 @@ const ProductsSectionSettings = () => {
             </>
         )
     }
-    
+
+    if (variation === "productWithVerySimpleCard") {
+        return (
+            <>
+                <AddToMenuBarToggler section='products' />
+                <ProductsWithVerySimpleCardSettings settings={settings} handleSettingChange={handleSettingChange}/>
+            </>
+        )
+    }
+
     return (
         <div>ProductsSectionSettings</div>
     )

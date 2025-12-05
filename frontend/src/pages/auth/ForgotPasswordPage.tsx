@@ -1,18 +1,25 @@
 import { motion } from "framer-motion";
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { ArrowLeft, Loader, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import Input from "../../components/the_mall/authentication/components/Input";
-import { forgotPassword } from "../../features/user/userSlice";
+import { forgotPassword, clearError } from "../../features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { TbLoader3 } from "react-icons/tb";
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const error = useAppSelector((state) => state.user.error);
 
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => state.user.isLoading);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearError());
+    };
+  }, [dispatch]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -58,7 +65,7 @@ const ForgotPasswordPage = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-
+          {error && <p className="text-red-500 font-semibold mt-2 text-[2vh]">{error || "Something went wrong. Did you fill all the details?"}</p>}
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
