@@ -24,7 +24,7 @@ const HeroWithReviewCardAndEmailFormSettings: React.FC<HeroSettingsProps> = ({
   const closePanel = () => setActivePanel(null);
   
   return (
-    <div className='space-y-1'>
+    <div className='space-y-[.35vh]'>
       {/* Background Settings */}
       <SubSettingsContainer
         name="Background"
@@ -46,7 +46,7 @@ const HeroWithReviewCardAndEmailFormSettings: React.FC<HeroSettingsProps> = ({
       <SubSettingsContainer
         name="Image"
         SettingsComponent={
-          <div className="px-2 space-y-1 py-1">
+          <div className="px-2 space-y-[.35vh] py-1">
             <MultipleLayoutImagesHandler
               objectPath={`${objectPath}.background.image`}
               min={1}
@@ -77,7 +77,7 @@ const HeroWithReviewCardAndEmailFormSettings: React.FC<HeroSettingsProps> = ({
               onClose={closePanel}
               title="Hero Button"
             >
-              <div className="space-y-1">
+              <div className="space-y-[.35vh]">
                 {/* Text Width Settings */}
                 <div className="border rounded">
                   <BackgroundEditor

@@ -132,7 +132,7 @@ const SupportingImagesSettings: React.FC<SupportingSettingsProps> = ({
                 }
             />
             {/* Images */}
-            {settings.gallery.imagesModal.addModal && (
+            {settings.sections.gallery.imagesModal.addModal && (
               <SubSettingsContainer
                   name="Images"
                   SettingsComponent={

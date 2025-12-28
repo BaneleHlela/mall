@@ -67,9 +67,10 @@ export const fetchServiceBySlug = createAsyncThunk(
 
 export const createService = createAsyncThunk(
   'services/createService',
-  async (data: Partial<Service>, thunkAPI) => {
+  async (data: Partial<Service> | FormData, thunkAPI) => {
     try {
-      const res = await axios.post(API_BASE, data);
+      const config = data instanceof FormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
+      const res = await axios.post(API_BASE, data, config);
       return res.data as Service;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to create service');
@@ -79,9 +80,10 @@ export const createService = createAsyncThunk(
 
 export const updateService = createAsyncThunk(
   'services/updateService',
-  async ({ id, data }: { id: string; data: Partial<Service> }, thunkAPI) => {
+  async ({ id, data }: { id: string; data: Partial<Service> | FormData }, thunkAPI) => {
     try {
-      const res = await axios.put(`${API_BASE}/${id}`, data);
+      const config = data instanceof FormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
+      const res = await axios.put(`${API_BASE}/${id}`, data, config);
       return res.data as Service;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to update service');

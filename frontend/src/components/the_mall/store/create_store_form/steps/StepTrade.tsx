@@ -28,7 +28,9 @@ const StepTrade: React.FC = () => {
   const tradeOptions = [
     { key: 'products', label: 'Products (Food, etc.)', description: 'Physical goods like food, clothing, or electronics.' },
     { key: 'services', label: 'Services (Plumbing, etc.)', description: 'Professional services like repairs or consultations.' },
-    { key: 'packages', label: 'Packages (Driver’s license, etc.)', description: 'Pre-packaged offerings like courses or licenses.' }
+    { key: 'packages', label: 'Packages (Driver’s license, etc.)', description: 'Pre-packaged offerings like courses or licenses.' },
+    { key: 'rentals', label: 'Rentals (Equipment, etc.)', description: 'Items available for rent like accomodation or vehicles.' },
+    { key: 'donations', label: 'Donations', description: 'Accept donations for your cause or organization.' }
   ];
 
   return (
@@ -42,7 +44,7 @@ const StepTrade: React.FC = () => {
       </div>
 
       {/* Trade Options */}
-      <div className="space-y-[2.5vh] w-full">
+      <div className="space-y-[1vh] w-full h-[70%] overflow-y-scroll">
         {tradeOptions.map((option) => {
           const selected = form.trades.includes(option.key);
           return (
@@ -61,7 +63,7 @@ const StepTrade: React.FC = () => {
               />
               <div className="flex flex-col">
                 <span className="text-[2vh] font-medium text-[#0b032d]">{option.label}</span>
-                <span className="text-[1.5vh] text-gray-600 leading-snug">{option.description}</span>
+                <span className="text-[1.5vh] text-gray-600 leading-snug line-clamp-1">{option.description}</span>
               </div>
             </label>
           );

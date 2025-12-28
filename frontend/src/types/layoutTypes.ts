@@ -82,6 +82,8 @@ export interface Layout {
         bookService: any;
         FAQs?: any;
         searchResults?: any;
+        rentals?: any;
+        donations?: any;
     };
 }
   

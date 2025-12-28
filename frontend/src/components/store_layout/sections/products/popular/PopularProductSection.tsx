@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import UnderlinedText from '../../../extras/text/UnderlinedText';
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper/modules";
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -77,12 +77,17 @@ const PopularProductsSection = () => {
           className="w-full pl-2 h-fit border-y-2"
         >
           <Swiper
-            modules={[Pagination, Navigation]}
+            modules={[Pagination, Navigation, Autoplay]}
             slidesPerView={visibleCount}
             spaceBetween={parseFloat(getResponsiveDimension(settings.grid.gap))}
             grabCursor={true}
             pagination={false}
             navigation={true}
+            autoplay={{
+              delay: 4000, 
+              disableOnInteraction: false, 
+              pauseOnMouseEnter: true, 
+            }}
             className="my-3"
           >
             {products.map((product) => (

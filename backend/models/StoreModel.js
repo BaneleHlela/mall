@@ -182,6 +182,14 @@ const storeSchema = new mongoose.Schema(
         type: [String],
         default: [],
       },
+      rentals: {
+        type: [String],
+        default: [],
+      },
+      donations: {
+        type: [String],
+        default: [],
+      },
     },
     operationTimes: operationTimesSchema,
     images: [{

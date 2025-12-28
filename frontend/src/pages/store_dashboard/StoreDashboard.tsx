@@ -14,6 +14,7 @@ import StoreOverview from "./supporting_pages/StoreDashboardOverview";
 import StoreDashboardTopbar from "../../components/store_dashboard/menubar/StoreDashboardTopbar";
 import DashboardStoreProducts from "./supporting_pages/DashboardStoreProducts";
 import DashboardStorePackages from "./supporting_pages/DashboardStorePackages";
+import DashboardStoreRentals from "./supporting_pages/DashboardStoreRentals";
 import { fetchStoreProducts } from "../../features/products/productsSlice";
 import StoreLogoSettings from "./supporting_pages/settings/StoreLogoSettings";
 import StoreThumbnailsSettings from "./supporting_pages/settings/StoreThumbnailsSettings";
@@ -25,6 +26,10 @@ import StoreSocialSettings from "./supporting_pages/settings/StoreSocialSettings
 import StoreAboutSettings from "./supporting_pages/settings/StoreAboutSettings";
 import StoreDashboardPosters from "./supporting_pages/StoreDashboardPosters";
 import StoreSubscriptions from "./supporting_pages/StoreSubscriptions";
+import { fetchStoreServices } from "../../features/services/servicesSlice";
+import { fetchStoreRentals } from "../../features/rentals/rentalSlice";
+import { fetchStoreDonations } from "../../features/donations/donationsSlice";
+import DashboardStoreDonations from "./supporting_pages/DashboardStoreDonations";
 
 
 const StoreDashboard = () => {
@@ -44,10 +49,32 @@ const StoreDashboard = () => {
             dispatch(setStore(store));
         }
     }, [store, storeSlug, dispatch]);
-
+    
+    // Fetch store products
     useEffect(() => {
         if (storeSlug) {
             dispatch(fetchStoreProducts({ storeSlug }));
+        }
+    }, [storeSlug, dispatch]);
+
+    // Fetch Store Services
+    useEffect(() => {
+        if (storeSlug) {
+            dispatch(fetchStoreServices({ storeSlug }));
+        }
+    }, [storeSlug, dispatch]);
+
+    // Fetch Store Rentals
+    useEffect(() => {
+        if (storeSlug) {
+            dispatch(fetchStoreRentals({ storeSlug: storeSlug }));
+        }
+    }, [storeSlug, dispatch]);
+
+    // Fetch Store Donations
+    useEffect(() => {
+        if (storeSlug) {
+            dispatch(fetchStoreDonations({ storeSlug: storeSlug }));
         }
     }, [storeSlug, dispatch]);
 
@@ -76,6 +103,8 @@ const StoreDashboard = () => {
                     <Route path="/products" element={<DashboardStoreProducts />} />
                     <Route path="/services" element={<StoreServices />} />
                     <Route path="/packages" element={<DashboardStorePackages />} />
+                    <Route path="/rentals" element={<DashboardStoreRentals />} />
+                    <Route path="/donations" element={<DashboardStoreDonations />} />
                     <Route path="/orders" element={<StoreOrders />} />
                     <Route path="/bookings" element={<StoreBookings />} />
                     <Route path="/subscriptions" element={<StoreSubscriptions />} />

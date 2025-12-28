@@ -19,7 +19,7 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
     settings,
     handleSettingChange,
 }) => {
-    const objectPath ='services';
+    const objectPath ='sections.services';
     const [activePanel, setActivePanel] = useState<string | null>(null);
     const closePanel = () => setActivePanel(null);
     

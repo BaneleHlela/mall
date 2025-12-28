@@ -100,7 +100,7 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({
             settings={settings}
             handleSettingChange={handleSettingChange}
             allow={["color",  "shadow", "border", "padding", "shadow", "width"]}
-            widthUnit='vw'
+            widthUnit='%'
             responsiveSize={responsiveBackground}
           />
         }

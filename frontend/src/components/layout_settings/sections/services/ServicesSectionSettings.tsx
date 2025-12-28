@@ -7,7 +7,7 @@ import { handleAddSectionToLinks } from '../hero/HeroSettings';
 
 const ServicesSectionSettings = () => {
     const dispatch = useAppDispatch();
-    const variation = useAppSelector((state) => state.layoutSettings.services.variation);
+    const variation = useAppSelector((state) => state.layoutSettings.sections.services.variation);
     const settings = useAppSelector((state) => state.layoutSettings);
     const handleSettingChange = (field: string, value: any) => {
         dispatch(updateSetting({ field, value }));

@@ -343,3 +343,13 @@ export function getSpacingClasses({
 
   return `space-y-[${mobileY}] space-x-[${mobileX}] lg:space-y-[${desktopY}] lg:space-x-[${desktopX}]`;
 }
+
+export function getResponsiveBackgroundImage(images: string[]): string {
+  if (!Array.isArray(images) || images.length === 0) return "";
+
+  const mobileImage: string = images[0];
+  const desktopImage: string = images[1] || images[0];
+
+  return window.innerWidth < 768 ? mobileImage : desktopImage;
+}
+

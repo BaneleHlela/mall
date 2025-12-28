@@ -4,7 +4,6 @@ import TextEditor from '../../text/TextEditor'
 import SubSettingsContainer from '../SubSettingsContainer'
 import { getSetting } from '../../../../utils/helperFunctions'
 import OptionsToggler from '../../supporting/OptionsToggler'
-import ColorPicker from '../../supporting/ColorPicker'
 import SettingsSlider from '../../supporting/SettingsSlider'
 import BackgroundEditor from '../../background/BackgroundEditor'
 
@@ -18,8 +17,8 @@ const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: 
 }) => {
     const allowArray = [
         "animation",
-        "position",
         "fontFamily",
+        "position",
         "fontSize",
         "color",
         "weight",
@@ -29,6 +28,7 @@ const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: 
         "lineHeight",
         "textDecoration",
         "padding",
+        "textAlign",
         ...(allowInput ? ["input"] : []) // Include "input" only if allowInput is true
     ];
 
@@ -40,7 +40,7 @@ const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: 
 
 
     return (
-        <div className="space-y-1">
+        <div className="space-y-[.3vh]">
             {allowWidth && (
                 <SettingsSlider
                     label="Width"
@@ -93,10 +93,15 @@ const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: 
                             value={getSetting("underline.show", settings, objectPath) ? "yes" : "no"}
                             onChange={(value) => handleSettingChange(`${objectPath}.underline.show`, value === "yes")}
                         />
-                        <ColorPicker
+                        <OptionsToggler
                             label="Color"
+                            options={["primary", "secondary", "accent", "quad", "pent"]}
                             value={getSetting("underline.color", settings, objectPath)}
-                            onChange={handleChange("underline.color")}
+                            onChange={(newValue) =>
+                                handleChange("underline.color")({
+                                    target: { value: newValue }
+                                } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
+                            }
                         />
                         <SettingsSlider
                             label="Width"

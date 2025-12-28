@@ -5,7 +5,7 @@ import SimpleServicesSection from "./simple_services_section/SimpleServicesSecti
 
 
 const StoreServicesSection = () => {
-  const variation = useAppSelector((state) => state.layoutSettings.services.variation);
+  const variation = useAppSelector((state) => state.layoutSettings.sections.services.variation);
   
   if (variation === "servicesSectionSimple") {
     return (

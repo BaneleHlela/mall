@@ -9,15 +9,25 @@ import UnderlinedText from '../../../extras/text/UnderlinedText'
 const GalleryWithImageSlider = () => {
     const dispatch = useAppDispatch()
     const currentStore = useAppSelector((state) => state.stores.currentStore)
-    const images = useAppSelector((state) => state.stores.currentStore?.images || [])
-    const settings = useAppSelector((state) => state.layoutSettings.gallery);
+    const storeImages = useAppSelector((state) => state.stores.currentStore?.images || [])
+    const settings = useAppSelector((state) => state.layoutSettings.sections.gallery);
     const [page, setPage] = useState(1)
     const [hasMore, setHasMore] = useState(true)
     const limit = 10
 
+    const customImages = settings.slider?.images;
+    const usingCustomImages = customImages && customImages.length > 0;
+    const images = usingCustomImages
+        ? customImages.map((url: string, index: number) => ({ _id: `custom-${index}`, url, description: '' }))
+        : storeImages;
+
+    const modifiedStyle = usingCustomImages
+        ? { ...settings.slider, hover: { ...settings.slider.hover, descriptionText: { ...settings.slider.hover.descriptionText, show: false } } }
+        : settings.slider;
+
     useEffect(() => {
-        if (currentStore?._id) {
-            dispatch(fetchStoreImages({ storeId: currentStore._id, page, limit }))
+        if (currentStore?._id && !usingCustomImages) {
+            dispatch(fetchStoreImages({ storeSlug: currentStore.slug, page, limit }))
                 .unwrap()
                 .then((result) => {
                     setHasMore(result.hasMore)
@@ -26,10 +36,10 @@ const GalleryWithImageSlider = () => {
                     console.error('Error fetching store images:', error)
                 })
         }
-    }, [dispatch, currentStore?._id, page, limit])
+    }, [dispatch, currentStore?._id, page, limit, usingCustomImages])
 
     const loadMore = () => {
-        if (hasMore) {
+        if (hasMore && !usingCustomImages) {
             setPage((prevPage) => prevPage + 1)
         }
     }
@@ -56,10 +66,10 @@ const GalleryWithImageSlider = () => {
                 style={settings.slider}
             />    */}
             <div className="max-w-full">
-                <ClickableAlwaysMovingImageSlider 
+                <ClickableAlwaysMovingImageSlider
                     images={images}
-                    style={settings.slider}
-                />   
+                    style={modifiedStyle}
+                />
             </div>
             
         </div>

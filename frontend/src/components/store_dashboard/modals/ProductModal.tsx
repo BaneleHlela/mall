@@ -357,20 +357,12 @@ const ProductModal: React.FC<ProductModalProps> = ({
             </div>
           )}
 
-          <div>
-            <label className="text-sm font-medium">Images</label>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleImageChange}
-              className="mt-1 block w-full"
-            />
-            <div className="flex flex-row">
-              {imageUrls.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
+          <div className="w-full bg-amber-200 flex justify-center">
+              {(imageUrls.length > 0 || images.length > 0) && (
+                <div className="grid grid-cols-5 gap-2 w-full max-w-5xl mt-2">
+                  
                   {imageUrls.map((url, index) => (
-                    <div key={index} className="relative w-20 h-20">
+                    <div key={`existing-${index}`} className="relative aspect-square">
                       <img
                         src={url}
                         alt={`existing-${index}`}
@@ -378,19 +370,16 @@ const ProductModal: React.FC<ProductModalProps> = ({
                       />
                       <IoClose
                         size={16}
-                        className="absolute top-0 right-0 cursor-pointer bg-white rounded-full"
+                        className="absolute top-1 right-1 cursor-pointer bg-white rounded-full"
                         onClick={() =>
-                          setImageUrls((prev) => prev.filter((_, i) => i !== index))
+                          setImageUrls(prev => prev.filter((_, i) => i !== index))
                         }
                       />
                     </div>
                   ))}
-                </div>
-              )}
-              {images.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
+
                   {images.map((file, index) => (
-                    <div key={index} className="relative w-20 h-20">
+                    <div key={`new-${index}`} className="relative aspect-square">
                       <img
                         src={URL.createObjectURL(file)}
                         alt={`preview-${index}`}
@@ -398,17 +387,17 @@ const ProductModal: React.FC<ProductModalProps> = ({
                       />
                       <IoClose
                         size={16}
-                        className="absolute top-0 right-0 cursor-pointer bg-white rounded-full"
+                        className="absolute top-1 right-1 cursor-pointer bg-white rounded-full"
                         onClick={() =>
-                          setImages((prev) => prev.filter((_, i) => i !== index))
+                          setImages(prev => prev.filter((_, i) => i !== index))
                         }
                       />
                     </div>
                   ))}
+
                 </div>
               )}
             </div>
-          </div>
 
           {error && <div className="text-red-500 text-sm">{error}</div>}
         </div>

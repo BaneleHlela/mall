@@ -1,15 +1,16 @@
 import { useAppSelector } from "../../../../../app/hooks";
-import { getBackgroundStyles, getBorderStyles, getTextStyles } from "../../../../../utils/stylingFunctions";
+import { getBackgroundStyles, getResponsiveBackgroundImage, getTextStyles } from "../../../../../utils/stylingFunctions";
 import UnderlinedText from "../../../extras/text/UnderlinedText";
 
 const AboutWithImageNextToText = () => {
-  const settings = useAppSelector((state) => state.layoutSettings.about);
+  const { colors, fonts } = useAppSelector((state) => state.layoutSettings);
+  const settings = useAppSelector((state) => state.layoutSettings.sections.about);
   const store = useAppSelector((state) => state.stores.currentStore);
   return (
     <div 
       style={{
-        ...getBackgroundStyles(settings.background),
-         ...getTextStyles(settings.text.style)
+        ...getBackgroundStyles(settings.background, colors),
+         ...getTextStyles(settings.text.style, fonts, colors)
       }}
       className="w-full h-fit"
       id="about"
@@ -21,7 +22,7 @@ const AboutWithImageNextToText = () => {
         <UnderlinedText style={settings.text.title.style} />
         <UnderlinedText style={settings.text.subheading?.style || {}} />
         <img 
-          src={settings.image.imageUrl} alt="about us" 
+          src={getResponsiveBackgroundImage(settings.image.imageUrl)} alt="about us" 
           style={{
             ...getBackgroundStyles(settings.image.background),
           }}
@@ -41,7 +42,7 @@ const AboutWithImageNextToText = () => {
             }}
             className=""
           >
-            {store?.about}
+            {settings.text.style.input || store?.about}
           </p>
             
         </div>
@@ -59,7 +60,7 @@ const AboutWithImageNextToText = () => {
             style={{
               ...getBackgroundStyles(settings.image.background),
             }}
-            src={settings.image.imageUrl} 
+            src={getResponsiveBackgroundImage(settings.image.imageUrl)} 
             alt="about us" 
             className="w-full h-full object-cover mb-3" 
           />
@@ -83,7 +84,7 @@ const AboutWithImageNextToText = () => {
             className={`${settings.text.style.animation} flex flex-col space-y-4 whitespace-pre-line`}
           >
             <p>
-              {store?.about}
+              {settings.text.style.input || store?.about}
             </p>
           </div>
         </div>

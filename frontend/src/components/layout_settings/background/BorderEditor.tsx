@@ -73,7 +73,7 @@ const BorderEditor: React.FC<EditorProps> = ({
           value={parseFloat(getSetting("radius", settings, objectPath) || "0")}
           unit="vh"
           min={0}
-          max={30}
+          max={60}
           step={.1}
           onChange={(newVal) => {
             const event = {

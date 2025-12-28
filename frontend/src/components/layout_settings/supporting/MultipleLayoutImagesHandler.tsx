@@ -79,12 +79,19 @@ const MultipleLayoutImagesHandler: React.FC<Props> = ({
     setShowStoreImages(false);
   };
 
+  const getImageLabel = (index: number): string => {
+    if (max === 2) {
+      return index === 0 ? "Mobile Image" : "Desktop Image";
+    }
+    return `Image ${index + 1}`;
+  };
+
   return (
     <div className="space-y-[.3vh] p-[.6vh] text-[2vh]">
       {images.map((image, index) => (
         <SingleLayoutImageHandler
           key={index}
-          label={`Image ${index + 1}`}
+          label={getImageLabel(index)}
           image={image}
           onImageSelect={(url) => handleImageSelect(index, url)}
           onDelete={() => handleImageDelete(index)} // ✅ Now confirms before deleting

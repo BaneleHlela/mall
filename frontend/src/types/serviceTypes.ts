@@ -2,22 +2,16 @@ export interface Service {
     _id: string | null;
     name: string;
     description: string;
-    price: number;
+    price?: number;
     duration: number;
     store: string;
-    thumbnail?: string;
     images?: string[];
     category?: string;
     slug: string;
-    performers?: Performer[]; // Added performers field
+    performers?: Performer[]; // ObjectId[] as strings
     isActive?: boolean;
     createdAt?: string;
     updatedAt?: string;
-}
-
-export interface Performer {
-    user: string; // ObjectId as a string
-    name: string;
 }
 
 export interface ServicesState {
@@ -25,4 +19,10 @@ export interface ServicesState {
     isLoading: boolean;
     error: string | null;
     selectedService?: Service | null;
+}
+
+interface Performer {
+    _id: string;
+    firstName: string;
+    lastName: string;
 }

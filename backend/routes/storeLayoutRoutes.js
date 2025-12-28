@@ -10,7 +10,8 @@ import {
     createLayoutConfigWithSettings,
     updateLayoutConfigWithSettings,
     getStoreLayouts,
-    captureLayoutScreenshot
+    captureLayoutScreenshot,
+    getLayoutByName
 } from "../controllers/StoreLayoutController.js";
 import { protectRoute } from "../middlewares/authMiddleware.js";
 
@@ -22,6 +23,7 @@ router.get('/demo', getDemoLayouts);
 router.post('/with-settings', createLayoutConfigWithSettings);
 router.put('/update-with-settings', updateLayoutConfigWithSettings);
 router.get('/store/:storeId', getStoreLayouts)
+router.get('/name/:name', getLayoutByName)
 
 // Dynamic routes
 router.put('/:layoutId', /*protectRoute,*/ /*isAdmin,*/ updateLayoutConfig);
@@ -34,4 +36,4 @@ router.put('/replace-color/:layoutId', replaceLayoutColor);
 
 
 
-export default router; 
+export default router;

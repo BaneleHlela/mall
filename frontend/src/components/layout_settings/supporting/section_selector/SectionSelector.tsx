@@ -1,54 +1,58 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { fetchSections, clearSections, type Section } from '../../../../features/sections/sectionSlice';
+import { fetchSections, clearSections, type Section, copySectionFromLayout, addSectionFromLayout } from '../../../../features/sections/sectionSlice';
 import SectionSelectorButton from './SectionSelectorButton';
 import SectionDisplay from './SectionDisplay';
 import { IoMdClose } from "react-icons/io";
-import { getSectionDefaults, type SectionType } from '../../../../utils/defaults/sections/getSectionDefaults';
-import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice';
+import { updateSetting, setInitialLayout } from '../../../../features/layouts/layoutSettingsSlice';
+import { selectActiveLayout } from '../../../../features/layouts/layoutSlice';
 
 interface SectionSelectorProps {
-  sectionToReplace?: SectionType;
+  sectionToReplace?: string;
   onClose: () => void;
-  onSelect?: (sectionName: string) => void; // <-- NEW
+  onSelect?: (sectionName: string) => void;
 }
 
 const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToReplace, onSelect}) => {
   const dispatch = useAppDispatch();
   const { sections, loading, error } = useAppSelector((state) => state.sections);
+  const activeLayout = useAppSelector(state => state.layoutSettings);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
-  // Initial fetch (e.g. default data)
-  useEffect(() => {
-    if (!sections.length && !selectedSection) {
-      dispatch(fetchSections());
-    }
-  }, [dispatch, sections.length, selectedSection]);
-
-  // Fetch by selected section name
-  useEffect(() => {
-    if (selectedSection) {
-      dispatch(clearSections());
-      dispatch(fetchSections({ name: selectedSection }));
-    }
-  }, [dispatch, selectedSection]);
-  
+  // Initial fetch - if sectionToReplace is provided, fetch sections for that variation
   useEffect(() => {
     if (sectionToReplace) {
       setSelectedSection(sectionToReplace);
+      dispatch(fetchSections({ variation: sectionToReplace }));
     } else {
-      setSelectedSection(null); // reset on "Add New Section"
+      // For "Add New Section", we might want to show all sections or group by variation
+      dispatch(fetchSections());
     }
-  }, [sectionToReplace]);
+  }, [dispatch, sectionToReplace]);
+
+  // Fetch by selected section name (for the sidebar selection)
+  useEffect(() => {
+    if (selectedSection && !sectionToReplace) {
+      dispatch(clearSections());
+      dispatch(fetchSections({ variation: selectedSection }));
+    }
+  }, [dispatch, selectedSection, sectionToReplace]);
 
   const validSections = useMemo(() => [
     "hero", "about", "menu", "services", "products",
-    "reviews", "gallery", "book", "contact", "events", "footer", "singleProduct"
+    "reviews", "gallery", "book", "contact", "events", "footer", "singleProduct", "FAQs"
   ], []);
+
+  const availableSections = useMemo(() => {
+    if (sectionToReplace) return validSections;
+    // Filter out sections already in the layout
+    return validSections.filter(section => !(activeLayout.sections as any)?.[section]);
+  }, [validSections, sectionToReplace, activeLayout.sections]);
 
   const handleSelectSection = (variation: string) => {
     setSelectedSection(variation);
-    console.log(`Selected Section: ${variation} `, );
+    dispatch(clearSections());
+    dispatch(fetchSections({ variation }));
   };
 
   const handleDeleteSection = (id: string) => {
@@ -56,46 +60,66 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
     // implement deletion logic
   };
 
-  // const extractSectionFromVariation = (variation: string): SectionType => {
-  //   const match = variation.match(/^[a-z]+/);
-  //   return (match?.[0] || 'hero') as SectionType; // fallback to "hero" if nothing matches
-  // };
   
-  const extractSectionFromVariation = (variation: string): SectionType => {
-    // This regex matches patterns like "singleProduct", "storeGallery", "aboutSection", etc.
-    const match = variation.match(/^[a-z]+(?:[A-Z][a-z]*)?/);
-  
-    // Convert the first character of the second word to lowercase to ensure proper section key formatting
-    const section = match?.[0] ?? 'hero';
-  
-    return section.charAt(0).toLowerCase() + section.slice(1) as SectionType;
-  };
- 
-  const handleSelectSectionVariation = async (variation: string) => {
-    const section = sectionToReplace ?? extractSectionFromVariation(variation);
-  
-    // Await the outer function
-    let sectionDefaults = await getSectionDefaults(section, variation);
-  
-    // If the result is a function (like an async () => ...), call it and await the result
-    if (typeof sectionDefaults === 'function') {
-      sectionDefaults = await sectionDefaults();
+  const handleSelectSectionVariation = async (section: Section) => {
+    if (!activeLayout?._id) {
+      console.error('No active layout found');
+      onClose();
+      return;
     }
-  
-    if (sectionToReplace) {
-      dispatch(updateSetting({
-        field: section,
-        value: sectionDefaults,
+
+    const sectionType = section.variation;
+    
+    try {
+      // Use the layout ID directly from the section object
+      const sourceLayoutId = section.layout;
+      
+      if (!sourceLayoutId) {
+        console.error('No source layout ID found in section');
+        onClose();
+        return;
+      }
+
+      // Copy or add the section configuration from source to target layout
+      const thunk = sectionToReplace ? copySectionFromLayout : addSectionFromLayout;
+
+
+      const result = await dispatch(thunk({
+        sourceLayoutId,
+        targetLayoutId: activeLayout._id,
+        sectionName: sectionType
       }));
-    } else {
-      onSelect?.(section);
-      dispatch(updateSetting({
-        field: section,
-        value: sectionDefaults,
-      }));
+
+      // Check if the dispatch was successful and update layout settings
+      if (thunk.fulfilled.match(result)) {
+        const { layout } = result.payload;
+
+        // Update the layoutSettings state with the complete updated layout from backend
+        dispatch(setInitialLayout(layout));
+
+        // Update the local state to reflect the change
+        // if (sectionToReplace) {
+        //   dispatch(updateSetting({
+        //     field: sectionType,
+        //     value: { variation: section.variation }, // Update with the new variation
+        //   }));
+        // } else {
+        //   onSelect?.(sectionType);
+        //   dispatch(updateSetting({
+        //     field: sectionType,
+        //     value: { variation: section.variation },
+        //   }));
+        // }
+      } else {
+        // Handle error case
+        console.error('Failed to copy/add section configuration:', result.payload);
+      }
+      
+      onClose();
+    } catch (error) {
+      console.error('Error copying section configuration:', error);
+      onClose();
     }
-  
-    onClose();
   };
 
   if (loading) return <div>Loading...</div>;
@@ -105,7 +129,7 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
     <div className="h-full w-full overflow-clip">
       {/* Header */}
       <div className="relative h-[8%] w-full bg-blue-500 text-center flex flex-col justify-center text-[3vh] text-white">
-        Replace or Add New Section
+        {sectionToReplace ? `Replace ${sectionToReplace} Section` : 'Add New Section'}
         <div className="absolute right-3 rounded-full p-[1vh] hover:shadow-md hover:scale-102">
             <IoMdClose className='text-[3vh]' onClick={onClose} />
         </div>
@@ -113,14 +137,15 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
 
       {/* Body Layout */}
       <div className="h-[92%]  w-full flex flex-row justify-center p-2">
-        {/* Sidebar Buttons */}
+        {/* Sidebar Buttons - only show if not replacing a specific section */}
         {!sectionToReplace && (
           <div className="h-full bg-white overflow-y-auto w-[25%] border-b">
-            {validSections.map((section) => (
+            {availableSections.map((section) => (
               <SectionSelectorButton
                 key={section}
                 sectionName={section}
                 onSelect={handleSelectSection}
+                isSelected={selectedSection === section}
               />
             ))}
           </div>
@@ -130,6 +155,12 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
           {selectedSection && sections.length === 0 && !loading && (
             <div className="p-4 text-center text-sm text-gray-700 italic">
               No variations available for "{selectedSection}"
+            </div>
+          )}
+
+          {sections.length === 0 && !loading && !sectionToReplace && (
+            <div className="p-4 text-center text-sm text-gray-700 italic">
+              Select a section type from the sidebar to view available variations
             </div>
           )}
 

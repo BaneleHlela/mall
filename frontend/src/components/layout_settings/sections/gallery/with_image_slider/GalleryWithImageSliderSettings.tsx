@@ -3,12 +3,12 @@ import { getSetting } from '../../../../../utils/helperFunctions';
 import BackgroundEditor from '../../../background/BackgroundEditor';
 import TextEditor from '../../../text/TextEditor';
 import OptionsToggler from '../../../supporting/OptionsToggler';
-import SettingsSlider from '../../../supporting/SettingsSlider';
 import SubSettingsContainer from '../../../extras/SubSettingsContainer';
 import FirstOrderSubSettingsContainer from '../../../FirstOrderSubSettingsContainer';
 import SlidingPanel from '../../../supporting/SlidingPanel';
 import { AnimatePresence } from 'framer-motion';
 import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings';
+import MultipleLayoutImagesHandler from '../../../supporting/MultipleLayoutImagesHandler';
 
 export interface SectionSettingsProps {
   settings: any;
@@ -19,7 +19,7 @@ const GalleryWithImageSliderSettings: React.FC<SectionSettingsProps> = ({
   settings,
   handleSettingChange,
 }) => {
-  const objectPath = "gallery";
+  const objectPath = "sections.gallery";
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
 
@@ -106,15 +106,33 @@ const GalleryWithImageSliderSettings: React.FC<SectionSettingsProps> = ({
         {activePanel === "slider" && (
           <SlidingPanel key="slider" isOpen={true} onClose={closePanel} title="Image Slider">
             <div className="px-[.6vh] space-y-[.3vh] py-[.3vh] pb-1">
-              <FirstOrderSubSettingsContainer 
-                name="Background" 
-                onClick={() => setActivePanel("slider_background")} 
+              <FirstOrderSubSettingsContainer
+                name="Images"
+                onClick={() => setActivePanel("images")}
               />
-              <FirstOrderSubSettingsContainer 
-                name="Hover Settings" 
-                onClick={() => setActivePanel("hover")} 
+              <FirstOrderSubSettingsContainer
+                name="Background"
+                onClick={() => setActivePanel("slider_background")}
+              />
+              <FirstOrderSubSettingsContainer
+                name="Hover Settings"
+                onClick={() => setActivePanel("hover")}
               />
             </div>
+          </SlidingPanel>
+        )}
+        {activePanel === "images" && (
+          <SlidingPanel
+            key="images"
+            title="Slider Images"
+            onClose={() => setActivePanel("slider")}
+            isOpen
+          >
+            <MultipleLayoutImagesHandler
+              images={getSetting("slider.images", settings, objectPath) || []}
+              max={50}
+              objectPath={`${objectPath}.slider.images`}
+            />
           </SlidingPanel>
         )}
         {activePanel === "slider_background" && (
@@ -142,7 +160,7 @@ const GalleryWithImageSliderSettings: React.FC<SectionSettingsProps> = ({
             onClose={() => setActivePanel("slider")}
             isOpen
           >
-              <div className='space-y-[.3vh] pb-1'>
+              <div className='space-y-[.6vh] pb-1'>
                 <BackgroundEditor
                   objectPath={`${objectPath}.slider.hover.background`}
                   settings={settings}
@@ -150,8 +168,12 @@ const GalleryWithImageSliderSettings: React.FC<SectionSettingsProps> = ({
                   allow={["color", "opacity"]}
                   responsiveSize
                 />
-                <div className="px-[.6vh] space-y-[.3vh]">
-                    <SubSettingsContainer
+                <div className="px-[.6vh] space-y-[.6vh]">
+                    <FirstOrderSubSettingsContainer 
+                      name="View Button" 
+                      onClick={() => setActivePanel("view_button")} 
+                    />
+                    {/* <SubSettingsContainer
                     name="View Button"
                     SettingsComponent={
                         <div className="px-[.6vh] py-[.3vh] space-y-[.3vh]">
@@ -181,7 +203,7 @@ const GalleryWithImageSliderSettings: React.FC<SectionSettingsProps> = ({
                         />
                         </div>
                     }
-                    />
+                    /> */}
                 </div>
                 
                 <div className="px-[.6vh] space-y-[.3vh]">
@@ -219,6 +241,41 @@ const GalleryWithImageSliderSettings: React.FC<SectionSettingsProps> = ({
               </div>
           </SlidingPanel>
 
+        )}
+        {activePanel === "view_button" && (
+          <SlidingPanel
+            key="view_button"
+            title="View Button Settings"
+            onClose={() => setActivePanel("hover")}
+            isOpen
+          >
+            <div className="px-[.6vh] py-[.3vh] space-y-[.3vh]">
+              <SubSettingsContainer
+                name="Background"
+                SettingsComponent={
+                  <BackgroundEditor
+                    objectPath={`${objectPath}.slider.hover.viewButton.background`}
+                    settings={settings}
+                    handleSettingChange={handleSettingChange}
+                    allow={["color", "height", "width", "border", "opacity"]}
+                    widthUnit="%"
+                    heightUnit="%"
+                  />
+                }
+              />
+              <SubSettingsContainer
+                name="Text"
+                SettingsComponent={
+                  <TextEditor
+                    objectPath={`${objectPath}.slider.hover.viewButton.text`}
+                    settings={settings}
+                    handleSettingChange={handleSettingChange}
+                    allow={["fontFamily", "fontSize", "color", "weight", "lineHeight"]}
+                  />
+                }
+              />
+            </div>
+          </SlidingPanel>
         )}
       </AnimatePresence>
     </div>

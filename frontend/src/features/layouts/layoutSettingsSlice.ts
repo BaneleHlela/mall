@@ -1,13 +1,15 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import type { Layout } from "../../types/layoutTypes"; 
 import { defaultLayoutConfig } from '../../utils/defaults/defaultLayoutConfig';
 
 
 
 // Define the initial state using that type
+//@ts-ignore
 const initialState: Layout = {
   ...defaultLayoutConfig,
 };
+
 
 const layoutSettingsSlice = createSlice({
   name: 'layoutSettings',

@@ -23,6 +23,7 @@ import { IoMdClose } from "react-icons/io";
 import StorePosterRatingStars from "../../the_mall/basic_store_post/StorePosterRatingStars";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineCleaningServices } from "react-icons/md";
+import { FaKey } from "react-icons/fa";
 
 interface Props {
   store: Store;
@@ -70,7 +71,7 @@ const StoreDashBoardMenubar = ({
         </p>
         <div className="mb-1">
           <StorePosterRatingStars
-            rating={store.rating.averageRating}
+            rating={store.rating ? store.rating.averageRating : 0}
             color="text-black"
           />
         </div>
@@ -147,6 +148,22 @@ const StoreDashBoardMenubar = ({
             onClick={handleLinkClick}
           />
         )}
+
+        {store.trades.includes("rentals") && (
+          <DashboardLink
+            linkTo={`/dashboard/${store.slug}/rentals`}
+            icon={<FaKey className="text-[1.8vh]" />}
+            text="Rentals"
+            onClick={handleLinkClick}
+          />
+        )}
+
+        <DashboardLink
+          linkTo={`/dashboard/${store.slug}/donations`}
+          icon={<FaHandsHelping className="text-[1.8vh]" />}
+          text="Donations"
+          onClick={handleLinkClick}
+        />
 
         <DashboardLink
           linkTo={`/dashboard/${store.slug}/layouts`}

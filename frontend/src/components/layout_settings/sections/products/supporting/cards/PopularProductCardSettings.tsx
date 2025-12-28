@@ -17,7 +17,7 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
   settings,
   handleSettingChange
 }) => {
-  const objectPath="products.card";
+  const objectPath="sections.products.card";
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
   const services = useAppSelector((state) => state.services.services)

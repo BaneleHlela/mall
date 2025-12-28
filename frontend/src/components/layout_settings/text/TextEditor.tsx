@@ -1,11 +1,13 @@
+import React, { useEffect } from "react";
 import { useAppSelector } from "../../../app/hooks";
 import type { EditorProps } from "../../../types/layoutSettingsType";
 import { getSetting } from "../../../utils/helperFunctions";
-import ColorPicker from "../supporting/ColorPicker";
 import InputHandler from "../supporting/InputHandler";
 import OptionsToggler from "../supporting/OptionsToggler";
+import RichTextEditor from "../supporting/RichTextEditor";
 import SettingsSlider from "../supporting/SettingsSlider";
 import TextareaHandler from "../supporting/TextareaHandler";
+import TipTapHandler from "../supporting/TipTapHandler";
 
 
 const TextEditor: React.FC<EditorProps> = ({
@@ -15,9 +17,23 @@ const TextEditor: React.FC<EditorProps> = ({
     allow,
     responsiveSize = false,
     responsivePadding = false,
-    useTextarea = false
+    useTextarea = false,
+    useQuill = false
 }) => {
     const isAllowed = (key: string) => !allow || allow.includes(key);
+
+    useEffect(() => {
+        if (responsivePadding) {
+            const currentPadding = getSetting("padding", settings, objectPath);
+            if (currentPadding && typeof currentPadding === 'object' && currentPadding.x && currentPadding.y && typeof currentPadding.x === 'string' && typeof currentPadding.y === 'string' && !currentPadding.x.mobile) {
+                // It's the old format { x: "val", y: "val" }, convert to responsive
+                handleSettingChange(`${objectPath}.padding`, {
+                    x: { mobile: currentPadding.x, desktop: currentPadding.x },
+                    y: { mobile: currentPadding.y, desktop: currentPadding.y }
+                });
+            }
+        }
+    }, [responsivePadding, settings, objectPath, handleSettingChange]);
 
 
     const handleChange =
@@ -51,7 +67,22 @@ const TextEditor: React.FC<EditorProps> = ({
     return (
         <div className="space-y-1 px-2">
           {isAllowed("input") && (
-            useTextarea ? (
+            useQuill ? (
+              <RichTextEditor
+                label=""
+                value={getSetting("input", settings, objectPath)}
+                onChange={(newValue) =>
+                  handleChange("input")({
+                    target: { value: newValue },
+                  } as React.ChangeEvent<HTMLInputElement>)
+                }
+                onFontFamilyChange={(fontFamily) =>
+                  handleChange("fontFamily")({
+                    target: { value: fontFamily }
+                  } as React.ChangeEvent<HTMLInputElement>)
+                }
+              />
+            ) : useTextarea ? (
               <TextareaHandler
                 label="Custom Text"
                 value={getSetting("input", settings, objectPath)}

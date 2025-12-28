@@ -1,5 +1,6 @@
 import React from 'react';
 import { getBackgroundStyles, getTextStyles } from '../../../../utils/stylingFunctions';
+import { useAppSelector } from '../../../../app/hooks';
 
 interface UnderlinedTextProps {
     style?: any; // Make style prop optional
@@ -12,10 +13,11 @@ const UnderlinedText: React.FC<UnderlinedTextProps> = ({
 }) => {
     // Use optional chaining to safely access properties
     const underline = style?.underline || {};  // Default to an empty object if underline is undefined
+    const { colors, fonts } = useAppSelector(state => state.layoutSettings);
 
     return (
         <div
-            style={{ ...getTextStyles(style) }} 
+            style={{ ...getTextStyles(style, fonts, colors) }} 
             className={`w-full flex flex-row ${style?.position === 'center' 
                 ? 'justify-center text-center' 
                 : style?.position === 'start' 
@@ -41,7 +43,7 @@ const UnderlinedText: React.FC<UnderlinedTextProps> = ({
                 {underline?.show && (
                     <span
                         style={{
-                            backgroundColor: underline?.color || 'black',  // Default to black if color is undefined
+                            backgroundColor: colors[underline?.color as keyof typeof colors] || 'black',  // Default to black if color is undefined
                             width: underline?.width || '50%',  // Default to 50% if width is undefined
                             height: underline?.height || '2px',  // Default to 2px if height is undefined
                             marginTop: underline?.marginTop || '0px',  // Default to 0px if marginTop is undefined

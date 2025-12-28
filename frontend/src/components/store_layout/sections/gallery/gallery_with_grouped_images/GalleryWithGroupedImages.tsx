@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
 import SingleGroupImages, { getGridColumnClasses } from './SingleGroupImages';
 import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../../../../../utils/stylingFunctions';
-import { AnimatePresence, motion } from 'framer-motion';
-import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation } from "swiper/modules";
 import UnderlinedText from '../../../extras/text/UnderlinedText';
+
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 interface GalleryGroup {
   input: string;
@@ -14,8 +18,9 @@ interface GalleryGroup {
 }
 
 const GalleryWithGroupedImages = () => {
-  const settings = useAppSelector((state) => state.layoutSettings.sections.gallery);
-  const groups: Record<string, GalleryGroup> = settings.imagesModal.images;
+   const settings = useAppSelector((state) => state.layoutSettings.sections.gallery);
+   const colors = useAppSelector((state) => state.layoutSettings.colors);
+   const groups: Record<string, GalleryGroup> = settings.imagesModal.images;
 
   const stack = settings.imagesModal.grids.thumbnail.stack;
   const isMobile = window.innerWidth < 768;
@@ -26,37 +31,18 @@ const GalleryWithGroupedImages = () => {
     ? settings.imagesModal.grids.thumbnail.columns.mobile
     : settings.imagesModal.grids.thumbnail.columns.desktop;
 
-  
-  const [activeGroupIndex, setActiveGroupIndex] = useState(0);
-  const [direction, setDirection] = useState<'left' | 'right'>('right');
+  // Group groups into slides for Swiper
+  const slides: typeof allGroups[] = [];
+  for (let i = 0; i < allGroups.length; i += visibleCount) {
+    slides.push(allGroups.slice(i, i + visibleCount));
+  }
 
-  const handleNext = () => {
-    setDirection('right');
-    setActiveGroupIndex((prev) => (prev + 1) % totalGroups);
-  };
-
-  const handlePrev = () => {
-    setDirection('left');
-    setActiveGroupIndex((prev) => (prev === 0 ? totalGroups - 1 : prev - 1));
-  };
-  
-    const totalGroups = Math.ceil(allGroups.length / visibleCount);
-    const startIdx = activeGroupIndex * visibleCount;
-
-    let currentGroup = allGroups.slice(startIdx, startIdx + visibleCount);
-
-    if (currentGroup.length < visibleCount && allGroups.length > 0) {
-        const needed = visibleCount - currentGroup.length;
-        const padding = allGroups.slice(0, needed);
-        currentGroup = [...currentGroup, ...padding];
-    }
 
   return (
     <div id="gallery" style={getBackgroundStyles(settings.background)} className='min-h-fit'>
       {/* Heading & Subheading */}
-      {settings.text.heading.input || settings.text.subheading.input && (
-        <div 
-            className='w-full'
+      <div 
+            className='w-full mb-4'
         >   
             {/* Heading + Subheading */}
             <div className="w-full">
@@ -66,105 +52,56 @@ const GalleryWithGroupedImages = () => {
                 <UnderlinedText style={settings.text.subheading} />
               )}
             </div>
-        </div>
-      )}
+      </div>
       
       {/* Stack Layouts */}
       {isHorizontal ? (
-        <div className="w-full relative flex flex-col items-center overflow-hidden">
-            {/* Navigation Buttons */}
-            <div className="flex justify-between absolute top-1/2 w-full mb-4 z-1">
-                <button 
-                    style={{
-                        ...getTextStyles(settings.imagesModal.toggleButtons),
-                        ...getBackgroundStyles(settings.imagesModal.toggleButtons?.background || {})
-                    }}
-                    onClick={handlePrev}
-                >
-                    <MdOutlineKeyboardArrowLeft />
-                </button>
-                <button 
-                    style={{
-                        ...getTextStyles(settings.imagesModal.toggleButtons),
-                        ...getBackgroundStyles(settings.imagesModal.toggleButtons?.background || {})
-                    }}
-                    onClick={handleNext}
-                >
-                    <MdOutlineKeyboardArrowRight/>
-                </button>
-            </div>
-
-          {/* Cards */}
-          <div className="w-full flex h-fit justify-center items-center">
-            <AnimatePresence custom={direction} mode="wait">
-              <motion.div
-                key={activeGroupIndex}
-                custom={direction}
-                initial={{ x: direction === 'right' ? 100 : -100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: direction === 'right' ? -100 : 100, opacity: 0 }}
-                transition={{ type: 'keyframes', stiffness: 300, damping: 30, duration: 0.5 }}
-                className="w-full flex gap-4 justify-center"
-                style={{
-                  gap: getResponsiveDimension(settings.imagesModal.grids.thumbnail.gap),
-                  ...getBackgroundStyles(settings.imagesModal.grids.thumbnail.background),
-                }}
-              >
-                {currentGroup.map(([groupKey, groupData]) => (
-                  <SingleGroupImages
-                    key={groupKey}
-                    groupName={groupData.input}
-                    groupDescrition={groupData.description}
-                    thumbnail={groupData.thumbnail}
-                    descriptionTextStyle={settings.text.groupDescription}
-                    images={groupData.images}
-                    textStyle={settings.text.groupName}
-                    style={settings.imagesModal}
-                  />
-                ))}
-              </motion.div>
-            </AnimatePresence>
-          </div>
-          
-          {/* Count */}
-          {settings.imagesModal.stepIndicator.use === 'digits' && (
-            <div
-              style={{
-                ...getTextStyles(settings.imagesModal.stepIndicator.text),
-              }}
-              className="mt-4 text-sm text-black"
-            >
-              {allGroups.length > 0 && (() => {
-                const start = activeGroupIndex * visibleCount + 1;
-                const end = Math.min(start + visibleCount - 1, allGroups.length);
-                return start === end
-                  ? `${start} / ${allGroups.length}`
-                  : `${start}–${end} / ${allGroups.length}`;
-              })()}
-            </div>
-          )}
-
-          {/* Dots */}
-          {settings.imagesModal.stepIndicator.use === 'dots' && (
-            <div className="mt-4 flex gap-2">
-              {Array.from({ length: totalGroups }).map((_, index) => (
-                <span
-                  key={index}
+        <div
+          className="w-full"
+          style={{ // @ts-ignore
+            '--swiper-pagination-color': colors[settings.text.heading.color as keyof typeof colors],
+            '--swiper-pagination-bullet-inactive-color': colors[settings.text.heading.color as keyof typeof colors] + '55',
+            '--swiper-navigation-color': colors[settings.text.heading.color as keyof typeof colors],
+          }}
+        >
+          <Swiper
+            modules={[ Autoplay , Navigation]}
+            slidesPerView={1}
+            spaceBetween={15}
+            grabCursor={true}
+            navigation={true}
+            className=""
+            autoplay={{
+              delay: 3000, 
+              disableOnInteraction: false,
+            }}
+            loop={true}
+          >
+            {slides.map((slide, slideIndex) => (
+              <SwiperSlide key={slideIndex}>
+                <div
+                  className="w-full flex gap-4 justify-center"
                   style={{
-                    ...getBackgroundStyles(settings.imagesModal.stepIndicator.background),
-                    width: getResponsiveDimension(settings.imagesModal.stepIndicator.background.height),
-                    backgroundColor:
-                      index === activeGroupIndex
-                        ? settings.imagesModal.stepIndicator.background.color
-                        : 'transparent',
+                    gap: getResponsiveDimension(settings.imagesModal.grids.thumbnail.gap),
+                    ...getBackgroundStyles(settings.imagesModal.grids.thumbnail.background, colors),
                   }}
-                  className={`h-2 w-2 rounded-full transition-all duration-300 ${
-                    index === activeGroupIndex ? 'scale-102' : ''
-                  }`}
-                />
-              ))}
-            </div>
-          )}
+                >
+                  {slide.map(([groupKey, groupData]) => (
+                    <SingleGroupImages
+                      key={groupKey}
+                      groupName={groupData.input}
+                      groupDescrition={groupData.description}
+                      thumbnail={groupData.thumbnail}
+                      descriptionTextStyle={settings.text.groupDescription}
+                      images={groupData.images}
+                      textStyle={settings.text.groupName}
+                      style={settings.imagesModal}
+                    />
+                  ))}
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       ) : (
         <div

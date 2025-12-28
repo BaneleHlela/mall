@@ -5,7 +5,7 @@ import type { Section } from '../../../../features/sections/sectionSlice';
 interface SectionDisplayProps {
   section: Section;
   onDelete: (id: string) => void;
-  onVariationSelect: (url: string) => void;
+  onVariationSelect: (section: Section) => void;
 }
 
 const SectionDisplay: React.FC<SectionDisplayProps> = ({
@@ -17,10 +17,9 @@ const SectionDisplay: React.FC<SectionDisplayProps> = ({
   const [showPopup, setShowPopup] = useState(false);
   const link = window.location.href;
 
-  const formatVariation = (camelCaseString: string) => {
-    return camelCaseString
-      .replace(/([A-Z])/g, ' $1')
-      .replace(/^./, (str) => str.toUpperCase());
+  const formatName = (name: string) => {
+    if (!name) return 'Unnamed Section';
+    return name.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
   };
 
   return (
@@ -34,7 +33,7 @@ const SectionDisplay: React.FC<SectionDisplayProps> = ({
         <div className="absolute top-[10%] w-[95%] h-[60%] shadow-2xl">
           <img
             src={section.images.desktop}
-            alt={section.variation}
+            alt={section.name}
             className="object-cover rounded-[1px] w-full h-full border-3 border-white border-b-0"
           />
           <div className="bg-white w-full h-[15%] border-t-1 border-t-gray-400 rounded-b-sm"></div>
@@ -45,7 +44,7 @@ const SectionDisplay: React.FC<SectionDisplayProps> = ({
           <div className="w-full h-2 bg-white rounded-t-lg"></div>
           <img
             src={section.images.mobile}
-            alt={section.variation}
+            alt={section.name}
             className="object-cover w-full h-full"
           />
           <div className="w-full h-2 bg-white rounded-b-lg"></div>
@@ -61,7 +60,7 @@ const SectionDisplay: React.FC<SectionDisplayProps> = ({
           <div className="absolute text-[1.8vh] top-0 left-0 w-full h-full flex flex-col justify-center items-center space-y-2 py-5 z-20">
             {link.includes('layouts') && (
               <button
-                onClick={() => onVariationSelect(section.variation)}
+                onClick={() => onVariationSelect(section)}
                 className="w-[55%] border border-black text-white bg-gray-800 p-[.8vh] rounded-[5vh] hover:scale-102"
               >
                 Select
@@ -69,7 +68,7 @@ const SectionDisplay: React.FC<SectionDisplayProps> = ({
             )}
             {link.includes('dashboard') && (
               <button
-                onClick={() => onDelete(section.variation)}
+                onClick={() => onDelete(section._id)}
                 className="w-[55%] border border-black text-white bg-gray-800 hover:bg-gray-700 p-[.8vh] rounded-[5vh] hover:scale-102"
               >
                 Delete
@@ -85,9 +84,12 @@ const SectionDisplay: React.FC<SectionDisplayProps> = ({
         )}
       </div>
 
-      {/* Footer with variation name */}
+      {/* Footer with section name and variation */}
       <div className="px-2 leading-5 text-center text-[1.8vh] h-[7vh] w-full rounded-b bg-white z-10 flex justify-center items-center">
-        {formatVariation(section.variation)}
+        <div className="flex flex-col">
+          <span className="font-semibold">{formatName(section.variation)}</span>
+          <span className="text-xs text-gray-600">{formatName(section.name)}</span>
+        </div>
       </div>
 
       {/* Fullscreen popup */}
@@ -101,6 +103,10 @@ const SectionDisplay: React.FC<SectionDisplayProps> = ({
               <IoMdClose className='text-[4vh]' />
             </button>
             <div className="flex flex-col gap-4">
+              <div className="text-center mb-4">
+                <h3 className="text-lg font-semibold">{formatName(section.variation)}</h3>
+                <p className="text-sm text-gray-600">{formatName(section.name)}</p>
+              </div>
               <img
                 src={section.images.desktop}
                 alt="Desktop"

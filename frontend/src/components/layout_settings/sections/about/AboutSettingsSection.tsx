@@ -6,6 +6,7 @@ import DoctorAboutSettings from "./doctor_about/DoctorAboutSettings";
 import AboutWithImageBehindTextSettings from "./with_image_behind_text/AboutWithImageBehindTextSettings";
 import AboutWithImageNextToTextSettings from "./with_image_next_to_text/AboutWithImageNextToTextSettings";
 import ShortAboutSettings from "./short_about/ShortAboutSettings";
+import AboutWithLineAndImageSettings from "./with_line_and_image/AboutWithLineAndImageSettings";
 
 const AboutSettingsSection = () => {
     const dispatch = useAppDispatch();
@@ -74,6 +75,10 @@ const AboutSettingsSection = () => {
             case "shortAbout":
                 return (
                     <ShortAboutSettings />
+                )
+            case "aboutWithLineAndImage":
+                return (
+                    <AboutWithLineAndImageSettings />
                 )
             default:
                 return <div>No settings found for {settings.sections.about.variation}</div>;

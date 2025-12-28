@@ -15,7 +15,6 @@ const serviceSchema = new mongoose.Schema({
   },
   duration: {
     type: Number, // (in minutes)
-    required: true,
   },
   store: {
     type: mongoose.Schema.Types.ObjectId,
@@ -23,14 +22,12 @@ const serviceSchema = new mongoose.Schema({
     required: true,
   },
   performers: [{
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', // Reference to the User model
-    },
-    name: {
-      type: String,
-    },
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   }],
+  images: {
+    type: [String],
+  },
   category: {
     type: String
   },

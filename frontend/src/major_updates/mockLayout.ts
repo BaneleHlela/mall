@@ -1,4 +1,5 @@
 import { Description } from "@headlessui/react";
+import { duration } from "@mui/material";
 import { pick } from "lodash";
 import { LineChart, Weight } from "lucide-react";
 
@@ -77,7 +78,7 @@ export const mockLayout = {
                 desktop: "4vh"
             },
             fontFamily: "primary",
-            fontWeight: "normal"
+            weight: "normal"
         },
         button: {
             show: true,
@@ -188,7 +189,7 @@ export const mockLayout = {
                         desktop: '2vh'
                     },
                     fontFamily: 'primary',
-                    fontWeight: 'normal'
+                    weight: 'normal'
                 },
                 background: {
                     color: 'secondary',
@@ -244,7 +245,7 @@ export const mockLayout = {
                         desktop: '2vh'
                     },
                     fontFamily: 'primary',
-                    fontWeight: 'normal'
+                    weight: 'normal'
                 },
                 background: {
                     color: 'secondary',
@@ -412,11 +413,10 @@ export const mockLayout = {
                     fontFamily: "secondary",
                     color: "secondary",
                     fontSize: "3.6000000000000014vh",
-                    fontWeight: "bold",
+                    weight: "bold",
                     letterSpacing: "0px",
                     animation: "fade-in",
                     lineHeight: "0.5",
-                    weight: "lighter"
                 },
                 background: {
                     height: "5.800000000000003vh",
@@ -445,25 +445,77 @@ export const mockLayout = {
             }
         },                                 
         about: {
-            variation: "shortAbout",
-            background: {
-                color: "secondary",
-            },
             text: {
-                header: {
-                    input: "About",
+                heading: {
+                    input: "Heading",
+                    fontFamily: "secondary",
+                    color: "secondary",
                     fontSize: {
-                        mobile: "5vh",
-                        desktop: "6vh"
+                        mobile: "3.8000000000000016vh",
+                        desktop: "5.2vh"
                     },
-                    fontWeight: "600",
+                    weight: "normal"
                 },
-                paragraph: {
-                    input: "Step into the world of exquisite headwear with L. Thompson's Ecom Hat Shop. We pride ourselves on offering a diverse range of hats, each carefully selected to complement various styles and occasions. From trendy beanies to classic sun hats, our collection combines current fashion trends with timeless elegance and variety, ensuring a hat for everyone.",
+                subheading: {
+                    input: "Subheading",
+                    fontFamily: "secondary",
+                    color: "secondary",
                     fontSize: {
-                        mobile: "3vh",
-                        desktop: "3.5vh",
+                        mobile: "3.8000000000000016vh",
+                        desktop: "5.2vh"
                     },
+                    weight: "normal"
+                },
+                firstParagraph:{
+                    input: "I'm a paragraph. Click here to add your own text and edit me. It’s easy. Just click “Edit Text” or double click me to add your own content and make changes to the font. Feel free to drag and drop me anywhere you like on your page. I’m a great place for you to tell a story and let your users know a little more about you.",
+                    fontFamily: "secondary",
+                    color: "secondary",
+                    fontSize: {
+                        mobile: "3.8000000000000016vh",
+                        desktop: "5.2vh"
+                    },
+                    weight: "normal"
+                },
+                secondParagraph:{
+                    input: "I'm a paragraph. Click here to add your own text and edit me. It’s easy. Just click “Edit Text” or double click me to add your own content and make changes to the font. Feel free to drag and drop me anywhere you like on your page. I’m a great place for you to tell a story and let your users know a little more about you.",
+                    fontFamily: "secondary",
+                    color: "secondary",
+                    fontSize: {
+                        mobile: "3.8000000000000016vh",
+                        desktop: "5.2vh"
+                    },
+                    weight: "normal"
+                },
+                secondSubheading: {
+                    input: "Subheading",
+                    fontFamily: "secondary",
+                    color: "secondary",
+                    fontSize: {
+                        mobile: "3.8000000000000016vh",
+                        desktop: "5.2vh"
+                    },
+                    weight: "normal"
+                }, 
+            },
+            background: {
+
+            },
+            image: {
+                url: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/khusela-roofing-solutions/images/37a36775bb62d27716e6b0ac44109bfb.jpg", "https://storage.googleapis.com/the-mall-uploads-giza/stores/khusela-roofing-solutions/images/37a36775bb62d27716e6b0ac44109bfb.jpg"],
+                background: {
+                    height: {
+                        mobile: "50vh",
+                        desktop: "100%",
+                    },
+                    width: { 
+                        mobile: "100%",
+                        desktop: "50%",
+                    },
+                    border: {
+                        width: "0px",
+                        style: "solid",
+                        radius: "30px",
+                    }
                 }
             }
         },
@@ -723,7 +775,7 @@ export const mockLayout = {
                         desktop: "1.5rem"
                     },
                     color: "primary",
-                    fontWeight: "bold",
+                    weight: "bold",
                 },
                 width: {
                     mobile: "100%",
@@ -804,85 +856,46 @@ export const mockLayout = {
             },
         },          
         gallery: {
-            variation: "simpleGallery",
+            variation: "basicSwiperGallery",
             background: {
-                color: "primary",
+                color: "transparent",
                 width: {
-                    mobile: "100%",
-                    desktop: "100%",
+                  mobile: "100%",
+                  desktop: "100%",
                 },
-            },
+                padding: {
+                  y: {
+                    desktop: "10.1vh",
+                    mobile: "4.2vh",
+                  },
+                  x: {
+                    desktop: "12.8vh",
+                    mobile: "1.5vh",
+                  },
+                },
+            },              
             text: {
                 heading: {
-                    input: "Selected Work",
-                    position: "center",
+                    input: "Heading",
+                    fontFamily: "secondary",
+                    color: "secondary",
                     fontSize: {
-                        mobile: "35px",
-                        desktop: "35px",
+                        mobile: "3.8000000000000016vh",
+                        desktop: "5.2vh"
                     },
-                    fontFamily: "primary",
-                    color: "primary",
-                    lineHeight: "1.3",
-                    underline: {
-                        show: true,
-                        color: "primary",
-                        width: "50%",
-                        style: "solid",
-                        thickness: "10px",
-                        marginTop: "10px",
-                    }
+                    weight: "normal"
                 },
                 subheading: {
-                    input: "Some work",
-                    position: "center",
+                    input: "Subheading",
+                    fontFamily: "secondary",
+                    color: "secondary",
                     fontSize: {
-                        mobile: "35px",
-                        desktop: "35px",
+                        mobile: "3.8000000000000016vh",
+                        desktop: "5.2vh"
                     },
-                    fontFamily: "primary",
-                    color: "primary",
-                    lineHeight: "1.3",
-                    underline: {
-                        show: false,
-                        color: "primary",
-                        width: "50%",
-                        style: "solid",
-                        thickness: "10px",
-                        marginTop: "10px",
-                    }
+                    weight: "normal"
                 },
             },
-            images: {
-                background: {
-                    border: {
-                        width: "2px",
-                        style: "solid",
-                        color: "secondary",
-                        radius: "10px",
-                    },
-                    height: {
-                        mobile: "25vh",
-                        desktop: "25vh",
-                    }
-                },
-                stack: {
-                    mobile: "horizontal",
-                    desktop: "horizontal",
-                },
-                columns: {
-                    mobile: 1,
-                    desktop: 1,
-                },
-                gap: {
-                    mobile: "5px",
-                    desktop: "0px",
-                },
-                urls: [
-                    "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100115.png",
-                    "https://storage.cloud.google.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100136.png",
-                    "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100200.png" 
-                ],
-            }
         },
         ennockHero: {
             background: {
@@ -1281,7 +1294,7 @@ export const mockLayout = {
                         mobile: "2rem",
                         desktop: "3rem"
                     },
-                    fontWeight: "bold",
+                    weight: "bold",
                     color: "primary",
                     padding: {
                     }
@@ -1294,7 +1307,7 @@ export const mockLayout = {
                         mobile: "2rem",
                         desktop: "3rem"
                     },
-                    fontWeight: "bold",
+                    weight: "bold",
                     color: "primary",
                     padding: {
                         x: "1rem",
@@ -1383,7 +1396,7 @@ export const mockLayout = {
                             desktop: "2em"
                         },
                         color: "secondary",
-                        fontWeight: "bold",
+                        weight: "bold",
                         fontStyle: "normal"
                     },
                     senderInfo: {
@@ -1400,7 +1413,7 @@ export const mockLayout = {
                         fontFamily: "tertiary",
                         color: "primary",
                         fontSize: "1.2em",
-                        fontWeight: "bold",
+                        weight: "bold",
                         letterSpacing: "0px",
                     },
                     background: {
@@ -1420,5 +1433,359 @@ export const mockLayout = {
                 }
             }
         },
+        rentals: {
+            bookingModal: {
+                text: {
+                    selectedDates: {
+                        input: "Select Rental Dates",
+                        fontFamily: "secondary",
+                        fontSize: {
+                            mobile: "2.3vh",
+                            desktop: "3vh"
+                        },
+                        color: "secondary",
+                        weight: "bold"
+                    },
+                    selectedRental: {
+                        input: "Selected Rental",
+                    }
+                },
+                background: {
+                    color: "accent",
+                    padding: {
+                        x: {
+                            mobile: "1.5vh",
+                            desktop: "2vh"
+                        },
+                        y: {
+                            mobile: "2vh",
+                            desktop: "2vh"
+                        },
+                    },
+                    border: {
+                        width: "0px",
+                        style: "solid",
+                        color: "secondary",
+                        radius: "0px"
+                    }
+                },
+                buttons: {
+                    selectedDateButton: {
+                        text: {
+                            input: "Book now",
+                            fontFamily: "secondary",
+                            color: "secondary",
+                            fontSize: {
+                                mobile: "2vh",
+                                desktop: "2.2vh"
+                            },
+                        },
+                        background: {
+                            color: "transparent",
+                            padding: {
+                                y: "1.3vh",
+                                x: "2.2vh",
+                            },
+                            width: "100%",
+                            border: {
+                                width: "1px",
+                                style: "solid",
+                                color: "secondary",
+                                radius: "1px"
+                            }
+                        },
+                    },
+                    selectedRentalButton:  {
+                        text: {
+                            input: "Book now",
+                            fontFamily: "secondary",
+                            color: "accent",
+                        },
+                    },
+                    requestBookingButton: {
+                        text: {
+                          input: "Book now",
+                          fontFamily: "secondary",
+                          color: "accent",
+                        },
+                      
+                        background: {
+                          color: "quad",
+                          padding: {
+                            y: "1.3vh",
+                            x: "2.2vh",
+                          },
+                          width: "100%",
+                        },
+                    },
+                },
+                dropdowns: {
+                    calendars: {
+                        background: {
+                            width: "100%",
+                            color: "accent",
+                            border: {
+                                width: "0px",
+                                style: "solid",
+                                color: "secondary",
+                                radius: "0px"
+                            },
+                            padding: {
+                                y: "10px",
+                                x: "10px"
+                            }
+                        },
+                        text: {
+                            fontFamily: "primary",
+                            color: "secondary"
+                        },
+                        monthText: {
+                            weight: "bold",
+                            color: "secondary",
+                            fontSize: {
+                                mobile: "2.2vh",
+                                desktop: "2.2vh",
+                            },
+                            fontFamily: "primary",
+                            letterSpacing: "0px"
+                        },
+                        toggleMonthIcon: {
+                            color: "secondary",
+                            fontSize: "1.5rem"
+                        },
+                        weekday: {
+                            text: {
+                                fontSize: "2vh",
+                                weight: "normal",
+                                textDecoration: "uppercase",
+                                color: "secondary"
+                            },
+                            underlineColor: {
+                                color: "secondary"
+                            }
+                        },
+                        date: {
+                            text: {
+                                color: "secondary",
+                                fontFamily: "primary",
+                                weight: "normal",
+                                fontSize: "1rem"
+                            },
+                            background: {
+                                color: "tranparent",
+                                padding: {
+                                    y: "1vh",
+                                    x: "0vh"
+                                },
+                                border: {
+                                    width: "0px",
+                                    style: "solid",
+                                    color: "secondary",
+                                    radius: "3px"
+                                }
+                            }
+                        },
+                        todayDate: {
+                            background: {
+                                color: "transparent",
+                                padding: {
+                                    y: "1vh",
+                                    x: "0vh"
+                                },
+                                border: {
+                                    width: "1px",
+                                    style: "solid",
+                                    color: "secondary",
+                                    radius: "100%"
+                                }
+                            },
+                            text: {
+                                fontFamily: "primary",
+                                fontSize: "1rem"
+                            }
+                        },
+                        selectedDate: {
+                            background: {
+                                color: "secondary",
+                                padding: {
+                                    y: "1vh",
+                                    x: "0vh"
+                                },
+                                border: {
+                                    width: "1px",
+                                    style: "solid",
+                                    color: "secondary",
+                                    radius: "100%"
+                                }
+                            },
+                            text: {
+                                color: "accent",
+                                fontFamily: "primary",
+                                weight: "bold",
+                                fontSize: "1rem"
+                            }
+                        },
+                        neighbouringMonth: {
+                            color: "gray"
+                        }
+                    },
+                    rentalsDropdown: {
+                        background: {
+                            // width: {
+                            //     mobile: "100%",
+                            //     desktop: "100%"
+                            // },
+                            color: "primary",
+                            border: {
+                                width: "1px",
+                                style: "solid",
+                                color: "secondary",
+                                radius: "5px"
+                            },
+                            padding: {
+                                y: "10px",
+                                x: "10px"
+                            }
+                        },
+                        text: {
+                            fontFamily: "primary",
+                            color: "secondary"
+                        },
+                        // toggleIcon: {
+                        //     color: "secondary",
+                        //     fontSize: "1.5rem"
+                        // },
+                    },
+                }
+            },
+        }
     }
 }
+
+
+const card = {
+    variaton: "popularDonationCard",
+    stack: {
+      mobile: "column",
+      desktop: "column"
+    },
+    background: {
+      color: "transparent",
+      height: {
+        mobile: "60vh",
+        desktop: "60vh"
+      },
+      border: {
+        width: "0vh",
+        color: "primary",
+        style: "solid",
+        radius: "0vh"
+      }
+    },
+    image: {
+      urls: [],
+      height: {
+        mobile: "75%",
+        desktop: "100%"
+      },
+      width: {
+        mobile: "100%",
+        desktop: "100%"
+      },
+      border: {
+        width: "0vh",
+        color: "primary",
+        style: "solid",
+        radius: "1.3vh"
+      }
+    },
+    markingButton: {
+      background: {
+        color: "secondary",
+        padding: {
+          x: "10px",
+          y: "5px"
+        },
+        border: {
+          color: "primary"
+        }
+      },
+      text: {
+        color: "secondary"
+      }
+    },
+    textAndButton: {
+      background: {
+        padding: {
+          x: "1rem",
+          y: "1rem"
+        }
+      },
+      text: {
+        name: {
+          fontSize: {
+            mobile: "2.600000000000001vh",
+            desktop: "2.8vh"
+          },
+          color: "secondary",
+          weight: "bold",
+          underline: {
+            show: false,
+            color: "primary",
+            width: "50%",
+            style: "solid",
+            thickness: "2px",
+            marginTop: "10px"
+          },
+          fontFamily: "primary",
+          position: "center"
+        },
+        description: {
+          fontSize: {
+            mobile: "2.600000000000001vh",
+            desktop: "2.8vh"
+          },
+          color: "secondary",
+          weight: "bold",
+          fontFamily: "primary",
+        },
+        position: "center"
+      },
+      button: {
+        show: {
+          mobile: "always",
+          desktop: "on-hover"
+        },
+        function: "bookAppointment",
+        style: {
+          text: {
+            input: "ADD TO CART",
+            fontFamily: "secondary",
+            color: "primary",
+            fontSize: ".85em",
+            weight: "bold",
+            letterSpacing: "0px"
+          },
+          background: {
+            height: "",
+            width: "70%",
+            color: "secondary",
+            shadow: true,
+            border: {
+              width: "0px",
+              style: "solid",
+              color: "primary",
+              radius: "0px"
+            },
+            padding: {
+              x: "6px",
+              y: "8px"
+            }
+          }
+        },
+        position: "center"
+      }
+    }
+};
+  
+  

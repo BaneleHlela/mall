@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import StoreLayout from "../../models/StoreLayout.js";
+import Section from "../../models/SectionModel.js";
 import { captureScreenshot } from "../../config/puppeteerConfig.js";
 import { uploadToUploads } from "../../config/gcsClient.js";
 
-dotenv.config({ path: "../../.env" });
+dotenv.config({ path: "../../../.env" });
 
 const captureLayoutSections = async (layoutId) => {
   if (!layoutId) {
@@ -16,7 +17,7 @@ const captureLayoutSections = async (layoutId) => {
 
   try {
     // 1️⃣ Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URL, {
+    await mongoose.connect("mongodb+srv://gizahlela_db_user:nIc44vojis9UcY9V@cluster0.jf9trd5.mongodb.net/the_mall", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -62,6 +63,19 @@ const captureLayoutSections = async (layoutId) => {
           await uploadToUploads(desktopBuffer, desktopFileName);
           const desktopUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${desktopFileName}`;
           console.log(`✅ Desktop screenshot uploaded: ${desktopUrl}`);
+
+          // Create Section document after successful screenshot upload
+          const sectionNameFormatted = `${layout.name} ${sectionName}`;
+          const newSection = await Section.create({
+            name: sectionNameFormatted,
+            variation: sectionName, // Add the variation field
+            layout: layoutId,
+            images: {
+              mobile: mobileUrl,
+              desktop: desktopUrl,
+            },
+          });
+          console.log(`✅ Section document created: ${sectionNameFormatted}`);
 
         } catch (error) {
           console.error(`❌ Failed to capture screenshots for ${sectionName} in ${routeName}:`, error.message);

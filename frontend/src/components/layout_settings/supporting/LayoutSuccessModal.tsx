@@ -2,6 +2,7 @@ import { IoCloseSharp } from 'react-icons/io5';
 import { GiCheckMark } from 'react-icons/gi';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useAppSelector } from '../../../app/hooks';
 
 interface LayoutSuccessModalProps {
   layoutId: string;
@@ -10,10 +11,14 @@ interface LayoutSuccessModalProps {
 
 const LayoutSuccessModal: React.FC<LayoutSuccessModalProps> = ({ layoutId, onClose }) => {
   const navigate = useNavigate();
-
+  const storeSlug = useAppSelector((state) => state.storeAdmin.store?.slug);
   const handlePreviewLayout = () => {
     navigate(`/layouts/${layoutId}/preview`);
   };
+
+  const handleBackToDashboard = () => {
+    navigate(`/stores/${storeSlug}/dashboard`);
+  }
 
   return (
     <motion.div
@@ -51,6 +56,13 @@ const LayoutSuccessModal: React.FC<LayoutSuccessModalProps> = ({ layoutId, onClo
         className="mt-[2vh] px-[2vh] py-[1.2vh] bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
       >
         Preview Layout
+      </button>
+      {/* Back to Dashboard Button */}
+      <button
+        onClick={handleBackToDashboard}
+        className="mt-[2vh] px-[2vh] py-[1.2vh] bg-gray-200 text-black rounded-lg hover:bg-gray-300 transition-colors"
+      >
+        Back to Dashboard
       </button>
     </motion.div>
   );

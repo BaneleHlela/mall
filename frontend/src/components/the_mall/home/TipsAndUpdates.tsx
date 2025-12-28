@@ -14,10 +14,12 @@ import { useNavigate } from 'react-router-dom';
 import { updateUser } from '../../../features/user/userSlice';
 
 interface TipsAndUpdatesProps {
-    
+    tipFor?: string;
+    message?: string;
+    color?: string;
 }
 
-const TipsAndUpdates: React.FC<TipsAndUpdatesProps> = () => {
+const TipsAndUpdates: React.FC<TipsAndUpdatesProps> = ({ tipFor = "Tips for Vendors", message = "The mall lets you create a website for R0!", color = "text-orange-400" }) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -120,7 +122,7 @@ const TipsAndUpdates: React.FC<TipsAndUpdatesProps> = () => {
             </div>
             {/* Text */}
             <div onClick={() => navigate(`/stores/${store?._id}`)} className="flex flex-col justify-center h-full">
-                <p style={{ lineHeight: "1.1"}}  className="font-semibold capitalize text-orange-400">Tips for vendors!</p>
+                <p style={{ lineHeight: "1.1"}}  className={`font-semibold capitalize ${color}`}>{tipFor}</p>
                 <p style={{ lineHeight: "1.1"}} className="text-[1.8vh] text-gray-300">@themall</p>
             </div>
             </div>
@@ -130,14 +132,14 @@ const TipsAndUpdates: React.FC<TipsAndUpdatesProps> = () => {
             </div>
         </div>
         {/* Text */}
-        <div 
+        <div
             style={{
             fontFamily: "Momo Trust Sans",
             lineHeight: "1.1",
             }}
             className="w-full text-[2.3vh] my-1 py-1 font-[500] px-[.6vh] "
         >
-            The mall lets you create a website for R0!
+            {message}
         </div>
         {/* Likes, Visits, or Share */}
         <div className="flex justify-between w-full h-[5vh] px-[.8vh] border-t-[.1vh] border-gray-200">

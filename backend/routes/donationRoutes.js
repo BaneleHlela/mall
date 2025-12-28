@@ -1,25 +1,25 @@
 import express from 'express';
-import { 
-    createDonation, 
-    getAllDonations,
-    getDonationById,
-    getDonationsByDonor,
-    getDonationsByRecipient,
-    updateDonationStatus,
-    deleteDonation,
-    filterDonations,
+import {
+  getDonationById,
+  getDonationBySlug,
+  updateDonation,
+  deleteDonation,
+  createDonation,
+  getAllDonations,
+  getStoreDonations,
+  updateIsActive
 } from '../controllers/DonationController.js';
-import { protectRoute } from '../middlewares/authMiddleware.js';
+import { uploadDonationImages } from '../middlewares/uploadMiddleware.js';
 
 const router = express.Router();
 
-router.post('/', protectRoute, createDonation);
-router.get("/", filterDonations); 
-router.get("/:id", getDonationById);
-router.get("/donor/:donorId", getDonationsByDonor);
-router.get("/recipient/:recipientId", getDonationsByRecipient); 
-router.get("/filter", filterDonations); 
-router.delete("/:id", deleteDonation);
-router.put("/:id/status", updateDonationStatus);
+router.post('/', uploadDonationImages, createDonation);
+router.get('/slug/:slug', getDonationBySlug);
+router.get("/store/:storeSlug", getStoreDonations);
+router.get('/:id', getDonationById);
+router.get('/', getAllDonations);
+router.put('/:id',  uploadDonationImages, updateDonation);
+router.delete('/:id', deleteDonation);
+router.patch('/isActive/:donationId', updateIsActive);
 
 export default router;

@@ -118,11 +118,9 @@ export const updateProduct = asyncHandler(async (req, res) => {
     imageUrls: retainedImages = [],
   } = req.body;
 
-  console.log(retainedImages);
 
   const files = req.files; // newly uploaded images
 
-  console.log(files);
 
   // 🧩 Parse JSON fields if they came in as strings
   try {

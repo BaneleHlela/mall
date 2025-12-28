@@ -13,6 +13,12 @@ import { FiPlus } from 'react-icons/fi';
 import BasicStorePost from '../../components/the_mall/basic_store_post/BasicStorePost';
 import TipsAndUpdates from '../../components/the_mall/home/TipsAndUpdates';
 import { FaTools } from 'react-icons/fa';
+import StorePostJSX from '../../components/the_mall/home/StorePostJSX';
+import { LookOutForRedFlags, YouCanInvest } from '../../components/the_mall/home/posts/SimplePosts';
+import MultipleLayoutsPost from '../../components/the_mall/home/posts/MultipleLayoutsPost';
+import FreePikPosters from '../../components/the_mall/home/posts/FreePikPosters';
+import SupplyChain from '../../components/the_mall/home/posts/SupplyChain';
+import { MdAdd } from 'react-icons/md';
 
 
 const HomePage = () => {
@@ -228,11 +234,69 @@ const HomePage = () => {
         <div onClick={() => navigate("/layouts/692623c23eec25fc3b7e2c58/preview")} className="w-ful h-[20vh] bg-white"></div>
         {/* Feed  */}
         <div className="space-y-[.35vh]">
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
+              <SupplyChain />
+            }
+            color="text-orange-400"
+          />
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
+              <FreePikPosters />
+            }
+            color="text-orange-400"
+          />
+          <StorePostJSX
+            tipFor='Tips for Vendors'
+            jsx={
+              <MultipleLayoutsPost />
+            }
+            color="text-orange-400"
+          />
+          <StorePostJSX
+            tipFor='Announcement'
+            jsx={
+              <YouCanInvest />
+            }
+            color="text-blue-500"
+          />
+          <StorePostJSX
+            tipFor='Announcement'
+            jsx={
+              <LookOutForRedFlags />
+            }
+            color="text-blue-500"
+          />
+          <StorePostJSX 
+            tipFor='Announcement'
+            jsx={
+              <>
+                <p>We're excited to announce that The Mall is launching a new feature that allows vendors to create their own personalized websites!</p>
+                <br/>
+                <p>This means that in addition to having a store within The Mall, vendors can now showcase their products and brand on a dedicated website, giving them even more visibility and reach.</p>
+                <br/>
+                <p>Best of all, this feature is available at no additional cost to our vendors. We believe that by empowering our vendors with more tools and resources, we can help them grow their businesses and succeed in the competitive online marketplace.</p>
+                <br/>
+                <p>Stay tuned for more updates as we roll out this exciting new feature!</p>
+              </>
+            }
+            color="text-blue-500"
+          />
           {StoreHomePosters.map((post, index) => (
             <BasicStorePost key={index} {...post} />
           ))}
-
-          <TipsAndUpdates />
+          <TipsAndUpdates 
+            tipFor='Tips for Vendors'
+            message='The mall lets you create a website for R0!'
+            color="text-orange-400"
+          />
+          <TipsAndUpdates 
+            tipFor='Tips for Vendors'
+            message='The mall lets you create a website for R0!'
+            color="text-orange-400"
+          />
           <BasicStorePost 
             storeSlug={"ennock-m-art"}
             status={"Just finished this painting for a client! What do you think?"}
@@ -284,6 +348,10 @@ const HomePage = () => {
           </div>
         )} */}
       </div>
+      {/* Add post button */}
+      <button className='fixed bottom-[7vh] right-2 p-1 bg-blue-600 text-white rounded-full'>
+        <MdAdd className='text-[4vh]'/>
+      </button>
     </div>
   );
 };

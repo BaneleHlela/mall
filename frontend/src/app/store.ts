@@ -15,6 +15,8 @@ import reviewReducer from "../features/reviews/reviewSlice.ts";
 import emailReducer from "../features/emails/emailSlice.ts";
 import sectionReducer from "../features/sections/sectionSlice.ts";
 import posterReducer from "../features/posters/posterSlice.ts";
+import rentalReducer from "../features/rentals/rentalSlice.ts";
+import donationReducer from "../features/donations/donationsSlice.ts";
 import rangeReducer from "../features/rangeSlice.ts";
 
 export const store = configureStore({
@@ -35,6 +37,8 @@ export const store = configureStore({
         email: emailReducer,
         sections: sectionReducer,
         posters: posterReducer,
+        rentals: rentalReducer,
+        donations: donationReducer,
         range: rangeReducer,
     },
 });

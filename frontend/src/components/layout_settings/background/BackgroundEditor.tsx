@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { getSetting } from "../../../utils/helperFunctions";
 import type { EditorProps } from "../../../types/layoutSettingsType";
 import ColorPicker from "../supporting/ColorPicker";
@@ -25,6 +25,19 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
   responsivePadding
 }) => {
   const isAllowed = (key: string) => !allow || allow.includes(key);
+
+  useEffect(() => {
+    if (responsivePadding) {
+      const currentPadding = getSetting("padding", settings, objectPath);
+      if (currentPadding && typeof currentPadding === 'object' && currentPadding.x && currentPadding.y && typeof currentPadding.x === 'string' && typeof currentPadding.y === 'string' && !currentPadding.x.mobile) {
+        // It's the old format { x: "val", y: "val" }, convert to responsive
+        handleSettingChange(`${objectPath}.padding`, {
+          x: { mobile: currentPadding.x, desktop: currentPadding.x },
+          y: { mobile: currentPadding.y, desktop: currentPadding.y }
+        });
+      }
+    }
+  }, [responsivePadding, settings, objectPath, handleSettingChange]);
 
   const handleChange =
     (field: string) =>

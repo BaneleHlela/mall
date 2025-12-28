@@ -6,12 +6,13 @@ import {
     deleteService,
     getServiceById,
     getServiceBySlug,
- } from '../controllers/ServiceContoller.js';
+  } from '../controllers/ServiceContoller.js';
+import { uploadServiceImages } from '../middlewares/uploadMiddleware.js';
 
 const router = express.Router();
 
-router.post('/', createService);
-router.put('/:id', updateService);
+router.post('/', uploadServiceImages, createService);
+router.put('/:id', uploadServiceImages, updateService);
 router.get('/store/:storeId', getStoreServices);
 router.delete('/:id', deleteService);
 router.get('/:id', getServiceById);

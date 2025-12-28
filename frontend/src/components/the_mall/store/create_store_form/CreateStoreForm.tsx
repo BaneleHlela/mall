@@ -125,7 +125,9 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
         },
         categories: {
           products: [],
-          services: []
+          services: [],
+          rentals: [],
+          donations: []
         },
         isVerified: false,
         likes: {

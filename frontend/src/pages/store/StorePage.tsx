@@ -42,6 +42,9 @@ import BasicSearchResults from "../../components/store_layout/sections/search_re
 import ErrorBoundary from "../../components/ErrorBoundary";
 import FooterWithSocialsAndEmail from "../../components/store_layout/sections/footer/footer_with_socials_and_email/FooterWithSocialsAndEmail";
 import HeroWithBox from "../../components/store_layout/sections/hero/hero_with_box/HeroWithBox";
+import { fetchStoreRentals } from "../../features/rentals/rentalSlice";
+import { fetchStorePackages } from "../../features/packages/packagesSlice";
+import { fetchStoreDonations } from "../../features/donations/donationsSlice";
 
 const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
   const location = useLocation();
@@ -108,17 +111,40 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
     fetchStore();
   }, [storeSlug, dispatch]);
 
+  // Fetch store services if applicable
   useEffect(() => {
     if (storeSlug) {
         dispatch(fetchStoreServices({ storeSlug }));
     }
   }, [dispatch]);
 
+  // Fetch store products if applicable
   useEffect(() => {
     if (storeSlug && store?.slug) {
       dispatch(fetchStoreProducts({ storeSlug: store.slug }));
     }
   }, [storeSlug, dispatch, store]);
+
+  // Fetch store rentals if applicable
+  useEffect(() => {
+    if (storeSlug && store?.trades.includes("rentals")) {
+      dispatch(fetchStoreRentals({ storeSlug }));
+    }
+  }, [storeSlug, dispatch, store]);
+
+  // Fetch store services if applicable
+  useEffect(() => {
+  if (store?.trades.includes("services") && storeSlug) {
+    dispatch(fetchStoreServices({ storeSlug })); // Fetch services if needed
+  }
+  }, [store, storeSlug, dispatch]);
+
+  // Fetch store donations if applicable
+  useEffect(() => {
+    if (store?.trades.includes("donations") && storeSlug) {
+      dispatch(fetchStoreDonations({ storeSlug: store.slug }));
+    }
+  }, [store, storeSlug, dispatch]);
 
   useEffect(() => {
     if (location.hash) {
@@ -129,12 +155,7 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
     }
   }, [location]);
 
-  // Fetch store services if applicable
-  useEffect(() => {
-    if (store?.trades.includes("services") && storeSlug) {
-      dispatch(fetchStoreServices({ storeSlug })); // Fetch services if needed
-    }
-  }, [store, storeSlug, dispatch]);
+ 
 
   // --- Guarantee section scroll after page fully renders ---
   useEffect(() => {

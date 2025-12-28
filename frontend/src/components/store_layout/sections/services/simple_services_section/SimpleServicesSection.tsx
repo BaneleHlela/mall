@@ -11,10 +11,12 @@ import { useNavigate } from 'react-router-dom';
 
 const SimpleServicesSection = () => {
   const navigate = useNavigate();
-  const settings = useAppSelector((state) => state.layoutSettings.services);
+  const settings = useAppSelector((state) => state.layoutSettings.sections.services);
   const services = useAppSelector((state) => state.services.services);
   const store = useAppSelector((state) => state.stores.currentStore);
   const layoutId = useAppSelector((state) => state.layoutSettings._id);
+  const colors = useAppSelector((state) => state.layoutSettings.colors);
+  const fonts = useAppSelector((state) => state.layoutSettings.fonts);
 
   const visibleCount = window.innerWidth < 768 ? settings.grid.columns.mobile : settings.grid.columns.desktop;
   const [activeGroupIndex, setActiveGroupIndex] = useState(0);
@@ -58,14 +60,14 @@ const SimpleServicesSection = () => {
   };
 
   return (
-    <div 
+    <div
         id="services"
-        style={getBackgroundStyles(settings.background)}
+        style={getBackgroundStyles(settings.background, colors)}
         className='flex flex-col justify-between min-h-fit'
     >
         {/* Heading & Subheading */}
         <div 
-            className='w-full'
+            className='w-full mb-4'
         >   
             {/* Heading + Subheading */}
             <div className="w-full">
@@ -77,9 +79,9 @@ const SimpleServicesSection = () => {
             </div>
         </div>
 
-      {store?.categories.services && settings.categorySelector.show && (
+      {store?.categories?.services && settings.categorySelector.show && (
         <div className="w-full pb-4 flex flex-row justify-center">
-          <CategorySelector categories={store.categories.services} style={settings.categorySelector} />
+          <CategorySelector categories={store.categories?.services} style={settings.categorySelector} />
         </div>
       )}
 
@@ -87,20 +89,20 @@ const SimpleServicesSection = () => {
         <div className="w-full relative flex flex-col items-center overflow-hidden">
           {/* Navigation Buttons */}
           <div className="flex justify-between absolute top-1/2 w-full z-10">
-            <button 
+            <button
                 style={{
-                    ...getBackgroundStyles(settings.grid.container.toggleButtons.background),
-                    ...getTextStyles(settings.grid.container.toggleButtons),
+                    ...getBackgroundStyles(settings.grid.container.toggleButtons.background, colors),
+                    ...getTextStyles(settings.grid.container.toggleButtons, fonts, colors),
                 }}
                 onClick={handlePrev}
             >
                 <MdOutlineKeyboardArrowLeft
             />
             </button>
-            <button 
+            <button
                 style={{
-                    ...getBackgroundStyles(settings.grid.container.toggleButtons.background),
-                    ...getTextStyles(settings.grid.container.toggleButtons),
+                    ...getBackgroundStyles(settings.grid.container.toggleButtons.background, colors),
+                    ...getTextStyles(settings.grid.container.toggleButtons, fonts, colors),
                 }}
                 onClick={handleNext}
             >
@@ -121,7 +123,7 @@ const SimpleServicesSection = () => {
                 className="w-full flex gap-4 justify-center"
                 style={{
                   gap: getResponsiveDimension(settings.grid.gap),
-                  ...getBackgroundStyles(settings.grid.container.background)
+                  ...getBackgroundStyles(settings.grid.container.background, colors)
                 }}
               >
                 {currentGroup.map((service, index) => (
@@ -130,7 +132,7 @@ const SimpleServicesSection = () => {
                     title={service.name}
                     duration={service.duration}
                     description={service.description}
-                    imageUrl={settings.card.image.urls[index]}
+                    imageUrl={service.images?.[0] || ".placeholder-image.png"}
                     price={service.price}
                     style={settings.card}
                     onClick={() => handleServiceButtonClick(service.slug || "")}
@@ -144,7 +146,7 @@ const SimpleServicesSection = () => {
           {settings.grid.container.stepIndicator.use === 'digits' && (
             <div
               style={{
-                ...getTextStyles(settings.grid.container.stepIndicator.text),
+                ...getTextStyles(settings.grid.container.stepIndicator.text, fonts, colors),
               }}
               className="mt-4 text-sm text-black"
             >
@@ -165,7 +167,7 @@ const SimpleServicesSection = () => {
                 <span
                   key={index}
                   style={{
-                    ...getBackgroundStyles(settings.grid.container.stepIndicator.background),
+                    ...getBackgroundStyles(settings.grid.container.stepIndicator.background, colors),
                     width: getResponsiveDimension(settings.grid.container.stepIndicator.background.height),
                     backgroundColor:
                       index === activeGroupIndex
@@ -190,7 +192,7 @@ const SimpleServicesSection = () => {
         >
           <div
             style={{
-              ...getBackgroundStyles(settings.grid.container.background),
+              ...getBackgroundStyles(settings.grid.container.background, colors),
               gap: getResponsiveDimension(settings.grid.gap)
             }}
             className={`grid px-1 ${getGridColumnClasses({
@@ -204,7 +206,7 @@ const SimpleServicesSection = () => {
                 title={service.name}
                 duration={service.duration}
                 description={service.description}
-                imageUrl={settings.card.image.urls[index]}
+                imageUrl={service.images?.[0] || ".placeholder-image.png"}
                 price={service.price}
                 style={settings.card}
                 onClick={() => handleServiceButtonClick(service.slug || "")}

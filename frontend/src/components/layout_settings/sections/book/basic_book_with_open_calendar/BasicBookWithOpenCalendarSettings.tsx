@@ -14,7 +14,7 @@ const BasicBookWithOpenCalendarSettings: React.FC<SectionEditorProps> = ({
   settings,
   handleSettingChange,
 }) => {
-  const objectPath = "book";
+  const objectPath = "sections.bookSection";
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
   return (

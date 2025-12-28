@@ -4,11 +4,13 @@ import { getBackgroundStyles, getTextStyles } from '../../../utils/stylingFuncti
 interface StoreButtonProps {
     onClick: () => void;
     style: any;
+    isLoading?: boolean;
 }
 
 const StoreLayoutButton: React.FC<StoreButtonProps> = ({
     onClick,
     style,
+    isLoading = false,
 }) => {
     // Destructure with fallback values for safe access
   const {
@@ -42,7 +44,7 @@ const StoreLayoutButton: React.FC<StoreButtonProps> = ({
     return (
         <button
             className="z-10"
-            onClick={() => onclick}
+            onClick={onClick}
             style={{
                 ...getTextStyles(style.text),
                 ...getBackgroundStyles(background),

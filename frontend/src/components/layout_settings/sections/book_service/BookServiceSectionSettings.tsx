@@ -7,9 +7,10 @@ import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice'
 import { AnimatePresence } from 'framer-motion';
 import SlidingPanel from '../../supporting/SlidingPanel';
 import TextEditor from '../../text/TextEditor';
-import { getSetting } from '../../../../utils/helperFunctions';
 import UnderlinedTextSettings from '../../extras/text/UnderlinedTextSettings';
 import MainBookWithCalenderSettings from '../book/basic_book_with_open_calendar/supporting/MainBookWithCalenderSettings';
+import MultipleLayoutImagesHandler from '../../supporting/MultipleLayoutImagesHandler';
+import { getSetting } from '../../../../utils/helperFunctions';
 
 const BookServiceSectionSettings = () => {
     const dispatch = useAppDispatch();
@@ -21,10 +22,7 @@ const BookServiceSectionSettings = () => {
     const [activePanel, setActivePanel] = useState<string | null>(null);
     const closePanel = () => setActivePanel(null);
 
-    const objectPath = "bookService"
-
-    console.log(getSetting(`background.color`, settings, "bookService"))
-    console.log(settings.background.color)
+    const objectPath = "sections.bookService"
     
     return (
         <div className='space-y-[.35vh]'>
@@ -33,16 +31,22 @@ const BookServiceSectionSettings = () => {
                 name="Background"
                 SettingsComponent={
                 <div className="px-[.15vh]">
-                    <BackgroundEditor
+                    {/* <BackgroundEditor
                         objectPath={`${objectPath}.background`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["height", "width", "color", "padding"]}
+                        allow={["height", "width", "color", "padding", "border"]}
                         widthUnit="%"
                         heightUnit="vh"
                         responsiveSize
                         responsivePadding
-                    />
+                    /> */}
+                    <MultipleLayoutImagesHandler
+                        objectPath={`${objectPath}.background.image`}
+                        min={1}
+                        max={2}
+                        images={getSetting("background.image", settings, objectPath)}
+                        />
                 </div>
                 }
             />

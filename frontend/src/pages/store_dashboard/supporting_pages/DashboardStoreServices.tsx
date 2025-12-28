@@ -150,7 +150,9 @@ const DashBoardStoreServices = () => {
           : b.name.localeCompare(a.name);
 
       case 'price':
-        return sortConfig.direction === 'asc' ? a.price - b.price : b.price - a.price;
+        const aPrice = a.price ?? 0;
+        const bPrice = b.price ?? 0;
+        return sortConfig.direction === 'asc' ? aPrice - bPrice : bPrice - aPrice;
 
       case 'status': {
         const order = ['Active', 'Inactive'];
@@ -227,7 +229,7 @@ const DashBoardStoreServices = () => {
               setAddServiceOpen(false)
               clearError()
           }}
-            categories={categories}
+            categories={categories || []}
           />
 
           {/* Edit Service Modal */}
@@ -238,7 +240,7 @@ const DashBoardStoreServices = () => {
               setSelectedService(null);
               clearError();
             }}
-            categories={categories}
+            categories={categories || []}
             service={selectedService ? selectedService : undefined}
           />
         </div>

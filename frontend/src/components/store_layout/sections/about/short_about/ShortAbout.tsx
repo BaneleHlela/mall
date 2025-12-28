@@ -1,5 +1,4 @@
 import { useAppSelector } from "../../../../../app/hooks";
-import { mockLayout } from "../../../../../major_updates/mockLayout";
 import { getBackgroundStyles, getTextStyles } from "../../../../../utils/stylingFunctions";
 
 const ShortAbout = () => {

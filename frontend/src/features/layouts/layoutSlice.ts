@@ -4,7 +4,6 @@ import type { Fonts, Layout, LayoutState } from "../../types/layoutTypes";
 import type { RootState } from "../../app/store.ts";
 import { API_URL } from "../context.ts";
 
-
 const initialState: LayoutState = {
     activeLayout: null,
     layoutSettings: null,
@@ -12,8 +11,6 @@ const initialState: LayoutState = {
     isLoading: false,
     error: null,
 };
-
-
 
 // Async thunks for layout actions
 export const getLayout = createAsyncThunk(
@@ -28,7 +25,6 @@ export const getLayout = createAsyncThunk(
     }
 );
 
-// Add this thunk to your file
 export const getLayoutByDemoStore = createAsyncThunk(
     "layouts/getLayoutByDemoStore",
     async (storeId: string, thunkAPI) => {
@@ -56,7 +52,7 @@ export const editLayout = createAsyncThunk(
 
 export const removeLayout = createAsyncThunk('layouts/removeLayout', async (layoutId: string) => {
     await axios.delete(`${API_URL}/api/layouts/${layoutId}`);
-    return layoutId; // Return the ID for deletion
+    return layoutId;
 });
 
 export const fetchDemoLayouts = createAsyncThunk(
@@ -78,14 +74,12 @@ export const createLayoutWithSettings = createAsyncThunk(
       {
         layoutId,
         newColors,
-        oldColors,
         newFonts,
         sectionUpdates,
         store
       }: {
         layoutId: string;
         newColors?: { primary: string; secondary: string; accent: string; quad: string; pent: string };
-        oldColors?: string[];
         newFonts?: Fonts;
         sectionUpdates?: any;
         store: string;
@@ -96,12 +90,11 @@ export const createLayoutWithSettings = createAsyncThunk(
         const response = await axios.post(`${API_URL}/api/layouts/with-settings`, {
           layoutId,
           newColors,
-          oldColors,
           newFonts,
           sectionUpdates,
           store
         });
-        return response.data; // Adjust as needed depending on what the backend returns
+        return response.data;
       } catch (error: any) {
         return thunkAPI.rejectWithValue(
           error.response?.data || 'Failed to create layout with settings'
@@ -116,14 +109,12 @@ export const updateLayoutWithSettings = createAsyncThunk(
       {
         layoutId,
         newColors,
-        oldColors,
         newFonts,
         sectionUpdates,
         store
       }: {
         layoutId: string;
         newColors?: { primary: string; secondary: string; accent: string; quad: string; pent: string };
-        oldColors?: string[];
         newFonts?: any;
         sectionUpdates?: any;
         store: string;
@@ -134,7 +125,6 @@ export const updateLayoutWithSettings = createAsyncThunk(
         const response = await axios.put(`${API_URL}/api/layouts/update-with-settings`, {
           layoutId,
           newColors,
-          oldColors,
           newFonts,
           sectionUpdates,
           store
@@ -162,19 +152,17 @@ export const getStoreLayouts = createAsyncThunk(
     }
 );
 
-// Capture layout screenshot and save it
 export const captureLayoutScreenshot = createAsyncThunk(
   "layouts/captureLayoutScreenshot",
   async (layoutId: string, thunkAPI) => {
     try {
       const response = await axios.put(`${API_URL}/api/layouts/capture/${layoutId}`);
-      return response.data.layout as Layout; // backend returns updated layout
+      return response.data.layout as Layout;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response?.data || "Failed to capture layout screenshot");
     }
   }
 );
-  
 
 const layoutSlice = createSlice({
     name: "layout",
@@ -189,7 +177,6 @@ const layoutSlice = createSlice({
   },
     extraReducers: (builder) => {
         builder
-            // Get layout
             .addCase(getLayout.pending, (state) => {
                 state.isLoading = true;
             })
@@ -202,20 +189,18 @@ const layoutSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.error.message || "Failed to load layout";
             })
-            // Create layout
             .addCase(createLayout.pending, (state) => {
                 state.isLoading = true;
             })
             .addCase(createLayout.fulfilled, (state, action: PayloadAction<Layout>) => {
                 state.isLoading = false;
-                state.layouts.push(action.payload); // Add the new layout to the array
-                state.activeLayout = action.payload; // Optionally set as active layout
+                state.layouts.push(action.payload);
+                state.activeLayout = action.payload;
             })
             .addCase(createLayout.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.error.message || "Failed to create layout";
             })
-            // Edit layout
             .addCase(editLayout.pending, (state) => {
                 state.isLoading = true;
             })
@@ -223,29 +208,25 @@ const layoutSlice = createSlice({
                 state.isLoading = false;
                 const index = state.layouts.findIndex(layout => layout._id === action.payload._id);
                 if (index >= 0) {
-                    state.layouts[index] = action.payload; // Update the existing layout in the array
+                    state.layouts[index] = action.payload;
                 }
-                state.activeLayout = action.payload; // Optionally set the updated layout as active
+                state.activeLayout = action.payload;
             })
             .addCase(editLayout.rejected, (state, action) => {
                 state.isLoading = true;
                 state.error = action.error.message || "Failed to update layout";
             })
-            
-            // Remove layout
             .addCase(removeLayout.pending, (state) => {
                 state.isLoading = true;
             })
             .addCase(removeLayout.fulfilled, (state, action: PayloadAction<string>) => {
                 state.isLoading = false;
-                state.layouts = state.layouts.filter(layout => layout._id !== action.payload); // Remove layout from array
+                state.layouts = state.layouts.filter(layout => layout._id !== action.payload);
             })
             .addCase(removeLayout.rejected, (state, action) => {
                 state.isLoading = true;
                 state.error = action.error.message || "Failed to delete layout";
             })
-
-            // Get layout by demo store
             .addCase(getLayoutByDemoStore.pending, (state) => {
                 state.isLoading = true;
             })
@@ -258,7 +239,6 @@ const layoutSlice = createSlice({
                 state.isLoading = true;
                 state.error = action.error.message || "Failed to load layout for demo store";
             })
-            // Fetch Demo Layouts
             .addCase(fetchDemoLayouts.pending, (state) => {
                 state.isLoading = true;
             })
@@ -270,8 +250,6 @@ const layoutSlice = createSlice({
                 state.isLoading = true;
                 state.error = action.error.message || "Failed to fetch demo layouts";
             })
-            // Create layout with settings
-            // Inside builder
             .addCase(createLayoutWithSettings.pending, (state) => {
                 state.isLoading = true;
             })
@@ -284,18 +262,14 @@ const layoutSlice = createSlice({
                 state.isLoading = true;
                 state.error = action.error.message || "Failed to create layout with settings";
             })
-
-            // Get multiple layouts by IDs
             .addCase(getStoreLayouts.pending, (state) => {
                 state.isLoading = true;
             })
             .addCase(getStoreLayouts.fulfilled, (state, action: PayloadAction<Layout[]>) => {
                 state.isLoading = false;
-                // Optionally merge or replace existing layouts
                 const newLayouts = action.payload;
                 const existingIds = new Set(state.layouts.map(layout => layout._id));
                 
-                // Add only new layouts
                 newLayouts.forEach(layout => {
                 if (!existingIds.has(layout._id)) {
                     state.layouts.push(layout);
@@ -306,23 +280,19 @@ const layoutSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.error.message || "Failed to load multiple layouts";
             })
-
-            // Capture screenshot
             .addCase(captureLayoutScreenshot.pending, (state) => {
               state.isLoading = true;
             })
             .addCase(captureLayoutScreenshot.fulfilled, (state, action: PayloadAction<Layout>) => {
               state.isLoading = false;
-            
-              // Update layouts array
+             
               const index = state.layouts.findIndex(layout => layout._id === action.payload._id);
               if (index >= 0) {
                 state.layouts[index] = action.payload;
               } else {
                 state.layouts.push(action.payload);
               }
-            
-              // Update active layout if it matches
+             
               if (state.activeLayout?._id === action.payload._id) {
                 state.activeLayout = action.payload;
               }
@@ -331,8 +301,6 @@ const layoutSlice = createSlice({
               state.isLoading = false;
               state.error = action.error.message || "Failed to capture layout screenshot";
             })
-
-            // Update layout with settings
             .addCase(updateLayoutWithSettings.pending, (state) => {
                 state.isLoading = true;
             })
@@ -348,64 +316,11 @@ const layoutSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.error.message || "Failed to update layout with settings";
             });
-  
-            // Upload Layout Image
-    //         .addCase(uploadLayoutImageThunk.pending, (state) => {
-    //             state.isLoading = true;
-    //         })
-    //         .addCase(uploadLayoutImageThunk.fulfilled, (state, action: PayloadAction<Layout>) => {
-    //             state.status = false;
-    //             const index = state.layouts.findIndex(layout => layout._id === action.payload._id);
-    //             if (index >= 0) {
-    //             state.layouts[index] = action.payload; // update the layout with the new image
-    //             }
-    //             if (state.activeLayout?._id === action.payload._id) {
-    //             state.activeLayout = action.payload; // also update activeLayout if it's the same
-    //             }
-    //         })
-    //         .addCase(uploadLayoutImageThunk.rejected, (state, action) => {
-    //             state.status = true;
-    //             state.error = action.error.message || "Failed to upload image";
-    //         })
-    //         // Update layout with image (pending, fulfilled, rejected)
-    //         .addCase(updateLayoutWithImage.pending, (state) => {
-    //             state.status = "loading";
-    //         })
-    //         .addCase(updateLayoutWithImage.fulfilled, (state, action) => {
-    //             const { objectPath, fileUrl } = action.payload;
-    //             const keys = objectPath.split('.');
-    //             let current: any = state;
-
-    //             keys.forEach((key, index) => {
-    //             if (index === keys.length - 1) {
-    //                 current[key] = fileUrl; // Set the image URL at the final key
-    //             } else {
-    //                 if (!current[key]) {
-    //                 const nextKey = keys[index + 1];
-    //                 current[key] = isNaN(Number(nextKey)) ? {} : [];
-    //                 }
-    //                 current = current[key];
-    //             }
-    //             });
-
-    //             // Optional: refresh state
-    //             if (state.activeLayout) {
-    //             state.activeLayout = { ...state.activeLayout };
-    //             }
-
-    //             state.status = false;
-    //         })
-    //         .addCase(updateLayoutWithImage.rejected, (state, action) => {
-    //             state.status = true;
-    //             state.error = action.error.message || "Failed to update layout with image";
-    //         });
-                        
     },
 });
 
 export const { setLayout, clearLayout } = layoutSlice.actions;
 
 export const selectActiveLayout = (state: RootState) => state.layout.activeLayout;
-// export const selectLayoutStatus = (state: RootState) => state.layout.status;
 
 export default layoutSlice.reducer;

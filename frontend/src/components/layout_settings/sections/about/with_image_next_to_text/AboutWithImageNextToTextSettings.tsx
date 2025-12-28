@@ -18,7 +18,7 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
   settings,
   handleSettingChange,
 }) => {
-  const objectPath = "about";
+  const objectPath = "sections.about";
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
 
@@ -62,7 +62,7 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
           >
             <div className="space-y-[.3vh]">
               <SubSettingsContainer
-                  name="Background"
+                  name="Background (Desktop)"
                   SettingsComponent={
                       <BackgroundEditor
                         objectPath={`${objectPath}.text.background`}
@@ -137,6 +137,7 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
               allow={["input", "fontFamily", "fontSize", "color", "weight", "fontStyle", "animation", "padding"]}
               responsivePadding
               responsiveSize
+              useTextarea
             />
           </SlidingPanel>
         )}
@@ -151,7 +152,7 @@ const AboutWithImageNextToSettings: React.FC<AboutWithImageNextToSettingsProps> 
               <MultipleLayoutImagesHandler
                 objectPath={`${objectPath}.image.imageUrl`}
                 min={1}
-                max={1}
+                max={2}
                 images={getSetting("image.imageUrl", settings, objectPath)}
               />
               <SubSettingsContainer

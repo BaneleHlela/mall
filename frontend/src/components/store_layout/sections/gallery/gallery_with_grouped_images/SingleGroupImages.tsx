@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAppSelector } from '../../../../../app/hooks';
 import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../../../../../utils/stylingFunctions';
 import { IoMdClose } from 'react-icons/io';
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md';
@@ -50,6 +51,9 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
     const [activeIndex, setActiveIndex] = useState(0);
     const [direction, setDirection] = useState<'left' | 'right'>('right');
 
+    const colors = useAppSelector((state) => state.layoutSettings.colors);
+    const fonts = useAppSelector((state) => state.layoutSettings.fonts);
+
     const handleNext = () => {
         setDirection('right');
         setActiveIndex((prev) => (prev + 1) % totalGroups);
@@ -70,40 +74,35 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
     return (
         <div
             style={{
-                ...getBackgroundStyles(style.background.thumbnail),
+                ...getBackgroundStyles(style.background.thumbnail, colors),
                 height: 'fit-content',
             }}
-            className="relative h-fit overflow-hidden"
+            className="h-fit"
         >
             <div className="text-center h-fit">
                 <img
                     style={{
-                        ...getBackgroundStyles(style.background.image),
+                        ...getBackgroundStyles(style.background.image, colors),
                     }}
                     src={thumbnail[0]}
                     alt="Thumbnail"
                     className="w-full object-cover cursor-pointer hover:opacity-80 transition-opacity duration-300"
                     onClick={() => setShowGrid(true)}
                 />
-                {textStyle.input && (
-                    <div className="w-full">
-                        <UnderlinedText style={textStyle} input={groupName} />
-                    </div>
-                )}
-                {!addModal && descriptionTextStyle.input && (
-                    <div className="w-full">
-                        <UnderlinedText style={descriptionTextStyle} input={groupDescrition} />
-                    </div>
-                )}
-                
             </div>
 
+            <div className="w-full">
+                <UnderlinedText style={textStyle} input={groupName} />
+            </div>
+            <div className="w-full">
+                <UnderlinedText style={descriptionTextStyle} input={groupDescrition} />
+            </div>
             {showGrid && style.addModal && (
                 <div
                     style={{
-                        ...getBackgroundStyles(style.background.modal),
+                        ...getBackgroundStyles(style.background.modal, colors),
                     }}
-                    className="fixed inset-0 overflow-auto z-50 hide-scrollbar"
+                    className="fixed inset-0 h-screen w-screen overflow-auto z-50 hide-scrollbar"
                 >
                     {/* Close Button */}
                     <div className="flex justify-end">
@@ -126,14 +125,14 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                     </div>
 
                     {isHorizontal ? (
-                        <div className="relative w-full  flex flex-col justify-between items-center overflow-hidden">
+                        <div className="fixed inset-0 h-screen w-screen flex flex-col justify-between items-center overflow-hidden">
                             {/* Navigation Buttons */}
                             <div className="flex justify-between absolute top-1/2 w-full z-10">
                                 <button
                                     onClick={handlePrev}
                                     style={{
-                                        ...getTextStyles(style.toggleButtons),
-                                        ...getBackgroundStyles(style.toggleButtons.background),
+                                        ...getTextStyles(style.toggleButtons, fonts, colors),
+                                        ...getBackgroundStyles(style.toggleButtons.background, colors),
                                     }}
                                 >
                                     <MdOutlineKeyboardArrowLeft />
@@ -141,8 +140,8 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                                 <button
                                     onClick={handleNext}
                                     style={{
-                                        ...getTextStyles(style.toggleButtons),
-                                        ...getBackgroundStyles(style.toggleButtons.background),
+                                        ...getTextStyles(style.toggleButtons, fonts, colors),
+                                        ...getBackgroundStyles(style.toggleButtons.background, colors),
                                     }}
                                 >
                                     <MdOutlineKeyboardArrowRight />
@@ -170,7 +169,7 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                                                 src={imageUrl}
                                                 alt={`Image ${index + 1}`}
                                                 className="w-full h-auto object-cover hover:opacity-80 transition-opacity duration-300"
-                                                style={getBackgroundStyles(style.background.modalImage)}
+                                                style={getBackgroundStyles(style.background.modalImage, colors)}
                                             />
                                         ))}
                                     </motion.div>
@@ -179,9 +178,9 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
 
                             {/* Count */}
                             {style.stepIndicator.use === 'digits' && (
-                                <div 
+                                <div
                                     style={{
-                                        ...getTextStyles(style.stepIndicator.text),
+                                        ...getTextStyles(style.stepIndicator.text, fonts, colors),
                                     }}
                                     className="mt-4 text-sm text-black"
                                 >
@@ -200,7 +199,7 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                                     {Array.from({ length: totalGroups }).map((_, index) => (
                                         <span
                                             style={{
-                                                ...getBackgroundStyles(style.stepIndicator.background),
+                                                ...getBackgroundStyles(style.stepIndicator.background, colors),
                                                 width: getResponsiveDimension(style.stepIndicator.background.height),
                                                 backgroundColor: index === activeIndex ? style.stepIndicator.background.color : 'transparent',
                                             }}
@@ -218,7 +217,7 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                             style={{
                                 gap: getResponsiveDimension(style.grids.modal.gap),
                             }}
-                            className={`grid px-1 ${getGridColumnClasses({
+                            className={`w-full h-full grid px-1 ${getGridColumnClasses({
                                 mobile: style.grids.modal.columns.mobile,
                                 desktop: style.grids.modal.columns.desktop,
                             })}`}
@@ -229,7 +228,7 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                                     src={imageUrl}
                                     alt={`Image ${index + 1}`}
                                     className="w-full h-auto object-cover hover:opacity-80 transition-opacity duration-300"
-                                    style={getBackgroundStyles(style.background.modalImage)}
+                                    style={getBackgroundStyles(style.background.modalImage, colors)}
                                 />
                             ))}
                         </div>

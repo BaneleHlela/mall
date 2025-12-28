@@ -62,7 +62,8 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
             name="Text"
             onClick={() => setActivePanel("Text")}
         />
-        {((getSetting("imagesModal.grids.thumbnail.stack.mobile", settings, objectPath) === "horizontal") ||
+        {/* Toggle Buttons */}
+        {/* {((getSetting("imagesModal.grids.thumbnail.stack.mobile", settings, objectPath) === "horizontal") ||
             (getSetting("imagesModal.grids.thumbnail.stack.desktop", settings, objectPath) === "horizontal"))
             &&
             (
@@ -70,8 +71,9 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                     name="Toggle Buttons"
                     onClick={() => setActivePanel("toggle_buttons")}
                 />
-        )}
-        {((getSetting("imagesModal.grids.thumbnail.stack.mobile", settings, objectPath) === "horizontal") ||
+        )} */}
+        {/* Toggle Buttons */}
+        {/* {((getSetting("imagesModal.grids.thumbnail.stack.mobile", settings, objectPath) === "horizontal") ||
             (getSetting("imagesModal.grids.thumbnail.stack.desktop", settings, objectPath) === "horizontal"))
             &&
             (
@@ -79,7 +81,7 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                     name="Step Indicator"
                     onClick={() => setActivePanel("step_indicator")}
                 />
-        )}
+        )} */}
         {/* Background */}
         <SubSettingsContainer
             name="Background"
@@ -124,7 +126,7 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                             onClick={() => setActivePanel("group_name")}
                         />
                         {/* Description */}
-                        {!settings.gallery.imagesModal.addModal && (
+                        {!settings.sections.gallery.imagesModal.addModal && (
                             <FirstOrderSubSettingsContainer
                                 name="Group Description"
                                 onClick={() => setActivePanel("group_description")}
@@ -154,7 +156,6 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                             settings={settings}
                             handleSettingChange={handleSettingChange}
                             objectPath={`${objectPath}.text.groupDescription`}
-                            allowInput
                         />
                     </div>
                 </SlidingPanel>
@@ -162,7 +163,7 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
         </AnimatePresence>
         
         
-        {activePanel === "toggle_buttons" && 
+        {/* {activePanel === "toggle_buttons" && 
             ((getSetting("imagesModal.grids.thumbnail.stack.mobile", settings, objectPath) === "horizontal") ||
             (getSetting("imagesModal.grids.thumbnail.stack.desktop", settings, objectPath) === "horizontal"))
             && (
@@ -212,7 +213,7 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                     />
                 )}  
             </SlidingPanel>
-        )}
+        )} */}
     </div>
   )
 }

@@ -114,7 +114,7 @@ const HeroSettings = () => {
       
     default:
       return <>No Settings for this hero</>;
-  }
+    }
 };
 
 export default HeroSettings;

@@ -34,7 +34,7 @@ const StoreTeam = () => {
     }
   };
 
-  if (!ready) {
+  if (ready) {
     return (
       <div className="h-full w-full p-[.3vh] rounded-[2vh] overflow-hidden">
         <div className="w-full h-full lg:px-[4vh] rounded overflow-hidden">

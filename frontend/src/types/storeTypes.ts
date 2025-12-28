@@ -67,6 +67,8 @@ export interface Store {
   categories?: {
     products?: string[];
     services?: string[];
+    rentals?: string[];
+    donations?: string[];
   };
   about: string;
   team: TeamMember[];

@@ -15,7 +15,7 @@ const GalleryWithGroupedImagesSettings: React.FC<SectionSettingsProps>  = ({
     settings,
     handleSettingChange,
 }) => {
-    const objectPath = "gallery";
+    const objectPath = "sections.gallery";
     
     const [activePanel, setActivePanel] = useState<string | null>(null);
     const closePanel = () => setActivePanel(null);

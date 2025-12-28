@@ -1,66 +1,55 @@
 import MainBookWithCalendar from '../main/MainBookWithOpenCalender'
 import { useAppSelector } from '../../../../../app/hooks'
-import { getBackgroundStyles, getBorderStyles, getTextStyles } from '../../../../../utils/stylingFunctions';
+import { getBackgroundStyles, getBorderStyles, getResponsiveBackgroundImage, getTextStyles } from '../../../../../utils/stylingFunctions';
+import UnderlinedText from '../../../extras/text/UnderlinedText';
+import { HiArrowLeftEndOnRectangle } from 'react-icons/hi2';
+import MainBookWithOpenCalendar from '../main/MainBookWithOpenCalender';
 
 const BasicBookWithOpenCalender = () => {
-  const style = useAppSelector((state => state.layoutSettings.book));
+  const config = useAppSelector(state => state.layoutSettings.sections.bookService)
+  const { colors, fonts } = useAppSelector(state => state.layoutSettings)
+
   return (
     <div
-      style={{
-      }}
       id="book"
-      className='w-screen overflow-y-visible flex flex-col justify-center items-center'
+      className="relative w-full h-full flex flex-col max-w-[100vw] min-h-fit overflow-hidden"
+      style={{
+        ...getBackgroundStyles(config.background, colors),
+        backgroundColor: "transparent",
+      }}
     >
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <img
+          src={getResponsiveBackgroundImage(config.background.image)}
+          alt="Service Image"
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Background Overlay (Opacity) */}
       <div
+        className="absolute inset-0 -z-10 bg-black pointer-events-none"
         style={{
-            ...getBackgroundStyles(style.background),
-        }} 
-        className="flex flex-col justify-center items-center min-h-fit"
-      >
-        <div
-          style={{
-            ...getBackgroundStyles(style.headerAndMainBackground),
-            ...(window.innerWidth <= 1080 ? { borderColor: style.headerAndMainBackground.color } : {...getBorderStyles(style.headerAndMainBackground.border) })
-          }} 
-          className="flex flex-col "
-        >
-          <div 
-            className={`w-full flex flex-row items-center
-              ${style.heading.text.position === "center" && "justify-center"}
-              ${style.heading.text.position === "end" && "justify-end"}
-              ${style.heading.text.position === "start" && "justify-start"}
-            `}
-          >
-            <p 
-              style={{
-                ...getTextStyles(style.heading.text),
-                ...getBackgroundStyles(style.heading.text.background)
-                }}
-                className='text-center min-w-fit'
-            >{style.heading.text.input || "Book"}</p>
-          </div>
-          <div 
-            className={`w-full flex flex-row items-center
-              ${style.subheading.text.position === "center" && "justify-center"}
-              ${style.subheading.text.position === "end" && "justify-end"}
-              ${style.subheading.text.position === "start" && "justify-start"}
-            `}
-          >
-            <p 
-              style={{
-                ...getTextStyles(style.subheading.text),
-                marginBottom: style.subheading.text.marginBottom,
-              }}
-              className='text-center min-w-fit'
-            >{style.subheading.text.input || "Book"}</p>
-          </div>
-          <div className="w-full bg-white">
-            <MainBookWithCalendar/>
-          </div>
+          opacity: config.background.opacity,
+        }}
+      />
+
+      {/* CONTENT */}
+      <div style={{...getBackgroundStyles(config.main.background, colors)}} className="relative z-10 flex flex-col mt-50">
+        {/* Heading + Subheading */}
+        <div className="w-full mb-4">
+          <UnderlinedText style={config.text.heading || {}} />
+          {config.text.subheading?.input && (
+            <UnderlinedText style={config.text.subheading || {}} />
+          )}
         </div>
+
+        <MainBookWithOpenCalendar />
       </div>
     </div>
   )
 }
+
 
 export default BasicBookWithOpenCalender

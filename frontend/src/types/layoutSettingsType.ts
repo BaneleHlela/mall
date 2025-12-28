@@ -5,6 +5,7 @@ export interface TextSettings {
       desktop: string;
     };
     weight?: string;
+    fontWeight?: string;
     color?: string;
     textShadow?: boolean;
     lineHeight?: string;
@@ -25,6 +26,7 @@ export interface EditorProps {
     responsiveSize?: boolean;
     responsivePadding?: boolean;
     useTextarea?: boolean;
+    useQuill?: boolean;
 }
 
 export interface ResponsiveValue {

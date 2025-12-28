@@ -6,6 +6,7 @@ export interface Section {
   _id: string;
   name: string;
   variation: string;
+  layout: string; // Layout ID that this section belongs to
   images: {
     mobile: string;
     desktop: string;
@@ -16,7 +17,7 @@ interface SectionsState {
   sections: Section[];
   loading: boolean;
   error: string | null;
-} // We can add filtered: Section[] and store there.
+}
 
 const initialState: SectionsState = {
   sections: [],
@@ -37,19 +38,70 @@ export const uploadStoreSection = createAsyncThunk(
       }
     }
 );
-// Thunk to fetch sections (optionally by name)
+
+// Thunk to fetch sections (optionally by name and variation)
 export const fetchSections = createAsyncThunk<
   Section[],
-  { name?: string } | undefined
+  { name?: string; variation?: string } | undefined
 >("sections/fetch", async (params, { rejectWithValue }) => {
   try {
-    const query = params?.name ? `?name=${encodeURIComponent(params.name)}` : "";
+    const queryParams = new URLSearchParams();
+    if (params?.name) {
+      queryParams.append('name', params.name);
+    }
+    if (params?.variation) {
+      queryParams.append('variation', params.variation);
+    }
+    
+    const query = queryParams.toString() ? `?${queryParams.toString()}` : "";
     const res = await axios.get(`${API_URL}/api/sections${query}`);
     return res.data.sections;
   } catch (error: any) {
     return rejectWithValue(error.response?.data?.message || "Failed to fetch sections");
   }
 });
+
+// Thunk to copy section configuration from one layout to another
+export const copySectionFromLayout = createAsyncThunk(
+  'sections/copyFromLayout',
+  async ({ sourceLayoutId, targetLayoutId, sectionName }: {
+    sourceLayoutId: string;
+    targetLayoutId: string;
+    sectionName: string;
+  }, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(`${API_URL}/api/sections/copy`, {
+        sourceLayoutId,
+        targetLayoutId,
+        sectionName,
+      });
+      return res.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || 'Copy section failed');
+    }
+  }
+);
+
+// Thunk to add section configuration from one layout to another (for adding new sections)
+export const addSectionFromLayout = createAsyncThunk(
+  'sections/addFromLayout',
+  async ({ sourceLayoutId, targetLayoutId, sectionName }: {
+    sourceLayoutId: string;
+    targetLayoutId: string;
+    sectionName: string;
+  }, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(`${API_URL}/api/sections/add`, {
+        sourceLayoutId,
+        targetLayoutId,
+        sectionName,
+      });
+      return res.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || 'Add section failed');
+    }
+  }
+);
 
 
 const sectionsSlice = createSlice({
@@ -88,6 +140,32 @@ const sectionsSlice = createSlice({
         state.sections = action.payload;
       })
       .addCase(fetchSections.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // Copy section from layout
+      .addCase(copySectionFromLayout.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(copySectionFromLayout.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(copySectionFromLayout.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // Add section from layout
+      .addCase(addSectionFromLayout.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addSectionFromLayout.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(addSectionFromLayout.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

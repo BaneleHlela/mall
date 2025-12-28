@@ -12,20 +12,20 @@ export const createLayoutConfig = async (req, res) => {
     try {
       const layout = await StoreLayout.create(req.body);
       // const layoutId = layout._id.toString();
-  
+   
       //Generate the preview screenshot
       // const previewUrl = `${CLIENT_URL}/layouts/${layoutId}/preview`;
       // const screenshotBuffer = await captureScreenshot(previewUrl, 360, 740);
-  
+   
       // Upload to Google Cloud
       // const fileName = `stores/layouts/${layoutId}/${layoutId}_preview.png`;
       // await uploadToUploads(screenshotBuffer, fileName);
-  
+   
       // // Save public URL in MongoDB
       // const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${fileName}`;
       // layout.imageUrl = publicUrl;
       // await layout.save();
-  
+   
       res.status(201).json(layout);
     } catch (error) {
       console.error('Error creating layout with screenshot:', error);
@@ -181,6 +181,21 @@ export const getLayoutByDemoStore = expressAsyncHandler(async (req, res) => {
     res.json(layout);
 });
 
+// Get Layout by Name
+export const getLayoutByName = expressAsyncHandler(async (req, res) => {
+    const { name } = req.params;
+
+    // Find the layout by name (case-insensitive)
+    const layout = await StoreLayout.findOne({ name: new RegExp(`^${name}$`, 'i') }).populate('store', '_id name slug');
+
+    if (!layout) {
+        res.status(404);
+        throw new Error("Layout not found with this name.");
+    }
+
+    res.json(layout);
+});
+
 // Get Layout by Store
 export const getLayoutByStore = expressAsyncHandler(async (req, res) => {
     const { storeId } = req.params;
@@ -304,6 +319,22 @@ export const updateLayoutConfig = expressAsyncHandler(async (req, res) => {
   if (body.sections?.singleProduct) {
     layout.sections.singleProduct = body.sections.singleProduct;
   }
+
+  if (body.sections?.services) {
+    layout.sections.services = body.sections.services;
+  };
+
+  if (body.sections?.bookService) {
+    layout.sections.bookService = body.sections.bookService;
+  };
+
+  if (body.sections?.rentals) {
+    layout.sections.rentals = body.sections.rentals;
+  };
+
+  if (body.sections?.donations) {
+    layout.sections.donations = body.sections.donations;
+  };
 
   // Example: update layout settings
   if (body.settings) {
@@ -473,8 +504,3 @@ export const captureLayoutScreenshot = expressAsyncHandler(async (req, res) => {
   }
 });
 
-
-
-  
-  
-  

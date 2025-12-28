@@ -25,6 +25,7 @@ import reviewRoutes from "./routes/reviewRoutes.js";
 import emailRoutes from "./routes/emailRoutes.js";
 import sectionRoutes from "./routes/sectionRoutes.js";
 import posterRoutes from "./routes/posterRoutes.js"
+import rentalRoutes from "./routes/rentalRoutes.js";
 
 import "./config/passportConfig.js";
 import initSlugs from "./utils/initSlugs.js";
@@ -86,6 +87,7 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/email", emailRoutes);
 app.use("/api/sections", sectionRoutes);
 app.use('/api/posters', posterRoutes);
+app.use('/api/rentals', rentalRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

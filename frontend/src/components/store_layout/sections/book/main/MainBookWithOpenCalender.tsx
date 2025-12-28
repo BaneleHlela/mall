@@ -31,7 +31,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
     // Redux selectors to get store, available times, and services
     // const store = useAppSelector((state) => state.stores.storesById[storeId as string]);
     const availableTimes = useAppSelector((state) => state.booking?.availableTimes || {});
-    const settings = useAppSelector(state => state.layoutSettings.bookService.main);
+    const settings = useAppSelector(state => state.layoutSettings.sections.bookService.main);
+    const { fonts, colors } = useAppSelector(state => state.layoutSettings);
     const services = useAppSelector((state) => state.services.services);
 
     // variables
@@ -45,18 +46,19 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [isSlotSectionOpen, setIsSlotSectionOpen] = useState(false);
 
+    // Selected service
     useEffect(() => {
         if (service) {
             // Use provided service
             setSelectedService(service);
             setSelectedServiceId(service._id);
-            setSelectedStaffId(service.performers?.[0]?.user || null);
+            setSelectedStaffId(service.performers?.[0]?._id || null);
         } else if (services.length > 0) {
             // Fallback to a random service if none provided
             const randomService = services[Math.floor(Math.random() * services.length)];
             setSelectedService(randomService);
             setSelectedServiceId(randomService._id);
-            setSelectedStaffId(randomService.performers?.[0]?.user || null);
+            setSelectedStaffId(randomService.performers?.[0]?._id || null);
         }
     }, [service, services]);
     
@@ -64,10 +66,10 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
     const dispatch = useAppDispatch();
     
 
-
     useEffect(() => {
     if (selectedDate instanceof Date && selectedServiceId && selectedStaffId) {
         const formattedDate = format(selectedDate, "yyyy-MM-dd");
+        console.log(formattedDate);
         const result = dispatch(getAvailableBookingTimes({
             storeId: store?._id as string,
             serviceId: selectedServiceId,
@@ -116,7 +118,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                 border: "none",
                 padding: "0px"
             }}
-            className="flex flex-col items-center"
+            className="flex flex-col items-center min-h-fit"
         >
             {/* Desktop */}
             <div 
@@ -124,6 +126,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                     height: settings.background.height.desktop,
                     ...getBackgroundStyles(settings.background),
                     ...getBorderStyles(settings.background.border),
+                    
                 }}
                 className="hidden w-full lg:flex flex-row z-2 min-h-fit "
             >
@@ -196,7 +199,9 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                 className={`w-full text-left flex flex-row justify-between items-center`}
                             >
                                 {selectedStaffId
-                                ? staffOptions.find((s) => s.user === selectedStaffId)?.name
+                                    ? staffOptions.find((s) => s._id === selectedStaffId) ?
+                                        `${staffOptions.find((s) => s._id === selectedStaffId)?.firstName || ''} ${staffOptions.find((s) => s._id === selectedStaffId)?.lastName || ''}`.trim() :
+                                        "Unknown Staff"
                                 : "Select a staff member"}
                                 <IoIosArrowDown/>
                             </Listbox.Button>
@@ -210,14 +215,14 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                 {staffOptions.map((staff, idx) => (
                                 <Listbox.Option
                                     key={idx}
-                                    value={staff.user}
+                                    value={staff._id}
                                     className={({ active, selected }) =>
                                     `p-2 cursor-pointer ${
                                         active ? "bg-gray-100" : ""
                                     } ${selected ? "font-medium" : ""}`
                                     }
                                 >
-                                    {staff.name}
+                                    {`${staff.firstName || ''} ${staff.lastName || ''}`.trim() || 'Unknown Staff'}
                                 </Listbox.Option>
                                 ))}
                             </Listbox.Options>
@@ -355,12 +360,12 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                             key={i}
                                             onClick={() => setSelectedTime(time)}
                                             style={{
-                                                ...getBackgroundStyles(settings.availableSlots.timeSlot.background),
-                                                ...getTextStyles(settings.availableSlots.timeSlot.text),
+                                                ...getBackgroundStyles(settings.availableSlots.timeSlot.background, colors),
+                                                ...getTextStyles(settings.availableSlots.timeSlot.text, fonts, colors),
                                             }}
                                             className={`p-2 ml-[.6vh] mr-2 border text-center hover:scale-102 ${
-                                                selectedTime === time ? "scale-115" : ""
-                                            }`}
+                                                selectedTime === time ? "opacity-100" : "opacity-50"
+                                            } `}
                                         >
                                             {convertTo12HourFormat(time)}
                                         </button>
@@ -374,7 +379,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                 </div>  
             </div>
             {/* Mobile */}
-            <div className="w-[100vw] min-h-fit px-[.6vh] flex flex-col justify-center lg:hidden">
+            <div className="w-full min-h-fit px-[.6vh] flex flex-col justify-center lg:hidden">
                 <div className="">
                     {/* Select a Date*/}
                     <div className="w-full">
@@ -383,7 +388,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                 ...getTextStyles(settings.titles.text),
                                 borderBottom: `${settings.titles.background.border.width} ${settings.titles.background.border.style} ${settings.titles.background.border.color}`,
                             }}
-                            className="w-full flex flex-row justify-between items-center pt-2 pb-1 pl-2 border-b-3 border-gray-300 cursor-pointer"
+                            className="w-full flex flex-row justify-between items-center pt-2 pb-1 border-b-3 border-gray-300 cursor-pointer"
                             onClick={() => setIsCalendarOpen(!isCalendarOpen)}
                         >
                             <p>Select a date</p>
@@ -416,7 +421,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                 ...getTextStyles(settings.titles.text),
                                 borderBottom: `${settings.titles.background.border.width} ${settings.titles.background.border.style} ${settings.titles.background.border.color}`, 
                             }}
-                            className="w-full flex flex-row justify-between items-center pl-2 pt-2 border-b-3 border-gray-300 cursor-pointer"
+                            className="w-full flex flex-row justify-between items-center pt-2 border-b-3 border-gray-300 cursor-pointer"
                             onClick={() => setIsSlotSectionOpen(!isSlotSectionOpen)}
                         >
                             <p className="line-clamp-1">Choose available slot</p>
@@ -440,7 +445,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                 <div>
                                 <p
                                     style={{
-                                        ...getTextStyles(settings.availableSlots.selectedDate.text)
+                                        ...getTextStyles(settings.availableSlots.selectedDate.text, fonts, colors)
                                     }}
                                     className="ml-[.6vh] mt-[1.2vh] mb-[1.2vh] text-gray-700"
                                 >
@@ -458,11 +463,11 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                             key={i}
                                             onClick={() => setSelectedTime(time)}
                                             style={{
-                                            ...getBackgroundStyles(settings.availableSlots.timeSlot.background),
-                                            ...getTextStyles(settings.availableSlots.timeSlot.text),
+                                                ...getBackgroundStyles(settings.availableSlots.timeSlot.background, colors),
+                                                ...getTextStyles(settings.availableSlots.timeSlot.text, fonts, colors),
                                             }}
-                                            className={`p-2 ml-[.6vh] mr-2 border text-center hover:scale-102 ${
-                                                selectedTime === time ? "bg-gray-300" : ""
+                                            className={`p-2 ml-[.6vh] mr-2 border text-center  ${
+                                                selectedTime === time ? "opacity-100" : "opacity-50"
                                             }`}
                                         >
                                             {convertTo12HourFormat(time)}
@@ -483,10 +488,10 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                         {/* Title */}
                         <div 
                             style={{ 
-                                ...getTextStyles(settings.titles.text), 
-                                borderBottom: `${settings.titles.background.border.width} ${settings.titles.background.border.style} ${settings.titles.background.border.color}`,
+                                ...getTextStyles(settings.titles.text, fonts, colors), 
+                                borderBottom: `${settings.titles.background.border.width} ${settings.titles.background.border.style} ${colors[settings.titles.background.border.color as keyof typeof colors]}`,
                             }}
-                            className="pl-2 w-full flex flex-col justify-end pt-2 pb-1  border-gray-300"
+                            className=" w-full flex flex-col justify-end pt-2 pb-1  border-gray-300"
                         >
                             Service Details:
                         </div>
@@ -501,8 +506,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                 <div className="relative mt-[1.2vh] mb-2">
                                     <Listbox.Button 
                                         style={{
-                                            ...getBackgroundStyles(settings.serviceDetails.buttons.background),
-                                            ...getTextStyles(settings.serviceDetails.buttons.text),
+                                            ...getBackgroundStyles(settings.serviceDetails.buttons.background, colors),
+                                            ...getTextStyles(settings.serviceDetails.buttons.text, fonts, colors),
                                         }}
                                         className="w-full text-left flex flex-row justify-between items-center"
                                     >
@@ -511,8 +516,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                     </Listbox.Button>
                                     <Listbox.Options 
                                         style={{
-                                            ...getTextStyles(settings.serviceDetails.buttons.text),
-                                            ...getBackgroundStyles(settings.serviceDetails.buttons.background.dropdown),
+                                            ...getTextStyles(settings.serviceDetails.buttons.text, fonts, colors),
+                                            ...getBackgroundStyles(settings.serviceDetails.buttons.background.dropdown, colors),
                                         }}
                                         className="absolute bg-white w-full max-h-[300px] hide-scrollbar overflow-scroll  border-2 border-gray-200 rounded-none  z-10"
                                     >
@@ -541,35 +546,37 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                 <div className="relative mt-0">
                                 <Listbox.Button
                                     style={{
-                                        ...getBackgroundStyles(settings.serviceDetails.buttons.background),
-                                        ...getTextStyles(settings.serviceDetails.buttons.text)
+                                        ...getBackgroundStyles(settings.serviceDetails.buttons.background, colors),
+                                        ...getTextStyles(settings.serviceDetails.buttons.text, fonts, colors)
                                     }}
                                     className={`w-full text-left flex flex-row justify-between items-center px-1`}
                                 >
                                     {selectedStaffId
-                                    ? staffOptions.find((s) => s.user === selectedStaffId)?.name
-                                    : "Select a staff member"}
+                                        ? staffOptions.find((s) => s._id === selectedStaffId) ?
+                                            `${staffOptions.find((s) => s._id === selectedStaffId)?.firstName || ''} ${staffOptions.find((s) => s._id === selectedStaffId)?.lastName || ''}`.trim() :
+                                            "Unknown Staff"
+                                        : "Select a staff member"}
                                     <IoIosArrowDown />
                                 </Listbox.Button>
                                 <Listbox.Options
                                     style={{
-                                        ...getTextStyles(settings.serviceDetails.buttons.text),
-                                        ...getBackgroundStyles(settings.serviceDetails.buttons.background.dropdown),
+                                        ...getTextStyles(settings.serviceDetails.buttons.text, fonts, colors),
+                                        ...getBackgroundStyles(settings.serviceDetails.buttons.background.dropdown, colors),
                                     }}
                                     className="absolute z-10 bg-white mt-1 w-full  border-2 border-gray-200 shadow-sm max-h-60 overflow-auto focus:outline-none rounded-none"
                                 >
                                     {staffOptions.map((staff, idx) => (
-                                    <Listbox.Option
-                                        key={idx}
-                                        value={staff.user}
-                                        className={({ active, selected }) =>
-                                        `p-2 cursor-pointer ${
-                                            active ? "bg-gray-100" : ""
-                                        } ${selected ? "font-medium" : ""}`
-                                        }
-                                    >
-                                        {staff.name}
-                                    </Listbox.Option>
+                                        <Listbox.Option
+                                            key={idx}
+                                            value={staff._id}
+                                            className={({ active, selected }) =>
+                                            `p-2 cursor-pointer ${
+                                                active ? "bg-gray-100" : ""
+                                            } ${selected ? "font-medium" : ""}`
+                                            }
+                                        >
+                                            {`${staff.firstName || ''} ${staff.lastName || ''}`.trim() || 'Unknown Staff'}
+                                        </Listbox.Option>
                                     ))}
                                 </Listbox.Options>
                                 </div>
@@ -578,7 +585,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                             {/* Date, Price, Duration */}
                             <div 
                                 style={{
-                                    ...getTextStyles(settings.serviceDetails.text)
+                                    ...getTextStyles(settings.serviceDetails.text, fonts, colors)
                                 }}
                                 className="mt-5"
                             >
@@ -589,7 +596,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                             {/* Message / Notes */}
                             <div 
                                 style={{
-                                    ...getTextStyles(settings.serviceDetails.text),
+                                    ...getTextStyles(settings.serviceDetails.text, fonts, colors),
                                     
                                 }}
                                 className="mt-5"
@@ -604,8 +611,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                 </label>
                                 <textarea
                                     style={{
-                                        ...getBackgroundStyles(settings.serviceDetails.messageBox.textArea.background),
-                                        ...getTextStyles(settings.serviceDetails.messageBox.text),
+                                        ...getBackgroundStyles(settings.serviceDetails.messageBox.textArea.background, colors),
+                                        ...getTextStyles(settings.serviceDetails.messageBox.text, fonts, colors),
                                     }}
                                     id="note"
                                     rows={4}
@@ -619,8 +626,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                     {!confirming ? (
                                         <button
                                             style={{
-                                                ...getBackgroundStyles(settings.serviceDetails.bookButton.background),
-                                                ...getTextStyles(settings.serviceDetails.bookButton.text),
+                                                ...getBackgroundStyles(settings.serviceDetails.bookButton.background, colors),
+                                                ...getTextStyles(settings.serviceDetails.bookButton.text, fonts, colors),
                                             }}
                                             onClick={() => setConfirming(true)}
                                             className="hover:scale-102 transition"
