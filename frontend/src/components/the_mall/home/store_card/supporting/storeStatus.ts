@@ -243,7 +243,7 @@ export function getStoreStatus(operationTimes?: OperationTimes, manualStatus?: {
  * Get CSS classes for status styling
  */
 export function getStatusClasses(status: StoreStatusResult): string {
-  const baseClasses = 'px-[5%] rounded-[2px] text-[80%] font-medium';
+  const baseClasses = 'px-[5%] rounded-[2px] text-[1.4vh] font-medium';
   
   switch (status.color) {
     case 'green':

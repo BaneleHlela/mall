@@ -198,9 +198,15 @@ const MallSearchPage = () => {
         ) : storeIds.length === 0 ? (
           <p className="text-center text-gray-500">No stores found.</p>
         ) : (
-          <div className="px-[2vh] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mt-[2vh]">
+          <div className="px-[1vh] grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 mt-[2vh]">
             {storeIds.map(id => (
-              <StoreCard key={id} store={storesById[id]} user={user} allowShadow />
+              <StoreCard 
+                key={id} 
+                store={storesById[id]} 
+                user={user} 
+                allowShadow 
+                mini={window.innerWidth < 640}
+              />
             ))}
           </div>
         )}

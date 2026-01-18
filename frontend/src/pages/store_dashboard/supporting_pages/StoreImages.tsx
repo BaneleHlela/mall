@@ -63,7 +63,7 @@ const StoreImages: React.FC<StoreImagesProps> = ({onImageSelect}) => {
       {/* Add a horizontal line here */}
       <hr className="w-5/5 mx-auto border-gray-300" />
 
-      <div className="flex items-center justify-center h-[55%] lg:h-fit overflow-y-scroll hide-scrollbar">
+      <div className="flex flex-col items-center justify-center h-fit lg:h-fit overflow-y-scroll hide-scrollbar">
         {isLoading && <p>Loading images...</p>}
 
         {!isLoading && images.length === 0 && (
@@ -85,7 +85,7 @@ const StoreImages: React.FC<StoreImagesProps> = ({onImageSelect}) => {
 
         {/* Load More Button */}
         {hasMore && (
-          <div className="w-full flex flex-row justify-center ">
+          <div className="hidden w-full flex flex-row justify-center ">
             <button
               onClick={loadMoreImages}
               className="mt-6 flex items-center justify-center px-4 py-2 text-black rounded-full hover:scale-102 transition-colors"

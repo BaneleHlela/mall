@@ -218,8 +218,8 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
               value={parseFloat(getSetting("padding.y.mobile", settings, objectPath) || "2")}
               unit="vh"
               min={0}
-              max={15}
-              step={0.1}
+              max={30}
+              step={0.2}
               onChange={createSliderChangeHandler("padding.y.mobile", "vh")}
             />
             <SettingsSlider
@@ -227,8 +227,8 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
               value={parseFloat(getSetting("padding.y.desktop", settings, objectPath) || "4")}
               unit="vh"
               min={0}
-              max={15}
-              step={0.1}
+              max={30}
+              step={0.2}
               onChange={createSliderChangeHandler("padding.y.desktop", "vh")}
             />
             <SettingsSlider
@@ -236,8 +236,8 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
               value={parseFloat(getSetting("padding.x.mobile", settings, objectPath) || "2")}
               unit="vh"
               min={0}
-              max={15}
-              step={0.1}
+              max={30}
+              step={0.2}
               onChange={createSliderChangeHandler("padding.x.mobile", "vh")}
             />
             <SettingsSlider
@@ -245,8 +245,8 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
               value={parseFloat(getSetting("padding.x.desktop", settings, objectPath) || "4")}
               unit="vh"
               min={0}
-              max={15}
-              step={0.1}
+              max={30}
+              step={0.2}
               onChange={createSliderChangeHandler("padding.x.desktop", "vh")}
             />
           </>
@@ -257,8 +257,8 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
               value={parseFloat(getSetting("padding.y", settings, objectPath) || "4")}
               unit="vh"
               min={0}
-              max={15}
-              step={0.1}
+              max={30}
+              step={0.2}
               onChange={createSliderChangeHandler("padding.y", "vh")}
             />
             <SettingsSlider
@@ -266,8 +266,8 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
               value={parseFloat(getSetting("padding.x", settings, objectPath) || "4")}
               unit="vh"
               min={0}
-              max={15}
-              step={0.1}
+              max={30}
+              step={0.2}
               onChange={createSliderChangeHandler("padding.x", "vh")}
             />
           </>

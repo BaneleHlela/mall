@@ -11,6 +11,7 @@ import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import StoreDonationModal from '../shared_donation_section_components/StoreDonationModal';
 
 const PopularDonationSection = () => {
   const settings = useAppSelector((state) => state.layoutSettings.sections.donations);
@@ -161,6 +162,9 @@ const PopularDonationSection = () => {
           </div>
         </div>
       )}
+      {
+        <StoreDonationModal />
+      }
     </div>
   );
 };

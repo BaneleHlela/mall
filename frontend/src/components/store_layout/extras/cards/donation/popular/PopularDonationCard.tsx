@@ -43,7 +43,7 @@ const PopularDonationCard: React.FC<PopularDonationCardProps> = ({
         <img
           src={imageUrl}
           alt="Donation Image"
-          className='w-full h-full object-cover transition-transform duration-500 ease-in-out hover:scale-95'
+          className='w-full h-full object-contain transition-transform duration-500 ease-in-out hover:scale-95'
         />
         {marking && (
           <button

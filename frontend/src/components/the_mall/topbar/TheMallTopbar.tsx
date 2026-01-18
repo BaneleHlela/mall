@@ -8,6 +8,7 @@ import type { RootState } from "../../../app/store";
 import { fetchStores } from "../../../features/stores/storeSlice";
 import { openRangeModal, closeRangeModal } from "../../../features/rangeSlice";
 import RangeModal from "../../modals/RangeModal";
+import ProtectedRoute from "../authorization/ProtectedRoute";
 
 // Popular searches div gotta be functional 
 // ui
@@ -69,7 +70,14 @@ const TheMallTopbar = () => {
                 onKeyDown={handleKeyDown}
                 type="text"
                 placeholder="Search for stores, products, or services"
-                className="w-full h-full border-b-[.2vh] border-stone-50 placeholder:text-[1.5vh] px-[.6vh] placeholder:text-stone-400 bg-[#3e3e3fe3] focus:outline-none"
+                className="w-full h-full border p-[1vh] placeholder:text-[1.5vh] placeholder:text-stone-400 bg-[#3e3e3fe3] focus:outline-none"
+                style={{
+                  backgroundColor: '#3e3e3fe3',
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  borderColor: '#6b7280',
+                  borderRadius: '4px',
+                }}
               />
 
               {/* Results Preview Modal */}
@@ -91,9 +99,10 @@ const TheMallTopbar = () => {
                                 <div className="grid grid-cols-2 gap-3">
                                 {limitedResults.map((id) => (
                                     <StoreCard
-                                    key={id}
-                                    store={storesById[id]}
-                                    user={user}
+                                      key={id}
+                                      store={storesById[id]}
+                                      user={user}
+                                      mini={true}
                                     />
                                 ))}
                                 </div>
@@ -126,7 +135,7 @@ const TheMallTopbar = () => {
                             {/* Brands & Categories */}
                             <div>
                                 <h3 className="text-gray-800 font-bold text-sm mb-3 tracking-wide">
-                                    DeEPARTMENTS & BRANDS
+                                    DEPARTMENTS & BRANDS
                                 </h3>
                                 <ul className="space-y-2 text-gray-700 text-sm">
                                     <li className="cursor-pointer hover:text-gray-900 transition-colors">
@@ -202,21 +211,74 @@ const TheMallTopbar = () => {
           </div>
 
           {/* Searchbar */}
-          <div className="w-full h-[50%] flex items-center">
+          <div className="w-full h-[50%] flex items-center relative">
             <input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              onKeyDown={handleKeyDown}
               type="text"
               placeholder="Search for stores, products, or services"
-              className="w-full h-[80%] border-b-[.2vh] border-stone-50 placeholder:text-[1.5vh] px-[1vh] placeholder:text-stone-400 bg-[#3e3e3fe3] focus:outline-none"
+              className="w-full h-[80%] border p-[1vh] placeholder:text-[1.5vh] placeholder:text-stone-400 bg-[#3e3e3fe3] focus:outline-none"
+              style={{
+                backgroundColor: '#3e3e3fe3',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: '#6b7280',
+                borderRadius: '4px',
+              }}
             />
+
+            {/* Mobile Search Results Popup */}
+            {showResults && (
+              <div
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className="absolute top-[110%] left-0 bg-white w-full h-fit max-h-[50vh] shadow-lg p-3 overflow-y-auto z-50"
+              >
+                {isLoading ? (
+                  <p className="text-gray-500 text-sm px-2">Loading...</p>
+                ) : limitedResults.length === 0 ? (
+                  <p className="text-gray-500 text-sm px-2">
+                    No results found
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3 w-full">
+                    {limitedResults.map((id) => (
+                      <StoreCard
+                        key={id}
+                        store={storesById[id]}
+                        user={user}
+                        mini={true}
+                      />
+                    ))}
+                  </div>
+                )}
+                {/* View All Button */}
+                {storeIds.length > 0 && (
+                  <button
+                    onClick={() =>
+                      navigate(`/search?query=${encodeURIComponent(searchTerm)}`)
+                    }
+                    className="w-full mt-3 py-2 text-sm font-semibold text-white bg-gray-900 rounded hover:bg-gray-800"
+                  >
+                    View All Results
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Modals */}
-      <RangeModal
-        open={isRangeModalOpen}
-        onClose={() => dispatch(closeRangeModal())}
-      />
+      <ProtectedRoute>
+        <RangeModal
+          open={isRangeModalOpen}
+          onClose={() => dispatch(closeRangeModal())}
+        />
+      </ProtectedRoute>
     </div>
   );
 };

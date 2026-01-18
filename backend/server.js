@@ -26,9 +26,9 @@ import emailRoutes from "./routes/emailRoutes.js";
 import sectionRoutes from "./routes/sectionRoutes.js";
 import posterRoutes from "./routes/posterRoutes.js"
 import rentalRoutes from "./routes/rentalRoutes.js";
+import payfastRoutes from "./routes/payfastRoutes.js";
 
 import "./config/passportConfig.js";
-import initSlugs from "./utils/initSlugs.js";
 
 
 dotenv.config();
@@ -88,6 +88,8 @@ app.use("/api/email", emailRoutes);
 app.use("/api/sections", sectionRoutes);
 app.use('/api/posters', posterRoutes);
 app.use('/api/rentals', rentalRoutes);
+app.use("/api/payments/payfast", payfastRoutes);
+
 
 app.use(notFound);
 app.use(errorHandler);

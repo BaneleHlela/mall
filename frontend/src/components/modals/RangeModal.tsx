@@ -46,7 +46,7 @@ const RangeModal: React.FC<RangeModalProps> = ({ open, onClose }) => {
           lat: userLocation.lat,
           lng: userLocation.lng,
         },
-        zoom: 12,
+        zoom: 11,
         mapTypeControl: false,
         streetViewControl: false,
       });
@@ -124,7 +124,7 @@ const RangeModal: React.FC<RangeModalProps> = ({ open, onClose }) => {
             <input
               type="range"
               min="1"
-              max="100"
+              max="30"
               value={range}
               onChange={(e) => handleRangeChange(Number(e.target.value))}
               className="w-full h-[0.8vh] rounded-full appearance-none bg-gray-200 cursor-pointer accent-[#0b032d]
@@ -136,7 +136,7 @@ const RangeModal: React.FC<RangeModalProps> = ({ open, onClose }) => {
             />
             <div className="flex justify-between text-xs text-stone-500 mt-1">
               <span>1 km</span>
-              <span>100 km</span>
+              <span>30 km</span>
             </div>
           </div>
 

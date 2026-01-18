@@ -54,7 +54,7 @@ const PopularRentalCard: React.FC<PopularRentalCardProps> = ({
       style={{
         ...getBackgroundStyles(style.background),
       }}
-      className={`flex group w-full h-full
+      className={`flex group w-full h-full overflow-hidden
           ${style.stack.mobile === "column" ? "flex-col" : "flex-row" }
           lg:${style.stack.desktop === "column" ? "flex-col" : "flex-row" }
       hover:scale-101`}

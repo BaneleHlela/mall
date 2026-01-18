@@ -16,6 +16,7 @@ export interface TextSettings {
     padding?: PaddingValue;
     backgroundColor?: string;
     textAlign?: string;
+    textMaxWidth?: ResponsiveValue;
 }
   
 export interface EditorProps {

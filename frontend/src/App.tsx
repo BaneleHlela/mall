@@ -22,6 +22,8 @@ import ForCreators from "./components/the_mall/home/ForCreators";
 import CaptureHomePoster from "./components/the_mall/basic_store_post/CaptureHomePoster";
 import AddStorePage from "./pages/store/AddStorePage";
 import AddUserAddressPage from "./pages/profile/address/AddUserAddressPage";
+import GetStartedPage from "./pages/store/get_started_page/GetStartedPage";
+import PayFastPage from "./pages/payments/PayFastPage";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -72,6 +74,7 @@ const App: React.FC = () => {
               <StoreDashboard />
             } 
           />
+          <Route path="/get-started" element={<GetStartedPage />} />
           <Route path="/layouts/my-layouts" element={<MyLayouts />} />
           <Route path="/layouts/create" element={<LayoutCreator />} />
           <Route path="/creators-dashboard/*" element={<Dashboard />} />
@@ -92,6 +95,10 @@ const App: React.FC = () => {
               <AddUserAddressPage />
             </ProtectedRoute>
             }
+          />
+          <Route
+            path="/payment/*"
+            element={<PayFastPage />}
           />
           {authRoutes}
         </Routes>

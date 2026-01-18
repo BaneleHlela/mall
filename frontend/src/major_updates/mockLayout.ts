@@ -347,101 +347,122 @@ export const mockLayout = {
     },
     sections: {
         hero: {
-            variation: "heroWithButtonBetweenImages",
+            variation: "heroWithTwoTextAreas",
             background: {
-            color: "primary",
-            width: {
-                desktop: "100%"
-            }
-            },
-            fontFamilly: "primary",
-            topDiv: {
-                display: true,
-                text: {
-                    style: {
-                    fontFamily: "secondary",
-                    input: "Sweetslice events",
-                    fontSize: {
-                        mobile: "5.199999999999997vh",
-                        desktop: "6.499999999999992vh"
-                    },
-                    color: "secondary",
-                    weight: "lighter",
-                    position: "center"
-                    }
+                height: {
+                    mobile: "fit-content",
+                    desktop: "fit-content"
                 },
-                background: {}
-            },
-            images: {
-            animation: {
-                image1: "leftToRight",
-                image2: "rightToLeft"
-            },
-            imageUrl: [
-                "https://storage.googleapis.com/the-mall-uploads-giza/stores/6883116947fc791fc7b89df9/images/assets_task_01k0zzvtsfe2fa9m4r0dtdc803_1753420374_img_1.webp",
-                "https://storage.googleapis.com/the-mall-uploads-giza/stores/6883116947fc791fc7b89df9/images/hero image.webp"
-            ],
-            url: {
-                image1: "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100115.png",
-                image2: "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100200.png"
-            }
-            },
-            midDiv: {
-            backgroundColor: "quad",
-            animation: "leftToRight",
-            text: {
-                style: {
-                input: "Baked with Love, Crafted for Memories",
-                fontFamily: "tertiary",
-                fontSize: {
-                    mobile: "3.8000000000000016vh",
-                    desktop: "5.2vh"
+                width: {
+                    mobile: "100%",
+                    desktop: "100%"
                 },
-                color: "accent",
-                lineHeight: "1.2",
-                weight: "normal"
-                },
-                input: "Baked with Love - Crafted for Memories",
-                fontFamily: "secondary",
-                color: "pent"
-            },
-            button: {
-                function: "orderNow",
-                style: {
-                text: {
-                    input: "Order Now",
-                    fontFamily: "secondary",
-                    color: "secondary",
-                    fontSize: "3.6000000000000014vh",
-                    weight: "bold",
-                    letterSpacing: "0px",
-                    animation: "fade-in",
-                    lineHeight: "0.5",
-                },
-                background: {
-                    height: "5.800000000000003vh",
-                    width: "43%",
+                color: "pent",
+                container: {
                     color: "primary",
-                    shadow: false,
-                    border: {
-                    width: "0vh",
-                    style: "solid",
-                    color: "accent",
-                    radius: "0px"
+                    width: {
+                        mobile: "100%",
+                        desktop: "100%"
+                    },
+                    height: {
+                        mobile: "39%",
+                        desktop: "101%"
                     },
                     padding: {
-                    x: "0.1vh",
-                    y: "0.1vh"
+                        y: {
+                            desktop: "2.6vh",
+                            mobile: "2.6vh"
+                        },
+                        x: {
+                            desktop: "2.4vh",
+                            mobile: "2.4vh"
+                        }
                     }
-                }
                 },
-                show: {
-                desktop: "never"
+                border: {
+                    width: "0vh",
+                    style: "none",
+                    radius: "0vh"
                 }
             },
-            background: {
-                color: "primary"
-            }
+            text: {
+                firstArea: {
+                    input: "Welcome to Our Store",
+                    fontFamily: "secondary",
+                    color: "secondary",
+                    fontSize: {
+                        mobile: "5.100000000000001vh",
+                        desktop: "7vh"
+                    },
+                    weight: "normal"	
+                },
+                secondArea: {
+                    input: "Discover amazing products and great deals. Shop now and enjoy exclusive offers!",
+                    fontFamily: "secondary",
+                    color: "secondary",
+                    fontSize: {
+                        mobile: "3.8000000000000016vh",
+                        desktop: "5.2vh"
+                    },
+                    weight: "normal"	
+                }
+            },
+            image: {
+                url: {
+                    mobile: [
+                        "https://storage.googleapis.com/the-mall-uploads-giza/stores/6895c4d6a50d393f431b9d47/images/522961668_2800125136849645_1163671612854122411_n.jpg",
+                        "https://storage.googleapis.com/the-mall-uploads-giza/stores/6895c4d6a50d393f431b9d47/images/CarrotCakeLoaf_03.jpg"
+                    ],
+                    desktop: [
+                        "https://storage.googleapis.com/the-mall-uploads-giza/stores/6895c4d6a50d393f431b9d47/images/522961668_2800125136849645_1163671612854122411_n.jpg",
+                        "https://storage.googleapis.com/the-mall-uploads-giza/stores/6895c4d6a50d393f431b9d47/images/CarrotCakeLoaf_03.jpg"
+                    ]
+                },
+                background: {
+                    height: {
+                        mobile: "50vh",
+                        desktop: "60vh",
+                    },
+                    width: { 
+                        mobile: "100%",
+                        desktop: "100%",
+                    },
+                    border: {
+                        width: "0px",
+                        style: "solid",
+                        radius: "0px",
+                    }
+                },
+            },
+            button: {
+                function: "buyNow",
+                show: true,
+                style: {
+                    text: {
+                        input: "Buy Now",
+                        fontFamily: "secondary",
+                        color: "primary",
+                        fontSize: "1.2em",
+                        fontWeight: "bold",
+                        letterSpacing: "0px"
+                    },
+                    background: {
+                        width: "190px",
+                        color: "accent",
+                        shadow: true,
+                        border: {
+                        width: "3px",
+                        style: "solid",
+                        color: "primary",
+                        radius: "0px"
+                        }
+                    }
+                },
+                position: "center"
+            },
+            imageFirst: {
+                desktop: false,
+                mobile: false
             }
         },                                 
         about: {
@@ -856,46 +877,142 @@ export const mockLayout = {
             },
         },          
         gallery: {
-            variation: "basicSwiperGallery",
+            variation: "popularGallerySection",         
             background: {
-                color: "transparent",
+                color: "primary",
                 width: {
-                  mobile: "100%",
-                  desktop: "100%",
+                    mobile: "100%",
+                    desktop: "80%"
                 },
                 padding: {
-                  y: {
-                    desktop: "10.1vh",
-                    mobile: "4.2vh",
-                  },
-                  x: {
-                    desktop: "12.8vh",
-                    mobile: "1.5vh",
-                  },
-                },
-            },              
+                    x: {
+                    mobile: "1.7999999999999998vh",
+                    desktop: "0vh"
+                    },
+                    y: {
+                    mobile: "5.7vh",
+                    desktop: "13.6vh"
+                    }
+                }
+            },        
             text: {
                 heading: {
-                    input: "Heading",
-                    fontFamily: "secondary",
-                    color: "secondary",
+                    input: "",
+                    position: "center",
                     fontSize: {
-                        mobile: "3.8000000000000016vh",
-                        desktop: "5.2vh"
+                        mobile: "35px",
+                        desktop: "35px"
                     },
-                    weight: "normal"
+                    fontFamily: "primary",
+                    color: "primary",
+                    lineHeight: "1.3",
+                    underline: {
+                    show: true,
+                    color: "primary",
+                    width: "50%",
+                    style: "solid",
+                    thickness: "10px",
+                    marginTop: "10px"
+                    }
                 },
+            
                 subheading: {
-                    input: "Subheading",
-                    fontFamily: "secondary",
-                    color: "secondary",
+                    input: "",
+                    position: "center",
                     fontSize: {
-                        mobile: "3.8000000000000016vh",
-                        desktop: "5.2vh"
+                    mobile: "35px",
+                    desktop: "35px"
                     },
-                    weight: "normal"
-                },
+                    fontFamily: "primary",
+                    color: "primary",
+                    lineHeight: "1.3",
+                    underline: {
+                    show: false,
+                    color: "primary",
+                    width: "50%",
+                    style: "solid",
+                    thickness: "10px",
+                    marginTop: "10px"
+                    }
+                }
             },
+            images: {
+                background: {
+                    border: {
+                    width: "0vh",
+                    style: "solid",
+                    color: "secondary",
+                    radius: "0vh"
+                    },
+                    height: {
+                        mobile: "30vh",
+                        desktop: "26vh"
+                    }
+                },
+                text: {
+                    title: {
+
+                    },
+                    description: {
+
+                    }
+                },
+                stack: {
+                    mobile: "vertical",
+                    desktop: "vertical"
+                },         
+                columns: {
+                    mobile: 2,
+                    desktop: 5
+                },           
+                gap: {
+                    mobile: "2.0000000000000004vh",
+                    desktop: "5.5vh"
+                },
+                imagesDetails: [
+                    {
+                        urls: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/demo-bnb/images/bed.png"],
+                        title: "Cozy Bedroom",
+                        description: ""
+                    },
+                    {
+                        urls: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/demo-bnb/images/towel-rack.png"],
+                        title: "Towels",
+                        description: ""
+                    },
+                    {
+                        urls: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/demo-bnb/images/washing-machine.png"],
+                        title: "Washing Machine",
+                        description: ""
+                    },
+                    {
+                        urls: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/demo-bnb/images/wi-fi.png"],
+                        title: "Wi-Fi",
+                        description: ""
+                    },
+                    {
+                        urls: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/demo-bnb/images/gym.png"],
+                        title: "Gym",
+                        description: ""
+                    },
+                    {
+                        urls: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/demo-bnb/images/pool.png"],
+                        title: "Pool",
+                        description: ""
+                    },
+                    {
+                        urls: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/demo-bnb/images/hair-dryer.png"],
+                        title: "Iron & Hair Dryer",
+                        description: ""
+                    },
+                    {
+                        urls: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/demo-bnb/images/amenities%20(1).png"],
+                        title: "Soap & Lotion",
+                        description: ""
+                    }
+                ],
+
+            }
         },
         ennockHero: {
             background: {

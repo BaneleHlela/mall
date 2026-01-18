@@ -1,21 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { HiArrowLeftEndOnRectangle } from "react-icons/hi2";
 import CartItemCard from "../../components/the_mall/store/cart/CartItemCard";
+import { getUserCart } from "../../features/cart/cartSlice";
 
 // ts errors
 
 const StoreCartModal = () => {
   const navigate = useNavigate();
   const { storeId } = useParams<{ storeId: string }>();
+  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
   const carts = useAppSelector((state) => state.cart.cart); // array of carts per store
   const store = useAppSelector((state) => state.stores.currentStore);
   const routes = useAppSelector((state) => state.layoutSettings.routes);
+
+  // Fetch user cart
+  useEffect(() => {
+    if (user && storeId) {
+      dispatch(getUserCart({ storeId }));
+    }
+  }, [user, storeId, dispatch]);
   
-
-
   if (!store) {
     return <>Store not found...</>;
   }
@@ -55,8 +62,39 @@ const StoreCartModal = () => {
     );
   }
 
+  const payWithPayFast = async () => {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/payments/payfast/create`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        orderId: "ORDER123",
+        amount: 500,
+        email: "buyer@email.com",
+      }),
+    });
+  
+    const data = await res.json();
+
+    console.log(data)
+  
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = data.paymentUrl;
+  
+    Object.entries(data.paymentData).forEach(([key, value]) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = String(value);
+      form.appendChild(input);
+    });
+  
+    document.body.appendChild(form);
+    form.submit();
+  };  
+
   return (
-    <div className="flex flex-col relative item-center w-screen h-screen overflow-y-scroll lg:w-[80%] max-w-[596px] py-[2vh]">
+    <div className="flex flex-col relative item-center w-screen h-screen overflow-y-scroll lg:w-[80%] max-w-md py-[2vh] bg-white hide-scrollbar">
       {/* Back Button */}
       <div
         onClick={handleBackToHome}
@@ -82,7 +120,9 @@ const StoreCartModal = () => {
         ))}
       </div>
       {/* Checkout */}
-      <div className="absolute flex justify-center bottom-0 w-full h-[8vh] p-[.8vh] border-t-3 border-gray-200">
+      <div
+        onClick={payWithPayFast}  
+        className="absolute flex justify-center bottom-0 w-full h-[8vh] p-[.8vh] border-t-3 border-gray-200">
         <button className="w-full bg-black text-white rounded-[.5vh] text-[2.2vh]">Checkout</button>
       </div>
     </div>

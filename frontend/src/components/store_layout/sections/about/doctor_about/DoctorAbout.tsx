@@ -10,7 +10,6 @@ const DoctorAbout = () => {
     const config = useAppSelector(state => state.layoutSettings.sections.about);
     const handleButtonClick = useStoreButtonClickHandler();
 
-    console.log(config)
 
     return (
         <div

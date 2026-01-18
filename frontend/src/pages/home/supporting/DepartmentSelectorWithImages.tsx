@@ -35,7 +35,7 @@ const DepartmentSelectorWithImages: React.FC<DepartmentSelectorWithImagesProps> 
     return (
         <div
             onClick={onSelect}
-            className="h-[20vh] lg:h-[41vh] aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102 transition-transform duration-300"
+            className="h-[20vh] lg:h-[27vh] aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102 transition-transform duration-300"
         >
             <div className="w-full h-full relative">
                 {/* Reely Thumbnail (main image slideshow) */}
@@ -58,7 +58,7 @@ const DepartmentSelectorWithImages: React.FC<DepartmentSelectorWithImagesProps> 
                         lineHeight: "1",
                         fontFamily: "Bebas Neue",
                     }}
-                    className="absolute rounded-b-[1vh] font-extrabold bottom-0 w-full text-white text-center text-[2.5vh] lg:text-[4.6vh] h-[20%] bg-[#0000001f] flex flex-col items-center justify-center"
+                    className="absolute bottom-0 rounded-b-[1vh] font-extrabold w-full text-white text-center text-[2.5vh] lg:text-[3.5vh] h-[15%] text-shadow-xs flex flex-col items-center justify-center"
                 >
                     {department.short}
                 </p>

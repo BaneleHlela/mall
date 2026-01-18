@@ -7,6 +7,8 @@ import GalleryWithHorizontalImagesSettings from "./with_horizontal_images/Galler
 import GalleryWithImageSliderSettings from "./with_image_slider/GalleryWithImageSliderSettings";
 import MaxThreeGallerySettings from "./max_three_gallery/MaxThreeGallerySettings";
 import SimpleGallerySectionSettings from "./simple_gallery/SimpleGallerySectionSettings";
+import PopularGallerySection from "../../../store_layout/sections/gallery/popular_gallery/PopularGallerySection";
+import PopularGallerySectionSettings from "./popular_gallery/PopularGallerySectionSettings";
 const StoreGallerySettings = () => {
     const dispatch = useAppDispatch();
     const variation = useAppSelector((state) => state.layoutSettings.sections.gallery.variation);
@@ -79,6 +81,11 @@ const StoreGallerySettings = () => {
                 </div>
                 <MaxThreeGallerySettings settings={settings} handleSettingChange={handleSettingChange} />
             </div>
+        )
+    }
+    if (variation === "popularGallerySection") {
+        return (
+            <PopularGallerySectionSettings settings={settings} handleSettingChange={handleSettingChange} />
         )
     }
     return (

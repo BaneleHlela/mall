@@ -47,6 +47,7 @@ const StoreMenubarCart: React.FC<StoreMenubarCartProps> = ({ style }) => {
   const cart = useAppSelector((state) => state.cart.cart);
   const store = useAppSelector((state) => state.stores.currentStore);
   const storeId = store?._id as string;
+  const storeSlug = store?.slug as string;
 
   // Fetch cart if user is logged in
   useEffect(() => {
@@ -97,7 +98,7 @@ const StoreMenubarCart: React.FC<StoreMenubarCartProps> = ({ style }) => {
         border: `${style.background?.border.width} ${style.background?.border.style} ${style.background?.border.color}`,
         borderRadius: style.background?.border.radius,
       }}
-      onClick = {() => navigate(`/stores/${storeId}/cart`)}
+      onClick = {() => navigate(`/stores/${storeSlug}/cart`)}
       className={ `relative cursor-pointer w-fit`}
     >
       {renderIcon()}

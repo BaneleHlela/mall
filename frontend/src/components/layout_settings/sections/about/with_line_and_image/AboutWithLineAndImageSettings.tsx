@@ -11,7 +11,6 @@ import SlidingPanel from "../../../supporting/SlidingPanel";
 import { AnimatePresence } from "framer-motion";
 import FirstOrderSubSettingsContainer from "../../../FirstOrderSubSettingsContainer";
 import MultipleLayoutImagesHandler from "../../../supporting/MultipleLayoutImagesHandler";
-import BorderEditor from "../../../background/BorderEditor";
 
 const AboutWithLineAndImageSettings = () => {
     const dispatch = useAppDispatch();
@@ -218,7 +217,7 @@ const AboutWithLineAndImageSettings = () => {
                                 allow={["input", "fontFamily", "fontSize", "color", "weight", "fontStyle", "padding"]}
                                 responsivePadding
                                 responsiveSize
-                                useTextarea
+                                useQuill
                             />
                         </div>
                     </SlidingPanel>

@@ -54,6 +54,28 @@ const FontFamily = Extension.create({
   },
 });
 
+/* Line height extension */
+const LineHeight = Extension.create({
+  name: "lineHeight",
+  addGlobalAttributes() {
+    return [
+      {
+        types: ["paragraph", "heading"],
+        attributes: {
+          lineHeight: {
+            default: null,
+            parseHTML: (element) => element.style.lineHeight,
+            renderHTML: (attributes) => {
+              if (!attributes.lineHeight) return {};
+              return { style: `line-height: ${attributes.lineHeight}` };
+            },
+          },
+        },
+      },
+    ];
+  },
+});
+
 interface RichTextEditorProps {
   label: string;
   value: string;
@@ -98,7 +120,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
   return (
     <div className="flex flex-col space-y-1">
-      <label className="text-sm font-medium">{label}</label>
+      <label className="text-sm font-medium text-shadow">{label}</label>
 
       <div className="border rounded-md overflow-hidden">
         {/* Toolbar */}
@@ -150,32 +172,52 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
             >
               <option value="">Size</option>
               <option value="8px">8px</option>
-              <option value="10px">10px</option>
-              <option value="12px">12px</option>
-              <option value="14px">14px</option>
-              <option value="16px">16px</option>
-              <option value="18px">18px</option>
-              <option value="20px">20px</option>
-              <option value="24px">24px</option>
-              <option value="28px">28px</option>
-              <option value="32px">32px</option>
+              <option value="1vh">10px</option>
+              <option value="2vh">12px</option>
+              <option value="2.3vh">14px</option>
+              <option value="2.7vh">16px</option>
+              <option value="3.5vh">18px</option>
+              <option value="5vh">20px</option>
+              <option value="7vh">24px</option>
+              <option value="8vh">28px</option>
+              <option value="9vh">32px</option>
             </select>
 
             {/* Font size input */}
             <input
               type="number"
-              min="8"
+              min="0.3"
               max="72"
+              step=".3"
               placeholder="px"
               className="border rounded px-2 py-1 text-[1.8vh] w-12 text-center bg-white"
               onChange={(e) => {
                 const fontSize = e.target.value;
                 if (fontSize && parseInt(fontSize) >= 8 && parseInt(fontSize) <= 72) {
-                  editor.chain().focus().setMark("textStyle", { fontSize: `${fontSize}px` }).run();
+                  editor.chain().focus().setMark("textStyle", { fontSize: `${fontSize}vh` }).run();
                 }
               }}
               title="Custom Font Size"
             />
+            {/* Line height dropdown */}
+            <select
+              className="border rounded px-2 py-1 text-[1.8vh] w-16 bg-white"
+              onChange={(e) => {
+                const lineHeight = e.target.value;
+                const currentNode = editor.state.selection.$head.parent;
+                const nodeType = currentNode.type.name;
+                if (nodeType === "paragraph" || nodeType === "heading") {
+                  editor.chain().focus().updateAttributes(nodeType, { lineHeight: lineHeight || null }).run();
+                }
+              }}
+              title="Line Height"
+            >
+              <option value="">LH</option>
+              <option value="1">1</option>
+              <option value="1.2">1.2</option>
+              <option value="1.5">1.5</option>
+              <option value="2">2</option>
+            </select>
           </div>
 
           <Divider />
@@ -260,7 +302,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         {/* Editor */}
         <EditorContent
           editor={editor}
-          className="prose max-w-none p-3 min-h-[200px] focus:outline-none"
+          className="prose max-w-none p-3 min-h-[200px] focus:outline-none  text-shadow-xs"
         />
       </div>
     </div>

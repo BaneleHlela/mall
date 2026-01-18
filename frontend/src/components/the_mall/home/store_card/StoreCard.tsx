@@ -15,9 +15,10 @@ interface StoreCardProps {
   user?: User | null; 
   allowShadow?: boolean;
   onFavoriteClick?: () => void;
+  mini?: boolean;
 }
 
-const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteClick }) => {
+const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteClick, mini = false }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -35,7 +36,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
   const storeStatus = getStoreStatus(store.operationTimes);
   const statusClasses = getStatusClasses(storeStatus);
   
-  const isFavorite = user?.favoriteStores?.includes(store._id);
+  const isFavorite = user?.favoriteStores?.includes(store._id!);
 
   // Dispatch updateUser directly to toggle favorite
   const handleFavoriteClick = (e: React.MouseEvent) => {
@@ -66,7 +67,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
         <span className="h-[40%] aspect-square bg-gray-400 rounded-full "></span>
       </div>
       {/* Image */}
-      <div className="relative h-[72%]">
+      <div className={`relative ${mini ? "h-[60%]": "h-[72%]"} `}>
         <img src={store.thumbnail} alt="store-thumbnail" className="w-full h-full object-cover -z-1" />
         <div className="absolute top-0 w-full h-full bg-[#00000000]"></div>
         {/* Favorite toggle button
@@ -84,9 +85,13 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
           
         </button> */}
         {/* Distance */}
-        <p className="absolute bottom-[2%] left-[1%] bg-white rounded text-[1.8vh] text-center text-black min-w-[15%] px-[1%]">{distanceText}</p>
+        <p 
+          className={`absolute left-[1%] bg-white 
+            ${mini ? 'text-[1.3vh] rounded-xs bottom-0' : 'text-[1.8vh] rounded bottom-[2%] '} text-center text-black min-w-[15%] px-[1%]`}>{distanceText}</p>
         {/* Demo */}
-        <p className="absolute bottom-[2%] right-[1%] bg-yellow-400 rounded text-[1.8vh] text-center text-black min-w-[15%] px-[1%]">Demo</p>
+        <p className={`absolute  right-[1%] bg-yellow-400 round
+          ${mini ? 'text-[1.3vh] rounded-xs bottom-0' : 'text-[1.8vh] rounded bottom-[2%]'}
+          text-center text-black min-w-[15%] px-[1%]`}>Demo</p>
         {/* Red flag */}
         {/* <div className="absolute top-1/2 left-1/2 text-red">
           <button className="text-red-600 z-10 h-full">
@@ -102,10 +107,11 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
           )}
         </div>
       </div>
-      <div className="h-[22%] shadow-md z-1">
+      <div className={`${mini ? "h-[40%]" : "h-[28%]"} shadow-md z-1`}>
         {/* Store name */}
-        <h3 className="text-center text-[90%] font-semibold text-gray-900">{store.name}</h3>
-        {/* Detials */}
+        <h3 className={`text-center font-semibold text-gray-900
+          ${mini ? "text-[1.5vh]": "text-[90%]"} line-clamp-1`}>{store.name}</h3>
+        {/* Details */}
         <div className="flex flex-row justify-between items-center px-[.8vh]">
           <button
             onClick={handleFavoriteClick}
@@ -113,9 +119,9 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
           >
             {/* <p style={{lineHeight: "1"}} className="text-white text-[3.4vh] font-light">{store.likes.count}</p> */}
             {isFavorite ? (
-              <GoHeartFill className="text-[3.8vh] text-gray-700" />
+              <GoHeartFill className={`${mini ? "text-[2vh]" : "text-[3.8vh]"}  text-gray-700`} />
             ) : (
-              <GoHeart className="text-[3.8vh] text-gray-700" />
+              <GoHeart className={`${mini ? "text-[2vh]" : "text-[3.8vh]"} text-gray-700`} />
             )}
           </button>
           
@@ -124,7 +130,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
             {storeStatus.message}
           </span>
           {/* Closed status */}
-          <RatingDisplay rating={store.rating} className="text-[1.8vh]" />
+          <RatingDisplay rating={store.rating} className={`${mini ? "text-[1.3vh]" : "text-[1.8vh]"} `} />
         </div>
       </div>
     </div>

@@ -45,21 +45,21 @@ const CartItemCard: React.FC<CartItemCardProps> = ({
   };
 
   return (
-    <div className='flex justify-between w-full h-[15vh] lg:h- bg-white p-[.35vh]'>
+    <div className='flex justify-between w-full min-h-[15vh] h-fit bg-white p-[.35vh]'>
         {/* Image */}
         <div className="w-[35%] flex justify-center">
             <img 
                 src={cartItem.product.images[0]} 
                 alt={cartItem.product.name} 
-                className="w-[90%] h-full object-cover rounded"
+                className="w-[90%] aspect-square h-full object-cover rounded"
             />
         </div>
         {/* Details */}
         <div className="flex flex-col justify-evenly w-[65%] text-start px-[.4vh]">
             {/* Product name */}
-            <p className="font-bold line-clamp-1">{cartItem.product.name}</p>
+            <p style={{lineHeight: "1"}} className="font-bold ">{cartItem.product.name}</p>
             {/* Product variation */}
-            <p className="line-clamp-1">{cartItem.variation}</p>
+            <p style={{lineHeight: "1"}} className="">{cartItem.variation}</p>
             {/* Price */}
             <p className="font-semibold text-[90%]">R {cartItem.price.toFixed(2)}</p>
             {/* Quantity */}

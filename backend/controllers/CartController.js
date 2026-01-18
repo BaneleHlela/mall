@@ -100,8 +100,7 @@ export const getUserCart = async (req, res) => {
       .populate({
         path: "items.product",
         select: "name images price prices", // only essential fields
-      })
-      .lean(); // optional: returns plain JS objects for lighter payload
+      });
 
     if (!carts || carts.length === 0) {
       return res.status(404).json({

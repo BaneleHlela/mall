@@ -29,5 +29,6 @@ export default defineConfig({
     strictPort: true,
     host: true,
     origin: "http://0.0.0.0:5173",
+    allowedHosts: ["lula-slakeless-hortatively.ngrok-free.dev"],
   },
 })

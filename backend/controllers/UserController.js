@@ -146,7 +146,7 @@ export const login = expressAsyncHandler(async (req, res) => {
     if (user && (await user.comparePassword(password))) {
         const { accessToken, refreshToken } = generateTokens(user._id);
         
-        await storeRefreshToken(user._id, refreshToken);
+        // await storeRefreshToken(user._id, refreshToken);
         setCookies(res, accessToken, refreshToken);
 
         user.lastLogin = new Date();

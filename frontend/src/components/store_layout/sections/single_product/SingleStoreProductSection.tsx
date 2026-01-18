@@ -29,6 +29,7 @@ const SingleStoreProductSection = () => {
     const routes = useAppSelector((state) => state.layoutSettings.routes);
     const isCartLoading = useAppSelector(state => state.cart.loading)
     const { colors, fonts } = useAppSelector((state) => state.layoutSettings);
+    const user = useAppSelector(state => state.user.user)
 
 
     const [selectedVariation, setSelectedVariation] = useState<string | null>(null);
@@ -81,6 +82,7 @@ const SingleStoreProductSection = () => {
 
     // --- Add to Cart ---
     const handleAddToCart = () => {
+        console.log(user);
         dispatch(
             addToCart({
                 storeId: product?.store || '', 

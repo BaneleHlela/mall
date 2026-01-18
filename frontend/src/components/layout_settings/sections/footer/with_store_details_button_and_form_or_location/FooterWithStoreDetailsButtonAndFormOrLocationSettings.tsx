@@ -225,7 +225,7 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                             settings={settings}
                             handleSettingChange={handleSettingChange}
                             objectPath={`${objectPath}.sendEmailForm`}
-                            variation={settings.footer.sendEmailForm.variation} 
+                            variation={settings.sections.footer.sendEmailForm.variation} 
                         />
                     </SlidingPanel>
                 )}

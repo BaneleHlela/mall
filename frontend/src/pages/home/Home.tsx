@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { fetchStores } from '../../features/stores/storeSlice';
 import type { RootState } from '../../app/store';
-import StoreCard from '../../components/the_mall/home/store_card/StoreCard';
 import TheMallTopbar from '../../components/the_mall/topbar/TheMallTopbar';
 import { departments, StoreHomePosters } from '../../utils/helperObjects';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -34,6 +33,9 @@ const HomePage = () => {
   const imageScrollRef = useRef<HTMLDivElement>(null);
   const touchStartXRef = useRef<number>(0);
   const touchScrollLeftRef = useRef<number>(0);
+  const isDraggingRef = useRef<boolean>(false);
+  const dragStartXRef = useRef<number>(0);
+  const dragScrollLeftRef = useRef<number>(0);
 
   // Fetch stores when department changes
   useEffect(() => {
@@ -95,16 +97,39 @@ const HomePage = () => {
       imageScrollRef.current.scrollLeft = touchScrollLeftRef.current + walk;
     }
   };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (imageScrollRef.current) {
+      isDraggingRef.current = true;
+      dragStartXRef.current = e.pageX;
+      dragScrollLeftRef.current = imageScrollRef.current.scrollLeft;
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDraggingRef.current || !imageScrollRef.current) return;
+    const walk = dragStartXRef.current - e.pageX;
+    imageScrollRef.current.scrollLeft = dragScrollLeftRef.current + walk;
+  };
+
+  const handleMouseUp = () => {
+    isDraggingRef.current = false;
+  };
+
+  const handleMouseLeave = () => {
+    isDraggingRef.current = false;
+  };
   
   
 
   return (
     <div className="relative  w-full h-full bg-gray-100 flex flex-col items-center">
       {/* Menubar */}
-      <nav className="w-[100vw] h-[15vh] z-11 sticky inset-0 bg-black flex flex-col items-center lg:h-[9vh]">
+      <nav className="w-[100vw] h-[15vh] min-h-[15vh] inset-0 z-10 bg-black flex flex-col items-center lg:min-h-[9vh]">
         <TheMallTopbar />
       </nav>
-      <div className="w-full space-y-1 lg:w-[80%] overflow-x-hidden hide-scrollbar">
+      {/* Content */}
+      <div className="w-full space-y-1 lg:w-[35%] overflow-x-hidden hide-scrollbar z-2">
         {/* Department Selector */}
         {selectedDepartment && (
           <div className="h-[8vh] w-full bg-white flex items-center relative">
@@ -154,7 +179,7 @@ const HomePage = () => {
         )}
         
         {/* Department Toggler With Images (Desktop) */}
-        {!selectedDepartment && (
+        {/* {!selectedDepartment && (
           <div
             ref={imageScrollRef}
             onWheel={handleImageWheel}
@@ -170,19 +195,23 @@ const HomePage = () => {
               />
             ))}
           </div>
-        )}
+        )} */}
 
-        {/* Department Toggler With Images (Mobile) */}
+        {/* Department Toggler With Images */}
         {!selectedDepartment && (
           <div
             ref={imageScrollRef}
             onWheel={handleImageWheel}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
-            className="flex bg-white pl-[.5vh] overflow-x-auto space-x-[.55vh] py-[2vh] hide-scrollbar lg:hidden"
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+            className="flex bg-white px-[1.5vh] overflow-x-auto space-x-[.55vh] py-[1.5vh] hide-scrollbar rounded-[1.5vh] overflow-hidden shadow-xs cursor-grab active:cursor-grabbing"
           >
             {/* Add your store */}
-            <div onClick={() => navigate("/add-store")} className="relative flex justify-center h-[20vh] bg-amber-500 aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102">
+            <div onClick={() => navigate("/add-store")} className="relative flex justify-center h-[20vh] lg:h-[27vh] bg-amber-500 aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102">
               {/* Image */}
               <div className="w-full">
                 <img 
@@ -230,8 +259,6 @@ const HomePage = () => {
             </div>
           </div>
         )}
-        <div onClick={() => navigate("/layouts/692623c23eec25fc3b7e2c58")} className="w-ful h-[20vh] bg-white"></div>
-        <div onClick={() => navigate("/layouts/692623c23eec25fc3b7e2c58/preview")} className="w-ful h-[20vh] bg-white"></div>
         {/* Feed  */}
         <div className="space-y-[.35vh]">
           <StorePostJSX
@@ -284,9 +311,9 @@ const HomePage = () => {
             }
             color="text-blue-500"
           />
-          {StoreHomePosters.map((post, index) => (
+          {/* {StoreHomePosters.map((post, index) => (
             <BasicStorePost key={index} {...post} />
-          ))}
+          ))} */}
           <TipsAndUpdates 
             tipFor='Tips for Vendors'
             message='The mall lets you create a website for R0!'
@@ -297,13 +324,13 @@ const HomePage = () => {
             message='The mall lets you create a website for R0!'
             color="text-orange-400"
           />
-          <BasicStorePost 
+          {/* <BasicStorePost 
             storeSlug={"ennock-m-art"}
             status={"Just finished this painting for a client! What do you think?"}
             poster={{
               images: ["https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/495371485_1238922361482703_9008209704576564623_n.jpg"],
             }}
-          />
+          /> */}
         </div>
 
         {/* Placeholder divs */}
@@ -352,6 +379,14 @@ const HomePage = () => {
       <button className='fixed bottom-[7vh] right-2 p-1 bg-blue-600 text-white rounded-full'>
         <MdAdd className='text-[4vh]'/>
       </button>
+      {/* Background Image (FOR DESKTOP) */}
+      <div className="absolute inset-0 hidden lg:flex w-full h-full">
+        <img 
+          src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/photo-collage.png%20(2).png" 
+          alt="home-bg-image" 
+          className="h-full w-full object-cover opacity-25 pointer-events-none select-none" 
+        />
+      </div>
     </div>
   );
 };

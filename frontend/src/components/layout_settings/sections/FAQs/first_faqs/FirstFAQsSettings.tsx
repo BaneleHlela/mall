@@ -29,9 +29,9 @@ const FirstFAQsSettings = () => {
                         objectPath={`${objectPath}.background`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["color"]}
-                        widthUnit="vw"
-                        heightUnit="vh"
+                        allow={["color", "width"]}
+                        widthUnit="%"
+                        heightUnit="%"
                         responsiveSize
                         responsivePadding
                     />

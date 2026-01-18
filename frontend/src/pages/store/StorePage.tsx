@@ -45,6 +45,7 @@ import HeroWithBox from "../../components/store_layout/sections/hero/hero_with_b
 import { fetchStoreRentals } from "../../features/rentals/rentalSlice";
 import { fetchStorePackages } from "../../features/packages/packagesSlice";
 import { fetchStoreDonations } from "../../features/donations/donationsSlice";
+import ProtectedRoute from "../../components/the_mall/authorization/ProtectedRoute";
 
 const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
   const location = useLocation();
@@ -266,7 +267,17 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
                 />
               ))}
               {store?.trades.includes("products") && <Route path="/product/:productSlug" element={<SingleStoreProductPage />} />}
-              {store?.trades.includes("products") && <Route path="/cart" element={<div className="flex justify-center w-full"><StoreCartModal /></div>  } />}
+              {store?.trades.includes("products") && 
+                <Route 
+                  path="/cart" 
+                  element={
+                    <ProtectedRoute>
+                      <div className="flex justify-center w-full">
+                        <StoreCartModal />
+                      </div>
+                    </ProtectedRoute> 
+                  } 
+                />}
               {store?.trades.includes("services") && <Route path="/service/:serviceSlug" element={<StoreBookServicePage />} />}
               <Route path="/search" element={<BasicStoreSearchResultsPage />} />
             </Routes>

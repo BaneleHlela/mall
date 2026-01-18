@@ -60,7 +60,7 @@ export function RatingDisplay({
   
   if (!rating || rating.numberOfRatings === 0) {
     return (
-      <div className={`flex items-center gap-1 ${className}`}>
+      <div className={`flex items-center gap-[1px] ${className}`}>
         <IoIosStar className={`w-4 h-4 ${starColor}`} />
         <span className="text-gray-500">(0)</span>
       </div>
@@ -68,7 +68,7 @@ export function RatingDisplay({
   }
   
   return (
-    <div className={`flex items-center gap-1 ${className}`}>
+    <div className={`flex items-center gap-[1px] ${className}`}>
       <IoIosStar className={`text-[1.8vh] ${starColor}`} />
       <span className="text-gray-800">
         {rating.averageRating} ({rating.numberOfRatings})

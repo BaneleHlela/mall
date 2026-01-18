@@ -325,6 +325,35 @@ const TextEditor: React.FC<EditorProps> = ({
             />
           )}
 
+          {/* Text Max Width, always responsive */}
+          {isAllowed("textMaxWidth") && (
+            <>
+            
+              <SettingsSlider
+                label="Width (Mobile)"
+                value={parseFloat(getSetting("textMaxWidth.mobile", settings, objectPath) || "100") }
+                unit="%"
+                min={10}
+                max={100}
+                step={1}
+                onChange={createSliderChangeHandler("textMaxWidth.mobile", "%")}
+              />
+
+              {/* Desktop */}
+
+              <SettingsSlider
+                label="Width (Desktop)"
+                value={parseFloat(getSetting("textMaxWidth.desktop", settings, objectPath) || "100") }
+                unit="%"
+                min={10}
+                max={100}
+                step={1}
+                onChange={createSliderChangeHandler("textMaxWidth.desktop", "%")}
+              />
+
+            </>
+          )}
+
           
           {/* Text shadow */}
           {isAllowed("textShadow") && (

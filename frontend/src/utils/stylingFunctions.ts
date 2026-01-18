@@ -353,3 +353,24 @@ export function getResponsiveBackgroundImage(images: string[]): string {
   return window.innerWidth < 768 ? mobileImage : desktopImage;
 }
 
+type TextMaxWidthConfig = {
+  mobile?: number | string
+  desktop?: number | string
+}
+
+
+export function getTextMaxWidth(
+  textStyle?: TextSettings,
+  fallback?: number | string
+) {
+  if (typeof window === "undefined") return fallback
+
+  const isMobile = window.innerWidth < 1024
+
+  return (
+    (isMobile
+      ? textStyle?.textMaxWidth?.mobile
+      : textStyle?.textMaxWidth?.desktop) ?? fallback
+  )
+}
+

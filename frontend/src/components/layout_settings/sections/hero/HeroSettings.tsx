@@ -10,6 +10,7 @@ import HeroWithBoxSettings from "./hero_with_box/HeroWithBoxSettings";
 import HeroWithDivAndImageSettings from "./hero_with_div_and_image/HeroWithDivAndImageSettings";
 import StylishHero from "../../../store_layout/sections/hero/styling_hero/StylishHero";
 import StylishHeroSettings from "./stylish_hero/StylishHeroSettings";
+import HeroWithTwoTextAreasSettings from "./hero_with_two_text_areas/HeroWithTwoTextAreasSettings";
 
 export const handleAddSectionToLinks = (
   dispatch: any,
@@ -111,7 +112,16 @@ const HeroSettings = () => {
           handleSettingChange={handleSettingChange}
         />
       );
-      
+    
+    case "heroWithTwoTextAreas":
+      return (
+        <div className="space-y-1">
+          <HeroWithTwoTextAreasSettings
+            settings={settings}
+            handleSettingChange={handleSettingChange}
+          />
+        </div>
+      );
     default:
       return <>No Settings for this hero</>;
     }

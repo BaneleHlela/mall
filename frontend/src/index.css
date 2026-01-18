@@ -220,7 +220,7 @@ ol ul, .rich-text ol ul {
 /* Paragraph spacing for rich text content */
 p, .rich-text p {
   margin: 0.5rem 0;
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
 /* Remove margin from first and last paragraphs */
@@ -241,6 +241,11 @@ p:last-child, .rich-text p:last-child {
 .rich-text {
   word-spacing: "0px";
 }
+
+.rich-text div {
+  line-height: 1.2;
+}
+
 
 
 

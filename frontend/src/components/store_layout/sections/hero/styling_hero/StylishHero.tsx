@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 
 
 const StylishHero = () => {
-    const colors = useAppSelector((state) => state.layoutSettings.colors)
+    const { fonts, colors } = useAppSelector((state) => state.layoutSettings)
     const config = useAppSelector((state) => state.layoutSettings.sections.hero);
     const handleButtonClick = useStoreButtonClickHandler();
 
@@ -21,12 +21,17 @@ const StylishHero = () => {
                 }} 
                 className="relative flex flex-col justify-between w-full p-[2vh] lg:hidden z-[1]">
                 {/* Text */}
-                <p 
+                <div 
+                    style={{...getTextStyles(config.header), color: colors[config.box.background.color as keyof typeof colors]}} 
+                    className="prose max-w-none"
+                    dangerouslySetInnerHTML={{ __html: config.header.input || "" }}
+                />
+                {/* <p 
                     style={{...getTextStyles(config.header), color: colors[config.box.background.color as keyof typeof colors]}} 
                     className=""
                 >
                         {config.header.input}
-                </p>
+                </p> */}
                 {/* Box */}
                 <div className="flex items-center justify-center w-full h-[50%] opacity-90">
                     <div 
@@ -89,7 +94,11 @@ const StylishHero = () => {
                             className="absolute inset-0 w-full h-full opacity-80"
                         >
                         </div>
-                        <p style={{...getTextStyles(config.header),}} className="text-center z-1 texxt-shadow-2xs">{config.header.input}</p>
+                        <div 
+                            style={{...getTextStyles(config.box.text.title, fonts, colors), color: colors[config.box.background.color as keyof typeof colors]}} 
+                            className="prose max-w-none z-1"
+                            dangerouslySetInnerHTML={{ __html: config.box.text.title.input || "" }}
+                        />
                         <p 
                             style={{
                                 ...getTextStyles(config.box.text),

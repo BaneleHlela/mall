@@ -110,90 +110,90 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
     };
 
     return (
-        <div className='bg-white px-[.5vh]'>
-        {/* Image and text */}
-        <div className="flex justify-between items-center w-full h-[5vh] ">
-            <div className="flex items-center h-full space-x-1">
-            {/* Thumbnail */}
-            <div className={`w-[10%] aspect-square bg-gradient-to-r from-orange-500 via-orange-400 to-orange-700 rounded-full p-[.25vh]`}>
-                <img
-                src="https://storage.googleapis.com/the-mall-uploads-giza/stores/686e76aa96f14c28650b671d/images/main.webp"
-                alt=""
-                className="w-full h-full object-cover rounded-full"
-                />
+        <div className='flex flex-col items-center bg-white px-[.5vh] py-[1vh] h-fit rounded-[1.5vh]'>
+            {/* Image and text */}
+            <div className="flex justify-between items-center w-full h-[5vh] max-h-[5vh] lg:h-[6vh] lg:max-h-[6vh] overflow-hidden">
+                <div className="flex items-center h-full space-x-1">
+                {/* Thumbnail */}
+                <div className={`h-full aspect-square bg-gradient-to-r from-orange-500 via-orange-400 to-orange-700 rounded-full p-[.25vh]`}>
+                    <img
+                        src="https://storage.googleapis.com/the-mall-uploads-giza/stores/686e76aa96f14c28650b671d/images/main.webp"
+                        alt=""
+                        className="w-full h-full object-cover rounded-full"
+                    />
+                </div>
+                {/* Text */}
+                <div onClick={() => navigate(`/stores/${store?._id}`)} className="flex flex-col justify-center h-full space-y-1">
+                    <div style={{ lineHeight: "1"}}  className={`font-semibold capitalize ${color}`}>{tipFor}</div>
+                    <div style={{ lineHeight: "1"}} className="text-[1.8vh] text-gray-300">@themall</div>
+                </div>
+                </div>
+                {/* Icon */}
+                <div className="">
+                {showTipsIcon ? (
+                    <TipsAndUpdatesIcon className='text-orange-400'/>
+                ) : (
+                    <BiDotsHorizontalRounded className='text-[2.8vh] cursor-pointer' />
+                )}
+                </div>
             </div>
-            {/* Text */}
-            <div onClick={() => navigate(`/stores/${store?._id}`)} className="flex flex-col justify-center h-full">
-                <p style={{ lineHeight: "1.1"}}  className={`font-semibold capitalize ${color}`}>{tipFor}</p>
-                <p style={{ lineHeight: "1.1"}} className="text-[1.8vh] text-gray-300">@themall</p>
+            {/* JSX Content */}
+            <div
+                style={{
+                fontFamily: "Momo Trust Sans",
+                lineHeight: "1.1",
+                }}
+                className="w-full text-[2.2vh] my-1 py-1 font-[500] px-[.6vh] "
+            >
+                {jsx}
             </div>
+            {/* Likes, Visits, or Share */}
+            <div className="flex justify-between w-full h-[5vh] px-[.8vh] border-t-[.1vh] border-gray-200">
+                <div className="flex items-center space-x-[1vh]">
+                {/* Likes */}
+                <div className="flex items-center space-x-1">
+                    <button
+                        onClick={handleFavoriteClick}
+                        className=""
+                    >
+                        {/* <p style={{lineHeight: "1"}} className="text-white text-[3.4vh] font-light">{store.likes.count}</p> */}
+                        {isFavorite ? (
+                            <GoHeartFill className="text-[3.5vh] text-black" />
+                            ) : (
+                            <GoHeart className="text-[3.5vh] text-black" />
+                        )}
+                    </button>
+                    <p className="font-[500]">{store.likes.count + Math.floor(Math.random() * 100) + 10} likes</p>
+                </div>
+                {/* Visits */}
+                <div className="flex items-center space-x-1">
+                    <BsDoorOpen className="text-[3vh] text-black" />
+                    <p className="font-[500]">{store.visits} visits</p>
+                </div>
+                </div>
+                {/* Share */}
+                <div className="flex h-full items-center cursor-pointer" onClick={handleShare}>
+                <LiaShareSolid className="text-[3.8vh]" />
+                </div>
             </div>
-            {/* Icon */}
-            <div className="">
-            {showTipsIcon ? (
-                <TipsAndUpdatesIcon className='text-orange-400'/>
-            ) : (
-                <BiDotsHorizontalRounded className='text-[2.8vh] cursor-pointer' />
+
+            {/* Ratings & Reviews */}
+            <div
+                onClick={() => setIsModalOpen(true)}
+                className="relative flex items-center w-full h-[5vh] p-[.6vh] cursor-pointer"
+            >
+                <div className="w-full h-full bg-black text-white rounded-[.8vh] border-[.2vh] px-[1.5vh] pr-[10vh] flex items-center font-[500]">
+                Ratings & Reviews
+                </div>
+                <div className="absolute right-[1.5vh] px-[.5vh]">
+                <StorePosterRatingStars rating={store.rating.averageRating} color='text-white'/>
+                </div>
+            </div>
+
+            {/* Reviews Modal */}
+            {isModalOpen && (
+                <HomePageReviewsModal onClose={() => setIsModalOpen(false)} store={store}/>
             )}
-            </div>
-        </div>
-        {/* JSX Content */}
-        <div
-            style={{
-            fontFamily: "Momo Trust Sans",
-            lineHeight: "1.1",
-            }}
-            className="w-full text-[2.3vh] my-1 py-1 font-[500] px-[.6vh] "
-        >
-            {jsx}
-        </div>
-        {/* Likes, Visits, or Share */}
-        <div className="flex justify-between w-full h-[5vh] px-[.8vh] border-t-[.1vh] border-gray-200">
-            <div className="flex items-center space-x-[1vh]">
-            {/* Likes */}
-            <div className="flex items-center space-x-1">
-                <button
-                    onClick={handleFavoriteClick}
-                    className=""
-                >
-                    {/* <p style={{lineHeight: "1"}} className="text-white text-[3.4vh] font-light">{store.likes.count}</p> */}
-                    {isFavorite ? (
-                        <GoHeartFill className="text-[3.5vh] text-black" />
-                        ) : (
-                        <GoHeart className="text-[3.5vh] text-black" />
-                    )}
-                </button>
-                <p className="font-[500]">{store.likes.count + Math.floor(Math.random() * 100) + 10} likes</p>
-            </div>
-            {/* Visits */}
-            <div className="flex items-center space-x-1">
-                <BsDoorOpen className="text-[3vh] text-black" />
-                <p className="font-[500]">{store.visits} visits</p>
-            </div>
-            </div>
-            {/* Share */}
-            <div className="flex h-full items-center cursor-pointer" onClick={handleShare}>
-            <LiaShareSolid className="text-[3.8vh]" />
-            </div>
-        </div>
-
-        {/* Ratings & Reviews */}
-        <div
-            onClick={() => setIsModalOpen(true)}
-            className="relative flex items-center w-full h-[5vh] p-[.6vh] cursor-pointer"
-        >
-            <div className="w-full h-full bg-black text-white rounded-[.8vh] border-[.2vh] px-[1.5vh] pr-[10vh] flex items-center font-[500]">
-            Ratings & Reviews
-            </div>
-            <div className="absolute right-[1.5vh] px-[.5vh]">
-            <StorePosterRatingStars rating={store.rating.averageRating} color='text-white'/>
-            </div>
-        </div>
-
-        {/* Reviews Modal */}
-        {isModalOpen && (
-            <HomePageReviewsModal onClose={() => setIsModalOpen(false)} store={store}/>
-        )}
         </div>
     );
 };

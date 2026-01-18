@@ -2,6 +2,7 @@ import { useAppSelector } from "../../../../../app/hooks";
 import { 
   getBackgroundStyles, 
   getResponsiveBackgroundImage, 
+  getTextMaxWidth, 
   getTextStyles 
 } from "../../../../../utils/stylingFunctions";
 import UnderlinedText from "../../../extras/text/UnderlinedText";
@@ -56,18 +57,26 @@ const AboutWithLineAndImage = () => {
           {/* LEFT: second subheading + paragraph */}
           <div className="lg:w-[50%]">
             <UnderlinedText style={config.text.secondSubheading} />
-            <p
+            {/* <p
               style={{
                 ...getTextStyles(config.text.secondParagraph),
               }}
               className="mt-[2vh]"
             >
               {config.text.secondParagraph.input}
-            </p>
+            </p> */}
+            <div
+              style={{
+                ...getTextStyles(config.text.secondParagraph),
+                maxWidth: getTextMaxWidth(config.text.secondParagraph, "100%"),
+              }} 
+              dangerouslySetInnerHTML={{ __html: config.text.secondParagraph.input || "" }}
+              className=""
+            />
           </div>
 
           {/* RIGHT: Image */}
-          <div  className="lg:w-[50%] flex justify-center items-center mt-[5vh] lg:mt-0">
+          <div  className="lg:w-[50%] flex justify-center items-center mt-[5vh] lg:mt-0 overflow-hidden">
             <img
               src={getResponsiveBackgroundImage(config.image.url)}
               style={{

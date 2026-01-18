@@ -168,7 +168,7 @@ const BasicSendEmailForm: React.FC<SendEmailFormProps> = ({ style }) => {
 
         {/* Submit button */}
         <div
-          className={`w-full flex flex-row mt-2 lg:mt-8
+          className={`w-full flex flex-row mt-4 lg:mt-8
             ${style.submitButton.position === 'center' && 'justify-center'}
             ${style.submitButton.position === 'start' && 'justify-start'}
             ${style.submitButton.position === 'end' && 'justify-end'}
