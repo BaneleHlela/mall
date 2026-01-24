@@ -43,7 +43,8 @@ router.post("/create", async (req, res) => {
     paymentData,
     process.env.PAYFAST_PASSPHRASE
   );
-
+  
+  console.log(paymentData, signature)
 
 
   res.json({
@@ -66,7 +67,7 @@ router.post(
   async (req, res) => {
   console.log("Received ITN:", req.body);
   
-  const receivedData = { ...req.body }; // clone
+  const receivedData = { ...req.body }; 
   const receivedSignature = receivedData.signature;
   delete receivedData.signature;
 
