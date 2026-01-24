@@ -103,11 +103,11 @@ export const captureStoreLayoutScreenshot = async (layoutId) => {
 export const generatePayFastSignature = (data, passPhrase = null) => {
   // Create parameter string
   let pfOutput = "";
-  // Sort keys alphabetically as required by PayFast
-  const sortedKeys = Object.keys(data).sort();
-  for (let key of sortedKeys) {
-    if (data[key] !== "") {
-      pfOutput +=`${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, "+")}&`
+  for (let key in data) {
+    if(data.hasOwnProperty(key)){
+      if (data[key] !== "") {
+        pfOutput +=`${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, "+")}&`
+      }
     }
   }
 

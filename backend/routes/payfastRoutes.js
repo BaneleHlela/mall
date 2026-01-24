@@ -58,17 +58,14 @@ router.post("/itn", express.urlencoded({ extended: false }), async (req, res) =>
   const receivedSignature = data.signature;
   delete data.signature;
 
-  console.log("Verifying signature...");
-
   const expectedSignature = generatePayFastSignature(data, process.env.PAYFAST_PASSPHRASE);
   console.log("Expected Signature:", expectedSignature);
   console.log("Received Signature:", receivedSignature);
   console.log(expectedSignature === receivedSignature ? "Signatures match." : "Signatures do not match.");
+
   if (receivedSignature !== expectedSignature) {
     return res.status(400).send("Invalid signature");
   }
-
-  console.log("Signature verified.");
 
   if (data.payment_status === "COMPLETE") {
     const orderId = data.m_payment_id;
@@ -77,13 +74,13 @@ router.post("/itn", express.urlencoded({ extended: false }), async (req, res) =>
     switch (paymentType) {
       case "subscription":
         try {
-          console.log("Activating subscription for order:", orderId);
           await Store.findByIdAndUpdate(orderId, {
             'subscription.isActive': true,
             'subscription.startDate': new Date(),
             'subscription.plan': 'pre-launch',
             'subscription.amount': parseFloat(data.amount_gross),
           });
+          console.log("Subscription activated for store:", orderId);
         } catch (error) {
           console.error("Error activating subscription:", error);
         }
@@ -106,8 +103,6 @@ router.post("/itn", express.urlencoded({ extended: false }), async (req, res) =>
 
     console.log(`Payment complete: ${orderId} (${paymentType})`);
   }
-
-  console.log("ITN processing complete");
 
   res.status(200).send("OK");
 });
