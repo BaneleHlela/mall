@@ -61,7 +61,9 @@ router.post("/itn", express.urlencoded({ extended: false }), async (req, res) =>
   console.log("Verifying signature...");
 
   const expectedSignature = generatePayFastSignature(data, process.env.PAYFAST_PASSPHRASE);
-
+  console.log("Expected Signature:", expectedSignature);
+  console.log("Received Signature:", receivedSignature);
+  console.log(expectedSignature === receivedSignature ? "Signatures match." : "Signatures do not match.");
   if (receivedSignature !== expectedSignature) {
     return res.status(400).send("Invalid signature");
   }
