@@ -101,25 +101,24 @@ export const captureStoreLayoutScreenshot = async (layoutId) => {
 };
 
 export const generatePayFastSignature = (data, passPhrase = null) => {
-  // 1. Sort keys alphabetically
-  const sortedKeys = Object.keys(data).sort();
+  // Create parameter string
+  let pfOutput = "";
+  for (let key in data) {
+    if(data.hasOwnProperty(key)){
+      if (data[key] !== "") {
+        pfOutput +=`${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, "+")}&`
+      }
+    }
+  }
 
-  // 2. Build parameter string
-  const paramString = sortedKeys
-    .filter(key => data[key] !== "" && data[key] !== null && data[key] !== undefined)
-    .map(key =>
-      `${key}=${encodeURIComponent(String(data[key])).replace(/%20/g, "+")}`
-    )
-    .join("&");
+  // Remove last ampersand
+  let getString = pfOutput.slice(0, -1);
+  if (passPhrase !== null) {
+    getString +=`&passphrase=${encodeURIComponent(passPhrase.trim()).replace(/%20/g, "+")}`;
+  }
 
-  // 3. Append passphrase if present
-  const finalString = passPhrase
-    ? `${paramString}&passphrase=${encodeURIComponent(passPhrase).replace(/%20/g, "+")}`
-    : paramString;
-
-  // 4. MD5 hash
-  return crypto.createHash("md5").update(finalString).digest("hex");
-};
+  return crypto.createHash("md5").update(getString).digest("hex");
+}; 
 
 
 
