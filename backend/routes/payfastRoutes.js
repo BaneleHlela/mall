@@ -58,11 +58,15 @@ router.post("/itn", express.urlencoded({ extended: false }), async (req, res) =>
   const receivedSignature = data.signature;
   delete data.signature;
 
+  console.log("Verifying signature...");
+
   const expectedSignature = generatePayFastSignature(data, process.env.PAYFAST_PASSPHRASE);
 
   if (receivedSignature !== expectedSignature) {
     return res.status(400).send("Invalid signature");
   }
+
+  console.log("Signature verified.");
 
   if (data.payment_status === "COMPLETE") {
     const orderId = data.m_payment_id;
