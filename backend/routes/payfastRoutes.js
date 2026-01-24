@@ -55,7 +55,15 @@ router.post("/create", async (req, res) => {
   });
 });
 
-router.post("/itn", express.urlencoded({ extended: false }), async (req, res) => {
+router.post(
+  "/itn", 
+  express.urlencoded({
+    extended: false,
+    verify: (req, res, buf) => {
+      req.rawBody = buf.toString("utf8");
+    }
+  }), 
+  async (req, res) => {
   console.log("Received ITN:", req.body);
   
   const receivedData = { ...req.body }; // clone
