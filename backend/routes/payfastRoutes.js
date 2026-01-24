@@ -6,6 +6,7 @@ import Store from "../models/StoreModel.js";
 const router = express.Router();
 
 router.post("/create", async (req, res) => {
+  console.log(req.body);
   const { orderId, amount, email, paymentType } = req.body;
 
   const itemNameMap = {
@@ -43,8 +44,8 @@ router.post("/create", async (req, res) => {
     paymentData,
     process.env.PAYFAST_PASSPHRASE
   );
-  
-  console.log(paymentData, signature)
+
+  console.log(paymentData, signature);
 
 
   res.json({
