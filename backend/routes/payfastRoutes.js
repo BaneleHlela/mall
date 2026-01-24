@@ -71,6 +71,7 @@ router.post("/itn", express.urlencoded({ extended: false }), async (req, res) =>
     switch (paymentType) {
       case "subscription":
         try {
+          console.log("Activating subscription for order:", orderId);
           await Store.findByIdAndUpdate(orderId, {
             'subscription.isActive': true,
             'subscription.startDate': new Date(),
