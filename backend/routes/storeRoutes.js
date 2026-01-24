@@ -27,7 +27,7 @@ import { uploadSingleFile, uploadTeamMemberImage } from "../middlewares/uploadMi
 
 const router = express.Router();
 
-router.post('/add', /*protectRoute,*/  addStore);
+router.post('/add', protectRoute,  addStore);
 router.get("/my-stores", protectRoute, getStoresByOwner);
 router.get('/nearby', getStoresNearby);
 router.get('/', getStores);

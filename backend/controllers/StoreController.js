@@ -22,16 +22,15 @@ const generateUniqueSlug = async (name) => {
 
 // add store
 export const addStore = expressAsyncHandler(async (req, res) => {
-    //const { _id, email, firstName } = req.user;
+    const { _id, email, firstName } = req.user;
     // Create the store with the creator as the owner in the team
     const slug = await generateUniqueSlug(req.body.name);
     const created = new Store({
-        //team: [{ member: _id, role: "owner" }], // Assign the creator as the owner
         ...req.body,
+        team: [{ member: _id, role: "owner" }], // Assign the creator as the owner
+        
         slug,
     });
-
-    console.log(created);
 
     await created.save();
 
@@ -48,10 +47,10 @@ export const getStore = expressAsyncHandler(async (req, res) => {
       let store;
       if (mongoose.Types.ObjectId.isValid(storeSlug)) {
         // If it's a valid ObjectId, find by _id
-        store = await Store.findById(storeSlug);
+        store = await Store.findById(storeSlug).populate('team.member');
       } else {
         // If it's not a valid ObjectId, assume it's a slug
-        store = await Store.findOne({ slug: storeSlug });
+        store = await Store.findOne({ slug: storeSlug }).populate('team.member');
       }
 
       if (!store) {
@@ -98,7 +97,7 @@ export const getStores = expressAsyncHandler(async (req, res) => {
     stores = await Store.find({
       ...searchFilter,
       'location.coordinates': { $exists: true },
-    }).aggregate([
+    }).populate('team.member').aggregate([
       {
         $geoNear: {
           near: {
@@ -128,7 +127,7 @@ export const getStores = expressAsyncHandler(async (req, res) => {
         break;
     }
 
-    stores = await Store.find(searchFilter).sort(sortOption);
+    stores = await Store.find(searchFilter).sort(sortOption).populate('team.member');
   }
 
   res.status(200).json(stores);
@@ -157,7 +156,7 @@ export const getStoresNearby = expressAsyncHandler(async (req, res) => {
           $maxDistance: searchRange
         }
       }
-    });
+    }).populate('team.member');
 
     res.status(200).json(stores);
   } catch (error) {
@@ -169,7 +168,7 @@ export const getStoresNearby = expressAsyncHandler(async (req, res) => {
 // Get demo stores
 export const getDemoStores = expressAsyncHandler(async (req, res) => {
   try {
-    const stores = await Store.find({ isDemo: true });
+    const stores = await Store.find({ isDemo: true }).populate('team.member');
 
     if (!stores || stores.length === 0) {
       return res.status(404).json({ message: 'No demo stores found' });
@@ -288,7 +287,8 @@ export const editStore = expressAsyncHandler(async (req, res) => {
   // Save the updated store
   await store.save();
 
-  // const updatedStore = await Store.findById(storeId).populate("layouts");
+  // Populate team.member
+  await store.populate('team.member');
 
   res.status(200).json(store);
 });
@@ -312,7 +312,7 @@ export const getStoresByOwner = expressAsyncHandler(async (req, res) => {
   const { _id } = req.user;
 
   // Find stores where the user is part of the team (regardless of their role)
-  const stores = await Store.find({ "team.member": _id });
+  const stores = await Store.find({ "team.member": _id }).populate('team.member');
 
   res.status(200).json(stores);
 });
@@ -575,9 +575,6 @@ export const addTeamMember = expressAsyncHandler(async (req, res) => {
 
   const newTeamMember = {
     member: user._id,
-    username: user.username,
-    firstName: user.firstName || '',
-    lastName: user.lastName || '',
     role: role || 'owner',
     about: about || '',
     image: imageUrl,
@@ -585,6 +582,7 @@ export const addTeamMember = expressAsyncHandler(async (req, res) => {
 
   store.team.push(newTeamMember);
   await store.save();
+  await store.populate('team.member');
 
   res.status(201).json(store);
 });
@@ -594,14 +592,14 @@ export const deleteTeamMember = expressAsyncHandler(async (req, res) => {
   const { storeSlug, username } = req.params;
 
   // Find the store
-  const store = await Store.findOne({ slug: storeSlug });
+  const store = await Store.findOne({ slug: storeSlug }).populate('team.member');
   if (!store) {
     return res.status(404).json({ message: 'Store not found.' });
   }
 
   // Check if the user exists in the team
   const memberIndex = store.team.findIndex(
-    (member) => member.username === username
+    (member) => member.member.username === username
   );
 
   if (memberIndex === -1) {
@@ -618,6 +616,7 @@ export const deleteTeamMember = expressAsyncHandler(async (req, res) => {
   // Remove the team member
   store.team.splice(memberIndex, 1);
   await store.save();
+  await store.populate('team.member');
 
   res.status(200).json({
     message: 'Team member removed successfully.',
@@ -631,13 +630,13 @@ export const editTeamMember = expressAsyncHandler(async (req, res) => {
   const { name, position, about } = req.body;
 
   // Find the store
-  const store = await Store.findOne({ slug: storeSlug });
+  const store = await Store.findOne({ slug: storeSlug }).populate('team.member');
   if (!store) {
     return res.status(404).json({ message: 'Store not found.' });
   }
 
   // Find the team member
-  const member = store.team.find((m) => m.username === username);
+  const member = store.team.find((m) => m.member.username === username);
   if (!member) {
     return res.status(404).json({ message: 'Team member not found.' });
   }
@@ -657,6 +656,7 @@ export const editTeamMember = expressAsyncHandler(async (req, res) => {
   }
 
   await store.save();
+  await store.populate('team.member');
 
   res.status(200).json({
     message: 'Team member updated successfully.',
@@ -689,6 +689,7 @@ export const toggleStoreStatus = expressAsyncHandler(async (req, res) => {
     };
 
     await store.save();
+    await store.populate('team.member');
 
     res.status(200).json({
       message: `Store status updated to ${status}`,
@@ -719,6 +720,7 @@ export const resetStoreStatus = expressAsyncHandler(async (req, res) => {
     };
 
     await store.save();
+    await store.populate('team.member');
 
     res.status(200).json({
       message: 'Store status reset to automatic',

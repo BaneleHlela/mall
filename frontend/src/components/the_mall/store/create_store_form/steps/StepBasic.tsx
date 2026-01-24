@@ -56,10 +56,12 @@ const StepBasic: React.FC = () => {
     return nameValid && departmentValid && phoneValid && emailValid;
   };
 
-  // Set the step validator
+  // Set the step validator only when nextClicked is true
   useEffect(() => {
-    setStepValidator(validateFields);
-  }, [form]);
+    if (nextClicked) {
+      setStepValidator(validateFields);
+    }
+  }, [nextClicked, form]);
 
   return (
     <div className="w-full h-full flex flex-col space-y-[.8vh] items-start text-[2vh]">
@@ -74,7 +76,7 @@ const StepBasic: React.FC = () => {
                     handleChange('name', e.target.value);
                     validateField('name', e.target.value);
                 }}
-                className="w-full border-b p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none focus:ring-0"
+                className={`w-full border-b p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none focus:ring-0 ${nextClicked && !validation.nameValid ? 'border-red-500' : ''}`}
             />
             {nextClicked && !validation.nameValid && <p className="text-red-500 text-sm">Store name is required</p>}
         </div>
@@ -94,7 +96,7 @@ const StepBasic: React.FC = () => {
                 <button
                     type="button"
                     onClick={() => setIsDeptOpen(prev => !prev)}
-                    className="w-full flex justify-between items-center border h-[5vh] p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none"
+                    className={`w-full flex justify-between items-center border h-[5vh] p-[.8vh] bg-[#0000000e] focus:bg-[#00000030] focus:outline-none ${nextClicked && !validation.departmentValid ? 'border-red-500' : ''}`}
                 >
                 {// @ts-ignore
                     form.departments[0] ? departments[form.departments[0]].full : 'Select Department'}

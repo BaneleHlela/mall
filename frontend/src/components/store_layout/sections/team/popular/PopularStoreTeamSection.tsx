@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md';
 
 const PupularStoreTeamSection = () => {
-    const settings = useAppSelector((state) => state.layoutSettings.team);
+    const settings = useAppSelector((state) => state.layoutSettings.sections.team);
     const store = useAppSelector((state) => state.stores.currentStore);
     
     const visibleCount = window.innerWidth < 768 ? settings.grid.columns.mobile : settings.grid.columns.desktop
@@ -118,8 +118,8 @@ const PupularStoreTeamSection = () => {
                         {teamMembers.map((member, index) => (
                             <PopularTeamCard
                                 key={index}
-                                firstName={member.firstName}
-                                lastName={member.lastName}
+                                firstName={member.member.firstName}
+                                lastName={member.member.lastName}
                                 about={member.about}
                                 imageUrl={member.image || 'defaultImageUrl.png'} // Provide a default image URL
                                 style={settings.card}
@@ -182,8 +182,8 @@ const PupularStoreTeamSection = () => {
                                 {currentGroup.map((member, index) => (
                                     <PopularTeamCard
                                         key={index}
-                                        firstName={member.firstName}
-                                        lastName={member.lastName}
+                                        firstName={member.member.firstName}
+                                        lastName={member.member.lastName}
                                         about={member.about}
                                         imageUrl={member.image || 'defaultImageUrl.png'} // Provide a default image URL
                                         style={settings.card}

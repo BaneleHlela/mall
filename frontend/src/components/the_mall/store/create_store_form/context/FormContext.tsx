@@ -48,7 +48,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 
   const [form, setForm] = useState<FormState>({
-    name: 'Banele',
+    name: 'Banele Clothing',
     nickname: '',
     logo: { url: '', text: '' },
     businessType: 'sole',
@@ -186,7 +186,6 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       localStorage.setItem('createStoreDraft', JSON.stringify(form));
       localStorage.setItem('createStoreStep', step.toString());
-      console.log('🟢 Draft saved:', form);
     } catch (error) {
       console.warn('Failed to save draft to localStorage:', error);
     }

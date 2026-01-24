@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import User from "../../models/UserModel.js";
 import Store from "../../models/StoreModel.js";
 
-dotenv.config({ path: "../../../.env" });
+dotenv.config({ path: "../../../../.env" });
 
 const updateStoreTeams = async () => {
   try {
@@ -16,27 +16,26 @@ const updateStoreTeams = async () => {
     for (const store of stores) {
       let updated = false;
 
-      const newTeam = await Promise.all(
-        store.team.map(async (memberObj) => {
-          // Skip if already has enriched data
-          if (memberObj.username && memberObj.firstName && memberObj.lastName) {
-            return memberObj;
+      const newTeam = store.team.map((memberObj) => {
+        // Check if member is already ObjectId
+        if (memberObj.member instanceof mongoose.Types.ObjectId) {
+          // If already ObjectId, check if has redundant fields
+          if (memberObj.username || memberObj.firstName || memberObj.lastName) {
+            updated = true;
+            const { username, firstName, lastName, ...rest } = memberObj;
+            return rest;
           }
+          return memberObj;
+        }
 
-          const user = await User.findById(memberObj.member);
-          if (!user) return memberObj;
-
-          updated = true;
-          return {
-            ...memberObj,
-            username: user.username,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            image: user.avatar || "",
-            about: memberObj.about || "",
-          };
-        })
-      );
+        // Convert member to ObjectId and remove redundant fields
+        updated = true;
+        const { username, firstName, lastName, ...rest } = memberObj;
+        return {
+          ...rest,
+          member: mongoose.Types.ObjectId(memberObj.member),
+        };
+      });
 
       if (updated) {
         store.team = newTeam;

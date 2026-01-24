@@ -84,7 +84,7 @@ const TheMallStoreHero = () => {
                 <button className="flex items-center w-fit border rounded-full px-[1.5vh] py-[.7vh] lg:py-[1vh] lg:px-[2vh] gap-2">Learn More </button>
             </div>
             {/* Countdown to launch */}
-            <div className="hidden lg:flex flex-col gap-[1.5vh] z-1 origin-top-left ">
+            <div className="hidden lg:flex flex-col gap-[1.5vh]  z-1 origin-top-left ">
                 <p
                     className="uppercase tracking-[0.3em] text-[1.5vh] text-gray-700 font-semibold"
                     style={{ fontFamily: 'Montserrat' }}

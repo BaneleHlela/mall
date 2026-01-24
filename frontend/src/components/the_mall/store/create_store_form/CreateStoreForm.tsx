@@ -121,7 +121,6 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
         },
         website: {
           source: 'internal',
-          layoutId: '',
         },
         categories: {
           products: [],
@@ -135,15 +134,6 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
           users: []
         },
         visits: 0,
-        team: [{
-          _id: user._id.toString(),
-          member: user._id.toString(),
-          username: user.username || '',
-          firstName: user.firstName || '',
-          lastName: user.lastName || '',
-          about: '',
-          role: 'owner' as const
-        }],
         location: {
           type: 'Point',
           coordinates: [form.location.coordinates[0], form.location.coordinates[1]], // [lng, lat]
@@ -205,6 +195,13 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
           <StepComponent />
         </motion.div>
       </AnimatePresence>
+      
+      {/* Error display */}
+      {(submitError || storeError) && (
+        <div className="text-center text-red-500 text-[1.8vh] mt-2 px-4">
+          {submitError || storeError}
+        </div>
+      )}
 
       <div className="flex flex-row justify-between items-center h-[7%] z-10">
         <button
@@ -237,12 +234,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
         )}
       </div>
 
-      {/* Error display */}
-      {(submitError || storeError) && (
-        <div className="text-center text-red-500 text-[1.8vh] mt-2 px-4">
-          {submitError || storeError}
-        </div>
-      )}
+      
 
       {/* Success case */}
       <AnimatePresence>

@@ -5,7 +5,7 @@ const UserDisplay = () => {
     const store = useAppSelector((state) => state.storeAdmin.store);
 
     // Find the user's role in the store's team array
-    const userRole = store?.team?.find((teamMember) => teamMember.member === user?._id as any)?.role;
+    const userRole = store?.team?.find((teamMember) => teamMember.member._id === user?._id as any)?.role;
 
     return (
         <div className="h-full flex flex-row justify-center">

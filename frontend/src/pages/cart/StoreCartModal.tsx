@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { HiArrowLeftEndOnRectangle } from "react-icons/hi2";
 import CartItemCard from "../../components/the_mall/store/cart/CartItemCard";
 import { getUserCart } from "../../features/cart/cartSlice";
+import LoadingButton from "../../components/the_mall/buttons/LoadingButton";
 
 // ts errors
 
@@ -15,6 +16,7 @@ const StoreCartModal = () => {
   const carts = useAppSelector((state) => state.cart.cart); // array of carts per store
   const store = useAppSelector((state) => state.stores.currentStore);
   const routes = useAppSelector((state) => state.layoutSettings.routes);
+  const isLoading = useAppSelector((state) => state.cart.isLoading);
 
   // Fetch user cart
   useEffect(() => {
@@ -70,12 +72,11 @@ const StoreCartModal = () => {
         orderId: "ORDER123",
         amount: 500,
         email: "buyer@email.com",
+        paymentType: "product",
       }),
     });
   
     const data = await res.json();
-
-    console.log(data)
   
     const form = document.createElement("form");
     form.method = "POST";
@@ -119,12 +120,12 @@ const StoreCartModal = () => {
           />
         ))}
       </div>
-      {/* Checkout */}
-      <div
-        onClick={payWithPayFast}  
-        className="absolute flex justify-center bottom-0 w-full h-[8vh] p-[.8vh] border-t-3 border-gray-200">
-        <button className="w-full bg-black text-white rounded-[.5vh] text-[2.2vh]">Checkout</button>
-      </div>
+      <LoadingButton
+        label="Checkout"
+        onClick={payWithPayFast}
+        isLoading={isLoading}
+        className="absolute flex justify-center bottom-0 bg-black text-white w-full h-[8vh] p-[.8vh] border-t-3 border-gray-200"
+      />
     </div>
   );
 };

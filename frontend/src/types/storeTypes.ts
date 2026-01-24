@@ -1,4 +1,5 @@
 import { Types } from "mongoose";
+import type { User } from "./userTypes";
 
 export interface Logo {
   imageUrls: string[];
@@ -17,10 +18,7 @@ export interface Logo {
 
 export interface TeamMember {
   _id: Types.ObjectId | string;
-  member: string; // user ID
-  username: string;
-  firstName: string;
-  lastName: string;
+  member: User;
   about: string;
   image?: string;
   role: "owner" | "manager" | "staff" | "viewer" | "admin";

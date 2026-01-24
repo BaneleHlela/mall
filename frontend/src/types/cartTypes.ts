@@ -19,7 +19,7 @@ export  interface Cart {
   
 export interface CartState {
     cart: Cart[];
-    loading: boolean;
+    isLoading: boolean;
     error: string | null;
 }
   

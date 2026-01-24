@@ -8,6 +8,7 @@ import TheMallStoreFeaturesSection from '../../../components/store_layout/custom
 import TheMallStoreCTASection from '../../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStoreCTASection';
 import TheMallStoreFooterSection from '../../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStoreFooterSection';
 import GetStartedMenubar from '../../../components/the_mall/topbar/GetStartedMenubar';
+import TheMallStorePlans from '../../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStorePlans';
 
 const GetStartedPage = () => {
   const { hideNavbar, showNavbar } = useNavbar();
@@ -30,12 +31,13 @@ const GetStartedPage = () => {
       style={{
         fontFamily: "Montserrat",
       }} 
-      className='w-full h-[100vh] overflow-y-scroll'
+      className='flex flex-col items-center w-full h-[100vh] overflow-y-scroll'
     >
       <GetStartedMenubar />
       <TheMallStoreHero />
       <TheMallStoreAboutSection />
       <TheMallSocialFeatureSection />
+      <TheMallStorePlans />
       <TheMallStoreFeaturesSection />
       <TheMallStoreCTASection />
       <TheMallStoreFooterSection />

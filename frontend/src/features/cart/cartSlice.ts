@@ -8,7 +8,7 @@ const API_BASE = `${API_URL}/api/cart`;
 // Initial state
 const initialState: CartState = {
   cart: [],
-  loading: false,
+  isLoading: false,
   error: null,
 };
 
@@ -91,57 +91,57 @@ const cartSlice = createSlice({
     builder
       // Add to cart
       .addCase(addToCart.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(addToCart.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.cart = [action.payload];
       })
       .addCase(addToCart.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.payload as string;
       })
 
       // Get user cart
       .addCase(getUserCart.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(getUserCart.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.cart = action.payload;
       })
       .addCase(getUserCart.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.payload as string;
       })
 
       // Update cart
       .addCase(updateCart.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(updateCart.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.cart = action.payload;
       })
       .addCase(updateCart.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.payload as string;
       })
 
       // Delete user cart
       .addCase(deleteUserCart.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(deleteUserCart.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.cart = state.cart.filter((cartItem: any) => cartItem.store !== action.payload);
       })
       .addCase(deleteUserCart.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.payload as string;
       });
   },

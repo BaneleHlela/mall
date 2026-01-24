@@ -27,6 +27,46 @@ const storeSchema = new mongoose.Schema(
         default: "",
       },
     },
+    payment: {
+      provider: {
+        type: String,
+        enum: ['payfast', 'paypal', 'stripe', 'razorpay', 'none'],
+        default: 'none',
+      },
+      merchantId: {
+        type: String,
+        default: "",
+      },
+      merchantKey: {
+        type: String,
+        default: "",
+      },
+      passphrase: {
+        type: String,
+        default: "",
+      },
+      isActive: {
+        type: Boolean,
+        default: false,
+      }
+    },
+    subscription: {
+      isActive: {
+        type: Boolean,
+        default: false,
+      },
+      startDate: {
+        type: Date,
+      },
+      plan: {
+        type: String,
+        default: 'pre-launch',
+      },
+      amount: {
+        type: Number,
+        default: 25.00,
+      },
+    },
     slogan: {
       type: String,
       default: ""
@@ -102,22 +142,14 @@ const storeSchema = new mongoose.Schema(
     }, 
     team: [{
       member: {
-        type: String,
-        required: true, 
-      },
-      username: {
-        type: String,
-      },
-      firstName: {
-        type: String,
-      },
-      lastName: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
       },
       role: {
         type: String,
-        enum: ["owner", "manager", "staff", "viewer", "admin"], 
-        default: "owner", 
+        enum: ["owner", "manager", "staff", "viewer", "admin"],
+        default: "owner",
       },
       about: {
         type: String,

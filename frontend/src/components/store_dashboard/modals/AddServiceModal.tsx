@@ -260,8 +260,8 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
                 className="w-full px-3 py-2 rounded border mt-1"
               >
                 {store.team.map((member: any) => (
-                  <option key={member.member} value={member.member}>
-                    {member.firstName} {member.lastName} ({member.role})
+                  <option key={member.member._id} value={member.member._id}>
+                    {member.member.firstName} {member.member.lastName} ({member.role})
                   </option>
                 ))}
               </select>

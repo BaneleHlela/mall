@@ -64,13 +64,13 @@ const StoreTeam = () => {
             {teamMembers.map((member: any) => (
               <TeamMemberCard
                 key={member._id}
-                firstName={member.firstName || "First"}
-                lastName={member.lastName || "Last"}
+                firstName={member.member.firstName || "First"}
+                lastName={member.member.lastName || "Last"}
                 position={member.role}
                 avatar={member.image}
                 deletable={teamMembers.length > 1}
                 about={member.about || "Add about info here"}
-                onDelete={() => handleDelete(member.username)}
+                onDelete={() => handleDelete(member.member.username)}
                 onEdit={() => {
                   setEditingMember(member);
                   setEditModalOpen(true);
