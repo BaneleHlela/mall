@@ -19,8 +19,8 @@ router.post("/create", async (req, res) => {
     merchant_id: process.env.PAYFAST_MERCHANT_ID,
     merchant_key: process.env.PAYFAST_MERCHANT_KEY,
 
-    return_url: `https://${process.env.FRONTEND_PUBLIC_URL}/payment/success` || "https://lula-slakeless-hortatively.ngrok-free.dev/payment/success",
-    cancel_url: `https://${process.env.FRONTEND_PUBLIC_URL}/payment/cancel` ||  "https://lula-slakeless-hortatively.ngrok-free.dev/payment/cancel",
+    return_url: `${process.env.FRONTEND_PUBLIC_URL}/payment/success` || "https://lula-slakeless-hortatively.ngrok-free.dev/payment/success",
+    cancel_url: `${process.env.FRONTEND_PUBLIC_URL}/payment/cancel` ||  "https://lula-slakeless-hortatively.ngrok-free.dev/payment/cancel",
     notify_url: process.env.BACKEND_URL
     ? `${process.env.BACKEND_URL}/api/payments/payfast/itn`
     : "https://lula-slakeless-hortatively.ngrok-free.dev/api/payments/payfast/itn",
@@ -77,7 +77,6 @@ router.post("/itn", express.urlencoded({ extended: false }), async (req, res) =>
             'subscription.plan': 'pre-launch',
             'subscription.amount': parseFloat(data.amount_gross),
           });
-          console.log("Subscription activated for store:", orderId);
         } catch (error) {
           console.error("Error activating subscription:", error);
         }
@@ -100,6 +99,8 @@ router.post("/itn", express.urlencoded({ extended: false }), async (req, res) =>
 
     console.log(`Payment complete: ${orderId} (${paymentType})`);
   }
+
+  console.log("ITN processing complete");
 
   res.status(200).send("OK");
 });

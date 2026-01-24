@@ -111,7 +111,7 @@ const StoreSuccessOverlay: React.FC<StoreSuccessOverlayProps> = ({ onClose }) =>
               focus:outline-none
             "
           >
-            Pay Now & Access Dashboard
+            Pay Now & Complete Setup
           </button>
         </div>
       </motion.div>
