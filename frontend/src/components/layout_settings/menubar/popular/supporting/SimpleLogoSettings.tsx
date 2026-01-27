@@ -5,7 +5,6 @@ import OptionsToggler from '../../../supporting/OptionsToggler';
 import TextEditor from '../../../text/TextEditor';
 import BackgroundEditor from '../../../background/BackgroundEditor';
 import SubSettingsContainer from '../../../extras/SubSettingsContainer';
-import LogoControl from '../../../logo/LogoControl';
 import { getSetting } from '../../../../../utils/helperFunctions';
 import MultipleLayoutImagesHandler from '../../../supporting/MultipleLayoutImagesHandler';
 
@@ -16,7 +15,7 @@ interface SimpleLogoSettingsProps {
 const SimpleLogoSettings: React.FC<SimpleLogoSettingsProps> = ({ objectPath }) => {
   const dispatch = useAppDispatch();
   const settings = useAppSelector((state) => state.layoutSettings);
-  const logoSettings = useAppSelector((state) => state.layoutSettings.menubar.topbar.logo);
+  const logoSettings = getSetting("", settings, objectPath);
     
   const handleSettingChange = (field: string, value: any) => {
     dispatch(updateSetting({ field, value }));
@@ -35,7 +34,7 @@ const SimpleLogoSettings: React.FC<SimpleLogoSettingsProps> = ({ objectPath }) =
       {logoSettings.use === 'logo' && (
         <MultipleLayoutImagesHandler
           objectPath={`${objectPath}.logoUrl`}
-          min={2}
+          min={1}
           max={2}
           images={getSetting("logoUrl", settings, objectPath)}
         />

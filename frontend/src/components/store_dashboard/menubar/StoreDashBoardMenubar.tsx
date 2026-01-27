@@ -158,12 +158,14 @@ const StoreDashBoardMenubar = ({
           />
         )}
 
-        <DashboardLink
-          linkTo={`/dashboard/${store.slug}/donations`}
-          icon={<FaHandsHelping className="text-[1.8vh]" />}
-          text="Donations"
-          onClick={handleLinkClick}
-        />
+        {store.trades.includes("donations") && (
+          <DashboardLink
+            linkTo={`/dashboard/${store.slug}/donations`}
+            icon={<FaHandsHelping className="text-[1.8vh]" />}
+            text="Donations"
+            onClick={handleLinkClick}
+          />
+        )}
 
         <DashboardLink
           linkTo={`/dashboard/${store.slug}/layouts`}

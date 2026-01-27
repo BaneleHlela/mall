@@ -15,7 +15,8 @@ import StoreLayoutButton from "../../shared_layout_components/StoreLayoutButton"
 
 
 const MenubarWithSearchbar = () => {
-  const layout = useAppSelector((state) => state.layoutSettings);    
+  const layout = useAppSelector((state) => state.layoutSettings); 
+  const { fonts, colors } = useAppSelector((state) => state.layoutSettings)   
   const scrollY = useMotionValue(0);
   const scrollDirection = useMotionValue("up");
   const [isOpen, setOpen] = useState(false);
@@ -127,9 +128,9 @@ const MenubarWithSearchbar = () => {
                         />
                     )}
                     {stackItem === 'heartLogo' && (
-                        <div className="flex justify-between items-center w-full h-full px-[.5vh]">
+                        <div className="flex items-center justify-between w-full h-full px-[.5vh]">
                             {layout.menubar.topbar.order.map((item: string) => (
-                                <div key={item}>
+                                <div key={item} className="">
                                     {item === 'hamburger' && (
                                         <StoreMenubarHamburger
                                             style={{
@@ -143,15 +144,19 @@ const MenubarWithSearchbar = () => {
                                     )}
                                     {item === 'logo' && (
                                         <StoreMenubarLogo
-                                            width="50%"
-                                            use={layout.menubar.topbar.logo.use}
-                                            logoText={layout.menubar.topbar.logo.text.input}
+                                            width="100%"
+                                            use={layout.menubar.topbar.logo?.use}
+                                            logoText={layout.menubar.topbar.logo.text?.input}
+                                            logoUrl={layout.menubar.topbar.logo?.logoUrl}
                                             style={{
-                                                color: layout.colors.secondary,
-                                                fontSize: layout.menubar.topbar.logo.text.fontSize,
-                                                fontWeight: layout.menubar.topbar.logo.text.weight,
-                                                letterSpacing: layout.menubar.topbar.logo.text.letterSpacing,
-                                                textDecoration: layout.menubar.topbar.logo.text.textDecoration,
+                                                text: {
+                                                    color: colors[layout.menubar.topbar.logo.text?.color as keyof typeof colors],
+                                                    fontSize: layout.menubar.topbar.logo.text?.fontSize,
+                                                    fontWeight: layout.menubar.topbar.logo.text?.weight,
+                                                    letterSpacing: layout.menubar.topbar.logo.text?.letterSpacing,
+                                                    textDecoration: layout.menubar.topbar.logo.text?.textDecoration,
+                                                },
+                                                background: layout.menubar.topbar.logo.style?.background,
                                             }}
                                         />
                                     )}
@@ -161,7 +166,7 @@ const MenubarWithSearchbar = () => {
                                                 style={{
                                                     variation: layout.menubar.topbar.cart.variation,
                                                     size: "4.5vh",
-                                                    color: layout.colors.secondary,
+                                                    color: colors[layout.colors.secondary as keyof typeof colors],
                                                     count: {
                                                         backgroundColor: 'black',
                                                         color: 'white',
@@ -185,16 +190,20 @@ const MenubarWithSearchbar = () => {
         <div className="hidden lg:flex justify-between items-center w-full h-[13vh] px-[1.5vh]">
             {/* Logo */}
             <div className="h-full w-[22%]">
-                <StoreMenubarLogo 
-                    width="100%" 
-                    use={layout.menubar.topbar.logo.use}
-                    logoText={layout.menubar.topbar.logo.text.input}
+                <StoreMenubarLogo
+                    width="50%"
+                    use={layout.menubar.topbar.logo?.use}
+                    logoText={layout.menubar.topbar.logo.text?.input}
+                    logoUrl={layout.menubar.topbar.logo?.logoUrl}
                     style={{
-                        color: layout.colors.secondary,
-                        fontSize: layout.menubar.topbar.logo.text.fontSize,
-                        fontWeight: layout.menubar.topbar.logo.text.weight,
-                        letterSpacing: layout.menubar.topbar.logo.text.letterSpacing,
-                        textDecoration: layout.menubar.topbar.logo.text.textDecoration,
+                        text: {
+                            color: layout.colors.secondary,
+                            fontSize: layout.menubar.topbar.logo.text?.fontSize,
+                            fontWeight: layout.menubar.topbar.logo.text?.weight,
+                            letterSpacing: layout.menubar.topbar.logo.text?.letterSpacing,
+                            textDecoration: layout.menubar.topbar.logo.text?.textDecoration,
+                        },
+                        background: layout.menubar.topbar.logo.style?.background,
                     }}
                 />
             </div>
@@ -299,23 +308,25 @@ const MenubarWithSearchbar = () => {
         <BlueSidebar
             isOpen={isOpen}
             onClose={() => setOpen(false)}
-            links={links} 
+            links={links}
             style={{
-                animation: "leftToRight",
+                animation: layout.menubar.sidebar?.animation || "leftToRight",
                 logo: {
-                    use: layout.menubar.topbar.logo.use,
-                    logoText: layout.menubar.topbar.logo.text.input,
+                    use: layout.menubar.sidebar?.logo?.use || layout.menubar.topbar.logo.use,
+                    logoText: layout.menubar.sidebar?.logo?.text?.input || layout.menubar.topbar.logo.text.input,
+                    logoUrl: layout.menubar.sidebar?.logo?.logoUrl || layout.menubar.topbar.logo.logoUrl,
                     style: {
-                        color: layout.colors.secondary,
+                        text: layout.menubar.sidebar?.logo?.style?.text || {},
+                        background: layout.menubar.sidebar?.logo?.style?.background || {},
                     }
                 },
                 links: {
-                    color: layout.colors.secondary,
-                    alignment: "center",
-                    fontFamily: layout.fonts.primary || "Arial",
-                    borderColor: layout.colors.quad,
+                    color: layout.menubar.sidebar?.links?.color || layout.colors.secondary,
+                    alignment: layout.menubar.sidebar?.links?.alignment || "center",
+                    fontFamily: fonts[layout.menubar.sidebar?.links?.fontFamily as keyof typeof fonts ] || layout.fonts.primary || "Arial",
+                    borderColor: colors[layout.menubar.sidebar?.links?.borderColor as keyof typeof colors ] || layout.colors.quad,
                 },
-                backgroundColor: layout.colors.primary,
+                backgroundColor: colors[layout.menubar.sidebar?.backgroundColor as keyof typeof colors] || layout.colors.primary,
             }}
         />
     </motion.nav>

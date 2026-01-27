@@ -3,8 +3,8 @@ import FirstOrderSubSettingsContainer from '../../FirstOrderSubSettingsContainer
 import SubSettingsContainer from '../../extras/SubSettingsContainer';
 import { AnimatePresence } from 'framer-motion';
 import SlidingPanel from '../../supporting/SlidingPanel';
-import LogoSettings from '../popular/supporting/StoreLayoutLogoSettings';
 import SimpleLogoSettings from '../popular/supporting/SimpleLogoSettings';
+import BlueSidebarSettings from './BlueSidebarSettings';
 import { useAppSelector, useAppDispatch } from '../../../../app/hooks';
 import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice';
 import OrderDnD from '../../extras/OrderDnD';
@@ -104,14 +104,14 @@ const MenubarWithSearchbarSettings = () => {
                 )}
 
                 {activePanel === 'sidebar' && (
-                <SlidingPanel
-                    key="sidebar"
-                    isOpen={true}
-                    onClose={closePanel}
-                    title="Sidebar Settings"
-                >
-                    <></>
-                </SlidingPanel>
+                    <SlidingPanel
+                        key="sidebar"
+                        isOpen={true}
+                        onClose={closePanel}
+                        title="Sidebar Settings"
+                    >
+                        <BlueSidebarSettings />
+                    </SlidingPanel>
                 )}
                 {activePanel === 'logo' && (
                 <SlidingPanel

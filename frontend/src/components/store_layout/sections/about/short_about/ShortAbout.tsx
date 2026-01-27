@@ -28,7 +28,12 @@ const ShortAbout = () => {
                         ...getTextStyles(about.text.paragraph), 
                     }}
                     className="mt-[2vh]"
-                >{about.text.paragraph.input}</p>
+                >
+                    <div 
+                        className="text-wrap w-full rich-text"
+                        dangerouslySetInnerHTML={{ __html: about.text.paragraph.input }}
+                    />
+                </p>
             </div>
             {/* Desktop */}
             <div style={{}} className="hidden lg:flex px-[10vh] py-[15vh]">
@@ -45,7 +50,12 @@ const ShortAbout = () => {
                             ...getTextStyles(about.text.paragraph), 
                         }}
                         className="mt-[2vh] w-[70%]"
-                    >{about.text.paragraph.input}</p>
+                    >
+                        <div 
+                            className="text-wrap w-full rich-text"
+                            dangerouslySetInnerHTML={{ __html: about.text.paragraph.input }}
+                        />
+                    </p>
                 </div>
             </div>
         </div>

@@ -27,7 +27,7 @@ const SingleStoreProductSection = () => {
     const isLoading = useAppSelector(state => state.products.isLoading)
     const settings = useAppSelector((state) => state.layoutSettings.sections.singleProduct);
     const routes = useAppSelector((state) => state.layoutSettings.routes);
-    const isCartLoading = useAppSelector(state => state.cart.loading)
+    const isCartLoading = useAppSelector(state => state.cart.isLoading)
     const { colors, fonts } = useAppSelector((state) => state.layoutSettings);
     const user = useAppSelector(state => state.user.user)
 
@@ -124,10 +124,10 @@ const SingleStoreProductSection = () => {
                     ...getBackgroundStyles(settings.text.exit.background, colors),
                 }}
                 onClick={() => {navigate(-1)}}
-                className="w-fit flex flex-row items-center cursor-pointer"
+                className="w-fit flex flex-row items-center cursor-pointer gap-1"
             >
                 <HiArrowLeftEndOnRectangle />
-                <p>Back</p>
+                <span>Back</span>
             </div>
 
             {/* Image and Details */}

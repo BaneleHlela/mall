@@ -2,7 +2,7 @@ import React from 'react'
 
 const Scibbler = () => {
   return (
-    <div>Scibbler</div>
+    <>sCRIBBLER</>
   )
 }
 

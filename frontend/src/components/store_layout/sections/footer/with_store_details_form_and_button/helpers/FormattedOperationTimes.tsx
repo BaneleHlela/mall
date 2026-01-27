@@ -27,12 +27,14 @@ export function formatOperationTimes(operationTimes: OperationTimes, style: any)
       openTimes.push(
         <div 
           style={{
-            ...getTextStyles(style)
+            ...getTextStyles(style),
+            
           }}
           key={currentDays.join('-')}
+          className="my-1"
         >
-          <p className="font-semibold">{formatDayRange(currentDays)}:</p>
-          <p>{currentRange}</p>
+          <p className="font-semibold m-0 p-0">{formatDayRange(currentDays)}:</p>
+          <p className="m-0 p-0">{currentRange}</p>
         </div>
       );
     }

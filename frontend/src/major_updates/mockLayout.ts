@@ -1,12 +1,13 @@
 import { Description } from "@headlessui/react";
 import { duration } from "@mui/material";
+import { FontSize } from "@tiptap/extension-text-style";
 import { pick } from "lodash";
 import { LineChart, Weight } from "lucide-react";
 
 export const mockLayout = {
     _id: "layoutid",
     colors: {
-        primary: "primary",
+        primary: "orange",
         secondary: "#0027f6",
         accent: "primary",
         quad: "gray",
@@ -466,79 +467,53 @@ export const mockLayout = {
             }
         },                                 
         about: {
-            text: {
-                heading: {
-                    input: "Heading",
-                    fontFamily: "secondary",
-                    color: "secondary",
-                    fontSize: {
-                        mobile: "3.8000000000000016vh",
-                        desktop: "5.2vh"
-                    },
-                    weight: "normal"
-                },
-                subheading: {
-                    input: "Subheading",
-                    fontFamily: "secondary",
-                    color: "secondary",
-                    fontSize: {
-                        mobile: "3.8000000000000016vh",
-                        desktop: "5.2vh"
-                    },
-                    weight: "normal"
-                },
-                firstParagraph:{
-                    input: "I'm a paragraph. Click here to add your own text and edit me. It’s easy. Just click “Edit Text” or double click me to add your own content and make changes to the font. Feel free to drag and drop me anywhere you like on your page. I’m a great place for you to tell a story and let your users know a little more about you.",
-                    fontFamily: "secondary",
-                    color: "secondary",
-                    fontSize: {
-                        mobile: "3.8000000000000016vh",
-                        desktop: "5.2vh"
-                    },
-                    weight: "normal"
-                },
-                secondParagraph:{
-                    input: "I'm a paragraph. Click here to add your own text and edit me. It’s easy. Just click “Edit Text” or double click me to add your own content and make changes to the font. Feel free to drag and drop me anywhere you like on your page. I’m a great place for you to tell a story and let your users know a little more about you.",
-                    fontFamily: "secondary",
-                    color: "secondary",
-                    fontSize: {
-                        mobile: "3.8000000000000016vh",
-                        desktop: "5.2vh"
-                    },
-                    weight: "normal"
-                },
-                secondSubheading: {
-                    input: "Subheading",
-                    fontFamily: "secondary",
-                    color: "secondary",
-                    fontSize: {
-                        mobile: "3.8000000000000016vh",
-                        desktop: "5.2vh"
-                    },
-                    weight: "normal"
-                }, 
-            },
             background: {
-
+                color: "primary",
             },
-            image: {
-                url: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/khusela-roofing-solutions/images/37a36775bb62d27716e6b0ac44109bfb.jpg", "https://storage.googleapis.com/the-mall-uploads-giza/stores/khusela-roofing-solutions/images/37a36775bb62d27716e6b0ac44109bfb.jpg"],
+            text: {
+                header: {
+                    input: "Made With Love & Sauce",
+                    fontFamily: "primary",
+                    fontSize: {
+                        mobile: "4vh",
+                        desktop: "5vh"
+                    }
+                },
+                details: {
+                    fontSize: {
+                        mobile: "2.4vh",
+                        desktop: "3vh"
+                    },
+                    fontFamily: "primary",
+                },
+                address: {
+                    input: "123 Mthatheni Street, Madadeni 2951"
+                },
+                openingHours: {
+                    input: "<strong>Mon-Fri:</strong> 8am - 6pm<br/><strong>Sat:</strong> 9am - 4pm<br/><strong>Sun:</strong> Closed"
+                }
+            },
+            logo: {
+                use: "logo",
+                logoUrl: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/khona-kota-chips/images/icon.png"],
+                text: {
+                    input: "",
+                    color: "primary",
+                    fontSize: {
+                        mobile: "3vh",
+                        desktop: "4vh"
+                    },
+                    weight: "bold",
+                    letterSpacing: "0px",
+                    textDecoration: "none"
+                },
                 background: {
-                    height: {
-                        mobile: "50vh",
-                        desktop: "100%",
-                    },
-                    width: { 
-                        mobile: "100%",
-                        desktop: "50%",
-                    },
-                    border: {
-                        width: "0px",
-                        style: "solid",
-                        radius: "30px",
+                    width: {
+                        mobile: "20%",
+                        desktop: "25vh"
                     }
                 }
-            }
+            },
         },
         nabout: {
             variation: "doctorAbout",

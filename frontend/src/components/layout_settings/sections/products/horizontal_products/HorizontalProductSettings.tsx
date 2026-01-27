@@ -48,7 +48,7 @@ const HorizontalProductSettings = () => {
                         objectPath={`${objectPath}.text.header`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={[ "color", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing" ]}
+                        allow={[ "color", "input", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing", "textAlign" ]}
                         responsiveSize
                     />
                 </div>
@@ -76,7 +76,7 @@ const HorizontalProductSettings = () => {
                                         objectPath={`${objectPath}.card.background`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={["height", "border"]}
+                                        allow={["height", "border", "padding"]}
                                         widthUnit="vw"
                                         heightUnit="vh"
                                         responsiveSize
@@ -135,7 +135,7 @@ const HorizontalProductSettings = () => {
                                 <div className="px-[.15vh] space-y-[.3vh]">
                                     <TextEditor
                                         objectPath={`${objectPath}.card.details.name`}
-                                        allow={[ "color", "fontFamily", "fontSize", "weight"]}
+                                        allow={[ "color", "fontFamily", "fontSize", "weight", "padding"]}
                                         responsiveSize
                                         responsivePadding
                                         settings={settings}

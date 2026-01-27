@@ -4,6 +4,7 @@ import FooterWithStoreDetailsButtonAndFormOrLocationSettings from './with_store_
 import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice';
 import AddToMenuBarToggler from '../../extras/AddToMenubarToggler';
 import FooterWithSocialsAndEmailSettings from './footer_with_socials_and_email/FooterWithSocialsAndEmailSettings';
+import FastFoodFooterSettings from './fast_food_footer/FastFoodFooterSettings';
 
 const StoreFooterSectionSettings = () => {
   const dispatch = useAppDispatch();
@@ -29,8 +30,18 @@ const StoreFooterSectionSettings = () => {
       </>
     )
   }
+
+  if ( variation === "fastFoodFooter") {
+    return (
+      <>
+        <AddToMenuBarToggler section='footer' />
+        <FastFoodFooterSettings handleSettingChange={handleSettingChange} settings={settings}/>
+      </>
+    )
+  }
+
   return (
-    <div>StoreFooterSectionSetting</div>
+    <div>No settings matching {variation}</div>
   )
 }
 

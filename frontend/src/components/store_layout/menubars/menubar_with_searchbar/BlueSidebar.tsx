@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { getBackgroundStyles, getSidebarAnimation, getTextStyles } from '../../../../utils/stylingFunctions';
 import { Link } from 'react-router-dom';
 import StoreMenubarLogo from '../shared_menubar_components/StoreMenubarLogo';
+import type { BackgroundSettings, TextSettings } from '../../../../types/layoutSettingsType';
+import type { Background } from '../../../../types/posterTypes';
 
 type NavLink = {
   to: string;
@@ -19,8 +21,10 @@ interface BlueSidebarProps {
     logo: {
       use: string;
       logoText: string;
+      logoUrl: string[];
       style: {
-        color: string;
+        text: TextSettings;
+        background: BackgroundSettings;
       }
     }
     links: {
@@ -55,15 +59,15 @@ const BlueSidebar: React.FC<BlueSidebarProps> = ({
         className="fixed pb-5 h-screen w-screen flex flex-col z-50 inset-0 lg:hidden"
       >
         <div className="flex items-center justify-center h-[15%] w-full">
-            <div className="h-full">
+            <div className="h-full mt-[10vh]">
               <StoreMenubarLogo 
                   width="50%" 
                   use={style.logo.use}
                   logoText={style.logo.logoText}
+                  logoUrl={style.logo.logoUrl || ""}
                   style={{
-                      color: style.logo.style.color,
-                      fontSize: '2.5vh',
-                      fontWeight: 'bold',
+                      text: style.logo.style.text || {},
+                      background: style.logo.style.background || {}
                   }}
               />
             </div>

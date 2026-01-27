@@ -11,7 +11,7 @@ import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import StoreDonationModal from '../shared_donation_section_components/StoreDonationModal';
+import StorePayDonationModal from '../shared_donation_section_components/StorePayDonationModal';
 
 const PopularDonationSection = () => {
   const settings = useAppSelector((state) => state.layoutSettings.sections.donations);
@@ -20,6 +20,9 @@ const PopularDonationSection = () => {
   const colors = useAppSelector((state) => state.layoutSettings.colors);
   const fonts = useAppSelector((state) => state.layoutSettings.fonts);
   const navigate = useNavigate();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDonation, setSelectedDonation] = useState<any | null>(null);
 
 
   const isMobile = window.innerWidth < 768;
@@ -122,6 +125,10 @@ const PopularDonationSection = () => {
                   imageUrl={donation.images[0]}
                   style={settings.card}
                   onClick={() => handleDonationClick(donation.slug)}
+                  onPayClick={() => {
+                    setSelectedDonation(donation);
+                    setIsModalOpen(true);
+                  }}
                 />
               </SwiperSlide>
             ))}
@@ -157,14 +164,20 @@ const PopularDonationSection = () => {
                 imageUrl={donation.images[0]}
                 style={settings.card}
                 onClick={() => handleDonationClick(donation.slug)}
+                onPayClick={() => {
+                  setSelectedDonation(donation);
+                  setIsModalOpen(true);
+                }}
               />
             ))}
           </div>
         </div>
       )}
-      {
-        <StoreDonationModal />
-      }
+      <StorePayDonationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        donation={selectedDonation}
+      />
     </div>
   );
 };

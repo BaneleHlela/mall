@@ -102,7 +102,7 @@ const ShortAboutSettings = () => {
                                         allow={["input", "fontFamily", "fontSize", "color", "weight", "fontStyle", "padding"]}
                                         responsivePadding
                                         responsiveSize
-                                        useTextarea
+                                        useQuill
                                     />
                                 </div>
                             }

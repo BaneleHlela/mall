@@ -11,6 +11,7 @@ interface PopularDonationCardProps {
   marking?: string;
   style: any;
   onClick?: () => void;
+  onPayClick?: () => void;
 }
 
 const PopularDonationCard: React.FC<PopularDonationCardProps> = ({
@@ -19,7 +20,8 @@ const PopularDonationCard: React.FC<PopularDonationCardProps> = ({
   imageUrl,
   marking,
   style,
-  onClick
+  onClick,
+  onPayClick
 }) => {
 
   return (
@@ -80,7 +82,6 @@ const PopularDonationCard: React.FC<PopularDonationCardProps> = ({
           `}
         >
           <div
-                
             className={`text-wrap w-full rich-text`}
             dangerouslySetInnerHTML={{ __html: donationDescription }}
           />
@@ -104,9 +105,9 @@ const PopularDonationCard: React.FC<PopularDonationCardProps> = ({
                 ${style.textAndButton.button.position === "end" && "justify-end"} 
             `}
           >
-            <StoreLayoutButton 
-              style={style.textAndButton.button} 
-              onClick={() => {}} 
+            <StoreLayoutButton
+              style={style.textAndButton.button}
+              onClick={onPayClick || (() => {})}
             />
           </div>
         </div>
