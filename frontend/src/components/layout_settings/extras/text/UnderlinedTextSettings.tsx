@@ -7,13 +7,14 @@ import OptionsToggler from '../../supporting/OptionsToggler'
 import SettingsSlider from '../../supporting/SettingsSlider'
 import BackgroundEditor from '../../background/BackgroundEditor'
 
-const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: boolean, responsiveSize?: boolean, allowWidth?: boolean }> = ({
+const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: boolean, responsiveSize?: boolean, allowWidth?: boolean, useQuill?: boolean }> = ({
     settings,
     handleSettingChange,
     objectPath,
     allowInput = false,
     responsiveSize = false,
-    allowWidth = false
+    allowWidth = false,
+    useQuill = false,
 }) => {
     const allowArray = [
         "animation",
@@ -64,6 +65,7 @@ const UnderlinedTextSettings: React.FC<SupportingSettingsProps & { allowInput?: 
                         allow={allowArray}
                         responsiveSize={responsiveSize}
                         responsivePadding
+                        useQuill={useQuill}
                     />
                 }
             />

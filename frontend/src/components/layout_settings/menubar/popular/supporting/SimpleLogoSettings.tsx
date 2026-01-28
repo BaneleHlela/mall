@@ -16,7 +16,8 @@ const SimpleLogoSettings: React.FC<SimpleLogoSettingsProps> = ({ objectPath }) =
   const dispatch = useAppDispatch();
   const settings = useAppSelector((state) => state.layoutSettings);
   const logoSettings = getSetting("", settings, objectPath);
-    
+  const logoType = logoSettings?.use || 'logo';
+
   const handleSettingChange = (field: string, value: any) => {
     dispatch(updateSetting({ field, value }));
   };
@@ -27,20 +28,20 @@ const SimpleLogoSettings: React.FC<SimpleLogoSettingsProps> = ({ objectPath }) =
       <OptionsToggler
         label="Logo Type"
         options={['logo', 'text']}
-        value={logoSettings.use}
+        value={logoType}
         onChange={(value) => handleSettingChange(`${objectPath}.use`, value)}
       />
       {/* Logo Images */}
-      {logoSettings.use === 'logo' && (
+      {logoType === 'logo' && (
         <MultipleLayoutImagesHandler
           objectPath={`${objectPath}.logoUrl`}
           min={1}
           max={2}
-          images={getSetting("logoUrl", settings, objectPath)}
+          images={getSetting("logoUrl", settings, objectPath) || []}
         />
       )}
 
-      {logoSettings.use === 'text' && (
+      {logoType === 'text' && (
         <SubSettingsContainer
           name="Text"
           SettingsComponent={

@@ -32,14 +32,13 @@ const UnderlinedText: React.FC<UnderlinedTextProps> = ({
                 }}
                 className="flex flex-col items-center text-wrap"
             >
-                <h1 
+                <div 
                     style={{
                         ...getBackgroundStyles(style?.background || {})  // Fallback to an empty object if background is undefined
                     }}
-                    className={`${style?.animation || ''} text-wrap`} // Default to empty string if animation is not provided
-                >
-                    {input || style?.input} {/* Fallback to style.input if input is undefined */}
-                </h1>
+                    className={`${style?.animation || ''} text-wrap`} 
+                    dangerouslySetInnerHTML={{ __html: style?.input || '' }}
+                />
                 {underline?.show && (
                     <span
                         style={{

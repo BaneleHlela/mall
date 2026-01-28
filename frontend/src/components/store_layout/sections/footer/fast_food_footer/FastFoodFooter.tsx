@@ -13,7 +13,7 @@ const FastFoodFooter = () => {
 
     return (
         <div
-            id="about"
+            id="footer"
             className='items-center w-full h-full flex flex-col py-[3vh] lg:py-[5vh]'
             style={{
                 ...getBackgroundStyles(config.background, colors),
@@ -85,6 +85,10 @@ const FastFoodFooter = () => {
                     </div>
                 )}
             </div>
+            {/* Copyright */}
+            <footer className="w-full text-center py-8 text-gray-600 text-sm border-t mt-6">
+                © {new Date().getFullYear()} The Mall — Concept by The Mall Team.
+            </footer>
         </div>
     )
 }

@@ -211,8 +211,8 @@ const MallSearchPage = () => {
           </div>
         )}
         <footer className="text-center py-8 text-gray-600 text-sm border-t mt-6 mb-[10vh]">
-        © {new Date().getFullYear()} The Mall — Concept by Banele Hlela.
-      </footer>
+          © {new Date().getFullYear()} The Mall — Concept by Banele Hlela.
+        </footer>
       </div>
       
     </div>

@@ -192,7 +192,7 @@ const DashBoardStoreProducts = () => {
             className="flex items-center space-x-1 bg-gray-900 text-white text-[2vh] font-semibold px-[2.2vh] py-[1vh] rounded-[.45vh] hover:bg-white hover:text-black hover:shadow-[0px_0px_10px_7px_rgba(0,_0,_0,_0.1)]"
             onClick={() => setAddProductOpen(true)}
           >
-            <p className="">Add</p> <FaPlus className='text-[1.8vh]'/>
+            <div className="">Add</div> <FaPlus className='text-[1.8vh]'/>
           </button>
           <div className="lg:space-x-[2vh] space-x-1 flex flex-row items-center">
             <DashboardFilterByCategory

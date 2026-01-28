@@ -1,10 +1,11 @@
 import FirstStorePackageCard from "../../../extras/cards/package/first/FirstStorePackageCard";
+import PopularStorePackageCard from "../../../extras/cards/package/popular/PopularStorePackageCard";
 
 const packages = [
   {
     title: 'New Client Deal',
     price: 120,
-    frequency: '',
+    frequency: 'Billed Once',
     description: 'Great for trying our services',
     duration: 'Valid for 3 months',
     features: ['3 Treatments', 'Free consultation', 'Online resources'],
@@ -46,7 +47,7 @@ const PackagesSection = () => {
     <section className="bg-[#c7d9be] py-10 px-4">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
         {packages.map((pkg, i) => (
-          <FirstStorePackageCard key={i} {...pkg} />
+          <PopularStorePackageCard key={i} {...pkg} />
         ))}
       </div>
     </section>

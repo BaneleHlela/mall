@@ -145,7 +145,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                     <SlidingPanel
                         key="textLines"
                         isOpen={true}
-                        onClose={closePanel}
+                        onClose={() => setActivePanel("container")}
                         title="Text Lines"
                     >
                         <div className="px-2 space-y-1 py-1">
@@ -155,12 +155,12 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                             SettingsComponent={
                             <div className="px-2 space-y-2">
                                 <BackgroundEditor
-                                objectPath={`${objectPath}.text`}
-                                settings={settings}
-                                handleSettingChange={handleSettingChange}
-                                allow={["width"]}
-                                widthUnit="vw"
-                                responsiveSize={true}
+                                    objectPath={`${objectPath}.text`}
+                                    settings={settings}
+                                    handleSettingChange={handleSettingChange}
+                                    allow={["width"]}
+                                    widthUnit="vw"
+                                    responsiveSize={true}
                                 />
                             </div>
                             }
@@ -169,9 +169,9 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                         {/* Individual Line Settings */}
                         {["firstLine", "secondLine", "thirdLine"].map((lineKey) => (
                             <FirstOrderSubSettingsContainer
-                            key={lineKey}
-                            name={lineKey.replace("Line", " Line")} // Formats: firstLine -> first Line
-                            onClick={() => setActivePanel(lineKey)}
+                                key={lineKey}
+                                name={lineKey.replace("Line", " Line")} // Formats: firstLine -> first Line
+                                onClick={() => setActivePanel(lineKey)}
                             />
                         ))}
                         </div>
@@ -208,6 +208,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                                     handleSettingChange={handleSettingChange}
                                     allowInput
                                     responsiveSize
+                                    useQuill
                                 />
                             </div>
                         </SlidingPanel>

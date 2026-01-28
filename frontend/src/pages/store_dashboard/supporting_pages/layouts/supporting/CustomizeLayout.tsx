@@ -42,6 +42,8 @@ const CustomizeLayout: React.FC<CustomizeLayoutProps> = ({ layout, onBack, edit 
     const [sectionUpdates, setSectionUpdates] = useState<Record<string, any>>({});
     const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+    console.log(layout)
+
     // Extract sections from layout routes
     const getLayoutSections = () => {
         const sections: Array<{name: string, type: SectionType, hasContent: boolean}> = [];

@@ -34,17 +34,14 @@ const StoreMenubarLogo: React.FC<StoreMenubarLogoProps> = ({
     const hasLogoImages = logoUrl.length > 0;
 
     return (
-        <Link style={{...getBackgroundStyles(style?.background, colors)}} to={linkTo} className='flex items-center h-full max-w-fit pl-1 pr-1'>
+        <Link  to={linkTo} className='flex items-center justify-center h-full max-w-fit pl-1 pr-1'>
             {use === 'logo' && hasLogoImages ? (
-                <div className="w-full h-full">
-                    <img
-                        style={{
-                        }}
-                        src={window.innerWidth < 589 ? logoUrl[0] : (logoUrl[1] || logoUrl[0])}
-                        alt='store logo'
-                        className='h-full w-full object-contain'
-                    />
-                </div>
+                <img
+                    style={{...getBackgroundStyles(style?.background, colors)}}
+                    src={window.innerWidth < 589 ? logoUrl[0] : (logoUrl[1] || logoUrl[0])}
+                    alt='store logo'
+                    className='flex items-center justify-center max-h-full w-full object-contain bg-white'
+                />
             ) : (
             <div
                 style={{

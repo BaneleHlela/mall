@@ -5,10 +5,11 @@ import { mockLayout } from '../../../../../major_updates/mockLayout';
 import { SlArrowDown } from 'react-icons/sl';
 import { useAppSelector } from '../../../../../app/hooks';
 import { getBackgroundStyles, getTextStyles } from '../../../../../utils/stylingFunctions';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const InStoreBasicSearchResults = () => {
-    const config = useAppSelector((state) => state.layoutSettings.sections.searchResults);;
+    const config = useAppSelector((state) => state.layoutSettings.sections.searchResults);
+    const store = useAppSelector((state) => state.stores.currentStore);
     const products = useAppSelector((state) => state.products.products);
     const {colors, fonts} = useAppSelector((state) => state.layoutSettings);
     const currentStore = useAppSelector((state) => state.stores.currentStore);
@@ -16,10 +17,10 @@ const InStoreBasicSearchResults = () => {
     const [isSortModalOpen, setIsSortModalOpen] = useState(false);
     const [selectedSort, setSelectedSort] = useState('best match');
     const sortDropdownRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const searchQuery = searchParams.get('q') || '';
 
-    console.log(searchQuery);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -34,6 +35,18 @@ const InStoreBasicSearchResults = () => {
         };
     }, []);
 
+    const handleProductClick = (productSlug: string) => {
+        const currentUrl = window.location.href;
+    
+        if (currentUrl.includes('layouts')) {
+          navigate(`/layouts/${store?.slug}/preview/product/${productSlug}`);
+        } else if (store && store.slug) {
+          navigate(`/stores/${store.slug}/product/${productSlug}`);
+        } else {
+          console.error('Store ID is not available');
+        }
+    };
+
     const hasCategories = (currentStore?.categories?.products?.length ?? 0) > 0 || (currentStore?.categories?.services?.length ?? 0) > 0;
 
     const sortOptions = ['best match', 'price (low to high)', 'price (high to low)', 'newest', 'oldest'];
@@ -46,7 +59,7 @@ const InStoreBasicSearchResults = () => {
         )
         : products;
     return (
-        <div style={{...getBackgroundStyles(config.background)}} className='flex flex-col w-full lg:w-[80%] px-[1vh] py-[3vh]'>
+        <div style={{...getBackgroundStyles(config.background)}} className='flex flex-col w-full min-h-fit lg:w-[80%] px-[1vh] py-[3vh]'>
             {/* Searchbar */}
             <div style={{...getTextStyles(config.text.header)}} className="text-center">
                 Search Results
@@ -145,6 +158,7 @@ const InStoreBasicSearchResults = () => {
                                     prices={product.prices}
                                     imageUrl={product.images[0]}
                                     style={config.card}
+                                    onClick={() => handleProductClick(product.slug)}
                                 />
                             </div>
                         ))}

@@ -1750,6 +1750,71 @@ export const mockLayout = {
                     },
                 }
             },
+        },
+        packages: {
+            card: {
+                background: {
+                    color: "primary",
+                },
+                text: {
+                    name: {
+                        fontFamily: "secondary",
+                        fontSize: {
+                            mobile: "2.5vh",
+                            desktop: "2.8vh"
+                        },
+                        color: "secondary",
+                        weight: "bold"
+                    },
+                    price: {
+                        fontFamily: "secondary",
+                        fontSize: {
+                            mobile: "3vh",
+                            desktop: "4.2vh"
+                        },
+                        color: "secondary",
+                        weight: "bold"
+                    },
+                    details: {
+                        fontFamily: "primary",
+                        fontSize: {
+                            mobile: "2vh",
+                            desktop: "2.2vh"
+                        },
+                        color: "secondary",
+                        weight: "normal"
+                    }
+                },
+                button: {
+                    show: true,
+                    style: {
+                        text: {
+                            input: "Buy Now",
+                            fontFamily: "secondary",
+                            color: "primary",
+                            fontSize: "1.2em",
+                            fontWeight: "bold",
+                            letterSpacing: "0px"
+                        },
+                        background: {
+                            width: "190px",
+                            color: "accent",
+                            shadow: true,
+                            border: {
+                            width: "3px",
+                            style: "solid",
+                            color: "primary",
+                            radius: "0px"
+                            }
+                        }
+                    },
+                    position: "center"
+                },
+                border: {
+                    show: "true",
+                    color: "secondary",
+                }
+            }
         }
     }
 }

@@ -59,9 +59,8 @@ const BlueSidebar: React.FC<BlueSidebarProps> = ({
         className="fixed pb-5 h-screen w-screen flex flex-col z-50 inset-0 lg:hidden"
       >
         <div className="flex items-center justify-center h-[15%] w-full">
-            <div className="h-full mt-[10vh]">
+            <div className="flex justify-center items-center h-full mt-[10vh] w-fit">
               <StoreMenubarLogo 
-                  width="50%" 
                   use={style.logo.use}
                   logoText={style.logo.logoText}
                   logoUrl={style.logo.logoUrl || ""}

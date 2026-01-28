@@ -78,6 +78,7 @@ const LayoutCreator = () => {
                   onSetActive={() => {}} // Add appropriate function here
                   onRename={() => {}} // Add appropriate function here
                   edit={false}
+                  onDelete={() => {}}
                 />
               );
             })}

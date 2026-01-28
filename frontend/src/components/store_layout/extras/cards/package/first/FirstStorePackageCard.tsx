@@ -36,7 +36,7 @@ const FirstStorePackageCard: React.FC<FirstStorePackageCardProps> = ({
         </div>
       )}
 
-      <div className="p-6">
+      <div className="p-6 border-b border-black">
         <h3 className="text-xl font-semibold mb-2">{title}</h3>
         <p className="text-3xl font-bold">${price}</p>
         <p className="text-sm">{frequency}</p>
@@ -49,7 +49,7 @@ const FirstStorePackageCard: React.FC<FirstStorePackageCardProps> = ({
       </div>
 
       {/* Desktop Benefits */}
-      <ul className="hidden md:block border-t border-black p-4 space-y-2 text-sm">
+      <ul className="hidden md:block  p-4 space-y-2 text-sm list-none">
         {features.map((feature, i) => (
           <li key={i}>{feature}</li>
         ))}
@@ -72,7 +72,7 @@ const FirstStorePackageCard: React.FC<FirstStorePackageCardProps> = ({
           )}
         </button>
         {showBenefits && (
-          <ul className="p-4 space-y-2 text-sm">
+          <ul className="p-4 space-y-2 text-sm list-decimal">
             {features.map((feature, i) => (
               <li key={i}>{feature}</li>
             ))}

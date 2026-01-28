@@ -218,19 +218,12 @@ ol ul, .rich-text ol ul {
 }
 
 /* Paragraph spacing for rich text content */
-p, .rich-text p {
+.rich-text p {
   margin: 0.5rem 0;
   line-height: 1.2;
 }
 
 /* Remove margin from first and last paragraphs */
-p:first-child, .rich-text p:first-child {
-  margin-top: 0;
-}
-
-p:last-child, .rich-text p:last-child {
-  margin-bottom: 0;
-}
 
 /* Ensure consistent spacing between elements */
 .rich-text > * + * {

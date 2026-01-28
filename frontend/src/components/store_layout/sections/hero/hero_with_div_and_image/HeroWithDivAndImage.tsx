@@ -5,6 +5,7 @@ import { useStoreButtonClickHandler } from "../../../extras/buttons/useStoreButt
 import UnderlinedText from "../../../extras/text/UnderlinedText";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import StoreLayoutButton from "../../../shared_layout_components/StoreLayoutButton";
 
 const HeroWithDivAndImage = () => {
   const config = useAppSelector((state) => state.layoutSettings.sections.hero);
@@ -40,7 +41,7 @@ const HeroWithDivAndImage = () => {
               : ""
           }`}
         >
-          <StoreButton
+          <StoreLayoutButton
             style={config.button}
             onClick={() =>
               handleButtonClick({

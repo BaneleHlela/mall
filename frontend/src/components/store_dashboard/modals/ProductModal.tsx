@@ -357,7 +357,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
             </div>
           )}
 
-          <div className="w-full bg-amber-200 flex justify-center">
+          <div className="w-full flex justify-center">
               {(imageUrls.length > 0 || images.length > 0) && (
                 <div className="grid grid-cols-5 gap-2 w-full max-w-5xl mt-2">
                   

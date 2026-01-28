@@ -10,6 +10,7 @@ import { getBackgroundStyles, getTextStyles } from '../../../../utils/stylingFun
 import UnderlinedText from '../../extras/text/UnderlinedText';
 import { formatPriceWithSpaces } from '../search_results/shared_search_results_components/BasicSearchProductCard';
 import VariationDropdown from './supporting/VariationDropdown';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 // ts errors
@@ -82,7 +83,19 @@ const SingleStoreProductSection = () => {
 
     // --- Add to Cart ---
     const handleAddToCart = () => {
-        console.log(user);
+        // Please login toaster if not logged in.
+        if (!user) {
+            toast.error('Please log in to add items to your cart.', {
+                style: {
+                    background: '#fef2f2',
+                    color: '#991b1b',
+                    fontFamily: 'Outfit',
+                },
+                icon: '❌',
+            });
+            return;
+        }
+
         dispatch(
             addToCart({
                 storeId: product?.store || '', 
@@ -92,20 +105,6 @@ const SingleStoreProductSection = () => {
                 variation: selectedVariation || undefined,
             })
         );
-    };
-
-    // --- Handle "Back to home" navigation ---
-    const handleBackToHome = () => {
-        const productStore = product.store;
-        const productsRoute = routes.products?.url || "products"; // Default to "products" if not found in routes
-
-        // Determine the correct navigation path
-        const basePath = `/stores/${productStore}`;
-        const fullPath = routes.products?.url === "/products" 
-            ? `${basePath}${productsRoute}#products` 
-            : `${basePath}#products`;
-
-        navigate(fullPath); // Navigate to the determined path
     };
 
     
