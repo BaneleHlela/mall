@@ -14,9 +14,9 @@ const API_BASE = `${API_URL}/api/packages`;
 // 🔁 Thunks
 export const fetchStorePackages = createAsyncThunk(
   'packages/fetchStorePackages',
-  async (storeId: string, thunkAPI) => {
+  async ({ storeSlug }: { storeSlug: string }, thunkAPI) => {
     try {
-      const res = await axios.get(`${API_BASE}/store/${storeId}`);
+      const res = await axios.get(`${API_BASE}/store/${storeSlug}`);
       return res.data as Package[];
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to fetch store packages');

@@ -25,7 +25,7 @@ const MobileTopBar: React.FC<{
     const dispatch = useAppDispatch();
     const user = useAppSelector((state) => state.user.user);
 
-    const isFavorite = user?.favoriteStores?.includes(store?._id);
+    const isFavorite = user?.favourites?.stores?.includes(store?._id);
 
     const handleFavoriteClick = () => {
       if (!user || !store) {
@@ -183,7 +183,7 @@ const DesktopTopBar: React.FC<{
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
 
-  const isFavorite = user?.favoriteStores?.includes(store?._id);
+  const isFavorite = user?.favourites?.stores?.includes(store?._id as string);
 
   const handleFavoriteClick = () => {
     if (!user || !store) {

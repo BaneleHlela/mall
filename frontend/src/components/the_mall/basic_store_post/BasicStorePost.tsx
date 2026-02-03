@@ -155,7 +155,7 @@ const BasicStorePost: React.FC<PostData> = ({ storeSlug, status, poster }) => {
     const distance = user ? calculateDistanceToStore(user, store) : null;
     const distanceText = formatDistance(distance);
 
-    const isFavorite = user?.favoriteStores?.includes(store._id);
+    const isFavorite = user?.favourites?.stores?.includes(store._id);
 
     const handleFavoriteClick = (e: React.MouseEvent) => {
         e.stopPropagation(); // Prevent navigating when clicking the heart

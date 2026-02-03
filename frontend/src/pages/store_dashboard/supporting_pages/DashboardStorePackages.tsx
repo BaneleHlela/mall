@@ -8,6 +8,8 @@ import { deletePackage, updatePackage } from '../../../features/packages/package
 import type { Package } from '../../../types/packageTypes';
 import type { Product } from '../../../types/productTypes';
 import type { Service } from '../../../types/serviceTypes';
+import type { Rental } from '../../../types/rentalTypes';
+import type { Donation } from '../../../types/donationTypes';
 import Swal from 'sweetalert2';
 import { clearError } from '../../../features/user/userSlice';
 import { FaPlus } from 'react-icons/fa';
@@ -17,6 +19,8 @@ const DashBoardStorePackages = () => {
   const [selectedStatus, setSelectedStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [addPackageOpen, setAddPackageOpen] = useState(false);
+  const [editPackageOpen, setEditPackageOpen] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' | 'cycle' }>({
     key: '',
     direction: 'asc',
@@ -25,6 +29,11 @@ const DashBoardStorePackages = () => {
   const itemsPerPage = 15;
 
   const packages = useAppSelector(state => state.packages.packages);
+
+  const handleEditPackage = (pkg: Package) => {
+    setSelectedPackage(pkg);
+    setEditPackageOpen(true);
+  };
 
   const handleDeletePackage = async (pkg: Package) => {
     if (!pkg._id) return;
@@ -125,6 +134,7 @@ const DashBoardStorePackages = () => {
     return statusMatch;
   });
 
+
   // ✅ Sorting function
   const sortedPackages = [...filteredPackages].sort((a, b) => {
     if (!sortConfig.key) return 0;
@@ -182,10 +192,10 @@ const DashBoardStorePackages = () => {
           <DashboardStoreItemsTable
             items={paginatedPackages}
             type="package"
-            onEditClick={() => {}}
-            onDeleteClick={handleDeletePackage as (item: Product | Service | Package) => void}
+            onEditClick={handleEditPackage as (item: Product | Service | Package | Rental | Donation) => void}
+            onDeleteClick={handleDeletePackage as (item: Product | Service | Package | Rental | Donation) => void}
             onSort={handleSort}
-            onStatusClick={handleStatusClick as (item: Product | Service | Package) => void}
+            onStatusClick={handleStatusClick as (item: Product | Service | Package | Rental | Donation) => void}
           />
         </div>
 
@@ -207,6 +217,17 @@ const DashBoardStorePackages = () => {
               setAddPackageOpen(false)
               clearError()
           }}
+          />
+
+          {/* Edit Package Modal */}
+          <AddPackageModal
+            open={editPackageOpen}
+            onClose={() => {
+              setEditPackageOpen(false);
+              setSelectedPackage(null);
+              clearError();
+            }}
+            package={selectedPackage || undefined}
           />
         </div>
       </div>

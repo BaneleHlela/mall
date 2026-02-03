@@ -30,6 +30,7 @@ import { fetchStoreServices } from "../../features/services/servicesSlice";
 import { fetchStoreRentals } from "../../features/rentals/rentalSlice";
 import { fetchStoreDonations } from "../../features/donations/donationsSlice";
 import DashboardStoreDonations from "./supporting_pages/DashboardStoreDonations";
+import { fetchStorePackages } from "../../features/packages/packagesSlice";
 
 
 const StoreDashboard = () => {
@@ -75,6 +76,13 @@ const StoreDashboard = () => {
     useEffect(() => {
         if (storeSlug) {
             dispatch(fetchStoreDonations({ storeSlug: storeSlug }));
+        }
+    }, [storeSlug, dispatch]);
+
+    // Fetch Store Packages
+    useEffect(() => {
+        if (storeSlug) {
+            dispatch(fetchStorePackages({ storeSlug: storeSlug }));
         }
     }, [storeSlug, dispatch]);
 

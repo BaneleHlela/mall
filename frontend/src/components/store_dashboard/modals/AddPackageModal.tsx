@@ -1,14 +1,68 @@
-import React, { useState } from 'react';
-import { IoClose } from 'react-icons/io5';
+import React, { useState, useEffect } from 'react';
+import { IoClose, IoReorderTwo } from 'react-icons/io5';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { createPackage } from '../../../features/packages/packagesSlice';
+import { createPackage, updatePackage } from '../../../features/packages/packagesSlice';
+import type { Package } from '../../../types/packageTypes';
+import type { DragEndEvent } from '@dnd-kit/core';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { AiOutlineDrag } from 'react-icons/ai';
 
 interface AddPackageModalProps {
   open: boolean;
   onClose: () => void;
+  package?: Package;
 }
 
-const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose }) => {
+// Sortable Feature Item Component
+const SortableFeatureItem = ({ feature, onRemove }: { feature: string; onRemove: () => void }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: feature });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <span
+      ref={setNodeRef}
+      style={style}
+      className="flex items-center bg-gray-200 text-sm px-2 py-1 rounded-full cursor-move"
+    >
+      <AiOutlineDrag className="mr-1 text-gray-500" size={16} {...attributes} {...listeners} />
+      {feature}
+      <IoClose
+        className="ml-1 cursor-pointer hover:text-red-500"
+        size={16}
+        onClick={onRemove}
+      />
+    </span>
+  );
+};
+
+const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, package: pkg }) => {
   const dispatch = useAppDispatch();
   const store = useAppSelector((state) => state.storeAdmin.store);
 
@@ -20,11 +74,50 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose }) => {
     durationFormat: 'months',
     label: '',
     frequency: 'once',
+    sessions: '',
   });
 
   const [features, setFeatures] = useState<string[]>([]);
   const [featureInput, setFeatureInput] = useState('');
   const [error, setError] = useState<string | null>(null);
+
+  // Initialize form with package data if editing
+  useEffect(() => {
+    if (pkg) {
+      setForm({
+        name: pkg.name || '',
+        price: pkg.price?.toString() || '',
+        description: pkg.description || '',
+        durationCount: pkg.duration?.count?.toString() || '',
+        durationFormat: pkg.duration?.format || 'months',
+        label: pkg.label || '',
+        frequency: pkg.frequency || 'once',
+        sessions: pkg.sessions?.toString() || '',
+      });
+      setFeatures(pkg.features || []);
+    } else {
+      // Reset form when not editing
+      setForm({
+        name: '',
+        price: '',
+        description: '',
+        durationCount: '',
+        durationFormat: 'months',
+        label: '',
+        frequency: 'once',
+        sessions: '',
+      });
+      setFeatures([]);
+    }
+  }, [pkg]);
+
+  // DnD sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -45,6 +138,18 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose }) => {
     setFeatures((prev) => prev.filter((f) => f !== feature));
   };
 
+  // Handle drag end for reordering features
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (active.id !== over?.id && over?.id !== undefined) {
+      setFeatures((items) => {
+        const oldIndex = items.indexOf(active.id as string);
+        const newIndex = items.indexOf(over.id as string);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+
   const handleFormSubmit = async () => {
     setError(null);
 
@@ -61,18 +166,25 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose }) => {
       duration: {
         expires: true,
         count: Number(form.durationCount),
-        format: form.durationFormat,
+        format: form.durationFormat as 'days' | 'weeks' | 'months' | 'years',
       },
-      frequency: form.frequency,
+      frequency: form.frequency as 'once' | 'monthly' | 'yearly' | 'custom',
+      sessions: Number(form.sessions),
       label: form.label.trim(),
       features,
     };
 
     try {
-      await dispatch(createPackage(payload)).unwrap();
+      if (pkg?._id) {
+        // Update existing package
+        await dispatch(updatePackage({ id: pkg._id, data: payload })).unwrap();
+      } else {
+        // Create new package
+        await dispatch(createPackage(payload)).unwrap();
+      }
       onClose();
     } catch (err: any) {
-      setError(err?.message || 'Failed to add package');
+      setError(err?.message || (pkg?._id ? 'Failed to update package' : 'Failed to add package'));
     }
   };
 
@@ -82,7 +194,7 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose }) => {
     <div className="fixed inset-0 h-screen overflow-scroll hide-scrollbar bg-[#00000048] flex items-center justify-center z-50">
       <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 font-[Outfit]">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold ">Add Package</h2>
+          <h2 className="text-lg font-semibold ">{pkg?._id ? 'Edit Package' : 'Add Package'}</h2>
           <button onClick={onClose}>
             <IoClose size={20} className="" />
           </button>
@@ -152,18 +264,31 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium ">Frequency</label>
+            <label className="block text-sm font-medium ">Billed</label>
             <select
               name="frequency"
               value={form.frequency}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded border mt-1"
+              className="w-full px-2 py-2 rounded border mt-1"
             >
               <option value="once">Once</option>
-              <option value="monthly">Monthly</option>
+              {/* <option value="monthly">Monthly</option>
               <option value="yearly">Yearly</option>
-              <option value="custom">Custom</option>
+              <option value="custom">Custom</option> */}
             </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium ">Sessions</label>
+            <input
+              name="sessions"
+              type="number"
+              min="1"
+              value={form.sessions}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded border mt-1"
+              required
+            />
           </div>
 
           <div>
@@ -198,19 +323,24 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose }) => {
               </button>
             </div>
             <div className="flex flex-wrap gap-2 mt-2">
-              {features.map((feature) => (
-                <span
-                  key={feature}
-                  className="flex items-center bg-gray-200 text-sm px-2 py-1 rounded-full"
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={features}
+                  strategy={verticalListSortingStrategy}
                 >
-                  {feature}
-                  <IoClose
-                    className="ml-1 cursor-pointer"
-                    size={16}
-                    onClick={() => handleRemoveFeature(feature)}
-                  />
-                </span>
-              ))}
+                  {features.map((feature) => (
+                    <SortableFeatureItem
+                      key={feature}
+                      feature={feature}
+                      onRemove={() => handleRemoveFeature(feature)}
+                    />
+                  ))}
+                </SortableContext>
+              </DndContext>
             </div>
           </div>
 
@@ -228,7 +358,7 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose }) => {
             onClick={handleFormSubmit}
             className="px-4 py-2 rounded  bg-blue-600"
           >
-            Add Package
+            {pkg?._id ? 'Update Package' : 'Add Package'}
           </button>
         </div>
       </div>

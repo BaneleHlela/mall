@@ -57,6 +57,14 @@ const userSchema = new mongoose.Schema(
 			lng: Number,
 			address: String,
 		}],
+		favourites: {
+			products: [{type: mongoose.Schema.Types.ObjectId, ref: "Product"}],
+			stores: [{type: mongoose.Schema.Types.ObjectId, ref: "Store"}],
+			services: [{type: mongoose.Schema.Types.ObjectId, ref: "Service"}],
+			packages: [{type: mongoose.Schema.Types.ObjectId, ref: "Package"}],
+			rentals: [{type: mongoose.Schema.Types.ObjectId, ref: "Rental"}],
+			donations: [{type: mongoose.Schema.Types.ObjectId, ref: "Donation"}],
+		},
     	wishlist: [{type: mongoose.Schema.Types.ObjectId, ref: "Product"}],
 		favoriteStores: [{type: mongoose.Schema.Types.ObjectId, ref: "Store"}],
 		isBlocked: {

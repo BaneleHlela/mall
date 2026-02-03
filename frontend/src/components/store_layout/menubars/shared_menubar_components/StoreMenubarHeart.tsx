@@ -16,7 +16,7 @@ const StoreMenubarHeart: React.FC<StoreMenubarHeartProps> = ({
     const dispatch = useAppDispatch();
     const store = useAppSelector((state) => state.stores.currentStore);
     const user = useAppSelector((state) => state.user.user);
-    const isFavorite = user?.favoriteStores?.includes(store?._id as string);
+    const isFavorite = user?.favourites?.stores?.includes(store?._id as string);
 
     const handleFavoriteClick = () => {
         if (!user || !store) {

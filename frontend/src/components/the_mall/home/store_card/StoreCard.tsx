@@ -36,7 +36,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
   const storeStatus = getStoreStatus(store.operationTimes);
   const statusClasses = getStatusClasses(storeStatus);
   
-  const isFavorite = user?.favoriteStores?.includes(store._id!);
+  const isFavorite = user?.favourites?.stores?.includes(store._id!);
 
   // Dispatch updateUser directly to toggle favorite
   const handleFavoriteClick = (e: React.MouseEvent) => {

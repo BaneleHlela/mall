@@ -21,7 +21,15 @@ export interface User {
         address: string; 
     }>;
     wishlist: string[];
-    favoriteStores?: string[];
+    favouriteStores?: string[];
+    favourites: {
+        products: Array<string | ObjectId>;
+        stores: Array<string | ObjectId>;
+        services: Array<string | ObjectId>;
+        packages: Array<string | ObjectId>;
+        rentals: Array<string | ObjectId>;
+        donations: Array<string | ObjectId>;
+    };
     refreshToken?: string;
     createdAt: string;
     updatedAt: string;

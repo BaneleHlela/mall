@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.post("/", createPackage);
 router.patch("/:id", updatePackage);
-router.get("/store/:storeId", getStorePackages);
+router.get("/store/:storeSlug", getStorePackages);
 router.delete("/soft/:id", softDeletePackage);
 router.delete("/:id", deletePackage);
 router.get("/:id", getPackageById);

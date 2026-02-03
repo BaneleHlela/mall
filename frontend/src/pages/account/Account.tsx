@@ -15,10 +15,11 @@ import { FaPencil } from 'react-icons/fa6';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import ManageAccount from './components/ManageAccount';
+import UserBookings from './components/UserBookings';
 
 // add toaster instead redirecting to the login page.
 
-type AccountSection = 'main' | 'manage-account' | 'addresses' | 'purchases' | 'payment-methods' | 'credit-history' | 'offers' | 'help';
+type AccountSection = 'main' | 'manage-account' | 'addresses' | 'purchases' | 'bookings' | 'payment-methods' | 'credit-history' | 'offers' | 'help';
 
 const Account: React.FC = () => {
   const navigate = useNavigate();
@@ -68,6 +69,7 @@ const Account: React.FC = () => {
     { id: 'manage-account', label: 'Manage account', icon: FaCog },
     { id: 'addresses', label: 'My addresses', icon: FaHome },
     { id: 'purchases', label: 'My purchases', icon: FaShoppingBag },
+    { id: 'bookings', label: 'My bookings', icon: FaShoppingBag },
     { id: 'payment-methods', label: 'Payment methods', icon: FaCreditCard },
     { id: 'credit-history', label: 'Credit history', icon: FaHistory },
     { id: 'offers', label: 'Offers & discounts', icon: FaGift },
@@ -85,6 +87,8 @@ const Account: React.FC = () => {
           return <MyPurchases onBack={() => setCurrentSection('main')} />;
         case 'payment-methods':
           return <PaymentMethods onBack={() => setCurrentSection('main')} />;
+        case 'bookings':
+          return <UserBookings onBack={() => setCurrentSection('main')} />;
         case 'credit-history':
           return <CreditHistory onBack={() => setCurrentSection('main')} />;
         case 'offers':

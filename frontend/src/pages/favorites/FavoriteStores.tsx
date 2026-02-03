@@ -8,11 +8,11 @@ const FavoriteStores = () => {
 
   // Extract favorite stores
   const favoriteStores = useMemo(() => {
-    if (!user?.favoriteStores || !stores) return [];
+    if (!user?.favourites?.stores || !stores) return [];
 
-    return user.favoriteStores
-      .map((id: string) => stores[id])
-      .filter((store) => !!store); // filter out undefined
+    return user.favourites.stores
+      .map((id) => stores[id.toString()])
+      .filter((store): store is import("../../types/storeTypes").Store => !!store); // filter out undefined
   }, [user, stores]);
 
   // Group favorites by department

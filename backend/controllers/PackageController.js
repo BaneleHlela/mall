@@ -1,5 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Package from '../models/PackageModel.js';
+import Store from '../models/StoreModel.js';
+import mongoose from 'mongoose';
 
 
 export const createPackage = asyncHandler(async (req, res) => {
@@ -12,6 +14,7 @@ export const createPackage = asyncHandler(async (req, res) => {
     isHighlighted,
     label,
     frequency,
+    sessions,
     features,
     discountPercentage,
   } = req.body;
@@ -31,6 +34,7 @@ export const createPackage = asyncHandler(async (req, res) => {
     isHighlighted,
     label,
     frequency,
+    sessions,
     features,
     discountPercentage,
   });
@@ -58,6 +62,7 @@ export const updatePackage = asyncHandler(async (req, res) => {
     'isHighlighted',
     'label',
     'frequency',
+    'sessions',
     'features',
     'discountPercentage',
     'isActive',
@@ -76,11 +81,34 @@ export const updatePackage = asyncHandler(async (req, res) => {
 
 
 export const getStorePackages = asyncHandler(async (req, res) => {
-  const { storeId } = req.params;
+  const { storeSlug } = req.params;
+  console.log(storeSlug);
+  
+  // Check if storeSlug is a valid ObjectId or a slug
+  let query = {};
+  if (mongoose.Types.ObjectId.isValid(storeSlug)) {
+    // If it's a valid ObjectId, use it directly
+    query = { store: new mongoose.Types.ObjectId(storeSlug) };
+  } else {
+    // If it's not a valid ObjectId, assume it's a slug and find the store by slug
+    const store = await Store.findOne({ slug: storeSlug });
+    if (!store) {
+      res.status(404);
+      throw new Error("Store not found");
+    }
+    query = { store: store._id };
+  }
 
-  const packages = await Package.find({ store: storeId, isActive: true }).sort({ createdAt: -1 });
+  console.log(query);
+  try {
+    // Fetch packages based on the query
+    const packages = await Package.find(query);
 
-  res.status(200).json(packages);
+    res.status(200).json(packages);
+  } catch (error) {
+    res.status(500);
+    throw new Error("Failed to fetch store packages");
+  }
 });
 
 

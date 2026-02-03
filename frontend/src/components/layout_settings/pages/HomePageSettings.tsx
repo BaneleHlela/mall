@@ -35,6 +35,7 @@ import ProductsSectionSettings from "../sections/products/ProductsSectionSetting
 import FAQsSectionSettings from "../sections/FAQs/FAQsSectionSettings";
 import DonationsSettings from "../sections/donations/DonationsSectionSettings";
 import RentalsSectionSettings from "../sections/rentals/RentalsSectionSettings";
+import { StorePackagesSection } from "../../store_layout/sections/StoreSections";
 
 const SortableItem = ({
   id,
@@ -182,6 +183,8 @@ const HomePageSettings = () => {
         return <ServicesSectionSettings />;
       case "products":
         return <ProductsSectionSettings />
+      case "packages":
+        return <StorePackagesSection />;
       case "footer":
         return <StoreFooterSectionSettings />
       case "team":

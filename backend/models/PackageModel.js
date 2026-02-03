@@ -47,6 +47,11 @@ const packageSchema = new mongoose.Schema({
         enum: ['once', 'monthly', 'yearly', 'custom'],
         default: 'once',
     },
+    sessions: {
+        type: Number,
+        required: true, // Number of sessions included in the package
+        min: 1,
+    },
     features: {
         type: [String],
         default: [],

@@ -91,7 +91,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
         }
     };
 
-    const isFavorite = user?.favoriteStores?.includes(store._id);
+    const isFavorite = user?.favourites?.stores?.includes(store._id);
 
     const handleFavoriteClick = (e: React.MouseEvent) => {
         e.stopPropagation(); // Prevent navigating when clicking the heart
@@ -150,26 +150,26 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
             {/* Likes, Visits, or Share */}
             <div className="flex justify-between w-full h-[5vh] px-[.8vh] border-t-[.1vh] border-gray-200">
                 <div className="flex items-center space-x-[1vh]">
-                {/* Likes */}
-                <div className="flex items-center space-x-1">
-                    <button
-                        onClick={handleFavoriteClick}
-                        className=""
-                    >
-                        {/* <p style={{lineHeight: "1"}} className="text-white text-[3.4vh] font-light">{store.likes.count}</p> */}
-                        {isFavorite ? (
-                            <GoHeartFill className="text-[3.5vh] text-black" />
-                            ) : (
-                            <GoHeart className="text-[3.5vh] text-black" />
-                        )}
-                    </button>
-                    <p className="font-[500]">{store.likes.count + Math.floor(Math.random() * 100) + 10} likes</p>
-                </div>
-                {/* Visits */}
-                <div className="flex items-center space-x-1">
-                    <BsDoorOpen className="text-[3vh] text-black" />
-                    <p className="font-[500]">{store.visits} visits</p>
-                </div>
+                    {/* Likes */}
+                    <div className="flex items-center space-x-1">
+                        <button
+                            onClick={handleFavoriteClick}
+                            className=""
+                        >
+                            {/* <p style={{lineHeight: "1"}} className="text-white text-[3.4vh] font-light">{store.likes.count}</p> */}
+                            {isFavorite ? (
+                                <GoHeartFill className="text-[3.5vh] text-black" />
+                                ) : (
+                                <GoHeart className="text-[3.5vh] text-black" />
+                            )}
+                        </button>
+                        <p className="font-[500]">{store.likes.count + Math.floor(Math.random() * 100) + 10} likes</p>
+                    </div>
+                    {/* Visits */}
+                    <div className="flex items-center space-x-1">
+                        <BsDoorOpen className="text-[3vh] text-black" />
+                        <p className="font-[500]">{store.visits} visits</p>
+                    </div>
                 </div>
                 {/* Share */}
                 <div className="flex h-full items-center cursor-pointer" onClick={handleShare}>

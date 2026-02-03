@@ -330,19 +330,19 @@ export const updateUser = expressAsyncHandler(async (req, res) => {
       user.locations = req.body.locations;
     }
 
-    // Update favoriteStores and store.likes
+    // Update favorites.stores and store.likes
     if (req.body.favoriteStore) {
       const storeId = req.body.favoriteStore;
       const userId = user._id;
 
       // Check if the store is already in user's favorites
-      const storeIndex = user.favoriteStores.findIndex(
+      const storeIndex = user.favourites.stores.findIndex(
         (store) => store.toString() === storeId
       );
 
       if (storeIndex === -1) {
-        // Add the store to favoriteStores
-        user.favoriteStores.push(storeId);
+        // Add the store to favourites.stores
+        user.favourites.stores.push(storeId);
 
         // Increment likes.count and add the user to likes.users array
         await Store.findByIdAndUpdate(
@@ -356,8 +356,8 @@ export const updateUser = expressAsyncHandler(async (req, res) => {
 
         console.log("Store liked");
       } else {
-        // Remove the store from favoriteStores
-        user.favoriteStores.splice(storeIndex, 1);
+        // Remove the store from favourites.stores
+        user.favourites.stores.splice(storeIndex, 1);
 
         // Decrement likes.count and remove the user from likes.users array
         await Store.findByIdAndUpdate(

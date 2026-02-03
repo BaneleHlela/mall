@@ -89,7 +89,7 @@ const TipsAndUpdates: React.FC<TipsAndUpdatesProps> = ({ tipFor = "Tips for Vend
         }
     };
 
-    const isFavorite = user?.favoriteStores?.includes(store._id);
+    const isFavorite = user?.favourites?.stores?.includes(store._id);
 
     const handleFavoriteClick = (e: React.MouseEvent) => {
         e.stopPropagation(); // Prevent navigating when clicking the heart
