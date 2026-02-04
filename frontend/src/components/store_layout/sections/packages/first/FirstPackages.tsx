@@ -5,9 +5,9 @@ import { fetchStorePackages } from '../../../../../features/packages/packagesSli
 
 const PackagesSection = () => {
   const dispatch = useAppDispatch();
-  const packages = useAppSelector((state) => state.packages.packages);
+  const packages = useAppSelector((state) => state.packages.storePackages);
   const store = useAppSelector((state) => state.stores.currentStore);
-  const loading = useAppSelector((state) => state.packages.loading);
+  const isLoading = useAppSelector((state) => state.packages.isLoading);
   const storeSlug = store?.slug;
 
   useEffect(() => {
@@ -40,11 +40,11 @@ const PackagesSection = () => {
     return freqMap[frequency || 'once'] || 'Billed Once';
   };
 
-  if (loading) {
+  if (isLoading && packages.length === 0) {
     return (
       <section className="bg-[#c7d9be] py-10 px-4">
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-lg">Loading packages...</p>
+          <p className="text-lg">isLoading packages...</p>
         </div>
       </section>
     );
@@ -61,6 +61,7 @@ const PackagesSection = () => {
         {packages.map((pkg) => (
           <PopularStorePackageCard
             key={pkg._id}
+            packageId={pkg._id}
             title={pkg.name}
             price={pkg.price}
             frequency={formatFrequency(pkg.frequency)}

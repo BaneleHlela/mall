@@ -9,8 +9,12 @@ import { IoShareSocial } from 'react-icons/io5';
 import StorePosterRatingStars from '../../../../../the_mall/basic_store_post/StorePosterRatingStars';
 import { RiArrowDownWideFill } from 'react-icons/ri';
 import { SlArrowDown, SlArrowUp } from 'react-icons/sl';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { purchasePackage } from '../../../../../../features/packages/packagesSlice';
+import { useNavigate } from 'react-router-dom';
 
 interface FirstStorePackageCardProps {
+  packageId?: string;
   label?: string;
   title: string;
   price: number;
@@ -22,6 +26,7 @@ interface FirstStorePackageCardProps {
 }
 
 const PopularStorePackageCard: React.FC<FirstStorePackageCardProps> = ({
+  packageId,
   label,
   title,
   price,
@@ -33,12 +38,36 @@ const PopularStorePackageCard: React.FC<FirstStorePackageCardProps> = ({
 }) => {
   const [showBenefits, setShowBenefits] = useState(false);
   const [showInteractions, setShowInteractions] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { isLoading, error } = useAppSelector((state) => state.packages);
+  const { user } = useAppSelector((state) => state.user);
 
   const config = mockLayout.sections.packages.card;
   const { colors, fonts } = mockLayout;
 
   const isFavorite = true;
   const handleFavoriteClick = () => {};
+
+  const handleSelectClick = async () => {
+    if (!packageId) {
+      console.error('Package ID is required');
+      return;
+    }
+
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      await dispatch(purchasePackage({ packageId })).unwrap();
+      // Optionally show success notification
+      alert('Package purchased successfully!');
+    } catch (err) {
+      console.error('Purchase failed:', err);
+    }
+  };
 
   return (
     <div
@@ -85,13 +114,15 @@ const PopularStorePackageCard: React.FC<FirstStorePackageCardProps> = ({
         <p className="text-xs opacity-60">{duration}</p>
 
         <button
+          onClick={handleSelectClick}
+          disabled={isLoading}
           style={{
             ...getBackgroundStyles(config.button.style.background, colors),
             ...getTextStyles(config.button.style.text, fonts, colors),
           }}
-          className="bg-black text-white px-4 py-2 mt-6 w-full hover:opacity-90"
+          className="bg-black text-white px-4 py-2 mt-6 w-full hover:opacity-90 disabled:opacity-50"
         >
-          Select
+          {isLoading ? 'Purchasing...' : 'Select'}
         </button>
       </div>
 

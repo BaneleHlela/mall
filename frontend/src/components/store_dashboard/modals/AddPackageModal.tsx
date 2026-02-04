@@ -74,7 +74,8 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
     durationFormat: 'months',
     label: '',
     frequency: 'once',
-    sessions: '',
+    sessionsAmount: '',
+    sessionsDuration: '45',
   });
 
   const [features, setFeatures] = useState<string[]>([]);
@@ -92,7 +93,8 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
         durationFormat: pkg.duration?.format || 'months',
         label: pkg.label || '',
         frequency: pkg.frequency || 'once',
-        sessions: pkg.sessions?.toString() || '',
+        sessionsAmount: pkg.sessions?.amount?.toString() || '',
+        sessionsDuration: pkg.sessions?.duration?.toString() || '45',
       });
       setFeatures(pkg.features || []);
     } else {
@@ -105,7 +107,8 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
         durationFormat: 'months',
         label: '',
         frequency: 'once',
-        sessions: '',
+        sessionsAmount: '',
+        sessionsDuration: '45',
       });
       setFeatures([]);
     }
@@ -169,7 +172,10 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
         format: form.durationFormat as 'days' | 'weeks' | 'months' | 'years',
       },
       frequency: form.frequency as 'once' | 'monthly' | 'yearly' | 'custom',
-      sessions: Number(form.sessions),
+      sessions: {
+        amount: Number(form.sessionsAmount),
+        duration: Number(form.sessionsDuration),
+      },
       label: form.label.trim(),
       features,
     };
@@ -278,17 +284,31 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium ">Sessions</label>
-            <input
-              name="sessions"
-              type="number"
-              min="1"
-              value={form.sessions}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded border mt-1"
-              required
-            />
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <label className="block text-sm font-medium ">Sessions Amount</label>
+              <input
+                name="sessionsAmount"
+                type="number"
+                min="1"
+                value={form.sessionsAmount}
+                onChange={handleChange}
+                className="w-full px-3 py-2 rounded border mt-1"
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block text-sm font-medium ">Session Duration (min)</label>
+              <input
+                name="sessionsDuration"
+                type="number"
+                min="1"
+                value={form.sessionsDuration}
+                onChange={handleChange}
+                className="w-full px-3 py-2 rounded border mt-1"
+                required
+              />
+            </div>
           </div>
 
           <div>

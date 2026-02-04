@@ -48,9 +48,19 @@ const packageSchema = new mongoose.Schema({
         default: 'once',
     },
     sessions: {
-        type: Number,
-        required: true, // Number of sessions included in the package
-        min: 1,
+        type: {
+            amount: {
+                type: Number,
+                required: true,
+                min: 1,
+            },
+            duration: {
+                type: Number, // in minutes
+                required: true,
+                min: 1,
+            }
+        },
+        required: true,
     },
     features: {
         type: [String],

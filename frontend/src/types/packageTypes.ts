@@ -1,7 +1,29 @@
+import type { Store } from "./storeTypes";
+
 export interface PackageDuration {
   expires?: boolean;
   format?: 'days' | 'weeks' | 'months' | 'years';
   count?: number;
+}
+
+export interface UserPackage {
+  _id: string;
+  user: string;
+  package: Package;
+  store: string;
+  sessionsTotal: number;
+  sessionsRemaining: number;
+  status: 'active' | 'completed' | 'expired' | 'cancelled';
+  purchaseDate: string;
+  expiryDate: string;
+  pricePaid: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PackageSessions {
+  amount: number;
+  duration: number; // in minutes
 }
 
 export interface Package {
@@ -14,7 +36,7 @@ export interface Package {
   isHighlighted?: boolean;
   label?: string;
   frequency?: 'once' | 'monthly' | 'yearly' | 'custom';
-  sessions?: number;
+  sessions?: PackageSessions;
   features?: string[];
   discountPercentage?: number;
   isActive?: boolean;

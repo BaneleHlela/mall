@@ -12,6 +12,11 @@ const bookingSchema = mongoose.Schema(
       ref: 'Store',
       required: true,
     },
+    type: {
+      type: String,
+      enum: ['Service', 'Package'],
+      required: true,
+    },
     services: [
       {
         service: {
@@ -38,9 +43,35 @@ const bookingSchema = mongoose.Schema(
         },
       },
     ],
+    packages: [
+      {
+        package: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Package',
+          required: true,
+        },
+        date: {
+          type: Date,
+          required: false,
+        },
+        time: {
+          type: String,
+          required: true,
+        },
+        notes: {
+          type: String,
+          required: false,
+        },
+        staff: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+          required: true,
+        },
+      },
+    ],
     status: {
       type: String,
-      enum: ['Pending', 'Confirmed', 'Cancelled'],
+      enum: ['Pending', 'rejected', 'Confirmed', 'Cancelled'],
       default: 'Pending',
     },
   },

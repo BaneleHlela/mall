@@ -16,6 +16,7 @@ import { IoMdArrowDropdown } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import ManageAccount from './components/ManageAccount';
 import UserBookings from './components/UserBookings';
+import ProtectedRoute from '../../components/the_mall/authorization/ProtectedRoute';
 
 // add toaster instead redirecting to the login page.
 
@@ -88,7 +89,12 @@ const Account: React.FC = () => {
         case 'payment-methods':
           return <PaymentMethods onBack={() => setCurrentSection('main')} />;
         case 'bookings':
-          return <UserBookings onBack={() => setCurrentSection('main')} />;
+          return ( 
+            <ProtectedRoute>
+              <UserBookings onBack={() => setCurrentSection('main')} />
+            </ProtectedRoute>
+           
+          );
         case 'credit-history':
           return <CreditHistory onBack={() => setCurrentSection('main')} />;
         case 'offers':

@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Package from '../models/PackageModel.js';
+import UserPackage from '../models/UserPackage.js';
 import Store from '../models/StoreModel.js';
 import mongoose from 'mongoose';
 
@@ -20,9 +21,9 @@ export const createPackage = asyncHandler(async (req, res) => {
   } = req.body;
 
   // Basic required fields validation
-  if (!store || !name || price == null || !duration) {
+  if (!store || !name || price == null || !duration || !sessions?.amount || !sessions?.duration) {
     res.status(400);
-    throw new Error('Please provide store, name, price, and duration');
+    throw new Error('Please provide store, name, price, duration, sessions amount and duration');
   }
 
   const newPackage = await Package.create({
@@ -165,5 +166,86 @@ export const getAllPackages = asyncHandler(async (req, res) => {
   const packages = await Package.find().populate('store', 'name');
 
   res.status(200).json(packages);
+});
+
+
+export const purchasePackage = asyncHandler(async (req, res) => {
+  const { packageId } = req.params;
+  const userId = req.user?._id;
+
+  if (!userId) {
+    res.status(401);
+    throw new Error('User not authenticated');
+  }
+
+  const pkg = await Package.findById(packageId).populate('store');
+  
+  if (!pkg) {
+    res.status(404);
+    throw new Error('Package not found');
+  }
+
+  // Calculate expiry date based on package duration
+  const expiryDate = new Date();
+  if (pkg.duration.format === 'days') {
+    expiryDate.setDate(expiryDate.getDate() + pkg.duration.count);
+  } else if (pkg.duration.format === 'weeks') {
+    expiryDate.setDate(expiryDate.getDate() + (pkg.duration.count * 7));
+  } else if (pkg.duration.format === 'months') {
+    expiryDate.setMonth(expiryDate.getMonth() + pkg.duration.count);
+  } else if (pkg.duration.format === 'years') {
+    expiryDate.setFullYear(expiryDate.getFullYear() + pkg.duration.count);
+  }
+
+  const userPackage = await UserPackage.create({
+    user: userId,
+    package: packageId,
+    store: pkg.store._id,
+    sessionsTotal: pkg.sessions?.amount || pkg.sessions,
+    sessionsRemaining: pkg.sessions?.amount || pkg.sessions,
+    expiryDate,
+    pricePaid: pkg.price,
+  });
+
+  res.status(201).json(userPackage);
+});
+
+export const updateUserPackageSessions = asyncHandler(async (req, res) => {
+  const { userPackageId } = req.params;
+  const { sessionsUsed } = req.body;
+
+  const userPackage = await UserPackage.findById(userPackageId);
+
+  if (!userPackage) {
+    res.status(404);
+    throw new Error('User package not found');
+  }
+
+  if (sessionsUsed != null) {
+    if (sessionsUsed < 0 || sessionsUsed > userPackage.sessionsRemaining) {
+      res.status(400);
+      throw new Error('Invalid number of sessions used');
+    }
+    userPackage.sessionsRemaining -= sessionsUsed;
+  }
+
+  const updatedPackage = await userPackage.save();
+
+  res.status(200).json(updatedPackage);
+});
+
+export const getUserPackages = asyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+
+  if (!userId) {
+    res.status(401);
+    throw new Error('User not authenticated');
+  }
+
+  const userPackages = await UserPackage.find({ user: userId })
+    .populate('package')
+    .populate('store', 'name');
+
+  res.status(200).json(userPackages);
 });
 
