@@ -1,13 +1,22 @@
+export interface BookingItem {
+    itemType: 'Service' | 'Package';
+    item: string;
+    startTime: string;
+    endTime: string;
+    duration: number;
+    staff: string;
+    notes?: string;
+}
+
 export interface Booking {
     _id: string;
     user: string;
     store: string;
-    service: string;
-    staff: string;
-    date: string; // ISO format
-    time: string; // HH:mm
-    status?: string;
-    [key: string]: any; // for any extra dynamic fields
+    bookingDate: string;
+    items: BookingItem[];
+    status: 'Pending' | 'Confirmed' | 'Rejected' | 'Cancelled';
+    createdAt: string;
+    updatedAt: string;
 }
   
 export interface AvailableTimes {

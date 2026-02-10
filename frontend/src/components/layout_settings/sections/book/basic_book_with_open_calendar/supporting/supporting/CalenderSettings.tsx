@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import FirstOrderSubSettingsContainer from '../../../../../FirstOrderSubSettingsContainer'
@@ -105,7 +106,7 @@ const CalenderSettings: React.FC<SupportingSettingsProps> = ({
                 objectPath={`${objectPath}.monthText`}
                 settings={settings}
                 handleSettingChange={handleSettingChange}
-                allow={["color", "fontFamily", "fontSize", "fontWeight", "letterSpacing"]}
+                allow={["color", "fontFamily", "fontSize", "weight", "letterSpacing"]}
               />
             </div>
           </SlidingPanel>

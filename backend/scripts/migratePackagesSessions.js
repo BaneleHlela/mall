@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/themall';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://gizahlela_db_user:nIc44vojis9UcY9V@cluster0.jf9trd5.mongodb.net/the_mall';
 
 async function migratePackagesSessions() {
   try {
@@ -19,14 +19,15 @@ async function migratePackagesSessions() {
       ]
     });
 
-    console.log(`Found ${packages.length} packages to migrate`);
+    console.log(`Found ${typeof Number(packages[0].sessions)} packages to migrate`);
 
     for (const pkg of packages) {
       // Check if sessions is a number (old format)
-      if (typeof pkg.sessions === 'number') {
+      if (typeof Number(pkg.sessions) === 'number') {
+        console.log(`Migrating package ${pkg._id} with sessions: ${pkg.sessions}`);
         const oldSessions = pkg.sessions;
         pkg.sessions = {
-          amount: oldSessions,
+          amount: Number(oldSessions),
           duration: 45, // Default duration of 45 minutes
         };
         await pkg.save();

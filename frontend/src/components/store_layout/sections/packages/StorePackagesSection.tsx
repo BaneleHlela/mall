@@ -1,7 +1,7 @@
-import FirstPackages from "./first/FirstPackages";
+import PopularStorePackagesSection from "./popular/PopularStorePackagesSection";
 const StorePackagesSection = () => {
   return (
-    <FirstPackages />
+    <PopularStorePackagesSection />
   )
 }
 

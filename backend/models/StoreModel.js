@@ -222,6 +222,10 @@ const storeSchema = new mongoose.Schema(
         type: [String],
         default: [],
       },
+      packages: {
+        type: [String],
+        default: [],
+      },
     },
     operationTimes: operationTimesSchema,
     images: [{

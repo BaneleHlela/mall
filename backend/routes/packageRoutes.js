@@ -11,6 +11,8 @@ import {
     purchasePackage,
     getUserPackages,
     updateUserPackageSessions,
+    likePackage,
+    unlikePackage,
 } from "../controllers/PackageController.js";
 import { protectRoute } from "../middlewares/authMiddleware.js";
 
@@ -24,6 +26,8 @@ router.delete("/:id", deletePackage);
 router.get("/:id", getPackageById);
 router.get('/', getAllPackages);
 router.post("/:packageId/purchase", protectRoute, purchasePackage);
+router.post("/:packageId/like", protectRoute, likePackage);
+router.delete("/:packageId/like", protectRoute, unlikePackage);
 router.get("/user/packages", protectRoute, getUserPackages);
 router.patch("/user/package/:userPackageId/sessions", protectRoute, updateUserPackageSessions);
 

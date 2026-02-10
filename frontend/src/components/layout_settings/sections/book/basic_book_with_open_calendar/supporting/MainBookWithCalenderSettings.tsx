@@ -29,10 +29,10 @@ const MainBookWithCalenderSettings: React.FC<SupportingSettingsProps> = ({
                 onClick={() => setActivePanel("background")}
             />
             {/* Ttiles */}
-            {/* <FirstOrderSubSettingsContainer
+            <FirstOrderSubSettingsContainer
                 name="Titles"
                 onClick={() => setActivePanel("titles")}
-            /> */}
+            />
             {/* Service Details */}
             <FirstOrderSubSettingsContainer
                 name="Service Details"

@@ -1,19 +1,38 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { IoChevronBackOutline } from 'react-icons/io5';
-import { FaUser, FaLock } from 'react-icons/fa';
 import { MdCleaningServices } from 'react-icons/md';
 import { TbPackages } from 'react-icons/tb';
 import { fetchUserPackages } from '../../../features/packages/packagesSlice';
+import MakeBookingModalUser from './MakeBookingModalUser';
+import type { UserPackage } from '../../../types/packageTypes';
 
 type UserBookingsSection = 'services' | 'packages';
+
+// Helper function to get package name
+const getPackageName = (pkg: UserPackage): string => {
+    if (typeof pkg.package === 'string') {
+        return 'Package';
+    }
+    return pkg.package.name || 'Package';
+};
+
+// Helper function to get store name
+const getStoreName = (pkg: UserPackage): string => {
+    if (typeof pkg.store === 'string') {
+        return 'Store';
+    }
+    return pkg.store.name || 'Store';
+};
 
 const UserBookings: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     const dispatch = useAppDispatch();
     const packages = useAppSelector((state) => state.packages.userPackages);
     const { user, isLoading } = useAppSelector((state) => state.user);
 
-    const [currentSection, setCurrentSection] = React.useState<UserBookingsSection>('services');
+    const [currentSection, setCurrentSection] = React.useState<UserBookingsSection>('packages');
+    const [selectedPackage, setSelectedPackage] = useState<UserPackage | null>(null);
+    const [showBookingModal, setShowBookingModal] = useState(false);
     
     // Fetch User Packages
     useEffect(() => {
@@ -22,9 +41,25 @@ const UserBookings: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         }
     }, [user, dispatch]);
 
+    const handleMakeBooking = (pkg: UserPackage) => {
+        setSelectedPackage(pkg);
+        setShowBookingModal(true);
+    };
+
+    const handleBookingSuccess = () => {
+        dispatch(fetchUserPackages());
+        setShowBookingModal(false);
+        setSelectedPackage(null);
+    };
+
+    const handleCloseModal = () => {
+        setShowBookingModal(false);
+        setSelectedPackage(null);
+    };
+
     return (
         <div className="min-h-screen bg-white py-[2.3vh] px-[.8vh]">
-            <div className="max-w-lg mx-auto space-y-6">
+            <div className="relative max-w-lg mx-auto space-y-6">
                 {/* ---- HEADER ---- */}
                 <div className="flex items-center mb-[1vh]">
                     <button
@@ -66,7 +101,7 @@ const UserBookings: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 {currentSection === "packages" && (
                     <div>
                         {/* Favotites */}
-                        <div className="relative w-full border-b-4 border-gray-100 py-2">
+                        <div className="relative w-full h-fit overflow-y-scroll border-b-4 border-gray-100 py-2">
                             <p className="">Quick book from your favorites</p>
                             <div className="flex h-[12vh] w-full border rounded-[2vh] overflow-hidden shadow-[0px_-1px_9px_1px_rgba(0,_0,_0,_0.1)]">
                                 <div className="w-[25%] aspect-square border-r"></div>
@@ -104,12 +139,17 @@ const UserBookings: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                                     <div className="w-[25%] aspect-square border-r"></div>
                                     <div className="flex flex-col justify-between w-[75%] h-full text-black px-2 py-1 shadow-lg">
                                         {/* Package name */}
-                                        <p style={{lineHeight: "1"}} className="text-[2.2vh] font-semibold">{pkg.package.name}</p>
+                                        <p style={{lineHeight: "1"}} className="text-[2.2vh] font-semibold">{getPackageName(pkg)}</p>
                                         {/* Store */}
-                                        <p className="">{pkg.store.name}</p>
+                                        <p className="">{getStoreName(pkg)}</p>
                                         <p className="">Sessions Left: {pkg.sessionsRemaining}</p>
                                         {/* Book button */}
-                                        <button className="w-full px-3 bg-blue-500 text-white font-semibold rounded-[1vh]">Make Booking</button>
+                                        <button 
+                                            onClick={() => handleMakeBooking(pkg)}
+                                            className="w-full px-3 bg-blue-500 text-white font-semibold rounded-[1vh]"
+                                        >
+                                            Make Booking
+                                        </button>
                                     </div>
                                 </div>
                             ))}
@@ -131,10 +171,22 @@ const UserBookings: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         <p>Package bookings content placeholder.</p>
                     </div>
                 )}
+                {/* Booking Modal */}
+                {showBookingModal && selectedPackage && (
+                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                        <div className="w-full max-w-md mx-4">
+                            <MakeBookingModalUser 
+                                userPackage={selectedPackage}
+                                onClose={handleCloseModal}
+                                onSuccess={handleBookingSuccess}
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
             
         </div>
     )
 }
 
-export default UserBookings
+export default UserBookings;

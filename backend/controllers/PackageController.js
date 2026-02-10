@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import Package from '../models/PackageModel.js';
 import UserPackage from '../models/UserPackage.js';
 import Store from '../models/StoreModel.js';
+import User from '../models/UserModel.js';
 import mongoose from 'mongoose';
 
 
@@ -10,6 +11,7 @@ export const createPackage = asyncHandler(async (req, res) => {
     store,
     name,
     price,
+    category,
     description,
     duration,
     isHighlighted,
@@ -29,6 +31,7 @@ export const createPackage = asyncHandler(async (req, res) => {
   const newPackage = await Package.create({
     store,
     name,
+    category,
     price,
     description,
     duration,
@@ -57,6 +60,7 @@ export const updatePackage = asyncHandler(async (req, res) => {
 
   const allowedFields = [
     'name',
+    'category',
     'price',
     'description',
     'duration',
@@ -83,6 +87,7 @@ export const updatePackage = asyncHandler(async (req, res) => {
 
 export const getStorePackages = asyncHandler(async (req, res) => {
   const { storeSlug } = req.params;
+  const { category } = req.query;
   console.log(storeSlug);
   
   // Check if storeSlug is a valid ObjectId or a slug
@@ -98,6 +103,11 @@ export const getStorePackages = asyncHandler(async (req, res) => {
       throw new Error("Store not found");
     }
     query = { store: store._id };
+  }
+
+  // Add category filter if provided
+  if (category) {
+    query.category = category;
   }
 
   console.log(query);
@@ -207,6 +217,10 @@ export const purchasePackage = asyncHandler(async (req, res) => {
     pricePaid: pkg.price,
   });
 
+  // Increment purchase count on the package
+  pkg.purchaseCount += 1;
+  await pkg.save();
+
   res.status(201).json(userPackage);
 });
 
@@ -243,9 +257,104 @@ export const getUserPackages = asyncHandler(async (req, res) => {
   }
 
   const userPackages = await UserPackage.find({ user: userId })
-    .populate('package')
+    .populate({
+      path: 'package',
+      populate: {
+        path: 'staff',
+        select: 'firstName lastName avatar',
+      },
+    })
     .populate('store', 'name');
 
   res.status(200).json(userPackages);
+});
+
+
+export const likePackage = asyncHandler(async (req, res) => {
+  const { packageId } = req.params;
+  const userId = req.user?._id;
+
+  if (!userId) {
+    res.status(401);
+    throw new Error('User not authenticated');
+  }
+
+  const pkg = await Package.findById(packageId);
+  
+  if (!pkg) {
+    res.status(404);
+    throw new Error('Package not found');
+  }
+
+  const user = await User.findById(userId);
+  
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  // Check if package is already in favorites
+  const isAlreadyLiked = user.favourites?.packages?.includes(packageId);
+  
+  if (isAlreadyLiked) {
+    res.status(400);
+    throw new Error('Package already liked');
+  }
+
+  // Add package to user's favorites
+  if (!user.favourites) {
+    user.favourites = { products: [], stores: [], services: [], packages: [], rentals: [], donations: [] };
+  }
+  
+  if (!user.favourites.packages) {
+    user.favourites.packages = [];
+  }
+  
+  user.favourites.packages.push(packageId);
+  await user.save();
+
+  // Increment likes count on the package
+  pkg.likesCount += 1;
+  await pkg.save();
+
+  res.status(200).json({ message: 'Package liked successfully', favouritePackages: user.favourites.packages });
+});
+
+
+export const unlikePackage = asyncHandler(async (req, res) => {
+  const { packageId } = req.params;
+  const userId = req.user?._id;
+
+  if (!userId) {
+    res.status(401);
+    throw new Error('User not authenticated');
+  }
+
+  const user = await User.findById(userId);
+  
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  // Check if package exists in favorites
+  if (!user.favourites?.packages?.includes(packageId)) {
+    res.status(400);
+    throw new Error('Package not in favorites');
+  }
+
+  // Remove package from user's favorites
+  user.favourites.packages = user.favourites.packages.filter(
+    (id) => id.toString() !== packageId
+  );
+  await user.save();
+
+  // Decrement likes count on the package
+  if (pkg.likesCount > 0) {
+    pkg.likesCount -= 1;
+    await pkg.save();
+  }
+
+  res.status(200).json({ message: 'Package unliked successfully', favouritePackages: user.favourites.packages });
 });
 

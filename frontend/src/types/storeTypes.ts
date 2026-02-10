@@ -67,6 +67,7 @@ export interface Store {
     services?: string[];
     rentals?: string[];
     donations?: string[];
+    packages?: string[];
   };
   about: string;
   team: TeamMember[];

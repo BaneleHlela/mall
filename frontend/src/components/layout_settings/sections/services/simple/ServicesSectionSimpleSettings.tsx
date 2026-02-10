@@ -12,7 +12,6 @@ import OptionsToggler from '../../../supporting/OptionsToggler';
 import { getSetting } from '../../../../../utils/helperFunctions';
 import BorderEditor from '../../../background/BorderEditor';
 import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings';
-import ColorPicker from '../../../supporting/ColorPicker';
 
 
 const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({

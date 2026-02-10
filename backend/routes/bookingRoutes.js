@@ -1,5 +1,6 @@
 import {
     makeBooking,
+    makePackageBooking,
     updateBooking,
     getStaffBookings,
     getStoreBookings,
@@ -13,6 +14,7 @@ import express from "express";
 const router = express.Router();
 
 router.post("/", protectRoute, makeBooking);
+router.post("/package", protectRoute, makePackageBooking);
 router.put('/:id', protectRoute, /* isAdmin,*/ updateBooking);
 router.get("/store/:storeId", protectRoute, /*isStoreAdmin,*/ getStoreBookings); 
 router.get('/staff/:staffId', getStaffBookings);

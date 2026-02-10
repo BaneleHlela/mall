@@ -243,6 +243,9 @@ export const editStore = expressAsyncHandler(async (req, res) => {
     if (req.body.categories.services && Array.isArray(req.body.categories.services)) {
       store.categories.services = req.body.categories.services; // Update services
     }
+    if (req.body.categories.packages && Array.isArray(req.body.categories.packages)) {
+      store.categories.packages = req.body.categories.packages; // Update packages
+    }
   }
 
   // Update contact details

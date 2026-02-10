@@ -30,6 +30,29 @@ import {
     }
   );
   
+  // Make a booking using a user package
+  export const makePackageBooking = createAsyncThunk(
+    'bookings/makePackageBooking',
+    async (
+      bookingData: {
+        userPackageId: string;
+        store: string;
+        date: string;
+        time: string;
+        staff: string;
+        notes?: string;
+      },
+      thunkAPI
+    ) => {
+      try {
+        const res = await axios.post(`${API_BASE}/package`, bookingData);
+        return res.data as Booking;
+      } catch (err: any) {
+        return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to make package booking');
+      }
+    }
+  );
+  
   export const updateBooking = createAsyncThunk(
     'bookings/updateBooking',
     async ({ id, data }: { id: string; data: Partial<Booking> }, thunkAPI) => {
@@ -83,14 +106,15 @@ import {
     async (
       {
         storeId,
-        serviceId,
+        itemId,
+        itemType,
         date,
         staffId,
-      }: { storeId: string; serviceId: string; date: string; staffId?: string },
+      }: { storeId: string; itemId: string; itemType: 'Service' | 'Package'; date: string; staffId?: string },
       thunkAPI
     ) => {
       try {
-        const url = `${API_BASE}/availability/${storeId}?serviceId=${serviceId}&date=${date}${
+        const url = `${API_BASE}/availability/${storeId}?itemId=${itemId}&itemType=${itemType}&date=${date}${
           staffId ? `&staffId=${staffId}` : ''
         }`;
         const res = await axios.get(url);
@@ -131,6 +155,20 @@ import {
           state.error = action.payload as string;
         })
   
+        // 🛠 Package Booking Actions
+        .addCase(makePackageBooking.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        .addCase(makePackageBooking.fulfilled, (state, action: PayloadAction<Booking>) => {
+          state.loading = false;
+          state.bookings.push(action.payload);
+        })
+        .addCase(makePackageBooking.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload as string;
+        })
+  
         .addCase(updateBooking.fulfilled, (state, action: PayloadAction<Booking>) => {
           const index = state.bookings.findIndex(b => b._id === action.payload._id);
           if (index !== -1) {
@@ -166,4 +204,3 @@ import {
   
   export const { clearBookingState } = bookingsSlice.actions;
   export default bookingsSlice.reducer;
-  

@@ -73,11 +73,11 @@ const ArtMenubar = () => {
     const routeLinks = layout.routeOrder
       .filter(key => key !== 'home')
       .map(key => { //@ts-ignore
-        const rawUrl = routes[key]?.url || "";
+        const rawUrl = layout.routes[key]?.url || "";
         const trimmedPath = rawUrl.replace(/^\//, ""); // remove leading slash
         return {
-          to: `${basePath}/${trimmedPath}`, //@ts-ignore
-          label: routes[key]?.name || '',
+          to: `${basePath}/${trimmedPath}#${key}`, //@ts-ignore
+          label: layout.routes[key]?.name || '',
         };
       });
   

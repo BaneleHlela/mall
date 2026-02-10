@@ -84,6 +84,7 @@ export interface Layout {
         searchResults?: any;
         rentals?: any;
         donations?: any;
+        packages: any;
     };
 }
   

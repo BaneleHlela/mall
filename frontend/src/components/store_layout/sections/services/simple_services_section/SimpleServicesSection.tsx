@@ -36,8 +36,7 @@ const SimpleServicesSection = () => {
     const currentUrl = window.location.href;
 
     if (currentUrl.includes('layouts')) {
-      console.log("navigating")
-      navigate(`/layouts/${layoutId}/preview/service/${serviceSlug}`);
+      navigate(`/layouts/${layoutId}/preview/service/${serviceSlug}#book`);
     } else if (store && store.slug) {
       navigate(`/stores/${store.slug}/service/${serviceSlug}#book`);
     } else {

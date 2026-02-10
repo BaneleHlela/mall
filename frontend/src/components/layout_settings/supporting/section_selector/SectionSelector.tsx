@@ -11,9 +11,10 @@ interface SectionSelectorProps {
   sectionToReplace?: string;
   onClose: () => void;
   onSelect?: (sectionName: string) => void;
+  addingPage?: boolean; // Optional prop to indicate if we're adding a page instead of a section
 }
 
-const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToReplace, onSelect}) => {
+const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToReplace, addingPage = false, onSelect}) => {
   const dispatch = useAppDispatch();
   const { sections, loading, error } = useAppSelector((state) => state.sections);
   const activeLayout = useAppSelector(state => state.layoutSettings);
@@ -43,8 +44,13 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
     "reviews", "gallery", "book", "contact", "events", "footer", "singleProduct", "FAQs"
   ], []);
 
+  const validPages = useMemo(() => [
+    "products", "services", "packages", "donations", "about", "contact", "events"
+  ], []);
+
   const availableSections = useMemo(() => {
     if (sectionToReplace) return validSections;
+    if (addingPage) return validPages;
     // Filter out sections already in the layout
     return validSections.filter(section => !(activeLayout.sections as any)?.[section]);
   }, [validSections, sectionToReplace, activeLayout.sections]);
@@ -62,6 +68,13 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
 
   
   const handleSelectSectionVariation = async (section: Section) => {
+    if (addingPage) {
+      // When adding a page, just call onSelect with the section variation
+      onSelect?.(section.variation);
+      onClose();
+      return;
+    }
+
     if (!activeLayout?._id) {
       console.error('No active layout found');
       onClose();
@@ -165,7 +178,9 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {sections.map((section: Section) => (
+            {sections
+              .filter((section: Section) => !addingPage || validPages.includes(section.variation))
+              .map((section: Section) => (
               <SectionDisplay
                 key={section._id}
                 section={section}

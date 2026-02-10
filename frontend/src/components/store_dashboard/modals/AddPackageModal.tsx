@@ -69,6 +69,7 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
   const [form, setForm] = useState({
     name: '',
     price: '',
+    category: '',
     description: '',
     durationCount: '',
     durationFormat: 'months',
@@ -80,7 +81,14 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
 
   const [features, setFeatures] = useState<string[]>([]);
   const [featureInput, setFeatureInput] = useState('');
+  const [selectedStaff, setSelectedStaff] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  // Get team members from store
+  const teamMembers = store?.team || [];
+
+  // Get package categories from store
+  const packageCategories = store?.categories?.packages || [];
 
   // Initialize form with package data if editing
   useEffect(() => {
@@ -88,6 +96,7 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
       setForm({
         name: pkg.name || '',
         price: pkg.price?.toString() || '',
+        category: pkg.category || '',
         description: pkg.description || '',
         durationCount: pkg.duration?.count?.toString() || '',
         durationFormat: pkg.duration?.format || 'months',
@@ -97,11 +106,13 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
         sessionsDuration: pkg.sessions?.duration?.toString() || '45',
       });
       setFeatures(pkg.features || []);
+      setSelectedStaff(pkg.staff || []);
     } else {
       // Reset form when not editing
       setForm({
         name: '',
         price: '',
+        category: '',
         description: '',
         durationCount: '',
         durationFormat: 'months',
@@ -111,6 +122,7 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
         sessionsDuration: '45',
       });
       setFeatures([]);
+      setSelectedStaff([]);
     }
   }, [pkg]);
 
@@ -141,6 +153,14 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
     setFeatures((prev) => prev.filter((f) => f !== feature));
   };
 
+  const handleToggleStaff = (memberId: string) => {
+    setSelectedStaff((prev) =>
+      prev.includes(memberId)
+        ? prev.filter((id) => id !== memberId)
+        : [...prev, memberId]
+    );
+  };
+
   // Handle drag end for reordering features
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -164,6 +184,7 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
     const payload = {
       store: store._id,
       name: form.name.trim(),
+      category: form.category.trim() || undefined,
       price: Number(form.price),
       description: form.description.trim(),
       duration: {
@@ -178,6 +199,7 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
       },
       label: form.label.trim(),
       features,
+      staff: selectedStaff,
     };
 
     try {
@@ -195,10 +217,10 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
   };
 
   if (!open) return null;
-  console.log(form)
+
   return (
     <div className="fixed inset-0 h-screen overflow-scroll hide-scrollbar bg-[#00000048] flex items-center justify-center z-50">
-      <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 font-[Outfit]">
+      <div className="bg-white max-h-[90vh] overflow-y-scroll hide-scrollbar w-full max-w-md rounded-lg shadow-lg p-6 font-[Outfit]">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold ">{pkg?._id ? 'Edit Package' : 'Add Package'}</h2>
           <button onClick={onClose}>
@@ -216,6 +238,21 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
               className="w-full px-3 py-2 rounded border mt-1"
               required
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium ">Category</label>
+            <select
+              name="category"
+              value={form.category}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded border mt-1"
+            >
+              <option value="">Select a category</option>
+              {packageCategories.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
           </div>
 
           <div>
@@ -362,6 +399,46 @@ const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, packag
                 </SortableContext>
               </DndContext>
             </div>
+          </div>
+
+          {/* Staff Selection */}
+          <div>
+            <label className="block text-sm font-medium ">Assign Staff</label>
+            {teamMembers.length === 0 ? (
+              <p className="text-sm text-gray-500 mt-1">No team members added yet</p>
+            ) : (
+              <div className="mt-2 space-y-2 max-h-40 overflow-y-auto border rounded p-2">
+                {teamMembers.map((member) => {
+                  const memberObj = member.member as any;
+                  const memberId = member._id as string;
+                  const isSelected = selectedStaff.includes(memberId);
+
+                  return (
+                    <label
+                      key={memberId}
+                      className={`flex items-center gap-2 cursor-pointer p-1 rounded ${
+                        isSelected ? 'bg-blue-50' : 'hover:bg-gray-50'
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => handleToggleStaff(memberId)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm">
+                        {memberObj?.firstName || memberObj?.lastName
+                          ? `${memberObj.firstName || ''} ${memberObj.lastName || ''}`
+                          : memberObj?.username || 'Unknown'}
+                        {member.role && (
+                          <span className="text-xs text-gray-500 ml-1">({member.role})</span>
+                        )}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {error && <div className="text-red-500 text-sm">{error}</div>}

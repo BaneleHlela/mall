@@ -71,7 +71,7 @@ const AboutWithLineAndImage = () => {
                 maxWidth: getTextMaxWidth(config.text.secondParagraph, "100%"),
               }} 
               dangerouslySetInnerHTML={{ __html: config.text.secondParagraph.input || "" }}
-              className=""
+              className="rich-text"
             />
           </div>
 

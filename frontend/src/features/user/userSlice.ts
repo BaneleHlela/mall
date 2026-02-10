@@ -8,7 +8,8 @@ import { API_URL } from "../context";
 //   ? "http://localhost:5000/api/auth"
 //   : "/api/auth";
 
-const USER_API_URL = `${API_URL}/api/user`; 
+const USER_API_URL = `${API_URL}/api/user`;
+const PACKAGES_API_URL = `${API_URL}/api/packages`;
 
 
 axios.defaults.withCredentials = true;
@@ -220,6 +221,31 @@ export const updateAvatar = createAsyncThunk(
   }
 );
 
+// Like Package
+export const likePackage = createAsyncThunk(
+  "user/likePackage",
+  async (packageId: string, thunkAPI) => {
+    try {
+      const response = await axios.post(`${PACKAGES_API_URL}/${packageId}/like`);
+      return response.data.favouritePackages as string[];
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to like package");
+    }
+  }
+);
+
+// Unlike Package
+export const unlikePackage = createAsyncThunk(
+  "user/unlikePackage",
+  async (packageId: string, thunkAPI) => {
+    try {
+      const response = await axios.delete(`${PACKAGES_API_URL}/${packageId}/like`);
+      return response.data.favouritePackages as string[];
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to unlike package");
+    }
+  }
+);
 
 
 // --- Slice ---
@@ -377,7 +403,39 @@ const userSlice = createSlice({
       .addCase(updateAvatar.rejected, (state, action) => {
         state.error = action.payload as string;
         state.isLoading = false;
-      })      
+      })
+      
+      // Like Package
+      .addCase(likePackage.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(likePackage.fulfilled, (state, action) => {
+        state.isLoading = false;
+        if (state.user?.favourites?.packages) {
+          state.user.favourites.packages = action.payload;
+        }
+      })
+      .addCase(likePackage.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+
+      // Unlike Package
+      .addCase(unlikePackage.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(unlikePackage.fulfilled, (state, action) => {
+        state.isLoading = false;
+        if (state.user?.favourites?.packages) {
+          state.user.favourites.packages = action.payload;
+        }
+      })
+      .addCase(unlikePackage.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
   },
 });
 

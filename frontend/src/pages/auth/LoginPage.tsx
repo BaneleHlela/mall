@@ -13,6 +13,7 @@ const LoginPage = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const from = (location.state as any)?.from?.pathname || '/';
+	console.log(from)
 	
 
 	const [email, setEmail] = useState("");

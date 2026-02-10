@@ -11,12 +11,14 @@ interface DashboardFilterByCategoryProps {
   categories: string[];
   value?: string;
   onChange: (category: string) => void;
+  categoryType?: 'products' | 'services' | 'packages' | 'rentals' | 'donations';
 }
 
 const DashboardFilterByCategory: React.FC<DashboardFilterByCategoryProps> = ({
   categories,
   value,
   onChange,
+  categoryType = 'products',
 }) => {
   const { isLoading, store } = useAppSelector((state) => state.storeAdmin);
   const dispatch = useAppDispatch();
@@ -51,7 +53,7 @@ const DashboardFilterByCategory: React.FC<DashboardFilterByCategoryProps> = ({
       storeSlug: store?.slug as string, // Pass the storeSlug
       updatedStore: {
         categories: {
-          products: [...categories, newCategory], // Assuming categories are part of the store schema
+          [categoryType]: [...categories, newCategory],
         }
       }
     }));
@@ -82,7 +84,7 @@ const DashboardFilterByCategory: React.FC<DashboardFilterByCategoryProps> = ({
           storeSlug: store?.slug as string,
           updatedStore: {
             categories: {
-              products: updatedCategories,
+              [categoryType]: updatedCategories,
             },
           },
         }));

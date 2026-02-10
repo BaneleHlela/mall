@@ -76,9 +76,8 @@ const MenubarWithSearchbar = () => {
       .map(key => { //@ts-ignore
         const rawUrl = layout.routes[key]?.url || "";
         const trimmedPath = rawUrl.replace(/^\//, ""); // remove leading slash
-        const isGallery = key === 'gallery';
         return {
-          to: isGallery ? `${basePath}/${trimmedPath}#gallery` : `${basePath}/${trimmedPath}`, //@ts-ignore
+          to: `${basePath}/${trimmedPath}#${key}`, //@ts-ignore
           label: layout.routes[key]?.name || '',
         };
       });

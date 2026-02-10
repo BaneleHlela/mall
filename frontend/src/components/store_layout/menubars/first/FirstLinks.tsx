@@ -6,8 +6,8 @@ const navLinks = [
   { to: "/layouts/preview", label: "Home" },
   { to: "/layouts/preview#about", label: "About" },
   { to: "/layouts/preview#footer", label: "Contact" },
-  { to: "/layouts/preview/services", label: "Treatments" },
-  { to: "/layouts/preview/packages", label: "Packages" },
+  { to: "/layouts/preview/services#services", label: "Treatments" },
+  { to: "/layouts/preview/packages#packages", label: "Packages" },
 ];
 
 const   FirstLinks = () => {

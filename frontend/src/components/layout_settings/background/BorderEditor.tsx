@@ -56,7 +56,7 @@ const BorderEditor: React.FC<EditorProps> = ({
 
       {isAllowed("color") && (
         <OptionsToggler
-          label="Text Color"
+          label="Border Color"
           options={["primary", "secondary", "accent", "quad", "pent"]}
           value={getSetting("color", settings, objectPath)}
           onChange={(newValue) =>

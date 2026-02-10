@@ -36,7 +36,7 @@ const StoreBookServiceSection = () => {
           className="relative w-full h-full flex flex-col max-w-[100vw] min-h-fit overflow-hidden"
           style={{
             ...getBackgroundStyles(config.background, colors),
-            backgroundColor: "transparent",
+            minnHeight: "fit-content"
           }}
         >
             {/* Back to home */} 
@@ -48,9 +48,9 @@ const StoreBookServiceSection = () => {
             {/* Background Image */}
             <div className="absolute inset-0">
                 <img
-                src={getResponsiveBackgroundImage(config.background.image)}
-                alt="Service Image"
-                className="w-full h-full object-cover"
+                    src={getResponsiveBackgroundImage(config.background.image)}
+                    alt=""
+                    className="w-full h-full object-cover"
                 />
             </div>
         
@@ -63,7 +63,7 @@ const StoreBookServiceSection = () => {
             />
         
             {/* CONTENT */}
-            <div style={{...getBackgroundStyles(config.main.background, colors)}} className="relative z-10 flex flex-col mt-[20vh] lg:mt-[10vh] lg:min-h-fit">
+            <div style={{...getBackgroundStyles(config.main.background, colors)}} className={`relative z-10 flex flex-col ${config.background.image.length > 0 && 'mt-[20vh]'} mt-[5vh] lg:mt-[10vh] lg:min-h-fit`}>
                 {/* Heading + Subheading */}
                 <div className="w-full mb-4">
                 <UnderlinedText style={config.text.heading || {}} />

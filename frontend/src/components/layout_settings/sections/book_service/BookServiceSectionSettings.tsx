@@ -31,7 +31,13 @@ const BookServiceSectionSettings = () => {
                 name="Background"
                 SettingsComponent={
                 <div className="px-[.15vh]">
-                    {/* <BackgroundEditor
+                    <MultipleLayoutImagesHandler
+                        objectPath={`${objectPath}.background.image`}
+                        min={0}
+                        max={2}
+                        images={getSetting("background.image", settings, objectPath)}
+                    />
+                    <BackgroundEditor
                         objectPath={`${objectPath}.background`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
@@ -40,13 +46,8 @@ const BookServiceSectionSettings = () => {
                         heightUnit="vh"
                         responsiveSize
                         responsivePadding
-                    /> */}
-                    <MultipleLayoutImagesHandler
-                        objectPath={`${objectPath}.background.image`}
-                        min={1}
-                        max={2}
-                        images={getSetting("background.image", settings, objectPath)}
-                        />
+                    />
+                    
                 </div>
                 }
             />

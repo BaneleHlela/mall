@@ -11,6 +11,10 @@ const packageSchema = new mongoose.Schema({
         required: true, // Name of the package, for e.g. "New Client Deal", "Platinum Unlimited Package"
         trim: true,
     },
+    category: {
+        type: String,
+        required: false,
+    },
     price: {
         type: Number,
         required: true, // Total price of the package
@@ -48,20 +52,21 @@ const packageSchema = new mongoose.Schema({
         default: 'once',
     },
     sessions: {
-        type: {
-            amount: {
-                type: Number,
-                required: true,
-                min: 1,
-            },
-            duration: {
-                type: Number, // in minutes
-                required: true,
-                min: 1,
-            }
+        amount: {
+            type: Number,
+            required: true,
+            min: 1,
         },
-        required: true,
+        duration: {
+            type: Number, // in minutes
+            required: true,
+            min: 1,
+        }
     },
+    staff: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }],
     features: {
         type: [String],
         default: [],
@@ -71,6 +76,14 @@ const packageSchema = new mongoose.Schema({
         default: 0, // Discount percentage on the package price
         min: 0,
         max: 100,
+    },
+    purchaseCount: {
+        type: Number,
+        default: 0, // Total number of times this package has been purchased
+    },
+    likesCount: {
+        type: Number,
+        default: 0, // Total number of users who liked this package
     },
     isActive: {
         type: Boolean,

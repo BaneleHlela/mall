@@ -1,5 +1,5 @@
 import React from 'react'
-import PackagesSection from './store_layout/sections/packages/first/FirstPackages'
+import PackagesSection from './store_layout/sections/packages/popular/PopularStorePackagesSection'
 
 const Scibbler = () => {
   return (

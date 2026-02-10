@@ -37,7 +37,7 @@ const UnderlinedText: React.FC<UnderlinedTextProps> = ({
                         ...getBackgroundStyles(style?.background || {})  // Fallback to an empty object if background is undefined
                     }}
                     className={`${style?.animation || ''} text-wrap`} 
-                    dangerouslySetInnerHTML={{ __html: style?.input || '' }}
+                    dangerouslySetInnerHTML={{ __html: input|| style?.input || '' }}
                 />
                 {underline?.show && (
                     <span

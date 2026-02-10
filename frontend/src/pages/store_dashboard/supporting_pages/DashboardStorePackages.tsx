@@ -13,13 +13,17 @@ import type { Donation } from '../../../types/donationTypes';
 import Swal from 'sweetalert2';
 import { clearError } from '../../../features/user/userSlice';
 import { FaPlus } from 'react-icons/fa';
+import DashboardFilterByCategory from '../../../components/store_dashboard/extras/DashboardFilterByCategory';
 
 const DashBoardStorePackages = () => {
   const dispatch = useAppDispatch();
+  const packages = useAppSelector(state => state.packages.storePackages);
   const [selectedStatus, setSelectedStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [addPackageOpen, setAddPackageOpen] = useState(false);
   const [editPackageOpen, setEditPackageOpen] = useState(false);
+  const categories  = useAppSelector(state => state.storeAdmin.store?.categories?.packages);
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' | 'cycle' }>({
     key: '',
@@ -28,7 +32,7 @@ const DashBoardStorePackages = () => {
 
   const itemsPerPage = 15;
 
-  const packages = useAppSelector(state => state.packages.packages);
+ 
 
   const handleEditPackage = (pkg: Package) => {
     setSelectedPackage(pkg);
@@ -124,14 +128,17 @@ const DashBoardStorePackages = () => {
   };
 
 
-  // ✅ Filter using isActive
+  // ✅ Filter using isActive and category
   const filteredPackages = packages.filter((pkg) => {
     const statusMatch =
       selectedStatus === '' ||
       (selectedStatus === 'Active' && pkg.isActive) ||
       (selectedStatus === 'Inactive' && !pkg.isActive);
 
-    return statusMatch;
+    const categoryMatch =
+      selectedCategory === '' || pkg.category === selectedCategory;
+
+    return statusMatch && categoryMatch;
   });
 
 
@@ -180,6 +187,12 @@ const DashBoardStorePackages = () => {
             <p className="">Add</p> <FaPlus className='text-[1.8vh]'/>
           </button>
           <div className="lg:space-x-[2vh] space-x-1 flex flex-row items-center">
+            <DashboardFilterByCategory
+              categories={categories ? categories : []}
+              value={selectedCategory}
+              onChange={setSelectedCategory}
+              categoryType="packages"
+            />
             <DashboardFilterByStatus
               value={selectedStatus}
               onChange={setSelectedStatus}

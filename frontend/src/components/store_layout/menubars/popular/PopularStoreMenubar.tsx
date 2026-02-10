@@ -386,7 +386,7 @@ const PopularStoreMenubar: React.FC = () => {
         const rawUrl = routes[key]?.url || "";
         const trimmedPath = rawUrl.replace(/^\//, ""); // remove leading slash
         return {
-          to: `${basePath}/${trimmedPath}`, //@ts-ignore
+          to: `${basePath}/${trimmedPath}#${key}`, //@ts-ignore
           label: routes[key]?.name || '',
         };
       });

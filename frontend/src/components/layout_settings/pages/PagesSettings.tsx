@@ -39,6 +39,7 @@ import SingleStoreProductPageSettings from "./SingleStoreProductPageSettings";
 import BookPageSettings from "./BookPageSettings";
 import BookServicePageSettings from "./BookServicePageSettings";
 import StoreSearchResultsPageSettings from "./StoreSearchResultsPageSettings";
+import SectionSelector from "../supporting/section_selector/SectionSelector";
 
 
 const SortableItem = ({
@@ -96,10 +97,10 @@ const PagesSettings: React.FC = () => {
   const routeOrder: string[] = useAppSelector((state) => state.layoutSettings.routeOrder);
   const store = useAppSelector((state) => state.storeAdmin.store);
   const settings = useAppSelector((state) => state.layoutSettings);
+  const [ openSectionSelector, setOpenSectionSelector ] = useState(false);
   const MySwal = withReactContent(Swal);
 
   const [activePanel, setActivePanel] = useState<string | null>(null);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const closePanel = () => setActivePanel(null);
   
@@ -166,7 +167,12 @@ const PagesSettings: React.FC = () => {
     };
     dispatch(updateSetting({ field: "routes", value: newRoutes }));
     dispatch(updateRouteOrder([...routeOrder, page]));
-    setDropdownOpen(false);
+  };
+
+  // Wrapper for section selector - converts section variation to page name
+  const handleSectionSelect = (sectionVariation: string) => {
+    handleAddPage(sectionVariation);
+    setOpenSectionSelector(false);
   };
 
   const sensors = useSensors(useSensor(PointerSensor));
@@ -196,32 +202,10 @@ const PagesSettings: React.FC = () => {
       <div className="relative px-4 flex flex-row justify-center">
         <button
           className="text-[2vh] flex flex-row justify-between items-center bg-stone-50 border-[.35vh] border-white text-black rounded px-[2.4vh] py-[.6vh] shadow-md hover:scale-103 hover:opacity-85"
-          onClick={() => setDropdownOpen(!dropdownOpen)}
+          onClick={() => setOpenSectionSelector(true)}
         >
           Add New Page <FaPlus className="ml-[.6vh]" />
         </button>
-
-        <AnimatePresence>
-          {dropdownOpen && (
-            <motion.div
-              className="absolute top-full dropdown rounded bg-stone-50 border-2 border-white mt-0 shadow-md z-50" 
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              {unusedPages.map((page) => (
-                <button
-                  key={page}
-                  className="block px-15 py-2 text-left rounded-[20px] hover:bg-gray-100 w-full"
-                  onClick={() => handleAddPage(page)}
-                >
-                  {page.charAt(0).toUpperCase() + page.slice(1)}
-                </button>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -311,6 +295,17 @@ const PagesSettings: React.FC = () => {
           </SlidingPanel>
         )}
       </AnimatePresence>
+      {openSectionSelector && (
+        <div className="fixed inset-0 bg-[#0000001e] flex justify-center items-center z-50">
+          <div className="bg-white flex flex-row w-[80vw] h-[80vh] overflow-auto">
+            <SectionSelector
+              onClose={() => setOpenSectionSelector(false)}
+              onSelect={handleSectionSelect}
+              addingPage={true}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

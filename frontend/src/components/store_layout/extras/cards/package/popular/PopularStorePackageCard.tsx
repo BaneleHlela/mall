@@ -11,6 +11,7 @@ import { RiArrowDownWideFill } from 'react-icons/ri';
 import { SlArrowDown, SlArrowUp } from 'react-icons/sl';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { purchasePackage } from '../../../../../../features/packages/packagesSlice';
+import { likePackage, unlikePackage } from '../../../../../../features/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 interface FirstStorePackageCardProps {
@@ -23,6 +24,8 @@ interface FirstStorePackageCardProps {
   duration: string;
   features: string[];
   isHighlighted?: boolean;
+  purchaseCount?: number;
+  likesCount?: number;
 }
 
 const PopularStorePackageCard: React.FC<FirstStorePackageCardProps> = ({
@@ -35,19 +38,43 @@ const PopularStorePackageCard: React.FC<FirstStorePackageCardProps> = ({
   duration,
   features,
   isHighlighted = false,
+  purchaseCount = 0,
+  likesCount = 0,
 }) => {
   const [showBenefits, setShowBenefits] = useState(false);
   const [showInteractions, setShowInteractions] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { isLoading, error } = useAppSelector((state) => state.packages);
-  const { user } = useAppSelector((state) => state.user);
+  const { user, isAuthenticated } = useAppSelector((state) => state.user);
 
-  const config = mockLayout.sections.packages.card;
-  const { colors, fonts } = mockLayout;
+  const config = useAppSelector(state => state.layoutSettings.sections.packages.card)|| mockLayout.sections.packages.card;
+  const { colors, fonts } = useAppSelector(state => state.layoutSettings) || mockLayout;
 
-  const isFavorite = true;
-  const handleFavoriteClick = () => {};
+  // Check if package is in user's favorites
+  const isFavorite = user?.favourites?.packages?.includes(packageId || '') || false;
+
+  const handleFavoriteClick = async () => {
+    if (!packageId) {
+      console.error('Package ID is required');
+      return;
+    }
+
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      if (isFavorite) {
+        await dispatch(unlikePackage(packageId)).unwrap();
+      } else {
+        await dispatch(likePackage(packageId)).unwrap();
+      }
+    } catch (err) {
+      console.error('Failed to update favorite:', err);
+    }
+  };
 
   const handleSelectClick = async () => {
     if (!packageId) {
@@ -69,11 +96,14 @@ const PopularStorePackageCard: React.FC<FirstStorePackageCardProps> = ({
     }
   };
 
+  console.log(colors)
+
   return (
     <div
       style={{
-        ...getBackgroundStyles(config.background, colors),
         ...getTextStyles(config.text.details, fonts, colors),
+        ...getBackgroundStyles(config.background, colors),
+        
       }}
       className={`border text-center flex flex-col relative justify-between ${
         isHighlighted ? 'scale-102' : ''
@@ -93,7 +123,7 @@ const PopularStorePackageCard: React.FC<FirstStorePackageCardProps> = ({
             colors[config.border.color as keyof typeof colors] || config.border.color
           }`,
         }}
-        className="p-6"
+        className="p-3 lg:p-6"
       >
         <h3
           style={getTextStyles(config.text.name, fonts, colors)}
@@ -238,13 +268,13 @@ const PopularStorePackageCard: React.FC<FirstStorePackageCardProps> = ({
                       <GoHeart className="text-[2.5vh]" />
                     )}
                   </button>
-                  <p className="text-[1.7vh] font-semibold">10 likes</p>
+                  <p className="text-[1.7vh] font-semibold">{likesCount} likes</p>
                 </div>
 
                 <div className="flex items-center space-x-1">
                   <BiSolidPurchaseTag className="text-[2.5vh]" />
                   <p className="text-[1.7vh] font-semibold">
-                    {10 + Math.floor(Math.random() * 100) + 10} purchases
+                    {purchaseCount} purchases
                   </p>
                 </div>
               </div>

@@ -37,7 +37,7 @@ function ReactCalendar(
           }
 
           .react-calendar__navigation__label {
-            font-weight: ${calendarStyle.monthText?.fontWeight || 'normal'};
+            font-weight: ${calendarStyle.monthText?.weight || 'normal'};
             color: ${colors[calendarStyle.monthText.color as keyof typeof colors]};
             font-size: ${calendarStyle.monthText.fontSize};
             font-family: ${calendarStyle.monthText.fontFamily};

@@ -1752,6 +1752,65 @@ export const mockLayout = {
             },
         },
         packages: {
+            background: {
+                image: ["https"],
+                color: "primary",
+                width: {
+                    mobile: "100%",
+                    desktop: "80%"
+                },
+                padding: {
+                    x: {
+                        mobile: "1vh",
+                        desktop: "0vh"
+                    },
+                    y: {
+                        mobile: "3vh",
+                        desktop: "5vh"
+                    },
+                },
+            },
+            text: {
+                heading: {
+                    input: "Packages",
+                    fontFamily: "secondary",
+                    color: "secondary",
+                    fontSize: {
+                        mobile: "2.5rem",
+                        desktop: "3.5rem"
+                    },
+                    weight: "bold"
+                },
+                subheading: {
+                    input: "Buy packages and start booking!",
+                    fontFamily: "secondary",
+                    color: "secondary",
+                    fontSize: {
+                        mobile: "1.5rem",
+                        desktop: "2rem"
+                    },
+                    weight: "normal"
+                }
+            },
+            categorySelector: {
+                show: true,
+                text: {
+                    fontFamily: "primary",
+                    fontSize: {
+                        mobile: "1.5rem",
+                        desktop: "1.5rem"
+                    },
+                    color: "primary",
+                    weight: "bold",
+                },
+                width: {
+                    mobile: "100%",
+                    desktop: "70%",
+                },
+                alignment: "center",
+                underlineColor: "secondary",
+                selectedColor: "secondary",
+            },
             card: {
                 background: {
                     color: "primary",

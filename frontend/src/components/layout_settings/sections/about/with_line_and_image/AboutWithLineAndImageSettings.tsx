@@ -253,7 +253,7 @@ const AboutWithLineAndImageSettings = () => {
                                         handleSettingChange={handleSettingChange}
                                         objectPath={`${objectPath}.image.background`}
                                         allow={["border", "height", "width"]}
-                                        widthUnit="%"
+                                        widthUnit="vw"
                                         heightUnit="vh"
                                         responsiveSize
                                     />

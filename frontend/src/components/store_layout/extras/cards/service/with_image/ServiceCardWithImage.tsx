@@ -2,6 +2,7 @@ import React from 'react'
 import { getBackgroundStyles, getTextStyles } from '../../../../../../utils/stylingFunctions';
 import StoreButton from '../../../buttons/StoreButton';
 import UnderlinedText from '../../../text/UnderlinedText';
+import StoreLayoutButton from '../../../../shared_layout_components/StoreLayoutButton';
 
 interface StoreServiceCardProps {
     title: string;
@@ -110,8 +111,8 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                             ${style.textAndButton.button.position === "end" && "justify-end"} 
                         `}
                         >
-                        <StoreButton 
-                            style={style.textAndButton.button} 
+                        <StoreLayoutButton 
+                            style={style.textAndButton.button} //@ts-ignore-next-line 
                             onClick={onClick} 
                         />
                     </div>

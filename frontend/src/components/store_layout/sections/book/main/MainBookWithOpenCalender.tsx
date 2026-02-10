@@ -72,9 +72,10 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
         console.log(formattedDate);
         const result = dispatch(getAvailableBookingTimes({
             storeId: store?._id as string,
-            serviceId: selectedServiceId,
+            itemId: selectedServiceId as string,
             date: formattedDate,
             staffId: selectedStaffId,
+            itemType: "Service",
         }));
         console.log(result);
     }
@@ -112,6 +113,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
             });
     };
 
+
     return (
         <div
             style={{
@@ -124,7 +126,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
             <div 
                 style={{
                     height: settings.background.height.desktop,
-                    ...getBackgroundStyles(settings.background),
+                    ...getBackgroundStyles(settings.background, colors),
                     ...getBorderStyles(settings.background.border),
                     
                 }}
@@ -135,10 +137,10 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                     {/* Title */}
                     <div 
                         style={{ 
-                            ...getTextStyles(settings.titles.text), 
+                            ...getTextStyles(settings.titles.text, fonts, colors), 
                             borderBottom: `${settings.titles.background.border.width} ${settings.titles.background.border.style} ${settings.titles.background.border.color}`,
                         }}
-                        className=" w-full flex flex-col justify-end +  border-gray-300"
+                        className={`w-full flex flex-col justify-end border-b-2 border-[${colors[settings.calendar.weekday.underlineColor.color as keyof typeof colors]}]`}
                     >
                         Service Details
                     </div>
@@ -153,8 +155,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                             <div className="relative mt-[1.2vh]">
                                 <Listbox.Button 
                                     style={{
-                                        ...getBackgroundStyles(settings.serviceDetails.buttons.background),
-                                        ...getTextStyles(settings.serviceDetails.buttons.text),
+                                        ...getBackgroundStyles(settings.serviceDetails.buttons.background, colors),
+                                        ...getTextStyles(settings.serviceDetails.buttons.text, fonts, colors),
                                     }}
                                     className="w-full text-left flex flex-row justify-between items-center"
                                 >
@@ -163,8 +165,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                 </Listbox.Button>
                                 <Listbox.Options 
                                     style={{
-                                        ...getTextStyles(settings.serviceDetails.buttons.text),
-                                        ...getBackgroundStyles(settings.serviceDetails.buttons.background.dropdown),
+                                        ...getTextStyles(settings.serviceDetails.buttons.text, fonts, colors),
+                                        ...getBackgroundStyles(settings.serviceDetails.buttons.background.dropdown, colors),
                                     }}
                                     className="absolute bg-white w-full max-h-[300px] hide-scrollbar overflow-scroll  border-2 border-gray-200 rounded-none  z-10"
                                 >
@@ -193,8 +195,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                             <div className="relative mt-[.3vh]">
                             <Listbox.Button
                                 style={{
-                                    ...getBackgroundStyles(settings.serviceDetails.buttons.background),
-                                    ...getTextStyles(settings.serviceDetails.buttons.text)
+                                    ...getBackgroundStyles(settings.serviceDetails.buttons.background, colors),
+                                    ...getTextStyles(settings.serviceDetails.buttons.text, fonts, colors)
                                 }}
                                 className={`w-full text-left flex flex-row justify-between items-center`}
                             >
@@ -207,8 +209,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                             </Listbox.Button>
                             <Listbox.Options
                                 style={{
-                                    ...getTextStyles(settings.serviceDetails.buttons.text),
-                                    ...getBackgroundStyles(settings.serviceDetails.buttons.background.dropdown),
+                                    ...getTextStyles(settings.serviceDetails.buttons.text, fonts, colors),
+                                    ...getBackgroundStyles(settings.serviceDetails.buttons.background.dropdown, colors),
                                 }}
                                 className="absolute z-10 bg-white mt-1 w-full  border-2 border-gray-200 shadow-sm max-h-60 overflow-auto focus:outline-none rounded-none"
                             >
@@ -232,7 +234,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                         {/* Date, Price, Duration */}
                         <div 
                             style={{
-                                ...getTextStyles(settings.serviceDetails.text)
+                                ...getTextStyles(settings.serviceDetails.text, fonts, colors)
                             }}
                             className="mt-5"
                         >
@@ -249,15 +251,15 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                         >
                             <label
                                 style={{
-                                    ...getTextStyles(settings.serviceDetails.text)
+                                    ...getTextStyles(settings.serviceDetails.text, fonts, colors)
                                 }} 
                                 className="block text-sm mb-2 text-white" htmlFor="note">
                                 Message (optional)
                             </label>
                             <textarea
                                 style={{
-                                    ...getBackgroundStyles(settings.serviceDetails.messageBox.textArea.background),
-                                    ...getTextStyles(settings.serviceDetails.messageBox.text),
+                                    ...getBackgroundStyles(settings.serviceDetails.messageBox.textArea.background, colors),
+                                    ...getTextStyles(settings.serviceDetails.messageBox.text, fonts, colors),
                                 }}
                                 id="note"
                                 rows={4}
@@ -271,8 +273,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                 {!confirming ? (
                                     <button
                                         style={{
-                                            ...getBackgroundStyles(settings.serviceDetails.bookButton.background),
-                                            ...getTextStyles(settings.serviceDetails.bookButton.text),
+                                            ...getBackgroundStyles(settings.serviceDetails.bookButton.background, colors),
+                                            ...getTextStyles(settings.serviceDetails.bookButton.text, fonts, colors),
                                         }}
                                         onClick={() => setConfirming(true)}
                                         className="hover:scale-102 transition"
@@ -284,8 +286,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                         <p className="text-sm">Are you sure you want to book this slot?</p>
                                         <button
                                             style={{
-                                                ...getBackgroundStyles(settings.serviceDetails.bookButton.background),
-                                                ...getTextStyles(settings.serviceDetails.bookButton.text),
+                                                ...getBackgroundStyles(settings.serviceDetails.bookButton.background, colors),
+                                                ...getTextStyles(settings.serviceDetails.bookButton.text, fonts, colors),
                                                 color: "green",
                                                 fontWeight: "bold",
                                             }}
@@ -296,8 +298,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                         </button>
                                         <button
                                             style={{
-                                                ...getBackgroundStyles(settings.serviceDetails.bookButton.background),
-                                                ...getTextStyles(settings.serviceDetails.bookButton.text),
+                                                ...getBackgroundStyles(settings.serviceDetails.bookButton.background, colors),
+                                                ...getTextStyles(settings.serviceDetails.bookButton.text, fonts, colors),
                                                 color: "red",
                                                 fontWeight: "bold",
                                             }}
@@ -317,10 +319,10 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                 <div className="h-full w-[32%] ">
                     <div 
                         style={{ 
-                            ...getTextStyles(settings.titles.text),
+                            ...getTextStyles(settings.titles.text, fonts, colors),
                             borderBottom: `${settings.titles.background.border.width} ${settings.titles.background.border.style} ${settings.titles.background.border.color}`,
                         }}
-                        className=" w-full flex flex-col justify-end 0  border-b-3 border-gray-300"
+                        className={`w-full flex flex-col justify-end 0  border-b-2 border-[${colors[settings.calendar.weekday.underlineColor.color as keyof typeof colors]}]`} 
                     >
                         <p>Select a date</p> 
                     </div>
@@ -332,17 +334,17 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                 <div className="h-full w-[32%] ">
                     <div 
                         style={{ 
-                            ...getTextStyles(settings.titles.text),
+                            ...getTextStyles(settings.titles.text, fonts,  colors),
                             borderBottom: `${settings.titles.background.border.width} ${settings.titles.background.border.style} ${settings.titles.background.border.color}`, 
                         }}
-                        className="w-full flex flex-col justify-end 0  border-b-3 border-gray-300 line-clamp-1"
+                        className={`w-full flex flex-col justify-end border-b-2 border-[${colors[settings.calendar.weekday.underlineColor.color as keyof typeof colors]}] line-clamp-1`}
                     >
                         Choose available slot
                     </div>
                     <div>
                         <p
                             style={{
-                                ...getTextStyles(settings.availableSlots.selectedDate.text)
+                                ...getTextStyles(settings.availableSlots.selectedDate.text, fonts, colors)
                             }}
                             className="ml-[.6vh] mt-[1.2vh] mb-[1.2vh] text-gray-700"
                         >
@@ -385,7 +387,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                     <div className="w-full">
                         <div 
                             style={{ 
-                                ...getTextStyles(settings.titles.text),
+                                ...getTextStyles(settings.titles.text, fonts, colors), 
                                 borderBottom: `${settings.titles.background.border.width} ${settings.titles.background.border.style} ${settings.titles.background.border.color}`,
                             }}
                             className="w-full flex flex-row justify-between items-center pt-2 pb-1 border-b-3 border-gray-300 cursor-pointer"
@@ -418,13 +420,14 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                     <div className="w-full">
                         <div 
                             style={{ 
-                                ...getTextStyles(settings.titles.text),
+                                ...getTextStyles(settings.titles.text, fonts, colors),
                                 borderBottom: `${settings.titles.background.border.width} ${settings.titles.background.border.style} ${settings.titles.background.border.color}`, 
                             }}
                             className="w-full flex flex-row justify-between items-center pt-2 border-b-3 border-gray-300 cursor-pointer"
                             onClick={() => setIsSlotSectionOpen(!isSlotSectionOpen)}
                         >
-                            <p className="line-clamp-1">Choose available slot</p>
+                            <p 
+                                className="line-clamp-1">Choose available slot</p>
                             <motion.div
                                 initial={false}
                                 animate={{ rotate: isSlotSectionOpen ? 180 : 0 }}
@@ -639,8 +642,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                             <p className="text-sm">Are you sure you want to book this slot?</p>
                                             <button
                                                 style={{
-                                                    ...getBackgroundStyles(settings.serviceDetails.bookButton.background),
-                                                    ...getTextStyles(settings.serviceDetails.bookButton.text),
+                                                    ...getBackgroundStyles(settings.serviceDetails.bookButton.background, colors),
+                                                    ...getTextStyles(settings.serviceDetails.bookButton.text, fonts, colors),
                                                     color: "green",
                                                     fontWeight: "bold",
                                                 }}
@@ -651,8 +654,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                             </button>
                                             <button
                                                 style={{
-                                                    ...getBackgroundStyles(settings.serviceDetails.bookButton.background),
-                                                    ...getTextStyles(settings.serviceDetails.bookButton.text),
+                                                    ...getBackgroundStyles(settings.serviceDetails.bookButton.background, colors),
+                                                    ...getTextStyles(settings.serviceDetails.bookButton.text, fonts, colors),
                                                     color: "red",
                                                     fontWeight: "bold",
                                                 }}

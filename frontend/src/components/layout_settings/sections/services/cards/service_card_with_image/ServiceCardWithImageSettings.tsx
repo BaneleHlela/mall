@@ -17,7 +17,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
   settings,
   handleSettingChange
 }) => {
-  const objectPath="services.card";
+  const objectPath="sections.services.card";
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
   const services = useAppSelector((state) => state.services.services)
@@ -59,12 +59,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
             name="Images"
             SettingsComponent={
                 <div className="px-[.6vh] space-y-2">
-                    <MultipleLayoutImagesHandler
-                        objectPath={`${objectPath}.image.urls`}
-                        min={1}
-                        max={15}
-                        images={getSetting("image.urls", settings, objectPath)}
-                    />
+                    
                     <BackgroundEditor
                         objectPath={`${objectPath}.image`}
                         settings={settings}
@@ -102,7 +97,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
       <AnimatePresence>
         {activePanel === "Text" && (
           <SlidingPanel onClose={closePanel} isOpen={true} title="Card Text Settings">
-            <div className="space-y-[.3vh] ">
+            <div className="space-y-[.3vh]">
                 <div className="border rounded px-[.6vh]">
                     <OptionsToggler
                         label="Show price"
@@ -123,31 +118,16 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
                         onChange={(value) => handleSettingChange(`${objectPath}.textAndButton.text.show.description`, value === "yes")}
                     />
                 </div>
-                <SubSettingsContainer
-                  name="Service Name"
-                  SettingsComponent={
-                    <UnderlinedTextSettings
-                      objectPath={`${objectPath}.textAndButton.text.name`}
-                      settings={settings}
-                      handleSettingChange={handleSettingChange}
-                      responsiveSize
-                    />
-                  }
-                />
-                <SubSettingsContainer
-                  name="Service Details"
-                  SettingsComponent={
-                    <UnderlinedTextSettings
-                      objectPath={`${objectPath}.textAndButton.text`}
-                      settings={settings}
-                      handleSettingChange={handleSettingChange}
-                      responsiveSize
-                    />
-                  }
-                />
+                  <FirstOrderSubSettingsContainer
+                    name="Service Name"
+                    onClick={() => setActivePanel("Service Name")}
+                  />
+                  <FirstOrderSubSettingsContainer
+                    name="Service Details"
+                    onClick={() => setActivePanel("Service Details")}
+                  />
             </div>
           </SlidingPanel>
-          
         )}
         {activePanel === "Button" && (
             <SlidingPanel onClose={closePanel} isOpen={true} title="Book Button Settings">
@@ -158,6 +138,26 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
                 allowShow
                 allowFunction
               />
+            </SlidingPanel>
+        )}
+        {activePanel === "Service Name" && (
+            <SlidingPanel onClose={closePanel} isOpen={true} title="Service Name Settings">
+                <UnderlinedTextSettings
+                  objectPath={`${objectPath}.textAndButton.text.name`}
+                  settings={settings}
+                  handleSettingChange={handleSettingChange}
+                  responsiveSize
+                />
+            </SlidingPanel>
+        )}
+        {activePanel === "Service Details" && (
+            <SlidingPanel onClose={closePanel} isOpen={true} title="Service Details Settings">
+                <UnderlinedTextSettings
+                  objectPath={`${objectPath}.textAndButton.text`}
+                  settings={settings}
+                  handleSettingChange={handleSettingChange}
+                  responsiveSize
+                />
             </SlidingPanel>
         )}
       </AnimatePresence>
