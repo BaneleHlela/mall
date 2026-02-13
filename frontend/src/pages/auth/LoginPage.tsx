@@ -42,7 +42,7 @@ const LoginPage = () => {
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.5 }}
-			className='max-w-[60vh] w-full h-full lg:h-[80%] flex flex-col justify-between backdrop-filter backdrop-blur-xl lg:rounded-[1vh] shadow-xl overflow-hidden p-[2vh]'
+			className='max-w-[60vh] w-full h-screen lg:h-screen flex flex-col justify-between backdrop-filter backdrop-blur-xl lg:rounded-[1vh] shadow-xl overflow-hidden px-[2vh] py-[4vh]'
 		>
 			<div className="w-full h-[20%] ">
 				<img 

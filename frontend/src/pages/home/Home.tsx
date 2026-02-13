@@ -123,7 +123,7 @@ const HomePage = () => {
   
 
   return (
-    <div className="relative  w-full h-full bg-gray-100 flex flex-col items-center">
+    <div className="relative  w-full h-full max-h-screen overflow-y-scroll hide-scrollbar bg-gray-100 flex flex-col items-center">
       {/* Menubar */}
       <nav className="w-[100vw] h-[15vh] min-h-[15vh] inset-0 z-10 bg-black flex flex-col items-center lg:min-h-[9vh]">
         <TheMallTopbar />
@@ -380,7 +380,7 @@ const HomePage = () => {
         <MdAdd className='text-[4vh]'/>
       </button>
       {/* Background Image (FOR DESKTOP) */}
-      <div className="absolute inset-0 hidden lg:flex w-full h-full">
+      <div className="absolute inset-0 hidden lg:flex w-full h-full max-h-screen">
         <img 
           src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/photo-collage.png%20(2).png" 
           alt="home-bg-image" 

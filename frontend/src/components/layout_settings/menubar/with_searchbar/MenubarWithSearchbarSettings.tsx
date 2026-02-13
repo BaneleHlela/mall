@@ -21,7 +21,6 @@ const MenubarWithSearchbarSettings = () => {
         dispatch(updateSetting({ field, value }));
     };
 
-    console.log(settings.menubar)
     
     return (
         <div className='p-[.6vh] space-y-[.6vh] w-full'>

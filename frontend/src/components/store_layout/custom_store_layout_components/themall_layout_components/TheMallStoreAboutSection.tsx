@@ -1,6 +1,8 @@
 import React from 'react'
 
 const TheMallStoreAboutSection = () => {
+
+  const definitionAlternatives = ["and vision becomes reality.", "and dreams scale into enterprises.", "and ambition turns into impact.", "and local businesses scale globally."]
   return (
     <div style={{fontFamily: "Montserrat"}} className='flex flex-col lg:flex-row w-full lg:h-[80vh] bg-stone-50  lg:py-[4vh] lg:px-[8vh]'>
       {/* Text & CTA */}
@@ -9,14 +11,14 @@ const TheMallStoreAboutSection = () => {
         <h2 style={{fontFamily: "DM Serif Text", lineHeight: "1"}} 
           className="w-[80%] text-[5vh] lg:text-[8vh] mb-[3vh]"
         >
-          More than a marketplace. <br/><span className='text-gray-500'>It's a home for your business</span>
+          More than a marketplace. <br/><span className='text-gray-500'>It's a home for commerce</span>
         </h2>
         <p  className="text-[2vh] text=gray-800 lg:text-[2.5vh]">
-          <strong>The Mall</strong> is where businesses become real brands, customers become communities, and small ideas grow with confidence.
+          <strong>The Mall</strong> is where businesses become brands, customers become communities, {definitionAlternatives[Math.floor(Math.random() * definitionAlternatives.length)]}
         </p>
         <p className="text-[2vh] text=gray-800 lg:text-[2.5vh]">
-          Whether you sell products, offer services, or run your business from your home, stall, or street, 
-          The Mall gives you the tools to look professional, build trust, and grow your name.
+          It is an e-commerce platform. No matter what you sell or how small you’re starting, 
+          The Mall equips you with the tools to manage your business, sharpen your skills, and scale seamlessly. But that’s only the beginning.
         </p>
         <div className="absolute top-[2%] right-[2%]">
           <img 
@@ -29,9 +31,9 @@ const TheMallStoreAboutSection = () => {
       {/* Image */}
       <div className="relative flex items-center justify-center w-full h-[40vh] lg:w-[50%] lg:h-full mt-[3vh] lg:mt-0">
         <img 
-          src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/undraw_building-websites_k2zp.svg" 
+          src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/branding-poster.jpg" 
           alt="" 
-          className="h-[30vh] lg:h-[60%] object-cover shadow-sm rounded-[1vh] z-1 backdrop-blur-xs" 
+          className="h-[30vh] lg:h-[80%] object-cover shadow-md rounded-[1vh] z-1 backdrop-blur-xs" 
         />
         <>
           <div className="absolute top-[28%] left- lg:hidden">

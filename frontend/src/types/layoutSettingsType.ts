@@ -1,4 +1,5 @@
 export interface TextSettings {
+  input?: string;
     fontFamily?: string;
     fontSize?: string | {
       mobile: string;

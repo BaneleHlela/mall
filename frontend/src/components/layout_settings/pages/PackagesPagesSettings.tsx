@@ -1,7 +1,8 @@
+import StorePackagesSectionSettings from "../sections/packages/StorePackagesSectionSettings"
 
 const PackagesPagesSettings = () => {
   return (
-    <div>PackagesPagesSettings</div>
+    <StorePackagesSectionSettings />
   )
 }
 

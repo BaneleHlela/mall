@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { Link } from 'react-router-dom';
-import { getBackgroundStyles, getTextStyles } from '../../../../utils/stylingFunctions';
+import { getBackgroundStyles, getResponsiveBackgroundImage, getTextStyles } from '../../../../utils/stylingFunctions';
 import type { BackgroundSettings, TextSettings } from '../../../../types/layoutSettingsType';
 
 interface StoreMenubarLogoProps {
@@ -23,7 +23,7 @@ const StoreMenubarLogo: React.FC<StoreMenubarLogoProps> = ({
     style,
 }) => {
     const store = useAppSelector((state) => state.stores.currentStore);
-    const colors = useAppSelector((state) => state.layoutSettings.colors);  
+    const { fonts, colors } = useAppSelector((state) => state.layoutSettings);  
     const layoutId = useAppSelector((state) => state.layoutSettings._id);
     const isPreviewMode = location.pathname.startsWith(`/layouts/${layoutId}/preview`);
 
@@ -34,18 +34,18 @@ const StoreMenubarLogo: React.FC<StoreMenubarLogoProps> = ({
     const hasLogoImages = logoUrl.length > 0;
 
     return (
-        <Link  to={linkTo} className='flex items-center justify-center h-full max-w-fit pl-1 pr-1'>
+        <Link  to={linkTo} className='flex items-center justify-center lg:justify-start h-fit w-fit max-w-fit pl-1 pr-1 p-0'>
             {use === 'logo' && hasLogoImages ? (
                 <img
-                    style={{...getBackgroundStyles(style?.background, colors)}}
-                    src={window.innerWidth < 589 ? logoUrl[0] : (logoUrl[1] || logoUrl[0])}
+                    style={{...getBackgroundStyles(style?.background, colors), backgroundColor: 'transparent'}}
+                    src={getResponsiveBackgroundImage(logoUrl)}
                     alt='store logo'
                     className='flex items-center justify-center max-h-full w-full object-contain bg-white'
                 />
             ) : (
             <div
                 style={{
-                    ...(style ? getTextStyles(style.text, colors) : {}),
+                    ...(style ? getTextStyles(style.text, fonts, colors) : {}),
                     ...getBackgroundStyles(style?.background, colors)
                 }}
                 className='min-w-fit flex flex-col justify-center'

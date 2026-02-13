@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import TheMallStoreHero from '../../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStoreHero'
+import TheMallStoreHero from '../../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStoreHero';
 import { useNavbar } from '../../../utils/context/NavBarContext';
 import WebFont from 'webfontloader';
 import TheMallStoreAboutSection from '../../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStoreAboutSection';
@@ -31,7 +31,7 @@ const GetStartedPage = () => {
       style={{
         fontFamily: "Montserrat",
       }} 
-      className='flex flex-col items-center w-full h-[100vh] overflow-y-scroll'
+      className='flex flex-col items-center w-full min-h-screen overflow-y-auto'
     >
       <GetStartedMenubar />
       <TheMallStoreHero />

@@ -40,6 +40,7 @@ import BookPageSettings from "./BookPageSettings";
 import BookServicePageSettings from "./BookServicePageSettings";
 import StoreSearchResultsPageSettings from "./StoreSearchResultsPageSettings";
 import SectionSelector from "../supporting/section_selector/SectionSelector";
+import PackagesPagesSettings from "./PackagesPagesSettings";
 
 
 const SortableItem = ({
@@ -142,6 +143,8 @@ const PagesSettings: React.FC = () => {
         return <GalleryPageSettings />;
       case "contact":
         return <ContactPageSettings />;
+      case "packages": 
+        return <PackagesPagesSettings />
       case "book":
         return <BookPageSettings />;
       default:

@@ -32,6 +32,7 @@ interface BlueSidebarProps {
       color:string;
       alignment: string;
       borderColor: string;
+      fontWeight: string;
     };
     animation: string;
     backgroundColor: string;
@@ -62,7 +63,7 @@ const BlueSidebar: React.FC<BlueSidebarProps> = ({
             <div className="flex justify-center items-center h-full mt-[10vh] w-fit">
               <StoreMenubarLogo 
                   use={style.logo.use}
-                  logoText={style.logo.logoText}
+                  logoText={style.logo.style.text.input || style.logo.logoText}
                   logoUrl={style.logo.logoUrl || ""}
                   style={{
                       text: style.logo.style.text || {},
@@ -71,7 +72,7 @@ const BlueSidebar: React.FC<BlueSidebarProps> = ({
               />
             </div>
         </div>
-        <div className="flex items-center h-[80%] px-[10%]">
+        <div className="flex items-center h-[80%] px-[5%]">
             {/* Navigation links */}
             <ul
               className={`flex flex-col w-full p-6 space-y-1
@@ -86,7 +87,8 @@ const BlueSidebar: React.FC<BlueSidebarProps> = ({
                   style={{
                     color: style.links.color,
                     fontFamily: style.links.fontFamily,
-                    borderBottom: `1px solid ${style.links.borderColor}`
+                    borderBottom: `1px solid ${style.links.borderColor}`,
+                    fontWeight: style.links.fontWeight,
                   }}
                   className={`flex flex-col justify-center capitalize text-[2.8vh] py-[1.5vh] hover:scale-102
                     ${style.links.alignment === "left" ? "text-left" : ""}

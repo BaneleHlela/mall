@@ -38,7 +38,7 @@ const BlueSidebarSettings: React.FC = () => {
       {/* Background Color */}
       <OptionsToggler
         label="Background Color"
-        options={['primary', 'secondary', 'tertiary', 'quad', 'pent']}
+        options={['primary', 'secondary', 'accent', 'quad', 'pent']}
         value={sidebarSettings.backgroundColor || settings.colors.primary}
         onChange={(value) => handleSettingChange('menubar.sidebar.backgroundColor', value)}
       />
@@ -87,7 +87,7 @@ const BlueSidebarSettings: React.FC = () => {
                     objectPath="menubar.sidebar.links"
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={["color", "fontFamily", "fontWeight"]}
+                    allow={["color", "fontFamily", "weight"]}
                 />
                 {/* <ColorPicker
                     label="Text Color"
@@ -107,7 +107,7 @@ const BlueSidebarSettings: React.FC = () => {
                 {/* Option Toggler Border Color Picker */}
                 <OptionsToggler
                     label="Border Color"
-                    options={['primary', 'secondary', 'tertiary', 'quad', 'pent']}
+                    options={['primary', 'secondary', 'tertiary', 'quad', 'pent', 'transparent']}
                     value={sidebarSettings.links?.borderColor || settings.colors.quad}
                     onChange={(value) => handleSettingChange('menubar.sidebar.links.borderColor', value)}
                 />

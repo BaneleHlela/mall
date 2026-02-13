@@ -2,7 +2,7 @@ import React from 'react'
 
 const TheMallSocialFeatureSection = () => {
   return (
-    <div style={{fontFamily: "Montserrat"}} className='flex flex-col lg:flex-row w-full lg:h-[80vh] bg-[#6c63ff]  lg:py-[4vh] lg:px-[8vh]'>
+    <div style={{fontFamily: "Montserrat"}} className='flex flex-col lg:flex-row w-full lg:h-[100vh] bg-[#6c63ff] px-[1.5vh]  lg:py-[4vh] lg:px-[8vh]'>
       {/* Image */}
       <div className="relative hidden lg:flex items-center justify-center w-full h-[40vh] lg:w-[50%] lg:h-full mt-[3vh] lg:mt-0">
         <img 
@@ -47,19 +47,22 @@ const TheMallSocialFeatureSection = () => {
         <h2 style={{fontFamily: "DM Serif Text", lineHeight: "1"}} 
           className="w-[80%] text-[5vh] lg:text-[8vh] mb-[3vh] text-white"
         >
-          You can't grow your business alone <strong>—</strong> <br/><span className='text-gray-200'>and you shouldn't.</span>
+          A Mall for Customers <strong>—</strong> <span className='text-gray-200'>A Network for Builders.</span>
         </h2>
         <p  className="text-[2vh] text-white lg:text-[2.5vh]">
-          <strong>The Mall</strong>  is a social space where vendors can connect with customers and each other. Growth happens faster when you're visible and connected.
+          <strong>Your store isn’t isolated</strong> — it lives alongside a diverse collection of businesses, forming a true digital mall. This makes your brand easier to discover, explore, and follow.
+          <br/> <br/>
+          But <strong>The Mall</strong> goes beyond visibility. <br/> 
+          Just as professionals connect and grow on LinkedIn, entrepreneurs on The Mall can collaborate on ideas, build partnerships, merge ventures, and learn from one another. It’s not just commerce — it’s connection.
         </p>
-        <div className="space-y-[1vh]">
+        <div className="space-y-[1vh] mt-[5vh]">
             <div className="flex h-[4vh] lg:h-[6vh] gap-2 items-center text-white lg:text-[2.5vh]">
                 <img 
                     src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/search-window-svgrepo-com.svg" 
                     alt="search-svg" 
                     className="h-[4vh] w-[4vh] lg:h-[6vh] lg:w-[6vh] object-cover bg-amber-500 rounded p-[1vh] mt-[2vh]" 
                 />
-                <p className="">Be discovered by customers</p>
+                <p className="mt-2">Be easily discovered by customers</p>
             </div>
             <div className="flex h-[4vh] lg:h-[6vh] gap-2 items-center text-white lg:text-[2.5vh]">
                 <img 
@@ -67,9 +70,9 @@ const TheMallSocialFeatureSection = () => {
                     alt="search-svg" 
                     className="h-[4vh] w-[4vh] lg:h-[6vh] lg:w-[6vh] object-cover bg-amber-500 rounded p-[.8vh] mt-[2vh]" 
                 />
-                <p className="">Connect with other businesses to form a "mall"</p>
+                <p className="mt-2">Connect with other businesses to form a "mall"</p>
             </div>
-            <div className="flex h-[4vh] lg:h-[6vh] gap-2 items-center text-white lg:text-[2.5vh]">
+            {/* <div className="flex h-[4vh] lg:h-[6vh] gap-2 items-center text-white lg:text-[2.5vh]">
                 <img 
                     src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/collaborate-work-together-co-operate-join-forces-svgrepo-com%20(1).svg" 
                     alt="search-svg" 
@@ -84,7 +87,7 @@ const TheMallSocialFeatureSection = () => {
                     className="h-[4vh] w-[4vh] lg:h-[6vh] lg:w-[6vh] object-cover bg-amber-500 rounded p-[.8vh] mt-[2vh]" 
                 />
                 <p className="">Learn as your business grows</p>
-            </div>
+            </div> */}
         </div>
         <div className="absolute top-[2%] right-[2%]">
           <img 

@@ -42,7 +42,7 @@ const App: React.FC = () => {
 
 
   return (
-    <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-screen w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar">  
+    <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-fit w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar">  
       <Router>
         <Menubar /> 
         <Routes>

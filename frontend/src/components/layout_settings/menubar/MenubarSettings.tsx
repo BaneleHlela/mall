@@ -13,6 +13,7 @@ import MenubarWithSearchbarSettings from "./with_searchbar/MenubarWithSearchbarS
 import { mockLayout } from "../../../major_updates/mockLayout";
 import { defaultStoreAlertDivConfig } from "../../../utils/defaults/extras/defaultStoreAlertDivConfig";
 import RestuarantMenubarSettings from "./restuarant_menubar/RestuarantMenubarSettings";
+import ArtMenubarSettings from "./art/ArtMenubarSettings";
 
 const MenubarSettings = () => {
     const settings = useAppSelector((state) => state.layoutSettings)
@@ -62,6 +63,9 @@ const MenubarSettings = () => {
             )}
             {variation === "restuarantMenubar" && (
               <RestuarantMenubarSettings />
+            )}
+            {variation === "artMenubar" && (
+              <ArtMenubarSettings />
             )}
           </div>
       )

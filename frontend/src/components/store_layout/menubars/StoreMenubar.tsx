@@ -1,7 +1,7 @@
 import { useAppSelector } from '../../../app/hooks'
+import ArtMenubar from './art_menubar/ArtMenubar';
 import MenubarWithSearchbar from './menubar_with_searchbar/MenubarWithSearchbar';
 import RestuarantMenubar from './restuarant_menubar/RestuarantMenubar';
-import SecondStoreMenubar from './second/SecondStoreMenubar'
 
 const StoreMenubar = () => {
   const variation = useAppSelector((state) => state.layoutSettings.menubar.variation);
@@ -11,6 +11,10 @@ const StoreMenubar = () => {
 
   if (variation === "restuarantMenubar") {
     return <RestuarantMenubar />
+  }
+
+  if (variation === "artMenubar") {
+    return <ArtMenubar />
   }
 
   return (

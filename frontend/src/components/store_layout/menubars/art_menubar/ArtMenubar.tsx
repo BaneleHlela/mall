@@ -11,11 +11,13 @@ import { useAppSelector } from "../../../../app/hooks";
 import { useStoreButtonClickHandler } from "../../extras/buttons/useStoreButtonClickHandler";
 import StoreLayoutButton from "../../shared_layout_components/StoreLayoutButton";
 import BlueSidebar from "../menubar_with_searchbar/BlueSidebar";
+import { getBackgroundStyles, getTextStyles } from "../../../../utils/stylingFunctions";
 
 
 
 const ArtMenubar = () => {
-  const layout = useAppSelector((state) => state.layoutSettings);    
+  const layout = useAppSelector((state) => state.layoutSettings);
+  const { colors, fonts } = useAppSelector((state) => state.layoutSettings);    
   const scrollY = useMotionValue(0);
   const scrollDirection = useMotionValue("up");
   const [isOpen, setOpen] = useState(false);
@@ -90,10 +92,12 @@ const ArtMenubar = () => {
         id="store_menubar"
         style={{ 
             y,
-            backgroundColor: layout.colors.primary,    
+            backgroundColor: layout.colors.primary,   
+            ...getBackgroundStyles(layout.menubar.topbar.background, colors),
+            borderBottom: `${layout.menubar.topbar.background.border.width} ${layout.menubar.topbar.background.border.style} ${colors[layout.menubar.topbar.background.border.color as keyof typeof colors]}` 
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="w-full h-fit bg-amber-50 fixed top-0 left-0 z-50 shadow opacity-90"
+        className="w-full h-fit bg-amber-50 sticky top-0 left-0 z-50 shadow opacity-100"
     >
         {/* Mobile */}
         <div className="w-full h-[10.5vh] lg:hidden">
@@ -101,41 +105,42 @@ const ArtMenubar = () => {
             <div className="flex justify-between items-center w-full h-full px-[.5vh]">
                 {/* Cart and heart */}
                 <div className="flex">
-                    <StoreMenubarCart 
-                        style={{
-                            variation: "basket",
-                            size: "5vh",
-                            color: layout.colors.secondary,
-                            count: {
-                                backgroundColor: 'black',
-                                color: 'white',
-                            }
-                        }}
-                    />
+                    {store?.trades.includes('products') && (
+                        <StoreMenubarCart 
+                            style={{
+                                variation: layout.menubar.topbar.cart.variation || "basket",
+                                size: "4vh",
+                                color: colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors],
+                                count: {
+                                    backgroundColor: 'black',
+                                    color: 'white',
+                                }
+                            }}
+                        />
+                    )}
                     <StoreMenubarHeart
-                        size="5vh"
-                        color={layout.colors.secondary}
+                        size={layout.menubar.topbar.cart.size || "4vh"}
+                        color={colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors]}
                     />
                 </div>
                 {/* Logo */}
-                <div className="h-full">
+                <div className="flex h-full">
                     <StoreMenubarLogo 
-                        width="50%" 
                         use={layout.menubar.topbar.logo.use}
-                        logoText={layout.menubar.topbar.logo.logoText}
+                        logoUrl={layout.menubar.topbar.logo.logoUrl}
+                        logoText={layout.menubar.topbar.logo.style.text.input || layout.menubar.topbar.logo.logoText}
                         style={{
-                            color: layout.colors.secondary,
-                            fontSize: '2.5vh',
-                            fontWeight: 'bold',
+                            text: {...layout.menubar.topbar.logo.style.text},
+                            background: {...layout.menubar.topbar.logo.style.background, color: colors[layout.colors.secondary as keyof typeof colors]},
                         }}
                     />
                 </div>
                 {/* Hamburger */}
                 <StoreMenubarHamburger 
                     style={{
-                        variation: 'cross',
-                        size: 32,
-                        color: layout.colors.secondary,
+                        variation: layout.menubar.topbar.hamburger.variation || 'cross',
+                        size: layout.menubar.topbar.hamburger.size || '5vh',
+                        color: colors[layout.menubar.topbar.hamburger.color as keyof typeof colors] || 'black',
                         direction: 'left',
                     }}
                     toggled={isOpen} toggle={setOpen}
@@ -145,20 +150,20 @@ const ArtMenubar = () => {
         {/* Desktop */}
         <div className="hidden lg:flex justify-between items-center w-full h-[13vh] px-[1.5vh]">
             {/* Logo */}
-            <div className="h-full w-[22%]">
+            <div className="flex items-center h-full">
                 <StoreMenubarLogo 
                     width="100%" 
                     use={layout.menubar.topbar.logo.use}
-                    logoText={layout.menubar.topbar.logo.logoText}
+                    logoUrl={layout.menubar.topbar.logo.logoUrl}
+                    logoText={layout.menubar.topbar.logo.style.text.input || layout.menubar.topbar.logo.logoText}
                     style={{
-                        color: layout.colors.secondary,
-                        fontSize: '2.5vh',
-                        fontWeight: 'bold',
+                        text: {...layout.menubar.topbar.logo.style.text},
+                        background: {...layout.menubar.topbar.logo.style.background, color: colors[layout.colors.secondary as keyof typeof colors]},
                     }}
                 />
             </div>
             {/* Links */}
-            <div className="h-full w-[43%] flex flex-col justify-center items-start">
+            <div className="h-full w-[43%] ml-[20%] flex flex-col justify-center items-start">
                 <div 
                     className='w-full h-full flex flex-col items-start'
                 >
@@ -166,11 +171,9 @@ const ArtMenubar = () => {
                     {links.map(({ to, label }) => (
                         <li
                             key={label}
-                            className='px-[2vh] hover:underline hover:text-gray-800 min-h-fit flex flex-col justify-center'
+                            className='px-[2vh] hover:underline hover:text-gray-800 min-h-fit flex flex-col justify-center line-clamp-1'
                             style={{
-                                color: layout.colors.secondary,
-                                fontSize: "2.5vh",
-                                fontFamily: "Arial",
+                                ...getTextStyles(layout.menubar.topbar.desktop.links, fonts, colors),
                             }}
                         >
                             <Link to={to}>{label}</Link>
@@ -191,22 +194,10 @@ const ArtMenubar = () => {
                     }
                     style={{
                         text: {
-                            color: layout.colors.primary,
-                            input: 'Shop Now'
+                            ...layout.menubar.topbar.desktop.button.text,
                         },
                         background: {
-                            color: layout.colors.secondary,
-                            padding: {
-                            },
-                            width: {
-                                desktop: "17vh",
-                            },
-                            border: {
-                                width: '1px',
-                                style: 'solid',
-                                color: layout.colors.secondary,
-                                radius: '30px',
-                            },
+                            ...layout.menubar.topbar.desktop.button.background
                         },
                     }}
                 />
@@ -217,7 +208,7 @@ const ArtMenubar = () => {
                             style={{
                                 variation: "basket",
                                 size: "4vh",
-                                color: layout.colors.secondary,
+                                color: colors[layout.colors.secondary as keyof typeof colors],
                                 count: {
                                     backgroundColor: 'black',
                                     color: 'white',
@@ -226,8 +217,8 @@ const ArtMenubar = () => {
                         />
                     )}
                     <StoreMenubarHeart
-                        size="4vh"
-                        color={layout.colors.secondary}
+                        size={layout.menubar.topbar.cart.size || "4vh"}
+                        color={colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors]}
                     />
                 </div>
             </div>
@@ -238,21 +229,24 @@ const ArtMenubar = () => {
             onClose={() => setOpen(false)}
             links={links} 
             style={{
-                animation: "upToDown",
+                animation: layout.menubar.sidebar.animation || "leftToright",
                 logo: {
-                    use: layout.menubar.topbar.logo.use,
-                    logoText: layout.menubar.topbar.logo.logoText,
+                    use: layout.menubar.sidebar.logo.use,
+                    logoUrl: layout.menubar.sidebar.logo.logoUrl,
+                    logoText: layout.menubar.sidebar.logo.style.text.input || layout.menubar.sidebar.logo.logoText,
                     style: {
-                        color: layout.colors.secondary,
+                        text: {...layout.menubar.sidebar.logo.style.text},
+                        background: {...layout.menubar.sidebar.logo.style.background, color: colors[layout.colors.secondary as keyof typeof colors]},
                     }
                 },
                 links: {
-                    color: layout.colors.secondary,
-                    alignment: "center",
-                    fontFamily: layout.fonts.primary,
-                    borderColor: layout.colors.quad,
+                    color: colors[layout.menubar.sidebar.links.color as keyof typeof colors ] || colors[layout.colors.secondary as keyof typeof colors],
+                    alignment: layout.menubar.sidebar.links.alignment || "center",
+                    fontFamily: fonts[layout.menubar.sidebar.links.fontFamily as keyof typeof fonts] || "Arial",
+                    borderColor: colors[layout.menubar.sidebar.links.borderColor as keyof typeof colors],
+                    fontWeight: layout.menubar.sidebar.links.weight || "normal",
                 },
-                backgroundColor: layout.colors.primary,
+                backgroundColor: colors[layout.menubar.sidebar.backgroundColor as keyof typeof colors] || colors[layout.colors.primary as keyof typeof colors],
             }}
         />
     </motion.nav>
