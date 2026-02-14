@@ -23,6 +23,7 @@ const StoreFloatingButton = ({
           cursor: "pointer",
           color: colors[config.style?.icon?.color as keyof typeof colors],
         }}
+        className='shadow-md'
       >
         {config.show === "chat" && (
           <IoMdChatboxes size={config.style?.icon?.size} color={colors[config.style?.icon?.color as keyof typeof colors]} />

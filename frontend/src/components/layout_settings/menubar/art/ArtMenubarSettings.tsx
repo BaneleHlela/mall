@@ -137,7 +137,7 @@ const ArtMenubarSettings = () => {
                         <SubSettingsContainer
                             name="Hambuger Settings"
                             SettingsComponent={
-                                <div className=''>
+                                <div className='px-[1vh]'>
                                     <OptionsToggler
                                         label="Variation"
                                         options={[

@@ -340,6 +340,10 @@ export const updateLayoutConfig = expressAsyncHandler(async (req, res) => {
     layout.sections.packages = body.sections.packages;
   };
 
+  if (body.sections?.book) {
+    layout.sections.book = body.sections.book;
+  };
+
   // Example: update layout settings
   if (body.settings) {
     Object.assign(layout.settings, body.settings);

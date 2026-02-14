@@ -49,7 +49,10 @@ const GalleryWithGroupedImages = () => {
               <UnderlinedText style={settings.text.heading} />
               
               {settings.text.subheading.input && (
-                <UnderlinedText style={settings.text.subheading} />
+                <div className='lg:max-w-[50%]'> 
+                  <UnderlinedText style={settings.text.subheading} />
+                </div>
+                
               )}
             </div>
       </div>

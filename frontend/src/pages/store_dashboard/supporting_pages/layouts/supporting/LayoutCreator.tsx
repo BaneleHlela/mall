@@ -48,7 +48,7 @@ const LayoutCreator = () => {
   }
 
   return (
-    <div className="px-[.8vh] relative w-full h-full text-center lg:max-w-[50vw]">
+    <div className="px-[.8vh] relative w-full h-screen text-center lg:max-w-[50vw]">
       <h1 className="py-[3vh] text-[4vh] text-shadow-xs">Layout creator</h1>
       {step === 1 && (
         <>

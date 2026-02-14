@@ -1,6 +1,7 @@
 import { Description } from "@headlessui/react";
 import { duration } from "@mui/material";
 import { FontSize } from "@tiptap/extension-text-style";
+import { color } from "framer-motion";
 import { pick } from "lodash";
 import { LineChart, Weight } from "lucide-react";
 
@@ -1872,6 +1873,73 @@ export const mockLayout = {
                 border: {
                     show: "true",
                     color: "secondary",
+                }
+            }
+        },
+        book: {
+            variation: "bookWithContrastColor",
+            background: {
+                color: "secondary",
+                padding: {
+                    x: {
+                        mobile: "0vh",
+                        desktop: "5vh"
+                    },
+                    y: {
+                        mobile: "0vh",
+                        desktop: "0vh"
+                    },
+                },
+                headingAndButton: {
+                    padding: {
+                        x: {
+                            mobile: "1vh",
+                            desktop: "1vh"
+                        },
+                        y: {
+                            mobile: "1vh",
+                            desktop: "1vh"
+                        },
+                    }
+                }
+            },
+            text: {
+                heading: {
+                    input: "Book An Appointment",
+                    fontFamily: "secondary",
+                    color: "primary",
+                    fontSize: {
+                        mobile: "2.5rem",
+                        desktop: "3.5rem"
+                    },
+                    weight: "bold"
+                }
+            },
+            button: {
+                text:  {
+                    input: "View All Services",
+                    fontFamily: "secondary",
+                    color: "accent",
+                    fontSize: "1.2em",
+                    weight: "bold",
+                    letterSpacing: "0px",
+                },
+                background: {
+                    color: "primary",
+                    padding: {
+                        x: "10px",
+                        y: "10px"
+                    },
+                    width: {
+                        mobile: "80%",
+                        desktop: "fit-content"
+                    },
+                    border: {
+                        width: "3px",
+                        style: "solid",
+                        color: "secondary",
+                        radius: "0px"
+                    }
                 }
             }
         }

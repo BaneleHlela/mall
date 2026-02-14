@@ -54,7 +54,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
     businessType: 'sole',
     thumbnail: '//example.com/images/thumbnails/product5.jpg',
     slogan: '',
-    contact: { phone: '0797604204', email: 'g@gmail.com' },
+    contact: { phone: '0712364567', email: 'demo@my-store.com' },
     departments: ["clothing"],
     socials: [{ platform: 'whatsapp', url: 'wa.me' }],
     location: { type: 'Point', coordinates: [30.08534999999999, -27.74885549999999], nickname: '', address: '' },

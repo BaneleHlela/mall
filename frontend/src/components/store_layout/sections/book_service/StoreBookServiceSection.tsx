@@ -15,7 +15,7 @@ const StoreBookServiceSection = () => {
     const service = useAppSelector(state => state.services.selectedService)
     const isLoading = useAppSelector(state => state.services.isLoading);
     const { colors, fonts } = useAppSelector(state => state.layoutSettings);
-
+    const variation = 
     useEffect(() => {
         if (serviceSlug) {
             dispatch(fetchServiceBySlug(serviceSlug))

@@ -109,7 +109,7 @@ const ArtMenubar = () => {
                         <StoreMenubarCart 
                             style={{
                                 variation: layout.menubar.topbar.cart.variation || "basket",
-                                size: "4vh",
+                                size: layout.menubar.topbar.cart.size || "4vh",
                                 color: colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors],
                                 count: {
                                     backgroundColor: 'black',
@@ -140,7 +140,7 @@ const ArtMenubar = () => {
                     style={{
                         variation: layout.menubar.topbar.hamburger.variation || 'cross',
                         size: layout.menubar.topbar.hamburger.size || '5vh',
-                        color: colors[layout.menubar.topbar.hamburger.color as keyof typeof colors] || 'black',
+                        color: colors[layout.menubar.topbar.hamburger.color as keyof typeof colors] || 'white',
                         direction: 'left',
                     }}
                     toggled={isOpen} toggle={setOpen}
@@ -163,7 +163,7 @@ const ArtMenubar = () => {
                 />
             </div>
             {/* Links */}
-            <div className="h-full w-[43%] ml-[20%] flex flex-col justify-center items-start">
+            <div className="h-full w-[50%] ml-[20%] flex flex-col justify-center items-start">
                 <div 
                     className='w-full h-full flex flex-col items-start'
                 >
@@ -183,7 +183,7 @@ const ArtMenubar = () => {
                 </div>
             </div>
             {/* Searchbar, cart & favorite */}
-            <div className="flex justify-end space-x-[1vh]  w-[20%] h-[40%]">
+            <div className="flex justify-end items-center space-x-[1vh]  w-[20%] h-[40%]">
                 <StoreLayoutButton 
                     onClick={() =>
                         handleButtonClick({
@@ -203,12 +203,12 @@ const ArtMenubar = () => {
                 />
                 {/* Cart and favorite */}
                 <div className="flex items-center space-x-1">
-                    {store?.trades.includes('products') && (
+                {store?.trades.includes('products') && (
                         <StoreMenubarCart 
                             style={{
-                                variation: "basket",
-                                size: "4vh",
-                                color: colors[layout.colors.secondary as keyof typeof colors],
+                                variation: layout.menubar.topbar.cart.variation || "basket",
+                                size: layout.menubar.topbar.cart.size || "4vh",
+                                color: colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors],
                                 count: {
                                     backgroundColor: 'black',
                                     color: 'white',

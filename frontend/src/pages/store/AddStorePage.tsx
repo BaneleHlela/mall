@@ -10,7 +10,7 @@ const AddStorePage = () => {
     }, [hideNavbar]);
     
     return (
-        <div className='w-full h-full'>
+        <div className='w-full h-screen'>
             <CreateStoreForm isDemo/>
         </div>
     )

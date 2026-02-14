@@ -12,7 +12,7 @@ import MainBookWithCalenderSettings from '../book/basic_book_with_open_calendar/
 import MultipleLayoutImagesHandler from '../../supporting/MultipleLayoutImagesHandler';
 import { getSetting } from '../../../../utils/helperFunctions';
 
-const BookServiceSectionSettings = () => {
+const BookServiceSectionSettings = ({bookPath} : {bookPath?: boolean}) => {
     const dispatch = useAppDispatch();
     const settings = useAppSelector((state) => state.layoutSettings);
 
@@ -22,7 +22,7 @@ const BookServiceSectionSettings = () => {
     const [activePanel, setActivePanel] = useState<string | null>(null);
     const closePanel = () => setActivePanel(null);
 
-    const objectPath = "sections.bookService"
+    const objectPath = bookPath ? "sections.book" : "sections.bookService"
     
     return (
         <div className='space-y-[.35vh]'>
@@ -162,7 +162,7 @@ const BookServiceSectionSettings = () => {
                         <MainBookWithCalenderSettings 
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            objectPath={`${objectPath}.main`} 
+                            objectPath={`sections.bookService.main`} 
                         />
                     </SlidingPanel>
                 )}

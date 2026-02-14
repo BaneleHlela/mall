@@ -18,31 +18,39 @@ import StoreTeamSection from "../../../../components/store_layout/sections/team/
 import StoreFAQsSection from "../../../../components/store_layout/sections/FAQs/StoreFAQsSection";
 import StoreDonationsSection from "../../../../components/store_layout/sections/donations/StoreDonationsSection";
 import StoreRentalsSection from "../../../../components/store_layout/sections/rentals/StoreRentalsSection";
+import ErrorBoundary from "../../../../components/ErrorBoundary";
 
 const StoreHome = () => {
   const settings = useAppSelector((state) => state.layoutSettings);
   const contains = settings.routes.home?.contains || [];
 
+  const withErrorBoundary = (Component: React.ReactElement) => (
+    <ErrorBoundary>
+      {Component}
+    </ErrorBoundary>
+  );
+  
 
   // Mapping section keys to actual components
   const sectionMap: Record<string, React.ReactElement> = {
-    hero: <StoreHeroSection />,
-    about: <StoreAboutSection />,
-    services: <StoreServicesSection />,
-    menu: <StoreMenuSection />,
-    products: <StoreProductsSection />,
-    donations: <StoreDonationsSection />,
-    reviews: <StoreReviewsSection />,
-    contact: <StoreContactSection />,
-    footer: <StoreFooterSection />,
-    gallery: <StoreGallerySection />,
-    events: <StoreEventsSection />,
-    book: <StoreBookSection />,
-    packages: <StorePackagesSection />,
-    rentals: <StoreRentalsSection />,
-    team: <StoreTeamSection />,
-    FAQs: <StoreFAQsSection />,
+    hero: withErrorBoundary(<StoreHeroSection />),
+    about: withErrorBoundary(<StoreAboutSection />),
+    services: withErrorBoundary(<StoreServicesSection />),
+    menu: withErrorBoundary(<StoreMenuSection />),
+    products: withErrorBoundary(<StoreProductsSection />),
+    donations: withErrorBoundary(<StoreDonationsSection />),
+    reviews: withErrorBoundary(<StoreReviewsSection />),
+    contact: withErrorBoundary(<StoreContactSection />),
+    footer: withErrorBoundary(<StoreFooterSection />),
+    gallery: withErrorBoundary(<StoreGallerySection />),
+    events: withErrorBoundary(<StoreEventsSection />),
+    book: withErrorBoundary(<StoreBookSection />),
+    packages: withErrorBoundary(<StorePackagesSection />),
+    rentals: withErrorBoundary(<StoreRentalsSection />),
+    team: withErrorBoundary(<StoreTeamSection />),
+    FAQs: withErrorBoundary(<StoreFAQsSection />),
   };
+  
 
   return (
     <div className="w-full flex flex-col items-center justify-center">

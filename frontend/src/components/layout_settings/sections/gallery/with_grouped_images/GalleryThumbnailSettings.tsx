@@ -20,7 +20,7 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
     const [activePanel, setActivePanel] = useState<string | null>(null);
     const closePanel = () => setActivePanel(null);
   return (
-    <div className='space-y-1'>
+    <div className='space-y-[.6vh]'>
         {/* Toggle Buttons */}
         
         <SubSettingsContainer
@@ -149,13 +149,14 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                     </div>
                 </SlidingPanel>
             )}
-            {activePanel === "group_description" && settings.gallery.imagesModal.addModal && (
+            {activePanel === "group_description" && (
                 <SlidingPanel key="group_description" isOpen={true} onClose={() => setActivePanel("Text")} title="Description Settings">
                     <div className="space-y-[.3vh]">
                         <UnderlinedTextSettings
                             settings={settings}
                             handleSettingChange={handleSettingChange}
                             objectPath={`${objectPath}.text.groupDescription`}
+                            responsiveSize
                         />
                     </div>
                 </SlidingPanel>
