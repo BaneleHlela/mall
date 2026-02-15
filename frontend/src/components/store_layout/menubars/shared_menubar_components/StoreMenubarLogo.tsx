@@ -23,6 +23,7 @@ const StoreMenubarLogo: React.FC<StoreMenubarLogoProps> = ({
     style,
 }) => {
     const store = useAppSelector((state) => state.stores.currentStore);
+    const menubarVariation = useAppSelector((state) => state.layoutSettings.menubar.variation)
     const { fonts, colors } = useAppSelector((state) => state.layoutSettings);  
     const layoutId = useAppSelector((state) => state.layoutSettings._id);
     const isPreviewMode = location.pathname.startsWith(`/layouts/${layoutId}/preview`);
@@ -34,7 +35,9 @@ const StoreMenubarLogo: React.FC<StoreMenubarLogoProps> = ({
     const hasLogoImages = logoUrl.length > 0;
 
     return (
-        <Link  to={linkTo} className='flex items-center justify-center lg:justify-start h-fit w-fit max-w-fit pl-1 mb-1 pr-1 p-0'>
+        <Link  to={linkTo} className={`flex items-center lg:justify-start h-fit w-fit max-w-fit pl-1 mb-1 pr-1 p-0
+            ${menubarVariation === "cakeMenubar" ? "justify-start" : "justify-center"}
+        `}>
             {use === 'logo' && hasLogoImages ? (
                 <img
                     style={{...getBackgroundStyles(style?.background, colors), backgroundColor: 'transparent'}}

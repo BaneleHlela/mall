@@ -14,7 +14,6 @@ import {
   StoreMenuPage, StoreReviewsPage
 } from "./supporting/StorePagesCentral";
 import BasicStoreSearchResultsPage from "./supporting/BasicStoreSearchResultsPage";
-import PopularStoreMenubar from "../../components/store_layout/menubars/popular/PopularStoreMenubar";
 import StoreOrderOnlinePage from "./supporting/order_online/StoreOrderOnlinePage";
 import { getBackgroundStyles } from "../../utils/stylingFunctions";
 import { setInitialLayout } from "../../features/layouts/layoutSettingsSlice";
@@ -25,25 +24,12 @@ import StoreBookServicePage from "./supporting/book_service/StoreBookServicePage
 import StoreAlertDiv from "../../components/store_layout/extras/alert_div/StoreAlertDiv";
 import StoreMenubarIcons from "../../components/store_layout/menubars/supporting/StoreMenubarIcons";
 import StoreFloatingButton from "../../components/store_layout/extras/buttons/StoreFloatingButton";
-import StoreWelcomeDiv from "../../components/store_layout/extras/StoreWelcomeDiv";
 import { IoMdClose } from "react-icons/io";
 import { FaTools } from "react-icons/fa";
 import StoreCartModal from "../cart/StoreCartModal";
 import StoreMenubar from "../../components/store_layout/menubars/StoreMenubar";
-import HorizontalProductsSection from "../../components/store_layout/sections/products/horizontal_products/HorizontalProductsSection";
-import ShortAbout from "../../components/store_layout/sections/about/short_about/ShortAbout";
-import FirstFAQs from "../../components/store_layout/sections/FAQs/first_faqs/FirstFAQs";
-import StylishHero from "../../components/store_layout/sections/hero/styling_hero/StylishHero";
-import MaxThreeGallery from "../../components/store_layout/sections/gallery/max_three_gallery/MaxThreeGallery";
-import DoctorAbout from "../../components/store_layout/sections/about/doctor_about/DoctorAbout";
-import ArtMenubar from "../../components/store_layout/menubars/art_menubar/ArtMenubar";
-import EnnockHero from "../../components/store_layout/sections/hero/ennock_hero/EnnockHero";
-import BasicSearchResults from "../../components/store_layout/sections/search_results/basic_search_results/InStoreBasicSearchResults";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import FooterWithSocialsAndEmail from "../../components/store_layout/sections/footer/footer_with_socials_and_email/FooterWithSocialsAndEmail";
-import HeroWithBox from "../../components/store_layout/sections/hero/hero_with_box/HeroWithBox";
 import { fetchStoreRentals } from "../../features/rentals/rentalSlice";
-import { fetchStorePackages } from "../../features/packages/packagesSlice";
 import { fetchStoreDonations } from "../../features/donations/donationsSlice";
 import ProtectedRoute from "../../components/the_mall/authorization/ProtectedRoute";
 

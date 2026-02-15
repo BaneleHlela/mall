@@ -32,6 +32,7 @@ const IconsSettingsHandler: React.FC<IconsSettingsHandlerProps> = ({
   const MAX_ICONS = 3;
   const indexKeyMap = ["first", "second", "third"];
   const socials = useAppSelector((state) => state.stores?.currentStore?.socials);
+  console.log(socials)
   const availablePlatforms = socials?.map((item) => item.platform) || [];
   const maxIcons = Math.min(MAX_ICONS, availablePlatforms.length);
 

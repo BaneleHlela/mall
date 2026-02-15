@@ -10,10 +10,10 @@ import StoreAlertDivSettings from "../extras/alert_div/StoreAlertDivSettings";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import MenubarWithSearchbarSettings from "./with_searchbar/MenubarWithSearchbarSettings";
-import { mockLayout } from "../../../major_updates/mockLayout";
 import { defaultStoreAlertDivConfig } from "../../../utils/defaults/extras/defaultStoreAlertDivConfig";
 import RestuarantMenubarSettings from "./restuarant_menubar/RestuarantMenubarSettings";
 import ArtMenubarSettings from "./art/ArtMenubarSettings";
+import CakeMenubarSettings from "./cake/CakeMenubarSettings";
 
 const MenubarSettings = () => {
     const settings = useAppSelector((state) => state.layoutSettings)
@@ -67,6 +67,9 @@ const MenubarSettings = () => {
             {variation === "artMenubar" && (
               <ArtMenubarSettings />
             )}
+            {variation === "cakeMenubar"} && (
+              <CakeMenubarSettings />
+            )
           </div>
       )
     }

@@ -124,227 +124,211 @@ export const mockLayout = {
     },
     menubar: {
         topbar: {
+            display: "socials",
+            logo: {
+                use: "logo",
+                logoText: "C. ShopEasy",
+                fontFamily: "primary",
+                text: {
+                input: "EasyHeadwear",
+                fontSize: {
+                    mobile: "2.9vh",
+                    desktop: "2.4vh"
+                },
+                letterSpacing: "0px",
+                textDecoration: "overline"
+                },
+                style: {
+                text: {
+                    input: "Bona Mfo",
+                    color: "primary"
+                },
+                background: {
+                    width: {
+                    mobile: "48%",
+                    desktop: "55%"
+                    },
+                    color: "primary",
+                    padding: {
+                    y: {
+                        mobile: "2.2vh"
+                    }
+                    }
+                }
+                },
+                logoUrl: [
+                "https://storage.googleapis.com/the-mall-uploads-giza/stores/bona-driving-school/images/Untitled.png"
+                ]
+            },
+            socials: {
+                show: true,
+                icons: {
+                  platforms: {
+                    first: "instagram",
+                    third: "pinterest",
+                    second: "email",
+                  },
+                  number: 3,
+                  size: "4.499999999999998vh",
+                  color: "secondary",
+                  background: {
+                    color: "transparent",
+                    padding: {
+                      y: "0.8vh",
+                      x: "0.8vh"
+                    },
+                    border: {
+                      style: "solid",
+                      width: "0.1vh",
+                      color: "secondary"
+                    }
+                  }
+                },
+            },
             background: {
-                color: "primary",
-                height: {
-                    mobile: "20vh",
-                    desktop: "6vh"
+                color: "accent",
+                border: {
+                style: "dashed",
+                width: "0vh",
+                color: "primary"
                 },
                 padding: {
-                    x: {
-                        mobile: "0vh",
-                        desktop: "0vh"
-                    },
-                    y: {
-                        mobile: "1vh",
-                        desktop: "1vh"
-                    }
+                y: {
+                    mobile: "0vh"
                 },
-            },
-            order: [
-                "heart",
-                "logo",
-                "hamburger"
-            ],
-            cart: {
-                variation: "paperbag",
-                size: "4.5vh",
-                color: "#0027f6"
-            },
-            heart: {
-                size: "4.5vh",
-                color: "#0027f6"
-            },
-            logo: {
-                use: "text",
-                logoText: "C. ShopEasy",
-                fontFamily: "Arial",
-                logoUrl: ["HTTPS://example.com/mobile-logo.png", "HTTPS://example.com/desktop-logo.png"],
-                text: {
-                    input: "EasyHeadwear",
-                    fontSize: {
-                        mobile: "2.900000000000001vh",
-                        desktop: "2.4000000000000004vh"
-                    },
-                    letterSpacing: "NaNpx",
-                    textDecoration: "overline"
-                },
-                background: {
-                    color: "primary",
+                x: {
+                    mobile: "0.8vh"
                 }
-            },
-            search: {
-                border: {
-                    width: "0.1vh",
-                    style: "solid",
-                    radius: "3.8vh",
-                    color: "#d4dde4"
-                }
-            },
-            button: {
-                function: 'buy',
-                text: {
-                    input: 'Shop Now',
-                    color: 'primary',
-                    fontSize: {
-                        mobile: '2vh',
-                        desktop: '2vh'
-                    },
-                    fontFamily: 'primary',
-                    weight: 'normal'
                 },
-                background: {
-                    color: 'secondary',
-                    width: {
-                        desktop: '17vh'
-                    },
-                    padding: {
-                        x: '1vh',
-                        y: '0.5vh'
-                    },
-                    border: {
-                        width: '1px',
-                        style: 'solid',
-                        color: 'secondary',
-                        radius: '30px'
-                    }
-                }
-            }
-        },
-        sidebar: {
-            background: {
-                color: "secondary",
-            },
-            animation: "leftToRight",
-            links: {
-                color: "accent",
-                alignment: "center",
-                fontFamily: "primary",
-                borderColor: "accent",
-            },
-            image: {
-                imageUrl: ["https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/495371485_1238922361482703_9008209704576564623_n.jpg"],
-                background: {
-                    border: {
-                        style: "solid",
-                        width: "1vh",
-                        color: "primary"
-                    }
-                },
-            },
-            div: {
-                background: {
-                    color: "primary",
-                },
-            },
-            button: {
-                function: 'buy',
-                text: {
-                    input: 'Shop Now',
-                    color: 'primary',
-                    fontSize: {
-                        mobile: '2vh',
-                        desktop: '2vh'
-                    },
-                    fontFamily: 'primary',
-                    weight: 'normal'
-                },
-                background: {
-                    color: 'secondary',
-                    width: {
-                        desktop: '17vh'
-                    },
-                    padding: {
-                        x: '1vh',
-                        y: '0.5vh'
-                    },
-                    border: {
-                        width: '1px',
-                        style: 'solid',
-                        color: 'secondary',
-                        radius: '30px'
-                    }
-                }
-            }
-        },
-        variation: "menubarWithSearchbar",
-        alertDiv: {
-            display: true,
-            position: "fixed",
-            loopDirection: "right",
-            background: {
-                color: "secondary",
                 height: {
-                    mobile: "8vh",
-                    desktop: "6vh"
+                mobile: "9vh"
                 }
             },
-            items: {
-                text: {
-                    input: "Free shipping for first time buyers!",
-                    fontSize: {
-                        mobile: "2.6999999999999993vh",
-                        desktop: "3.8vh"
-                    },
-                    color: "primary",
-                    fontFamily: "tertiary"
-                },
-                icon: {
-                    show: true,
-                    name: "FaTruck",
-                    color: "primary",
-                    height: {
-                        mobile: "5vh",
-                        desktop: "5vh"
-                    },
-                    size: "4.7vh",
-                    fontSize: "4.900000000000002vh"
+            hamburger: {
+                variation: "spiral",
+                color: "primary",
+                size: 32
+            },
+            desktop: {
+                links: {
+                fontFamily: "secondary",
+                color: "primary",
+                fontSize: "2.1vh"
                 },
                 button: {
-                    button: {
-                        function: "book",
-                        show: true,
-                        text: {
-                            input: "Book Now"
-                        },
-                        background: {
-                            width: {
-                                desktop: "17vh",
-                                mobile: "20vh"
-                            },
-                            padding: {
-                                x: {
-                                    mobile: "3vh",
-                                    desktop: "3vh"
-                                },
-                                y: {
-                                    mobile: "1.5vh",
-                                    desktop: "2vh"
-                                }
-                            },
-                            border: {
-                                width: "0px",
-                                style: "solid",
-                                radius: "30px"
-                            }
-                        }
+                background: {
+                    color: "transparent",
+                    padding: {
+                    x: "6.2vh"
                     },
-                    text: {
-                        input: "Order Now"
-                    },
-                    show: false,
-                    background: {
-                        color: "primary",
-                        border: {
-                            radius: "1.7vh"
-                        },
-                        padding: {
-                            x: "3.8vh",
-                            y: "5vh"
-                        }
+                    border: {
+                    style: "solid",
+                    width: "0.1vh",
+                    color: "secondary"
                     }
+                },
+                text: {
+                    fontFamily: "secondary",
+                    color: "primary",
+                    weight: "normal",
+                    input: "Book Now"
+                },
+                show: false
                 }
             }
+        },
+        variation: "cakeMenubar",
+        alertDiv: {
+          display: false,
+          position: "fixed",
+          loopDirection: "right",
+          background: {
+            color: "secondary",
+            height: {
+              mobile: "10vh",
+              desktop: "10vh"
+            }
+          },
+          items: {
+            text: {
+              input: "Free shipping for first time buyers!",
+              fontSize: {
+                mobile: "2.5vh",
+                desktop: "3vh"
+              },
+              color: "primary"
+            },
+            icon: {
+              show: true,
+              name: "FaTruck",
+              color: "primary",
+              height: {
+                mobile: "5vh",
+                desktop: "5vh"
+              }
+            },
+            button: {
+              button: {
+                function: "book",
+                show: true,
+                text: {
+                  input: "Book Now"
+                },
+                background: {
+                  width: {
+                    desktop: "17vh",
+                    mobile: "20vh"
+                  },
+                  padding: {
+                    x: {
+                      mobile: "3vh",
+                      desktop: "3vh"
+                    },
+                    y: {
+                      mobile: "1.5vh",
+                      desktop: "2vh"
+                    }
+                  },
+                  border: {
+                    width: "0px",
+                    style: "solid",
+                    radius: "30px"
+                  }
+                }
+              }
+            }
+          }
+        },
+        sidebar: {
+          backgroundColor: "accent",
+          logo: {
+            use: "logo",
+            style: {
+              text: {
+                input: "Kwamashu",
+                color: "secondary",
+                fontSize: {
+                  mobile: "2.8vh"
+                }
+              },
+              background: {
+                color: "secondary",
+                width: {
+                  mobile: "43%"
+                }
+              }
+            },
+            logoUrl: [
+              "https://storage.googleapis.com/the-mall-uploads-giza/stores/bona-driving-school/images/driving-car-drive-svgrepo-com (2).svg"
+            ]
+          },
+          links: {
+            color: "primary",
+            alignment: "right",
+            fontFamily: "secondary",
+            weight: "lighter",
+            borderColor: "primary"
+          }
         }
     },
     sections: {

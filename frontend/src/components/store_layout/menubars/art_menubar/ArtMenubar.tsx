@@ -51,6 +51,7 @@ const ArtMenubar = () => {
     dir === "down" ? "-100%" : "0%"
   );
 
+
   //Links
   const links = React.useMemo(() => {
     const location = useLocation();

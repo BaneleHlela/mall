@@ -49,7 +49,7 @@ const SimpleLogoSettings: React.FC<SimpleLogoSettingsProps> = ({ objectPath }) =
               objectPath={`${objectPath}.style.text`}
               settings={settings}
               handleSettingChange={handleSettingChange}
-              allow={['input', 'color', 'fontSize', 'weight', 'letterSpacing', "textDecoration"]}
+              allow={['input', 'color','fontFamily', 'fontSize', 'weight', 'letterSpacing', "textDecoration"]}
               responsiveSize
             />
           }
@@ -62,7 +62,7 @@ const SimpleLogoSettings: React.FC<SimpleLogoSettingsProps> = ({ objectPath }) =
             objectPath={`${objectPath}.style.background`}
             settings={settings}
             handleSettingChange={handleSettingChange}
-            allow={['color', "width", "padding"]}
+            allow={['color', "width", "padding", "border"]}
             responsiveSize
             responsivePadding
             widthUnit='%'

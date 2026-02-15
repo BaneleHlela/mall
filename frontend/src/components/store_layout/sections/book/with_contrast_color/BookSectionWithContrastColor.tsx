@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAppSelector } from '../../../../../app/hooks';
 import { getBackgroundStyles, getTextStyles } from '../../../../../utils/stylingFunctions';
 import { mockLayout } from '../../../../../major_updates/mockLayout';

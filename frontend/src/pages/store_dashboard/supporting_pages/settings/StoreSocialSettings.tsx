@@ -249,7 +249,7 @@ const StoreSocialSettings = () => {
   ) as SocialPlatform[];
 
   return (
-    <div className='flex justify-center w-full h-full bg-white border-t-[.5vh] border-gray-200 lg:border-none'>
+    <div className='flex justify-center w-full h-full overflow-y-scroll bg-white border-t-[.5vh] border-gray-200 lg:border-none'>
       <div className="flex flex-col justify-between items-center w-full max-w-4xl">
         <h1 className="py-5 text-2xl font-[500] w-full text-center text-shadow-2xs">Social Links</h1>
         

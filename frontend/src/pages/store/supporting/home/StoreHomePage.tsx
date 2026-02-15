@@ -30,6 +30,8 @@ const StoreHome = () => {
     </ErrorBoundary>
   );
   
+  console.log(window.scrollY)
+  
 
   // Mapping section keys to actual components
   const sectionMap: Record<string, React.ReactElement> = {

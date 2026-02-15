@@ -1,5 +1,6 @@
 import { useAppSelector } from '../../../app/hooks'
 import ArtMenubar from './art_menubar/ArtMenubar';
+import CakeMenubar from './cake_menubar/CakeMenubar';
 import MenubarWithSearchbar from './menubar_with_searchbar/MenubarWithSearchbar';
 import RestuarantMenubar from './restuarant_menubar/RestuarantMenubar';
 
@@ -15,6 +16,10 @@ const StoreMenubar = () => {
 
   if (variation === "artMenubar") {
     return <ArtMenubar />
+  }
+
+  if (variation === "cakeMenubar") {
+    return <CakeMenubar />
   }
 
   return (

@@ -83,7 +83,7 @@ const StoreMenubarCart: React.FC<StoreMenubarCartProps> = ({ style }) => {
       case "beachbag":
         return <GiBeachBag style={{width: style.size, height: style.size}} color={style.color} />;
       case "shoppingbag":
-        return <LiaShoppingBagSolid style={{width: style.size, height: style.size}} color={style.color} />;
+        return <LiaShoppingBagSolid style={{width: style.size, height: style.size}} color={style.color} className="scale-110 origin-bottom"/>;
       default:
         return <FaShoppingCart style={{width: style.size, height: style.size}} color={style.color} />; 
     }
