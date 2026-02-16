@@ -86,7 +86,7 @@ const FirstStoreCategorySelector: React.FC<FirstStoreCategorySelectorProps> = ({
         </Swiper>
       ) : (
         <div
-          className="flex flex-row justify-between overflow-x-auto border-b"
+          className="flex flex-row justify-evenly overflow-x-auto border-b"
           style={{
             ...containerStyle,
             borderColor: colors[style.text.color as keyof typeof colors],

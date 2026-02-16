@@ -1,12 +1,11 @@
 import FirstStoreMenuSection from "./first/FirstStoreMenuSection";
+import PopularStoreMenuSection from "./popular/PopularStoreMenuSection";
 
 const StoreMenuSection = () => {
-    const variation = "first";
-    if ( variation === "first") {
-        return (
-            <FirstStoreMenuSection />
-        )
-    }
+    
+    return (
+        <PopularStoreMenuSection />
+    )
 }
 
 export default StoreMenuSection

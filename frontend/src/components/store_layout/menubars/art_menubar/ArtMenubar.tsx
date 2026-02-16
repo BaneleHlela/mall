@@ -98,7 +98,7 @@ const ArtMenubar = () => {
             borderBottom: `${layout.menubar.topbar.background.border.width} ${layout.menubar.topbar.background.border.style} ${colors[layout.menubar.topbar.background.border.color as keyof typeof colors]}` 
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="w-full h-fit bg-amber-50 sticky top-0 left-0 z-50 shadow opacity-100"
+        className="w-full h-fit bg-amber-50 sticky top-0 left-0 z-50 opacity-100"
     >
         {/* Mobile */}
         <div className="w-full h-[10.5vh] lg:hidden">
@@ -125,14 +125,14 @@ const ArtMenubar = () => {
                     />
                 </div>
                 {/* Logo */}
-                <div className="flex h-full">
+                <div className="flex items-center h-full">
                     <StoreMenubarLogo 
                         use={layout.menubar.topbar.logo.use}
                         logoUrl={layout.menubar.topbar.logo.logoUrl}
                         logoText={layout.menubar.topbar.logo.style.text.input || layout.menubar.topbar.logo.logoText}
                         style={{
                             text: {...layout.menubar.topbar.logo.style.text},
-                            background: {...layout.menubar.topbar.logo.style.background, color: colors[layout.colors.secondary as keyof typeof colors]},
+                            background: {...layout.menubar.topbar.logo.style.background},
                         }}
                     />
                 </div>
@@ -159,7 +159,7 @@ const ArtMenubar = () => {
                     logoText={layout.menubar.topbar.logo.style.text.input || layout.menubar.topbar.logo.logoText}
                     style={{
                         text: {...layout.menubar.topbar.logo.style.text},
-                        background: {...layout.menubar.topbar.logo.style.background, color: colors[layout.colors.secondary as keyof typeof colors]},
+                        background: {...layout.menubar.topbar.logo.style.background},
                     }}
                 />
             </div>

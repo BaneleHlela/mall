@@ -356,8 +356,19 @@ const ProductModal: React.FC<ProductModalProps> = ({
               </div>
             </div>
           )}
+          <div className="">
+            <label className="text-sm font-medium">Images</label>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageChange}
+                className="mt-1 block w-full"
+              />
+          </div>
 
           <div className="w-full flex justify-center">
+              
               {(imageUrls.length > 0 || images.length > 0) && (
                 <div className="grid grid-cols-5 gap-2 w-full max-w-5xl mt-2">
                   

@@ -33,6 +33,10 @@ interface BlueSidebarProps {
       alignment: string;
       borderColor: string;
       fontWeight: string;
+      padding: {
+        x: string;
+        y: string;
+      },
     };
     animation: string;
     backgroundColor: string;
@@ -46,7 +50,7 @@ const BlueSidebar: React.FC<BlueSidebarProps> = ({
   style
 }) => {
   const store = useAppSelector((state) => state.stores.currentStore);
-
+  console.log(style.links.padding?.y);
   return (
     isOpen && (
       <motion.div
@@ -87,6 +91,7 @@ const BlueSidebar: React.FC<BlueSidebarProps> = ({
                   style={{
                     color: style.links.color,
                     fontFamily: style.links.fontFamily,
+                    padding: `${style.links.padding?.y } ${style.links.padding?.x}`,
                     borderBottom: `1px solid ${style.links.borderColor}`,
                     fontWeight: style.links.fontWeight,
                   }}

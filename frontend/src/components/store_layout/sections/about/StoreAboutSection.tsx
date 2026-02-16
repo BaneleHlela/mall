@@ -1,5 +1,6 @@
 import { useAppSelector } from "../../../../app/hooks";
 import type { SectionProps } from "../../../../types/layoutTypes"
+import DoctorAbout from "./doctor_about/DoctorAbout";
 import ShortAbout from "./short_about/ShortAbout";
 import AboutWithImageBehindText from "./with_image_behind_text/AboutWithImageBehindText";
 import AboutWithImageNextToText from "./with_image_next_to_text/AboutWithImageNextToText";
@@ -21,6 +22,12 @@ const StoreAboutSection = ({id}: SectionProps) => {
   if (variation === "aboutWithLineAndImage") {
     return (
       <AboutWithLineAndImage />
+    )
+  }
+
+  if (variation === "doctorAbout") {
+    return (
+      <DoctorAbout />
     )
   }
 

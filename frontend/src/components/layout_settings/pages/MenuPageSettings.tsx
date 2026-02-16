@@ -1,7 +1,8 @@
+import StoreMenuSectionSettings from "../sections/menu/StoreMenuSectionSettings"
 
 const MenuPageSettings = () => {
   return (
-    <div>MenuPageSettings</div>
+    <StoreMenuSectionSettings />
   )
 }
 

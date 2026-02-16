@@ -118,7 +118,8 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
         <div
             style={{
                 border: "none",
-                padding: "0px"
+                padding: "0px",
+                ...getBackgroundStyles(settings.background, colors),
             }}
             className="flex flex-col items-center min-h-fit"
         >
@@ -126,7 +127,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
             <div 
                 style={{
                     height: settings.background.height.desktop,
-                    ...getBackgroundStyles(settings.background, colors),
+                    
                     ...getBorderStyles(settings.background.border),
                     
                 }}
@@ -366,7 +367,7 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
                                                 ...getTextStyles(settings.availableSlots.timeSlot.text, fonts, colors),
                                             }}
                                             className={`p-2 ml-[.6vh] mr-2 border text-center hover:scale-102 ${
-                                                selectedTime === time ? "opacity-100" : "opacity-50"
+                                                selectedTime === time ? "opacity-100 scale-110" : "opacity-50"
                                             } `}
                                         >
                                             {convertTo12HourFormat(time)}

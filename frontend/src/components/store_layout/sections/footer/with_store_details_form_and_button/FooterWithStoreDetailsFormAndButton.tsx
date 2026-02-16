@@ -207,6 +207,7 @@ const FooterWithStoreDetailsFormAndButton = () => {
           )}
         </div>
       </div>
+      
     </div>
     
   )

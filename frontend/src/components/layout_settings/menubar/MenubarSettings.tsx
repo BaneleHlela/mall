@@ -67,9 +67,9 @@ const MenubarSettings = () => {
             {variation === "artMenubar" && (
               <ArtMenubarSettings />
             )}
-            {variation === "cakeMenubar"} && (
+            {variation === "cakeMenubar" && (
               <CakeMenubarSettings />
-            )
+            )}
           </div>
       )
     }
@@ -102,6 +102,12 @@ const MenubarSettings = () => {
                   )}
                   {variation === "menubarWithSearchbar" && (
                     <MenubarWithSearchbarSettings />
+                  )}
+                  {variation === "restuarantMenubar" && (
+                    <RestuarantMenubarSettings />
+                  )}
+                  {variation === "artMenubar" && (
+                    <ArtMenubarSettings />
                   )}
                 </SlidingPanel>
               )}

@@ -344,6 +344,10 @@ export const updateLayoutConfig = expressAsyncHandler(async (req, res) => {
     layout.sections.book = body.sections.book;
   };
 
+  if (body.sections?.menu) {
+    layout.sections.menu = body.sections.menu;
+  }
+
   // Example: update layout settings
   if (body.settings) {
     Object.assign(layout.settings, body.settings);

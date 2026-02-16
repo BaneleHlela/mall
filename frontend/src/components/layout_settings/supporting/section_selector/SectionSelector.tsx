@@ -45,7 +45,7 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
   ], []);
 
   const validPages = useMemo(() => [
-    "products", "services", "packages", "donations", "about", "contact", "events"
+    "products", "services", "packages", "donations", "about", "contact", "events", "menu"
   ], []);
 
   const availableSections = useMemo(() => {

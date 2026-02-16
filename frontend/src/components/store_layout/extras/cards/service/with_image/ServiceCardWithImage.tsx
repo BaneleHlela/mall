@@ -62,16 +62,19 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
             >
                 {/* Name */}
                 <UnderlinedText style={style.textAndButton.text.name} input={title}/>
+                <div className="mt-2"></div>
                 {/* Description */}
                 {style.textAndButton.text.show.description && (
                     <p style={{
-                        ...getTextStyles(style.textAndButton.text)
+                        ...getTextStyles(style.textAndButton.text),
+                        paddingTop: "0.5rem"
                         }} 
-                        className="line-clamp-4"
+                        className="line-clamp-4 pt-2"
                     >
                         {description}
                     </p>
                 )}
+                
                 {/* Duration */}
                 {style.textAndButton.text.show.duration && (
                     <p style={{
@@ -93,6 +96,7 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                         R{price}
                     </p>
                 )}
+                <div className="mb-2"></div>
                 <div 
                     className={`flex-row w-full
                         ${style.textAndButton.button.show.desktop === "never" && "lg:hidden"}

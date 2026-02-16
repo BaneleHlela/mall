@@ -1926,7 +1926,356 @@ export const mockLayout = {
                     }
                 }
             }
-        }
+        },
+        menu: {
+            variation: "popularMenu",
+            background: {
+              color: "primary",
+              width: {
+                mobile: "100%",
+                desktop: "90%"
+              },
+              padding: {
+                y: {
+                  desktop: "2.4vh",
+                  mobile: "2.2vh"
+                },
+                x: {
+                  mobile: "1.7999999999999998vh"
+                }
+              }
+            },
+            text: {
+              heading: {
+                input: "Order Online",
+                position: "start",
+                fontSize: {
+                  mobile: "6.1vh",
+                  desktop: "8.1vh"
+                },
+                fontFamily: "secondary",
+                color: "accent",
+                lineHeight: "1.0999999999999999",
+                underline: {
+                  show: true,
+                  color: "primary",
+                  width: "50%",
+                  style: "solid",
+                  thickness: "10px",
+                  marginTop: "10px"
+                },
+                textAlign: "left",
+                padding: {
+                  x: {
+                    desktop: "0.1vh"
+                  },
+                  y: {
+                    desktop: "0.1vh",
+                    mobile: "0.1vh"
+                  }
+                }
+              },
+              subheading: {
+                input: "Use me to showcase your products in a simple, elegant way.",
+                position: "start",
+                fontSize: {
+                  mobile: "2.1000000000000005vh",
+                  desktop: "2.0999999999999996vh"
+                },
+                fontFamily: "primary",
+                color: "quad",
+                lineHeight: "1.1",
+                underline: {
+                  show: false,
+                  color: "primary",
+                  width: "50%",
+                  style: "solid",
+                  thickness: "10px",
+                  marginTop: "10px"
+                },
+                padding: {
+                  y: {
+                    desktop: "0.7999999999999999vh",
+                    mobile: "2.5vh"
+                  },
+                  x: {
+                    desktop: "0.1vh"
+                  }
+                }
+              }
+            },
+            acceptingOrdersButton: {
+              position: "start",
+              fontFamily: "primary",
+              text: {
+                input: "",
+                fontFamily: "primary",
+                color: "accent",
+                lineHeight: "1.4999999999999996"
+              },
+              background: {
+                border: {
+                  radius: "9.9vh",
+                  color: "accent"
+                },
+                padding: {
+                  y: "0.8999999999999999vh",
+                  x: "1.3999999999999995vh"
+                },
+                color: "transparent"
+              }
+            },
+            pickupOrDelivery: {
+              position: "end",
+              fontFamily: "primary",
+              background: {
+                padding: {
+                  y: {
+                    mobile: "1vh",
+                    desktop: "1vh"
+                  },
+                  x: {
+                    mobile: "1vh",
+                    desktop: "1vh"
+                  }
+                },
+                width: {
+                  mobile: "100%",
+                  desktop: "25%"
+                },
+                border: {
+                  width: "1px",
+                  style: "solid",
+                  color: "quad",
+                  radius: "11.6vh"
+                }
+              }
+            },
+            categorySelector: {
+              show: true,
+              text: {
+                fontFamily: "primary",
+                color: "accent",
+                fontWeight: "bold",
+                weight: "lighter"
+              },
+              width: {
+                mobile: "100%",
+                desktop: "70%"
+              },
+              alignment: "end",
+              underlineColor: "secondary",
+              selectedColor: "accent"
+            },
+            categoryDivider: {
+              show: true,
+              color: "accent",
+              fontFamily: "tertiary",
+              textAlign: "center",
+              fontSize: {
+                mobile: "2.499999999999999vh",
+                desktop: "2.8000000000000007vh"
+              },
+              padding: {
+                y: {
+                  mobile: "2vh",
+                  desktop: "2.8999999999999995vh"
+                }
+              }
+            },
+            stack: {
+                mobile: "horizontal",
+                desktop: "vertical"
+            },
+            grid: {
+                container: {
+                  background: {
+                    position: "center",
+                    width: {
+                      mobile: "100%",
+                      desktop: "100%"
+                    },
+                    color: "transparent",
+                    shadow: false,
+                    border: {
+                      width: "0vh"
+                    },
+                    padding: {
+                      x: {
+                        mobile: "0vh"
+                      }
+                    }
+                  },
+                  stepIndicator: {
+                    use: "dots",
+                    background: {
+                      height: {
+                        mobile: "8.1px",
+                        desktop: "2px"
+                      },
+                      color: "secondary",
+                      border: {
+                        color: "secondary",
+                        radius: "15vh",
+                        style: "solid",
+                        width: "0.2vh"
+                      }
+                    }
+                  },
+                  toggleButtons: {
+                    background: {
+                      color: "transparent"
+                    },
+                    color: "secondary",
+                    fontSize: "6.3vh"
+                  }
+                },
+                columns: {
+                  mobile: 1,
+                  desktop: 4
+                },
+                gap: {
+                  mobile: "0vh",
+                  desktop: "1.5000000000000002vh"
+                }
+            },
+            card: {
+                variaton: "popularProductCard",
+                stack: {
+                  mobile: "column",
+                  desktop: "column"
+                },
+                background: {
+                  color: "transparent",
+                  height: {
+                    mobile: "60vh",
+                    desktop: "60vh"
+                  },
+                  border: {
+                    width: "0vh",
+                    color: "primary",
+                    style: "solid",
+                    radius: "0vh"
+                  }
+                },
+                image: {
+                  urls: [],
+                  height: {
+                    mobile: "75%",
+                    desktop: "100%"
+                  },
+                  width: {
+                    mobile: "100%",
+                    desktop: "100%"
+                  },
+                  border: {
+                    width: "0vh",
+                    color: "primary",
+                    style: "solid",
+                    radius: "1.3vh"
+                  }
+                },
+                markingButton: {
+                  background: {
+                    color: "secondary",
+                    padding: {
+                      x: "10px",
+                      y: "5px"
+                    },
+                    border: {
+                      color: "primary"
+                    }
+                  },
+                  text: {
+                    color: "secondary"
+                  }
+                },
+                textAndButton: {
+                  background: {
+                    padding: {
+                      x: "1rem",
+                      y: "1rem"
+                    }
+                  },
+                  text: {
+                    fontFamily: "primary",
+                    fontSize: {
+                      mobile: "2.5vh",
+                      desktop: "2.4vh"
+                    },
+                    color: "secondary",
+                    fontWeight: "bold",
+                    underline: {
+                      show: false,
+                      color: "secondary",
+                      width: "50%",
+                      style: "solid",
+                      thickness: "2px",
+                      marginTop: "10px"
+                    },
+                    name: {
+                      fontSize: {
+                        mobile: "2.600000000000001vh",
+                        desktop: "2.8vh"
+                      },
+                      color: "secondary",
+                      fontWeight: "bold",
+                      underline: {
+                        show: false,
+                        color: "primary",
+                        width: "50%",
+                        style: "solid",
+                        thickness: "2px",
+                        marginTop: "10px"
+                      },
+                      weight: "bold",
+                      fontFamily: "primary",
+                      position: "center"
+                    },
+                    position: "center"
+                  },
+                  button: {
+                    show: {
+                      mobile: "always",
+                      desktop: "on-hover"
+                    },
+                    function: "bookAppointment",
+                    style: {
+                      text: {
+                        input: "ADD TO CART",
+                        fontFamily: "secondary",
+                        color: "primary",
+                        fontSize: ".85em",
+                        fontWeight: "bold",
+                        letterSpacing: "0px"
+                      },
+                      background: {
+                        height: "",
+                        width: "70%",
+                        color: "secondary",
+                        shadow: true,
+                        border: {
+                          width: "0px",
+                          style: "solid",
+                          color: "primary",
+                          radius: "0px"
+                        },
+                        padding: {
+                          x: "6px",
+                          y: "8px"
+                        }
+                      }
+                    },
+                    position: "center"
+                  }
+                }
+            },
+            toggleButtons: {
+                color: "secondary",
+                backgroundColor: "secondary",
+                fontSize: "4.8vh"
+            }
+        }  
     }
 }
 

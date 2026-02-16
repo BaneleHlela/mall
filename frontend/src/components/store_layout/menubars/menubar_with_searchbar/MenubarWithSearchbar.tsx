@@ -188,7 +188,7 @@ const MenubarWithSearchbar = () => {
         {/* Desktop */}
         <div className="hidden lg:flex justify-between items-center w-full h-[13vh] px-[1.5vh]">
             {/* Logo */}
-            <div className="h-full w-[22%]">
+            <div className="flex items-center h-full w-[22%]">
                 <StoreMenubarLogo
                     width="50%"
                     use={layout.menubar.topbar.logo?.use}

@@ -87,7 +87,7 @@ const BlueSidebarSettings: React.FC = () => {
                     objectPath="menubar.sidebar.links"
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={["color", "fontFamily", "weight"]}
+                    allow={["color", "fontFamily", "weight", "padding", "fontSize", "responsivePadding"]}
                 />
                 {/* <ColorPicker
                     label="Text Color"

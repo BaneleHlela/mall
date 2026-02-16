@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import type { Product } from '../../../../../types/productTypes';
 import { fetchStoreProducts } from '../../../../../features/products/productsSlice';
 import { useNavigate } from 'react-router-dom';
 import UnderlinedText from '../../../extras/text/UnderlinedText';

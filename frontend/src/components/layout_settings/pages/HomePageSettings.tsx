@@ -37,6 +37,7 @@ import DonationsSettings from "../sections/donations/DonationsSectionSettings";
 import RentalsSectionSettings from "../sections/rentals/RentalsSectionSettings";
 import { StorePackagesSection } from "../../store_layout/sections/StoreSections";
 import StorePackagesSectionSettings from "../sections/packages/StorePackagesSectionSettings";
+import StoreMenuSectionSettings from "../sections/menu/StoreMenuSectionSettings";
 
 const SortableItem = ({
   id,
@@ -196,6 +197,8 @@ const HomePageSettings = () => {
         return <DonationsSettings />
       case "rentals":
         return <RentalsSectionSettings />
+      case "menu": 
+        return <StoreMenuSectionSettings />
       default:
         return <div>No settings available for section "{section}".</div>;
     }

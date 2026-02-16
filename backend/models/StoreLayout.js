@@ -81,6 +81,7 @@ const storeLayoutSchema = new mongoose.Schema({
         singleProduct: {},
         bookService: {},
         book: {},
+        menu: {},
     },
 }, { 
     timestamps: true 

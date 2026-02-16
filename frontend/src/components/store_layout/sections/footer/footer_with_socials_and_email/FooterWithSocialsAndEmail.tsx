@@ -107,6 +107,10 @@ const FooterWithSocialsAndEmail = () => {
         }} 
         className="absolute inset-0 w-full h-full z-0 bg-[#ffffff2f]">
       </div>
+      {/* Copyright */}
+      <footer className="w-full text-center py-8 text-gray-600 text-sm border-t mt-6">
+          © {new Date().getFullYear()} The Mall — Concept by The Mall Team.
+      </footer>
     </div>
   )
 }

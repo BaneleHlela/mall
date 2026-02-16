@@ -104,7 +104,7 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({ style, asFloat })
                 ...getBorderStyles(style?.background?.border || {}),
                 ...getBackgroundStyles(style?.background || {})
             }}
-            className={`w-fit flex ${ asFloat ? "flex-col shadow-md" : "flex-row" } justify-center gap-2`}
+            className={`w-fit flex ${ asFloat ? "flex-col" : "flex-row" } justify-center gap-2 z-200`}
         >
             {platformOrder
             .slice(0, Math.min(style?.number || 3, 3)) // ✅ limit the number of icons
