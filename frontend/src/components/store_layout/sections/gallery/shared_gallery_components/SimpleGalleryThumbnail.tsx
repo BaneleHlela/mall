@@ -55,11 +55,11 @@ const SimpleGalleryThumbnail: React.FC<SimpleGalleryThumbnailProps> = ({
                 </Swiper>
             </div>
 
-            <div className="flex flex-col justify-evenly items-center w-full h-[35%] text-center px-[2vh]">
-                <p style={{ ...getTextStyles(style.title) }}>
+            <div className="flex flex-col justify-evenly items-center text-center w-full h-[35%] px-[2vh]">
+                <p style={{ ...getTextStyles(style.title) }} className='line-clamp-1'>
                     {title}
                 </p>
-                <p style={{ ...getTextStyles(style.description) }}>
+                <p style={{ ...getTextStyles(style.description) }} className='line-clamp-5'>
                     {description}
                 </p>
             </div>

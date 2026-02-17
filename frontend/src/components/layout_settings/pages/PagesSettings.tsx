@@ -147,8 +147,6 @@ const PagesSettings: React.FC = () => {
         return <PackagesPagesSettings />
       case "book":
         return <BookPageSettings />;
-      case "menu": 
-        return <MenuPageSettings />
       default:
         return <div>No settings available.</div>;
     }

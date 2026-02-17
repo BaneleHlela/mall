@@ -129,7 +129,7 @@ const ArtMenubar = () => {
                     <StoreMenubarLogo 
                         use={layout.menubar.topbar.logo.use}
                         logoUrl={layout.menubar.topbar.logo.logoUrl}
-                        logoText={layout.menubar.topbar.logo.style.text.input || layout.menubar.topbar.logo.logoText}
+                        logoText={layout.menubar.topbar.logo.style.text.input || store?.name}
                         style={{
                             text: {...layout.menubar.topbar.logo.style.text},
                             background: {...layout.menubar.topbar.logo.style.background},
@@ -156,7 +156,7 @@ const ArtMenubar = () => {
                     width="100%" 
                     use={layout.menubar.topbar.logo.use}
                     logoUrl={layout.menubar.topbar.logo.logoUrl}
-                    logoText={layout.menubar.topbar.logo.style.text.input || layout.menubar.topbar.logo.logoText}
+                    logoText={layout.menubar.topbar.logo.style.text.input || store?.name}
                     style={{
                         text: {...layout.menubar.topbar.logo.style.text},
                         background: {...layout.menubar.topbar.logo.style.background},
@@ -243,9 +243,11 @@ const ArtMenubar = () => {
                 links: {
                     color: colors[layout.menubar.sidebar.links.color as keyof typeof colors ] || colors[layout.colors.secondary as keyof typeof colors],
                     alignment: layout.menubar.sidebar.links.alignment || "center",
+                    fontSize: layout.menubar.sidebar.links.fontSize || "2vh",
                     fontFamily: fonts[layout.menubar.sidebar.links.fontFamily as keyof typeof fonts] || "Arial",
                     borderColor: colors[layout.menubar.sidebar.links.borderColor as keyof typeof colors],
                     fontWeight: layout.menubar.sidebar.links.weight || "normal",
+                    padding: layout.menubar.sidebar.links.padding || {y: "1vh", x: "2vh"},
                 },
                 backgroundColor: colors[layout.menubar.sidebar.backgroundColor as keyof typeof colors] || colors[layout.colors.primary as keyof typeof colors],
             }}

@@ -118,7 +118,7 @@ const RestuarantMenubar = () => {
                             <div className="flex items-center justify-center w-fit">
                                 <StoreMenubarLogo
                                     use={layout.menubar.topbar.logo.use}
-                                    logoText={layout.menubar.topbar.logo.style.text.input}
+                                    logoText={layout.menubar.topbar.logo.style.text.input || store?.name}
                                     logoUrl={layout.menubar.topbar.logo.logoUrl}
                                     style={{
                                         text: layout.menubar.topbar.logo.style.text,
@@ -156,7 +156,7 @@ const RestuarantMenubar = () => {
             <div className="flex flex-row justify-start items-start w-fit">
                 <StoreMenubarLogo 
                     use={layout.menubar.topbar.logo.use}
-                    logoText={layout.menubar.topbar.logo.style.text.input}
+                    logoText={layout.menubar.topbar.logo.style.text.input || store?.name}
                     logoUrl={layout.menubar.topbar.logo.logoUrl}
                     style={{
                         text: layout.menubar.topbar.logo.style.text,
@@ -175,7 +175,7 @@ const RestuarantMenubar = () => {
                             key={label}
                             className='px-[2vh] hover:underline hover:text-gray-800 min-h-fit flex flex-col justify-center'
                             style={{
-                                ...getTextStyles(layout.menubar.topbar.links.text, layout.colors),
+                                ...getTextStyles(layout.menubar.topbar.links.text, fonts, colors),
                             }}
                         >
                             <Link to={to}>{label}</Link>

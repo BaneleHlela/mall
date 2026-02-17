@@ -5,6 +5,13 @@ interface MapComponentProps {
   lat: number;
   lng: number;
   name: string;
+  image?: {
+    url: string[];
+    background: {
+      height: string;
+      width: string;
+    }
+  }, 
   style: {
     height: {
         mobile: string;
@@ -17,8 +24,13 @@ interface MapComponentProps {
   };
 }
 
-const MapComponent: React.FC<MapComponentProps> = ({ lat, lng, name, style }) => {
+const MapComponent: React.FC<MapComponentProps> = ({ lat, lng, name, image, style }) => {
   const mapRef = useRef<HTMLDivElement>(null);
+
+  // Safely access image properties with defaults
+  const imageUrl = image?.url?.[0] || '';
+  const imageHeight = image?.background?.height || '100px';
+  const imageWidth = image?.background?.width || '160px';
 
   useEffect(() => {
     if (!window.google || !mapRef.current) return;
@@ -33,9 +45,36 @@ const MapComponent: React.FC<MapComponentProps> = ({ lat, lng, name, style }) =>
       map,
     });
 
+    // Build image HTML only if imageUrl exists
+    const imageHtml = imageUrl ? `
+      <img 
+        src="${imageUrl}"
+        alt="${name}"
+        style="
+          width:${imageWidth};
+          height:${imageHeight};
+          object-fit:cover;
+          border-radius:4px;
+          margin-bottom:6px;
+        "
+      />
+    ` : '';
+
     const infowindow = new window.google.maps.InfoWindow({
-      content: `<div style="padding: 8px; font-weight: bold">${name}</div>`,
+      content: `
+        <div style="display:flex; flex-direction:column; align-items:center; max-width:180px;">
+          ${imageHtml}
+          <div style="
+            font-weight:bold;
+            text-align:center;
+            font-size:14px;
+          ">
+            ${name}
+          </div>
+        </div>
+      `,
     });
+    
 
     marker.addListener('click', () => {
       infowindow.open(map, marker);
@@ -43,7 +82,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ lat, lng, name, style }) =>
 
     // Auto-open the info window
     infowindow.open(map, marker);
-  }, [lat, lng, name]);
+  }, [lat, lng, name, imageUrl, imageHeight, imageWidth]);
 
   return (
     <div 

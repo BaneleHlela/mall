@@ -270,7 +270,7 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
             {/* Floating Icons */}
             <ErrorBoundary>
               {settings?.floats?.floatingIcons?.show && !isCartRoute && (
-                <div className={`fixed z-100 
+                <div className={`fixed z-50 
                   ${settings.floats.floatingIcons.position === "left-1/2" && "left-2 top-1/2"} 
                   ${settings.floats.floatingIcons.position === "left-1/4" && "left-2 top-1/4"} 
                   ${settings.floats.floatingIcons.position === "right-1/2" && "right-2 top-1/2"} 

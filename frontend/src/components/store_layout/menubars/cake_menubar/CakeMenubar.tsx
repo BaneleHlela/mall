@@ -108,7 +108,7 @@ const CakeMenubar = () => {
                       <StoreMenubarLogo 
                           use={config.topbar.logo.use}
                           logoUrl={config.topbar.logo.logoUrl}
-                          logoText={config.topbar.logo.style.text.input || config.topbar.logo.logoText}
+                          logoText={config.topbar.logo.style.text.input || store?.name}
                           style={{
                               text: {...config.topbar.logo.style.text},
                               background: {...config.topbar.logo.style.background, color: colors[layout.colors.secondary as keyof typeof colors]},
@@ -163,7 +163,7 @@ const CakeMenubar = () => {
                       <StoreMenubarLogo 
                           use={config.topbar.logo.use}
                           logoUrl={config.topbar.logo.logoUrl}
-                          logoText={config.topbar.logo.style.text.input || config.topbar.logo.logoText}
+                          logoText={config.topbar.logo.style.text.input || store?.name}
                           style={{
                               text: {...config.topbar.logo.style.text},
                               background: {...config.topbar.logo.style.background, color: colors[layout.colors.secondary as keyof typeof colors]},
@@ -182,23 +182,24 @@ const CakeMenubar = () => {
                       className='w-full h-full flex flex-col items-start'
                   >
                       <ul className="hidden lg:flex flex-row h-full justify-center items-center text-center capitalize space-x-0">
-                      {links.map(({ to, label }) => (
-                          <li
-                              key={label}
-                              className='px-[2vh] hover:underline hover:text-gray-800 min-h-fit flex flex-col justify-center line-clamp-1'
-                              style={{
-                                  ...getTextStyles(layout.menubar.topbar.desktop.links, fonts, colors),
-                              }}
-                          >
-                              <Link to={to}>{label}</Link>
-                          </li>
-                      ))}
+                        {links.map(({ to, label }) => (
+                            <li
+                                key={label}
+                                className='px-[2vh] hover:underline hover:text-gray-800 min-h-fit flex flex-col justify-center line-clamp-1'
+                                style={{
+                                    ...getTextStyles(layout.menubar.topbar.desktop.links, fonts, colors),
+                                }}
+                            >
+                                <Link to={to}>{label}</Link>
+                            </li>
+                        ))}
                       </ul>
                 </div>
               </div>
               {/* Button, Heart & Cart */}
               <div className="flex space-x-3">
-                <StoreLayoutButton 
+                {layout.menubar.topbar.desktop.button.show && (
+                  <StoreLayoutButton 
                     onClick={() =>
                         handleButtonClick({
                             type: 'buy',
@@ -214,7 +215,9 @@ const CakeMenubar = () => {
                             ...layout.menubar.topbar.desktop.button.background
                         },
                     }}
-                />
+                  />
+                )}
+                
                 {/* Heart & Cart */}
                 <div className="flex justify-between items-center">
                         <StoreMenubarHeart
@@ -260,6 +263,8 @@ const CakeMenubar = () => {
                         fontFamily: fonts[layout.menubar.sidebar.links.fontFamily as keyof typeof fonts] || "Arial",
                         borderColor: colors[layout.menubar.sidebar.links.borderColor as keyof typeof colors],
                         fontWeight: layout.menubar.sidebar.links.weight || "normal",
+                        padding: layout.menubar.sidebar.links?.padding || "1vh 2vh",
+                        fontSize: layout.menubar.sidebar.links?.fontSize || "2.2vh",
                     },
                     backgroundColor: colors[layout.menubar.sidebar.backgroundColor as keyof typeof colors] || colors[layout.colors.primary as keyof typeof colors],
                 }}

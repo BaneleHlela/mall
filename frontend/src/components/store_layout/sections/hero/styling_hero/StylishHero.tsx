@@ -95,7 +95,7 @@ const StylishHero = () => {
                         >
                         </div>
                         <div 
-                            style={{...getTextStyles(config.box.text.title, fonts, colors), color: colors[config.box.background.color as keyof typeof colors]}} 
+                            style={{...getTextStyles(config.box.text.title, fonts, colors)}} 
                             className="prose max-w-none z-1"
                             dangerouslySetInnerHTML={{ __html: config.box.text.title.input || "" }}
                         />

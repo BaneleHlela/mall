@@ -11,6 +11,7 @@ import { useAppSelector } from "../../../../app/hooks";
 import { useStoreButtonClickHandler } from "../../extras/buttons/useStoreButtonClickHandler";
 import BlueSidebar from "./BlueSidebar";
 import StoreLayoutButton from "../../shared_layout_components/StoreLayoutButton";
+import { getTextStyles } from "../../../../utils/stylingFunctions";
 
 
 
@@ -129,43 +130,36 @@ const MenubarWithSearchbar = () => {
                     {stackItem === 'heartLogo' && (
                         <div className="flex items-center justify-between w-full h-full px-[.5vh]">
                             {layout.menubar.topbar.order.map((item: string) => (
-                                <div key={item} className="">
+                                <div key={item} className="flex h-full items-center">
                                     {item === 'hamburger' && (
-                                        <StoreMenubarHamburger
+                                        <StoreMenubarHamburger 
                                             style={{
-                                                variation: 'cross',
-                                                size: 32,
-                                                color: layout.colors.secondary,
+                                                variation: layout.menubar.topbar.hamburger?.variation || 'cross',
+                                                size: layout.menubar.topbar.hamburger?.size || '5vh',
+                                                color: colors[layout.menubar.topbar.hamburger?.color as keyof typeof colors] || 'white',
                                                 direction: 'left',
                                             }}
                                             toggled={isOpen} toggle={setOpen}
                                         />
                                     )}
                                     {item === 'logo' && (
-                                        <StoreMenubarLogo
-                                            width="100%"
-                                            use={layout.menubar.topbar.logo?.use}
-                                            logoText={layout.menubar.topbar.logo.text?.input}
-                                            logoUrl={layout.menubar.topbar.logo?.logoUrl}
+                                        <StoreMenubarLogo 
+                                            use={layout.menubar.topbar.logo.use}
+                                            logoUrl={layout.menubar.topbar.logo.logoUrl}
+                                            logoText={layout.menubar.topbar.logo.style.text.input || layout.menubar.topbar.logo.logoText}
                                             style={{
-                                                text: {
-                                                    color: colors[layout.menubar.topbar.logo.text?.color as keyof typeof colors],
-                                                    fontSize: layout.menubar.topbar.logo.text?.fontSize,
-                                                    fontWeight: layout.menubar.topbar.logo.text?.weight,
-                                                    letterSpacing: layout.menubar.topbar.logo.text?.letterSpacing,
-                                                    textDecoration: layout.menubar.topbar.logo.text?.textDecoration,
-                                                },
-                                                background: layout.menubar.topbar.logo.style?.background,
+                                                text: {...layout.menubar.topbar.logo.style.text},
+                                                background: {...layout.menubar.topbar.logo.style.background, color: colors[layout.colors.secondary as keyof typeof colors]},
                                             }}
                                         />
                                     )}
                                     {item === 'heart' && (
                                         <div className="flex px-[.2vh]">
-                                            <StoreMenubarCart
+                                            <StoreMenubarCart 
                                                 style={{
-                                                    variation: layout.menubar.topbar.cart.variation,
-                                                    size: "4.5vh",
-                                                    color: colors[layout.colors.secondary as keyof typeof colors],
+                                                    variation: layout.menubar.topbar.cart.variation || "basket",
+                                                    size: layout.menubar.topbar.cart.size || "4vh",
+                                                    color: colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors],
                                                     count: {
                                                         backgroundColor: 'black',
                                                         color: 'white',
@@ -173,8 +167,8 @@ const MenubarWithSearchbar = () => {
                                                 }}
                                             />
                                             <StoreMenubarHeart
-                                                size="4.5vh"
-                                                color={layout.colors.secondary}
+                                                size={layout.menubar.topbar.cart.size || "4vh"}
+                                                color={colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors]}
                                             />
                                         </div>
                                     )}
@@ -189,20 +183,13 @@ const MenubarWithSearchbar = () => {
         <div className="hidden lg:flex justify-between items-center w-full h-[13vh] px-[1.5vh]">
             {/* Logo */}
             <div className="flex items-center h-full w-[22%]">
-                <StoreMenubarLogo
-                    width="50%"
-                    use={layout.menubar.topbar.logo?.use}
-                    logoText={layout.menubar.topbar.logo.text?.input}
-                    logoUrl={layout.menubar.topbar.logo?.logoUrl}
+                <StoreMenubarLogo 
+                    use={layout.menubar.topbar.logo.use}
+                    logoUrl={layout.menubar.topbar.logo.logoUrl}
+                    logoText={layout.menubar.topbar.logo.style.text.input || store?.name}
                     style={{
-                        text: {
-                            color: layout.colors.secondary,
-                            fontSize: layout.menubar.topbar.logo.text?.fontSize,
-                            fontWeight: layout.menubar.topbar.logo.text?.weight,
-                            letterSpacing: layout.menubar.topbar.logo.text?.letterSpacing,
-                            textDecoration: layout.menubar.topbar.logo.text?.textDecoration,
-                        },
-                        background: layout.menubar.topbar.logo.style?.background,
+                        text: {...layout.menubar.topbar.logo.style.text},
+                        background: {...layout.menubar.topbar.logo.style.background, color: colors[layout.colors.secondary as keyof typeof colors]},
                     }}
                 />
             </div>
@@ -212,19 +199,17 @@ const MenubarWithSearchbar = () => {
                     className='w-full h-full flex flex-col items-start'
                 >
                     <ul className="hidden lg:flex flex-row h-full justify-center items-center text-center capitalize space-x-0">
-                    {links.map(({ to, label }) => (
-                        <li
-                            key={label}
-                            className='px-[2vh] hover:underline hover:text-gray-800 min-h-fit flex flex-col justify-center'
-                            style={{
-                                color: layout.colors.secondary,
-                                fontSize: "2.5vh",
-                                fontFamily: "Arial",
-                            }}
-                        >
-                            <Link to={to}>{label}</Link>
-                        </li>
-                    ))}
+                        {links.map(({ to, label }) => (
+                            <li
+                                key={label}
+                                className='px-[2vh] hover:underline hover:text-gray-800 min-h-fit flex flex-col justify-center line-clamp-1'
+                                style={{
+                                    ...getTextStyles(layout.menubar.topbar.desktop.links, fonts, colors),
+                                }}
+                            >
+                                <Link to={to}>{label}</Link>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             </div>
@@ -240,22 +225,10 @@ const MenubarWithSearchbar = () => {
                     }
                     style={{
                         text: {
-                            color: layout.colors.primary,
-                            input: 'Shop Now'
+                            ...layout.menubar.topbar.desktop.button.text,
                         },
                         background: {
-                            color: layout.colors.secondary,
-                            padding: {
-                            },
-                            width: {
-                                desktop: "17vh",
-                            },
-                            border: {
-                                width: '1px',
-                                style: 'solid',
-                                color: layout.colors.secondary,
-                                radius: '30px',
-                            },
+                            ...layout.menubar.topbar.desktop.button.background
                         },
                     }}
                 />
@@ -307,25 +280,28 @@ const MenubarWithSearchbar = () => {
         <BlueSidebar
             isOpen={isOpen}
             onClose={() => setOpen(false)}
-            links={links}
+            links={links} 
             style={{
-                animation: layout.menubar.sidebar?.animation || "leftToRight",
+                animation: layout.menubar.sidebar.animation || "leftToright",
                 logo: {
-                    use: layout.menubar.sidebar?.logo?.use || layout.menubar.topbar.logo.use,
-                    logoText: layout.menubar.sidebar?.logo?.text?.input || layout.menubar.topbar.logo.text.input,
-                    logoUrl: layout.menubar.sidebar?.logo?.logoUrl || layout.menubar.topbar.logo.logoUrl,
+                    use: layout.menubar.sidebar.logo.use,
+                    logoUrl: layout.menubar.sidebar.logo.logoUrl,
+                    logoText: layout.menubar.sidebar.logo.style.text.input || layout.menubar.sidebar.logo.logoText,
                     style: {
-                        text: layout.menubar.sidebar?.logo?.style?.text || {},
-                        background: layout.menubar.sidebar?.logo?.style?.background || {},
+                        text: {...layout.menubar.sidebar.logo.style.text},
+                        background: {...layout.menubar.sidebar.logo.style.background, color: colors[layout.colors.secondary as keyof typeof colors]},
                     }
                 },
                 links: {
-                    color: layout.menubar.sidebar?.links?.color || layout.colors.secondary,
-                    alignment: layout.menubar.sidebar?.links?.alignment || "center",
-                    fontFamily: fonts[layout.menubar.sidebar?.links?.fontFamily as keyof typeof fonts ] || layout.fonts.primary || "Arial",
-                    borderColor: colors[layout.menubar.sidebar?.links?.borderColor as keyof typeof colors ] || layout.colors.quad,
+                    color: colors[layout.menubar.sidebar.links?.color as keyof typeof colors ] || colors[layout.colors.secondary as keyof typeof colors],
+                    alignment: layout.menubar.sidebar.links?.alignment || "center",
+                    fontSize: layout.menubar.sidebar.links?.fontSize || "2.5vh",
+                    fontFamily: fonts[layout.menubar.sidebar.links?.fontFamily as keyof typeof fonts] || "Arial",
+                    borderColor: colors[layout.menubar.sidebar.links?.borderColor as keyof typeof colors],
+                    fontWeight: layout.menubar.sidebar.links?.weight || "normal",
+                    padding: layout.menubar.sidebar.links?.padding || { x: "1vh", y: "1vh" },
                 },
-                backgroundColor: colors[layout.menubar.sidebar?.backgroundColor as keyof typeof colors] || layout.colors.primary,
+                backgroundColor: colors[layout.menubar.sidebar.backgroundColor as keyof typeof colors] || colors[layout.colors.primary as keyof typeof colors],
             }}
         />
     </motion.nav>

@@ -53,17 +53,16 @@ const StlyishHero: React.FC<StlyishHeroProps> = ({
 
       {/* Image Settings */}
       <SubSettingsContainer
-        name="Title"
+        name="Mobile Header"
         SettingsComponent={
           <div className="px-[1vh] space-y-[.5vh] py-1">
             <TextEditor
-                objectPath={`${objectPath}.box.text.title`}
+                objectPath={`${objectPath}.header`}
                 settings={settings}
                 handleSettingChange={handleSettingChange}
-                allow={["input", "color", "weight", "fontFamily", "fontSize", "lineHeight", "letterSpacing", "textDecoration"]}
+                allow={["input", "color", "weight", "fontFamily", "fontSize", "lineHeight", "textAlign", "letterSpacing", "textDecoration"]}
                 responsiveSize
                 responsivePadding
-                useQuill
             />
           </div>
         }
@@ -122,17 +121,17 @@ const StlyishHero: React.FC<StlyishHeroProps> = ({
             >
                 {/* Header */}
                 <SubSettingsContainer
-                  name="Header"
+                  name="Desktop Title"
                   SettingsComponent={
                     <div className="px-[1vh] space-y-[.5vh] py-1">
                       <TextEditor
-                          objectPath={`${objectPath}.header`}
+                          objectPath={`${objectPath}.box.text.title`}
                           settings={settings}
                           handleSettingChange={handleSettingChange}
                           allow={["input", "color", "weight", "fontFamily", "fontSize", "lineHeight", "letterSpacing", "textDecoration"]}
                           responsiveSize
                           responsivePadding
-                          useQuill
+                          useTextarea
                       />
                     </div>
                   }

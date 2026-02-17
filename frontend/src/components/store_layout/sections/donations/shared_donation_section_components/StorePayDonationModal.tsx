@@ -92,7 +92,7 @@ const StorePayDonationModal: React.FC<StorePayDonationModalProps> = ({ isOpen, o
             style={{
                 fontFamily: fonts.primary,
             }}
-            className='fixed inset-0 flex justify-center w-screen h-screen bg-stone-100 z-100'
+            className='fixed inset-0 flex justify-center w-screen h-screen backdrop-blur-2xl z-100'
         >
             {/* Container */}
             <div className="flex flex-col space-y-[3vh] p-[2vh] pb-[4vh] w-full lg:w-md lg:border border-gray-300 lg:rounded-[3vh] h-full text-center overflow-y-scroll hide-scrollbar bg-white">
@@ -118,7 +118,7 @@ const StorePayDonationModal: React.FC<StorePayDonationModalProps> = ({ isOpen, o
                 {/* Donation Name and Description */}
                 <div className=''>
                     {/* Donation Name */}
-                    <p style={{lineHeight: "1"}} className="mt-[50vh] text-[3vh] font-extrabold capitalize">
+                    <p style={{lineHeight: "1"}} className="mt-[5vh] text-[3vh] font-extrabold capitalize">
                         {donation.name}
                     </p>
                     {/* Donation description */}

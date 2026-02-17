@@ -12,6 +12,7 @@ import InputHandler from '../../../supporting/InputHandler'
 import StoreButtonSettings from '../../../extras/StoreButtonSettings'
 import SendEmailFormSettings from '../../../forms/SendEmailFormSettings'
 import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings'
+import MultipleLayoutImagesHandler from '../../../supporting/MultipleLayoutImagesHandler'
 
 const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEditorProps> = ({
     settings,
@@ -187,15 +188,57 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                         onClose={closePanel}
                         title="Location Settings"
                     >
-                        <BackgroundEditor
-                            objectPath={`${objectPath}.location`}
-                            settings={settings}
-                            handleSettingChange={handleSettingChange}
-                            allow={["height", "width", "border"]}
-                            widthUnit="%"
-                            heightUnit="%"
-                            responsiveSize
-                        />
+                        <div className="space-y-[.5vh]">
+                            <BackgroundEditor
+                                objectPath={`${objectPath}.location`}
+                                settings={settings}
+                                handleSettingChange={handleSettingChange}
+                                allow={["height", "width", "border"]}
+                                widthUnit="%"
+                                heightUnit="%"
+                                responsiveSize
+                            />
+                            {/* InfoWindow Image Settings */}
+                            <FirstOrderSubSettingsContainer
+                                name="InfoWindow Image"
+                                onClick={() => setActivePanel("locationImage")}
+                            />
+                        </div>
+                    </SlidingPanel>
+                )}
+                {activePanel === "locationImage" && (
+                    <SlidingPanel
+                        key="locationImage"
+                        isOpen={true}
+                        onClose={() => setActivePanel("location")}
+                        title="InfoWindow Image Settings"
+                    >
+                        <div className="space-y-[.5vh]">
+                            {/* Image URL Handler */}
+                            <SubSettingsContainer
+                                name="Image"
+                                SettingsComponent={
+                                    <MultipleLayoutImagesHandler
+                                        objectPath={`${objectPath}.location.image.url`}
+                                        min={0}
+                                        max={1}
+                                        images={getSetting("location.image.url", settings, objectPath) || []}
+                                    />
+                                }
+                            />
+                            {/* Image Background (height/width) */}
+                            <SubSettingsContainer
+                                name="Image Size"
+                                SettingsComponent={
+                                    <BackgroundEditor
+                                        objectPath={`${objectPath}.location.image.background`}
+                                        settings={settings}
+                                        handleSettingChange={handleSettingChange}
+                                        allow={["height", "width"]}
+                                    />
+                                }
+                            />
+                        </div>
                     </SlidingPanel>
                 )}
                 {activePanel === "button" && (

@@ -10,9 +10,14 @@ import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice'
 import OrderDnD from '../../extras/OrderDnD';
 import OptionsToggler from '../../supporting/OptionsToggler';
 import BorderEditor from '../../background/BorderEditor';
+import BackgroundEditor from '../../background/BackgroundEditor';
+import SettingsSlider from '../../supporting/SettingsSlider';
+import TextEditor from '../../text/TextEditor';
+import StoreButtonSettings from '../../extras/StoreButtonSettings';
 
 const MenubarWithSearchbarSettings = () => {
     const [activePanel, setActivePanel] = useState<string | null>(null);
+    const store = useAppSelector((state) => state.storeAdmin.store);
     const closePanel = () => setActivePanel(null);
     const settings = useAppSelector((state) => state.layoutSettings);
     const dispatch = useAppDispatch();
@@ -20,6 +25,10 @@ const MenubarWithSearchbarSettings = () => {
     const handleSettingChange = (field: string, value: any) => {
         dispatch(updateSetting({ field, value }));
     };
+
+    const hamburgerSize = Number(
+        settings.menubar.topbar.hamburger?.size?.toString().replace("vh", "")
+    ) || 2;
 
     
     return (
@@ -42,11 +51,128 @@ const MenubarWithSearchbarSettings = () => {
                     onClose={closePanel}
                     title="Topbar Settings"
                 >
-                    <div className='px-[.5vh] space-y-[1vh]'>
+                    <div className='px-[.5vh] space-y-[.6vh]'>
+                        {/* Background */}
+                        <SubSettingsContainer   
+                            name="Background"
+                            SettingsComponent={
+                                <BackgroundEditor
+                                    objectPath="menubar.topbar.background"
+                                    handleSettingChange={handleSettingChange}
+                                    settings={settings}
+                                    responsivePadding
+                                    responsiveSize
+                                    allow={["color", "shadow", "height", "padding", "border", "opacity"]}
+                                />
+                            }
+                        />
+                        
+                        {/* Cart & Like Settings */}
+                        <SubSettingsContainer
+                            name="Cart & Like Settings"
+                            SettingsComponent={
+                                <div className='px-[1vh]'>
+                                    {store?.trades.includes('products') && (
+                                        <OptionsToggler
+                                            label="Variation"
+                                            options={[
+                                                "default",
+                                                "bag",
+                                                "basket",
+                                                "outline",
+                                                "medical",
+                                                "trolley2",
+                                                "trolley3",
+                                                "paperbag",
+                                                "beachbag",
+                                                "shoppingbag",
+                                            ]}
+                                            value={settings.menubar.topbar.cart.variation}
+                                            onChange={(value) => handleSettingChange('menubar.topbar.cart.variation', value)}
+                                        />
+                                    )}
+                                    {/* Color */}
+                                    <OptionsToggler
+                                        label="Color"
+                                        options={[
+                                            "primary",
+                                            "secondary",
+                                            "accent",
+                                            "pent", 
+                                            "quad",
+                                        ]}
+                                        value={settings.menubar.topbar.cart.color}
+                                        onChange={(value) => handleSettingChange('menubar.topbar.cart.color', value)}
+                                    />
+                                    {/* Size using slider */}
+                                    <SettingsSlider
+                                        label="Size"
+                                        value={settings.menubar.topbar.cart.size ? Number(settings.menubar.topbar.cart.size.toString().replace("vh", "")) : 2}
+                                        min={1}
+                                        max={10}
+                                        step={.1}
+                                        onChange={(value) => handleSettingChange('menubar.topbar.cart.size', `${value}vh`)}
+                                    />
+                                </div>
+                            }
+                        />
+                        {/* Hamburger */}
+                        <SubSettingsContainer
+                            name="Hambuger Settings"
+                            SettingsComponent={
+                                <div className='px-[1vh]'>
+                                    <OptionsToggler
+                                        label="Variation"
+                                        options={[
+                                            "cross",
+                                            "squash",
+                                            "twirl",
+                                            "fade",
+                                            "spiral",
+                                            "divice",
+                                            "turn",
+                                            "pivot",
+                                            "squeeze",
+                                            "spin",
+                                            'rotate'
+                                        ]}
+                                        value={settings.menubar.topbar.hamburger?.variation || "cross"}
+                                        onChange={(value) => handleSettingChange('menubar.topbar.hamburger.variation', value)}
+                                    />
+                                    {/* Color */}
+                                    <OptionsToggler
+                                        label="Color"
+                                        options={[
+                                            "primary",
+                                            "secondary",
+                                            "accent",
+                                            "pent", 
+                                            "quad",
+                                        ]}
+                                        value={settings.menubar.topbar.hamburger?.color || "cross"}
+                                        onChange={(value) => handleSettingChange('menubar.topbar.hamburger.color', value)}
+                                    />
+                                    {/* Size using slider */}
+                                    <SettingsSlider
+                                        label="Size"
+                                        value={hamburgerSize}
+                                        min={10}
+                                        max={50}
+                                        step={1}
+                                        onChange={(value) => handleSettingChange('menubar.topbar.hamburger.size', value)}
+                                    />
+                                </div>
+                            }
+                        />
                         <FirstOrderSubSettingsContainer
                             name="Logo Settings"
                             onClick={() => setActivePanel('logo')}
                         />
+                        <FirstOrderSubSettingsContainer
+                            name="Desktop Settings"
+                            onClick={() => setActivePanel('desktop')}
+                        />
+                        {/* Stack and Order */}
                         <div className="rounded border-2 border-white text-center p-[.5vh] shadow">
                             <p className="mb-[1vh]">Mobile Topbar Layout</p>
                             <div className="space-y-[1vh]">
@@ -66,28 +192,7 @@ const MenubarWithSearchbarSettings = () => {
                                 </div>
                             </div>
                         </div>
-                        <SubSettingsContainer
-                            name="Cart Settings"
-                            SettingsComponent={
-                                <OptionsToggler
-                                    label="Variation"
-                                    options={[
-                                        "default",
-                                        "bag",
-                                        "basket",
-                                        "outline",
-                                        "medical",
-                                        "trolley2",
-                                        "trolley3",
-                                        "paperbag",
-                                        "beachbag",
-                                        "shoppingbag",
-                                    ]}
-                                    value={settings.menubar.topbar.cart.variation}
-                                    onChange={(value) => handleSettingChange('menubar.topbar.cart.variation', value)}
-                                />
-                            }
-                        />
+                        {/* Search Settings */}
                         <SubSettingsContainer
                             name="Search Settings"
                             SettingsComponent={
@@ -116,13 +221,59 @@ const MenubarWithSearchbarSettings = () => {
                 <SlidingPanel
                     key="logo"
                     isOpen={true}
-                    onClose={closePanel}
+                    onClose={() => setActivePanel('topbar')}
                     title="Mobile Logo Settings"
                 >
                     <SimpleLogoSettings
                         objectPath="menubar.topbar.logo"
                     />
                 </SlidingPanel>
+                )}
+                {(activePanel === 'desktop') && (
+                    <SlidingPanel
+                        key="desktop"
+                        isOpen={true}
+                        onClose={() => setActivePanel('topbar')}
+                        title="Desktop Topbar Settings"
+                    >
+                        <>
+                            {/* Links */}
+                            <SubSettingsContainer
+                                key="desktop_links"
+                                name="Links"
+                                SettingsComponent={
+                                    <TextEditor
+                                        objectPath="menubar.topbar.desktop.links"
+                                        settings={settings}
+                                        handleSettingChange={handleSettingChange}
+                                        allow={["color", "fontFamily", 'fontSize', "weight"]}
+                                    />
+                                }
+                            />
+                            {/* Button */}
+                            <FirstOrderSubSettingsContainer
+                                name="Desktop Button"
+                                onClick={() => setActivePanel('desktop_button')}
+                            />
+                        </>
+                    </SlidingPanel>
+                )}
+                {activePanel === 'desktop_button' && (
+                    <SlidingPanel
+                        key="desktop_button"
+                        isOpen={true}
+                        onClose={() => setActivePanel('desktop')}
+                        title="Desktop Button Settings"
+                    >
+                        <>
+                            <StoreButtonSettings
+                                objectPath="menubar.topbar.desktop.button"
+                                settings={settings}
+                                allowSimpleShow
+                                allowFunction
+                            />
+                        </>
+                    </SlidingPanel>
                 )}
             </AnimatePresence>
         </div>

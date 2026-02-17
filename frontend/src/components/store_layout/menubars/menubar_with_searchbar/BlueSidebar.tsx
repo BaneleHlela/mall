@@ -29,6 +29,7 @@ interface BlueSidebarProps {
     }
     links: {
       fontFamily: string;
+      fontSize: string;
       color:string;
       alignment: string;
       borderColor: string;
@@ -94,6 +95,7 @@ const BlueSidebar: React.FC<BlueSidebarProps> = ({
                     padding: `${style.links.padding?.y } ${style.links.padding?.x}`,
                     borderBottom: `1px solid ${style.links.borderColor}`,
                     fontWeight: style.links.fontWeight,
+                    fontSize: style.links.fontSize,
                   }}
                   className={`flex flex-col justify-center capitalize text-[2.8vh] py-[1.5vh] hover:scale-102
                     ${style.links.alignment === "left" ? "text-left" : ""}

@@ -200,7 +200,8 @@ const MaxThreeGallerySettings: React.FC<SectionSettingsProps> = ({
                                             objectPath={`${objectPath}.cards.style.title`}
                                             settings={settings}
                                             handleSettingChange={handleSettingChange}
-                                            allow={["fontFamily",  "color", "fontSize", "weight"]}
+                                            allow={["fontFamily",  "color", "fontSize", "weight", "textAlign", "padding"]}
+                                            responsivePadding
                                             responsiveSize
                                         />
                                     </div>
