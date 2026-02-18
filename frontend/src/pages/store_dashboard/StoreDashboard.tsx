@@ -31,6 +31,7 @@ import { fetchStoreRentals } from "../../features/rentals/rentalSlice";
 import { fetchStoreDonations } from "../../features/donations/donationsSlice";
 import DashboardStoreDonations from "./supporting_pages/DashboardStoreDonations";
 import { fetchStorePackages } from "../../features/packages/packagesSlice";
+import ThumbnailsControl from "../../components/layout_settings/thumbnails/ThumbnailsControl";
 
 
 const StoreDashboard = () => {
@@ -102,7 +103,7 @@ const StoreDashboard = () => {
             <div className="hidden lg:flex">
             <StoreDashBoardMenubar store={store} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen}/>
             </div>
-            <div className="flex flex-col h-full w-full">
+            <div className="flex flex-col items-center h-full w-full">
                 <StoreDashboardTopbar isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
                 <Routes>
                     <Route path="/" element={<StoreOverview store={store} />} />
@@ -120,7 +121,7 @@ const StoreDashboard = () => {
                     <Route path="/posters/*" element={<StoreDashboardPosters />} />
                     <Route path="/settings" element={<StoreSettings />} />
                     <Route path="/settings/logo" element={<StoreLogoSettings />} />
-                    <Route path="/settings/thumbnails" element={<StoreThumbnailsSettings />} />
+                    <Route path="/settings/thumbnails" element={<ThumbnailsControl />} />
                     <Route path="/settings/basic" element={<StoreBasicSettings />} />
                     <Route path="/settings/trade" element={<StoreTradeSettings />} />
                     <Route path="/settings/operating-hours" element={<StoreBusinessHoursSettings />} />

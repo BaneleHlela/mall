@@ -167,7 +167,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
 
   
   return (
-    <div className="relative flex flex-col justify-evenly w-full h-full lg:max-w-[50vh] mx-auto p-[1.2vh] bg-white">
+    <div className="relative flex flex-col justify-evenly w-full h-full lg:max-w-[50vh] mx-auto p-[1.2vh] bg-white shadow">
       <div className="relative flex items-center justify-center w-full text-cenrte text-[4vh] font-[500] h-[15%]">
         <img 
           src="https://storage.googleapis.com/the-mall-uploads-giza/stores/68726dde5987f5810dee5a8a/images/mall%20image.webp" 

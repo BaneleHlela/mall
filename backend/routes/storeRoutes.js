@@ -21,7 +21,13 @@ import {
     getDemoStores,
     toggleStoreStatus,
     resetStoreStatus,
-    initializeStoreWebsites
+    initializeStoreWebsites,
+    createExternalWebsiteLayout,
+    updateExternalWebsiteLayout,
+    uploadStoreThumbnail,
+    deleteStoreThumbnail,
+    captureStoreCardAuto,
+    captureReelyAuto
 } from "../controllers/StoreController.js";
 import { uploadSingleFile, uploadTeamMemberImage } from "../middlewares/uploadMiddleware.js";
 
@@ -45,9 +51,19 @@ router.get('/:storeSlug/gallery', getStoreImages);
 router.put('/:storeSlug/gallery', uploadSingleFile("image"), uploadStoreGalleryImage);
 router.delete('/:storeSlug/gallery', deleteStoreGalleryImage);
 
+// Thumbnail routes
+router.put('/:storeSlug/thumbnails', uploadSingleFile("thumbnail"), uploadStoreThumbnail);
+router.delete('/:storeSlug/thumbnails', deleteStoreThumbnail);
+router.post('/:storeSlug/thumbnails/storeCard/capture', captureStoreCardAuto);
+router.post('/:storeSlug/thumbnails/reely/capture', captureReelyAuto);
+
 // Store status routes
 router.put('/:storeSlug/status', protectRoute, toggleStoreStatus);
 router.delete('/:storeSlug/status', protectRoute, resetStoreStatus);
+
+// External website layout routes
+router.post('/:storeSlug/external-website', /*protectRoute,*/ createExternalWebsiteLayout);
+router.put('/:storeSlug/external-website', /*protectRoute,*/ updateExternalWebsiteLayout);
 
 // Initialize website objects for existing stores
 router.post('/initialize-websites', initializeStoreWebsites);

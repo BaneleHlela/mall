@@ -31,7 +31,12 @@ export interface Fonts {
     secondary?: string;
     tertiary?: string;
 }
-  
+
+export interface LayoutSource {
+    source: 'internal' | 'custom' | 'external';
+    websiteName?: string;
+    websiteUrl?: string;
+}
 
 export interface Layout {
     name: string;
@@ -39,6 +44,7 @@ export interface Layout {
     routes: Routes;
     routeOrder: string[];
     screenshot: string;
+    source?: LayoutSource;
     colors: {
         primary: string;
         secondary: string;

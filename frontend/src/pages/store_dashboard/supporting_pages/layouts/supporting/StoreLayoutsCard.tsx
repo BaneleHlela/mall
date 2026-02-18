@@ -15,6 +15,8 @@ import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { GoHomeFill } from "react-icons/go";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { FaExternalLinkAlt } from "react-icons/fa";
+import type { LayoutSource } from "../../../../../types/layoutTypes";
 
 const mysweetalert = withReactContent(Swal);
 
@@ -24,6 +26,7 @@ interface StoreLayoutCardProps {
     store: string;
     name?: string;
     screenshot: string;
+    source?: LayoutSource;
   };
   onSelect: (layoutId: string) => void;
   onSetActive: () => void;
@@ -39,6 +42,9 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
   const [showButtons, setShowButtons] = useState(false);
   const [isSettingActive, setIsSettingActive] = useState(false);
   const isLoading = useAppSelector((state) => state.layout.isLoading);
+
+  const isExternal = layout.source?.source === 'external';
+  const externalUrl = layout.source?.websiteUrl;
 
   const handleSetActive = async () => {
     const result = await mysweetalert.fire({
@@ -81,6 +87,13 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
     handleSetActive();
   };
 
+  const handleViewExternal = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (externalUrl) {
+      window.open(externalUrl, '_blank');
+    }
+  };
+
   const handleDelete = async () => {
     const result = await mysweetalert.fire({
       title: "Delete Layout?",
@@ -118,8 +131,10 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
     if (e) e.stopPropagation();
 
     const result = await mysweetalert.fire({
-      title: "Capture Screenshot?",
-      text: "This will update the layout's screenshot. Are you sure?",
+      title: isExternal ? "Capture External Website Screenshot?" : "Capture Screenshot?",
+      text: isExternal 
+        ? "This will capture a screenshot of the external website. Are you sure?"
+        : "This will update the layout's screenshot. Are you sure?",
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -135,7 +150,9 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
       mysweetalert.fire({
         icon: "success",
         title: "Screenshot Captured!",
-        text: "Layout screenshot has been updated successfully.",
+        text: isExternal 
+          ? "External website screenshot has been captured successfully."
+          : "Layout screenshot has been updated successfully.",
         confirmButtonColor: "#3085d6"
       });
     } catch (error) {
@@ -164,11 +181,29 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
         <div className="flex justify-center h-[4%] w-full items-center text-center text-[1.6vh] font-semibold line-clamp-1">
         </div>
         <div className="relative h-[90%]">
-          <img
-            src={layout.screenshot}
-            alt={layout.name || "Store Layout"}
-            className="w-full h-full object-contain"
-          />
+          {isExternal ? (
+            layout.screenshot ? (
+              <img
+                src={layout.screenshot}
+                alt={layout.name || "External Website"}
+                className="w-full h-full object-contain"
+              />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-purple-100 to-purple-200">
+                <FaExternalLinkAlt className="text-4xl text-purple-500 mb-2" />
+                <p className="text-sm text-purple-700 font-medium text-center px-4">External Website</p>
+                {externalUrl && (
+                  <p className="text-xs text-purple-500 text-center px-4 mt-1 truncate max-w-full">{externalUrl}</p>
+                )}
+              </div>
+            )
+          ) : (
+            <img
+              src={layout.screenshot}
+              alt={layout.name || "Store Layout"}
+              className="w-full h-full object-contain"
+            />
+          )}
 
           {/* Menu Icon at bottom right */}
           <button
@@ -183,31 +218,46 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
             <div className="absolute inset-0 bg-white/20 backdrop-blur flex items-center justify-center">
               <div className="rounded-2xl p-4 lg:shadow-2xl lg:max-w-[80%]">
                 <div className={`grid ${edit ? 'grid-cols-2' : 'grid-cols-1'} gap-1 lg:gap-4`}>
-                  {/* View */}
+                  {/* View/Visit */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setShowButtons(false);
-                      navigate(`/layouts/${layout._id}/preview`);
+                      if (isExternal) {
+                        handleViewExternal(e);
+                      } else {
+                        navigate(`/layouts/${layout._id}/preview`);
+                      }
                     }}
                     className="flex flex-col aspect-square items-center justify-center p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-colors"
                   >
-                    <LuScanEye className="text-[3vh] text-green-600 mb-1" />
-                    <span className="text-[1.5vh] font-medium text-green-700">View</span>
+                    {isExternal ? (
+                      <>
+                        <FaExternalLinkAlt className="text-[3vh] text-green-600 mb-1" />
+                        <span className="text-[1.5vh] font-medium text-green-700">Visit</span>
+                      </>
+                    ) : (
+                      <>
+                        <LuScanEye className="text-[3vh] text-green-600 mb-1" />
+                        <span className="text-[1.5vh] font-medium text-green-700">View</span>
+                      </>
+                    )}
                   </button>
 
-                  {/* Edit */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowButtons(false);
-                      onSelect(layout._id);
-                    }}
-                    className="flex flex-col items-center justify-center p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
-                  >
-                    <MdModeEditOutline className="text-[3vh] text-blue-600 mb-1" />
-                    <span className="text-[1.5vh] font-medium text-blue-700">{edit ? "Edit" : "Select"}</span>
-                  </button>
+                  {/* Edit - only for internal layouts */}
+                  {!isExternal && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowButtons(false);
+                        onSelect(layout._id);
+                      }}
+                      className="flex flex-col items-center justify-center p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
+                    >
+                      <MdModeEditOutline className="text-[3vh] text-blue-600 mb-1" />
+                      <span className="text-[1.5vh] font-medium text-blue-700">{edit ? "Edit" : "Select"}</span>
+                    </button>
+                  )}
 
                   {edit && (
                     <>
@@ -250,7 +300,7 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
                         <span className="text-[1.5vh] font-medium text-red-700">Delete</span>
                       </button>
 
-                      {/* Capture */}
+                      {/* Capture Screenshot */}
                       <button
                         style={{lineHeight: "1.1"}}
                         onClick={(e) => {
@@ -261,7 +311,9 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
                         className="flex flex-col items-center justify-center p-3 bg-red-50 hover:bg-red-100 rounded-xl transition-colors col-span-2"
                       >
                         <IoCamera className="text-[3vh] text-red-600 mb-1" />
-                        <span className="text-[1.5vh] font-medium text-red-700">Capture Screenshot</span>
+                        <span className="text-[1.5vh] font-medium text-red-700">
+                          {isExternal ? "Capture External Screenshot" : "Capture Screenshot"}
+                        </span>
                       </button>
                     </>
                   )}

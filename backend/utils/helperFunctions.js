@@ -68,6 +68,42 @@ export const captureStoreThumbnail = async (storeId) => {
   }
 };
 
+// Capture StoreCard Thumbnail (1447 x 900 px)
+export const captureStoreCardThumbnail = async (storeId) => {
+  if (!storeId) {
+    throw new Error('storeId is required to capture the storeCard thumbnail');
+  }
+
+  const url = `http://localhost:5173/stores/${storeId}`;
+  console.log(`Capturing storeCard for: ${url}`);
+
+  try {
+    const screenshotBuffer = await captureScreenshot(url, 1447, 900);
+    return screenshotBuffer;
+  } catch (error) {
+    console.error(`Failed to capture storeCard for store ${storeId}:`, error);
+    throw error;
+  }
+};
+
+// Capture Reely Thumbnail (360 x 660 px)
+export const captureReelyThumbnail = async (storeId) => {
+  if (!storeId) {
+    throw new Error('storeId is required to capture the reely thumbnail');
+  }
+
+  const url = `http://localhost:5173/stores/${storeId}`;
+  console.log(`Capturing reely for: ${url}`);
+
+  try {
+    const screenshotBuffer = await captureScreenshot(url, 360, 660);
+    return screenshotBuffer;
+  } catch (error) {
+    console.error(`Failed to capture reely for store ${storeId}:`, error);
+    throw error;
+  }
+};
+
 // Capture Store HomePoster
 export const captureStoreHomePoster = async () => {
 

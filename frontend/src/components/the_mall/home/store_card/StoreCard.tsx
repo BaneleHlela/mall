@@ -68,7 +68,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
       </div>
       {/* Image */}
       <div className={`relative ${mini ? "h-[60%]": "h-[72%]"} `}>
-        <img src={store.thumbnail} alt="store-thumbnail" className="w-full h-full object-cover -z-1" />
+        <img src={store.thumbnails.storeCard || store.thumbnail} alt="store-thumbnail" className="w-full h-full object-cover -z-1" />
         <div className="absolute top-0 w-full h-full bg-[#00000000]"></div>
         {/* Favorite toggle button
         <button
@@ -110,7 +110,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
       <div className={`${mini ? "h-[40%]" : "h-[28%]"} shadow-md z-1`}>
         {/* Store name */}
         <h3 className={`text-center font-semibold text-gray-900
-          ${mini ? "text-[1.5vh]": "text-[90%]"} line-clamp-1`}>{store.name}</h3>
+          ${mini ? "text-[1.5vh]": "text-[90%]"} line-clamp-1`}>{store.nickname || store.name}</h3>
         {/* Details */}
         <div className="flex flex-row justify-between items-center px-[.8vh]">
           <button

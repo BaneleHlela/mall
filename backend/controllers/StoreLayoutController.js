@@ -457,6 +457,8 @@ export const captureLayoutScreenshot = expressAsyncHandler(async (req, res) => {
     }
 
     const oldScreenshotUrl = layout.screenshot;
+    const isExternal = layout.source?.source === 'external';
+    const externalUrl = layout.source?.websiteUrl;
 
     // 2️⃣ Delete old screenshot ONLY if it matches this layoutId
     if (oldScreenshotUrl) {
@@ -480,7 +482,17 @@ export const captureLayoutScreenshot = expressAsyncHandler(async (req, res) => {
     }
 
     // 3️⃣ Capture screenshot as Buffer
-    const screenshotBuffer = await captureStoreLayoutScreenshot(layoutId);
+    let screenshotBuffer;
+    
+    if (isExternal && externalUrl) {
+      // Capture screenshot from external URL
+      console.log(`Capturing screenshot from external URL: ${externalUrl}`);
+      screenshotBuffer = await captureScreenshot(externalUrl, 360, 660);
+    } else {
+      // Capture screenshot from internal layout preview
+      screenshotBuffer = await captureStoreLayoutScreenshot(layoutId);
+    }
+    
     if (!screenshotBuffer) {
       res.status(500);
       throw new Error("Failed to capture layout screenshot");

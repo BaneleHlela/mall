@@ -306,6 +306,140 @@ export const resetStoreStatus = createAsyncThunk<Store, { storeSlug: string }>(
   }
 );
 
+// Create External Website Layout
+export const createExternalWebsiteLayout = createAsyncThunk<
+  { layout: any; store: Store },
+  { storeSlug: string; websiteUrl: string; websiteName?: string }
+>(
+  'store_admin/createExternalWebsiteLayout',
+  async ({ storeSlug, websiteUrl, websiteName }, thunkAPI) => {
+    try {
+      const response = await axios.post(`${STORE_URL}/${storeSlug}/external-website`, {
+        websiteUrl,
+        websiteName
+      });
+      return response.data;
+    } catch (error: any) {
+      console.error('Error creating external website layout:', error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to create external website layout'
+      );
+    }
+  }
+);
+
+// Update External Website Layout
+export const updateExternalWebsiteLayout = createAsyncThunk<
+  { layout: any; store: Store },
+  { storeSlug: string; websiteUrl?: string; websiteName?: string }
+>(
+  'store_admin/updateExternalWebsiteLayout',
+  async ({ storeSlug, websiteUrl, websiteName }, thunkAPI) => {
+    try {
+      const response = await axios.put(`${STORE_URL}/${storeSlug}/external-website`, {
+        websiteUrl,
+        websiteName
+      });
+      return response.data;
+    } catch (error: any) {
+      console.error('Error updating external website layout:', error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to update external website layout'
+      );
+    }
+  }
+);
+
+// Thumbnail types
+type ThumbnailType = 'storeCard' | 'profily' | 'reely';
+
+// Upload Store Thumbnail
+export const uploadStoreThumbnail = createAsyncThunk<
+  { url: string; thumbnailType: ThumbnailType },
+  { storeSlug: string; thumbnailFile: File; thumbnailType: ThumbnailType }
+>(
+  'stores/uploadStoreThumbnail',
+  async ({ storeSlug, thumbnailFile, thumbnailType }, thunkAPI) => {
+    const formData = new FormData();
+    formData.append('thumbnail', thumbnailFile);
+    formData.append('thumbnailType', thumbnailType);
+
+    try {
+      const response = await axios.put(`${STORE_URL}/${storeSlug}/thumbnails`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      return response.data;
+    } catch (error: any) {
+      console.error('Error uploading store thumbnail:', error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to upload thumbnail'
+      );
+    }
+  }
+);
+
+// Delete Store Thumbnail
+export const deleteStoreThumbnail = createAsyncThunk<
+  { thumbnailType: ThumbnailType },
+  { storeSlug: string; thumbnailType: ThumbnailType }
+>(
+  'stores/deleteStoreThumbnail',
+  async ({ storeSlug, thumbnailType }, thunkAPI) => {
+    try {
+      await axios.delete(`${STORE_URL}/${storeSlug}/thumbnails`, {
+        data: { thumbnailType },
+      });
+      return { thumbnailType };
+    } catch (error: any) {
+      console.error('Error deleting store thumbnail:', error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to delete thumbnail'
+      );
+    }
+  }
+);
+
+// Capture StoreCard Thumbnail Automatically
+export const captureStoreCardThumbnail = createAsyncThunk<
+  { url: string },
+  { storeSlug: string }
+>(
+  'stores/captureStoreCardThumbnail',
+  async ({ storeSlug }, thunkAPI) => {
+    try {
+      const response = await axios.post(`${STORE_URL}/${storeSlug}/thumbnails/storeCard/capture`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error capturing storeCard thumbnail:', error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to capture storeCard thumbnail'
+      );
+    }
+  }
+);
+
+// Capture Reely Thumbnail Automatically
+export const captureReelyThumbnail = createAsyncThunk<
+  { url: string },
+  { storeSlug: string }
+>(
+  'stores/captureReelyThumbnail',
+  async ({ storeSlug }, thunkAPI) => {
+    try {
+      const response = await axios.post(`${STORE_URL}/${storeSlug}/thumbnails/reely/capture`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error capturing reely thumbnail:', error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to capture reely thumbnail'
+      );
+    }
+  }
+);
+
 // --- Slice ---
 const storeAdminSlice = createSlice({
     name: "storeAdmin",
@@ -572,6 +706,116 @@ const storeAdminSlice = createSlice({
         .addCase(resetStoreStatus.rejected, (state, action) => {
           state.isLoading = false;
           state.error = action.payload as string || 'Failed to reset store status';
+        })
+
+        // Create External Website Layout
+        .addCase(createExternalWebsiteLayout.pending, (state) => {
+          state.isLoading = true;
+          state.error = null;
+        })
+        .addCase(createExternalWebsiteLayout.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.error = null;
+          state.store = action.payload.store;
+        })
+        .addCase(createExternalWebsiteLayout.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload as string || 'Failed to create external website layout';
+        })
+
+        // Update External Website Layout
+        .addCase(updateExternalWebsiteLayout.pending, (state) => {
+          state.isLoading = true;
+          state.error = null;
+        })
+        .addCase(updateExternalWebsiteLayout.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.error = null;
+          state.store = action.payload.store;
+        })
+        .addCase(updateExternalWebsiteLayout.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload as string || 'Failed to update external website layout';
+        })
+
+        // Upload Store Thumbnail
+        .addCase(uploadStoreThumbnail.pending, (state) => {
+          state.isLoading = true;
+          state.error = null;
+        })
+        .addCase(uploadStoreThumbnail.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.error = null;
+          if (state.store) {
+            state.store.thumbnails = {
+              ...state.store.thumbnails,
+              [action.payload.thumbnailType]: action.payload.url
+            };
+          }
+        })
+        .addCase(uploadStoreThumbnail.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload as string || 'Failed to upload thumbnail';
+        })
+
+        // Delete Store Thumbnail
+        .addCase(deleteStoreThumbnail.pending, (state) => {
+          state.isLoading = true;
+          state.error = null;
+        })
+        .addCase(deleteStoreThumbnail.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.error = null;
+          if (state.store) {
+            state.store.thumbnails = {
+              ...state.store.thumbnails,
+              [action.payload.thumbnailType]: ""
+            };
+          }
+        })
+        .addCase(deleteStoreThumbnail.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload as string || 'Failed to delete thumbnail';
+        })
+
+        // Capture StoreCard Thumbnail
+        .addCase(captureStoreCardThumbnail.pending, (state) => {
+          state.isLoading = true;
+          state.error = null;
+        })
+        .addCase(captureStoreCardThumbnail.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.error = null;
+          if (state.store) {
+            state.store.thumbnails = {
+              ...state.store.thumbnails,
+              storeCard: action.payload.url
+            };
+          }
+        })
+        .addCase(captureStoreCardThumbnail.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload as string || 'Failed to capture storeCard thumbnail';
+        })
+
+        // Capture Reely Thumbnail
+        .addCase(captureReelyThumbnail.pending, (state) => {
+          state.isLoading = true;
+          state.error = null;
+        })
+        .addCase(captureReelyThumbnail.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.error = null;
+          if (state.store) {
+            state.store.thumbnails = {
+              ...state.store.thumbnails,
+              reely: action.payload.url
+            };
+          }
+        })
+        .addCase(captureReelyThumbnail.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload as string || 'Failed to capture reely thumbnail';
         })
     }
 });

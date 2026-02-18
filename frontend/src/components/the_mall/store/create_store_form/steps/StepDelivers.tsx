@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormContext } from '../context/FormContext';
+import FeatureLocked from '../../../extras/FeatureLocked';
 
 const StepDelivers: React.FC = () => {
   const { form, handleChange, setStepValidator, nextClicked } = useFormContext();
@@ -157,7 +158,7 @@ const StepDelivers: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center space-y-[1.2vh] text-[2vh] bg-[#ffffff4d]">
+    <div className="relative flex flex-col items-center space-y-[1.2vh] text-[2vh] bg-[#ffffff4d]">
       <h3 className="text-[2.5vh] text-center">Delivery Settings</h3>
 
       {/* Enable delivery toggle */}
@@ -174,7 +175,7 @@ const StepDelivers: React.FC = () => {
         </label>
       </div>
 
-      {form.delivers.enabled && (
+      {!form.delivers.enabled && (
         <>
           {/* Range slider */}
           <div className='w-full text-center'>
@@ -221,6 +222,11 @@ const StepDelivers: React.FC = () => {
           Please configure delivery settings
         </div>
       )}
+      <div className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden">
+        <FeatureLocked
+          comment='Delivery feature will be ready before launch. You will be able to configure delivery details on your dashboard.'
+        />
+      </div>
     </div>
   );
 };

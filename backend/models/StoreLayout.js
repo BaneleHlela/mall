@@ -13,6 +13,19 @@ const storeLayoutSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
+    source: {
+        source: {
+            type: String,
+            enum: ['internal', 'custom', 'external'],
+            default: 'internal'
+        },
+        websiteName: {
+        type: String
+        },
+        websiteUrl: {
+        type: String
+        }
+    },
     store: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Store",

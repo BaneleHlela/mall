@@ -1,9 +1,10 @@
 import expressAsyncHandler from 'express-async-handler';
 import  Store  from '../models/StoreModel.js';
+import StoreLayout from '../models/StoreLayout.js';
 import { uploadToUploads, uploadsBucket } from '../config/gcsClient.js';
 import mongoose from 'mongoose';
 import User from '../models/UserModel.js';
-import { generateSlug } from '../utils/helperFunctions.js';
+import { generateSlug, captureStoreCardThumbnail, captureReelyThumbnail } from '../utils/helperFunctions.js';
 
 const CLIENT_URL = process.env.CLIENT_URL;
 
@@ -772,5 +773,309 @@ export const initializeStoreWebsites = expressAsyncHandler(async (req, res) => {
   } catch (error) {
     console.error('Initialize store websites error:', error);
     res.status(500).json({ message: 'Failed to initialize store websites' });
+  }
+});
+
+// Create external website layout
+export const createExternalWebsiteLayout = expressAsyncHandler(async (req, res) => {
+  try {
+    const { storeSlug } = req.params;
+    const { websiteUrl, websiteName } = req.body;
+
+    if (!websiteUrl) {
+      return res.status(400).json({ message: 'Website URL is required' });
+    }
+
+    // Find the store
+    const store = await Store.findOne({ slug: storeSlug });
+    if (!store) {
+      return res.status(404).json({ message: 'Store not found' });
+    }
+
+    // Validate and normalize URL
+    let normalizedUrl = websiteUrl.trim();
+    if (!normalizedUrl.startsWith('http://') && !normalizedUrl.startsWith('https://')) {
+      normalizedUrl = 'https://' + normalizedUrl;
+    }
+
+    // Create a new layout for the external website
+    const externalLayout = new StoreLayout({
+      name: websiteName || 'External Website',
+      store: store._id,
+      source: {
+        source: 'external',
+        websiteName: websiteName || store.name,
+        websiteUrl: normalizedUrl
+      },
+      isDemo: false
+    });
+
+    await externalLayout.save();
+
+    // Add layout to store's layouts array
+    store.layouts.push(externalLayout._id);
+
+    // Update store's website configuration
+    store.website = {
+      source: 'external',
+      layoutId: externalLayout._id,
+      websiteName: websiteName || store.name,
+      websiteUrl: normalizedUrl
+    };
+
+    await store.save();
+    await store.populate('team.member');
+
+    res.status(201).json({
+      message: 'External website layout created successfully',
+      layout: externalLayout,
+      store
+    });
+  } catch (error) {
+    console.error('Create external website layout error:', error);
+    res.status(500).json({ message: 'Failed to create external website layout' });
+  }
+});
+
+// Update external website layout
+export const updateExternalWebsiteLayout = expressAsyncHandler(async (req, res) => {
+  try {
+    const { storeSlug } = req.params;
+    const { websiteUrl, websiteName } = req.body;
+
+    // Find the store
+    const store = await Store.findOne({ slug: storeSlug });
+    if (!store) {
+      return res.status(404).json({ message: 'Store not found' });
+    }
+
+    // Check if store has an external layout
+    if (store.website?.source !== 'external' || !store.website?.layoutId) {
+      return res.status(400).json({ message: 'Store does not have an external website layout' });
+    }
+
+    // Find the external layout
+    const externalLayout = await StoreLayout.findById(store.website.layoutId);
+    if (!externalLayout) {
+      return res.status(404).json({ message: 'External layout not found' });
+    }
+
+    // Validate and normalize URL
+    let normalizedUrl = websiteUrl?.trim();
+    if (normalizedUrl && !normalizedUrl.startsWith('http://') && !normalizedUrl.startsWith('https://')) {
+      normalizedUrl = 'https://' + normalizedUrl;
+    }
+
+    // Update layout
+    if (websiteName) {
+      externalLayout.name = websiteName;
+      externalLayout.source.websiteName = websiteName;
+    }
+    if (normalizedUrl) {
+      externalLayout.source.websiteUrl = normalizedUrl;
+    }
+    await externalLayout.save();
+
+    // Update store's website configuration
+    store.website = {
+      ...store.website,
+      websiteName: websiteName || store.website.websiteName,
+      websiteUrl: normalizedUrl || store.website.websiteUrl
+    };
+    await store.save();
+    await store.populate('team.member');
+
+    res.status(200).json({
+      message: 'External website layout updated successfully',
+      layout: externalLayout,
+      store
+    });
+  } catch (error) {
+    console.error('Update external website layout error:', error);
+    res.status(500).json({ message: 'Failed to update external website layout' });
+  }
+});
+
+// Helper function to delete thumbnail from GCS
+const deleteThumbnailFromGCS = async (imageUrl) => {
+  if (!imageUrl) return;
+  
+  const filePath = imageUrl.split(`the-mall-uploads-giza/`)[1];
+  if (filePath) {
+    try {
+      await uploadsBucket.file(filePath).delete();
+      console.log(`Thumbnail deleted from GCS: ${filePath}`);
+    } catch (error) {
+      console.error(`Error deleting thumbnail from GCS:`, error.message);
+    }
+  }
+};
+
+// Upload store thumbnail (manual upload)
+export const uploadStoreThumbnail = expressAsyncHandler(async (req, res) => {
+  try {
+    const { storeSlug } = req.params;
+    const { thumbnailType } = req.body; // 'storeCard', 'profily', or 'reely'
+    const file = req.file;
+    const fileName = req.body.fileName || file.originalname;
+
+    if (!file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    if (!['storeCard', 'profily', 'reely'].includes(thumbnailType)) {
+      return res.status(400).json({ message: "Invalid thumbnail type. Must be 'storeCard', 'profily', or 'reely'" });
+    }
+
+    const store = await Store.findOne({ slug: storeSlug });
+    if (!store) {
+      return res.status(404).json({ message: "Store not found" });
+    }
+
+    // Delete old thumbnail if it exists
+    if (store.thumbnails && store.thumbnails[thumbnailType]) {
+      await deleteThumbnailFromGCS(store.thumbnails[thumbnailType]);
+    }
+
+    // Upload new thumbnail
+    const destination = `stores/${store.slug}/thumbnails/${thumbnailType}/${Date.now()}_${fileName}`;
+    await uploadToUploads(file.buffer, destination);
+
+    const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${destination}`;
+
+    // Update store document
+    store.thumbnails = {
+      ...store.thumbnails,
+      [thumbnailType]: publicUrl
+    };
+    await store.save();
+
+    res.status(200).json({ 
+      message: `${thumbnailType} thumbnail uploaded successfully`, 
+      url: publicUrl,
+      thumbnailType 
+    });
+  } catch (error) {
+    console.error("Upload thumbnail error:", error);
+    res.status(500).json({ message: "Failed to upload thumbnail" });
+  }
+});
+
+// Delete store thumbnail
+export const deleteStoreThumbnail = expressAsyncHandler(async (req, res) => {
+  try {
+    const { storeSlug } = req.params;
+    const { thumbnailType } = req.body;
+
+    if (!['storeCard', 'profily', 'reely'].includes(thumbnailType)) {
+      return res.status(400).json({ message: "Invalid thumbnail type. Must be 'storeCard', 'profily', or 'reely'" });
+    }
+
+    const store = await Store.findOne({ slug: storeSlug });
+    if (!store) {
+      return res.status(404).json({ message: "Store not found" });
+    }
+
+    // Delete from GCS if exists
+    if (store.thumbnails && store.thumbnails[thumbnailType]) {
+      await deleteThumbnailFromGCS(store.thumbnails[thumbnailType]);
+    }
+
+    // Clear thumbnail field
+    store.thumbnails = {
+      ...store.thumbnails,
+      [thumbnailType]: ""
+    };
+    await store.save();
+
+    res.status(200).json({ 
+      message: `${thumbnailType} thumbnail deleted successfully`,
+      thumbnailType 
+    });
+  } catch (error) {
+    console.error("Delete thumbnail error:", error);
+    res.status(500).json({ message: "Failed to delete thumbnail" });
+  }
+});
+
+// Capture storeCard thumbnail automatically (1447 x 900 px)
+export const captureStoreCardAuto = expressAsyncHandler(async (req, res) => {
+  try {
+    const { storeSlug } = req.params;
+
+    const store = await Store.findOne({ slug: storeSlug });
+    if (!store) {
+      return res.status(404).json({ message: "Store not found" });
+    }
+
+    // Delete old storeCard thumbnail if it exists
+    if (store.thumbnails && store.thumbnails.storeCard) {
+      await deleteThumbnailFromGCS(store.thumbnails.storeCard);
+    }
+
+    // Capture screenshot at 1447 x 900
+    const screenshotBuffer = await captureStoreCardThumbnail(store._id.toString());
+
+    // Upload to GCS
+    const destination = `stores/${store.slug}/thumbnails/storeCard/${Date.now()}_storeCard.png`;
+    await uploadToUploads(screenshotBuffer, destination);
+
+    const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${destination}`;
+
+    // Update store document
+    store.thumbnails = {
+      ...store.thumbnails,
+      storeCard: publicUrl
+    };
+    await store.save();
+
+    res.status(200).json({ 
+      message: "StoreCard thumbnail captured successfully", 
+      url: publicUrl 
+    });
+  } catch (error) {
+    console.error("Capture storeCard error:", error);
+    res.status(500).json({ message: "Failed to capture storeCard thumbnail" });
+  }
+});
+
+// Capture reely thumbnail automatically (360 x 660 px)
+export const captureReelyAuto = expressAsyncHandler(async (req, res) => {
+  try {
+    const { storeSlug } = req.params;
+
+    const store = await Store.findOne({ slug: storeSlug });
+    if (!store) {
+      return res.status(404).json({ message: "Store not found" });
+    }
+
+    // Delete old reely thumbnail if it exists
+    if (store.thumbnails && store.thumbnails.reely) {
+      await deleteThumbnailFromGCS(store.thumbnails.reely);
+    }
+
+    // Capture screenshot at 360 x 660
+    const screenshotBuffer = await captureReelyThumbnail(store._id.toString());
+
+    // Upload to GCS
+    const destination = `stores/${store.slug}/thumbnails/reely/${Date.now()}_reely.png`;
+    await uploadToUploads(screenshotBuffer, destination);
+
+    const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${destination}`;
+
+    // Update store document
+    store.thumbnails = {
+      ...store.thumbnails,
+      reely: publicUrl
+    };
+    await store.save();
+
+    res.status(200).json({ 
+      message: "Reely thumbnail captured successfully", 
+      url: publicUrl 
+    });
+  } catch (error) {
+    console.error("Capture reely error:", error);
+    res.status(500).json({ message: "Failed to capture reely thumbnail" });
   }
 });
