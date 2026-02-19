@@ -27,7 +27,8 @@ import {
     uploadStoreThumbnail,
     deleteStoreThumbnail,
     captureStoreCardAuto,
-    captureReelyAuto
+    captureReelyAuto,
+    cloneStore
 } from "../controllers/StoreController.js";
 import { uploadSingleFile, uploadTeamMemberImage } from "../middlewares/uploadMiddleware.js";
 
@@ -67,5 +68,8 @@ router.put('/:storeSlug/external-website', /*protectRoute,*/ updateExternalWebsi
 
 // Initialize website objects for existing stores
 router.post('/initialize-websites', initializeStoreWebsites);
+
+// Clone store for multi-location
+router.post('/:storeId/clone', protectRoute, cloneStore);
 
 export default router;

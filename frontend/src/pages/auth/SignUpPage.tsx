@@ -7,6 +7,7 @@ import PasswordStrengthMeter from "../../components/the_mall/authentication/comp
 import { signup, clearError } from "../../features/user/userSlice";
 import { TbLoader3 } from "react-icons/tb";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import SocialLoginButtons from "../../components/the_mall/authentication/components/SocialLoginButtons";
 
 const SignUpPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -48,14 +49,14 @@ const SignUpPage = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="max-w-[60vh] w-full h-full lg:h-[80%] flex flex-col justify-between backdrop-filter backdrop-blur-xl lg:rounded-[1vh] shadow-xl overflow-hidden p-[2vh]"
+      className="max-w-[60vh] w-full h-screen lg:h-screen flex flex-col justify-between backdrop-filter bg-white lg:rounded-[1vh] shadow-xl overflow-hidden p-[2vh]"
     >
       {/* Optional header image to match login page */}
       <div className="w-full h-[10%] ">
         <img
           src="https://storage.googleapis.com/the-mall-uploads-giza/stores/68726dde5987f5810dee5a8a/images/mall%20image.webp"
           alt="mall theme image"
-          className="w-full h-full object-cover rounded-[1vh]"
+          className="w-full h-0 object-cover rounded-[1vh]"
         />
       </div>
 
@@ -112,11 +113,19 @@ const SignUpPage = () => {
 			disabled={isLoading || !isPasswordStrong(password)}
 		>
 			{isLoading ? (
-			<TbLoader3 className="w-6 h-6 animate-spin mx-auto" />
+			  <TbLoader3 className="w-6 h-6 animate-spin mx-auto" />
 			) : (
 			"Sign Up"
 			)}
 		</motion.button>
+    <div className="flex flex-col">
+				<div className="w-full flex flex-row items-center justify-between text-[2.2vh]">
+					<span className="h-[.15vh] w-[30%] bg-gray-600"></span>
+						Or sign up with
+					<span className="h-[.15vh] w-[30%] bg-gray-600"></span>
+				</div>
+				<SocialLoginButtons/>
+			</div>
         
       </form>
 		

@@ -4,7 +4,7 @@ import {
 	PASSWORD_RESET_SUCCESS_TEMPLATE,
 	VERIFICATION_EMAIL_TEMPLATE,
   WELCOME_EMAIL_TEMPLATE,
-  STORE_CREATED_TEMPLATE
+  STORE_CREATED_EMAIL_TEMPLATE
 
 } from "./emailTemplates.js";
 
@@ -86,7 +86,7 @@ export const sendResetSuccessEmail = async (email) => {
 
 export const sendStoreCreatedEmail = async (email, name, storeName, dashboardURL) => {
   try {
-    const html = STORE_CREATED_TEMPLATE
+    const html = STORE_CREATED_EMAIL_TEMPLATE
       .replace("{name}", name)
       .replace("{storeName}", storeName)
       .replace("{dashboardURL}", dashboardURL);

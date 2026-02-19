@@ -161,6 +161,35 @@ export const editStore = createAsyncThunk<Store, { storeSlug: string; updates: P
   }
 );
 
+// Clone store for multi-location
+interface CloneStoreData {
+  nickname?: string;
+  location?: {
+    type: string;
+    coordinates: [number, number];
+    address?: string;
+    nickname?: string;
+  };
+  contact?: {
+    phone?: string;
+    email?: string;
+    whatsapp?: string;
+  };
+}
+
+export const cloneStore = createAsyncThunk<Store, { storeId: string; data: CloneStoreData }>(
+  'stores/cloneStore',
+  async ({ storeId, data }, thunkAPI) => {
+    try {
+      const response = await axios.post(`${STORE_API_URL}/${storeId}/clone`, data);
+      return response.data.store;
+    } catch (error) {
+      console.error('Error cloning store:', error);
+      return thunkAPI.rejectWithValue('Failed to clone store');
+    }
+  }
+);
+
 
 
 
@@ -360,6 +389,33 @@ const storeSlice = createSlice({
       .addCase(editStore.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || 'Failed to update store';
+      })
+      // Clone Store
+      .addCase(cloneStore.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(cloneStore.fulfilled, (state, action: PayloadAction<Store>) => {
+        state.isLoading = false;
+        const clonedStore = action.payload;
+
+        if (clonedStore._id) {
+          // Add to all stores list
+          state.storesById[clonedStore._id] = clonedStore;
+          if (!state.storeIds.includes(clonedStore._id)) {
+            state.storeIds.push(clonedStore._id);
+          }
+
+          // Add to "my stores" list
+          state.myStoresById[clonedStore._id] = clonedStore;
+          if (!state.myStoreIds.includes(clonedStore._id)) {
+            state.myStoreIds.push(clonedStore._id);
+          }
+        }
+      })
+      .addCase(cloneStore.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to clone store';
       })
   },
 });

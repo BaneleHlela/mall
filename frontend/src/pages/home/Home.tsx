@@ -18,6 +18,7 @@ import MultipleLayoutsPost from '../../components/the_mall/home/posts/MultipleLa
 import FreePikPosters from '../../components/the_mall/home/posts/FreePikPosters';
 import SupplyChain from '../../components/the_mall/home/posts/SupplyChain';
 import { MdAdd } from 'react-icons/md';
+import { IoStorefrontOutline } from 'react-icons/io5';
 
 
 const HomePage = () => {
@@ -119,6 +120,8 @@ const HomePage = () => {
   const handleMouseLeave = () => {
     isDraggingRef.current = false;
   };
+
+  console.log(user?.stores)
   
   
 
@@ -210,24 +213,46 @@ const HomePage = () => {
             onMouseLeave={handleMouseLeave}
             className="flex bg-white px-[1.5vh] overflow-x-auto space-x-[.55vh] py-[1.5vh] hide-scrollbar rounded-[1.5vh] overflow-hidden shadow-xs cursor-grab active:cursor-grabbing"
           >
+            
             {/* Add your store */}
-            <div onClick={() => navigate("/add-store")} className="relative flex justify-center h-[20vh] lg:h-[27vh] bg-amber-500 aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102">
+            {user?.stores.length === 0 && (
+              <div onClick={() => navigate("/add-store")} className="relative flex justify-center h-[20vh] lg:h-[27vh] bg-amber-500 aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102">
+                {/* Image */}
+                <div className="w-full">
+                  <img 
+                    src="https://storage.googleapis.com/the-mall-uploads-giza/stores/686e76aa96f14c28650b671d/images/Promote%20Your%20Shop%20in%20Style.png" 
+                    alt="Mall theme image" 
+                    className="w-full h-full object-cover rounded-[1vh]" 
+                  />
+                </div>
+                {/* Button */}
+                <div className="absolute bottom-0 flex justify-center items-center w-full h-[20%] bg-[#0000001f]  rounded-b-[1vh]">
+                  <button className=" bg-black text-white border-[.2vh] border-white rounded-full">
+                    <FiPlus className='text-[2.5vh]'/>
+                  </button>
+                </div>
+              </div>
+            )}
+            {/* Manage Your Stores */}
+            {user && user.stores && user.stores.length > 0 && (
+              <div onClick={() => navigate("/my-stores")} className="relative flex justify-center h-[20vh] lg:h-[27vh] bg-amber-500 aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102">
               {/* Image */}
               <div className="w-full">
                 <img 
-                  src="https://storage.googleapis.com/the-mall-uploads-giza/stores/686e76aa96f14c28650b671d/images/Promote%20Your%20Shop%20in%20Style.png" 
+                  src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/20260219_1444_Image%20Generation_remix_01khtyvvhkfsbaka3qfy5khanb.png" 
                   alt="Mall theme image" 
                   className="w-full h-full object-cover rounded-[1vh]" 
                 />
               </div>
               {/* Button */}
               <div className="absolute bottom-0 flex justify-center items-center w-full h-[20%] bg-[#0000001f]  rounded-b-[1vh]">
-                <button className=" bg-black text-white border-[.2vh] border-white rounded-full">
-                  <FiPlus className='text-[2.5vh]'/>
+                <button className=" bg-black text-white border-[.2vh] p-1 border-white rounded-full">
+                  <IoStorefrontOutline className='text-[2vh]'/>
                 </button>
               </div>
             </div>
-            <div className=""></div>
+            )}
+            {/* Department Selector With Images */}
             {Object.entries(departments).map(([key, dept]) => (
               <DepartmentSelectorWithImages
                 key={key}
@@ -235,6 +260,7 @@ const HomePage = () => {
                 department={dept}
               />
             ))}
+            
           </div>
         )}
         {/* Thumbail you clicked */}

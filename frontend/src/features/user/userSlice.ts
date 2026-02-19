@@ -303,12 +303,22 @@ const userSlice = createSlice({
         state.isLoading = false;
       })
 
+      // Verify email
+      .addCase(verifyEmail.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
       .addCase(verifyEmail.fulfilled, (state, action: PayloadAction<User>) => {
         state.user = action.payload;
         state.isAuthenticated = true;
         state.isLoading = false;
       })
+      .addCase(verifyEmail.rejected, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.error = action.payload || 'Failed to verify email';
+      })
 
+      // Check Auth
       .addCase(checkAuth.pending, (state) => {
         state.isCheckingAuth = true;
       })

@@ -5,6 +5,7 @@ import { uploadToUploads, uploadsBucket } from '../config/gcsClient.js';
 import mongoose from 'mongoose';
 import User from '../models/UserModel.js';
 import { generateSlug, captureStoreCardThumbnail, captureReelyThumbnail } from '../utils/helperFunctions.js';
+import { sendStoreCreatedEmail } from '../emails/email.js';
 
 const CLIENT_URL = process.env.CLIENT_URL;
 
@@ -34,8 +35,15 @@ export const addStore = expressAsyncHandler(async (req, res) => {
     });
 
     await created.save();
+    
+    // Update the user's stores array
+    await User.findByIdAndUpdate(
+      _id,
+      { $push: { stores: created._id } }, // Push the new store ID into the user's stores array
+      { new: true } // Return the updated document
+    );
 
-    // await sendStoreCreatedEmail(email, firstName, created.name, `http://localhost:5173/dashboard/${created._id}`)
+    await sendStoreCreatedEmail(email, firstName, created.name, `http://localhost:5173/dashboard/${created._id}`)
     res.status(201).json(created);
 });
 
@@ -306,6 +314,13 @@ export const deleteStore = expressAsyncHandler(async (req, res) => {
     const deletedStore = await Store.findByIdAndDelete(storeId);
   
     if (deletedStore) {
+      // Remove the store from all team members' stores arrays
+      const teamMemberIds = deletedStore.team.map(member => member.member);
+      await User.updateMany(
+        { _id: { $in: teamMemberIds } },
+        { $pull: { stores: deletedStore._id } }
+      );
+      
       res.json({ message: 'Store deleted successfully.' });
     } else {
       res.status(404).json({ message: 'Store not found.' });
@@ -586,6 +601,13 @@ export const addTeamMember = expressAsyncHandler(async (req, res) => {
 
   store.team.push(newTeamMember);
   await store.save();
+
+  // Update the user's stores array
+  await User.findByIdAndUpdate(
+    user._id,
+    { $addToSet: { stores: store._id } } // Use addToSet to avoid duplicates
+  );
+
   await store.populate('team.member');
 
   res.status(201).json(store);
@@ -610,6 +632,9 @@ export const deleteTeamMember = expressAsyncHandler(async (req, res) => {
     return res.status(404).json({ message: 'Team member not found.' });
   }
 
+  // Get the user ID before removing from team
+  const userIdToRemove = store.team[memberIndex].member._id;
+
   // Ensure at least one member remains
   if (store.team.length <= 1) {
     return res.status(400).json({
@@ -620,6 +645,13 @@ export const deleteTeamMember = expressAsyncHandler(async (req, res) => {
   // Remove the team member
   store.team.splice(memberIndex, 1);
   await store.save();
+
+  // Remove the store from the user's stores array
+  await User.findByIdAndUpdate(
+    userIdToRemove,
+    { $pull: { stores: store._id } }
+  );
+
   await store.populate('team.member');
 
   res.status(200).json({
@@ -1077,5 +1109,79 @@ export const captureReelyAuto = expressAsyncHandler(async (req, res) => {
   } catch (error) {
     console.error("Capture reely error:", error);
     res.status(500).json({ message: "Failed to capture reely thumbnail" });
+  }
+});
+
+// Clone store for multi-location businesses
+export const cloneStore = expressAsyncHandler(async (req, res) => {
+  try {
+    const { storeId } = req.params;
+    const { nickname, location, contact } = req.body;
+    const userId = req.user._id;
+
+    // Find original store
+    const originalStore = await Store.findById(storeId);
+    if (!originalStore) {
+      return res.status(404).json({ message: 'Store not found' });
+    }
+
+    // Check if user is part of the store team
+    const isTeamMember = originalStore.team.some(
+      member => member.member.toString() === userId.toString()
+    );
+    if (!isTeamMember) {
+      return res.status(403).json({ message: 'Not authorized to clone this store' });
+    }
+
+    // Generate unique slug with location suffix
+    const baseSlug = originalStore.slug;
+    const locationSuffix = nickname ? generateSlug(nickname) : `location-${Date.now()}`;
+    const newSlug = await generateUniqueSlug(`${baseSlug}-${locationSuffix}`);
+
+    // Create cloned store
+    const clonedStore = new Store({
+      name: originalStore.name,
+      nickname: nickname || `${originalStore.name} - New Location`,
+      slug: newSlug,
+      logo: originalStore.logo,
+      slogan: originalStore.slogan,
+      thumbnail: originalStore.thumbnail,
+      thumbnails: originalStore.thumbnails,
+      about: originalStore.about,
+      departments: originalStore.departments,
+      trades: originalStore.trades,
+      categories: originalStore.categories,
+      socials: originalStore.socials,
+      operationTimes: originalStore.operationTimes,
+      layouts: originalStore.layouts,
+      website: originalStore.website,
+      businessType: originalStore.businessType,
+      payment: originalStore.payment,
+      delivers: originalStore.delivers,
+      location: location || originalStore.location,
+      contact: contact || originalStore.contact,
+      team: [{ member: userId, role: 'owner' }],
+      likes: { count: 0, users: [] },
+      rating: { averageRating: 0, numberOfRatings: 0 },
+      visits: 0,
+      images: [],
+      isVerified: false,
+    });
+
+    await clonedStore.save();
+
+    // Add store to user's stores array
+    await User.findByIdAndUpdate(userId, { $push: { stores: clonedStore._id } });
+
+    // Populate team member
+    await clonedStore.populate('team.member');
+
+    res.status(201).json({
+      message: 'Store cloned successfully',
+      store: clonedStore
+    });
+  } catch (error) {
+    console.error('Clone store error:', error);
+    res.status(500).json({ message: 'Failed to clone store', error: error.message });
   }
 });
