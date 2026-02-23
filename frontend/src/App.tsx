@@ -24,6 +24,9 @@ import AddStorePage from "./pages/store/AddStorePage";
 import AddUserAddressPage from "./pages/profile/address/AddUserAddressPage";
 import GetStartedPage from "./pages/store/get_started_page/GetStartedPage";
 import PayFastPage from "./pages/payments/PayFastPage";
+import ComingSoon from "./components/the_mall/ComingSoon";
+import MallCartPage from "./pages/cart/MallCartPage";
+import { HiOutlineChatAlt2 } from "react-icons/hi";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -42,21 +45,42 @@ const App: React.FC = () => {
 
 
   return (
-    <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-fit w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar">  
+    <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-fit w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar max-h-screen">  
       <Router>
         <Menubar /> 
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/search" element={<MallSearchPage />} />
+          <Route
+            path="/chat"
+            element={
+              <ComingSoon 
+                title="Chat Coming Soon"
+                message="Soon you'll be able to chat directly with vendors and other users right here! We're building a seamless messaging experience to help you connect, ask questions, and get support."
+                targetDate={new Date("2026-04-01")}
+                icon={<HiOutlineChatAlt2 className="w-[3vh] h-[3vh] text-white" />}
+              />
+            }
+          />
+          <Route path="/cart" element={<MallCartPage />} />
           <Route path="/stores/:storeSlug/*" element={<StorePage />} />
           <Route path="/my-stores" element={<MyStores />} />
+          <Route path="/account" element={<Account />} />
           {/* <Route path="/my-stores" 
             element={
               <ComingSoon message="I have not deployed this page yet but it's where users can add stores and access them."/>
             } 
           /> */}
-          <Route path="/search" element={<MallSearchPage />} />
-          <Route path="/favorites" element={<FavoriteStores />} />
-          <Route path="/account" element={<Account />} />
+          
+          <Route 
+            path="/favorites" 
+            element={
+              <ProtectedRoute>
+                <FavoriteStores />
+              </ProtectedRoute>
+              } 
+            />
+          
           <Route path="/scribbler/*" element={<Scribbler />} />
           <Route path="/layouts/:layoutId/*" element={<Layouts />} />
           <Route path="/capture" element={<CaptureHomePoster />} />
@@ -100,6 +124,7 @@ const App: React.FC = () => {
             path="/payment/*"
             element={<PayFastPage />}
           />
+          
           {authRoutes}
         </Routes>
       </Router>

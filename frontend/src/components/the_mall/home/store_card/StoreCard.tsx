@@ -48,7 +48,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
     }
 
     dispatch(
-      updateUser({
+      updateUser({ // @ts-ignore-next-line
           user: user._id, // userId
           favoriteStore: store._id, // storeId
         })
@@ -58,7 +58,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
   return (
     <div
         onClick={handleClick}
-        className={`relative aspect-4/3 border-b border-gray-700 rounded-[2px]  overflow-hidden ${allowShadow && "shadow"} absolute inset-0 bg-white/10 backdrop-blur-md transition-transform transform hover:-translate-y-1 z-0`}
+        className={`relative aspect-4/3 border-b border-gray-700 rounded-[2px]  overflow-hidden ${allowShadow && "shadow-md"} absolute inset-0 bg-white/10 backdrop-blur-md transition-transform transform hover:-translate-y-1 z-0`}
     >
       {/* Glassy background */}
       <div className="flex flex-row justify-end items-center h-[6%] space-x-[.5vh] w-full px-[2%] bg-gray-700 shadow z-1">
@@ -67,7 +67,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
         <span className="h-[40%] aspect-square bg-gray-400 rounded-full "></span>
       </div>
       {/* Image */}
-      <div className={`relative ${mini ? "h-[60%]": "h-[72%]"} `}>
+      <div className={`relative ${mini ? "h-[65%]": "h-[72%]"} `}>
         <img src={store.thumbnails.storeCard || store.thumbnail} alt="store-thumbnail" className="w-full h-full object-cover -z-1" />
         <div className="absolute top-0 w-full h-full bg-[#00000000]"></div>
         {/* Favorite toggle button

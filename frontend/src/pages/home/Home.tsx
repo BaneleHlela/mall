@@ -256,7 +256,7 @@ const HomePage = () => {
             {Object.entries(departments).map(([key, dept]) => (
               <DepartmentSelectorWithImages
                 key={key}
-                onSelect={() => handleDepartmentSelect(key)}
+                onSelect={() => navigate(`/search?department=${key}`)}
                 department={dept}
               />
             ))}

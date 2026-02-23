@@ -7,7 +7,11 @@ import { IoChevronBackOutline } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { TbLoader3 } from "react-icons/tb";
 
-const AddUserAddressPage = () => {
+interface AddUserAddressPageProps {
+  show?: boolean;
+}
+
+const AddUserAddressPage: React.FC<AddUserAddressPageProps> = ({show = false}) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { error, user } = useAppSelector((state) => state.user);
@@ -106,8 +110,10 @@ const AddUserAddressPage = () => {
     }
   };
 
+  if (!show) return null;
+
   return (
-    <div className="w-full min-h-screen bg-white py-[2.3vh] px-[.8vh]">
+    <div className="w-full min-h-screen bg-white/10 backdrop-blur-md py-[2.3vh] px-[.8vh]">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-[1vh]">
@@ -118,7 +124,7 @@ const AddUserAddressPage = () => {
             >
                 <IoChevronBackOutline className='text-[2.5vh]'/>
             </button>
-            <h1 className="text-2xl font-semibold text-stone-800">Add Address</h1>
+            <h1 className="text-2xl font-semibold text-stone-800">Add User Address</h1>
           </div>
         </div>
 

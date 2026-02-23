@@ -62,7 +62,7 @@ const TheMallStoreHero = () => {
 
   return (
     <div
-        className='flex flex-col lg:flex-row w-full h-[100vh] lg:h-[90vh] bg-white overflow-hidden mt-[.1vh]'
+        className='flex flex-col lg:flex-row w-full min-h-[100vh] lg:min-h-[90vh] bg-white overflow-hidden mt-[.1vh]'
     >
         {/* Text & Countdown */}
         <div className="relative flex flex-col justify-evenly gap-[5vh] w-full lg:w-[50%] min-h-[48%] lg:h-[100%] pl-[3vh] lg:pl-[5vh] py-[4vh] z-1">

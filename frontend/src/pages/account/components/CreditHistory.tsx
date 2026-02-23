@@ -1,6 +1,6 @@
 import React from 'react';
-import { FaArrowLeft, FaHistory, FaCoins } from 'react-icons/fa';
-import ComingSoon from '../../../components/the_mall/ComingSoon';
+import { FaHistory, FaCoins, FaArrowUp, FaArrowDown, FaGift, FaUserFriends } from 'react-icons/fa';
+import { IoChevronBackOutline } from 'react-icons/io5';
 
 interface CreditHistoryProps {
   onBack: () => void;
@@ -8,124 +8,132 @@ interface CreditHistoryProps {
 
 const CreditHistory: React.FC<CreditHistoryProps> = ({ onBack }) => {
   return (
-    <div className="min-h-screen bg-stone-100 p-6">
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center mb-6">
-          <button
-            onClick={onBack}
-            className="mr-4 p-2 hover:bg-stone-200 rounded-full transition-colors"
-          >
-            <FaArrowLeft className="text-stone-600" />
-          </button>
-          <h1 className="text-2xl font-semibold text-stone-800">Credit History</h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+      {/* Header */}
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-6 pb-16 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onBack}
+              className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors"
+            >
+              <IoChevronBackOutline className='text-white text-xl'/>
+            </button>
+            <h1 className="text-xl font-semibold text-white">Credit History</h1>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-2xl mx-auto px-4 -mt-8">
+        {/* Balance Card */}
+        <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-2xl shadow-xl shadow-purple-200/50 p-6 mb-6 text-white overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+          
+          <div className="relative z-10">
+            <p className="text-white/80 text-sm font-medium mb-1">Current Balance</p>
+            <div className="flex items-baseline gap-2">
+              <FaCoins className="text-yellow-300 text-2xl" />
+              <span className="text-4xl font-bold">1,250</span>
+              <span className="text-white/80">credits</span>
+            </div>
+            <p className="text-white/60 text-xs mt-2">≈ $12.50 value</p>
+          </div>
         </div>
 
         {/* Coming Soon Content */}
-        <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-          <div className="mb-6">
-            <FaCoins className="mx-auto text-yellow-500 text-6xl mb-4" />
-            <h2 className="text-2xl font-bold text-stone-800 mb-4">Credit History Coming Soon</h2>
+        <div className="bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-100 p-8 text-center mb-6">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-100 to-amber-200 flex items-center justify-center mx-auto mb-4">
+            <FaCoins className="text-amber-600 text-2xl" />
           </div>
-          
-          <div className="max-w-md mx-auto text-left space-y-4 mb-8">
-            <div className="bg-stone-50 rounded-lg p-4">
-              <h3 className="font-semibold text-stone-800 mb-2 flex items-center">
-                <FaHistory className="mr-2 text-blue-600" />
-                What you'll be able to do:
-              </h3>
-              <ul className="text-stone-600 space-y-2 text-sm">
-                <li>• View your complete credit transaction history</li>
-                <li>• Track earned credits from purchases and referrals</li>
-                <li>• Monitor credit redemptions and usage</li>
-                <li>• See your current credit balance</li>
-                <li>• Export credit statements for your records</li>
-                <li>• Set up credit balance alerts and notifications</li>
-              </ul>
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">Credit History Coming Soon</h2>
+          <p className="text-gray-500 text-sm">Track your credit earnings and redemptions</p>
+        </div>
+
+        {/* Feature Cards */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="bg-gradient-to-br from-emerald-50 to-teal-100 rounded-2xl p-5 border border-emerald-200">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-3 shadow-lg shadow-emerald-200/50">
+              <FaArrowUp className="text-white" />
             </div>
-            
-            <div className="bg-blue-50 rounded-lg p-4">
-              <h3 className="font-semibold text-blue-800 mb-2">How Credits Work:</h3>
-              <p className="text-blue-700 text-sm">
-                Credits are earned through purchases, referrals, and special promotions. 
-                They can be used to get discounts on future purchases or unlock premium features. 
-                Your credit history will show all transactions, making it easy to track your savings.
-              </p>
-            </div>
+            <h4 className="font-semibold text-emerald-800 mb-1">Earned Credits</h4>
+            <p className="text-emerald-600 text-xs">From purchases & referrals</p>
           </div>
 
-          <div className="text-stone-500 text-sm">
-            <p>This feature is currently under development and will be available soon.</p>
-            <p className="mt-2">Stay tuned for updates!</p>
+          <div className="bg-gradient-to-br from-blue-50 to-cyan-100 rounded-2xl p-5 border border-blue-200">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center mb-3 shadow-lg shadow-blue-200/50">
+              <FaArrowDown className="text-white" />
+            </div>
+            <h4 className="font-semibold text-blue-800 mb-1">Used Credits</h4>
+            <p className="text-blue-600 text-xs">Discounts & redemptions</p>
           </div>
         </div>
 
-        {/* Feature Preview Cards */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 border border-green-200">
-            <div className="flex items-center mb-3">
-              <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
-                <span className="text-white font-bold">+</span>
-              </div>
-              <div>
-                <h4 className="font-semibold text-green-800">Earned Credits</h4>
-                <p className="text-green-600 text-sm">Track all credits you've earned</p>
-              </div>
-            </div>
-            <div className="text-green-700 text-sm">
-              From purchases, referrals, and special offers
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-200">
-            <div className="flex items-center mb-3">
-              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
-                <span className="text-white font-bold">-</span>
-              </div>
-              <div>
-                <h4 className="font-semibold text-blue-800">Used Credits</h4>
-                <p className="text-blue-600 text-sm">See how you've spent your credits</p>
-              </div>
-            </div>
-            <div className="text-blue-700 text-sm">
-              Discounts applied and features unlocked
-            </div>
-          </div>
-        </div>
-
-        {/* Mock Preview */}
-        <div className="mt-6 bg-white rounded-lg shadow-sm p-6 opacity-50">
-          <h3 className="text-lg font-semibold text-stone-800 mb-4 flex items-center">
-            <FaHistory className="mr-2" />
-            Recent Transactions (Preview)
+        {/* What you'll be able to do */}
+        <div className="bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-100 p-6 mb-6">
+          <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <FaHistory className="text-indigo-600" />
+            What you'll be able to do:
           </h3>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center p-3 bg-stone-50 rounded-lg">
-              <div>
-                <p className="font-medium text-stone-800">Purchase Reward</p>
-                <p className="text-stone-500 text-sm">Order #12345 - Tech Store</p>
-              </div>
-              <span className="text-green-600 font-semibold">+50 credits</span>
-            </div>
-            <div className="flex justify-between items-center p-3 bg-stone-50 rounded-lg">
-              <div>
-                <p className="font-medium text-stone-800">Discount Applied</p>
-                <p className="text-stone-500 text-sm">Coffee Shop Purchase</p>
-              </div>
-              <span className="text-red-600 font-semibold">-25 credits</span>
-            </div>
-            <div className="flex justify-between items-center p-3 bg-stone-50 rounded-lg">
-              <div>
-                <p className="font-medium text-stone-800">Referral Bonus</p>
-                <p className="text-stone-500 text-sm">Friend joined the platform</p>
-              </div>
-              <span className="text-green-600 font-semibold">+100 credits</span>
-            </div>
+          <ul className="space-y-3">
+            {[
+              'View your complete credit transaction history',
+              'Track earned credits from purchases and referrals',
+              'Monitor credit redemptions and usage',
+              'See your current credit balance',
+              'Export credit statements for your records',
+              'Set up credit balance alerts and notifications'
+            ].map((item, index) => (
+              <li key={index} className="flex items-start gap-3 text-gray-600 text-sm">
+                <div className="w-5 h-5 rounded-full bg-gradient-to-r from-indigo-100 to-purple-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-600"></div>
+                </div>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Preview Transactions */}
+        <div className="bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-100 overflow-hidden opacity-60">
+          <div className="p-5 border-b border-gray-100">
+            <h3 className="font-semibold text-gray-800 flex items-center gap-2">
+              <FaHistory className="text-gray-400" />
+              Recent Transactions (Preview)
+            </h3>
           </div>
-          <div className="mt-4 text-center">
-            <div className="inline-block bg-stone-200 text-stone-600 px-4 py-2 rounded-lg">
-              Preview Only - Feature Coming Soon
-            </div>
+          <div className="divide-y divide-gray-100">
+            {[
+              { type: 'earned', label: 'Purchase Reward', desc: 'Order #12345 - Tech Store', amount: '+50' },
+              { type: 'used', label: 'Discount Applied', desc: 'Coffee Shop Purchase', amount: '-25' },
+              { type: 'earned', label: 'Referral Bonus', desc: 'Friend joined the platform', amount: '+100' },
+            ].map((tx, index) => (
+              <div key={index} className="p-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                    tx.type === 'earned' 
+                      ? 'bg-gradient-to-br from-emerald-100 to-teal-200' 
+                      : 'bg-gradient-to-br from-red-100 to-rose-200'
+                  }`}>
+                    {tx.type === 'earned' ? (
+                      <FaGift className="text-emerald-600" />
+                    ) : (
+                      <FaArrowDown className="text-red-600" />
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-800 text-sm">{tx.label}</p>
+                    <p className="text-gray-500 text-xs">{tx.desc}</p>
+                  </div>
+                </div>
+                <span className={`font-semibold ${tx.type === 'earned' ? 'text-emerald-600' : 'text-red-600'}`}>
+                  {tx.amount} credits
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="p-4 bg-gray-50 text-center">
+            <span className="text-xs text-gray-400 font-medium">Preview Only - Feature Coming Soon</span>
           </div>
         </div>
       </div>

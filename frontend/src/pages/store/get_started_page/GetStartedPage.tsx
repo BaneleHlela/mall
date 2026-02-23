@@ -31,7 +31,7 @@ const GetStartedPage = () => {
       style={{
         fontFamily: "Montserrat",
       }} 
-      className='flex flex-col items-center w-full min-h-screen overflow-y-auto'
+      className='flex flex-col items-center w-full h-screen overflow-y-auto'
     >
       <GetStartedMenubar />
       <TheMallStoreHero />

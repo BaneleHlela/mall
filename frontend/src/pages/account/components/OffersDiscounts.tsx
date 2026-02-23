@@ -1,5 +1,6 @@
 import React from 'react';
-import { FaArrowLeft, FaGift, FaPercent, FaTags } from 'react-icons/fa';
+import { FaGift, FaPercent, FaTags, FaBell, FaStar } from 'react-icons/fa';
+import { IoChevronBackOutline } from 'react-icons/io5';
 
 interface OffersDiscountsProps {
   onBack: () => void;
@@ -7,98 +8,94 @@ interface OffersDiscountsProps {
 
 const OffersDiscounts: React.FC<OffersDiscountsProps> = ({ onBack }) => {
   return (
-    <div className="min-h-screen bg-stone-100 p-6">
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center mb-6">
-          <button
-            onClick={onBack}
-            className="mr-4 p-2 hover:bg-stone-200 rounded-full transition-colors"
-          >
-            <FaArrowLeft className="text-stone-600" />
-          </button>
-          <h1 className="text-2xl font-semibold text-stone-800">Offers & Discounts</h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+      {/* Header */}
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-6 pb-16 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onBack}
+              className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors"
+            >
+              <IoChevronBackOutline className='text-white text-xl'/>
+            </button>
+            <h1 className="text-xl font-semibold text-white">Offers & Discounts</h1>
+          </div>
         </div>
+      </div>
 
+      <div className="max-w-2xl mx-auto px-4 -mt-8">
         {/* Empty State */}
-        <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-          <div className="mb-6">
-            <FaGift className="mx-auto text-stone-400 text-6xl mb-4" />
-            <h2 className="text-2xl font-semibold text-stone-600 mb-2">No offers available</h2>
-            <p className="text-stone-500">Check back later for exclusive deals and discounts!</p>
+        <div className="bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-100 p-10 text-center mb-6">
+          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 to-orange-200 flex items-center justify-center mx-auto mb-5">
+            <FaGift className="text-orange-500 text-3xl" />
+          </div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">No offers available</h2>
+          <p className="text-gray-500 text-sm">Check back later for exclusive deals and discounts!</p>
+        </div>
+
+        {/* Feature Cards */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="bg-gradient-to-br from-violet-50 to-purple-100 rounded-2xl p-5 border border-violet-200 opacity-60">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center mb-3 shadow-lg shadow-violet-200/50">
+              <FaPercent className="text-white" />
+            </div>
+            <h4 className="font-semibold text-violet-800 mb-1">Percentage Off</h4>
+            <p className="text-violet-600 text-xs">Save on favorite items</p>
+          </div>
+
+          <div className="bg-gradient-to-br from-orange-50 to-amber-100 rounded-2xl p-5 border border-orange-200 opacity-60">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center mb-3 shadow-lg shadow-orange-200/50">
+              <FaTags className="text-white" />
+            </div>
+            <h4 className="font-semibold text-orange-800 mb-1">Promo Codes</h4>
+            <p className="text-orange-600 text-xs">Exclusive discount codes</p>
+          </div>
+
+          <div className="bg-gradient-to-br from-emerald-50 to-teal-100 rounded-2xl p-5 border border-emerald-200 opacity-60">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-3 shadow-lg shadow-emerald-200/50">
+              <FaGift className="text-white" />
+            </div>
+            <h4 className="font-semibold text-emerald-800 mb-1">Seasonal Deals</h4>
+            <p className="text-emerald-600 text-xs">Holiday special offers</p>
+          </div>
+
+          <div className="bg-gradient-to-br from-blue-50 to-cyan-100 rounded-2xl p-5 border border-blue-200 opacity-60">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center mb-3 shadow-lg shadow-blue-200/50">
+              <FaStar className="text-white" />
+            </div>
+            <h4 className="font-semibold text-blue-800 mb-1">Loyalty Rewards</h4>
+            <p className="text-blue-600 text-xs">Earn points & rewards</p>
           </div>
         </div>
 
-        {/* Placeholder Cards for Future Features */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 border border-purple-200 opacity-50">
-            <div className="flex items-center mb-3">
-              <FaPercent className="text-purple-600 text-2xl mr-3" />
-              <div>
-                <h3 className="font-semibold text-purple-800">Percentage Discounts</h3>
-                <p className="text-purple-600 text-sm">Save on your favorite items</p>
-              </div>
+        {/* Newsletter Signup */}
+        <div className="bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-100 p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center shadow-lg shadow-pink-200/50">
+              <FaBell className="text-white" />
             </div>
-            <p className="text-purple-700 text-sm">Coming soon...</p>
-          </div>
-
-          <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6 border border-orange-200 opacity-50">
-            <div className="flex items-center mb-3">
-              <FaTags className="text-orange-600 text-2xl mr-3" />
-              <div>
-                <h3 className="font-semibold text-orange-800">Promo Codes</h3>
-                <p className="text-orange-600 text-sm">Exclusive discount codes</p>
-              </div>
+            <div>
+              <h3 className="font-semibold text-gray-800">Stay Updated</h3>
+              <p className="text-gray-500 text-xs">Be the first to know about new deals</p>
             </div>
-            <p className="text-orange-700 text-sm">Coming soon...</p>
           </div>
-
-          <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 border border-green-200 opacity-50">
-            <div className="flex items-center mb-3">
-              <FaGift className="text-green-600 text-2xl mr-3" />
-              <div>
-                <h3 className="font-semibold text-green-800">Seasonal Offers</h3>
-                <p className="text-green-600 text-sm">Holiday and special event deals</p>
-              </div>
-            </div>
-            <p className="text-green-700 text-sm">Coming soon...</p>
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-200 opacity-50">
-            <div className="flex items-center mb-3">
-              <FaPercent className="text-blue-600 text-2xl mr-3" />
-              <div>
-                <h3 className="font-semibold text-blue-800">Loyalty Rewards</h3>
-                <p className="text-blue-600 text-sm">Earn points and get rewards</p>
-              </div>
-            </div>
-            <p className="text-blue-700 text-sm">Coming soon...</p>
-          </div>
-        </div>
-
-        {/* Newsletter Signup Placeholder */}
-        <div className="mt-6 bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-stone-800 mb-4 text-center">
-            Stay Updated on Offers
-          </h3>
-          <p className="text-stone-600 text-center mb-4">
-            Be the first to know about new deals and exclusive discounts
-          </p>
-          <div className="flex max-w-md mx-auto">
+          
+          <div className="flex gap-2">
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-2 border border-stone-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-300 transition-all text-sm"
               disabled
             />
             <button
               disabled
-              className="bg-stone-400 text-white px-6 py-2 rounded-r-lg cursor-not-allowed"
+              className="bg-gray-200 text-gray-400 px-5 py-3 rounded-xl font-medium cursor-not-allowed"
             >
               Notify Me
             </button>
           </div>
-          <p className="text-stone-400 text-xs text-center mt-2">
+          <p className="text-gray-400 text-xs text-center mt-3">
             Feature coming soon
           </p>
         </div>

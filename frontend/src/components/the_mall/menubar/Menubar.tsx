@@ -47,7 +47,7 @@ const Menubar = () => {
         <LuShoppingCart size="3.1vh" />
       </Link>
       <Link to="/favorites" className="p-[1vh]">
-        <GoHeart size="3.2vh" />
+        <FaRegHeart size="3vh" />
       </Link>
       <Link to="/account" className="p-[1vh]">
         <CircleUser size="3.1vh" />

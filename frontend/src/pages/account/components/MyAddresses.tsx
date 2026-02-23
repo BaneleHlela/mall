@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { RootState } from '../../../app/store';
 import { updateUser } from '../../../features/user/userSlice';
-import { FaArrowLeft, FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaStar, FaRegStar } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaStar, FaRegStar } from 'react-icons/fa';
 import { IoChevronBackOutline } from 'react-icons/io5';
 import { GrSearchAdvanced } from 'react-icons/gr';
 import { TbLoader3 } from 'react-icons/tb';
+import AddUserAddressPage from '../../profile/address/AddUserAddressPage';
 
 interface MyAddressesProps {
   onBack: () => void;
@@ -18,6 +19,7 @@ interface Address {
   lng: number;
   address: string;
 }
+
 const MyAddresses: React.FC<MyAddressesProps> = ({ onBack }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -84,133 +86,63 @@ const MyAddresses: React.FC<MyAddressesProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="w-full min-h-screen  bg-white py-[2.3vh] px-[.8vh]">
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-[1vh]">
-          <div className="flex items-center">
+    <div className="h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 overflow-y-scroll hide-scrollbar pb-[7vh]">
+      {/* Header */}
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-6 pb-16 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-center gap-3">
             <button
-                onClick={onBack}
-                className="mr-[1.5vh] py-[1.5vh] hover:bg-stone-200 rounded-full transition-colors"
+              onClick={onBack}
+              className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors"
             >
-                <IoChevronBackOutline className='text-[2.5vh]'/>
+              <IoChevronBackOutline className='text-white text-xl'/>
             </button>
-            <h1 className="text-2xl font-semibold text-stone-800">My Addresses</h1>
+            <h1 className="text-xl font-semibold text-white">My Addresses</h1>
           </div>
-          {/* <button
-            onClick={() => setShowAddForm(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors"
-          >
-            <FaPlus className="mr-2" />
-            Add Address
-          </button> */}
         </div>
+      </div>
 
-        {/* Add Address Form */}
-        {showAddForm && (
-          <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <h2 className="text-lg font-semibold text-stone-800 mb-4">Add New Address</h2>
-            <form onSubmit={handleAddAddress} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">
-                  Nickname
-                </label>
-                <input
-                  type="text"
-                  value={newAddress.nickname}
-                  onChange={(e) => setNewAddress({ ...newAddress, nickname: e.target.value })}
-                  className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Home, Work, etc."
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">
-                  Full Address
-                </label>
-                <textarea
-                  value={newAddress.address}
-                  onChange={(e) => setNewAddress({ ...newAddress, address: e.target.value })}
-                  className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  rows={3}
-                  placeholder="Enter full address"
-                  required
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">
-                    Latitude
-                  </label>
-                  <input
-                    type="number"
-                    step="any"
-                    value={newAddress.lat}
-                    onChange={(e) => setNewAddress({ ...newAddress, lat: parseFloat(e.target.value) })}
-                    className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="0.0"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">
-                    Longitude
-                  </label>
-                  <input
-                    type="number"
-                    step="any"
-                    value={newAddress.lng}
-                    onChange={(e) => setNewAddress({ ...newAddress, lng: parseFloat(e.target.value) })}
-                    className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="0.0"
-                  />
-                </div>
-              </div>
-              <div className="flex space-x-3">
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white py-2 px-4 rounded-lg transition-colors"
-                >
-                  {isLoading ? 'Adding...' : 'Add Address'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowAddForm(false)}
-                  className="flex-1 bg-stone-300 hover:bg-stone-400 text-stone-700 py-2 px-4 rounded-lg transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
-
-        {/* Add address button */}
+      {/* Add Address Button */}
+      <div className="max-w-2xl mx-auto px-4 -mt-8">
+        {/* Add Address Button */}
         <button
-          onClick={() => navigate('/add-user-address')}
-          className="flex items-center w-full shadow my-[2vh] rounded-full p-[1vh] space-x-[1vh] border-2 border-stone-200 hover:bg-stone-50 transition-colors"
+          onClick={() => setShowAddForm(true)}
+          className="w-full bg-white rounded-2xl shadow-lg shadow-gray-200/50 p-4 flex items-center gap-4 hover:shadow-xl transition-all duration-300 border border-gray-100 group active:scale-[0.98]"
         >
-            <GrSearchAdvanced className='ml-1 text-[2.5vh]'/>
-            <p className="">Add Address</p>
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-200/50 group-hover:scale-110 transition-transform duration-300">
+            <GrSearchAdvanced className='text-white text-xl'/>
+          </div>
+          <div className="flex-1 text-left">
+            <p className="font-semibold text-gray-800">Add New Address</p>
+            <p className="text-sm text-gray-500">Search for your location</p>
+          </div>
+          <div className="w-8 h-8 rounded-full bg-gray-50 group-hover:bg-gray-100 flex items-center justify-center transition-colors">
+            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
         </button>
 
         {/* Addresses List */}
-        <div className="space-y-[2vh]">
+        <div className="mt-6 space-y-1">
           {addresses.length === 0 ? (
-            <div className="bg-white p-8 text-center">
-              <FaMapMarkerAlt className="mx-auto text-stone-400 text-4xl mb-4" />
-              <h3 className="text-lg font-medium text-stone-600 mb-2">No addresses yet</h3>
-              <p className="text-stone-500 mb-4">Add your first address to get started</p>
+            <div className="bg-white rounded-2xl shadow-lg shadow-gray-200/50 py-12 text-center border border-gray-100">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center mx-auto mb-4">
+                <FaMapMarkerAlt className="text-gray-400 text-2xl" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">No addresses yet</h3>
+              <p className="text-gray-500 mb-6">Add your first address to get started</p>
               <button
                 onClick={() => setShowAddForm(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-gray-900 to-gray-800 text-white font-semibold px-6 py-3 rounded-xl shadow-lg shadow-gray-300/30 hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
               >
-                Add Address
+                <FaPlus />
+                <span>Add Address</span>
               </button>
             </div>
           ) : (
             addresses.map((address, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-sm py-[1.3vh] px-[2vh]">
+              <div key={index} className="bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-100 overflow-hidden">
                 {editingIndex === index ? (
                   <EditAddressForm
                     address={address}
@@ -219,51 +151,66 @@ const MyAddresses: React.FC<MyAddressesProps> = ({ onBack }) => {
                     isLoading={isLoading}
                   />
                 ) : (
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center mb-2">
-                        <h3 className="text-lg font-semibold text-stone-800 mr-2">
-                          {address.nickname}
-                        </h3>
-                        {index === 0 && (
-                          <span className="bg-yellow-100 text-yellow-800 text-[1.4vh] font-semibold px-[.8vh] py-[.35vh] rounded-full flex items-center">
-                            <FaStar className="mr-1 text-[1.2vh]" />
-                            Selected
-                          </span>
+                  <div className="p-5">
+                    <div className="flex items-start gap-4">
+                      {/* Icon */}
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                        index === 0 
+                          ? 'bg-gradient-to-br from-amber-400 to-orange-500 shadow-lg shadow-orange-200/50' 
+                          : 'bg-gradient-to-br from-gray-100 to-gray-200'
+                      }`}>
+                        {index === 0 ? (
+                          <FaStar className="text-white text-lg" />
+                        ) : (
+                          <FaMapMarkerAlt className="text-gray-500 text-lg" />
                         )}
                       </div>
-                      <p className="text-stone-600 mb-2 line-clamp-1">{address.address}</p>
-                      {/* {(address.lat !== 0 || address.lng !== 0) && (
-                        <p className="text-sm text-stone-500">
-                          Coordinates: {address.lat}, {address.lng}
-                        </p>
-                      )} */}
-                    </div>
-                    <div className="flex items-center space-x-2 ml-4">
+
+                      {/* Content */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="text-lg font-semibold text-gray-800">
+                            {address.nickname}
+                          </h3>
+                          {index === 0 && (
+                            <span className="px-2.5 py-0.5 bg-gradient-to-r from-amber-100 to-orange-100 text-orange-700 text-xs font-semibold rounded-full">
+                              Selected
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-gray-600 text-sm line-clamp-2">{address.address}</p>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex items-center gap-1">
                         {index !== 0 && (
-                            <button
-                                onClick={() => handleSetPrimary(index)}
-                                className="flex items-center h-fit px-[.8vh] py-[.35vh]  bg-blue-100 text-yellow-800 font-semibold  rounded-full"
-                                title="Set as primary"
-                            >
-                                {isLoading ? <TbLoader3 className='mr-[.5vh] text-[1.2vh] animate-spin mx-auto' /> : <FaRegStar className="mr-[.5vh] text-[1.2vh]" />}
-                                <p style={{lineHeight: "1"}} className="leading-0 text-[1.5vh]">Select</p>
-                            </button>
+                          <button
+                            onClick={() => handleSetPrimary(index)}
+                            className="p-2.5 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-xl transition-colors"
+                            title="Set as selected"
+                          >
+                            {isLoading ? (
+                              <TbLoader3 className='animate-spin text-lg' />
+                            ) : (
+                              <FaRegStar className="text-lg" />
+                            )}
+                          </button>
                         )}
                         <button
-                            onClick={() => setEditingIndex(index)}
-                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                            title="Edit address"
+                          onClick={() => setEditingIndex(index)}
+                          className="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
+                          title="Edit address"
                         >
-                            <FaEdit />
+                          <FaEdit className="text-lg" />
                         </button>
                         <button
-                            onClick={() => handleDeleteAddress(index)}
-                            className="text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Delete address"
+                          onClick={() => handleDeleteAddress(index)}
+                          className="p-2.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+                          title="Delete address"
                         >
-                        <FaTrash />
-                      </button>
+                          <FaTrash className="text-lg" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -272,6 +219,94 @@ const MyAddresses: React.FC<MyAddressesProps> = ({ onBack }) => {
           )}
         </div>
       </div>
+
+      {/* Add Address Form Modal */}
+      {/* {showAddForm && (
+        <div className="fixed inset-0 bg-black/0 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-amber-600 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <h2 className="text-xl font-semibold text-gray-800 mb-6">Add New Address</h2>
+              <form onSubmit={handleAddAddress} className="space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                    Nickname
+                  </label>
+                  <input
+                    type="text"
+                    value={newAddress.nickname}
+                    onChange={(e) => setNewAddress({ ...newAddress, nickname: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-300 transition-all"
+                    placeholder="Home, Work, etc."
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                    Full Address
+                  </label>
+                  <textarea
+                    value={newAddress.address}
+                    onChange={(e) => setNewAddress({ ...newAddress, address: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-300 transition-all resize-none"
+                    rows={3}
+                    placeholder="Enter full address"
+                    required
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-600 mb-2">
+                      Latitude
+                    </label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={newAddress.lat}
+                      onChange={(e) => setNewAddress({ ...newAddress, lat: parseFloat(e.target.value) })}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-300 transition-all"
+                      placeholder="0.0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-600 mb-2">
+                      Longitude
+                    </label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={newAddress.lng}
+                      onChange={(e) => setNewAddress({ ...newAddress, lng: parseFloat(e.target.value) })}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-300 transition-all"
+                      placeholder="0.0"
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="flex-1 bg-gradient-to-r from-gray-900 to-gray-800 text-white font-semibold py-3 rounded-xl shadow-lg shadow-gray-300/30 hover:shadow-xl transition-all duration-300 active:scale-[0.98] disabled:opacity-50"
+                  >
+                    {isLoading ? 'Adding...' : 'Add Address'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowAddForm(false)}
+                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl transition-all duration-300 active:scale-[0.98]"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )} */}
+      {showAddForm && (
+        <div className="fixed inset-0 h-screen w-screen">
+          <AddUserAddressPage show={showAddForm}/>
+        </div>  
+      )}
     </div>
   );
 };
@@ -290,51 +325,54 @@ const EditAddressForm: React.FC<EditAddressFormProps> = ({ address, onSave, onCa
     e.preventDefault();
     onSave(editedAddress);
   };
-return (
-  <div className="space-y-4">
-    <div className="bg-stone-50 p-4 rounded-lg">
-      <div className="flex items-center mb-2">
-        <h4 className="text-sm font-medium text-stone-700">Full Address</h4>
+
+  return (
+    <div className="p-5">
+      {/* Current Address Display */}
+      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-4 mb-5">
+        <div className="flex items-center gap-2 mb-2">
+          <FaMapMarkerAlt className="text-gray-400" />
+          <h4 className="text-sm font-medium text-gray-600">Current Address</h4>
+        </div>
+        <p className="text-gray-700 text-sm">{address.address}</p>
+        {(address.lat !== 0 || address.lng !== 0) && (
+          <p className="text-xs text-gray-500 mt-1">
+            Coordinates: {address.lat.toFixed(4)}, {address.lng.toFixed(4)}
+          </p>
+        )}
       </div>
-      <p className="text-stone-600 text-sm">{address.address}</p>
-      {(address.lat !== 0 || address.lng !== 0) && (
-        <p className="text-xs text-stone-500 mt-1">
-          Coordinates: {address.lat}, {address.lng}
-        </p>
-      )}
+      
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <label className="block text-sm font-medium text-gray-600 mb-2">
+            Nickname
+          </label>
+          <input
+            type="text"
+            value={editedAddress.nickname}
+            onChange={(e) => setEditedAddress({ ...editedAddress, nickname: e.target.value })}
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-300 transition-all"
+            required
+          />
+        </div>
+        <div className="flex gap-3">
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="flex-1 bg-gradient-to-r from-gray-900 to-gray-800 text-white font-semibold py-3 rounded-xl shadow-lg shadow-gray-300/30 hover:shadow-xl transition-all duration-300 active:scale-[0.98] disabled:opacity-50"
+          >
+            {isLoading ? 'Saving...' : 'Save Changes'}
+          </button>
+          <button
+            type="button"
+            onClick={onCancel}
+            className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl transition-all duration-300 active:scale-[0.98]"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
     </div>
-    
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-stone-700 mb-2">
-          Nickname
-        </label>
-        <input
-          type="text"
-          value={editedAddress.nickname}
-          onChange={(e) => setEditedAddress({ ...editedAddress, nickname: e.target.value })}
-          className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          required
-        />
-      </div>
-      <div className="flex space-x-3">
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white py-2 px-4 rounded-lg transition-colors"
-        >
-          {isLoading ? 'Saving...' : 'Save Changes'}
-        </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          className="flex-1 bg-stone-300 hover:bg-stone-400 text-stone-700 py-2 px-4 rounded-lg transition-colors"
-        >
-          Cancel
-        </button>
-      </div>
-    </form>
-  </div>
   );
 };
 
