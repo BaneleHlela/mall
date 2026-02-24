@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import StoreLayoutCard from "./supporting/StoreLayoutsCard";
 import CustomizeLayout from "./supporting/CustomizeLayout";
 import { FaPlus, FaGlobe, FaExternalLinkAlt, FaPaintBrush, FaTimes, FaCheck } from "react-icons/fa";
+import { FiLayout, FiPlus } from "react-icons/fi";
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 
@@ -68,11 +69,26 @@ const StoreDashboardLayouts = () => {
   // }, [dispatch, layouts]);
 
   if (!store) {
-    return <p>Store not found or invalid store ID: {storeId}.</p>;
+    return (
+      <div className="p-4 lg:p-6 h-full">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-full flex items-center justify-center">
+          <p className="text-slate-500">Store not found or invalid store ID.</p>
+        </div>
+      </div>
+    );
   }
 
   if (isLoading && !store) {
-    return <p>loading...</p>;
+    return (
+      <div className="p-4 lg:p-6 h-full">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-full flex items-center justify-center">
+          <div className="animate-pulse flex flex-col items-center gap-3">
+            <div className="w-10 h-10 bg-slate-200 rounded-full animate-spin"></div>
+            <p className="text-slate-500">Loading layouts...</p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const handleClick = async () => {
@@ -268,200 +284,221 @@ const StoreDashboardLayouts = () => {
   // }
 
   return (
-    <div className="relative flex flex-col items-center justify-between w-full h-full px-[1vh] mt-1 overflow-y-scroll hide-scrollbar">
-      {/* New Layout Modal */}
-      {showNewLayoutModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-y-scroll">
-          <div className="relative w-full max-w-2xl lg:mx-4 bg-white rounded-2xl shadow-2xl overflow-y-scroll lg:overflow-hidden  animate-fadeIn">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-gray-900 to-gray-800">
-              <h2 className="text-xl font-semibold text-white">Create New Website</h2>
-              <button
-                onClick={() => {
-                  setShowNewLayoutModal(false);
-                  setShowExternalLinkInput(false);
-                  setExternalLink("");
-                }}
-                className="p-2 text-white/70 hover:text-white transition-colors rounded-full hover:bg-white/10"
-              >
-                <FaTimes className="w-5 h-5" />
-              </button>
+    <div className="p-1 lg:p-3 h-full w-full">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-full flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="p-4 lg:p-5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white">
+                <FiLayout className="text-lg" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold text-slate-800">Layouts</h1>
+                <p className="text-sm text-slate-500">{storeLayouts.length} layout{storeLayouts.length !== 1 ? 's' : ''}</p>
+              </div>
             </div>
-
-            {/* Modal Content */}
-            <div className="p-6">
-              {!showExternalLinkInput ? (
-                <>
-                  <p className="mb-6 text-gray-600 text-center">
-                    Choose how you want to set up your store's website
-                  </p>
-                  
-                  <div className="grid gap-4 md:grid-cols-3">
-                    {/* Internal Option */}
-                    <button
-                      onClick={handleInternalLayout}
-                      className="group relative flex flex-col items-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl hover:border-blue-400 hover:shadow-lg transition-all duration-300"
-                    >
-                      <div className="flex items-center justify-center w-14 h-14 mb-4 bg-blue-500 rounded-full shadow-lg group-hover:scale-110 transition-transform">
-                        <FaGlobe className="w-7 h-7 text-white" />
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2">Internal Website</h3>
-                      <p className="text-sm text-gray-600 text-center mb-3">
-                        Build a beautiful website using our drag-and-drop builder with pre-designed components
-                      </p>
-                      <span className="px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
-                        FREE
-                      </span>
-                    </button>
-
-                    {/* External Option */}
-                    <button
-                      onClick={handleExternalLayout}
-                      className="group relative flex flex-col items-center p-6 bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-200 rounded-xl hover:border-purple-400 hover:shadow-lg transition-all duration-300"
-                    >
-                      <div className="flex items-center justify-center w-14 h-14 mb-4 bg-purple-500 rounded-full shadow-lg group-hover:scale-110 transition-transform">
-                        <FaExternalLinkAlt className="w-6 h-6 text-white" />
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2">External Website</h3>
-                      <p className="text-sm text-gray-600 text-center mb-3">
-                        Already have a website? Simply link your existing website to your store profile
-                      </p>
-                      <span className="px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
-                        FREE
-                      </span>
-                    </button>
-
-                    {/* Custom Option */}
-                    <button
-                      onClick={handleCustomLayout}
-                      className="group relative flex flex-col items-center p-6 bg-gradient-to-br from-amber-50 to-amber-100 border-2 border-amber-200 rounded-xl hover:border-amber-400 hover:shadow-lg transition-all duration-300"
-                    >
-                      <div className="flex items-center justify-center w-14 h-14 mb-4 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full shadow-lg group-hover:scale-110 transition-transform">
-                        <FaPaintBrush className="w-6 h-6 text-white" />
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2">Custom Website</h3>
-                      <p className="text-sm text-gray-600 text-center mb-3">
-                        Get a fully custom-designed website built specifically for your brand
-                      </p>
-                      <span className="px-3 py-1 text-xs font-semibold text-amber-700 bg-amber-100 rounded-full">
-                        Contact for Pricing
-                      </span>
-                    </button>
-                  </div>
-                </>
-              ) : (
-                /* External Link Input */
-                <div className="animate-fadeIn">
-                  <button
-                    onClick={() => setShowExternalLinkInput(false)}
-                    className="flex items-center gap-2 mb-4 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-                  >
-                    <span>← Back to options</span>
-                  </button>
-                  
-                  <div className="flex flex-col items-center">
-                    <div className="flex items-center justify-center w-16 h-16 mb-4 bg-purple-500 rounded-full shadow-lg">
-                      <FaExternalLinkAlt className="w-8 h-8 text-white" />
-                    </div>
-                    
-                    <h3 className="text-xl font-semibold text-gray-800 mb-2">Link Your External Website</h3>
-                    <p className="text-sm text-gray-600 text-center mb-6 max-w-md">
-                      Enter your existing website URL below. Customers will be directed to this website when they visit your store page.
-                    </p>
-                    
-                    <div className="w-full max-w-md">
-                      <div className="relative">
-                        <input
-                          type="text"
-                          value={externalLink}
-                          onChange={(e) => setExternalLink(e.target.value)}
-                          placeholder="www.yourwebsite.com"
-                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-400 focus:outline-none transition-colors text-gray-700"
-                        />
-                      </div>
-                      
-                      <div className="flex gap-3 mt-4">
-                        <button
-                          onClick={() => {
-                            setShowExternalLinkInput(false);
-                            setExternalLink("");
-                          }}
-                          className="flex-1 px-4 py-3 text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors font-medium"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={handleSaveExternalLink}
-                          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-white bg-purple-500 rounded-xl hover:bg-purple-600 transition-colors font-medium"
-                        >
-                          <FaCheck className="w-4 h-4" />
-                          Save Link
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            
+            <button
+              onClick={handleClick}
+              className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl font-medium text-sm hover:from-indigo-600 hover:to-purple-600 transition-all shadow-sm hover:shadow-md"
+            >
+              <FiPlus className="text-lg" />
+              New Layout
+            </button>
           </div>
         </div>
-      )}
 
-      <div>
-        <h1 className="text-center text-[2.4vh] font-semibold py-[1.5vh] font-[Lato] text-shadow-xs">
-          {store.name} Layouts
-        </h1>
-        {storeLayouts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/4076/4076503.png"
-            alt="Empty layouts"
-            className="w-32 opacity-80 mb-6"
-          />
-        
-          <h2 className="text-2xl font-semibold text-gray-700">No Layouts Yet</h2>
-          <p className="text-gray-500 mt-2 max-w-xs">
-            Your store doesn't have any layouts created. Build a custom layout to design your storefront.
-          </p>
-        </div>        
-        ) : (
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 px-4 max-h-[90%]">
-            {storeLayouts.map((layout) => {
-              let storeId = '';
-              if (typeof layout.store === 'object' && layout.store !== null) {
-                storeId = String(layout.store._id);
-              } else if (typeof layout.store === 'string') {
-                storeId = layout.store;
-              } else if (layout.store) {
-                storeId = String(layout.store);
-              }
-              
-              return (
-                <StoreLayoutCard
-                  key={layout._id}
-                  layout={{
-                    _id: layout._id || '',
-                    store: storeId,
-                    name: layout.name,
-                    screenshot: layout.screenshot,
-                    source: layout.source
+        {/* New Layout Modal */}
+        {showNewLayoutModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-y-scroll">
+            <div className="relative w-full max-w-2xl lg:mx-4 bg-white rounded-2xl shadow-2xl overflow-y-scroll lg:overflow-hidden animate-fadeIn">
+              {/* Modal Header */}
+              <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600">
+                <h2 className="text-xl font-semibold text-white">Create New Website</h2>
+                <button
+                  onClick={() => {
+                    setShowNewLayoutModal(false);
+                    setShowExternalLinkInput(false);
+                    setExternalLink("");
                   }}
-                  onSelect={() => handleEdit(layout._id || '')}
-                  onSetActive={() => handleSetActiveLayout(layout._id || '')}
-                  onRename={() => handleRenameLayout(layout._id || '', layout.name || 'Store Layout')}
-                  onDelete={() => handleDeleteLayout(layout._id || '')}
-                  isActive={store?.website?.layoutId === layout._id}
-                />
-              );
-            })}
+                  className="p-2 text-white/70 hover:text-white transition-colors rounded-full hover:bg-white/10"
+                >
+                  <FaTimes className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Modal Content */}
+              <div className="p-6">
+                {!showExternalLinkInput ? (
+                  <>
+                    <p className="mb-6 text-gray-600 text-center">
+                      Choose how you want to set up your store's website
+                    </p>
+                    
+                    <div className="grid gap-4 md:grid-cols-3">
+                      {/* Internal Option */}
+                      <button
+                        onClick={handleInternalLayout}
+                        className="group relative flex flex-col items-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl hover:border-blue-400 hover:shadow-lg transition-all duration-300"
+                      >
+                        <div className="flex items-center justify-center w-14 h-14 mb-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full shadow-lg group-hover:scale-110 transition-transform">
+                          <FaGlobe className="w-7 h-7 text-white" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-800 mb-2">Internal Website</h3>
+                        <p className="text-sm text-gray-600 text-center mb-3">
+                          Build a beautiful website using our drag-and-drop builder with pre-designed components
+                        </p>
+                        <span className="px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
+                          FREE
+                        </span>
+                      </button>
+
+                      {/* External Option */}
+                      <button
+                        onClick={handleExternalLayout}
+                        className="group relative flex flex-col items-center p-6 bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-200 rounded-xl hover:border-purple-400 hover:shadow-lg transition-all duration-300"
+                      >
+                        <div className="flex items-center justify-center w-14 h-14 mb-4 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full shadow-lg group-hover:scale-110 transition-transform">
+                          <FaExternalLinkAlt className="w-6 h-6 text-white" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-800 mb-2">External Website</h3>
+                        <p className="text-sm text-gray-600 text-center mb-3">
+                          Already have a website? Simply link your existing website to your store profile
+                        </p>
+                        <span className="px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
+                          FREE
+                        </span>
+                      </button>
+
+                      {/* Custom Option */}
+                      <button
+                        onClick={handleCustomLayout}
+                        className="group relative flex flex-col items-center p-6 bg-gradient-to-br from-amber-50 to-amber-100 border-2 border-amber-200 rounded-xl hover:border-amber-400 hover:shadow-lg transition-all duration-300"
+                      >
+                        <div className="flex items-center justify-center w-14 h-14 mb-4 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full shadow-lg group-hover:scale-110 transition-transform">
+                          <FaPaintBrush className="w-6 h-6 text-white" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-800 mb-2">Custom Website</h3>
+                        <p className="text-sm text-gray-600 text-center mb-3">
+                          Get a fully custom-designed website built specifically for your brand
+                        </p>
+                        <span className="px-3 py-1 text-xs font-semibold text-amber-700 bg-amber-100 rounded-full">
+                          Contact for Pricing
+                        </span>
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  /* External Link Input */
+                  <div className="animate-fadeIn">
+                    <button
+                      onClick={() => setShowExternalLinkInput(false)}
+                      className="flex items-center gap-2 mb-4 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                    >
+                      <span>← Back to options</span>
+                    </button>
+                    
+                    <div className="flex flex-col items-center">
+                      <div className="flex items-center justify-center w-16 h-16 mb-4 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full shadow-lg">
+                        <FaExternalLinkAlt className="w-8 h-8 text-white" />
+                      </div>
+                      
+                      <h3 className="text-xl font-semibold text-gray-800 mb-2">Link Your External Website</h3>
+                      <p className="text-sm text-gray-600 text-center mb-6 max-w-md">
+                        Enter your existing website URL below. Customers will be directed to this website when they visit your store page.
+                      </p>
+                      
+                      <div className="w-full max-w-md">
+                        <div className="relative">
+                          <input
+                            type="text"
+                            value={externalLink}
+                            onChange={(e) => setExternalLink(e.target.value)}
+                            placeholder="www.yourwebsite.com"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-400 focus:outline-none transition-colors text-gray-700"
+                          />
+                        </div>
+                        
+                        <div className="flex gap-3 mt-4">
+                          <button
+                            onClick={() => {
+                              setShowExternalLinkInput(false);
+                              setExternalLink("");
+                            }}
+                            className="flex-1 px-4 py-3 text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors font-medium"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={handleSaveExternalLink}
+                            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-white bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl hover:from-purple-600 hover:to-purple-700 transition-colors font-medium"
+                          >
+                            <FaCheck className="w-4 h-4" />
+                            Save Link
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         )}
-      </div>
 
-      <div className="fixed bottom-0 w-fit h-[10vh] flex flex-col justify-center items-center">
-        <button onClick={handleClick} className="flex items-center bg-black text-white rounded-[.45vh] p-[1vh] space-x-1 shadow">
-          <p className="">New Layout</p> <FaPlus className="text-[1.5vh]"/>
-        </button>
+        {/* Content Area */}
+        {storeLayouts.length === 0 ? (
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white mb-6 shadow-lg">
+              <FiLayout className="text-3xl" />
+            </div>
+            <h2 className="text-xl font-bold text-slate-800 mb-2">No Layouts Yet</h2>
+            <p className="text-slate-500 text-center max-w-md mb-6">
+              Create your first layout to design and customize your store's online presence.
+            </p>
+            <button
+              onClick={handleClick}
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl font-medium text-sm hover:from-indigo-600 hover:to-purple-600 transition-all shadow-sm hover:shadow-md"
+            >
+              <FiPlus className="text-lg" />
+              Create First Layout
+            </button>
+          </div>
+        ) : (
+          <div className="flex-1 overflow-y-auto p-4 lg:p-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-5">
+              {storeLayouts.map((layout) => {
+                let storeId = '';
+                if (typeof layout.store === 'object' && layout.store !== null) {
+                  storeId = String(layout.store._id);
+                } else if (typeof layout.store === 'string') {
+                  storeId = layout.store;
+                } else if (layout.store) {
+                  storeId = String(layout.store);
+                }
+                
+                return (
+                  <StoreLayoutCard
+                    key={layout._id}
+                    layout={{
+                      _id: layout._id || '',
+                      store: storeId,
+                      name: layout.name,
+                      screenshot: layout.screenshot,
+                      source: layout.source
+                    }}
+                    onSelect={() => handleEdit(layout._id || '')}
+                    onSetActive={() => handleSetActiveLayout(layout._id || '')}
+                    onRename={() => handleRenameLayout(layout._id || '', layout.name || 'Store Layout')}
+                    onDelete={() => handleDeleteLayout(layout._id || '')}
+                    isActive={store?.website?.layoutId === layout._id}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

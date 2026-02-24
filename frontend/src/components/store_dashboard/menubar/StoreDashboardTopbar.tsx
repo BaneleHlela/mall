@@ -1,5 +1,4 @@
 import UserDisplay from './UserDisplay'
-import { IoMdNotifications, IoMdSearch } from "react-icons/io";
 import { Fade as Hamburger } from 'hamburger-react'
 import { IoNotificationsOutline, IoSearch } from 'react-icons/io5';
 import { useState } from 'react';
@@ -8,6 +7,7 @@ import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { getStoreStatus } from '../../the_mall/home/store_card/supporting/storeStatus';
 import { toggleStoreStatus } from '../../../features/store_admin/storeAdminSlice';
 import toast, { Toaster } from 'react-hot-toast';
+import { RiVipCrown2Fill } from 'react-icons/ri';
 
 interface Props {
   isMobileMenuOpen?: boolean;
@@ -24,7 +24,7 @@ const StoreDashboardTopbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }:
   const shouldHideTopbar = window.location.href.includes('posters/view');
 
   if (shouldHideTopbar) {
-    return null; // Return null to hide the component
+    return null;
   }
 
   // Handle status toggle
@@ -75,64 +75,87 @@ const StoreDashboardTopbar = ({ isMobileMenuOpen = false, setIsMobileMenuOpen }:
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
-      <div
-        className='bg-white lg:bg-transparent font-[Outfit] flex flex-row justify-between items-center w-full min-h-[12vh] text-gray-900 px-[1.5vh] lg:px-[3.5vh]'
-      >
-        <div className="rounded-[.5vh] bg-black text-white flex flex-col justify-center lg:hidden">
-          <Hamburger toggled={isMobileMenuOpen} toggle={(toggled) => setIsMobileMenuOpen?.(toggled ? true : false)} size={29}/>
+      <div className='bg-gradient-to-r from-slate-50 to-white font-[Outfit] flex flex-row justify-between items-center w-full min-h-[12vh] text-gray-900 px-4 lg:px-8 border-b border-slate-200/80'>
+        {/* Left Section - Hamburger & Title */}
+        <div className="flex items-center gap-4">
+          {/* Mobile Hamburger */}
+          <div className="rounded-xl bg-slate-900 text-white flex items-center justify-center lg:hidden shadow-lg shadow-slate-900/20">
+            <Hamburger 
+              toggled={isMobileMenuOpen} 
+              toggle={(toggled) => setIsMobileMenuOpen?.(toggled ? true : false)} 
+              size={24}
+            />
+          </div>
+
+          {/* Title & Breadcrumb */}
+          <div className="hidden lg:flex flex-col justify-center">
+            <div className="flex items-center gap-2 text-sm text-slate-400 mb-1">
+              <span>Dashboard</span>
+              <span>/</span>
+              <span className="text-slate-600">{store?.name || 'Store'}</span>
+            </div>
+            <h1 className='text-2xl font-bold text-slate-800'>Welcome back! 👋</h1>
+          </div>
         </div>
 
-        {/* Title */}
-        <div className="hidden lg:flex flex-col justify-center h-full w-[40%] rounded-[8px]">
-          <p className='text-[4vh] font-semibold text-gray-800'>Dashboard</p>
-          <p className="line-clamp-2">Find and manage key information related to your store</p>
+        {/* Center - Searchbar (Desktop) */}
+        <div className="hidden lg:flex flex-1 max-w-xl mx-8">
+          <div className="relative w-full">
+            <IoSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-lg text-slate-400" />
+            <input 
+              type="text" 
+              placeholder="Search products, orders, customers..."
+              className="w-full h-11 rounded-xl bg-slate-100 border-2 border-transparent 
+                      focus:border-slate-300 focus:bg-white placeholder:text-slate-400 
+                      pl-11 pr-4 text-sm transition-all duration-200
+                      focus:outline-none focus:ring-4 focus:ring-slate-100"
+            />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-1 bg-slate-200 rounded-md text-xs text-slate-500 font-medium">
+              ⌘K
+            </div>
+          </div>
         </div>
 
-        {/* Searchbar */}
-        <div className="hidden lg:flex w-[40%] h-full items-center ml-[20vh] relative">
-          <IoSearch className="absolute left-[1.5vh] text-[2.2vh] text-purple-600" />
-          <input 
-            type="text" 
-            placeholder="Search..."
-            className="w-full h-[40%] rounded-[2vh] border-b-[.2vh] 
-                    shadow-[0px_0px_6px_0px_rgba(0,_0,_0,_0.1)] 
-                    border-stone-50 placeholder:text-[1.5vh] 
-                    pl-[5vh] placeholder:text-stone-400 bg-white 
-                    focus:outline-none"
-          />
-        </div>
-
-        {/* Notifs and account */}
-        <div className="h-full flex flex-row justify-end items-center lg:w-[30%] ">
-
-          {/* Open/Closed Status */}
-          <div
+        {/* Right Section - Actions */}
+        <div className="flex items-center gap-3">
+          {/* Open/Closed Status Toggle */}
+          <button
             onClick={handleStatusClick}
-            className={`flex flex-col items-center font-bold py-[.5vh] px-[1vh] space-x-1 text-white mr-[2vh] rounded-[.5vh] border transition-colors duration-200 cursor-pointer hover:opacity-80 ${
-              isLoading ? 'opacity-50 cursor-not-allowed' : ''
-            } ${isOpen ? 'bg-green-600 border-green-600' : 'bg-red-600 border-red-600'}`}
+            disabled={isLoading}
+            className={`hidden sm:flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 ${
+              isLoading 
+                ? 'opacity-50 cursor-not-allowed' 
+                : 'hover:shadow-lg active:scale-95'
+            } ${
+              isOpen 
+                ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-lg shadow-emerald-500/25' 
+                : 'bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-lg shadow-red-500/25'
+            }`}
             title={`Click to ${isOpen ? 'close' : 'open'} store manually`}
           >
             {isOpen ? (
-              <FaDoorOpen className='text-[3vh]' />
+              <>
+                <FaDoorOpen className='text-lg' />
+                <span>Open</span>
+              </>
             ) : (
-              <FaDoorClosed className='text-[3vh]' />
+              <>
+                <FaDoorClosed className='text-lg' />
+                <span>Closed</span>
+              </>
             )}
-            <p style={{ lineHeight: "1" }} className="text-[1.5vh]">
-              {isOpen ? 'open' : 'closed'}
-            </p>
-            {store?.manualStatus?.isOverridden && (
-              <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full"
-                   title="Manual override active" />
-            )}
-          </div>
+          </button>
 
-          <div className="relative flex flex-col justify-center mr-[3vh]">
-            <IoNotificationsOutline className='shadowm-sm text-[3vh] text-black' />
-            {/* Available notifs */}
-            <div className="bg-purple-600 absolute bottom-0 left-0 aspect-square rounded-full h-[35%]"></div>
-          </div>
+          {/* Notifications */}
+          <button className="relative p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 transition-colors">
+            <IoNotificationsOutline className='text-xl text-slate-600' />
+            {/* Notification Badge */}
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
+              3
+            </span>
+          </button>
 
+          {/* User Display */}
           <UserDisplay />
         </div>
       </div>

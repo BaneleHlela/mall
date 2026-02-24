@@ -147,14 +147,14 @@ export const addTeamMember = createAsyncThunk<
 
 export const deleteTeamMember = createAsyncThunk<
   Store, // response type (updated store)
-  { storeId: string; username: string }, // args type
+  { storeSlug: string; username: string }, // args type
   { rejectValue: string }
 >(
   'store/deleteTeamMember',
-  async ({ storeId, username }, { rejectWithValue }) => {
+  async ({ storeSlug, username }, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `${STORE_URL}/${storeId}/team/${username}`
+        `${STORE_URL}/${storeSlug}/team/${username}`
       );
       return response.data.store;
     } catch (err: any) {
@@ -186,7 +186,7 @@ export const deleteStoreGalleryImage = createAsyncThunk<
 export const editTeamMember = createAsyncThunk<
   Store,
   {
-    storeId: string;
+    storeSlug: string;
     username: string;
     updatedData: {
       name?: string;
@@ -195,7 +195,7 @@ export const editTeamMember = createAsyncThunk<
       imageFile?: File;
     };
   }
->('store/editTeamMember', async ({ storeId, username, updatedData }, thunkAPI) => {
+>('store/editTeamMember', async ({ storeSlug, username, updatedData }, thunkAPI) => {
   try {
     const formData = new FormData();
     if (updatedData.name) formData.append('name', updatedData.name);
@@ -203,7 +203,7 @@ export const editTeamMember = createAsyncThunk<
     if (updatedData.about) formData.append('about', updatedData.about);
     if (updatedData.imageFile) formData.append('image', updatedData.imageFile);
 
-    const res = await axios.put(`${STORE_URL}/${storeId}/team/${username}`, formData, {
+    const res = await axios.put(`${STORE_URL}/${storeSlug}/team/${username}`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
 

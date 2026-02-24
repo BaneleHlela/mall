@@ -14,7 +14,6 @@ export const StoreDashboardStatCardsBoard = () => {
   const [timeframe, setTimeframe] = useState<"today" | "week" | "month">("today");
   const [showPercentage, setShowPercentage] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const blur = true;
 
   const cycleTimeframe = (current: "today" | "week" | "month") =>
     current === "today" ? "week" : current === "week" ? "month" : "today";
@@ -36,16 +35,18 @@ export const StoreDashboardStatCardsBoard = () => {
       title: "Bill",
       value: "R123.47",
       percentage: 10,
-      color: "#ff0000",
+      color: "#ef4444",
       icon: FaMoneyBills,
+      gradient: "from-red-500 to-rose-500",
     },
     store.trades.includes("products")
       ? {
           title: "Orders Completed",
           value: "R120k",
           percentage: 10,
-          color: "#ffb000",
+          color: "#f59e0b",
           icon: PiPackageFill,
+          gradient: "from-amber-500 to-orange-500",
         }
       : null,
     store.trades.length > 0
@@ -55,6 +56,7 @@ export const StoreDashboardStatCardsBoard = () => {
           percentage: -5,
           color: "#8b5cf6",
           icon: GiMoneyStack,
+          gradient: "from-purple-500 to-violet-500",
         }
       : null,
     {
@@ -63,54 +65,61 @@ export const StoreDashboardStatCardsBoard = () => {
       percentage: 10,
       color: "#22c55e",
       icon: FaDoorOpen,
+      gradient: "from-green-500 to-emerald-500",
     },
-  ].filter(Boolean);
+  ].filter(Boolean) as Array<{
+    title: string;
+    value: string;
+    percentage: number;
+    color: string;
+    icon: React.ComponentType<{ className?: string }>;
+    gradient: string;
+  }>;
 
   // Desktop layout
   if (!isMobile) {
     return (
-      <div className="border-3 border-white h-[16%] w-full rounded-[1.5vh]">
-        <div className={`flex flex-row items-center justify-center w-full bg-white h-full  py-[2vh] px-[2vh] space-x-[2vh] rounded-[1.5vh] shadow-[0px_14px_13px_-19px_rgba(0,_0,_0,_0.1)]
-          ${blur && "bg-white/20 ring-1 ring-black/5 shadow blur"} 
-        `}>
-          {cards.map((card, idx) => (
-            <div key={idx} className="flex items-center space-x-[2vh]">
-              <StoreDashboardOverviewStatCard
-                title={card.title}
-                value={card.value}
-                percentage={card.percentage}
-                timeframe={timeframe}
-                onTimeframeChange={() => setTimeframe((prev) => cycleTimeframe(prev))}
-                showPercentage={showPercentage}
-                onValueToggle={() => setShowPercentage((prev) => !prev)}
-                icon={card.icon}
-                color={card.color}
-              />
-              {idx !== cards.length - 1 && (
-                <div className="w-[.1vh] h-[80%] bg-gray-300"></div>
-              )}
-            </div>
-          ))}
-        </div>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+        {cards.map((card, idx) => (
+          <div
+            key={idx}
+            className="group relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-100 overflow-hidden"
+          >
+            {/* Background gradient decoration */}
+            <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${card.gradient} opacity-5 rounded-full -translate-y-8 translate-x-8 group-hover:scale-150 transition-transform duration-500`} />
+            
+            <StoreDashboardOverviewStatCard
+              title={card.title}
+              value={card.value}
+              percentage={card.percentage}
+              timeframe={timeframe}
+              onTimeframeChange={() => setTimeframe((prev) => cycleTimeframe(prev))}
+              showPercentage={showPercentage}
+              onValueToggle={() => setShowPercentage((prev) => !prev)}
+              icon={card.icon}
+              color={card.color}
+            />
+          </div>
+        ))}
       </div>
     );
   }
 
   // Mobile swiper layout
   return (
-    <div className="border-2 w-full border-white rounded-[1.5vh]">
-      <div className={`w-full bg-white py-[2vh] px-[1vh] rounded-[1.5vh] shadow-[0px_14px_13px_-19px_rgba(0,_0,_0,_0.1)]
-          ${blur && "ring-1 ring-black/5 shadow blur"}
-        `}>
-        <Swiper
-          modules={[Autoplay]}
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
-          spaceBetween={10}
-          slidesPerView={1}
-          loop={true}
-        >
-          {cards.map((card, idx) => (
-            <SwiperSlide key={idx}>
+    <div className="w-full">
+      <Swiper
+        modules={[Autoplay]}
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        spaceBetween={12}
+        slidesPerView={1.1}
+        loop={true}
+        className="px-1"
+      >
+        {cards.map((card, idx) => (
+          <SwiperSlide key={idx}>
+            <div className="group relative bg-white rounded-2xl p-5 shadow-sm border border-slate-100 overflow-hidden">
+              <div className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-br ${card.gradient} opacity-5 rounded-full -translate-y-6 translate-x-6`} />
               <StoreDashboardOverviewStatCard
                 title={card.title}
                 value={card.value}
@@ -122,10 +131,10 @@ export const StoreDashboardStatCardsBoard = () => {
                 icon={card.icon}
                 color={card.color}
               />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 };

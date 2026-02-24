@@ -1,6 +1,5 @@
 import React from 'react';
-import { FaUserEdit } from 'react-icons/fa';
-import { TiUserDelete } from 'react-icons/ti';
+import { FiEdit2, FiTrash2, FiUser } from 'react-icons/fi';
 
 interface TeamMemberCardProps {
   firstName: string;
@@ -24,31 +23,66 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
   deletable = true,
 }) => {
   const fullName = `${firstName} ${lastName}`;
+  const initials = `${firstName?.charAt(0) || ''}${lastName?.charAt(0) || ''}`;
 
   return (
-    <div className="aspect-[3/5] bg-white border border-stone-200 rounded-xl shadow-md overflow-hidden flex flex-col">
-      <div className="relative h-[72%] w-full">
-        <img
-          src={avatar || "/default-avatar.png"}
-          alt={fullName}
-          className="w-full h-full object-cover"
-        />
-        {/* Edit and Remove */}
-        <div onClick={onEdit} className="absolute top-[.6vh] border-[.3vh] border-yellow-500 pr-[.6vh] pl-[.8vh] rounded-[.6vh] right-[.8vh] flex flex-row items-center justify-between space-x-[.6vh] hover:scale-108">
+    <div className="group bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col">
+      {/* Avatar Section */}
+      <div className="relative h-40 bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center">
+        {avatar ? (
+          <img
+            src={avatar}
+            alt={fullName}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+            {initials || <FiUser className="text-3xl" />}
+          </div>
+        )}
+        
+        {/* Action Buttons Overlay */}
+        <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           {deletable && (
-            <button onClick={onDelete} className="text-[3vh] hover:text-red-600">
-              <TiUserDelete />
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete?.();
+              }}
+              className="w-8 h-8 rounded-lg bg-white/90 backdrop-blur-sm flex items-center justify-center text-slate-600 hover:text-red-500 hover:bg-white shadow-sm transition-all"
+            >
+              <FiTrash2 className="text-sm" />
             </button>
           )}
-          <button className="text-[2.8vh] rounded-full hover:text-green-600">
-            <FaUserEdit  />
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit?.();
+            }}
+            className="w-8 h-8 rounded-lg bg-white/90 backdrop-blur-sm flex items-center justify-center text-slate-600 hover:text-purple-500 hover:bg-white shadow-sm transition-all"
+          >
+            <FiEdit2 className="text-sm" />
           </button>
         </div>
+
+        {/* Status Badge */}
+        <div className="absolute bottom-3 left-3">
+          <span className="px-2.5 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-medium text-slate-600 shadow-sm">
+            {position}
+          </span>
+        </div>
       </div>
-      <div className="h-[28%] flex flex-col items-center justify-evenly text-center px-3 py-2">
-        <div className="font-semibold text-[2.5vh] font-[Outfit]">{fullName}</div>
-        <div className="text-[2.2vh] text-gray-500">{position}</div>
-        <div style={{lineHeight: "1.1"}} className="text-[1.8vh] text-gray-500">{about}</div>
+
+      {/* Info Section */}
+      <div className="flex-1 flex flex-col p-4">
+        <h3 className="font-semibold text-slate-800 text-base truncate">
+          {fullName}
+        </h3>
+        {about && (
+          <p className="mt-2 text-sm text-slate-500 line-clamp-2 leading-relaxed">
+            {about}
+          </p>
+        )}
       </div>
     </div>
   );

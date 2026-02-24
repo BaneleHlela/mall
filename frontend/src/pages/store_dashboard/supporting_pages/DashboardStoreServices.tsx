@@ -9,9 +9,11 @@ import { deleteService, updateService } from '../../../features/services/service
 import type { Service } from '../../../types/serviceTypes';
 import type { Product } from '../../../types/productTypes';
 import type { Package } from '../../../types/packageTypes';
+import type { Rental } from '../../../types/rentalTypes';
+import type { Donation } from '../../../types/donationTypes';
 import Swal from 'sweetalert2';
 import { clearError } from '../../../features/user/userSlice';
-import { FaPlus } from 'react-icons/fa';
+import { FiPlus, FiBriefcase } from 'react-icons/fi';
 
 const DashBoardStoreServices = () => {
   const dispatch = useAppDispatch();
@@ -38,7 +40,6 @@ const DashBoardStoreServices = () => {
 
   const handleDeleteService = async (service: Service) => {
     if (!service._id) return;
-    // Show a SweetAlert confirmation dialog
     const result = await Swal.fire({
       title: 'Are you sure?',
       text: `You are about to delete the service "${service.name}". This action cannot be undone.`,
@@ -51,28 +52,20 @@ const DashBoardStoreServices = () => {
 
     if (result.isConfirmed) {
       try {
-        // Dispatch the delete action and wait for it to complete
-        const response = await dispatch(deleteService(service._id)).unwrap();
-
-        // If successful, show success message
+        await dispatch(deleteService(service._id)).unwrap();
         await Swal.fire('Deleted!', 'The service has been deleted.', 'success');
-
-        // ✅ Close modal only after successful deletion
         setEditServiceOpen(false);
         setSelectedService(null);
         dispatch(clearError());
       } catch (error: any) {
-        // If there was an error, show it
         await Swal.fire('Error', error?.message || 'Failed to delete the service.', 'error');
       }
     }
   };
 
-
   const handleSort = (key: string) => {
     setSortConfig(prev => {
       if (prev.key === key) {
-        // toggle direction
         return { key, direction: prev.direction === 'asc' ? 'desc' : 'asc' };
       }
       return { key, direction: 'asc' };
@@ -81,7 +74,7 @@ const DashBoardStoreServices = () => {
 
   const handleStatusClick = (service: Service) => {
     if (!service._id) return;
-    const newStatus = !service.isActive; // toggle directly
+    const newStatus = !service.isActive;
 
     Swal.fire({
       title: "Change Service Status",
@@ -94,18 +87,16 @@ const DashBoardStoreServices = () => {
       cancelButtonText: "No",
       preConfirm: async () => {
         try {
-          // Dispatch the update action
           const resultAction = await dispatch(
             updateService({ id: service._id as string, data: { isActive: newStatus } })
           );
 
-          // Check if thunk was fulfilled
           if (updateService.fulfilled.match(resultAction)) {
-            return true; // continue to success alert
+            return true;
           } else {
-            // Show error message in the modal
+            const payload = resultAction.payload;
             Swal.showValidationMessage(
-              (resultAction.payload as string) || "Failed to update service status"
+              (typeof payload === 'string' ? payload : "Failed to update service status")
             );
             return false;
           }
@@ -127,8 +118,7 @@ const DashBoardStoreServices = () => {
     });
   };
 
-
-  // ✅ Filter using category and isActive
+  // Filter using category and isActive
   const filteredServices = services.filter((service) => {
     const categoryMatch = selectedCategory === '' || service.category === selectedCategory;
     const statusMatch =
@@ -139,7 +129,7 @@ const DashBoardStoreServices = () => {
     return categoryMatch && statusMatch;
   });
 
-  // ✅ Sorting function
+  // Sorting function
   const sortedServices = [...filteredServices].sort((a, b) => {
     if (!sortConfig.key) return 0;
 
@@ -168,24 +158,39 @@ const DashBoardStoreServices = () => {
     }
   });
 
-  // ✅ Apply pagination after sorting
+  // Apply pagination after sorting
   const paginatedServices = sortedServices.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
   return (
-    <div className="w-fit h-fit py-1">
-      <div className="w-[100vw] h-[88vh] lg:w-[82vw] rounded bg-white">
-        {/* Top bar: Add service + filters */}
-        <div className="h-[10%] flex flex-row justify-between items-center w-full px-[1.2vh]">
-          <button
-            className="flex items-center space-x-1 bg-gray-900 text-white text-[2vh] font-semibold px-[2.2vh] py-[1vh] rounded-[.45vh] hover:bg-white hover:text-black hover:shadow-[0px_0px_10px_7px_rgba(0,_0,_0,_0.1)]"
-            onClick={() => setAddServiceOpen(true)}
-          >
-            <p className="">Add</p> <FaPlus className='text-[1.8vh]'/>
-          </button>
-          <div className="lg:space-x-[2vh] space-x-1 flex flex-row items-center">
+    <div className="p-1 lg:p-3 h-full w-full">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-full flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="p-4 lg:p-5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white">
+                <FiBriefcase className="text-lg" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold text-slate-800">Services</h1>
+                <p className="text-sm text-slate-500">{services.length} services total</p>
+              </div>
+            </div>
+            
+            <button
+              onClick={() => setAddServiceOpen(true)}
+              className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl font-medium text-sm hover:from-emerald-600 hover:to-teal-600 transition-all shadow-sm hover:shadow-md"
+            >
+              <FiPlus className="text-lg" />
+              Add Service
+            </button>
+          </div>
+          
+          {/* Filters */}
+          <div className="flex flex-wrap items-center gap-3 mt-4">
             <DashboardFilterByCategory
               categories={categories ? categories : []}
               value={selectedCategory}
@@ -198,20 +203,21 @@ const DashBoardStoreServices = () => {
           </div>
         </div>
 
-        {/* Service Table */}
-        <div className="w-full h-[80%] overflow-scroll border-y-1 border-gray-400">
+        {/* Table */}
+        <div className="flex-1 overflow-auto">
           <DashboardStoreItemsTable
             items={paginatedServices}
             type="service"
-            onEditClick={handleEditService as (item: Service | Product | Package) => void}
-            onDeleteClick={handleDeleteService as (item: Service | Product | Package) => void}
+            onEditClick={handleEditService as (item: Service | Product | Package | Rental | Donation) => void}
+            onDeleteClick={handleDeleteService as (item: Service | Product | Package | Rental | Donation) => void}
             onSort={handleSort}
-            onStatusClick={handleStatusClick as (item: Service | Product | Package) => void}
+            onStatusClick={handleStatusClick as (item: Service | Product | Package | Rental | Donation) => void}
+            sortConfig={sortConfig}
           />
         </div>
 
         {/* Pagination */}
-        <div className="h-[10%] flex justify-center items-center">
+        <div className="p-4 border-t border-slate-100 bg-slate-50/50">
           <DashboardPagination
             currentPage={currentPage}
             totalItems={services.length}
@@ -220,33 +226,28 @@ const DashBoardStoreServices = () => {
           />
         </div>
 
-        {/* Add Service Modal */}
-        <div className="h-screen w-screen">
-          {/* Add Service Modal */}
-          <AddServiceModal
-            open={addServiceOpen}
-            onClose={() => {
-              setAddServiceOpen(false)
-              clearError()
+        {/* Modals */}
+        <AddServiceModal
+          open={addServiceOpen}
+          onClose={() => {
+            setAddServiceOpen(false)
+            clearError()
           }}
-            categories={categories || []}
-          />
+          categories={categories || []}
+        />
 
-          {/* Edit Service Modal */}
-          <AddServiceModal
-            open={editServiceOpen}
-            onClose={() => {
-              setEditServiceOpen(false);
-              setSelectedService(null);
-              clearError();
-            }}
-            categories={categories || []}
-            service={selectedService ? selectedService : undefined}
-          />
-        </div>
+        <AddServiceModal
+          open={editServiceOpen}
+          onClose={() => {
+            setEditServiceOpen(false);
+            setSelectedService(null);
+            clearError();
+          }}
+          categories={categories || []}
+          service={selectedService ? selectedService : undefined}
+        />
       </div>
     </div>
-
   );
 };
 

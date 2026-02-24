@@ -1,20 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { LuScanEye } from "react-icons/lu";
-import { MdModeEditOutline } from "react-icons/md";
-import { MdDelete } from "react-icons/md";
+import { MdModeEditOutline, MdDelete } from "react-icons/md";
 import { IoCamera } from "react-icons/io5";
-import { FiEdit } from "react-icons/fi";
-import { HiDotsVertical } from "react-icons/hi";
+import { FiEdit, FiMoreVertical, FiExternalLink, FiCheck } from "react-icons/fi";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import { captureLayoutScreenshot } from "../../../../../features/layouts/layoutSlice";
-import { GrSelect } from "react-icons/gr";
-import LoadingButton from "../../../../../components/the_mall/buttons/LoadingButton";
-import { TbLoader3 } from "react-icons/tb";
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-import { GoHomeFill } from "react-icons/go";
-import { GiHamburgerMenu } from "react-icons/gi";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import type { LayoutSource } from "../../../../../types/layoutTypes";
 
@@ -166,7 +159,6 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
     }
   };
 
-
   // Toggle menu visibility
   const toggleMenu = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -174,23 +166,40 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
   };
 
   return (
-    <div className="">
-      <p className="text-center font-[400] text-[1.8vh] line-clamp-1 lg:py-[1vh] text-shadow-2xs">{layout.name || "Store Layout"}</p>
-
-      <div className={`relative w-full pt-1 ${isActive ? 'bg-gray-700 border-white' : 'bg-white border-white'} border-2 aspect-9/18 lg:max-h-[60vh] overflow-hidden rounded-lg shadow-md`}>
-        <div className="flex justify-center h-[4%] w-full items-center text-center text-[1.6vh] font-semibold line-clamp-1">
+    <div className="group relative">
+      {/* Active Badge */}
+      {isActive && (
+        <div className="absolute -top-2 -right-2 z-20 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow-lg flex items-center gap-1">
+          <FiCheck className="w-3 h-3" />
+          Active
         </div>
-        <div className="relative h-[90%]">
+      )}
+
+      {/* Card Container */}
+      <div 
+        className={`relative w-full overflow-hidden rounded-xl border-3 transition-all duration-300 cursor-pointer
+          ${isActive 
+            ? 'border-indigo-400 shadow-lg shadow-indigo-100' 
+            : 'border-slate-200 hover:border-slate-300 hover:shadow-md'
+          }
+        `}
+        onClick={() => setShowButtons(!showButtons)}
+      >
+        {/* Preview Container - Phone-like aspect ratio */}
+        <div className="relative aspect-[9/16] bg-slate-100">
+          {/* Screenshot / Preview */}
           {isExternal ? (
             layout.screenshot ? (
               <img
                 src={layout.screenshot}
                 alt={layout.name || "External Website"}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
               />
             ) : (
               <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-purple-100 to-purple-200">
-                <FaExternalLinkAlt className="text-4xl text-purple-500 mb-2" />
+                <div className="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center mb-3">
+                  <FaExternalLinkAlt className="text-xl text-white" />
+                </div>
                 <p className="text-sm text-purple-700 font-medium text-center px-4">External Website</p>
                 {externalUrl && (
                   <p className="text-xs text-purple-500 text-center px-4 mt-1 truncate max-w-full">{externalUrl}</p>
@@ -198,134 +207,141 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
               </div>
             )
           ) : (
-            <img
-              src={layout.screenshot}
-              alt={layout.name || "Store Layout"}
-              className="w-full h-full object-contain"
-            />
+            layout.screenshot ? (
+              <img
+                src={layout.screenshot}
+                alt={layout.name || "Store Layout"}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
+                <div className="w-12 h-12 rounded-full bg-slate-300 flex items-center justify-center mb-3">
+                  <LuScanEye className="text-xl text-slate-500" />
+                </div>
+                <p className="text-sm text-slate-500 font-medium">No Preview</p>
+              </div>
+            )
           )}
 
-          {/* Menu Icon at bottom right */}
-          <button
-            onClick={toggleMenu}
-            className="absolute bottom-1 right-[45%] bg-white/20 backdrop-blur-sm text-white p-1 rounded transition-colors z-10"
-          >
-            <GiHamburgerMenu className="lg:text-[2.6vh]"/>
-          </button>
+          {/* Hover Overlay */}
+          <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-opacity duration-300 ${showButtons ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+            {/* Menu Toggle Button */}
+            <button
+              onClick={toggleMenu}
+              className="absolute top-2 right-2 w-8 h-8 bg-white/20 backdrop-blur-sm text-white rounded-lg flex items-center justify-center hover:bg-white/30 transition-colors"
+            >
+              <FiMoreVertical className="text-lg" />
+            </button>
 
-          {/* Phone-like menu overlay */}
-          {showButtons && (
-            <div className="absolute inset-0 bg-white/20 backdrop-blur flex items-center justify-center">
-              <div className="rounded-2xl p-4 lg:shadow-2xl lg:max-w-[80%]">
-                <div className={`grid ${edit ? 'grid-cols-2' : 'grid-cols-1'} gap-1 lg:gap-4`}>
-                  {/* View/Visit */}
+            {/* Action Buttons */}
+            <div className={`absolute bottom-0 left-0 right-0 p-3 transition-transform duration-300 ${showButtons ? 'translate-y-0' : 'translate-y-full group-hover:translate-y-0'}`}>
+              <div className="grid grid-cols-3 gap-2">
+                {/* View/Visit */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowButtons(false);
+                    if (isExternal) {
+                      handleViewExternal(e);
+                    } else {
+                      navigate(`/layouts/${layout._id}/preview`);
+                    }
+                  }}
+                  className="flex flex-col items-center justify-center p-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-lg transition-colors"
+                >
+                  {isExternal ? (
+                    <FiExternalLink className="text-lg text-white mb-1" />
+                  ) : (
+                    <LuScanEye className="text-lg text-white mb-1" />
+                  )}
+                  <span className="text-[10px] font-medium text-white">{isExternal ? 'Visit' : 'View'}</span>
+                </button>
+
+                {/* Edit - only for internal layouts */}
+                {!isExternal && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setShowButtons(false);
-                      if (isExternal) {
-                        handleViewExternal(e);
-                      } else {
-                        navigate(`/layouts/${layout._id}/preview`);
-                      }
+                      onSelect(layout._id);
                     }}
-                    className="flex flex-col aspect-square items-center justify-center p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-colors"
+                    className="flex flex-col items-center justify-center p-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-lg transition-colors"
                   >
-                    {isExternal ? (
-                      <>
-                        <FaExternalLinkAlt className="text-[3vh] text-green-600 mb-1" />
-                        <span className="text-[1.5vh] font-medium text-green-700">Visit</span>
-                      </>
-                    ) : (
-                      <>
-                        <LuScanEye className="text-[3vh] text-green-600 mb-1" />
-                        <span className="text-[1.5vh] font-medium text-green-700">View</span>
-                      </>
-                    )}
+                    <MdModeEditOutline className="text-lg text-white mb-1" />
+                    <span className="text-[10px] font-medium text-white">Edit</span>
                   </button>
+                )}
 
-                  {/* Edit - only for internal layouts */}
-                  {!isExternal && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowButtons(false);
-                        onSelect(layout._id);
-                      }}
-                      className="flex flex-col items-center justify-center p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
-                    >
-                      <MdModeEditOutline className="text-[3vh] text-blue-600 mb-1" />
-                      <span className="text-[1.5vh] font-medium text-blue-700">{edit ? "Edit" : "Select"}</span>
-                    </button>
-                  )}
+                {/* Set Active */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowButtons(false);
+                    handleSetActiveClick(e);
+                  }}
+                  className="flex flex-col items-center justify-center p-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-lg transition-colors"
+                >
+                  <FiCheck className="text-lg text-white mb-1" />
+                  <span className="text-[10px] font-medium text-white">Set Active</span>
+                </button>
 
-                  {edit && (
-                    <>
-                      {/* Rename */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowButtons(false);
-                          onRename();
-                        }}
-                        className="flex flex-col items-center justify-center p-3 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors"
-                      >
-                        <FiEdit className="text-[3vh] text-purple-600 mb-1" />
-                        <span className="text-[1.5vh] font-medium text-purple-700">Rename</span>
-                      </button>
+                {/* Rename */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowButtons(false);
+                    onRename();
+                  }}
+                  className="flex flex-col items-center justify-center p-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-lg transition-colors"
+                >
+                  <FiEdit className="text-lg text-white mb-1" />
+                  <span className="text-[10px] font-medium text-white">Rename</span>
+                </button>
 
-                      {/* Set Active */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowButtons(false);
-                          handleSetActiveClick(e);
-                        }}
-                        className="flex flex-col items-center justify-center lg:p-3 bg-orange-50 hover:bg-orange-100 rounded-xl transition-colors"
-                      >
-                        <GrSelect className="text-[3vh] text-orange-600 mb-1" />
-                        <p className="text-[1.5vh] font-medium text-orange-700 line-clamp-1">Set Active</p>
-                      </button>
+                {/* Capture Screenshot */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowButtons(false);
+                    handleCaptureScreenshot(e);
+                  }}
+                  className="flex flex-col items-center justify-center p-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-lg transition-colors"
+                >
+                  <IoCamera className="text-lg text-white mb-1" />
+                  <span className="text-[10px] font-medium text-white">Capture</span>
+                </button>
 
-                      {/* Delete */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowButtons(false);
-                          handleDelete();
-                        }}
-                        className="flex flex-col items-center justify-center p-3 bg-red-50 hover:bg-red-100 rounded-xl transition-colors"
-                      >
-                        <MdDelete className="text-[3vh] text-red-600 mb-1" />
-                        <span className="text-[1.5vh] font-medium text-red-700">Delete</span>
-                      </button>
-
-                      {/* Capture Screenshot */}
-                      <button
-                        style={{lineHeight: "1.1"}}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowButtons(false);
-                          handleCaptureScreenshot(e);
-                        }}
-                        className="flex flex-col items-center justify-center p-3 bg-red-50 hover:bg-red-100 rounded-xl transition-colors col-span-2"
-                      >
-                        <IoCamera className="text-[3vh] text-red-600 mb-1" />
-                        <span className="text-[1.5vh] font-medium text-red-700">
-                          {isExternal ? "Capture External Screenshot" : "Capture Screenshot"}
-                        </span>
-                      </button>
-                    </>
-                  )}
-                </div>
+                {/* Delete */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowButtons(false);
+                    handleDelete();
+                  }}
+                  className="flex flex-col items-center justify-center p-2 bg-red-500/50 backdrop-blur-sm hover:bg-red-500/70 rounded-lg transition-colors"
+                >
+                  <MdDelete className="text-lg text-white mb-1" />
+                  <span className="text-[10px] font-medium text-white">Delete</span>
+                </button>
               </div>
+            </div>
+          </div>
+
+          {/* External Badge */}
+          {isExternal && (
+            <div className="absolute top-2 left-2 bg-purple-500 text-white text-[10px] font-semibold px-2 py-1 rounded-md flex items-center gap-1">
+              <FiExternalLink className="w-3 h-3" />
+              External
             </div>
           )}
         </div>
 
-        {/* Bottom bar */}
-        <div className="flex justify-center h-[6%] w-full items-center text-center text-[1.6vh] font-semibold line-clamp-1">
-          <span className="w-10 h-[.25vh] bg-gray-300 rounded"></span>
+        {/* Card Footer - Name */}
+        <div className="p-3 bg-white border-t border-slate-100">
+          <p className="text-sm font-medium text-slate-700 truncate">{layout.name || "Store Layout"}</p>
+          <p className="text-xs text-slate-400 mt-0.5">
+            {isExternal ? 'External Link' : 'Custom Layout'}
+          </p>
         </div>
       </div>
     </div>

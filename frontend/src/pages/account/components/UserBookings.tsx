@@ -58,7 +58,7 @@ const UserBookings: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 pb-[6vh]">
             {/* Header */}
             <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-6 pb-16 px-4">
                 <div className="max-w-lg mx-auto">
@@ -102,11 +102,11 @@ const UserBookings: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 </div>
             </div>
 
-            <div className="max-w-lg mx-auto px-4 -mt-6">
+            <div className="max-w-lg mx-auto px-2 -mt-6">
                 {currentSection === "packages" && (
-                    <div className="space-y-6">
+                    <div className="space-y-[2vh]">
                         {/* Quick Book Favorites */}
-                        <div>
+                        {/* <div>
                             <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Quick Book from Favorites</h3>
                             <div className="bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-100 overflow-hidden">
                                 <div className="flex">
@@ -122,11 +122,11 @@ const UserBookings: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Booking History */}
-                        <div>
-                            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Booking History</h3>
+                        <div className='bg-white -px-1 shadow-md p-2 rounded-[1.5vh]'>
+                            <h3 className="text-sm font-semibold text-gray-800 uppercase tracking-wider mb-3">Booking History</h3>
                             <div className="bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-100 overflow-hidden">
                                 <div className="flex">
                                     <div className="w-24 h-24 bg-gradient-to-br from-emerald-100 to-teal-200 flex items-center justify-center flex-shrink-0">
@@ -150,7 +150,7 @@ const UserBookings: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         </div>
 
                         {/* Purchased Packages */}
-                        <div>
+                        <div className='px-2'>
                             <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Your Purchased Packages</h3>
                             <div className="space-y-3">
                                 {packages.length === 0 ? (

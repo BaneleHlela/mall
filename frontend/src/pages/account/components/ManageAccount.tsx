@@ -62,7 +62,7 @@ const ManageAccount: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 pb-[6vh]">
       {/* Header */}
       <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-6 pb-16 px-4">
         <div className="max-w-lg mx-auto">
@@ -78,7 +78,7 @@ const ManageAccount: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         </div>
       </div>
 
-      <div className="max-w-lg mx-auto px-4 -mt-8">
+      <div className="max-w-lg mx-auto px-4 -mt-[5vh]">
         {/* Avatar Card */}
         <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 mb-6 border border-gray-100">
           <div className="flex flex-col items-center">
@@ -109,7 +109,7 @@ const ManageAccount: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         </div>
 
         {/* Section Tabs */}
-        <div className="bg-white rounded-2xl shadow-lg shadow-gray-200/50 p-1.5 mb-6 border border-gray-100">
+        <div className="bg-white rounded-2xl -mt-[2vh] shadow-lg shadow-gray-200/50 p-1.5 mb-6 border border-gray-100">
           <div className="flex gap-1">
             <button
               onClick={() => setCurrentSection('personal-info')}

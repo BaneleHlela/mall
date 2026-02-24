@@ -5,9 +5,13 @@ import DashboardStoreItemsTable from '../../../components/store_dashboard/tables
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { deleteDonation, updateDonationIsActive } from '../../../features/donations/donationsSlice';
 import type { Donation } from '../../../types/donationTypes';
+import type { Product } from '../../../types/productTypes';
+import type { Service } from '../../../types/serviceTypes';
+import type { Package } from '../../../types/packageTypes';
+import type { Rental } from '../../../types/rentalTypes';
 import Swal from 'sweetalert2';
 import { clearError } from '../../../features/user/userSlice';
-import { FaPlus } from 'react-icons/fa';
+import { FiPlus, FiHeart } from 'react-icons/fi';
 import DonationModal from '../../../components/store_dashboard/modals/DonationModal';
 
 const DashboardStoreDonations = () => {
@@ -32,7 +36,6 @@ const DashboardStoreDonations = () => {
   };
 
   const handleDeleteDonation = async (donation: Donation) => {
-    // Show a SweetAlert confirmation dialog
     const result = await Swal.fire({
       title: 'Are you sure?',
       text: `You are about to delete the donation "${donation.name}". This action cannot be undone.`,
@@ -45,18 +48,12 @@ const DashboardStoreDonations = () => {
 
     if (result.isConfirmed) {
       try {
-        // Dispatch the delete action and wait for it to complete
-        const response = await dispatch(deleteDonation(donation._id)).unwrap();
-
-        // If successful, show success message
+        await dispatch(deleteDonation(donation._id)).unwrap();
         await Swal.fire('Deleted!', 'The donation has been deleted.', 'success');
-
-        // ✅ Close modal only after successful deletion
         setEditDonationOpen(false);
         setSelectedDonation(null);
         dispatch(clearError());
       } catch (error: any) {
-        // If there was an error, show it
         await Swal.fire('Error', error?.message || 'Failed to delete the donation.', 'error');
       }
     }
@@ -65,7 +62,6 @@ const DashboardStoreDonations = () => {
   const handleSort = (key: string) => {
     setSortConfig(prev => {
       if (prev.key === key) {
-        // toggle direction
         return { key, direction: prev.direction === 'asc' ? 'desc' : 'asc' };
       }
       return { key, direction: 'asc' };
@@ -73,7 +69,7 @@ const DashboardStoreDonations = () => {
   };
 
   const handleStatusClick = (donation: Donation) => {
-    const newStatus = !donation.isActive; // toggle directly
+    const newStatus = !donation.isActive;
 
     Swal.fire({
       title: "Change Donation Status",
@@ -86,18 +82,16 @@ const DashboardStoreDonations = () => {
       cancelButtonText: "No",
       preConfirm: async () => {
         try {
-          // Dispatch the new thunk and wait for it to finish
           const resultAction = await dispatch(
             updateDonationIsActive({ donationId: donation._id, isActive: newStatus })
           );
 
-          // Check if thunk was fulfilled
           if (updateDonationIsActive.fulfilled.match(resultAction)) {
-            return true; // continue to success alert
+            return true;
           } else {
-            // Show error message in the modal
+            const payload = resultAction.payload;
             Swal.showValidationMessage(
-              resultAction.payload || "Failed to update donation status"
+              (typeof payload === 'string' ? payload : "Failed to update donation status")
             );
             return false;
           }
@@ -119,7 +113,7 @@ const DashboardStoreDonations = () => {
     });
   };
 
-  // ✅ Filter using isActive
+  // Filter using isActive
   const filteredDonations = donations.filter((donation) => {
     const statusMatch =
       selectedStatus === '' ||
@@ -129,7 +123,7 @@ const DashboardStoreDonations = () => {
     return statusMatch;
   });
 
-  // ✅ Sorting function
+  // Sorting function
   const sortedDonations = [...filteredDonations].sort((a, b) => {
     if (!sortConfig.key) return 0;
 
@@ -141,8 +135,8 @@ const DashboardStoreDonations = () => {
 
       case 'status': {
         const order = ['Active', 'Inactive'];
-        const statusA = donation.isActive ? 'Active' : 'Inactive';
-        const statusB = donation.isActive ? 'Active' : 'Inactive';
+        const statusA = a.isActive ? 'Active' : 'Inactive';
+        const statusB = b.isActive ? 'Active' : 'Inactive';
 
         return order.indexOf(statusA) - order.indexOf(statusB);
       }
@@ -152,24 +146,39 @@ const DashboardStoreDonations = () => {
     }
   });
 
-  // ✅ Apply pagination after sorting
+  // Apply pagination after sorting
   const paginatedDonations = sortedDonations.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
   return (
-    <div className="w-fit h-fit py-1">
-      <div className="w-[100vw] h-[88vh] lg:w-[82vw] rounded bg-white">
-        {/* Top bar: Add donation + filters */}
-        <div className="h-[10%] flex flex-row justify-between items-center w-full px-[1.2vh]">
-          <button
-            className="flex items-center space-x-1 bg-gray-900 text-white text-[2vh] font-semibold px-[2.2vh] py-[1vh] rounded-[.45vh] hover:bg-white hover:text-black hover:shadow-[0px_0px_10px_7px_rgba(0,_0,_0,_0.1)]"
-            onClick={() => setAddDonationOpen(true)}
-          >
-            <p className="">Add</p> <FaPlus className='text-[1.8vh]'/>
-          </button>
-          <div className="lg:space-x-[2vh] space-x-1 flex flex-row items-center">
+    <div className="p-1 lg:p-3 h-full w-full">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-full flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="p-4 lg:p-5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-pink-500 flex items-center justify-center text-white">
+                <FiHeart className="text-lg" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold text-slate-800">Donations</h1>
+                <p className="text-sm text-slate-500">{donations.length} donations total</p>
+              </div>
+            </div>
+            
+            <button
+              onClick={() => setAddDonationOpen(true)}
+              className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-xl font-medium text-sm hover:from-rose-600 hover:to-pink-600 transition-all shadow-sm hover:shadow-md"
+            >
+              <FiPlus className="text-lg" />
+              Add Donation
+            </button>
+          </div>
+          
+          {/* Filters */}
+          <div className="flex flex-wrap items-center gap-3 mt-4">
             <DashboardFilterByStatus
               value={selectedStatus}
               onChange={setSelectedStatus}
@@ -177,20 +186,21 @@ const DashboardStoreDonations = () => {
           </div>
         </div>
 
-        {/* Donation Table */}
-        <div className="w-full h-[80%] overflow-scroll border-y-1 border-gray-400">
+        {/* Table */}
+        <div className="flex-1 overflow-auto">
           <DashboardStoreItemsTable
             items={paginatedDonations}
             type="donation"
-            onEditClick={handleEditDonation as (item: Donation) => void}
-            onDeleteClick={handleDeleteDonation as (item: Donation) => void}
+            onEditClick={handleEditDonation as (item: Product | Service | Package | Rental | Donation) => void}
+            onDeleteClick={handleDeleteDonation as (item: Product | Service | Package | Rental | Donation) => void}
             onSort={handleSort}
-            onStatusClick={handleStatusClick as (item: Donation) => void}
+            onStatusClick={handleStatusClick as (item: Product | Service | Package | Rental | Donation) => void}
+            sortConfig={sortConfig}
           />
         </div>
 
         {/* Pagination */}
-        <div className="h-[10%] flex justify-center items-center">
+        <div className="p-4 border-t border-slate-100 bg-slate-50/50">
           <DashboardPagination
             currentPage={currentPage}
             totalItems={donations.length}
@@ -199,31 +209,26 @@ const DashboardStoreDonations = () => {
           />
         </div>
 
-        {/* Add Donation Modal */}
-        <div className="h-screen w-screen">
-          {/* Add Donation Modal */}
-          <DonationModal
-            open={addDonationOpen}
-            onClose={() => {
-              setAddDonationOpen(false)
-              clearError()
+        {/* Modals */}
+        <DonationModal
+          open={addDonationOpen}
+          onClose={() => {
+            setAddDonationOpen(false)
+            clearError()
           }}
-          />
+        />
 
-          {/* Edit Donation Modal */}
-          <DonationModal
-            open={editDonationOpen}
-            onClose={() => {
-              setEditDonationOpen(false);
-              setSelectedDonation(null);
-              clearError();
-            }}
-            donation={selectedDonation ? selectedDonation : undefined}
-          />
-        </div>
+        <DonationModal
+          open={editDonationOpen}
+          onClose={() => {
+            setEditDonationOpen(false);
+            setSelectedDonation(null);
+            clearError();
+          }}
+          donation={selectedDonation ? selectedDonation : undefined}
+        />
       </div>
     </div>
-
   );
 };
 

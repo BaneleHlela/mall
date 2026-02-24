@@ -12,7 +12,7 @@ import type { Rental } from '../../../types/rentalTypes';
 import type { Donation } from '../../../types/donationTypes';
 import Swal from 'sweetalert2';
 import { clearError } from '../../../features/user/userSlice';
-import { FaPlus } from 'react-icons/fa';
+import { FiPlus, FiGift } from 'react-icons/fi';
 import DashboardFilterByCategory from '../../../components/store_dashboard/extras/DashboardFilterByCategory';
 
 const DashBoardStorePackages = () => {
@@ -32,8 +32,6 @@ const DashBoardStorePackages = () => {
 
   const itemsPerPage = 15;
 
- 
-
   const handleEditPackage = (pkg: Package) => {
     setSelectedPackage(pkg);
     setEditPackageOpen(true);
@@ -41,7 +39,6 @@ const DashBoardStorePackages = () => {
 
   const handleDeletePackage = async (pkg: Package) => {
     if (!pkg._id) return;
-    // Show a SweetAlert confirmation dialog
     const result = await Swal.fire({
       title: 'Are you sure?',
       text: `You are about to delete the package "${pkg.name}". This action cannot be undone.`,
@@ -54,25 +51,18 @@ const DashBoardStorePackages = () => {
 
     if (result.isConfirmed) {
       try {
-        // Dispatch the delete action and wait for it to complete
-        const response = await dispatch(deletePackage(pkg._id)).unwrap();
-
-        // If successful, show success message
+        await dispatch(deletePackage(pkg._id)).unwrap();
         await Swal.fire('Deleted!', 'The package has been deleted.', 'success');
-
         dispatch(clearError());
       } catch (error: any) {
-        // If there was an error, show it
         await Swal.fire('Error', error?.message || 'Failed to delete the package.', 'error');
       }
     }
   };
 
-
   const handleSort = (key: string) => {
     setSortConfig(prev => {
       if (prev.key === key) {
-        // toggle direction
         return { key, direction: prev.direction === 'asc' ? 'desc' : 'asc' };
       }
       return { key, direction: 'asc' };
@@ -81,7 +71,7 @@ const DashBoardStorePackages = () => {
 
   const handleStatusClick = (pkg: Package) => {
     if (!pkg._id) return;
-    const newStatus = !pkg.isActive; // toggle directly
+    const newStatus = !pkg.isActive;
 
     Swal.fire({
       title: "Change Package Status",
@@ -94,18 +84,16 @@ const DashBoardStorePackages = () => {
       cancelButtonText: "No",
       preConfirm: async () => {
         try {
-          // Dispatch the update action
           const resultAction = await dispatch(
             updatePackage({ id: pkg._id, data: { isActive: newStatus } })
           );
 
-          // Check if thunk was fulfilled
           if (updatePackage.fulfilled.match(resultAction)) {
-            return true; // continue to success alert
+            return true;
           } else {
-            // Show error message in the modal
+            const payload = resultAction.payload;
             Swal.showValidationMessage(
-              (resultAction.payload as string) || "Failed to update package status"
+              (typeof payload === 'string' ? payload : "Failed to update package status")
             );
             return false;
           }
@@ -127,8 +115,7 @@ const DashBoardStorePackages = () => {
     });
   };
 
-
-  // ✅ Filter using isActive and category
+  // Filter using isActive and category
   const filteredPackages = packages.filter((pkg) => {
     const statusMatch =
       selectedStatus === '' ||
@@ -141,8 +128,7 @@ const DashBoardStorePackages = () => {
     return statusMatch && categoryMatch;
   });
 
-
-  // ✅ Sorting function
+  // Sorting function
   const sortedPackages = [...filteredPackages].sort((a, b) => {
     if (!sortConfig.key) return 0;
 
@@ -169,24 +155,39 @@ const DashBoardStorePackages = () => {
     }
   });
 
-  // ✅ Apply pagination after sorting
+  // Apply pagination after sorting
   const paginatedPackages = sortedPackages.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
   return (
-    <div className="w-fit h-fit py-1">
-      <div className="w-[100vw] h-[88vh] lg:w-[82vw] rounded bg-white">
-        {/* Top bar: Add package + filters */}
-        <div className="h-[10%] flex flex-row justify-between items-center w-full px-[1.2vh]">
-          <button
-            className="flex items-center space-x-1 bg-gray-900 text-white text-[2vh] font-semibold px-[2.2vh] py-[1vh] rounded-[.45vh] hover:bg-white hover:text-black hover:shadow-[0px_0px_10px_7px_rgba(0,_0,_0,_0.1)]"
-            onClick={() => setAddPackageOpen(true)}
-          >
-            <p className="">Add</p> <FaPlus className='text-[1.8vh]'/>
-          </button>
-          <div className="lg:space-x-[2vh] space-x-1 flex flex-row items-center">
+    <div className="p-1 lg:p-3 h-full w-full">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-full flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="p-4 lg:p-5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white">
+                <FiGift className="text-lg" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold text-slate-800">Packages</h1>
+                <p className="text-sm text-slate-500">{packages.length} packages total</p>
+              </div>
+            </div>
+            
+            <button
+              onClick={() => setAddPackageOpen(true)}
+              className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl font-medium text-sm hover:from-amber-600 hover:to-orange-600 transition-all shadow-sm hover:shadow-md"
+            >
+              <FiPlus className="text-lg" />
+              Add Package
+            </button>
+          </div>
+          
+          {/* Filters */}
+          <div className="flex flex-wrap items-center gap-3 mt-4">
             <DashboardFilterByCategory
               categories={categories ? categories : []}
               value={selectedCategory}
@@ -200,8 +201,8 @@ const DashBoardStorePackages = () => {
           </div>
         </div>
 
-        {/* Package Table */}
-        <div className="w-full h-[80%] overflow-scroll border-y-1 border-gray-400">
+        {/* Table */}
+        <div className="flex-1 overflow-auto">
           <DashboardStoreItemsTable
             items={paginatedPackages}
             type="package"
@@ -209,11 +210,12 @@ const DashBoardStorePackages = () => {
             onDeleteClick={handleDeletePackage as (item: Product | Service | Package | Rental | Donation) => void}
             onSort={handleSort}
             onStatusClick={handleStatusClick as (item: Product | Service | Package | Rental | Donation) => void}
+            sortConfig={sortConfig}
           />
         </div>
 
         {/* Pagination */}
-        <div className="h-[10%] flex justify-center items-center">
+        <div className="p-4 border-t border-slate-100 bg-slate-50/50">
           <DashboardPagination
             currentPage={currentPage}
             totalItems={packages.length}
@@ -222,30 +224,26 @@ const DashBoardStorePackages = () => {
           />
         </div>
 
-        {/* Add Package Modal */}
-        <div className="h-screen w-screen">
-          <AddPackageModal
-            open={addPackageOpen}
-            onClose={() => {
-              setAddPackageOpen(false)
-              clearError()
+        {/* Modals */}
+        <AddPackageModal
+          open={addPackageOpen}
+          onClose={() => {
+            setAddPackageOpen(false)
+            clearError()
           }}
-          />
+        />
 
-          {/* Edit Package Modal */}
-          <AddPackageModal
-            open={editPackageOpen}
-            onClose={() => {
-              setEditPackageOpen(false);
-              setSelectedPackage(null);
-              clearError();
-            }}
-            package={selectedPackage || undefined}
-          />
-        </div>
+        <AddPackageModal
+          open={editPackageOpen}
+          onClose={() => {
+            setEditPackageOpen(false);
+            setSelectedPackage(null);
+            clearError();
+          }}
+          package={selectedPackage || undefined}
+        />
       </div>
     </div>
-
   );
 };
 

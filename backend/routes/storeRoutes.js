@@ -34,15 +34,19 @@ import { uploadSingleFile, uploadTeamMemberImage } from "../middlewares/uploadMi
 
 const router = express.Router();
 
+// Store routes
 router.post('/add', protectRoute,  addStore);
 router.get("/my-stores", protectRoute, getStoresByOwner);
 router.get('/nearby', getStoresNearby);
 router.get('/', getStores);
 router.get("/:storeSlug", getStore);
 router.put('/edit/:storeSlug', /*protectRoute,*/ editStore);
+
+// Team Member Routes
 router.post('/:storeSlug/team', uploadTeamMemberImage, addTeamMember);
 router.delete('/:storeSlug/team/:username', deleteTeamMember);
 router.put('/:storeSlug/team/:username', uploadSingleFile('image'), editTeamMember);
+
 router.get('/demo', getDemoStores);
 
 router.put("/:storeSlug/logo", uploadSingleFile("logo"), uploadStoreLogo);
@@ -71,5 +75,7 @@ router.post('/initialize-websites', initializeStoreWebsites);
 
 // Clone store for multi-location
 router.post('/:storeId/clone', protectRoute, cloneStore);
+
+
 
 export default router;

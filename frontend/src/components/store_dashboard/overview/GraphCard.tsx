@@ -1,4 +1,3 @@
-import { MdNavigateNext } from "react-icons/md";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import {
   LineChart,
@@ -15,54 +14,81 @@ import {
 interface GraphCardProps {
   title: string
   data: { name: string; value: number }[]
-  color?: string // line color
+  color?: string
   amount?: string | number;
 }
+
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white px-4 py-3 rounded-xl shadow-lg border border-slate-100">
+        <p className="text-sm font-medium text-slate-600">{label}</p>
+        <p className="text-lg font-bold text-slate-800">{payload[0].value}</p>
+      </div>
+    );
+  }
+  return null;
+};
 
 const GraphCard: React.FC<GraphCardProps> = ({
   title,
   data,
-  color = "#4f46e5",
+  color = "#8b5cf6",
   amount = "1.2k",
 }) => {
-  const blur = true;
-  const gradientId = `gradient-${color.replace("#", "")}`
+  const gradientId = `gradient-${color.replace("#", "")}`;
 
   return (
-    <div className="w-full h-full border-3 border-white rounded-[1.2vh]">
-      <div className={`w-full h-full p-4 lg:py-[3vh] lg:pr-[4vh]  ${blur && "bg-white ring-1 ring-black/5 shadow blur"}`}>
-        <div className="w-full flex flex-row justify-between">
-          {/*  */}
-          <div className="mb-3 lg:pl-[4vh]">
-            <h2 className="text-[1.7vh] font-semibold text-gray-600">{title}</h2>
-            <h1 className="text-[3vh] font-bold">{amount}</h1>
+    <div className="w-full h-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="p-6 h-full flex flex-col">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-6">
+          <div>
+            <h2 className="text-sm font-medium text-slate-500 mb-1">{title}</h2>
+            <p className="text-3xl font-bold text-slate-800">{amount}</p>
+            <div className="flex items-center gap-1 mt-1">
+              <span className="text-green-500 text-sm font-medium">↑ 12%</span>
+              <span className="text-slate-400 text-xs">vs last week</span>
+            </div>
           </div>
-          {/* Toggle buttons */}
-          <div className="h-fit flex flex-row space-x-[.5vh]">
-            <div className="px-[.5vh] py-[.6vh] border-[.1vh] border-gray-300 rounded-[.6vh] hover:scale-105">
-              <GrPrevious className="text-[2vh]" color={color}/>
-            </div>
-            <div className="p-[.5vh] border-[.1vh] border-gray-300 rounded-[.6vh] hover:scale-105">
-              <GrNext className="text-[2vh]" color={color}/>
-            </div>
-            
+          
+          {/* Navigation buttons */}
+          <div className="flex gap-2">
+            <button className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors">
+              <GrPrevious className="text-slate-600" size={14}/>
+            </button>
+            <button className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors">
+              <GrNext className="text-slate-600" size={14}/>
+            </button>
           </div>
         </div>
-        <div className="h-[85%] flex justify-start">
+        
+        {/* Chart */}
+        <div className="flex-1 min-h-0">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data}>
-              {/* Define gradient */}
+            <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={color} stopOpacity={0.4} />
+                  <stop offset="0%" stopColor={color} stopOpacity={0.3} />
                   <stop offset="100%" stopColor={color} stopOpacity={0} />
                 </linearGradient>
               </defs>
 
-              <XAxis dataKey="name" stroke="#888" />
-              <YAxis stroke="#888" />
-              <Tooltip />
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+              <XAxis 
+                dataKey="name" 
+                stroke="#94a3b8" 
+                fontSize={12} 
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis 
+                stroke="#94a3b8" 
+                fontSize={12} 
+                tickLine={false}
+                axisLine={false}
+              />
+              <Tooltip content={<CustomTooltip />} />
               <Area
                 type="monotone"
                 dataKey="value"
@@ -73,8 +99,9 @@ const GraphCard: React.FC<GraphCardProps> = ({
                 type="monotone"
                 dataKey="value"
                 stroke={color}
-                strokeWidth={2}
+                strokeWidth={3}
                 dot={false}
+                activeDot={{ r: 6, fill: color, stroke: 'white', strokeWidth: 3 }}
               />
             </AreaChart>
           </ResponsiveContainer>

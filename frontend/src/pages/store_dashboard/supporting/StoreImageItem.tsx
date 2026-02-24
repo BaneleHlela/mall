@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { IoMdClose } from "react-icons/io";
+import { FiCheck, FiTrash2, FiEye } from "react-icons/fi";
 import type { Image } from '../../../types/storeTypes';
 import { TbLoader3 } from 'react-icons/tb';
 import { useAppSelector } from '../../../app/hooks';
@@ -18,60 +19,78 @@ const StoreImageItem: React.FC<StoreImageItemProps> = ({ img, onDelete, onUse })
 
   return (
     <div 
-      className="relative font-[Outfit]"
+      className="relative group rounded-xl overflow-hidden aspect-square cursor-pointer"
       onMouseEnter={() => setShowOptions(true)}
       onMouseLeave={() => setShowOptions(false)}
     >
       <img
         src={img.url}
         alt={`Store Image`}
-        className="w-full aspect-square object-cover aspect-square"
+        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
       />
+      
+      {/* Overlay */}
+      <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent transition-opacity duration-200 ${showOptions ? 'opacity-100' : 'opacity-0'}`} />
+      
+      {/* Action Buttons */}
       {showOptions && (
-        <div className="absolute top-0 left-0 w-full h-full rounded  flex flex-col justify-center items-center space-y-2 py-5 z-10">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-3">
           {(link.includes("posters") || link.includes("layouts") || link.includes('thumbnails')) && (
             <button 
-                onClick={() => onUse(img.url)}
-                className="w-[55%] border border-black text-white bg-gray-800 px-2 py-2 rounded-[22px] hover:scale-102"
+              onClick={() => onUse(img.url)}
+              className="flex items-center gap-2 w-full max-w-[140px] justify-center bg-white/95 backdrop-blur-sm text-slate-700 px-3 py-2 rounded-lg hover:bg-white transition-all text-sm font-medium shadow-lg"
             >
-                Select
+              <FiCheck className="text-green-500" />
+              Select
             </button>
           )}
+          
           {link.includes("images") && (
-              <button 
-                onClick={() => onDelete(img._id)}
-                className="w-[55%] border border-black text-white bg-gray-800 hover:bg-gray-700 px-2 py-2 rounded-[22px] hover:scale-102 "
-              >
-                {isLoading ? (
-                      <TbLoader3 size={20} className="animate-spin mx-auto" />
-                    ) : "Delete"
-                }
-              </button>
-           )}
+            <button 
+              onClick={() => onDelete(img._id)}
+              disabled={isLoading}
+              className="flex items-center gap-2 w-full max-w-[140px] justify-center bg-white/95 backdrop-blur-sm text-slate-700 px-3 py-2 rounded-lg hover:bg-white transition-all text-sm font-medium shadow-lg"
+            >
+              {isLoading ? (
+                <TbLoader3 size={16} className="animate-spin" />
+              ) : (
+                <FiTrash2 className="text-red-500" />
+              )}
+              Delete
+            </button>
+          )}
           
           <button 
             onClick={() => setShowPopup(true)}
-            className="w-[55%] border border-black text-black px-2 py-2 rounded-[22px] hover:scale-102 hover:bg-gray-700 hover:text-stone-200"
+            className="flex items-center gap-2 w-full max-w-[140px] justify-center bg-white/95 backdrop-blur-sm text-slate-700 px-3 py-2 rounded-lg hover:bg-white transition-all text-sm font-medium shadow-lg"
           >
+            <FiEye className="text-purple-500" />
             View
           </button>
         </div>
       )}
-      {showOptions && (
-        <div className="absolute top-0 left-0 w-full h-full rounded bg-black opacity-15 flex flex-col justify-center items-center space-y-2 py-5">
-        </div>
-      )}
-      {/* Popup Div */}
+      
+      {/* Popup Modal */}
       {showPopup && (
-        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center z-50">
-          <div className="relative bg-white rounded-md p-4 shadow-lg">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          onClick={() => setShowPopup(false)}
+        >
+          <div 
+            className="relative bg-white rounded-2xl p-2 shadow-2xl max-w-4xl max-h-[90vh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
-              className="absolute top-2 right-2 text-black shadow-md p-1 rounded-full hover:scale-102"
+              className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm text-slate-600 rounded-full hover:bg-white hover:text-slate-800 transition-all shadow-lg"
               onClick={() => setShowPopup(false)} 
             >
-              <IoMdClose size={28}/>
+              <IoMdClose size={20}/>
             </button>
-            <img src={img.url} alt="Popup Image" className="max-w-full max-h-[80vh] object-contain" />
+            <img 
+              src={img.url} 
+              alt="Preview" 
+              className="max-w-full max-h-[80vh] object-contain rounded-xl" 
+            />
           </div>
         </div>
       )}

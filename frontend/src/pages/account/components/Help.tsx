@@ -79,7 +79,7 @@ const Help: React.FC<HelpProps> = ({ onBack }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 pb-[6vh]">
       {/* Header */}
       <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-6 pb-16 px-4">
         <div className="max-w-2xl mx-auto">

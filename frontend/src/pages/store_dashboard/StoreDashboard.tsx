@@ -17,7 +17,6 @@ import DashboardStorePackages from "./supporting_pages/DashboardStorePackages";
 import DashboardStoreRentals from "./supporting_pages/DashboardStoreRentals";
 import { fetchStoreProducts } from "../../features/products/productsSlice";
 import StoreLogoSettings from "./supporting_pages/settings/StoreLogoSettings";
-import StoreThumbnailsSettings from "./supporting_pages/settings/StoreThumbnailsSettings";
 import StoreBasicSettings from "./supporting_pages/settings/StoreBasicSettings";
 import StoreTradeSettings from "./supporting_pages/settings/StoreTradeSettings";
 import StoreBusinessHoursSettings from "./supporting_pages/settings/StoreBusinessHoursSettings";
@@ -38,9 +37,6 @@ const StoreDashboard = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const dispatch = useAppDispatch();
     const { storeSlug } = useParams<{ storeSlug: string  }>();
-    // const store = useAppSelector((state: RootState) =>
-    //     storeSlug ? state.stores.myStoresById[storeSlug] : undefined
-    // );
     const store = useAppSelector((state) => state.storeAdmin.store);
     const isLoading = useAppSelector((state) => state.storeAdmin.isLoading);
     
@@ -87,51 +83,96 @@ const StoreDashboard = () => {
         }
     }, [storeSlug, dispatch]);
 
+    // Close mobile menu on route change
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [storeSlug]);
+
     if (isLoading && !store) {
-        return <>loading...</>
+        return (
+            <div className="h-screen w-screen flex items-center justify-center bg-slate-50">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 border-4 border-slate-200 border-t-purple-500 rounded-full animate-spin" />
+                    <p className="text-slate-500 font-medium">Loading dashboard...</p>
+                </div>
+            </div>
+        );
     }
     
     if (!store) {
-        return <p>Store not found or invalid store Slug.</p>;
+        return (
+            <div className="h-screen w-screen flex items-center justify-center bg-slate-50">
+                <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
+                        <svg className="w-8 h-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
+                    <h2 className="text-xl font-semibold text-slate-800 mb-2">Store not found</h2>
+                    <p className="text-slate-500">Invalid store slug or store doesn't exist.</p>
+                </div>
+            </div>
+        );
     }
 
     return (
-        <div className="h-screen w-screen flex flex-row overflow-clip">
-            <div className={`fixed h-screen w-screen ${isMobileMenuOpen && "z-19"} lg:hidden`} >
-                <StoreDashBoardMenubar store={store} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen}/>
+        <div className="min-h-screen w-screen flex flex-row bg-slate-50 overflow-hidden">
+            {/* Mobile Overlay */}
+            {isMobileMenuOpen && (
+                <div 
+                    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                />
+            )}
+            
+            {/* Sidebar */}
+            <div className={`fixed h-screen z-50 lg:relative lg:z-auto transition-transform duration-300 ease-in-out ${
+                isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+            }`}>
+                <StoreDashBoardMenubar 
+                    store={store} 
+                    isMobileMenuOpen={isMobileMenuOpen} 
+                    setIsMobileMenuOpen={setIsMobileMenuOpen}
+                />
             </div>
-            <div className="hidden lg:flex">
-            <StoreDashBoardMenubar store={store} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen}/>
-            </div>
-            <div className="flex flex-col items-center h-full w-full">
-                <StoreDashboardTopbar isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
-                <Routes>
-                    <Route path="/" element={<StoreOverview store={store} />} />
-                    <Route path="/layouts" element={<StoreDashboardLayouts />} />
-                    <Route path="/team" element={<StoreTeam />} />
-                    <Route path="/products" element={<DashboardStoreProducts />} />
-                    <Route path="/services" element={<StoreServices />} />
-                    <Route path="/packages" element={<DashboardStorePackages />} />
-                    <Route path="/rentals" element={<DashboardStoreRentals />} />
-                    <Route path="/donations" element={<DashboardStoreDonations />} />
-                    <Route path="/orders" element={<StoreOrders />} />
-                    <Route path="/bookings" element={<StoreBookings />} />
-                    <Route path="/subscriptions" element={<StoreSubscriptions />} />
-                    <Route path="/images" element={<StoreImages onImageSelect={() => {}}/>} /> 
-                    <Route path="/posters/*" element={<StoreDashboardPosters />} />
-                    <Route path="/settings" element={<StoreSettings />} />
-                    <Route path="/settings/logo" element={<StoreLogoSettings />} />
-                    <Route path="/settings/thumbnails" element={<ThumbnailsControl />} />
-                    <Route path="/settings/basic" element={<StoreBasicSettings />} />
-                    <Route path="/settings/trade" element={<StoreTradeSettings />} />
-                    <Route path="/settings/operating-hours" element={<StoreBusinessHoursSettings />} />
-                    <Route path="/settings/location" element={<StoreLocationSettings />} />
-                    <Route path="/settings/socials" element={<StoreSocialSettings />} />
-                    <Route path="/settings/about" element={<StoreAboutSettings />} />
-                </Routes>
+            
+            {/* Main Content */}
+            <div className="flex flex-col h-screen w-full overflow-hidden">
+                <StoreDashboardTopbar 
+                    isMobileMenuOpen={isMobileMenuOpen} 
+                    setIsMobileMenuOpen={setIsMobileMenuOpen} 
+                />
+                
+                {/* Page Content */}
+                <main className="flex items-center justify-center h-full w-full overflow-y-auto overflow-x-hidden">
+                    <Routes>
+                        <Route path="/" element={<StoreOverview store={store} />} />
+                        <Route path="/layouts" element={<StoreDashboardLayouts />} />
+                        <Route path="/team" element={<StoreTeam />} />
+                        <Route path="/products" element={<DashboardStoreProducts />} />
+                        <Route path="/services" element={<StoreServices />} />
+                        <Route path="/packages" element={<DashboardStorePackages />} />
+                        <Route path="/rentals" element={<DashboardStoreRentals />} />
+                        <Route path="/donations" element={<DashboardStoreDonations />} />
+                        <Route path="/orders" element={<StoreOrders />} />
+                        <Route path="/bookings" element={<StoreBookings />} />
+                        <Route path="/subscriptions" element={<StoreSubscriptions />} />
+                        <Route path="/images" element={<StoreImages onImageSelect={() => {}}/>} /> 
+                        <Route path="/posters/*" element={<StoreDashboardPosters />} />
+                        <Route path="/settings" element={<StoreSettings />} />
+                        <Route path="/settings/logo" element={<StoreLogoSettings />} />
+                        <Route path="/settings/thumbnails" element={<ThumbnailsControl />} />
+                        <Route path="/settings/basic" element={<StoreBasicSettings />} />
+                        <Route path="/settings/trade" element={<StoreTradeSettings />} />
+                        <Route path="/settings/operating-hours" element={<StoreBusinessHoursSettings />} />
+                        <Route path="/settings/location" element={<StoreLocationSettings />} />
+                        <Route path="/settings/socials" element={<StoreSocialSettings />} />
+                        <Route path="/settings/about" element={<StoreAboutSettings />} />
+                    </Routes>
+                </main>
             </div>
         </div>
-    )
+    );
 }
 
 export default StoreDashboard;

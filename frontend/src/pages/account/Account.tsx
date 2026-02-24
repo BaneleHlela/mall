@@ -85,11 +85,11 @@ const Account: React.FC = () => {
   const accountOptions = [
     { id: 'manage-account', label: 'Manage account', icon: FaCog, color: 'from-violet-500 to-purple-600', bgColor: 'bg-violet-50' },
     //{ id: 'addresses', label: 'My addresses', icon: FaHome, color: 'from-blue-500 to-cyan-600', bgColor: 'bg-blue-50' },
-    //{ id: 'purchases', label: 'My purchases', icon: FaShoppingBag, color: 'from-emerald-500 to-teal-600', bgColor: 'bg-emerald-50' },
+    { id: 'purchases', label: 'My purchases', icon: FaShoppingBag, color: 'from-emerald-500 to-teal-600', bgColor: 'bg-emerald-50' },
     { id: 'bookings', label: 'My bookings', icon: FaCalendarCheck, color: 'from-orange-500 to-amber-600', bgColor: 'bg-orange-50' },
     //{ id: 'payment-methods', label: 'Payment methods', icon: FaCreditCard, color: 'from-pink-500 to-rose-600', bgColor: 'bg-pink-50' },
-    { id: 'credit-history', label: 'Credit history', icon: FaHistory, color: 'from-indigo-500 to-blue-600', bgColor: 'bg-indigo-50' },
-    //{ id: 'offers', label: 'Offers & discounts', icon: FaGift, color: 'from-yellow-500 to-orange-600', bgColor: 'bg-yellow-50' },
+    //{ id: 'credit-history', label: 'Credit history', icon: FaHistory, color: 'from-indigo-500 to-blue-600', bgColor: 'bg-indigo-50' },
+    { id: 'offers', label: 'Offers & discounts', icon: FaGift, color: 'from-yellow-500 to-orange-600', bgColor: 'bg-yellow-50' },
     { id: 'help', label: 'Help & support', icon: FaQuestionCircle, color: 'from-gray-500 to-slate-600', bgColor: 'bg-gray-50' },
   ];
 
@@ -106,9 +106,7 @@ const Account: React.FC = () => {
           return <PaymentMethods onBack={() => setCurrentSection('main')} />;
         case 'bookings':
           return ( 
-            <ProtectedRoute>
               <UserBookings onBack={() => setCurrentSection('main')} />
-            </ProtectedRoute>
           );
         case 'credit-history':
           return <CreditHistory onBack={() => setCurrentSection('main')} />;
@@ -122,14 +120,16 @@ const Account: React.FC = () => {
     };
 
     return (
-      <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-white to-slate-50">
-        {renderSection()}
+      <div className="h-screen max-h-screen w-full bg-gradient-to-br from-slate-50 via-white to-slate-50">
+        <ProtectedRoute>
+          {renderSection()}
+        </ProtectedRoute>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen w-full max-w-md mx-auto bg-gradient-to-br from-slate-50 via-white to-slate-50 flex flex-col">
+    <div className="h-screen w-full max-w-md mx-auto bg-gradient-to-br from-slate-50 via-white to-slate-50 flex flex-col">
       {/* Header Section with Gradient Background */}
       <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-10 pb-15 px-6 overflow-hidden">
         {/* Decorative Elements */}
@@ -145,7 +145,7 @@ const Account: React.FC = () => {
             {/* Avatar Ring */}
             <div className="absolute -inset-1 bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 rounded-full opacity-75 group-hover:opacity-100 blur-sm transition-opacity duration-300"></div>
             
-            <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-white/20 backdrop-blur-sm">
+            <div className="relative w-[12vh] h-[12vh] rounded-full overflow-hidden border-4 border-white/20 backdrop-blur-sm">
               {user?.avatar ? (
                 <img 
                   src={user.avatar} 
@@ -166,13 +166,13 @@ const Account: React.FC = () => {
           </div>
           
           {/* User Name */}
-          <h2 className="mt-4 text-xl font-semibold text-white tracking-tight">
+          <h2 className="mt-[.6vh] text-xl font-semibold text-white tracking-tight">
             {user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.username || 'Guest User'}
           </h2>
           
           {/* Member Badge */}
           {isAuthenticated && (
-            <span className="mt-2 px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-xs text-white/80 font-medium">
+            <span className="mt-[.6vh] px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-xs text-white/80 font-medium">
               Member
             </span>
           )}

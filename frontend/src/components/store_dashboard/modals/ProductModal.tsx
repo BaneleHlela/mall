@@ -4,12 +4,7 @@ import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { createProduct, updateProduct } from '../../../features/products/productsSlice';
 import { TbLoader3 } from 'react-icons/tb';
 import type { Product } from '../../../types/productTypes';
-
-// ts Errors
-// You shouldn't be able to add save a product without prices for its variations.
-// Be more specific about the error, e.g. "Price for variation 'Red' is missing." or "Products require at least one image" Not just "failed to add product"
-// Confirm edit product
-// UI
+import { FiPackage, FiPlus, FiX } from 'react-icons/fi';
 
 interface ProductModalProps {
   open: boolean;
@@ -69,8 +64,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
     }
   }, [product]);
 
-  console.log(imageUrls);
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -99,11 +92,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      // Calculate how many images can be uploaded based on existing image URLs
       const remainingImagesCount = 5 - imageUrls.length;
-      // If there are more images selected than the remaining count, slice the excess
       const filesToAdd = newFiles.slice(0, remainingImagesCount);
-      // Update the images state by appending the new images, ensuring no more than 5 in total
       setImages((prev) => [...prev, ...filesToAdd].slice(0, 5));
     }
   };
@@ -119,7 +109,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
   const handleFormSubmit = async () => {
     setError(null);
 
-    // Validation
     if (!form.name.trim()) {
       setError('Product name is required.');
       return;
@@ -129,11 +118,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
       setError('Product description is required.');
       return;
     }
-
-    // if (!form.category) {
-    //   setError('Please select a category.');
-    //   return;
-    // }
 
     if (variations.length === 0) {
       if (form.price <= 0) {
@@ -207,225 +191,292 @@ const ProductModal: React.FC<ProductModalProps> = ({
     }    
   };
 
-  
-  
-  
-
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 bg-[#0000004d] flex items-center justify-center z-50">
-      <div className="bg-white max-h-screen overflow-scroll hide-scrollbar w-full max-w-md rounded-lg shadow-lg p-6 font-[Outfit]">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Add Product</h2>
-          <button onClick={onClose}>
-            <IoClose size={20} />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      
+      {/* Modal */}
+      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden animate-fadeIn">
+        {/* Header with gradient */}
+        <div className="relative bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 p-5 text-white">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
+          
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+          >
+            <IoClose className="text-white" size={18} />
           </button>
+          
+          <div className="relative flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+              <FiPackage className="text-xl" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold">{product ? 'Edit Product' : 'Add Product'}</h2>
+              <p className="text-white/80 text-sm">
+                {product ? 'Update product details' : 'Create a new product'}
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div className="space-y-3">
-          <div>
-            <label className="block text-sm font-medium">Name</label>
-            <input
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded border mt-1"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Category</label>
-            <select
-              name="category"
-              value={form.category}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded border mt-1"
-            >
-              <option value="">Select Category</option>
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Description</label>
-            <textarea
-              name="description"
-              rows={3}
-              value={form.description}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded border mt-1"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Marking</label>
-            <input
-              name="marking"
-              value={form.marking}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded border mt-1"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Stock Quantity</label>
-            <input
-              name="stockQuantity"
-              type="number"
-              value={form.stockQuantity}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded border mt-1"
-            />
-          </div>
-
-          <div>
-            <label className="text-sm font-medium">Variations</label>
-            <div className="flex gap-2 mt-1">
-              <input
-                type="text"
-                value={variationInput}
-                onChange={(e) => setVariationInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddVariation())}
-                className="w-full px-3 py-2 rounded border"
-                placeholder="e.g. Red, Medium"
-              />
-              <button
-                type="button"
-                onClick={handleAddVariation}
-                className="bg-blue-500 text-white px-4 py-2 rounded text-sm"
-              >
-                +
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {variations.map((tag) => (
-                <span
-                  key={tag}
-                  className="flex items-center bg-gray-200 text-sm px-2 py-1 rounded-full"
-                >
-                  {tag}
-                  <IoClose
-                    className="ml-1 cursor-pointer"
-                    size={16}
-                    onClick={() => handleRemoveVariation(tag)}
-                  />
-                </span>
-              ))}
-            </div>
-          </div>
-          {variations.length === 0 && (
+        {/* Content */}
+        <div className="p-5 overflow-y-auto max-h-[60vh] hide-scrollbar">
+          <div className="space-y-4">
+            {/* Name */}
             <div>
-              <label className="block text-sm font-medium">Price</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Product Name <span className="text-red-500">*</span>
+              </label>
               <input
-                type="number"
-                name="price"
-                value={form.price}
+                name="name"
+                value={form.name}
                 onChange={handleChange}
-                className="w-full px-3 py-2 rounded border mt-1"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all outline-none"
+                placeholder="Enter product name"
                 required
               />
             </div>
-          )}
-          
 
-
-          {variations.length > 0 && (
+            {/* Category */}
             <div>
-              <label className="text-sm font-medium">Set Prices</label>
-              <div className="space-y-2 mt-2">
-                {variations.map((variation) => (
-                  <div key={variation} className="flex items-center gap-2">
-                    <span className="text-sm w-1/2">{variation}</span>
-                    <input
-                      type="number"
-                      className="w-1/2 px-3 py-2 rounded border"
-                      value={priceByVariation[variation] || ''}
-                      onChange={(e) => handlePriceChange(variation, e.target.value)}
-                      placeholder="Enter price"
-                      required
-                    />
-                  </div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
+              <select
+                name="category"
+                value={form.category}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all outline-none bg-white"
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
                 ))}
+              </select>
+            </div>
+
+            {/* Description */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Description <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                name="description"
+                rows={3}
+                value={form.description}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all outline-none resize-none"
+                placeholder="Describe your product..."
+                required
+              />
+            </div>
+
+            {/* Marking & Stock Row */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Marking</label>
+                <input
+                  name="marking"
+                  value={form.marking}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all outline-none"
+                  placeholder="e.g. New, Sale"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Stock Quantity</label>
+                <input
+                  name="stockQuantity"
+                  type="number"
+                  value={form.stockQuantity}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all outline-none"
+                  min="0"
+                />
               </div>
             </div>
-          )}
-          <div className="">
-            <label className="text-sm font-medium">Images</label>
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={handleImageChange}
-                className="mt-1 block w-full"
-              />
-          </div>
 
-          <div className="w-full flex justify-center">
-              
-              {(imageUrls.length > 0 || images.length > 0) && (
-                <div className="grid grid-cols-5 gap-2 w-full max-w-5xl mt-2">
-                  
-                  {imageUrls.map((url, index) => (
-                    <div key={`existing-${index}`} className="relative aspect-square">
-                      <img
-                        src={url}
-                        alt={`existing-${index}`}
-                        className="w-full h-full object-cover rounded"
+            {/* Variations */}
+            <div>
+              <label className="text-sm font-medium text-slate-700 mb-1 block">Variations</label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={variationInput}
+                  onChange={(e) => setVariationInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddVariation())}
+                  className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all outline-none"
+                  placeholder="e.g. Red, Medium, Large"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddVariation}
+                  className="px-4 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all shadow-sm"
+                >
+                  <FiPlus />
+                </button>
+              </div>
+              {variations.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {variations.map((tag) => (
+                    <span
+                      key={tag}
+                      className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 rounded-full text-sm border border-purple-200"
+                    >
+                      {tag}
+                      <FiX
+                        className="cursor-pointer hover:text-red-500 transition-colors"
+                        size={14}
+                        onClick={() => handleRemoveVariation(tag)}
                       />
-                      <IoClose
-                        size={16}
-                        className="absolute top-1 right-1 cursor-pointer bg-white rounded-full"
-                        onClick={() =>
-                          setImageUrls(prev => prev.filter((_, i) => i !== index))
-                        }
-                      />
-                    </div>
+                    </span>
                   ))}
-
-                  {images.map((file, index) => (
-                    <div key={`new-${index}`} className="relative aspect-square">
-                      <img
-                        src={URL.createObjectURL(file)}
-                        alt={`preview-${index}`}
-                        className="w-full h-full object-cover rounded"
-                      />
-                      <IoClose
-                        size={16}
-                        className="absolute top-1 right-1 cursor-pointer bg-white rounded-full"
-                        onClick={() =>
-                          setImages(prev => prev.filter((_, i) => i !== index))
-                        }
-                      />
-                    </div>
-                  ))}
-
                 </div>
               )}
             </div>
 
-          {error && <div className="text-red-500 text-sm">{error}</div>}
+            {/* Price */}
+            {variations.length === 0 && (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Price <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">R</span>
+                  <input
+                    type="number"
+                    name="price"
+                    value={form.price}
+                    onChange={handleChange}
+                    className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all outline-none"
+                    placeholder="0.00"
+                    required
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Variation Prices */}
+            {variations.length > 0 && (
+              <div>
+                <label className="text-sm font-medium text-slate-700 mb-2 block">Set Prices for Variations</label>
+                <div className="space-y-2">
+                  {variations.map((variation) => (
+                    <div key={variation} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
+                      <span className="text-sm font-medium text-slate-700 flex-1">{variation}</span>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">R</span>
+                        <input
+                          type="number"
+                          className="w-28 pl-7 pr-3 py-2 rounded-lg border border-slate-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all outline-none text-sm"
+                          value={priceByVariation[variation] || ''}
+                          onChange={(e) => handlePriceChange(variation, e.target.value)}
+                          placeholder="0.00"
+                          required
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Images */}
+            <div>
+              <label className="text-sm font-medium text-slate-700 mb-2 block">
+                Product Images <span className="text-red-500">*</span>
+              </label>
+              <div className="border-2 border-dashed border-slate-200 rounded-xl p-4 hover:border-purple-300 transition-colors">
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageChange}
+                  className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer"
+                />
+                <p className="text-xs text-slate-400 mt-2">Upload up to 5 images (existing: {imageUrls.length})</p>
+              </div>
+            </div>
+
+            {/* Image Previews */}
+            {(imageUrls.length > 0 || images.length > 0) && (
+              <div className="grid grid-cols-5 gap-2">
+                {imageUrls.map((url, index) => (
+                  <div key={`existing-${index}`} className="relative aspect-square group">
+                    <img
+                      src={url}
+                      alt={`existing-${index}`}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                    <button
+                      onClick={() => setImageUrls(prev => prev.filter((_, i) => i !== index))}
+                      className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <FiX size={12} />
+                    </button>
+                  </div>
+                ))}
+
+                {images.map((file, index) => (
+                  <div key={`new-${index}`} className="relative aspect-square group">
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={`preview-${index}`}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                    <button
+                      onClick={() => setImages(prev => prev.filter((_, i) => i !== index))}
+                      className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <FiX size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Error Message */}
+            {error && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-xl">
+                <p className="text-red-600 text-sm">{error}</p>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="flex justify-end gap-2 mt-6">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 border rounded text-sm bg-gray-200"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleFormSubmit}
-            className="px-4 py-2 rounded text-white bg-blue-600"
-          >
-            {isLoading ? <TbLoader3 className='w-6 h-6 animate-spin mx-auto' /> : `${product ? 'Edit Product' : 'Create Product'}`}
-          </button>
+        {/* Footer */}
+        <div className="p-5 border-t border-slate-100 bg-slate-50/50">
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={onClose}
+              className="px-5 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleFormSubmit}
+              disabled={isLoading}
+              className="px-5 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl text-sm font-medium hover:from-purple-600 hover:to-pink-600 transition-all shadow-sm disabled:opacity-50 flex items-center gap-2"
+            >
+              {isLoading ? (
+                <>
+                  <TbLoader3 className="w-4 h-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                product ? 'Update Product' : 'Create Product'
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>

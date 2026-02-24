@@ -50,26 +50,31 @@ export const addStore = expressAsyncHandler(async (req, res) => {
 
 // get store
 export const getStore = expressAsyncHandler(async (req, res) => {
-    try {
+  try {
       const storeSlug = req.params.storeSlug;
-      // Check if storeSlug is a valid ObjectId or a slug
       let store;
+
       if (mongoose.Types.ObjectId.isValid(storeSlug)) {
-        // If it's a valid ObjectId, find by _id
-        store = await Store.findById(storeSlug).populate('team.member');
+          // If it's a valid ObjectId, find by _id
+          store = await Store.findById(storeSlug).populate({
+              path: 'team.member',
+          });
       } else {
-        // If it's not a valid ObjectId, assume it's a slug
-        store = await Store.findOne({ slug: storeSlug }).populate('team.member');
+          // If it's not a valid ObjectId, assume it's a slug
+          store = await Store.findOne({ slug: storeSlug }).populate({
+              path: 'team.member',
+              select: 'name email', // Select specific fields from the User model
+          });
       }
 
       if (!store) {
-        return res.status(404).json({ message: 'Store not found' });
+          return res.status(404).json({ message: 'Store not found' });
       }
 
       res.status(200).json(store);
-    } catch (error) {
+  } catch (error) {
       res.status(500).json({ error: 'Failed to retrieve store', details: error.message });
-    }
+  }
 });
 
 
@@ -679,7 +684,7 @@ export const editTeamMember = expressAsyncHandler(async (req, res) => {
 
   // Update fields
   if (name) member.name = name;
-  if (position) member.position = position;
+  if (position) member.role = position; // Map position to role
   if (about) member.about = about;
 
   // Handle image upload

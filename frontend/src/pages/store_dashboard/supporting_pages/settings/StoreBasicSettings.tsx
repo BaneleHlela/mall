@@ -5,7 +5,15 @@ import { departments } from '../../../../utils/helperObjects';
 import type { Store } from '../../../../types/storeTypes';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-import  LoadingButton  from '../../../../components/the_mall/buttons/LoadingButton';
+import LoadingButton from '../../../../components/the_mall/buttons/LoadingButton';
+import { 
+  FaStore, 
+  FaPhone, 
+  FaEnvelope, 
+  FaTag,
+  FaChevronDown,
+  FaCheck
+} from 'react-icons/fa';
 
 const mysweetalert = withReactContent(Swal);
 
@@ -99,7 +107,7 @@ const StoreBasicSettings = () => {
         icon: "error",
         title: "Validation Error",
         text: "Please fix all highlighted fields before saving.",
-        confirmButtonColor: "#d33"
+        confirmButtonColor: "#dc2626"
       });
       return;
     }
@@ -109,7 +117,7 @@ const StoreBasicSettings = () => {
         icon: "error",
         title: "Store Not Found",
         text: "Cannot update settings because the store was not loaded.",
-        confirmButtonColor: "#d33"
+        confirmButtonColor: "#dc2626"
       });
       return;
     }
@@ -130,7 +138,7 @@ const StoreBasicSettings = () => {
         icon: "success",
         title: "Saved Successfully!",
         text: "Your store settings have been updated.",
-        confirmButtonColor: "#3085d6"
+        confirmButtonColor: "#7c3aed"
       });
   
     } catch (error) {
@@ -140,116 +148,229 @@ const StoreBasicSettings = () => {
         icon: "error",
         title: "Update Failed",
         text: "Something went wrong while saving your settings. Please try again.",
-        confirmButtonColor: "#d33"
+        confirmButtonColor: "#dc2626"
       });
     }
   };
   
   return (
-    <div className='flex justify-center w-full h-full bg-white'>
-      <div className="flex flex-col justify-between items-center w-full max-w-md">
-        <h1 className="py-5 text-2xl font-[500] w-full text-center text-shadow-2xs">Basic Settings</h1>
-        <div className="flex flex-col space-y-4">
-              {/* Store Name */}
-              <div>
-              <label className="text-black">Store Name *</label>
-              <input
-                  type="text"
-                  value={form.name}
-                  onChange={e => handleInputChange('name', e.target.value)}
-                  className="w-full border-b p-2 bg-[#0000000e] focus:bg-[#00000030]"
-              />
-              {!validation.nameValid && <p className="text-red-500 text-sm">Store name is required</p>}
-              </div>
+    <div className="h-full min-h-full w-full bg-slate-50">
+      {/* Header Section */}
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-500/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-cyan-500/10 to-transparent rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+        
+        <div className="relative max-w-4xl mx-auto px-6 py-8">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white shadow-lg">
+              <FaStore className="text-2xl" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white">Name & Contact</h1>
+              <p className="text-white/60 text-sm">Basic store information and contact details</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-              {/* Store Nickname */}
-              <div>
-              <label className="text-black">Store Nickname</label>
+      {/* Content */}
+      <div className="max-w-4xl mx-auto px-4 py-6">
+        <div className="bg-white rounded-2xl shadow-lg shadow-slate-200/50 border border-slate-100 overflow-hidden">
+          {/* Form Section */}
+          <div className="p-6 space-y-6">
+            {/* Store Name */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                <FaStore className="text-blue-500" />
+                Store Name <span className="text-red-500">*</span>
+              </label>
               <input
-                  type="text"
-                  value={form.nickname}
-                  onChange={e => handleInputChange('nickname', e.target.value)}
-                  className="w-full border-b p-2 bg-[#0000000e] focus:bg-[#00000030]"
-                  placeholder="Optional nickname for your store"
+                type="text"
+                value={form.name}
+                onChange={e => handleInputChange('name', e.target.value)}
+                placeholder="Enter your store name"
+                className={`w-full px-4 py-3 bg-slate-50 border-2 rounded-xl focus:outline-none focus:ring-0 transition-colors
+                  ${!validation.nameValid 
+                    ? 'border-red-300 focus:border-red-500 bg-red-50' 
+                    : 'border-slate-200 focus:border-blue-500 bg-slate-50 focus:bg-white'
+                  }`}
               />
-              </div>
+              {!validation.nameValid && (
+                <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                  Store name is required
+                </p>
+              )}
+            </div>
 
-              {/* Department */}
-              <div>
-              <label className="text-black">Department *</label>
+            {/* Store Nickname */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                <FaTag className="text-purple-500" />
+                Store Nickname
+              </label>
+              <input
+                type="text"
+                value={form.nickname}
+                onChange={e => handleInputChange('nickname', e.target.value)}
+                placeholder="Optional nickname for your store"
+                className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-purple-500 focus:bg-white transition-colors"
+              />
+              <p className="text-slate-400 text-xs mt-2">A short, memorable name for display purposes</p>
+            </div>
+
+            {/* Department */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                <FaTag className="text-amber-500" />
+                Department <span className="text-red-500">*</span>
+              </label>
               <div className="relative">
-                  <button
+                <button
                   type="button"
                   onClick={() => setIsDeptOpen(prev => !prev)}
-                  className="w-full flex justify-between items-center border p-2 bg-[#0000000e]"
-                  >
-                  {form.departments[0] ? (departments as any)[form.departments[0]]?.full : 'Select Department'}
-                  <span>▼</span>
-                  </button>
-                  {isDeptOpen && (
-                  <ul className="absolute mt-1 w-full bg-white border rounded shadow max-h-[250px] overflow-y-auto z-10">
-                      {Object.entries(departments).map(([key, { full, description }]) => (
-                      <li
-                          key={key}
-                          onClick={() => handleDepartmentChange(key)}
-                          className={`p-2 hover:bg-gray-100 cursor-pointer ${form.departments[0] === key ? 'bg-gray-200' : ''}`}
+                  className={`w-full flex justify-between items-center px-4 py-3 bg-slate-50 border-2 rounded-xl transition-colors
+                    ${!validation.departmentValid 
+                      ? 'border-red-300 bg-red-50' 
+                      : isDeptOpen 
+                        ? 'border-amber-500 bg-white' 
+                        : 'border-slate-200 hover:border-slate-300'
+                    }`}
+                >
+                  <span className={form.departments[0] ? 'text-slate-700' : 'text-slate-400'}>
+                    {form.departments[0] ? (departments as any)[form.departments[0]]?.full : 'Select Department'}
+                  </span>
+                  <FaChevronDown className={`text-slate-400 transition-transform ${isDeptOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {isDeptOpen && (
+                  <div className="absolute z-20 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl max-h-[250px] overflow-y-auto">
+                    {Object.entries(departments).map(([key, { full, description }]) => (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => handleDepartmentChange(key)}
+                        className={`w-full text-left p-3 hover:bg-slate-50 transition-colors flex items-center gap-3
+                          ${form.departments[0] === key ? 'bg-amber-50' : ''}`}
                       >
-                          <p className="font-medium">{full}</p>
-                          <p className="text-xs text-gray-500">{description}</p>
-                      </li>
-                      ))}
-                  </ul>
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0
+                          ${form.departments[0] === key ? 'bg-amber-500 border-amber-500' : 'border-slate-300'}`}
+                        >
+                          {form.departments[0] === key && <FaCheck className="text-white text-xs" />}
+                        </div>
+                        <div>
+                          <p className="font-medium text-slate-700">{full}</p>
+                          <p className="text-xs text-slate-400">{description}</p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {!validation.departmentValid && (
+                <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                  Department is required
+                </p>
+              )}
+            </div>
+
+            {/* Slogan */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                <FaTag className="text-green-500" />
+                Slogan
+              </label>
+              <input
+                type="text"
+                value={form.slogan}
+                onChange={e => handleInputChange('slogan', e.target.value)}
+                placeholder="Your store's tagline"
+                className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-green-500 focus:bg-white transition-colors"
+              />
+              <p className="text-slate-400 text-xs mt-2">A catchy phrase that represents your brand</p>
+            </div>
+
+            {/* Contact Information */}
+            <div className="pt-4 border-t border-slate-100">
+              <h3 className="text-sm font-semibold text-slate-700 mb-4">Contact Information</h3>
+              
+              <div className="grid gap-4 sm:grid-cols-2">
+                {/* Phone */}
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                    <FaPhone className="text-blue-500" />
+                    Phone <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={form.contact.phone}
+                    onChange={e => handleInputChange('contact.phone', e.target.value)}
+                    placeholder="10-digit phone number"
+                    className={`w-full px-4 py-3 bg-slate-50 border-2 rounded-xl focus:outline-none focus:ring-0 transition-colors
+                      ${!validation.phoneValid 
+                        ? 'border-red-300 focus:border-red-500 bg-red-50' 
+                        : 'border-slate-200 focus:border-blue-500 bg-slate-50 focus:bg-white'
+                      }`}
+                  />
+                  {!validation.phoneValid && (
+                    <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                      Enter a valid phone number (10 digits)
+                    </p>
                   )}
-              </div>
-              {!validation.departmentValid && <p className="text-red-500 text-sm">Department is required</p>}
-              </div>
+                </div>
 
-              {/* Slogan */}
-              <div>
-              <label className="text-black">Slogan</label>
-              <input
-                  type="text"
-                  value={form.slogan}
-                  onChange={e => handleInputChange('slogan', e.target.value)}
-                  className="w-full border-b p-2 bg-[#0000000e] focus:bg-[#00000030]"
-              />
+                {/* Email */}
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                    <FaEnvelope className="text-purple-500" />
+                    Email <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    value={form.contact.email}
+                    onChange={e => handleInputChange('contact.email', e.target.value)}
+                    placeholder="your@email.com"
+                    className={`w-full px-4 py-3 bg-slate-50 border-2 rounded-xl focus:outline-none focus:ring-0 transition-colors
+                      ${!validation.emailValid 
+                        ? 'border-red-300 focus:border-red-500 bg-red-50' 
+                        : 'border-slate-200 focus:border-purple-500 bg-slate-50 focus:bg-white'
+                      }`}
+                  />
+                  {!validation.emailValid && (
+                    <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                      Enter a valid email address
+                    </p>
+                  )}
+                </div>
               </div>
-
-              {/* Phone */}
-              <div>
-              <label className="text-black">Phone *</label>
-              <input
-                  type="text"
-                  value={form.contact.phone}
-                  onChange={e => handleInputChange('contact.phone', e.target.value)}
-                  className={`w-full border-b p-2 bg-[#0000000e] focus:bg-[#00000030] ${!validation.phoneValid ? 'border-red-500' : ''}`}
-              />
-              {!validation.phoneValid && <p className="text-red-500 text-sm">Enter a valid phone number (10 digits)</p>}
-              </div>
-
-              {/* Email */}
-              <div>
-              <label className="text-black">Email *</label>
-              <input
-                  type="email"
-                  value={form.contact.email}
-                  onChange={e => handleInputChange('contact.email', e.target.value)}
-                  className={`w-full border-b p-2 bg-[#0000000e] focus:bg-[#00000030] ${!validation.emailValid ? 'border-red-500' : ''}`}
-              />
-              {!validation.emailValid && <p className="text-red-500 text-sm">Enter a valid email address</p>}
-              </div>
+            </div>
           </div>
-          {error && <p className='text-sm text-red-600'>{error}</p>}
-          {/* Save Button */}
-          <div className="w-full flex flex-row justify-center mb-[2vh]">
+
+          {/* Error Message */}
+          {error && (
+            <div className="px-6 pb-4">
+              <div className="bg-red-50 rounded-xl p-4 border border-red-200">
+                <p className="text-sm text-red-600">{error}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Footer */}
+          <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end">
             <button
-                type="button"
-                onClick={handleSave}
-                className="mt-5 px-4 py-2 text-white bg-[#0b032d] hover:scale-105 hover:opacity-80 disabled:bg-gray-500"
+              type="button"
+              onClick={handleSave}
+              disabled={isLoading}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
             >
-                <LoadingButton isLoading={isLoading} label="Save" />
+              <LoadingButton isLoading={isLoading} label="Save Changes" />
             </button>
           </div>
+        </div>
       </div>
     </div>
   );
