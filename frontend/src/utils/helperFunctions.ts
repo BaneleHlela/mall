@@ -344,5 +344,28 @@ export function getDynamicSizeMap() {
 }
 
 
+export const getZoomScaleClass = (zoom: number) => {
+  if (zoom <= 0.1) return 'scale-[0.1]';
+  if (zoom <= 0.2) return 'scale-[0.2]';
+  if (zoom <= 0.3) return 'scale-[0.3]';
+  if (zoom <= 0.4) return 'scale-[0.4]';
+  if (zoom <= 0.5) return 'scale-[0.5]';
+  if (zoom <= 0.6) return 'scale-[0.6]';
+  if (zoom <= 0.7) return 'scale-[0.7]';
+  if (zoom <= 0.8) return 'scale-[0.8]';
+  if (zoom <= 0.9) return 'scale-[0.9]';
+  if (zoom <= 1) return 'scale-[1]';
+  if (zoom <= 1.1) return 'scale-[1.1]';
+  if (zoom <= 1.2) return 'scale-[1.2]';
+  if (zoom <= 1.3) return 'scale-[1.3]';
+  if (zoom <= 1.4) return 'scale-[1.4]';
+  if (zoom <= 1.5) return 'scale-[1.5]';
+  if (zoom <= 1.6) return 'scale-[1.6]';
+  if (zoom <= 1.7) return 'scale-[1.7]';
+  if (zoom <= 1.8) return 'scale-[1.8]';
+  if (zoom <= 1.9) return 'scale-[1.9]';
+  if (zoom <= 2) return 'scale-[2]';
+  return 'scale-[1]';
+};
 
 

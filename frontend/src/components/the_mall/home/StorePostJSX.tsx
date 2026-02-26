@@ -102,7 +102,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
         }
 
         dispatch(
-          updateUser({
+          updateUser({ //@ts-ignore-next-line
               user: user._id, // userId
               favoriteStore: store._id, // storeId
             })
@@ -143,7 +143,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
                 fontFamily: "Momo Trust Sans",
                 lineHeight: "1.1",
                 }}
-                className="w-full text-[2.2vh] my-1 py-1 font-[500] px-[.6vh] "
+                className="w-full text-[2vh] lg:text-[2.2vh] my-1 py-1 font-[500] px-[.6vh] "
             >
                 {jsx}
             </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TbReplace } from "react-icons/tb";
 import { IoColorPaletteOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
-
+import { ChevronRight } from "lucide-react";
 
 interface SettingsContainerProps {
   name: string;
@@ -14,6 +14,8 @@ interface SettingsContainerProps {
   renamable?: boolean;
   onDeleteClick?: () => void;
   deletable?: boolean;
+  icon?: React.ReactNode;
+  isActive?: boolean;
 }
 
 const SettingsContainer: React.FC<SettingsContainerProps> = ({ 
@@ -24,7 +26,9 @@ const SettingsContainer: React.FC<SettingsContainerProps> = ({
   onRename,
   replaceble = false,
   renamable = false,
-  deletable = false
+  deletable = false,
+  icon,
+  isActive = false
 }) => {
   const [editableName, setEditableName] = useState(name);
 
@@ -40,52 +44,62 @@ const SettingsContainer: React.FC<SettingsContainerProps> = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative group">
       <div
-        className="w-full h-[7vh] text-[1.8vh] rounded-sm border-[.3vh] border-white bg-stone-50 text-gray-900 shadow-sm hover:bg-gray-900 hover:border-[.3vh] hover:border-white hover:text-white hover:scale-101 cursor-move"        
+        className={`w-full flex items-center justify-between px-[1.6vh] py-[1.2vh] rounded-xl border transition-all duration-200 cursor-pointer
+          ${isActive 
+            ? 'bg-stone-800 border-stone-700 text-white shadow-lg' 
+            : 'bg-white border-stone-200 text-stone-700 hover:bg-stone-50 hover:border-stone-300 hover:shadow-md'
+          }
+        `}
+        onClick={onClick}
       >
-        <div className="w-full h-full flex justify-between items-center pl-[1.8vh] pr-[1vh]">
+        <div className="flex items-center space-x-[1.2vh] flex-1 min-w-0">
+          {icon && (
+            <div className={`flex-shrink-0 w-[4vh] h-[4vh] rounded-lg flex items-center justify-center
+              ${isActive ? 'bg-white/10' : 'bg-stone-100'}
+            `}>
+              {icon}
+            </div>
+          )}
           {renamable ? (
             <input
               type="text"
               value={editableName}
               onChange={handleNameChange}
-              className="capitalize px-[1vh] w-[50%] border-[.3vh] border-white rounded bg-transparent outline-none"
+              onClick={(e) => e.stopPropagation()}
+              className="capitalize px-[.8vh] py-[.4vh] w-1/2 border rounded bg-transparent outline-none text-sm"
             />
           ) : (
-            <span
-              onClick={onClick}
-              className="capitalize"
-            >
-              {name}
-            </span>
+            <span className="capitalize font-medium text-[1.8vh] truncate">{name}</span>
           )}
-          <div className="space-x-2 mt-1">
+        </div>
+        
+        <div className="flex items-center space-x-1 flex-shrink-0">
+          {deletable && (
             <button 
-              className="text-[135%] cursor-pointer"
+              className="p-[1vh] rounded-lg hover:bg-red-100 text-stone-400 hover:text-red-500 transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeleteClick?.();
+              }}
             >
-              <IoColorPaletteOutline
-                onClick={onClick}
-              />
+              <AiOutlineDelete size={16} />
             </button>
-            {deletable && (
-              <button 
-                className="text-[135%] cursor-pointer hover:text-red-600"
-              >
-                <AiOutlineDelete
-                  onClick={onDeleteClick}
-                />
-              </button>
-            )}
-            {replaceble && (
-              <button 
-                className="text-[130%] cursor-pointer"
-              >
-                <TbReplace
-                  onClick={onReplaceClick}
-                />
-              </button>
-            )}
+          )}
+          {replaceble && (
+            <button 
+              className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-400 hover:text-stone-600 transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                onReplaceClick?.();
+              }}
+            >
+              <TbReplace size={16} />
+            </button>
+          )}
+          <div className={`p-1.5 rounded-lg ${isActive ? 'bg-white/10' : 'bg-stone-100'}`}>
+            <ChevronRight size={16} className={isActive ? 'text-white' : 'text-stone-500'} />
           </div>
         </div>
       </div>

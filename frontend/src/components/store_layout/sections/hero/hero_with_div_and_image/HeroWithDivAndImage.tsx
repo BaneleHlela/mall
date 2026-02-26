@@ -47,6 +47,7 @@ const HeroWithDivAndImage = () => {
               handleButtonClick({
                 type: config.button.function,
                 routes,
+                storeSlug: store?.slug as string,
                 // @ts-ignore
                 contactNumber: store?.contact?.phone,
               })

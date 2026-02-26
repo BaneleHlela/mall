@@ -64,7 +64,11 @@ const App: React.FC = () => {
           />
           <Route path="/cart" element={<MallCartPage />} />
           <Route path="/stores/:storeSlug/*" element={<StorePage />} />
-          <Route path="/my-stores" element={<MyStores />} />
+          <Route path="/my-stores" element={
+            <ProtectedRoute>
+              <MyStores />
+            </ProtectedRoute>
+            } />
           <Route path="/account" element={<Account />} />
           {/* <Route path="/my-stores" 
             element={

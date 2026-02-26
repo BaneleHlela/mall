@@ -20,11 +20,11 @@ const BorderEditor: React.FC<EditorProps> = ({
     };
 
   return (
-    <div className="space-y-1 p-2">
+    <div className="">
 
       {isAllowed("style") && (
         <OptionsToggler
-          label="Border Style"
+          label="Style"
           options={["none", "solid", "dashed", "dotted", "double", "groove"]}
           value={getSetting("style", settings, objectPath)}
           onChange={(newValue) =>
@@ -56,7 +56,7 @@ const BorderEditor: React.FC<EditorProps> = ({
 
       {isAllowed("color") && (
         <OptionsToggler
-          label="Border Color"
+          label="Color"
           options={["primary", "secondary", "accent", "quad", "pent"]}
           value={getSetting("color", settings, objectPath)}
           onChange={(newValue) =>

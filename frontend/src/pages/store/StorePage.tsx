@@ -32,6 +32,7 @@ import ErrorBoundary from "../../components/ErrorBoundary";
 import { fetchStoreRentals } from "../../features/rentals/rentalSlice";
 import { fetchStoreDonations } from "../../features/donations/donationsSlice";
 import ProtectedRoute from "../../components/the_mall/authorization/ProtectedRoute";
+import { useNavbar } from "../../utils/context/NavBarContext";
 
 const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
   const location = useLocation();
@@ -39,8 +40,23 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
   const { storeSlug: paramStoreSlug } = useParams<{ storeSlug: string }>();
   const storeSlug = propStoreSlug || paramStoreSlug
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [showWelcomeDiv, setShowWelcomeDiv] = useState(settings?.welcomeDiv?.display || false);
   const isCartRoute = location.pathname.includes('/cart'); // Check if the current route is "/cart"
+  const { hideNavbar, showNavbar } = useNavbar(); 
+  
+  // Hide Navbar if scrolling down, show if scrolling up
+    useEffect(() => {
+      let lastScrollY = window.scrollY;
+      const handleScroll = () => {
+        if (window.scrollY > lastScrollY) {
+          hideNavbar();
+        } else {
+          showNavbar();
+        }
+        lastScrollY = window.scrollY;
+      };
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }, [hideNavbar, showNavbar]);
 
   const dispatch = useAppDispatch();
   const [store, setStore] = useState<StoreType | null>(null); // Local state for the store

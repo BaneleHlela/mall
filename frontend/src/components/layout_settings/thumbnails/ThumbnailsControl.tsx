@@ -308,7 +308,7 @@ const ThumbnailsControl: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col items-center border-2 border-gray-200 rounded-md shadow-md w-full max-w-md py-4 px-4 overflow-y-scroll hide-scrollbar">
+    <div className="h-full flex flex-col max-w-md items-center border-2 border-gray-200 rounded-md shadow-md w-full max-w-md py-4 px-4 overflow-y-scroll hide-scrollbar">
       <div className="flex items-center gap-2 mb-4">
         <IoCamera size={20} className="text-gray-700" />
         <h2 className="text-lg font-semibold">Store Thumbnails</h2>

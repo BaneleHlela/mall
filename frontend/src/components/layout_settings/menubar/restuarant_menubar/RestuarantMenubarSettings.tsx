@@ -29,7 +29,7 @@ const RestuarantMenubarSettings = () => {
 
     
     return (
-        <div className='p-[.6vh] space-y-[.3vh] w-full'>
+        <div className='space-y-[.3vh] w-full'>
             {/* Topbar */}
             <FirstOrderSubSettingsContainer
                 name="Topbar"

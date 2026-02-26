@@ -156,5 +156,3 @@ export const generatePayFastSignature = (data, passPhrase = null) => {
   return crypto.createHash("md5").update(getString).digest("hex");
 }; 
 
-
-

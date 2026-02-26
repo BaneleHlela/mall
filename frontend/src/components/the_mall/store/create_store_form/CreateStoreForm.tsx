@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FormProvider, useFormContext } from './context/FormContext';
 import StepBasic from './steps/StepBasic';
@@ -10,15 +10,25 @@ import { LiaStoreSolid } from 'react-icons/lia';
 import StoreSuccessOverlay from '../StoreSuccessOverlay';
 import { createStore } from '../../../../features/stores/storeSlice';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { createLayout } from '../../../../features/layouts/layoutSlice';
-import { defaultLayoutConfig } from '../../../../utils/defaults/defaultLayoutConfig';
 import StepSocials from './steps/StepSocials';
 import StepDelivers from './steps/StepDelivers';
 import { TbLoader3 } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
-import { IoClose } from 'react-icons/io5';
+import { IoClose, IoAlertCircle } from 'react-icons/io5';
+import { FaCheck } from 'react-icons/fa';
 
 const steps = [StepBasic, StepTrade, StepBusinessHours, StepLocation, StepDelivers, StepAbout, StepSocials];
+
+const stepTitles = [
+  'Basic Details',
+  'What You Sell',
+  'Operating Hours',
+  'Location',
+  'Delivery',
+  'About',
+  'Socials'
+];
+
 interface CreateStoreFormInnerProps {
     isDemo?: boolean;
 }
@@ -33,20 +43,28 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
    const isLoading = useAppSelector((state) => state.stores.isLoading || state.layout.isLoading);
    const storeError = useAppSelector((state) => state.stores.error);
    const user = useAppSelector((state) => state.user.user);
-  
+   
   const StepComponent = steps[step];
 
-  
+  // Track which steps have been completed (have valid data)
+  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
+
   const handleNextStep = () => {
     setNextClicked(true);
-    setSubmitError(null); // Clear any previous errors
-    if (validateCurrentStep()) {
+    setSubmitError(null);
+    
+    // Validate current step
+    const isValid = validateCurrentStep();
+    
+    if (isValid) {
+      // Mark current step as completed
+      setCompletedSteps(prev => new Set(prev).add(step));
       nextStep();
     }
   };
 
   const handlePrevStep = () => {
-    setSubmitError(null); // Clear any previous errors
+    setSubmitError(null);
     prevStep();
   };
 
@@ -59,19 +77,9 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
   const handleReset = () => {
     if (window.confirm('Are you sure you want to start over? This will clear all your progress.')) {
       resetForm();
+      setCompletedSteps(new Set());
     }
   };
-  
-  const createNewLayout = async () => {
-    try {// @ts-ignore-next-line
-      const result = await dispatch(createLayout(defaultLayoutConfig)).unwrap();
-      return result._id;
-    } catch (error) {
-      console.error('Failed to create layout:', error);
-      return null;
-    }
-  };
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,11 +90,12 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
       // Validate all required fields before submission
       if (!form.name.trim()) {
         setSubmitError('Store name is required');
+        setNextClicked(true);
         return;
       }
       
       if (!form.contact.phone || !/^[0-9]{10}$/.test(form.contact.phone)) {
-        setSubmitError('Valid phone number is required');
+        setSubmitError('Valid phone number is required (10 digits)');
         return;
       }
       
@@ -165,18 +174,79 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
     }
   };
 
+  // Step Progress Indicator Component
+  const StepProgress = () => (
+    <div className="w-full mb-4">
+      <div className="flex items-center justify-between relative">
+        {/* Progress Line Background */}
+        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-[.4vh] bg-gray-200 rounded"></div>
+        {/* Progress Line Fill */}
+        <div 
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 h-[.4vh] bg-indigo-600 rounded transition-all duration-300"
+          style={{ width: `${(step / (steps.length - 1)) * 100}%` }}
+        ></div>
+        
+        {/* Step Circles */}
+        {steps.map((_, index) => {
+          const isCompleted = completedSteps.has(index) || index < step;
+          const isCurrent = index === step;
+          
+          return (
+            <div key={index} className="relative z-10 flex flex-col items-center">
+              <button
+                type="button"
+                onClick={() => {
+                  // Only allow going back to completed steps
+                  if (index < step || completedSteps.has(index)) {
+                    // Navigate to that step
+                    while (step > index) {
+                      prevStep();
+                    }
+                  }
+                }}
+                disabled={index > step && !completedSteps.has(index)}
+                className={`w-[3vh] h-[3vh] rounded-full flex items-center justify-center text-[1.8vh] font-medium transition-all duration-200 
+                  ${isCompleted 
+                    ? 'bg-indigo-600 text-white hover:bg-indigo-700' 
+                    : isCurrent 
+                      ? 'bg-indigo-600 text-white ring-4 ring-indigo-200' 
+                      : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}
+                  ${index > step && !completedSteps.has(index) ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+              >
+                {isCompleted ? <FaCheck size={12} /> : index + 1}
+              </button>
+              <span className={`text-[1.4vh] mt-1 hidden sm:block ${isCurrent ? 'text-indigo-600 font-medium' : 'text-gray-500'}`}>
+                {stepTitles[index].split(' ')[0]}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
   
   return (
-    <div className="relative flex flex-col justify-evenly w-full h-full lg:max-w-[50vh] mx-auto p-[1.2vh] bg-white shadow">
-      <div className="relative flex items-center justify-center w-full text-cenrte text-[4vh] font-[500] h-[15%]">
+    <div className="relative flex flex-col w-full h-full lg:max-w-[55vh] mx-auto p-4 bg-white shadow-xl rounded-2xl border border-gray-100">
+      {/* Header Section */}
+      <div className="relative flex items-center justify-center w-full text-center h-16 mb-2">
         <img 
           src="https://storage.googleapis.com/the-mall-uploads-giza/stores/68726dde5987f5810dee5a8a/images/mall%20image.webp" 
           alt="Mall theme image" 
-          className="absolute inset-0 w-full h-full object-cover rounded-[.55vh]" 
+          className="absolute inset-0 w-full h-full object-cover rounded-xl" 
         />
-        {/* Only show this if next clicked is true */}
-        <p className="font-[Lato] text-white text-[4vh] z-1 text-shadow-2xs font-[500] opacity-85">Create Your Store</p>
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/70 to-purple-900/70 rounded-xl"></div>
+        <p className="font-[Lato] text-white text-[3.5vh] z-10 font-semibold drop-shadow-lg">Create Your Store</p>
       </div>
+      
+      {/* Step Progress Indicator */}
+      <StepProgress />
+      
+      {/* Current Step Title */}
+      <div className="text-center mb-[1.2vh]">
+        <h2 className="text-lg font-semibold text-gray-800">{stepTitles[step]}</h2>
+        <p className="text-xs text-gray-500">Step {step + 1} of {steps.length}</p>
+      </div>
+
       <AnimatePresence custom={direction} mode="wait">
         <motion.div
           key={step}
@@ -190,7 +260,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
           animate="center"
           exit="exit"
           transition={{ duration: 0.3 }}
-          className="w-full h-[70%] z-10 "
+          className="flex-1 overflow-y-auto min-h-0"
         >
           <StepComponent />
         </motion.div>
@@ -198,36 +268,66 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
       
       {/* Error display */}
       {(submitError || storeError) && (
-        <div className="text-center text-red-500 text-[1.8vh] mt-2 px-4">
-          {submitError || storeError}
-        </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-2 text-red-600 text-[1.8vh] bg-red-50 p-3 rounded-lg border border-red-200 mb-3"
+        >
+          <IoAlertCircle size={18} className="flex-shrink-0" />
+          <span>{submitError || storeError}</span>
+        </motion.div>
       )}
 
-      <div className="flex flex-row justify-between items-center h-[7%] z-10">
+      <div className="flex flex-row justify-between items-center pt-3 border-t border-gray-100 mt-auto">
         <button
             type="button"
-            onClick={step === 0 ? () => navigate(-1) : prevStep}
-            className="px-[1.2vh] py-[.3vh] text-[2vh] text-black border rounded-[.45vh] flex items-center gap-1"
-            >
-            {step === 0 ? "Close" : "Back"}
+            onClick={step === 0 ? handleClose : handlePrevStep}
+            className="px-[1.6vh] py-[1vh] text-[1.8vh] font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2"
+        >
+            {step === 0 ? (
+              <>
+                <IoClose size={18} />
+                Close
+              </>
+            ) : (
+              'Back'
+            )}
         </button>
+        
+        {/* Step indicator dots for mobile */}
+        <div className="flex sm:hidden gap-1">
+          {steps.map((_, index) => (
+            <div 
+              key={index} 
+              className={`w-[.8vh] h-[.8vh] rounded-full transition-colors ${index === step ? 'bg-indigo-600' : index < step ? 'bg-indigo-300' : 'bg-gray-300'}`}
+            />
+          ))}
+        </div>
+        
         {step === steps.length - 1 ? (
             <button
                 type="button"
                 onClick={handleSubmit} 
-                className="px-[1.2vh] py-[.3vh] text-[2vh] text-white bg-black rounded-[.45vh] hover:scale-105 hover:opacity-80 disabled:bg-gray-500"
+                className="px-[2.2vh] py-[1vh] text-[1.8vh] font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-all hover:scale-105 disabled:bg-gray-400 disabled:hover:scale-100 flex items-center gap-2 shadow-md"
+                disabled={isLoading || isSubmitting}
             >
-                {isLoading ? (
-                  <TbLoader3 className="w-6 h-6 animate-spin mx-auto" />
+                {isLoading || isSubmitting ? (
+                  <>
+                    <TbLoader3 className="w-4 h-4 animate-spin" />
+                    Creating...
+                  </>
                 ) : (
-                  "Submit"
+                  <>
+                    <FaCheck size={14} />
+                    Create Store
+                  </>
                 )}
             </button>
               ) : (
             <button
                 onClick={handleNextStep}
                 disabled={step === steps.length - 1}
-                className="px-[1.2vh] py-[.3vh] text-[2vh] text-white bg-black rounded-[.45vh] hover:scale-105 hover:opacity-80 disabled:bg-gray-500"
+                className="px-[2.2vh] py-[1vh] text-[1.8vh] font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-all hover:scale-105 disabled:bg-gray-400 disabled:hover:scale-100 flex items-center gap-2 shadow-md"
             >
                 Next
             </button>
@@ -241,15 +341,17 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
           {isSuccess && <StoreSuccessOverlay onClose={() => setIsSuccess(false)}/>}
       </AnimatePresence>
       {/* Background Icon */}
-      <div className="absolute z-0 top-10 left-[10%] w-[500px] flex flex-col justify-center opacity-10">
-        <LiaStoreSolid size={700} className='mr-80'/>
+      <div className="absolute z-0 top-20 left-4 w-48 flex flex-col justify-center opacity-5 pointer-events-none">
+        <LiaStoreSolid size={200} className='text-indigo-900'/>
       </div>
     </div>
   );
 };
+
 interface CreateStoreFormProps {
     isDemo?: boolean;
 }
+
 const CreateStoreForm: React.FC<CreateStoreFormProps> = ({isDemo}) => (
   <FormProvider>
     <CreateStoreFormInner isDemo={isDemo}/>

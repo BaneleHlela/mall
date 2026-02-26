@@ -254,7 +254,7 @@ const StoreSocialSettings = () => {
     }
 
     const updatedStore: Omit<Store, 'id'> = {
-      ...store,
+      ...store, // @ts-ignore
       socials,
     };
 

@@ -8,9 +8,9 @@ interface InputHandlerProps {
 
 const InputHandler: React.FC<InputHandlerProps> = ({ label, value, onChange }) => {
   return (
-    <div className="flex flex-row justify-between items-center w-full h-[4vh] text-[2vh]">
+    <div className="flex flex-row justify-between items-center w-full h-[4vh] text-[1.8vh]">
       <div className="w-[50%] flex flex-row justify-between">
-        {label && <label className="">{label}</label>}
+        {label && <label className="]">{label}</label>}
         <p className="mr-1">:</p>
       </div>
 

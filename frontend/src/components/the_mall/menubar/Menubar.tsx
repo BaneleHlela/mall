@@ -16,7 +16,7 @@ const Menubar = () => {
   const location = useLocation();
   const { isNavbarHidden } = useNavbar(); // 🔹 global state
 
-  const hiddenRoutes = ["dashboard", "layouts", "preview", "stores", "scribbler", "signup", "business-plan", "login", "capture"];
+  const hiddenRoutes = ["dashboard", "layouts", "preview", "scribbler", "signup", "business-plan", "login", "capture"];
   const isHiddenByRoute = shouldHideNav(hiddenRoutes, location.pathname);
 
   const isHidden = isHiddenByRoute || isNavbarHidden;

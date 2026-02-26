@@ -3,7 +3,7 @@ import React from 'react'
 const SupplyChain = () => {
   return (
     <div>
-      <p className="font-normal py-1">
+      <p className="font-normal py-[.7vh]">
         Today's business term: Supply Chain. Where does your business fit, and what value does it bring to the supply chain?
       </p>
       <div className="relative w-full">

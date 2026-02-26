@@ -36,7 +36,7 @@ export const createLayoutConfig = async (req, res) => {
 
 export const createLayoutConfigWithSettings = async (req, res) => {
     try {
-      const { layoutId, newColors, newFonts, sectionUpdates, store } = req.body;
+      const { layoutId, newColors, newFonts, store, themeName } = req.body;
 
       // Fetch the original layout
       const originalLayout = await StoreLayout.findById(layoutId);
@@ -44,24 +44,16 @@ export const createLayoutConfigWithSettings = async (req, res) => {
         return res.status(404).json({ message: 'Original layout not found.' });
       }
 
-      const clonedLayout = JSON.parse(JSON.stringify(originalLayout)); // Deep clone layout
+      // Use toObject() to properly convert Mongoose document to plain object
+      const clonedLayout = originalLayout.toObject();
       delete clonedLayout._id;
 
-      // === Apply Section Updates ===
-      if (sectionUpdates) {
-        Object.keys(sectionUpdates).forEach(sectionKey => {
-          if (clonedLayout[sectionKey]) {
-            clonedLayout[sectionKey] = { ...clonedLayout[sectionKey], ...sectionUpdates[sectionKey] };
-          }
-        });
-      }
-
-      // === Create New Layout ===
+      // === Create New Layout with only colors and fonts updated ===
       const newLayout = await StoreLayout.create({
         ...clonedLayout,
         fonts: newFonts || clonedLayout.fonts,
         colors: newColors || clonedLayout.colors,
-        name: "New Layout with Updated Settings",
+        name: themeName || "New Layout with Updated Settings",
         store
       });
   
@@ -69,12 +61,12 @@ export const createLayoutConfigWithSettings = async (req, res) => {
       const previewUrl = `${CLIENT_URL}/layouts/${newLayoutId}/preview`;
   
       // Screenshot
-      const screenshotBuffer = await captureScreenshot(previewUrl, 360, 740);
-      const fileName = `stores/layouts/${newLayoutId}/${newLayoutId}_preview.png`;
-      await uploadToUploads(screenshotBuffer, fileName);
-      const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${fileName}`;
+      // const screenshotBuffer = await captureScreenshot(previewUrl, 360, 740);
+      // const fileName = `stores/layouts/${newLayoutId}/${newLayoutId}_preview.png`;
+      // await uploadToUploads(screenshotBuffer, fileName);
+      // const publicUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${fileName}`;
   
-      newLayout.imageUrl = publicUrl;
+      // newLayout.imageUrl = publicUrl;
       await newLayout.save();
 
       // === Add layout ID to store's layouts array ===

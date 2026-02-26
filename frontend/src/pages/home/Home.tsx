@@ -13,12 +13,13 @@ import BasicStorePost from '../../components/the_mall/basic_store_post/BasicStor
 import TipsAndUpdates from '../../components/the_mall/home/TipsAndUpdates';
 import { FaTools } from 'react-icons/fa';
 import StorePostJSX from '../../components/the_mall/home/StorePostJSX';
-import { LookOutForRedFlags, YouCanInvest } from '../../components/the_mall/home/posts/SimplePosts';
+import { LaunchDate, LookOutForRedFlags, WelcomeToTheMall, WhatIsECommerce, WhatIsMVP, YouCanInvest, MallMVPAnnouncement, Branding } from '../../components/the_mall/home/posts/SimplePosts';
 import MultipleLayoutsPost from '../../components/the_mall/home/posts/MultipleLayoutsPost';
 import FreePikPosters from '../../components/the_mall/home/posts/FreePikPosters';
 import SupplyChain from '../../components/the_mall/home/posts/SupplyChain';
 import { MdAdd } from 'react-icons/md';
 import { IoStorefrontOutline } from 'react-icons/io5';
+import toast from 'react-hot-toast';
 
 
 const HomePage = () => {
@@ -123,7 +124,30 @@ const HomePage = () => {
 
   console.log(user?.stores)
   
-  
+  // Handle add post button click
+  const handleAddPostClick = () => {
+    if (!user) {
+      toast.error("Please sign in to create a post.", {
+        duration: 4000,
+        position: 'bottom-center',
+      });
+      return;
+    }
+    
+    if (!user.stores || user.stores.length === 0) {
+      toast.error("You need to create a store before you can post.", {
+        duration: 4000,
+        position: 'bottom-center',
+      });
+      return;
+    }
+    
+    toast("This feature is coming soon!", {
+      icon: '🚧',
+      duration: 4000,
+      position: 'bottom-center',
+    });
+  };
 
   return (
     <div className="relative  w-full h-full max-h-screen overflow-y-scroll hide-scrollbar bg-gray-100 flex flex-col items-center">
@@ -290,6 +314,42 @@ const HomePage = () => {
           <StorePostJSX
             tipFor='Tips and Updates'
             jsx={
+              <WelcomeToTheMall />
+            }
+          />
+          <StorePostJSX
+            tipFor='Announcement'
+            jsx={
+              <MallMVPAnnouncement />
+            }
+            color="text-green-500"
+          />
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
+              <WhatIsECommerce />
+            }
+          />
+          <StorePostJSX
+            tipFor='Tips for Vendors'
+            jsx={<WhatIsMVP />}
+            color="text-orange-400"
+          />
+          <StorePostJSX
+            tipFor='Tips for Vendors'
+            jsx={<Branding />}
+            color="text-orange-400"
+          />
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
+              <LaunchDate/>
+            }
+          />
+          
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
               <SupplyChain />
             }
             color="text-orange-400"
@@ -402,7 +462,10 @@ const HomePage = () => {
         )} */}
       </div>
       {/* Add post button */}
-      <button className='fixed bottom-[7vh] right-2 p-1 bg-blue-600 text-white rounded-full'>
+      <button 
+        onClick={handleAddPostClick}
+        className='fixed bottom-[7vh] right-2 p-[1.2vh] bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-full z-100 shadow-lg hover:shadow-xl hover:scale-110 active:scale-95 transition-all duration-200 ease-out'
+      >
         <MdAdd className='text-[4vh]'/>
       </button>
       {/* Background Image (FOR DESKTOP) */}
@@ -418,3 +481,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+

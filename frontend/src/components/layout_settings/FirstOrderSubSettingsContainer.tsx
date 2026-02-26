@@ -1,51 +1,84 @@
-import React, { useState } from "react";
+import React from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { motion } from "framer-motion";
 import { FiTrash } from "react-icons/fi";
+import { ChevronRight } from "lucide-react";
+import { useBreadcrumbs } from "../../contexts/BreadcrumbContext";
 
 interface FirstOrderSubSettingsContainerProps {
   name: string;
   onClick?: () => void;
   deletable?: boolean; 
   onDeleteClick?: () => void;
+  panelId?: string;
+  icon?: React.ReactNode;
 }
 
 const FirstOrderSubSettingsContainer: React.FC<FirstOrderSubSettingsContainerProps> = ({
   name,
   onClick,
-  deletable= false,
-  onDeleteClick
+  deletable = false,
+  onDeleteClick,
+  panelId,
+  icon
 }) => {
+  const { addBreadcrumb, currentPanel } = useBreadcrumbs();
+  
+  const isActive = currentPanel === panelId;
 
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+      if (panelId) {
+        addBreadcrumb(panelId, name, () => {});
+      }
+    }
+  };
 
   return (
-    <div className="relative w-full">
+    <motion.div 
+      className="relative w-full"
+      whileHover={{ scale: 1.005 }}
+      whileTap={{ scale: 0.995 }}
+    >
       <div
-        className="w-full h-[7vh] text-[1.8vh] bg-stone-50 border-[.3vh] border-white text-gray-900 rounded p-[.6vh] shadow-md hover:scale-103 hover:bg-gray-900 hover:text-white hover:border-white"
+        className={`w-full flex items-center justify-between px-[1.6vh] py-[1.2vh] rounded-xl border transition-all duration-200 cursor-pointer group
+          ${isActive 
+            ? 'bg-stone-800 border-stone-700 text-white shadow-lg' 
+            : 'bg-white border-stone-200 text-stone-700 hover:bg-stone-50 hover:border-stone-300 hover:shadow-md'
+          }
+        `}
+        onClick={handleClick}
       >
-        <div className="w-full h-full flex justify-between items-center pl-2">
-          <span onClick={onClick} className="cursor-pointer capitalize">{name}</span>
-          <div className="flex flex-row space-x-1">
-            {deletable && (
-              <div 
-                onClick={onDeleteClick}
-                className="flex flex-col justify-center hover:scale:150 cursor-pointer"
-              >
-                <FiTrash className="text-red-600 text-[2vh]" />
-              </div>
-            )}
-            
-            <motion.div
-              className="text-[150%] cursor-pointer"
-              transition={{ duration: 0.3 }}
-              onClick={onClick}
+        <div className="flex items-center space-x-[1.2vh] flex-1 min-w-0">
+          {icon && (
+            <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center
+              ${isActive ? 'bg-white/10' : 'bg-stone-100'}
+            `}>
+              {icon}
+            </div>
+          )}
+          <span className="capitalize font-medium text-[1.8vh] truncate">{name}</span>
+        </div>
+        
+        <div className="flex items-center space-x-1 flex-shrink-0">
+          {deletable && (
+            <button 
+              className="p-1.5 rounded-lg hover:bg-red-100 text-stone-400 hover:text-red-500 transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeleteClick?.();
+              }}
             >
-              <IoIosArrowForward />
-            </motion.div>
-          </div>  
+              <FiTrash size={14} />
+            </button>
+          )}
+          <div className={`p-1.5 rounded-lg transition-colors ${isActive ? 'bg-white/10' : 'group-hover:bg-stone-100'}`}>
+            <ChevronRight size={16} className={isActive ? 'text-white' : 'text-stone-400 group-hover:text-stone-600'} />
+          </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

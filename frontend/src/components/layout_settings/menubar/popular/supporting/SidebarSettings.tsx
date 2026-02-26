@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { updateSetting } from '../../../../../features/layouts/layoutSettingsSlice';
-import OptionsToggler from '../../../supporting/OptionsToggler';
-import MenubarLinksSettings from './MenubarLinksSettings';
-import IconsSettingsHandler from './IconsSettingsHandler';
-import StoreButtonSettings from '../../../extras/StoreButtonSettings';
-import FirstOrderSubSettingsContainer from '../../../FirstOrderSubSettingsContainer';
-import SlidingPanel from '../../../supporting/SlidingPanel';
-import { AnimatePresence } from 'framer-motion';
-import IconsOrButtonSettings from './IconsOrButtonSettings';
-import BackgroundEditor from '../../../background/BackgroundEditor';
-import SubSettingsContainer from '../../../extras/SubSettingsContainer';
+import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
+import { updateSetting } from "../../../../../features/layouts/layoutSettingsSlice";
+import BackgroundEditor from "../../../background/BackgroundEditor";
+import HamburgerSettings from "./HamburgerSettings";
+import MenubarLinksSettings from "./MenubarLinksSettings";
+import SimpleLogoSettings from "./SimpleLogoSettings";
+import FirstOrderSubSettingsContainer from "../../../FirstOrderSubSettingsContainer";
+import SlidingPanel from "../../../supporting/SlidingPanel";
+import { AnimatePresence } from "framer-motion";
+import { useBreadcrumbs } from "../../../../../contexts/BreadcrumbContext";
+import { Menu, Link2, Image } from "lucide-react";
 
-const SidebarSettings: React.FC = () => {
-  const dispatch = useAppDispatch();
+const SidebarSettings = () => {
   const settings = useAppSelector((state: any) => state.layoutSettings);
-  const sidebarAnimation = settings.menubar.sidebar.animation;
+  const dispatch = useAppDispatch();
+  const { addBreadcrumb } = useBreadcrumbs();
 
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
@@ -24,70 +23,43 @@ const SidebarSettings: React.FC = () => {
     dispatch(updateSetting({ field, value }));
   };
 
-  const animationOptions = ['leftToRight', 'rightToLeft', 'upToDown', 'downToUp', 'fade'];
+  const handlePanelOpen = (panelId: string, label: string) => {
+    setActivePanel(panelId);
+    addBreadcrumb(panelId, label, closePanel);
+  };
+
+  const sidebarSettings = [
+    { id: "hamburger", name: "Hamburger", icon: <Menu size={16} />, component: <HamburgerSettings /> },
+    { id: "links", name: "Links", icon: <Link2 size={16} />, component: <MenubarLinksSettings type="sidebar" /> },
+    { id: "logo", name: "Logo", icon: <Image size={16} />, component: <SimpleLogoSettings objectPath="menubar.sidebar.logo" /> },
+  ];
 
   return (
-    <div className="space-y-1 px-2 py-1">
-      {/* Animation Toggler */}
-      <OptionsToggler
-        label="Animation"
-        options={animationOptions}
-        value={sidebarAnimation}
-        onChange={(value) => handleSettingChange('menubar.sidebar.animation', value)}
-      />
-
-      <SubSettingsContainer
-          name="Background"
-          SettingsComponent={
-              <BackgroundEditor
-                  objectPath={`menubar.sidebar.background`}
-                  settings={settings}
-                  handleSettingChange={handleSettingChange}
-                  allow={['color', 'border', 'padding', "height", "width"]}
-              />
-          }
-      />
-
-      {/* Refactored: Links Section */}
-      <FirstOrderSubSettingsContainer
-        name="Links"
-        onClick={() => setActivePanel('links')}
-      />
-
-      {/* Refactored: Extras Section */}
-      <FirstOrderSubSettingsContainer
-        name="Extras"
-        onClick={() => setActivePanel('extras')}
-      />
+    <div className="p-1 space-y-2">
+      {sidebarSettings.map((item) => (
+        <FirstOrderSubSettingsContainer
+          key={item.id}
+          name={item.name}
+          onClick={() => handlePanelOpen(item.id, item.name)}
+          panelId={item.id}
+          icon={item.icon}
+        />
+      ))}
 
       <AnimatePresence>
-        {/* Links Panel */}
-        {activePanel === 'links' && (
-          <SlidingPanel
-            key="links"
-            isOpen={true}
-            onClose={closePanel}
-            title="Sidebar Links"
-          >
-            <MenubarLinksSettings type="sidebar" allowPositioning={true}/>
-          </SlidingPanel>
-        )}
-
-        {/* Extras Panel */}
-        {activePanel === 'extras' && (
-          <SlidingPanel
-            key="extras"
-            isOpen={true}
-            onClose={closePanel}
-            title="Sidebar Extras"
-          >
-            <IconsOrButtonSettings
-              objectPath="menubar.sidebar.extras"
-              handleSettingChange={handleSettingChange}
-              settings={settings}
-            />
-          </SlidingPanel>
-        )}
+        {sidebarSettings.map((item) => (
+          activePanel === item.id && (
+            <SlidingPanel
+              key={item.id}
+              isOpen={true}
+              onClose={closePanel}
+              title={`${item.name} Settings`}
+              panelId={item.id}
+            >
+              {item.component}
+            </SlidingPanel>
+          )
+        ))}
       </AnimatePresence>
     </div>
   );

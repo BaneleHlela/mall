@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { getSetting } from "../../../utils/helperFunctions";
 import type { EditorProps } from "../../../types/layoutSettingsType";
-import ColorPicker from "../supporting/ColorPicker";
 import OptionsToggler from "../supporting/OptionsToggler";
 import SettingsSlider from "../supporting/SettingsSlider";
 import SubSettingsContainer from "../extras/SubSettingsContainer";
@@ -76,77 +75,90 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
 
 
   return (
-    <div className="space-y-1 px-2">
+    <div className="space-y-[.4vh]">
+        {/* Color Section */}
         {isAllowed("color") && (
+          <div className="bg-white rounded-xl shadow-sm border border-stone-100 px-[1vh]">
+            <OptionsToggler
+              label="Color"
+              options={["primary", "secondary", "accent", "quad", "pent", "transparent"]}
+              value={getSetting("color", settings, objectPath)}
+              onChange={(newValue) =>
+                handleChange("color")({
+                  target: { value: newValue }
+                } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
+              }
+              showColorSwatches={true}
+            />
+          </div>
+        )}
+       
+        {/* Animation Section */}
+        {isAllowed("animation") && (
+          <div className="bg-white rounded-xl p-[1.5vh] shadow-sm border border-stone-100">
+            <OptionsToggler
+              label="Animation"
+              value={getSetting("animation", settings, objectPath) || "none"}
+              options={animationOptions.map(option => option.value)}
+              onChange={(value) => handleSettingChange(`${objectPath}.animation`, value)}
+            />
+          </div>
+        )}
+
+      {/* Shadow Section */}
+      {isAllowed("shadow") && (
+        <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100">
           <OptionsToggler
-            label="Color"
-            options={["primary", "secondary", "accent", "quad", "pent", "transparent"]}
-            value={getSetting("color", settings, objectPath)}
+            label="Shadow"
+            options={["true", "false"]}
+            value={String(getSetting("shadow", settings, objectPath))}
             onChange={(newValue) =>
-              handleChange("color")({
+              handleChange("shadow")({
+                target: { value: newValue === "true" } as unknown as HTMLInputElement,
+              } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
+            }
+          />
+        </div>
+      )}
+
+      {/* Position Section */}
+      {isAllowed("position") && (
+        <div className="bg-white rounded-xl p-[1.5vh] shadow-sm border border-stone-100">
+          <OptionsToggler
+            label="Position"
+            options={["start", "center", "end"]}
+            value={getSetting("position", settings, objectPath) || "start"}
+            onChange={(newValue) =>
+              handleChange("position")({
                 target: { value: newValue }
               } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
             }
           />
-        )}
-       {/* ANIMATION */}
-       {isAllowed("animation") && (
-          <OptionsToggler
-            label="Animation"
-            value={getSetting("animation", settings, objectPath) || "none"}
-            options={animationOptions.map(option => option.value)}
-            onChange={(value) => handleSettingChange(`${objectPath}.animation`, value)}
-          />
-        )}
-
-      {isAllowed("shadow") && (
-        <OptionsToggler
-          label="Shadow"
-          options={["true", "false"]}
-          value={String(getSetting("shadow", settings, objectPath))}
-          onChange={(newValue) =>
-            handleChange("shadow")({
-              target: { value: newValue === "true" } as unknown as HTMLInputElement,
-            } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
-          }
-        />
+        </div>
       )}
 
-      {/* Position */}
-      {isAllowed("position") && (
-        <OptionsToggler
-          label="Position"
-          options={["start", "center", "end"]}
-          value={getSetting("position", settings, objectPath) || "start"}
-          onChange={(newValue) =>
-            handleChange("position")({
-              target: { value: newValue }
-            } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
-          }
-        />
-      )}
-
-      {/* HEIGHT */}
-      {isAllowed("height") &&
-        (responsiveSize ? (
-          <>
-            <SettingsSlider
-              label="Height (Mobile)"
-              value={parseInt(getSetting("height.mobile", settings, objectPath) || "110")}
-              unit={heightUnit}
-              {...getSliderProps(heightUnit)}
-              onChange={createSliderChangeHandler("height.mobile", heightUnit)}
-            />
-            <SettingsSlider
-              label="Height (Desktop)"
-              value={parseInt(getSetting("height.desktop", settings, objectPath) || "120")}
-              unit={heightUnit}
-              {...getSliderProps(heightUnit)}
-              onChange={createSliderChangeHandler("height.desktop", heightUnit)}
-            />
-          </>
-        ) : (
-          heightUnit ? (
+      {/* Height Section */}
+      {isAllowed("height") && (
+        <div className="bg-white rounded-xl p-[1.5vh] shadow-sm border border-stone-100">
+          <h4 className="text-[1.5vh] font-semibold text-stone-500 uppercase tracking-wide">Height</h4>
+          {responsiveSize ? (
+            <>
+              <SettingsSlider
+                label="Mobile"
+                value={parseInt(getSetting("height.mobile", settings, objectPath) || "110")}
+                unit={heightUnit}
+                {...getSliderProps(heightUnit)}
+                onChange={createSliderChangeHandler("height.mobile", heightUnit)}
+              />
+              <SettingsSlider
+                label="Desktop"
+                value={parseInt(getSetting("height.desktop", settings, objectPath) || "120")}
+                unit={heightUnit}
+                {...getSliderProps(heightUnit)}
+                onChange={createSliderChangeHandler("height.desktop", heightUnit)}
+              />
+            </>
+          ) : heightUnit ? (
             <SettingsSlider
               label="Height"
               value={parseInt(getSetting("height", settings, objectPath) || "10")}
@@ -154,8 +166,7 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
               {...getSliderProps(heightUnit)}
               onChange={createSliderChangeHandler("height", heightUnit)}
             />
-           )
-           : (
+          ) : (
             <SettingsSlider
               label="Height"
               value={parseFloat(getSetting("height", settings, objectPath) || "10")}
@@ -165,30 +176,32 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
               step={.1}
               onChange={createSliderChangeHandler("height", "vh")}
             />)
-          
-      ))}
+          }
+        </div>
+      )}
 
-      {/* WIDTH */}
-      {isAllowed("width") &&
-        (responsiveSize ? (
-          <>
-            <SettingsSlider
-              label="Width (Mobile)"
-              value={parseInt(getSetting("width.mobile", settings, objectPath) || "10")}
-              unit={widthUnit}
-              {...getSliderProps(widthUnit)}
-              onChange={createSliderChangeHandler("width.mobile", widthUnit)}
-            />
-            <SettingsSlider
-              label="Width (Desktop)"
-              value={parseInt(getSetting("width.desktop", settings, objectPath) || "20")}
-              unit={widthUnit}
-              {...getSliderProps(widthUnit)}
-              onChange={createSliderChangeHandler("width.desktop", widthUnit)}
-            />
-          </>
-        ) : (
-          widthUnit ? (
+      {/* Width Section */}
+      {isAllowed("width") && (
+        <div className="bg-white rounded-xl p-[1.5vh] shadow-sm border border-stone-100">
+          <h4 className="text-[1.5vh] font-semibold text-stone-500 uppercase tracking-wide">Width</h4>
+          {responsiveSize ? (
+            <>
+              <SettingsSlider
+                label="Mobile"
+                value={parseInt(getSetting("width.mobile", settings, objectPath) || "10")}
+                unit={widthUnit}
+                {...getSliderProps(widthUnit)}
+                onChange={createSliderChangeHandler("width.mobile", widthUnit)}
+              />
+              <SettingsSlider
+                label="Desktop"
+                value={parseInt(getSetting("width.desktop", settings, objectPath) || "20")}
+                unit={widthUnit}
+                {...getSliderProps(widthUnit)}
+                onChange={createSliderChangeHandler("width.desktop", widthUnit)}
+              />
+            </>
+          ) : widthUnit ? (
             <SettingsSlider
               label="Width"
               value={parseInt(getSetting("width", settings, objectPath) || "20")}
@@ -206,99 +219,109 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
               step={.1}
               onChange={createSliderChangeHandler("width", "vw")}
             />
-          )
-        ))}
+          )}
+        </div>
+      )}
 
-      {/* PADDING */}
+      {/* Padding Section */}
       {isAllowed("padding") && (
-        responsivePadding ? (
-          <>
-            <SettingsSlider
-              label="Padding Y (Mobile)"
-              value={parseFloat(getSetting("padding.y.mobile", settings, objectPath) || "2")}
-              unit="vh"
-              min={0}
-              max={30}
-              step={0.2}
-              onChange={createSliderChangeHandler("padding.y.mobile", "vh")}
-            />
-            <SettingsSlider
-              label="Padding Y (Desktop)"
-              value={parseFloat(getSetting("padding.y.desktop", settings, objectPath) || "4")}
-              unit="vh"
-              min={0}
-              max={30}
-              step={0.2}
-              onChange={createSliderChangeHandler("padding.y.desktop", "vh")}
-            />
-            <SettingsSlider
-              label="Padding X (Mobile)"
-              value={parseFloat(getSetting("padding.x.mobile", settings, objectPath) || "2")}
-              unit="vh"
-              min={0}
-              max={30}
-              step={0.2}
-              onChange={createSliderChangeHandler("padding.x.mobile", "vh")}
-            />
-            <SettingsSlider
-              label="Padding X (Desktop)"
-              value={parseFloat(getSetting("padding.x.desktop", settings, objectPath) || "4")}
-              unit="vh"
-              min={0}
-              max={30}
-              step={0.2}
-              onChange={createSliderChangeHandler("padding.x.desktop", "vh")}
-            />
-          </>
-        ) : (
-          <>
-            <SettingsSlider
-              label="Padding Y"
-              value={parseFloat(getSetting("padding.y", settings, objectPath) || "4")}
-              unit="vh"
-              min={0}
-              max={30}
-              step={0.2}
-              onChange={createSliderChangeHandler("padding.y", "vh")}
-            />
-            <SettingsSlider
-              label="Padding X"
-              value={parseFloat(getSetting("padding.x", settings, objectPath) || "4")}
-              unit="vh"
-              min={0}
-              max={30}
-              step={0.2}
-              onChange={createSliderChangeHandler("padding.x", "vh")}
-            />
-          </>
-        )
+        <div className="bg-white rounded-xl p-[1.5vh] shadow-sm border border-stone-100">
+          <h4 className="text-[1.5vh] font-semibold text-stone-500 uppercase tracking-wide">Padding</h4>
+          {responsivePadding ? (
+            <>
+              <SettingsSlider
+                label="Y (Mobile)"
+                value={parseFloat(getSetting("padding.y.mobile", settings, objectPath) || "2")}
+                unit="vh"
+                min={0}
+                max={30}
+                step={0.2}
+                onChange={createSliderChangeHandler("padding.y.mobile", "vh")}
+              />
+              <SettingsSlider
+                label="Y (Desktop)"
+                value={parseFloat(getSetting("padding.y.desktop", settings, objectPath) || "4")}
+                unit="vh"
+                min={0}
+                max={30}
+                step={0.2}
+                onChange={createSliderChangeHandler("padding.y.desktop", "vh")}
+              />
+              <SettingsSlider
+                label="X (Mobile)"
+                value={parseFloat(getSetting("padding.x.mobile", settings, objectPath) || "2")}
+                unit="vh"
+                min={0}
+                max={30}
+                step={0.2}
+                onChange={createSliderChangeHandler("padding.x.mobile", "vh")}
+              />
+              <SettingsSlider
+                label="X (Desktop)"
+                value={parseFloat(getSetting("padding.x.desktop", settings, objectPath) || "4")}
+                unit="vh"
+                min={0}
+                max={30}
+                step={0.2}
+                onChange={createSliderChangeHandler("padding.x.desktop", "vh")}
+              />
+            </>
+          ) : (
+            <>
+              <SettingsSlider
+                label="Y"
+                value={parseFloat(getSetting("padding.y", settings, objectPath) || "4")}
+                unit="vh"
+                min={0}
+                max={30}
+                step={0.2}
+                onChange={createSliderChangeHandler("padding.y", "vh")}
+              />
+              <SettingsSlider
+                label="X"
+                value={parseFloat(getSetting("padding.x", settings, objectPath) || "4")}
+                unit="vh"
+                min={0}
+                max={30}
+                step={0.2}
+                onChange={createSliderChangeHandler("padding.x", "vh")}
+              />
+            </>
+          )}
+        </div>
       )}
 
-      {/* margin */}
+      {/* Margin Section */}
       {isAllowed("margin") && (
-        <SettingsSlider
-          label="margin"
-          value={parseInt(getSetting("margin", settings, objectPath) || "100")}
-          unit="px"
-          min={0}
-          max={100}
-          step={1}
-          onChange={createSliderChangeHandler("margin", "px")}
-        />
+        <div className="bg-white rounded-xl p-[1.5vh] shadow-sm border border-stone-100">
+          <SettingsSlider
+            label="Margin"
+            value={parseInt(getSetting("margin", settings, objectPath) || "100")}
+            unit="px"
+            min={0}
+            max={100}
+            step={1}
+            onChange={createSliderChangeHandler("margin", "px")}
+          />
+        </div>
       )}
-      {/* OPACITY */}
+      
+      {/* Opacity Section */}
       {isAllowed("opacity") && (
-        <SettingsSlider
-          label="Opacity"
-          value={parseInt(getSetting("opacity", settings, objectPath) || "100")}
-          unit="%"
-          min={0}
-          max={100}
-          step={1}
-          onChange={createSliderChangeHandler("opacity", "%")}
-        />
+        <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100">
+          <SettingsSlider
+            label="Opacity"
+            value={parseInt(getSetting("opacity", settings, objectPath) || "100")}
+            unit="%"
+            min={0}
+            max={100}
+            step={1}
+            onChange={createSliderChangeHandler("opacity", "%")}
+          />
+        </div>
       )}
-      {/* BORDER */}
+      
+      {/* Border Section */}
       {isAllowed("border") && (
         <SubSettingsContainer
           name="Border"
@@ -311,8 +334,6 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
           }
         />
       )}
-      
-      
     </div>
   );
 };

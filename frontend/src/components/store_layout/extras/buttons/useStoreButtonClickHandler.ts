@@ -27,11 +27,11 @@ export const useStoreButtonClickHandler = () => {
       /* ---------------------------------------
          BOOK  → services page
       ---------------------------------------- */
-      case 'book':
+      case 'book' || 'services':
         if (isHomePage) {
           window.location.hash = '#services';
         } else if (isLayoutRoute) {
-          navigate(`/layouts/${layoutId}/services`);
+          navigate(`/layouts/${layoutId}/preview/preview/services`);
         } else {
           navigate(`/stores/${storeSlug}/services`);
         }
@@ -41,11 +41,11 @@ export const useStoreButtonClickHandler = () => {
       /* ---------------------------------------
          BUY  → products page
       ---------------------------------------- */
-      case 'buy':
+      case 'buy' || 'shop':
         if (isHomePage) {
           window.location.hash = '#products';
         } else if (isLayoutRoute) {
-          navigate(`/layouts/${layoutId}/products`);
+          navigate(`/layouts/${layoutId}/preview/preview/products`);
         } else {
           navigate(`/stores/${storeSlug}/products`);
         }
@@ -55,11 +55,11 @@ export const useStoreButtonClickHandler = () => {
       /* ---------------------------------------
          SUBSCRIBE  → packages page
       ---------------------------------------- */
-      case 'subscribe':
+      case 'subscribe' || 'packages':
         if (isHomePage) {
           window.location.hash = '#packages';
         } else if (isLayoutRoute) {
-          navigate(`/layouts/${layoutId}/packages`);
+          navigate(`/layouts/${layoutId}/preview/packages`);
         } else {
           navigate(`/stores/${storeSlug}/packages`);
         }

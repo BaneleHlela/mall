@@ -106,7 +106,7 @@ const StoreAboutSettings = () => {
   };
 
   return (
-    <div className="min-h-full w-full bg-slate-50">
+    <div className="min-h-full w-full bg-slate-50 max-w-md">
       {/* Header Section */}
       <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
         {/* Decorative elements */}

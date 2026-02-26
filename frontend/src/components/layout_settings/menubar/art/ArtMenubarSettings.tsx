@@ -31,7 +31,7 @@ const ArtMenubarSettings = () => {
     ) || 2;
     
     return (
-        <div className='p-[.6vh] space-y-[.6vh] w-full'>
+        <div className='space-y-[.6vh] w-full'>
             {/* Topbar */}
             <FirstOrderSubSettingsContainer
                 name="Topbar"

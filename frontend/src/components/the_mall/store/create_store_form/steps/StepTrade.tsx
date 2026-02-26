@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useFormContext } from '../context/FormContext';
+import { FaCheck, FaBox, FaTools, FaGift, FaHome, FaHeart } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 const StepTrade: React.FC = () => {
   const { form, handleChange, setStepValidator, nextClicked } = useFormContext();
@@ -26,62 +28,119 @@ const StepTrade: React.FC = () => {
   };
 
   const tradeOptions = [
-    { key: 'products', label: 'Products (Food, etc.)', description: 'Physical goods like food, clothing, or electronics.' },
-    { key: 'services', label: 'Services (Plumbing, etc.)', description: 'Professional services like repairs or consultations.' },
-    { key: 'packages', label: 'Packages (Driver’s license, etc.)', description: 'Pre-packaged offerings like courses or licenses.' },
-    { key: 'rentals', label: 'Rentals (Equipment, etc.)', description: 'Items available for rent like accomodation or vehicles.' },
-    { key: 'donations', label: 'Donations', description: 'Accept donations for your cause or organization.' }
+    { 
+      key: 'products', 
+      label: 'Products', 
+      description: 'Physical goods like food, clothing, or electronics.',
+      icon: FaBox,
+      color: 'bg-blue-500'
+    },
+    { 
+      key: 'services', 
+      label: 'Services', 
+      description: 'Professional services like repairs or consultations.',
+      icon: FaTools,
+      color: 'bg-green-500'
+    },
+    { 
+      key: 'packages', 
+      label: 'Packages', 
+      description: 'Pre-packaged offerings like courses or licenses.',
+      icon: FaGift,
+      color: 'bg-purple-500'
+    },
+    { 
+      key: 'rentals', 
+      label: 'Rentals', 
+      description: 'Items available for rent like accommodation or vehicles.',
+      icon: FaHome,
+      color: 'bg-orange-500'
+    },
+    { 
+      key: 'donations', 
+      label: 'Donations', 
+      description: 'Accept donations for your cause or organization.',
+      icon: FaHeart,
+      color: 'bg-red-500'
+    }
   ];
 
   return (
-    <div className="relative w-full h-full flex flex-col justify-start pt-[8vh]">
+    <div className="relative w-full h-full flex flex-col justify-start">
       {/* Header Section */}
-      <div className="text-center mb-[4vh]">
-        <h2 className="text-[2.6vh] font-semibold text-[#0b032d]">What does your store sell?</h2>
-        <p className="text-[1.6vh] text-gray-600 mt-[0.8vh]">
-          (Select all that apply. You can skip if none.)
+      <div className="text-center mb-4">
+        <h2 className="hidden text-xl font-semibold text-gray-800">What does your store sell?</h2>
+        <p className="text-xs text-gray-500 mt-1">
+          Select all that apply. You can skip this step if needed.
         </p>
       </div>
 
       {/* Trade Options */}
-      <div className="space-y-[1vh] w-full h-[70%] overflow-y-scroll">
+      <div className="space-y-3 w-full flex-1 overflow-y-auto pr-1">
         {tradeOptions.map((option) => {
           const selected = form.trades.includes(option.key);
+          const Icon = option.icon;
+          
           return (
-            <label
+            <motion.label
               key={option.key}
               htmlFor={option.key}
-              className={`flex items-start w-full  gap-[1.5vh] border rounded p-[2vh] transition-all cursor-pointer 
-                ${selected ? 'border-[#0b032d] bg-[#f4f3ff]' : 'border-gray-500 4over:border-[#0b032d]/50 hover:bg-gray-50'}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`flex items-center w-full gap-4 border-2 rounded-xl p-4 cursor-pointer transition-all duration-200 
+                ${selected 
+                  ? 'border-indigo-500 bg-indigo-50' 
+                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}`}
             >
+              <div className={`w-10 h-10 rounded-full ${option.color} flex items-center justify-center flex-shrink-0`}>
+                <Icon className="text-white text-sm" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <span className="text-sm font-semibold text-gray-800 block">{option.label}</span>
+                <span className="text-xs text-gray-500 line-clamp-1">{option.description}</span>
+              </div>
+              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200
+                ${selected ? 'border-indigo-500 bg-indigo-500' : 'border-gray-300'}`}
+              >
+                {selected && <FaCheck className="text-white text-xs" />}
+              </div>
               <input
                 type="checkbox"
                 id={option.key}
                 checked={selected}
                 onChange={(e) => handleTradeToggle(option.key, e.target.checked)}
-                className="mt-[0.5vh] w-[2.2vh] h-[2.2vh] accent-[#0b032d] cursor-pointer"
+                className="sr-only"
               />
-              <div className="flex flex-col">
-                <span className="text-[2vh] font-medium text-[#0b032d]">{option.label}</span>
-                <span className="text-[1.5vh] text-gray-600 leading-snug line-clamp-1">{option.description}</span>
-              </div>
-            </label>
+            </motion.label>
           );
         })}
       </div>
 
+      {/* Selection Summary */}
+      {form.trades.length > 0 && (
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg"
+        >
+          <p className="text-xs text-green-700 font-medium">
+            ✓ {form.trades.length - 1} trade{form.trades.length -1  > 1 ? 's' : ''} selected
+          </p>
+        </motion.div>
+      )}
+
       {/* No Selection Message */}
       {form.trades.length === 0 && (
-        <div className="text-center mt-[4vh]">
-          <p className="text-[1.6vh] text-gray-500 italic">
-            No trade types selected. You can skip this step or choose the ones that match your business.
+        <div className="text-center mt-4 p-3 bg-gray-50 rounded-lg">
+          <p className="text-xs text-gray-500">
+            No trade types selected. You can skip this step.
           </p>
         </div>
       )}
 
       {/* Validation error (though trades are optional) */}
       {nextClicked && !validation.tradesValid && (
-        <div className="text-center text-red-500 text-[1.8vh] mt-2">
+        <div className="text-center text-red-500 text-xs mt-2">
           Please select at least one trade type
         </div>
       )}

@@ -31,7 +31,7 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({
   const handleSettingChange = (field: string, value: any) => {
     dispatch(updateSetting({ field, value }));
   };
-  const buttonFunctions = ['book', 'call', 'buy', 'subscribe'];
+  const buttonFunctions = ['services', 'call', 'products', 'packages'];
 
   return (
     <div className="space-y-[.35vh]">
@@ -80,15 +80,13 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({
       <SubSettingsContainer
         name="Text"
         SettingsComponent={
-            <div className="px-2">
-                <TextEditor
-                    objectPath={`${objectPath}.text`}
-                    settings={settings}
-                    handleSettingChange={handleSettingChange}
-                    allow={["input", "fontFamily", "color", "fontSize", "weight", "animation", "lineHeight"]}
-                    responsiveSize={false}
-                />
-            </div> 
+              <TextEditor
+                  objectPath={`${objectPath}.text`}
+                  settings={settings}
+                  handleSettingChange={handleSettingChange}
+                  allow={["input", "fontFamily", "color", "fontSize", "weight", "animation", "lineHeight"]}
+                  responsiveSize={false}
+              />
         }
       />
 

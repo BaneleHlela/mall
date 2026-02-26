@@ -11,11 +11,14 @@ import FirstOrderSubSettingsContainer from "../../../FirstOrderSubSettingsContai
 import SlidingPanel from "../../../supporting/SlidingPanel";
 import { AnimatePresence } from "framer-motion";
 import TextEditor from "../../../text/TextEditor";
+import { useBreadcrumbs } from "../../../../../contexts/BreadcrumbContext";
+import { Heart, ShoppingCart, Monitor, Smartphone } from "lucide-react";
 
 const TopbarSettings = () => {
   const settings = useAppSelector((state: any) => state.layoutSettings);
   const store = useAppSelector((state) => state.stores.currentStore);
   const dispatch = useAppDispatch();
+  const { addBreadcrumb } = useBreadcrumbs();
 
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
@@ -24,26 +27,39 @@ const TopbarSettings = () => {
     dispatch(updateSetting({ field, value }));
   };
 
+  const handlePanelOpen = (panelId: string, label: string) => {
+    setActivePanel(panelId);
+    addBreadcrumb(panelId, label, closePanel);
+  };
+
   return (
-    <div className="p-[.7vh] space-y-[.5vh]">
+    <div className="p-1 space-y-2">
       <FirstOrderSubSettingsContainer
-        name="heart"
-        onClick={() => setActivePanel("heart")}
+        name="Heart"
+        onClick={() => handlePanelOpen("heart", "Heart")}
+        panelId="heart"
+        icon={<Heart size={16} />}
       />
       {Array.isArray(store?.trades) && store.trades.includes("products") && (
-          <FirstOrderSubSettingsContainer
-            name="Cart"
-            onClick={() => setActivePanel("cart")}
-          />
+        <FirstOrderSubSettingsContainer
+          name="Cart"
+          onClick={() => handlePanelOpen("cart", "Cart")}
+          panelId="cart"
+          icon={<ShoppingCart size={16} />}
+        />
       )}
 
       <FirstOrderSubSettingsContainer
         name="Desktop"
-        onClick={() => setActivePanel("desktop")}
+        onClick={() => handlePanelOpen("desktop", "Desktop")}
+        panelId="desktop"
+        icon={<Monitor size={16} />}
       />
       <FirstOrderSubSettingsContainer
         name="Mobile"
-        onClick={() => setActivePanel("mobile")}
+        onClick={() => handlePanelOpen("mobile", "Mobile")}
+        panelId="mobile"
+        icon={<Smartphone size={16} />}
       />
 
       <AnimatePresence>
@@ -53,6 +69,7 @@ const TopbarSettings = () => {
             isOpen={true}
             onClose={closePanel}
             title="Topbar Background"
+            panelId="background"
           >
             <BackgroundEditor
               objectPath="menubar.background"
@@ -72,6 +89,7 @@ const TopbarSettings = () => {
             isOpen={true}
             onClose={closePanel}
             title="Desktop Topbar Settings"
+            panelId="desktop"
           >
             <DesktopTopbarSettings />
           </SlidingPanel>
@@ -83,6 +101,7 @@ const TopbarSettings = () => {
             isOpen={true}
             onClose={closePanel}
             title="Mobile Topbar Settings"
+            panelId="mobile"
           >
             <MobileTopbarSettings />
           </SlidingPanel>
@@ -94,6 +113,7 @@ const TopbarSettings = () => {
             isOpen={true}
             onClose={closePanel}
             title="Cart Settings"
+            panelId="cart"
           >
             <CartSettings
               settings={settings}
@@ -106,7 +126,8 @@ const TopbarSettings = () => {
             key="heart"
             isOpen={true}
             onClose={closePanel}
-            title="heart Settings"
+            title="Heart Settings"
+            panelId="heart"
           >
             {/* Favorite Icon settings */}
             <TextEditor

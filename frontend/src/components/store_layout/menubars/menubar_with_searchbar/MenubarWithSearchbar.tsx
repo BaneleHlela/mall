@@ -146,7 +146,7 @@ const MenubarWithSearchbar = () => {
                                         <StoreMenubarLogo 
                                             use={layout.menubar.topbar.logo.use}
                                             logoUrl={layout.menubar.topbar.logo.logoUrl}
-                                            logoText={layout.menubar.topbar.logo.style.text.input || layout.menubar.topbar.logo.logoText}
+                                            logoText={layout.menubar.topbar.logo.style.text?.input || layout.menubar.topbar.logo.logoText}
                                             style={{
                                                 text: {...layout.menubar.topbar.logo.style.text},
                                                 background: {...layout.menubar.topbar.logo.style.background, color: colors[layout.colors.secondary as keyof typeof colors]},
@@ -186,7 +186,7 @@ const MenubarWithSearchbar = () => {
                 <StoreMenubarLogo 
                     use={layout.menubar.topbar.logo.use}
                     logoUrl={layout.menubar.topbar.logo.logoUrl}
-                    logoText={layout.menubar.topbar.logo.style.text.input || store?.name}
+                    logoText={layout.menubar.topbar.logo.style.text?.input || store?.name}
                     style={{
                         text: {...layout.menubar.topbar.logo.style.text},
                         background: {...layout.menubar.topbar.logo.style.background, color: colors[layout.colors.secondary as keyof typeof colors]},

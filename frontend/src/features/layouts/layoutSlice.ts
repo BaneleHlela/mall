@@ -75,14 +75,14 @@ export const createLayoutWithSettings = createAsyncThunk(
         layoutId,
         newColors,
         newFonts,
-        sectionUpdates,
-        store
+        store,
+        themeName
       }: {
         layoutId: string;
         newColors?: { primary: string; secondary: string; accent: string; quad: string; pent: string };
         newFonts?: Fonts;
-        sectionUpdates?: any;
         store: string;
+        themeName?: string;
       },
       thunkAPI
     ) => {
@@ -91,8 +91,8 @@ export const createLayoutWithSettings = createAsyncThunk(
           layoutId,
           newColors,
           newFonts,
-          sectionUpdates,
-          store
+          store,
+          themeName
         });
         return response.data;
       } catch (error: any) {
