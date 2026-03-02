@@ -304,5 +304,307 @@
   animation: shimmer 3s linear infinite;
 }
 
+@keyframes appear {
+  from { 
+    opacity: 0;
+    scale: 0.5;
+  }
+  to { 
+    opacity: 1; 
+    scale: 1;
+  }
+}
+
+.blocktest {
+  animation: appear linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+/* Scroll-driven animations - appear family */
+
+@keyframes appear-from-bottom {
+  from { 
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0);
+  }
+}
+
+@keyframes appear-from-top {
+  from { 
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0);
+  }
+}
+
+@keyframes appear-from-left {
+  from { 
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(0);
+  }
+}
+
+@keyframes appear-from-right {
+  from { 
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(0);
+  }
+}
+
+@keyframes appear-rotate {
+  from { 
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.5);
+  }
+  to { 
+    opacity: 1; 
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes appear-blur {
+  from { 
+    opacity: 0;
+    filter: blur(10px);
+  }
+  to { 
+    opacity: 1; 
+    filter: blur(0);
+  }
+}
+
+@keyframes appear-slide-scale {
+  from { 
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes appear-pop {
+  from { 
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.1);
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1);
+  }
+}
+
+@keyframes appear-reveal {
+  from { 
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+  to { 
+    opacity: 1; 
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes appear-fade-width {
+  from { 
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to { 
+    opacity: 1; 
+    transform: scaleX(1);
+  }
+}
+
+@keyframes appear-fade-height {
+  from { 
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  to { 
+    opacity: 1; 
+    transform: scaleY(1);
+  }
+}
+
+@keyframes appear-skew {
+  from { 
+    opacity: 0;
+    transform: skewX(-20deg);
+  }
+  to { 
+    opacity: 1; 
+    transform: skewX(0deg);
+  }
+}
+
+@keyframes appear-zoom-in {
+  from { 
+    opacity: 0;
+    transform: scale(0);
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1);
+  }
+}
+
+@keyframes appear-zoom-out {
+  from { 
+    opacity: 0;
+    transform: scale(2);
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1);
+  }
+}
+
+@keyframes appear-flip-x {
+  from { 
+    opacity: 0;
+    transform: perspective(400px) rotateX(90deg);
+  }
+  to { 
+    opacity: 1; 
+    transform: perspective(400px) rotateX(0deg);
+  }
+}
+
+@keyframes appear-flip-y {
+  from { 
+    opacity: 0;
+    transform: perspective(400px) rotateY(90deg);
+  }
+  to { 
+    opacity: 1; 
+    transform: perspective(400px) rotateY(0deg);
+  }
+}
+
+/* Animation utility classes with scroll-driven timeline */
+
+.appear {
+  animation: appear linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-from-bottom {
+  animation: appear-from-bottom linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-from-top {
+  animation: appear-from-top linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-from-left {
+  animation: appear-from-left linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-from-right {
+  animation: appear-from-right linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-rotate {
+  animation: appear-rotate linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-blur {
+  animation: appear-blur linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-slide-scale {
+  animation: appear-slide-scale linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-pop {
+  animation: appear-pop linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-reveal {
+  animation: appear-reveal linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-fade-width {
+  animation: appear-fade-width linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-fade-height {
+  animation: appear-fade-height linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-skew {
+  animation: appear-skew linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-zoom-in {
+  animation: appear-zoom-in linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-zoom-out {
+  animation: appear-zoom-out linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-flip-x {
+  animation: appear-flip-x linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+.appear-flip-y {
+  animation: appear-flip-y linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+} 
 
 

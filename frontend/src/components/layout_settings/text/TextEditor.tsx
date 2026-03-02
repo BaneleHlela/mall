@@ -18,7 +18,8 @@ const TextEditor: React.FC<EditorProps> = ({
     responsiveSize = false,
     responsivePadding = false,
     useTextarea = false,
-    useQuill = false
+    useQuill = false,
+    scrollAnimationsOnly = false
 }) => {
     const isAllowed = (key: string) => !allow || allow.includes(key);
     const storeColors = useAppSelector((state) => state.layoutSettings.colors);
@@ -54,8 +55,31 @@ const TextEditor: React.FC<EditorProps> = ({
       "rotate-in",
       "blur-in",
       "glitch",
-      "typewriter"
+      "typewriter",
+      // Scroll-driven appear animations
+      "appear",
+      "appear-from-bottom",
+      "appear-from-top",
+      "appear-from-left",
+      "appear-from-right",
+      "appear-rotate",
+      "appear-blur",
+      "appear-slide-scale",
+      "appear-pop",
+      "appear-reveal",
+      "appear-fade-width",
+      "appear-fade-height",
+      "appear-skew",
+      "appear-zoom-in",
+      "appear-zoom-out",
+      "appear-flip-x",
+      "appear-flip-y"
     ];
+
+    // Filter animations based on scrollAnimationsOnly prop
+    const filteredAnimationOptions = scrollAnimationsOnly
+      ? ["none", "appear", "appear-from-bottom", "appear-from-top", "appear-from-left", "appear-from-right", "appear-rotate", "appear-blur", "appear-slide-scale", "appear-pop", "appear-reveal", "appear-fade-width", "appear-fade-height", "appear-skew", "appear-zoom-in", "appear-zoom-out", "appear-flip-x", "appear-flip-y"]
+      : animationOptions;
     const createSliderChangeHandler = (field: string, unit: string) => (newVal: number) => {
       const event = {
         target: Object.assign(document.createElement("input"), {
@@ -129,7 +153,7 @@ const TextEditor: React.FC<EditorProps> = ({
             <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100">
               <OptionsToggler
                   label="Text Animation"
-                  options={animationOptions}
+                  options={filteredAnimationOptions}
                   value={getSetting("animation", settings, objectPath) || "none"}
                   onChange={(newValue) =>
                       handleChange("animation")({

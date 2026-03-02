@@ -24,6 +24,7 @@ const HeroWithDivAndImage = () => {
       className="flex flex-col justify-center items-center overflow-hidden"
     >
       {/* Text */}
+      <div className=""></div>
       {config.text.firstLine.show && <UnderlinedText style={config.text.firstLine} />}
       {config.text.secondLine.show && <UnderlinedText style={config.text.secondLine} />}
       {config.text.thirdLine.show && <UnderlinedText style={config.text.thirdLine} />}

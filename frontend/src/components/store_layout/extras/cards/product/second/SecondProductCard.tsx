@@ -58,7 +58,7 @@ const SecondProductCard: React.FC<StoreProductCardProps> = ({
         ...getBackgroundStyles(style.background),
         backgroundColor: "transparent",
       }}
-      className={`flex group flex-col hover:scale-101`}
+      className={`flex group flex-col hover:scale-101 blocktest`}
     >
       {/* Image */}
       <div 

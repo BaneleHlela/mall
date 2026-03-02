@@ -29,6 +29,7 @@ export interface EditorProps {
     responsivePadding?: boolean;
     useTextarea?: boolean;
     useQuill?: boolean;
+    scrollAnimationsOnly?: boolean;
 }
 
 export interface ResponsiveValue {

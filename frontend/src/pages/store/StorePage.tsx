@@ -248,7 +248,9 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
             {!isCartRoute && (
               <>
                 {/* Store Menubar */}
-                <StoreMenubar />
+                <ErrorBoundary>
+                  <StoreMenubar />
+                </ErrorBoundary>
                 {/* <ArtMenubar /> */}
               </>
             )}

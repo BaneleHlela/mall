@@ -30,7 +30,7 @@ const ShortAbout = () => {
                     className="mt-[2vh]"
                 >
                     <div 
-                        className="text-wrap w-full rich-text"
+                        className={`text-wrap w-full rich-text ${about.text.paragraph?.animation}`}
                         dangerouslySetInnerHTML={{ __html: about.text.paragraph.input }}
                     />
                 </p>
@@ -49,10 +49,10 @@ const ShortAbout = () => {
                     <p style={{
                             ...getTextStyles(about.text.paragraph), 
                         }}
-                        className="mt-[2vh] w-[70%]"
+                        className="mt-[2vh] w-[70%] "
                     >
                         <div 
-                            className="text-wrap w-full rich-text"
+                            className={`text-wrap w-full rich-text ${about.text.paragraph?.animation}`}
                             dangerouslySetInnerHTML={{ __html: about.text.paragraph.input }}
                         />
                     </p>

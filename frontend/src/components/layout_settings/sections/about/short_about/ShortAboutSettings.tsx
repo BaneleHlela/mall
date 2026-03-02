@@ -25,7 +25,7 @@ const ShortAboutSettings = () => {
 
     const menuBarToggle = (
         pageSections.includes('about') && (
-            <div className="px-2 py-1 border rounded">
+            <div className="px-[.8vh] py-[.4vh] border rounded">
                 <OptionsToggler
                     label="Add to Menubar ?"
                     options={["yes", "no"]}
@@ -99,10 +99,11 @@ const ShortAboutSettings = () => {
                                         objectPath={`${objectPath}.text.paragraph`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={["input", "fontFamily", "fontSize", "color", "weight", "fontStyle", "padding"]}
+                                        allow={["input", "animation", "fontFamily", "fontSize", "color", "weight", "fontStyle", "padding"]}
                                         responsivePadding
                                         responsiveSize
                                         useQuill
+                                        scrollAnimationsOnly
                                     />
                                 </div>
                             }

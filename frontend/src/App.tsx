@@ -25,6 +25,7 @@ import AddUserAddressPage from "./pages/profile/address/AddUserAddressPage";
 import GetStartedPage from "./pages/store/get_started_page/GetStartedPage";
 import PayFastPage from "./pages/payments/PayFastPage";
 import ComingSoon from "./components/the_mall/ComingSoon";
+import MallCartPzage from "./pages/cart/MallCartPage";
 import MallCartPage from "./pages/cart/MallCartPage";
 import { HiOutlineChatAlt2 } from "react-icons/hi";
 

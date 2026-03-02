@@ -48,8 +48,9 @@ const HorizontalProductSettings = () => {
                         objectPath={`${objectPath}.text.header`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={[ "color", "input", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing", "textAlign" ]}
+                        allow={[ "color", "padding", "input", "fontFamily", "fontSize", "weight", "lineHeight", "animation", "letterSpacing", "textAlign" ]}
                         responsiveSize
+                        responsivePadding
                     />
                 </div>
                 }
