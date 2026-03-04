@@ -50,16 +50,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser()); // Allow us to pass incoming cookies
 
 
-
-
-if (process.env.NODE_ENV === "production") {
-	app.use(express.static(path.join(__dirname, "/frontend/dist")));
-
-	app.get("*", (req, res) => {
-		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-	});
-}
-
 // Session setup (required for Passport to work)
 app.use(session({
     secret: process.env.SESSION_SECRET,
