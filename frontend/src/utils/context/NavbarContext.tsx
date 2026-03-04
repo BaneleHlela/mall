@@ -1,5 +1,5 @@
 // src/context/NavbarContext.tsx
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react"
 
 interface NavbarContextType {
   isNavbarHidden: boolean;
