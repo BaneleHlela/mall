@@ -16,7 +16,7 @@ import { calculateDistanceToStore, formatDistance } from '../home/store_card/sup
 import { updateUser } from '../../../features/user/userSlice';
 import toast from 'react-hot-toast';
 import StorePosterRatingStars from './StorePosterRatingStars';
-import { useNavbar } from '../../../utils/context/NavBarContext';
+import { useNavbar } from '../../../utils/context/NavbarContext';
 import StorePosterSlideshow from './types/StorePosterSlideshow';
 
 

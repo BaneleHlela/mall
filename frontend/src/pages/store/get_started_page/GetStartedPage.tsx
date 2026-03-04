@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import TheMallStoreHero from '../../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStoreHero';
-import { useNavbar } from '../../../utils/context/NavBarContext';
+import { useNavbar } from '../../../utils/context/NavbarContext';
 import WebFont from 'webfontloader';
 import TheMallStoreAboutSection from '../../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStoreAboutSection';
 import TheMallSocialFeatureSection from '../../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallSocialFeatureSection';

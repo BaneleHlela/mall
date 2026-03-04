@@ -32,7 +32,7 @@ import ErrorBoundary from "../../components/ErrorBoundary";
 import { fetchStoreRentals } from "../../features/rentals/rentalSlice";
 import { fetchStoreDonations } from "../../features/donations/donationsSlice";
 import ProtectedRoute from "../../components/the_mall/authorization/ProtectedRoute";
-import { useNavbar } from "../../utils/context/NavBarContext";
+import { useNavbar } from "../../utils/context/NavbarContext";
 
 const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
   const location = useLocation();

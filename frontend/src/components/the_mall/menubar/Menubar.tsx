@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { House, LayoutDashboard, Store, Search, CircleUser } from "lucide-react";
 import { FaRegHeart } from "react-icons/fa";
-import { useNavbar } from "../../../utils/context/NavBarContext";
+import { useNavbar } from "../../../utils/context/NavbarContext";
 import { LuShoppingCart } from "react-icons/lu";
 import { HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
 import { HiOutlineChatAlt2 } from "react-icons/hi";

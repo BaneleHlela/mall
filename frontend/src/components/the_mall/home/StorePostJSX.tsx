@@ -8,7 +8,7 @@ import { BsDoorOpen } from 'react-icons/bs';
 import HomePageReviewsModal from './HomePageReviewsModal';
 import StorePosterRatingStars from '../basic_store_post/StorePosterRatingStars';
 import { fetchStore } from '../../../features/store_admin/storeAdminSlice';
-import { useNavbar } from '../../../utils/context/NavBarContext';
+import { useNavbar } from '../../../utils/context/NavbarContext';
 import { fetchStoreBySlug, setLoading } from '../../../features/stores/storeSlice';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useNavigate } from 'react-router-dom';

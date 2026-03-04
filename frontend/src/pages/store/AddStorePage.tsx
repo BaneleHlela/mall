@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import CreateStoreForm from '../../components/the_mall/store/create_store_form/CreateStoreForm'
-import { useNavbar } from '../../utils/context/NavBarContext'
+import { useNavbar } from '../../utils/context/NavbarContext'
 
 const AddStorePage = () => {
     const { hideNavbar } = useNavbar();
