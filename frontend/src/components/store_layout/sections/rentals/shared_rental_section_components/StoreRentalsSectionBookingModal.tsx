@@ -1,4 +1,3 @@
-import { get } from "lodash";
 import { useAppSelector } from "../../../../../app/hooks";
 import { mockLayout } from "../../../../../major_updates/mockLayout";
 import StoreLayoutButton from "../../../shared_layout_components/StoreLayoutButton";
@@ -27,7 +26,7 @@ const StoreRentalsSectionBookingModal: React.FC<StoreRentalsSectionBookingModalP
   rentalDuration
 }) => {
   const { fonts, colors } = useAppSelector((state) => state.layoutSettings);
-  const config = useAppSelector(state => state.layoutSettings.sections.rentals.bookingModal) || get(mockLayout, 'sections.rentals.bookingModal');
+  const config = useAppSelector(state => state.layoutSettings.sections.rentals.bookingModal);
   const rentals = useAppSelector((state) => state.rentals.rentals);
   const [isRentalsDropdownOpen, setIsRentalsDropdownOpen] = useState(false);
   const [selectedRental, setSelectedRental] = useState({ name: rentalName, duration: rentalDuration });
