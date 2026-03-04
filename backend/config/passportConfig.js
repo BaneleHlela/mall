@@ -25,7 +25,9 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/api/auth/google/callback",
+      callbackURL: process.env.NODE_ENV === 'production'
+      ? `${process.env.PRODUCTION_URL}/api/auth/google/callback`
+      : "/api/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -70,7 +72,6 @@ passport.use(new FacebookStrategy(
   {
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
-    // passportConfig.js line 75
     callbackURL: process.env.NODE_ENV === 'production'
     ? `${process.env.PRODUCTION_URL}/api/auth/facebook/callback`
     : "/api/auth/facebook/callback",
