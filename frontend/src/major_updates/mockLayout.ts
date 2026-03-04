@@ -1,9 +1,3 @@
-import { Description } from "@headlessui/react";
-import { duration } from "@mui/material";
-import { FontSize } from "@tiptap/extension-text-style";
-import { color } from "framer-motion";
-import { pick } from "lodash";
-import { LineChart, Weight } from "lucide-react";
 
 export const mockLayout = {
     _id: "layoutid",
