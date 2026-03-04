@@ -71,7 +71,9 @@ passport.use(new FacebookStrategy(
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
     // passportConfig.js line 75
-    callbackURL: "/api/auth/facebook/callback",
+    callbackURL: process.env.NODE_ENV === 'production'
+    ? `${process.env.PRODUCTION_URL}/api/auth/facebook/callback`
+    : "/api/auth/facebook/callback",
     profileFields: ['id', 'first_name', 'last_name', 'email', 'picture.type(large)']
   },
   async ( accessToken, refreshToken, profile, done) => { // ✅ FIXED
