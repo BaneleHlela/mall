@@ -273,12 +273,12 @@ const TheMallTopbar = () => {
       </div>
 
       {/* Modals */}
-      <ProtectedRoute>
+      {/* <ProtectedRoute>
         <RangeModal
           open={isRangeModalOpen}
           onClose={() => dispatch(closeRangeModal())}
         />
-      </ProtectedRoute>
+      </ProtectedRoute> */}
     </div>
   );
 };
