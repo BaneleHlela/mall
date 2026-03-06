@@ -30,6 +30,8 @@ import MallCartPage from "./pages/cart/MallCartPage";
 import { HiOutlineChatAlt2 } from "react-icons/hi";
 import { checkAuth } from "./features/user/userSlice";
 import "./features/api/axiosInstance"; // Initialize axios interceptors
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import DataDeletion from "./pages/DataDeletion";
 
 const AppContent: React.FC = () => {
   const dispatch = useDispatch();
@@ -141,9 +143,18 @@ const AppContent: React.FC = () => {
           }
         />
         <Route
+          path="/privacy-policy"
+          element={<PrivacyPolicy />}
+        />
+        <Route  
+          path="/data-deletion"
+          element={<DataDeletion />}
+        />
+        <Route
           path="/payment/*"
           element={<PayFastPage />}
         />
+        
         
         {authRoutes}
       </Routes>
