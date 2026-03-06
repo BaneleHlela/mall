@@ -2,7 +2,7 @@ import React from "react";
 
 const DataDeletion: React.FC = () => {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-16 text-gray-800">
+    <div className="max-w-4xl mx-auto lg:min-h-screen bg-gray-100 px-6 py-16 text-gray-800">
       <h1 className="text-3xl font-semibold mb-6">
         Data Deletion Instructions
       </h1>
@@ -29,7 +29,7 @@ const DataDeletion: React.FC = () => {
         Send a deletion request to:
       </p>
 
-      <p className="font-medium mt-2">banelehlela07@gmail.com</p>
+      <p className="font-medium mt-2">contact@themallbeta.com</p>
 
       <p className="mt-4">
         Include your account email address and request for data deletion.
@@ -48,7 +48,7 @@ const DataDeletion: React.FC = () => {
         Contact
       </h2>
 
-      <p>Email: banelehlela07@gmail.com</p>
+      <p>Email: contact@themallbeta.com</p>
     </div>
   );
 };

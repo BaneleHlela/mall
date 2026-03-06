@@ -84,7 +84,7 @@ const PrivacyPolicy: React.FC = () => {
 
       <h2 className="text-xl font-semibold mt-8 mb-3">7. Contact</h2>
 
-      <p>Email: banelehlela07@gmail.com</p>
+      <p>Email: contact@themallbeta.com</p>
       <p>Website: https://themallbeta.com</p>
     </div>
   );
