@@ -14,11 +14,15 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function sendMail({ to, subject, html }) {
+export async function sendMail({ to, subject, html, from }) {
   console.log("Sending email to:", to, "Subject:", process.env.NEO_EMAIL_PASSWORD, process.env.SMTP_USER);
   return transporter.sendMail({
+    from: from || process.env.SMTP_USER,
     to,
     subject,
     html,
   });
 }
+
+await transporter.verify();
+console.log("SMTP ready");
