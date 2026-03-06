@@ -40,7 +40,7 @@ export const WelcomeToTheMall = ({ fonts }: WelcomeToTheMallProps) => {
   return (
       <div className="w-full">
           {/* Welcome message above the poster */}
-          <p className="font-normal py-[.7vh]">
+          <p className="font-normal py-[1vh]">
               Welcome to the Mall! We're so excited to have you. 
           </p>
           
@@ -309,7 +309,7 @@ export const LaunchDate = () => {
 
   return (
     <div className="w-full">
-      <p className="font-normal py-[.7vh]">
+      <p className="font-normal py-[1vh]">
         Important announcement about The Mall's availability.
       </p>
       

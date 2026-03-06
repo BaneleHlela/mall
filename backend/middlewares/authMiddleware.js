@@ -5,6 +5,7 @@ import expressAsyncHandler from "express-async-handler";
 
 export const protectRoute = async (req, res, next) => {
 	try {
+        console.log("Checking access token in cookies:", req.cookies.accessToken);
 		const accessToken = req.cookies.accessToken;
 
 		if (!accessToken) {

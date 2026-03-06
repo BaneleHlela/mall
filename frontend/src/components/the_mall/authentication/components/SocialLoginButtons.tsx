@@ -26,10 +26,10 @@ const SocialLoginButtons = () => {
         <div className="">Google</div>
       </button>
       <button
-        onClick={facebookLogin}
-        className="py-[1vh] w-[40%] text-black rounded flex flex-row gap-[1vh] justify-center items-center bg-[#e8f0fe]"
+        onClick={() => {}}
+        className="py-[1vh] w-[40%] text-gray-400 rounded flex flex-row gap-[1vh] justify-center items-center bg-gray-200"
       >
-        <FaFacebook className="text-blue-600 text-[3.3vh]"/> 
+        <FaFacebook className="text-gray-300 text-[3.3vh]"/> 
         <div className="">facebook</div>
       </button>
     </div>

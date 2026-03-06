@@ -234,7 +234,7 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
 
   return (
     <div 
-      className={`w-screen h-screen flex flex-row justify-center`}
+      className={`w-screen flex flex-row justify-center`}
       style={{
         backgroundColor: settings.colors.primary,
       }}

@@ -132,6 +132,9 @@ const rentalsSlice = createSlice({
     setCurrentRental(state, action: PayloadAction<Rental | null>) {
       state.currentRental = action.payload;
     },
+    clearError(state) {
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -228,5 +231,5 @@ const rentalsSlice = createSlice({
   },
 });
 
-export const { clearRentals, setCurrentRental } = rentalsSlice.actions;
+export const { clearRentals, setCurrentRental, clearError } = rentalsSlice.actions;
 export default rentalsSlice.reducer;

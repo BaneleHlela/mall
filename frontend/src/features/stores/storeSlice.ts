@@ -80,7 +80,7 @@ export const fetchStoresInRange = createAsyncThunk<
 export const fetchStoresByOwner = createAsyncThunk<Store[], string>(
   'stores/fetchStoresByOwner',
   async (ownerId) => {
-    const response = await axios.get(`${STORE_API_URL}/my-stores`, { params: { ownerId } });
+    const response = await axios.get(`${STORE_API_URL}/my-stores`);
     return response.data;
   }
 );
@@ -207,6 +207,9 @@ const storeSlice = createSlice({
     },
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
+    },
+    clearError: (state) => {
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -420,6 +423,6 @@ const storeSlice = createSlice({
   },
 });
 
-export const { setLoading, setError,  setCurrentStore } = storeSlice.actions;
+export const { setLoading, setError, setCurrentStore, clearError } = storeSlice.actions;
 
 export default storeSlice.reducer;

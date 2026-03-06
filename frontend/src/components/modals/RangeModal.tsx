@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaTimes } from 'react-icons/fa';
 import type { RootState } from '../../app/store';
@@ -19,6 +19,7 @@ const RangeModal: React.FC<RangeModalProps> = ({ open, onClose }) => {
   const mapInstance = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<any>(null);
   const circleRef = useRef<any>(null);
+  const [isMapLoading, setIsMapLoading] = useState(true);
 
   const userLocation = user?.locations?.[0];
 
@@ -58,6 +59,8 @@ const RangeModal: React.FC<RangeModalProps> = ({ open, onClose }) => {
         },
         map: mapInstance.current,
       });
+
+      setIsMapLoading(false);
     }
   }, [open, userLocation]);
 
@@ -146,7 +149,21 @@ const RangeModal: React.FC<RangeModalProps> = ({ open, onClose }) => {
               <label className="block text-[1.5vh] font-semibold text-stone-700 mb-2">
                 Search Area Preview
               </label>
-              <div ref={mapRef} className="w-full h-[25vh] border rounded-lg" />
+              <div className="w-full h-[25vh] border rounded-lg relative">
+                {isMapLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-lg">
+                    <div style={{
+                      width: '40px',
+                      height: '40px',
+                      border: '4px solid #f3f4f6',
+                      borderTop: '4px solid #0b032d',
+                      borderRadius: '50%',
+                      animation: 'spin 1s linear infinite'
+                    }} />
+                  </div>
+                )}
+                <div ref={mapRef} className="w-full h-full" style={{ opacity: isMapLoading ? 0 : 1 }} />
+              </div>
               <p className="text-sm text-stone-600 mt-2">
                 The blue circle shows your search area. Stores within this radius will be displayed.
               </p>

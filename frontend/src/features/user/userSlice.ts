@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from "../api/axiosInstance";
 import { type User, type UserState } from "../../types/userTypes";
 import { API_URL } from "../context";
 
@@ -12,7 +12,7 @@ const USER_API_URL = `${API_URL}/api/user`;
 const PACKAGES_API_URL = `${API_URL}/api/packages`;
 
 
-axios.defaults.withCredentials = true;
+
 
 const initialState: UserState = {
   user: null,
@@ -30,7 +30,7 @@ export const signup = createAsyncThunk(
   "user/signup",
   async ({ email, password, firstName, lastName }: { email: string; password: string; firstName: string; lastName: string }, thunkAPI) => {
     try {
-      const response = await axios.post(`${USER_API_URL}/signup`, { email, password, firstName, lastName });
+      const response = await api.post(`${USER_API_URL}/signup`, { email, password, firstName, lastName });
       return response.data.user as User;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Error signing up");
@@ -43,7 +43,7 @@ export const login = createAsyncThunk(
   "user/login",
   async ({ email, password }: { email: string; password: string }, thunkAPI) => {
     try {
-      const response = await axios.post(`${USER_API_URL}/login`, { email, password });
+      const response = await api.post(`${USER_API_URL}/login`, { email, password });
       return response.data.user as User;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Error logging in");
@@ -55,7 +55,7 @@ export const logout = createAsyncThunk(
   "user/logout", 
   async (_, thunkAPI) => {
   try {
-    await axios.post(`${USER_API_URL}/logout`);
+    await api.post(`${USER_API_URL}/logout`);
     return null;
   } catch (err: any) {
     return thunkAPI.rejectWithValue("Error logging out");
@@ -68,7 +68,7 @@ export const refreshAccessToken = createAsyncThunk(
     "user/refreshAccessToken",
     async (_, thunkAPI) => {
       try {
-        const response = await axios.get(`${USER_API_URL}/refresh-token`);
+        const response = await api.get(`${USER_API_URL}/refresh-token`);
         return response.data.message as string;
       } catch (err: any) {
         return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to refresh token");
@@ -81,7 +81,7 @@ export const getProfile = createAsyncThunk(
   "user/getProfile",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get(`${USER_API_URL}/profile`, {
+      const response = await api.get(`${USER_API_URL}/profile`, {
         withCredentials: true, // ⬅️ This is required for cookie/session-based auth
       });
       return response.data as User;
@@ -98,7 +98,7 @@ export const userLoginStatus = createAsyncThunk(
     "user/loginStatus",
     async (_, thunkAPI) => {
       try {
-        const response = await axios.get(`${USER_API_URL}/login-status`);
+        const response = await api.get(`${USER_API_URL}/login-status`);
         return response.data as boolean;
       } catch (err: any) {
         return thunkAPI.rejectWithValue(false);
@@ -111,7 +111,7 @@ export const updateUser = createAsyncThunk(
     "user/updateUser",
     async (userData: Partial<User>, thunkAPI) => {
       try {
-        const response = await axios.put(`${USER_API_URL}/edit-user`, userData);
+        const response = await api.put(`${USER_API_URL}/edit-user`, userData);
         return response.data as User;
       } catch (err: any) {
         return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to update user");
@@ -125,7 +125,7 @@ export const deleteUser = createAsyncThunk(
     "user/deleteUser",
     async (_, thunkAPI) => {
       try {
-        await axios.delete(`${USER_API_URL}/delete`);
+        await api.delete(`${USER_API_URL}/delete`);
         return null;
       } catch (err: any) {
         return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to delete user");
@@ -137,7 +137,7 @@ export const verifyEmail = createAsyncThunk(
   "user/verifyEmail",
   async (code: string, thunkAPI) => {
     try {
-      const response = await axios.post(`${USER_API_URL}/verify-email`, { code });
+      const response = await api.post(`${USER_API_URL}/verify-email`, { code });
       return response.data.user as User;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Error verifying email");
@@ -149,7 +149,7 @@ export const checkAuth = createAsyncThunk(
   "user/checkAuth", 
   async (_, thunkAPI) => {
   try {
-    const response = await axios.get(`${USER_API_URL}/check-auth`);
+    const response = await api.get(`${USER_API_URL}/check-auth`);
     return response.data.user as User;
   } catch {
     return thunkAPI.rejectWithValue(null);
@@ -162,7 +162,7 @@ export const forgotPassword = createAsyncThunk(
   "user/forgotPassword",
   async (email: string, thunkAPI) => {
     try {
-      const response = await axios.post(`${USER_API_URL}/forgot-password`, { email });
+      const response = await api.post(`${USER_API_URL}/forgot-password`, { email });
       return response.data.message as string;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Error sending email");
@@ -174,7 +174,7 @@ export const resetPassword = createAsyncThunk(
   "user/resetPassword",
   async ({ token, password }: { token: string; password: string }, thunkAPI) => {
     try {
-      const response = await axios.post(`${USER_API_URL}/reset-password/${token}`, { password });
+      const response = await api.post(`${USER_API_URL}/reset-password/${token}`, { password });
       return response.data.message as string;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Error resetting password");
@@ -201,7 +201,7 @@ export const updateAvatar = createAsyncThunk(
         formData.append("avatar", payload.file);
       }
 
-      const response = await axios.put(
+      const response = await api.put(
         `${USER_API_URL}/avatar`,
         formData,
         {
@@ -226,7 +226,7 @@ export const likePackage = createAsyncThunk(
   "user/likePackage",
   async (packageId: string, thunkAPI) => {
     try {
-      const response = await axios.post(`${PACKAGES_API_URL}/${packageId}/like`);
+      const response = await api.post(`${PACKAGES_API_URL}/${packageId}/like`);
       return response.data.favouritePackages as string[];
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to like package");
@@ -239,7 +239,7 @@ export const unlikePackage = createAsyncThunk(
   "user/unlikePackage",
   async (packageId: string, thunkAPI) => {
     try {
-      const response = await axios.delete(`${PACKAGES_API_URL}/${packageId}/like`);
+      const response = await api.delete(`${PACKAGES_API_URL}/${packageId}/like`);
       return response.data.favouritePackages as string[];
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to unlike package");
@@ -364,7 +364,7 @@ const userSlice = createSlice({
         state.error = action.payload as string;
       })
       
-      .addCase(getProfile.fulfilled, (state, action: PayloadAction<User>) => {
+      .addCase(getProfile.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isAuthenticated = true;
       })

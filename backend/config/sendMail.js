@@ -10,11 +10,12 @@ const transporter = nodemailer.createTransport({
   port: 465,
   auth: {
     user: process.env.SMTP_USER,
-    pass: process.env.GMAIL_APP_PASSWORD,
+    pass: process.env.NEO_EMAIL_PASSWORD,
   },
 });
 
 export async function sendMail({ to, subject, html }) {
+  console.log("Sending email to:", to, "Subject:", process.env.NEO_EMAIL_PASSWORD, process.env.SMTP_USER);
   return transporter.sendMail({
     to,
     subject,

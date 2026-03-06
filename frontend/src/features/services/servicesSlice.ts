@@ -107,7 +107,11 @@ export const deleteService = createAsyncThunk(
 const servicesSlice = createSlice({
   name: 'services',
   initialState,
-  reducers: {},
+  reducers: {
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
 
@@ -174,3 +178,4 @@ const servicesSlice = createSlice({
 });
 
 export default servicesSlice.reducer;
+export const { clearError } = servicesSlice.actions;

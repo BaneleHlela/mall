@@ -122,8 +122,8 @@ const HomePage = () => {
     isDraggingRef.current = false;
   };
 
-  console.log(user?.stores)
   
+
   // Handle add post button click
   const handleAddPostClick = () => {
     if (!user) {
@@ -149,12 +149,12 @@ const HomePage = () => {
     });
   };
 
+
   return (
-    <div className="relative  w-full h-full max-h-screen overflow-y-scroll hide-scrollbar bg-gray-100 flex flex-col items-center">
+    <div className="relative  w-full h-full overflow-y-scroll hide-scrollbar bg-gray-100 flex flex-col items-center">
       {/* Menubar */}
-      <nav className="w-[100vw] h-[15vh] min-h-[15vh] inset-0 z-10 bg-black flex flex-col items-center lg:min-h-[9vh]">
-        <TheMallTopbar />
-      </nav>
+      <TheMallTopbar />
+      <div className="w-[100vw] h-[14vh] min-h-[14vh] lg:min-h-[10vh] lg:h-[10vh]"></div>
       {/* Content */}
       <div className="w-full space-y-1 lg:w-[35%] overflow-x-hidden hide-scrollbar z-2">
         {/* Department Selector */}
@@ -239,7 +239,7 @@ const HomePage = () => {
           >
             
             {/* Add your store */}
-            {user?.stores.length === 0 && (
+            {user?.stores.length === 0 || !user  && (
               <div onClick={() => navigate("/add-store")} className="relative flex justify-center h-[20vh] lg:h-[27vh] bg-amber-500 aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102">
                 {/* Image */}
                 <div className="w-full">
@@ -464,7 +464,7 @@ const HomePage = () => {
       {/* Add post button */}
       <button 
         onClick={handleAddPostClick}
-        className='fixed bottom-[7vh] right-2 p-[1.2vh] bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-full z-100 shadow-lg hover:shadow-xl hover:scale-110 active:scale-95 transition-all duration-200 ease-out'
+        className='fixed bottom-[6vh] right-2 p-[1.2vh] bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-full z-100 shadow-lg hover:shadow-xl hover:scale-110 active:scale-95 transition-all duration-200 ease-out'
       >
         <MdAdd className='text-[4vh]'/>
       </button>

@@ -106,6 +106,9 @@ const packagesSlice = createSlice({
         clearPackagesError: (state) => {
             state.error = null;
         },
+        clearError: (state) => {
+            state.error = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -204,5 +207,5 @@ const packagesSlice = createSlice({
     },
 });
 
-export const { clearPackagesError } = packagesSlice.actions;
+export const { clearPackagesError, clearError } = packagesSlice.actions;
 export default packagesSlice.reducer;

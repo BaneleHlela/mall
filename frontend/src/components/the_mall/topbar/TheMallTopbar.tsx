@@ -1,6 +1,6 @@
 import { MdLocationSearching } from "react-icons/md";
 import { SlLocationPin } from "react-icons/sl";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import StoreCard from "../home/store_card/StoreCard";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
@@ -17,6 +17,8 @@ const TheMallTopbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+  const lastScrollY = useRef(0);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -33,6 +35,26 @@ const TheMallTopbar = () => {
     }
   }, [dispatch, searchTerm]);
 
+  // Hide topbar on scroll down, show on scroll up
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
+        // Scrolling down and past initial threshold
+        setIsHidden(true);
+      } else {
+        // Scrolling up
+        setIsHidden(false);
+      }
+      
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const showResults = searchTerm.length > 0 && (isFocused || isHovered);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -43,8 +65,9 @@ const TheMallTopbar = () => {
 
   const limitedResults = storeIds.slice(0, 4); // show only first 4 results
 
+
   return (
-    <div className="w-full h-full lg:w-[80%] text-white">
+    <div className={`fixed top-0 w-[100vw] h-[14vh] min-h-[14vh] lg:min-h-[10vh] lg:h-[8vh] lg:max-h-[8vh] inset-0 z-50 bg-black flex flex-col items-center lg:px-[10%] text-white transition-transform duration-300 ${isHidden ? '-translate-y-full' : ''}`}>
       <div className="h-full w-full">
         {/* Desktop */}
         <div className="hidden lg:flex w-full h-full flex-row justify-between items-center">
@@ -182,7 +205,7 @@ const TheMallTopbar = () => {
         </div>
 
         {/* Mobile */}
-        <div className="w-full h-full py-[1vh] px-[.9vh] lg:hidden">
+        <div className="w-full h-full py-[.8vh] px-[.9vh] lg:hidden">
           <div className="w-full h-[50%] flex flex-row justify-between items-center">
             {/* Logo */}
             <div className="w-fit h-[65%]">
@@ -273,12 +296,14 @@ const TheMallTopbar = () => {
       </div>
 
       {/* Modals */}
-      {/* <ProtectedRoute>
-        <RangeModal
-          open={isRangeModalOpen}
-          onClose={() => dispatch(closeRangeModal())}
-        />
-      </ProtectedRoute> */}
+      {isRangeModalOpen && (
+        <ProtectedRoute>
+          <RangeModal
+            open={isRangeModalOpen}
+            onClose={() => dispatch(closeRangeModal())}
+          />
+        </ProtectedRoute>
+      )}
     </div>
   );
 };

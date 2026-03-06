@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getBackgroundStyles } from '../../../utils/stylingFunctions';
 
 interface MapComponentProps {
@@ -26,6 +26,7 @@ interface MapComponentProps {
 
 const MapComponent: React.FC<MapComponentProps> = ({ lat, lng, name, image, style }) => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Safely access image properties with defaults
   const imageUrl = image?.url?.[0] || '';
@@ -82,15 +83,44 @@ const MapComponent: React.FC<MapComponentProps> = ({ lat, lng, name, image, styl
 
     // Auto-open the info window
     infowindow.open(map, marker);
+
+    setIsLoading(false);
   }, [lat, lng, name, imageUrl, imageHeight, imageWidth]);
 
   return (
     <div 
-      ref={mapRef} 
       style={{ 
           ...getBackgroundStyles(style),
       }} 
-    />
+    >
+      {isLoading && (
+        <div style={{ 
+          width: style.width?.desktop || '100%', 
+          height: style.height?.desktop || '300px',
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          backgroundColor: '#f3f4f6'
+        }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            border: '4px solid #f3f4f6',
+            borderTop: '4px solid #0b032d',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite'
+          }} />
+        </div>
+      )}
+      <div 
+        ref={mapRef} 
+        style={{ 
+            ...getBackgroundStyles(style),
+            opacity: isLoading ? 0 : 1,
+            transition: 'opacity 0.3s ease-in-out',
+        }} 
+      />
+    </div>
   );
 };
 

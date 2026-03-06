@@ -333,6 +333,7 @@ export const deleteStore = expressAsyncHandler(async (req, res) => {
 });
 
 export const getStoresByOwner = expressAsyncHandler(async (req, res) => {
+  console.log("Fetching stores for user:", req.user);
   const { _id } = req.user;
 
   // Find stores where the user is part of the team (regardless of their role)
@@ -346,7 +347,6 @@ export const linkLayoutToStore = async (req, res) => {
     try {
         const { storeId } = req.params;
         const { layoutId } = req.body; // Layout ID to be added
-      console.log(layoutId)
         if (!layoutId) {
             return res.status(400).json({ message: "Layout ID is required." });
         }

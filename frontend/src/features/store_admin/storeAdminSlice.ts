@@ -451,6 +451,9 @@ const storeAdminSlice = createSlice({
         setError: (state, action: PayloadAction<string | null>) => {
           state.error = action.payload;
         },
+        clearError: (state) => {
+          state.error = null;
+        },
         setStore: (state, action: PayloadAction<Store | null>) => {
           state.store = action.payload;
         },
@@ -820,7 +823,7 @@ const storeAdminSlice = createSlice({
     }
 });
 
-export const { setLoading, setError, updateStoreSetting, setStore, updateStoreImages, addImageToStore } = storeAdminSlice.actions;
+export const { setLoading, setError, clearError, updateStoreSetting, setStore, updateStoreImages, addImageToStore } = storeAdminSlice.actions;
 
 
 export default storeAdminSlice.reducer;

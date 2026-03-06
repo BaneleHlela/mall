@@ -1,7 +1,7 @@
 export const setCookies = (res, accessToken, refreshToken) => {
 	res.cookie("accessToken", accessToken, {
 		httpOnly: true, // prevent XSS attacks, cross site scripting attack (cannot be accessed via js)
-		secure: process.env.REFRESH_TOKEN_SECRET === "production",
+		secure: process.env.NODE_ENV === "production",
 		sameSite: "strict", // prevents CSRF attack, cross-site request forgery attack
 		maxAge: 15 * 60 * 1000, // 15 minutes
 	});

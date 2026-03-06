@@ -101,11 +101,10 @@ const MallSearchPage = () => {
   const hasActiveFilters = searchTerm || selectedDepartment;
 
   return (
-    <div className="relative w-full h-screen bg-white flex flex-col items-center">
+    <div className="relative w-full bg-white flex flex-col items-center">
       {/* Menubar */}
-      <nav className="w-[100vw] h-[15vh] min-h-[15vh] inset-0 z-10 bg-black flex flex-col items-center lg:min-h-[9vh]">
-        <TheMallTopbar />
-      </nav>
+      <TheMallTopbar />
+      <div className="w-[100vw] h-[14vh] min-h-[14vh]"></div>
 
       <div className="w-full lg:w-[80%] overflow-x-hidden hide-scrollbar flex flex-col">
         {/* Department Selector */}

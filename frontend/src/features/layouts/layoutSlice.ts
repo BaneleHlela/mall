@@ -174,6 +174,9 @@ const layoutSlice = createSlice({
     clearLayout(state) {
       state.activeLayout = null;
     },
+    clearError(state) {
+      state.error = null;
+    },
   },
     extraReducers: (builder) => {
         builder
@@ -319,7 +322,7 @@ const layoutSlice = createSlice({
     },
 });
 
-export const { setLayout, clearLayout } = layoutSlice.actions;
+export const { setLayout, clearLayout, clearError } = layoutSlice.actions;
 
 export const selectActiveLayout = (state: RootState) => state.layout.activeLayout;
 

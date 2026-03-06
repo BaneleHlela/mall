@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes, useNavigate } from "react-router-dom";
 import Home from "./pages/home/Home";
 import authRoutes from "./routes/authRoutes";
 import Scribbler from "./components/Scibbler";
@@ -28,9 +28,12 @@ import ComingSoon from "./components/the_mall/ComingSoon";
 import MallCartPzage from "./pages/cart/MallCartPage";
 import MallCartPage from "./pages/cart/MallCartPage";
 import { HiOutlineChatAlt2 } from "react-icons/hi";
+import { checkAuth } from "./features/user/userSlice";
+import "./features/api/axiosInstance"; // Initialize axios interceptors
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
@@ -40,101 +43,119 @@ const App: React.FC = () => {
       }
     };
 
+    // Handle auth logout event when token refresh fails
+    const handleAuthLogout = () => {
+      navigate('/login');
+    };
+
     window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
+    window.addEventListener('auth:logout', handleAuthLogout);
+    return () => {
+      window.removeEventListener("message", handleMessage);
+      window.removeEventListener('auth:logout', handleAuthLogout);
+    };
+  }, [dispatch, navigate]);
+
+  // Check Auth
+  useEffect(() => {
+    dispatch(checkAuth() as any);
   }, [dispatch]);
-
-
+  
   return (
-    <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-fit w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar max-h-screen">  
-      <Router>
-        <Menubar /> 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/search" element={<MallSearchPage />} />
-          <Route
-            path="/chat"
-            element={
-              <ComingSoon 
-                title="Chat Coming Soon"
-                message="Soon you'll be able to chat directly with vendors and other users right here! We're building a seamless messaging experience to help you connect, ask questions, and get support."
-                targetDate={new Date("2026-04-01")}
-                icon={<HiOutlineChatAlt2 className="w-[3vh] h-[3vh] text-white" />}
-              />
-            }
-          />
-          <Route path="/cart" element={<MallCartPage />} />
-          <Route path="/stores/:storeSlug/*" element={<StorePage />} />
-          <Route path="/my-stores" element={
-            <ProtectedRoute>
-              <MyStores />
-            </ProtectedRoute>
-            } />
-          <Route path="/account" element={<Account />} />
-          {/* <Route path="/my-stores" 
-            element={
-              <ComingSoon message="I have not deployed this page yet but it's where users can add stores and access them."/>
-            } 
-          /> */}
-          
-          <Route 
-            path="/favorites" 
-            element={
-              <ProtectedRoute>
-                <FavoriteStores />
-              </ProtectedRoute>
-              } 
+    <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-fit w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar">  
+      <Menubar /> 
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/search" element={<MallSearchPage />} />
+        <Route
+          path="/chat"
+          element={
+            <ComingSoon 
+              title="Chat Coming Soon"
+              message="Soon you'll be able to chat directly with vendors and other users right here! We're building a seamless messaging experience to help you connect, ask questions, and get support."
+              targetDate={new Date("2026-04-01")}
+              icon={<HiOutlineChatAlt2 className="w-[3vh] h-[3vh] text-white" />}
             />
-          
-          <Route path="/scribbler/*" element={<Scribbler />} />
-          <Route path="/layouts/:layoutId/*" element={<Layouts />} />
-          <Route path="/capture" element={<CaptureHomePoster />} />
-          {/* <Route 
-            path="/dashboard/:storeId/*" 
-            element={ 
+          }
+        />
+        <Route path="/cart" element={<MallCartPage />} />
+        <Route path="/stores/:storeSlug/*" element={<StorePage />} />
+        <Route path="/my-stores" element={
+          <ProtectedRoute>
+            <MyStores />
+          </ProtectedRoute>
+          } />
+        <Route path="/account" element={<Account />} />
+        {/* <Route path="/my-stores" 
+          element={
+            <ComingSoon message="I have not deployed this page yet but it's where users can add stores and access them."/>
+          } 
+        /> */}
+        
+        <Route 
+          path="/favorites" 
+          element={
             <ProtectedRoute>
-              <StoreDashboard />
+              <FavoriteStores />
             </ProtectedRoute>
             } 
-          /> */}
-          <Route 
-            path="/dashboard/:storeSlug/*" 
-            element={ 
-              <StoreDashboard />
-            } 
           />
-          <Route path="/get-started" element={<GetStartedPage />} />
-          <Route path="/layouts/my-layouts" element={<MyLayouts />} />
-          <Route path="/layouts/create" element={<LayoutCreator />} />
-          <Route path="/creators-dashboard/*" element={<Dashboard />} />
-          <Route path="/business-plan" element={<BusinessPlan />} />
-          <Route path="/creators" element={<ForCreators />} />
-          <Route
-            path="/add-store"
-            element={
-            <ProtectedRoute>
-              <AddStorePage />
-            </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/add-user-address"
-            element={
-            <ProtectedRoute>
-              <AddUserAddressPage />
-            </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/payment/*"
-            element={<PayFastPage />}
-          />
-          
-          {authRoutes}
-        </Routes>
-      </Router>
-      
+        
+        <Route path="/scribbler/*" element={<Scribbler />} />
+        <Route path="/layouts/:layoutId/*" element={<Layouts />} />
+        <Route path="/capture" element={<CaptureHomePoster />} />
+        {/* <Route 
+          path="/dashboard/:storeId/*" 
+          element={ 
+          <ProtectedRoute>
+            <StoreDashboard />
+          </ProtectedRoute>
+          } 
+        /> */}
+        <Route 
+          path="/dashboard/:storeSlug/*" 
+          element={ 
+            <StoreDashboard />
+          } 
+        />
+        <Route path="/get-started" element={<GetStartedPage />} />
+        <Route path="/layouts/my-layouts" element={<MyLayouts />} />
+        <Route path="/layouts/create" element={<LayoutCreator />} />
+        <Route path="/creators-dashboard/*" element={<Dashboard />} />
+        <Route path="/business-plan" element={<BusinessPlan />} />
+        <Route path="/creators" element={<ForCreators />} />
+        <Route
+          path="/add-store"
+          element={
+          <ProtectedRoute>
+            <AddStorePage />
+          </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-user-address"
+          element={
+          <ProtectedRoute>
+            <AddUserAddressPage />
+          </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/payment/*"
+          element={<PayFastPage />}
+        />
+        
+        {authRoutes}
+      </Routes>
     </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   );
 };
 

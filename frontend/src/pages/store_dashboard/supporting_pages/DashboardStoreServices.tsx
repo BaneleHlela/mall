@@ -5,14 +5,13 @@ import DashboardPagination from '../../../components/store_dashboard/tables/Dash
 import DashboardStoreItemsTable from '../../../components/store_dashboard/tables/DashboardStoreItemsTable';
 import AddServiceModal from '../../../components/store_dashboard/modals/AddServiceModal';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { deleteService, updateService } from '../../../features/services/servicesSlice';
+import { deleteService, updateService, clearError } from '../../../features/services/servicesSlice';
 import type { Service } from '../../../types/serviceTypes';
 import type { Product } from '../../../types/productTypes';
 import type { Package } from '../../../types/packageTypes';
 import type { Rental } from '../../../types/rentalTypes';
 import type { Donation } from '../../../types/donationTypes';
 import Swal from 'sweetalert2';
-import { clearError } from '../../../features/user/userSlice';
 import { FiPlus, FiBriefcase } from 'react-icons/fi';
 
 const DashBoardStoreServices = () => {
@@ -231,7 +230,7 @@ const DashBoardStoreServices = () => {
           open={addServiceOpen}
           onClose={() => {
             setAddServiceOpen(false)
-            clearError()
+            dispatch(clearError())
           }}
           categories={categories || []}
         />
@@ -241,7 +240,7 @@ const DashBoardStoreServices = () => {
           onClose={() => {
             setEditServiceOpen(false);
             setSelectedService(null);
-            clearError();
+            dispatch(clearError());
           }}
           categories={categories || []}
           service={selectedService ? selectedService : undefined}
