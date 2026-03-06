@@ -18,7 +18,7 @@ export const handleOAuthSuccess = async (
   // Send welcome email if it's a new user
   if (user.isNewUser) {
     try {
-      await sendWelcomeEmail(user.email, user.name);
+      await sendWelcomeEmail(user.email, user.firstName);
     } catch (e) {
       console.error("Failed to send welcome email", e);
     }
