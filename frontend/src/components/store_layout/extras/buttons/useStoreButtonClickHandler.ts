@@ -6,7 +6,7 @@ interface ButtonClickHandlerOptions {
   storeSlug: string;
   type: ActionType;
   routes: Record<string, any>;
-  contactNumber: string;
+  contactNumber?: string;
 }
 
 export const useStoreButtonClickHandler = () => {

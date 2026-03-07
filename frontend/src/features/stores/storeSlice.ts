@@ -6,7 +6,7 @@ import { API_URL } from '../context';
 const STORE_API_URL = `${API_URL}/api/stores`; // Adjust this based on your setup
 
 // Initial state for store settings
-interface StoresState {
+export interface StoresState {
   currentStore: Store  | null;
 
   storesById: Record<string, Store>;

@@ -3,7 +3,7 @@ import userReducer from "../features/user/userSlice.ts";
 import adminReducer from "../features/admin/adminSlice.ts";
 import layoutSettingsReducer from "../features/layouts/layoutSettingsSlice.ts";
 import layoutReducer from "../features/layouts/layoutSlice";
-import storeReducer from "../features/stores/storeSlice";
+import storeReducer, { type StoresState } from "../features/stores/storeSlice";
 import storeAdminReducer from "../features/store_admin/storeAdminSlice";
 import serviceReducer from "../features/services/servicesSlice.ts";
 import productReducer from "../features/products/productsSlice.ts";
@@ -18,6 +18,9 @@ import posterReducer from "../features/posters/posterSlice.ts";
 import rentalReducer from "../features/rentals/rentalSlice.ts";
 import donationReducer from "../features/donations/donationsSlice.ts";
 import rangeReducer from "../features/rangeSlice.ts";
+
+// Type for the stores reducer
+type StoresReducerType = typeof storeReducer;
 
 export const store = configureStore({
     reducer: {

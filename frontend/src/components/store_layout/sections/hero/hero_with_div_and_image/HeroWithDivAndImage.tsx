@@ -1,4 +1,5 @@
 import { useAppSelector } from "../../../../../app/hooks";
+import { useWindowSize } from "../../../../../hooks/use-window-size";
 import { getBackgroundStyles } from "../../../../../utils/stylingFunctions";
 import StoreButton from "../../../extras/buttons/StoreButton";
 import { useStoreButtonClickHandler } from "../../../extras/buttons/useStoreButtonClickHandler";
@@ -13,7 +14,8 @@ const HeroWithDivAndImage = () => {
   const routes = useAppSelector((state) => state.layoutSettings.routes);
   const store = useAppSelector((state) => state.stores.currentStore);
 
-  const isMobile = window.innerWidth < 740;
+  const { width: windowWidth } = useWindowSize();
+  const isMobile = windowWidth ? windowWidth < 740 : false;
   const imageFirst = isMobile ? config.imageFirst?.mobile : config.imageFirst?.desktop;
 
   const Container = () => (
@@ -48,8 +50,7 @@ const HeroWithDivAndImage = () => {
               handleButtonClick({
                 type: config.button.function,
                 routes,
-                storeSlug: store?.slug as string,
-                // @ts-ignore
+                storeSlug: store?.slug ?? '',
                 contactNumber: store?.contact?.phone,
               })
             }

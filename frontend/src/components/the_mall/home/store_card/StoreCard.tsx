@@ -58,7 +58,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
   return (
     <div
         onClick={handleClick}
-        className={`relative aspect-4/3 border-b border-gray-700 rounded-[2px]  overflow-hidden ${allowShadow && "shadow-md"} absolute inset-0 bg-white/10 backdrop-blur-md transition-transform transform hover:-translate-y-1 z-0`}
+        className={`relative aspect-4/3 border-1 border-gray-200 border-b-gray-500 rounded-[2px]  overflow-hidden ${allowShadow && "shadow-sm"} absolute inset-0 bg-white/10 backdrop-blur-md transition-transform transform hover:-translate-y-1 z-0`}
     >
       {/* Glassy background */}
       <div className="flex flex-row justify-end items-center h-[6%] space-x-[.5vh] w-full px-[2%] bg-gray-700 shadow z-1">
