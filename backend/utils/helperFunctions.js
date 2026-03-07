@@ -56,7 +56,7 @@ export const captureStoreThumbnail = async (storeId) => {
   }
 
   //const url = `${CLIENT_URL}/stores/${storeId}`;
-  const url = `http://localhost:5173/stores/${storeId}`;
+  const url = `${process.env.CLIENT_URL}/stores/${storeId}`;
   console.log(url)
 
   try {
@@ -74,7 +74,7 @@ export const captureStoreCardThumbnail = async (storeId) => {
     throw new Error('storeId is required to capture the storeCard thumbnail');
   }
 
-  const url = `http://localhost:5173/stores/${storeId}`;
+  const url = `${process.env.CLIENT_URL}/stores/${storeId}`;
   console.log(`Capturing storeCard for: ${url}`);
 
   try {
@@ -92,7 +92,7 @@ export const captureReelyThumbnail = async (storeId) => {
     throw new Error('storeId is required to capture the reely thumbnail');
   }
 
-  const url = `http://localhost:5173/stores/${storeId}`;
+  const url = `${process.env.CLIENT_URL}/stores/${storeId}`;
   console.log(`Capturing reely for: ${url}`);
 
   try {
@@ -108,7 +108,7 @@ export const captureReelyThumbnail = async (storeId) => {
 export const captureStoreHomePoster = async () => {
 
   //const url = `${CLIENT_URL}/stores/${storeId}`;
-  const url = `http://localhost:5173/capture`;
+  const url = `${process.env.CLIENT_URL}/capture`;
   console.log(url)
 
   try {
