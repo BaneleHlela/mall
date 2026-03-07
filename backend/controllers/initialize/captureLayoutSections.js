@@ -46,7 +46,7 @@ const captureLayoutSections = async (layoutId) => {
       }
 
       for (const sectionName of route.contains) {
-        const url = `http://localhost:5173/layouts/${layoutId}/preview${route.url}#${sectionName}`;
+        const url = `${process.env.CLIENT_URL}/layouts/${layoutId}/preview${route.url}#${sectionName}`;
         console.log(`⚡ Capturing for ${sectionName} in ${routeName} at ${url}`);
 
         try {

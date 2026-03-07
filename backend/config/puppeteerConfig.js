@@ -113,7 +113,17 @@ import puppeteer from 'puppeteer';
 export const captureScreenshot = async (url, width = 1280, height = 800) => {
   let browser;
   try {
-    browser = await puppeteer.launch({});
+    browser = await puppeteer.launch({
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--disable-web-security'
+      ]
+    });
+    
 
     const page = await browser.newPage();
 
