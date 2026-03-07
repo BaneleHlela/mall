@@ -141,25 +141,25 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     // Scroll page to trigger lazy images
-    await page.evaluate(async () => {
-      await new Promise((resolve) => {
-        let totalHeight = 0;
-        const distance = 500;
+    // await page.evaluate(async () => {
+    //   await new Promise((resolve) => {
+    //     let totalHeight = 0;
+    //     const distance = 500;
 
-        const timer = setInterval(() => {
-          const scrollHeight = document.body.scrollHeight;
+    //     const timer = setInterval(() => {
+    //       const scrollHeight = document.body.scrollHeight;
 
-          window.scrollBy(0, distance);
-          totalHeight += distance;
+    //       window.scrollBy(0, distance);
+    //       totalHeight += distance;
 
-          if (totalHeight >= scrollHeight) {
-            clearInterval(timer);
-            window.scrollTo(0, 0);
-            setTimeout(resolve, 1000);
-          }
-        }, 300);
-      });
-    });
+    //       if (totalHeight >= scrollHeight) {
+    //         clearInterval(timer);
+    //         window.scrollTo(0, 0);
+    //         setTimeout(resolve, 1000);
+    //       }
+    //     }, 300);
+    //   });
+    // });
 
     // Wait for images and animations
     await page.evaluate(async () => {
@@ -189,7 +189,6 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
       await Promise.all([...imagePromises, ...animationPromises]);
     });
 
-    // Final stabilization
     // Final stabilization
     await new Promise(resolve => setTimeout(resolve, 1000));
 
