@@ -190,7 +190,18 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
     });
 
     // Final stabilization
+    // Final stabilization
     await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Force scroll to top before screenshot
+    await page.evaluate(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
+
+    // Small delay after scroll to top
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     const screenshotBuffer = await page.screenshot({
       fullPage: true,
