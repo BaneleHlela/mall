@@ -162,45 +162,35 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
     // });
 
     // Wait for images and animations
-    await page.evaluate(async () => {
+    // await page.evaluate(async () => {
 
-      const imagePromises = Array.from(document.images).map((img) => {
-        if (img.complete && img.naturalHeight !== 0) return;
+    //   const imagePromises = Array.from(document.images).map((img) => {
+    //     if (img.complete && img.naturalHeight !== 0) return;
 
-        return new Promise((resolve) => {
-          img.addEventListener("load", resolve);
-          img.addEventListener("error", resolve);
-        });
-      });
+    //     return new Promise((resolve) => {
+    //       img.addEventListener("load", resolve);
+    //       img.addEventListener("error", resolve);
+    //     });
+    //   });
 
-      const animationPromises = Array.from(document.querySelectorAll("*")).map(
-        (element) => {
-          const style = window.getComputedStyle(element);
-          const dur = parseFloat(style.animationDuration) || 0;
-          const delay = parseFloat(style.animationDelay) || 0;
-          const total = (dur + delay) * 1000;
+    //   const animationPromises = Array.from(document.querySelectorAll("*")).map(
+    //     (element) => {
+    //       const style = window.getComputedStyle(element);
+    //       const dur = parseFloat(style.animationDuration) || 0;
+    //       const delay = parseFloat(style.animationDelay) || 0;
+    //       const total = (dur + delay) * 1000;
 
-          if (total > 0) {
-            return new Promise((resolve) => setTimeout(resolve, total));
-          }
-        }
-      );
+    //       if (total > 0) {
+    //         return new Promise((resolve) => setTimeout(resolve, total));
+    //       }
+    //     }
+    //   );
 
-      await Promise.all([...imagePromises, ...animationPromises]);
-    });
+    //   await Promise.all([...imagePromises, ...animationPromises]);
+    // });
 
     // Final stabilization
     await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // Force scroll to top before screenshot
-    await page.evaluate(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    });
-
-    // Small delay after scroll to top
-    await new Promise(resolve => setTimeout(resolve, 500));
 
     const screenshotBuffer = await page.screenshot({
       fullPage: true,
