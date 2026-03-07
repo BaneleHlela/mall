@@ -137,12 +137,10 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
 
     await page.goto(url, { waitUntil: "networkidle2", timeout: 0 });
 
-    // allow React / scripts to finish rendering
-    await page.waitForTimeout(2000);
+    // React render delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
-    // ------------------------------------
-    // SCROLL PAGE (trigger lazy loading)
-    // ------------------------------------
+    // Scroll page to trigger lazy images
     await page.evaluate(async () => {
       await new Promise((resolve) => {
         let totalHeight = 0;
@@ -163,12 +161,9 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
       });
     });
 
-    // ------------------------------------
-    // WAIT FOR IMAGES + ANIMATIONS
-    // ------------------------------------
+    // Wait for images and animations
     await page.evaluate(async () => {
 
-      // wait for images
       const imagePromises = Array.from(document.images).map((img) => {
         if (img.complete && img.naturalHeight !== 0) return;
 
@@ -178,7 +173,6 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
         });
       });
 
-      // wait for css animations
       const animationPromises = Array.from(document.querySelectorAll("*")).map(
         (element) => {
           const style = window.getComputedStyle(element);
@@ -195,14 +189,9 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
       await Promise.all([...imagePromises, ...animationPromises]);
     });
 
-    // ------------------------------------
-    // FINAL STABILIZATION
-    // ------------------------------------
-    await page.waitForTimeout(1000);
+    // Final stabilization
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // ------------------------------------
-    // TAKE SCREENSHOT
-    // ------------------------------------
     const screenshotBuffer = await page.screenshot({
       fullPage: true,
     });
