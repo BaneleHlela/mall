@@ -2,7 +2,7 @@ import { Storage } from "@google-cloud/storage";
 
 const storage = new Storage({
     projectId: "mall-461908",
-    keyFilename: "C:/Users/banel/Desktop/the_mall/secrets/mall-461908-71caa5f1648a.json", 
+    keyFilename: `${process.env.GOOGLE_APPLICATION_CREDENTIALS}`, 
 });
 
 export const uploadsBucket = storage.bucket("the-mall-uploads-giza");
