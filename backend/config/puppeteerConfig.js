@@ -115,6 +115,7 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
   try {
     browser = await puppeteer.launch({
       headless: true,
+      executablePath: '/usr/bin/chromium-browser',
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',

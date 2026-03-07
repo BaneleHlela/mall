@@ -97,7 +97,7 @@ const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeSlug }) => {
         </div>
         <div>
           <h3 className="font-semibold text-slate-800">Upload Images</h3>
-          <p className="text-xs text-slate-500">Add images to your store gallery</p>
+          <p className="text-xs text-slate-500">Add images to your store gallery (Max 10mb per upload)</p>
         </div>
       </div>
 
