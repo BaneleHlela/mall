@@ -138,7 +138,7 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
     await page.goto(url, { waitUntil: "networkidle2", timeout: 0 });
 
     // React render delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     // Scroll page to trigger lazy images
     // await page.evaluate(async () => {
