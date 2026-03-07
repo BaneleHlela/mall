@@ -1,6 +1,36 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { API_URL } from '../context';
 
+// Define protected routes that require authentication
+// Token refresh will only be attempted for these routes
+const PROTECTED_ROUTES = [
+  '/api/user/',
+  '/api/admin/',
+  '/api/dashboard/',
+  '/api/orders/',
+  '/api/settings/',
+];
+
+// Define public routes that don't require token refresh on 401
+const PUBLIC_ROUTES = [
+  '/api/user/login',
+  '/api/user/register',
+  '/api/user/refresh-token',
+  '/api/stores/public',
+];
+
+// Check if the request URL is a protected route
+const isProtectedRoute = (url: string): boolean => {
+  // First check if it's explicitly a public route
+  const isPublicRoute = PUBLIC_ROUTES.some((route) => url.includes(route));
+  if (isPublicRoute) {
+    return false;
+  }
+
+  // Then check if it matches any protected route pattern
+  return PROTECTED_ROUTES.some((route) => url.includes(route));
+};
+
 // Create axios instance with base configuration
 export const api = axios.create({
   baseURL: API_URL,
@@ -42,6 +72,11 @@ const setupInterceptors = () => {
 
       // If error is 401 and we haven't already tried to refresh
       if (error.response?.status === 401 && !originalRequest._retry) {
+        // Only attempt token refresh for protected routes
+        if (!isProtectedRoute(originalRequest.url || '')) {
+          return Promise.reject(error);
+        }
+
         // If already refreshing, queue the request
         if (isRefreshing) {
           return new Promise((resolve, reject) => {
@@ -96,6 +131,11 @@ const setupInterceptors = () => {
 
       // If error is 401 and we haven't already tried to refresh
       if (error.response?.status === 401 && !originalRequest._retry) {
+        // Only attempt token refresh for protected routes
+        if (!isProtectedRoute(originalRequest.url || '')) {
+          return Promise.reject(error);
+        }
+
         // If already refreshing, queue the request
         if (isRefreshing) {
           return new Promise((resolve, reject) => {

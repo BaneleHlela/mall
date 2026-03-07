@@ -13,9 +13,10 @@ type TopBarProps = {
   setDevice: React.Dispatch<React.SetStateAction<DeviceType>>;
   zoom: number;
   setZoom: React.Dispatch<React.SetStateAction<number>>;
+  onSave?: () => void;
 };
 
-const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick }: TopBarProps) => {
+const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick, onSave }: TopBarProps) => {
   const navigate = useNavigate();
   const { layoutId } = useParams<{ layoutId: string }>();
   
@@ -28,8 +29,9 @@ const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick }: TopBa
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate(-1)}
-            className="flex items-center space-x-[.8vh] px-[1.6vh] py-[.8vh] bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
+            onClick={() => {}}
+            className="flex items-center space-x-[.8vh] px-[1.6vh] py-[.8vh] bg-white/10 text-white/50 rounded-lg cursor-not-allowed"
+            disabled
           >
             <IoIosArrowRoundBack className="text-[2vh]" />
             <span className="text-[1.8vh] font-medium">Back</span>
@@ -38,11 +40,11 @@ const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick }: TopBa
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => navigate(-1)}
+            onClick={onSave}
             className="flex items-center space-x-[.8vh] px-[2vh] py-[.8vh] bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white rounded-lg shadow-md transition-all"
           >
             <Save size={16} />
-            <span className="text-[1.8vh] font-medium">Save & Exit</span>
+            <span className="text-[1.8vh] font-medium">Create Layout</span>
           </motion.button>
         </div>
 
@@ -76,19 +78,20 @@ const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick }: TopBa
           <div className="flex items-center space-x-[.8vh]">
             <motion.button
               whileTap={{ scale: 0.95 }}
-              onClick={() => navigate(-1)}
-              className="w-9 h-9 flex items-center justify-center bg-white/10 rounded-lg"
+              onClick={() => {}}
+              className="w-9 h-9 flex items-center justify-center bg-white/10 text-white/50 rounded-lg cursor-not-allowed"
+              disabled
             >
-              <IoIosArrowRoundBack className="text-[2.5vh] text-white" />
+              <IoIosArrowRoundBack className="text-[2.5vh]" />
             </motion.button>
             
             <motion.button
               whileTap={{ scale: 0.95 }}
-              onClick={() => navigate(-1)}
+              onClick={onSave}
               className="flex items-center space-x-1 px-3 py-1.5 bg-emerald-500 rounded-lg"
             >
               <Save size={14} className="text-white" />
-              <span className="text-xs font-medium text-white">Save</span>
+              <span className="text-xs font-medium text-white">Create Layout</span>
             </motion.button>
           </div>
 

@@ -71,31 +71,8 @@ const LayoutCreator = () => {
       // Get the new layout ID
       const newLayoutId = newLayout?._id || newLayout;
 
-      // Show success message with custom HTML
-      const { isConfirmed } = await mysweetalert.fire({
-        title: "🎉 Layout Created!",
-        html: `
-          <div class="text-center">
-            <p class="text-lg mb-2">You have created your layout!</p>
-            <p class="text-sm text-gray-600">Now it's time to further edit by replacing text and images.</p>
-          </div>
-        `,
-        icon: "success",
-        confirmButtonText: "Continue to Editor",
-        confirmButtonColor: "#4f46e5",
-        cancelButtonText: "Back to Layouts",
-        showCancelButton: true,
-        allowOutsideClick: false,
-      });
-
-      if (isConfirmed) {
-        // Navigate to layout editor
-        navigate(`/layouts/${newLayoutId || selectedLayout._id}`);
-      } else {
-        // Go back to layout selection
-        setStep("select");
-        setSelectedLayout(null);
-      }
+      // Automatically navigate to the layout editor
+      navigate(`/layouts/${newLayoutId || selectedLayout._id}`);
 
     } catch (error) {
       console.error("Failed to create layout:", error);

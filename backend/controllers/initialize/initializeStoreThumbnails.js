@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import Store from "../../models/StoreModel.js";
-import { captureStoreThumbnail } from "../../utils/helperFunctions.js";
-import { uploadToUploads } from "../../config/gcsClient.js";
+import { captureStoreCardThumbnail, captureReelyThumbnail } from "../../utils/helperFunctions.js";
+import { uploadToUploads, deleteFromUploads } from "../../config/gcsClient.js";
 
 dotenv.config({ path: "../../../.env" });
 
@@ -16,39 +16,67 @@ const initializeStoreThumbnails = async () => {
     });
     console.log("✅ Connected to MongoDB");
 
-    // 2. Find stores missing thumbnails
-    const storesWithoutThumbnails = await Store.find({
-      $or: [{ thumbnail: { $exists: true } }, { thumbnail: "" }],
-    });
+    // 2. Find ALL stores (regardless of existing thumbnails)
+    const stores = await Store.find({});
 
-    if (storesWithoutThumbnails.length === 0) {
-      console.log("🎉 All stores already have thumbnails!");
+    if (stores.length === 0) {
+      console.log("No stores found!");
       return;
     }
 
-    console.log(`Found ${storesWithoutThumbnails.length} stores without thumbnails.`);
+    console.log(`Found ${stores.length} stores to process.`);
 
     // 3. Process each store
-    for (const store of storesWithoutThumbnails) {
+    for (const store of stores) {
       try {
-        console.log(`📸 Capturing thumbnail for store: ${store._id} (${store.name || "Unnamed"})`);
+        console.log(`📸 Processing thumbnails for store: ${store._id} (${store.name || "Unnamed"})`);
 
-        // Generate screenshot
-        const screenshotBuffer = await captureStoreThumbnail(store._id.toString());
+        // Delete old thumbnails if they exist
+        if (store.thumbnails && store.thumbnails.storeCard) {
+          try {
+            const oldStoreCardPath = store.thumbnails.storeCard.replace("https://storage.googleapis.com/the-mall-uploads-giza/", "");
+            await deleteFromUploads(oldStoreCardPath);
+            console.log(`🗑️ Deleted old storeCard thumbnail for store: ${store._id}`);
+          } catch (err) {
+            console.log(`⚠️ Could not delete old storeCard: ${err.message}`);
+          }
+        }
 
-        // Construct path for cloud storage
-        const fileName = `stores/${store._id}/thumbnail.png`;
+        if (store.thumbnails && store.thumbnails.reely) {
+          try {
+            const oldReelyPath = store.thumbnails.reely.replace("https://storage.googleapis.com/the-mall-uploads-giza/", "");
+            await deleteFromUploads(oldReelyPath);
+            console.log(`🗑️ Deleted old reely thumbnail for store: ${store._id}`);
+          } catch (err) {
+            console.log(`⚠️ Could not delete old reely: ${err.message}`);
+          }
+        }
 
-        // Upload to GCS
-        await uploadToUploads(screenshotBuffer, fileName);
+        // Generate and upload storeCard thumbnail (desktop - 1447x900)
+        console.log(`   📱 Capturing storeCard (desktop) for store: ${store._id}`);
+        const storeCardBuffer = await captureStoreCardThumbnail(store._id.toString());
+        const storeCardFileName = `stores/${store._id}/thumbnails/storeCard.png`;
+        await uploadToUploads(storeCardBuffer, storeCardFileName);
+        const storeCardUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${storeCardFileName}`;
 
-        // Update store document with the public URL
-        store.thumbnail = `https://storage.googleapis.com/the-mall-uploads-giza/${fileName}`;
+        // Generate and upload reely thumbnail (mobile - 360x660)
+        console.log(`   📱 Capturing reely (mobile) for store: ${store._id}`);
+        const reelyBuffer = await captureReelyThumbnail(store._id.toString());
+        const reelyFileName = `stores/${store._id}/thumbnails/reely.png`;
+        await uploadToUploads(reelyBuffer, reelyFileName);
+        const reelyUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${reelyFileName}`;
+
+        // Update store document with the new thumbnail URLs
+        store.thumbnails = {
+          storeCard: storeCardUrl,
+          reely: reelyUrl,
+          profily: store.thumbnails?.profily || "", // Preserve profily if exists
+        };
         await store.save();
 
-        console.log(`✅ Thumbnail uploaded and saved for store: ${store._id}`);
+        console.log(`✅ Thumbnails uploaded and saved for store: ${store._id}`);
       } catch (error) {
-        console.error(`❌ Failed to generate thumbnail for store ${store._id}:`, error.message);
+        console.error(`❌ Failed to process thumbnails for store ${store._id}:`, error.message);
       }
     }
 

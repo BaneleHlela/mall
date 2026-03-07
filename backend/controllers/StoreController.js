@@ -302,6 +302,29 @@ export const editStore = expressAsyncHandler(async (req, res) => {
     };
   }
 
+  // Update subscription (admin only)
+  if (req.body.subscription !== undefined) {
+    store.subscription = {
+      ...store.subscription,
+      ...req.body.subscription
+    };
+  }
+
+  // Update isBlocked (admin only)
+  if (req.body.isBlocked !== undefined) {
+    store.isBlocked = req.body.isBlocked;
+  }
+
+  // Update departments (admin only)
+  if (req.body.departments && Array.isArray(req.body.departments)) {
+    store.departments = req.body.departments;
+  }
+
+  // Update flag (admin only)
+  if (req.body.flag !== undefined) {
+    store.flag = req.body.flag;
+  }
+
   // Save the updated store
   await store.save();
 

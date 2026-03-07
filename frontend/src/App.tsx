@@ -13,6 +13,7 @@ import MyLayouts from "./pages/store_dashboard/supporting_pages/layouts/StoreDas
 import { useDispatch } from "react-redux";
 import { setInitialLayout } from "./features/layouts/layoutSettingsSlice";
 import Dashboard from "./pages/dashboard/Dashboard";
+import CreatorsDashboard from "./pages/creators_dashboard/CreatorsDashboard";
 import ProtectedRoute from "./components/the_mall/authorization/ProtectedRoute";
 import LayoutCreator from "./pages/store_dashboard/supporting_pages/layouts/supporting/LayoutCreator";
 import MallSearchPage from "./pages/search/MallSearchPage";
@@ -59,9 +60,9 @@ const AppContent: React.FC = () => {
   }, [dispatch, navigate]);
 
   // Check Auth
-  useEffect(() => {
-    dispatch(checkAuth() as any);
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(checkAuth() as any);
+  // }, [dispatch]);
   
   return (
     <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-fit w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar">  
@@ -123,7 +124,7 @@ const AppContent: React.FC = () => {
         <Route path="/get-started" element={<GetStartedPage />} />
         <Route path="/layouts/my-layouts" element={<MyLayouts />} />
         <Route path="/layouts/create" element={<LayoutCreator />} />
-        <Route path="/creators-dashboard/*" element={<Dashboard />} />
+        <Route path="/creators-dashboard/*" element={<CreatorsDashboard />} />
         <Route path="/business-plan" element={<BusinessPlan />} />
         <Route path="/creators" element={<ForCreators />} />
         <Route

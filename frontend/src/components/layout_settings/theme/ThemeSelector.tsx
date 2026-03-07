@@ -29,8 +29,8 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ layout, onThemeSelect, is
   const existingColors = [layoutColors.primary, layoutColors.secondary, layoutColors.accent, layoutColors.quad, layoutColors.pent];
   const existingFonts = layout.fonts || { primary: "", secondary: "", tertiary: "" };
   
-  // Steps state
-  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
+  // Steps state - only 2 steps now (fonts and colors)
+  const [currentStep, setCurrentStep] = useState<1 | 2>(1);
   
   // State
   const [selectedFontPairing, setSelectedFontPairing] = useState<FontPairing | null>(null);
@@ -108,15 +108,15 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ layout, onThemeSelect, is
   
   // Navigate to next step
   const nextStep = () => {
-    if (currentStep < 3) {
-      setCurrentStep((currentStep + 1) as 1 | 2 | 3);
+    if (currentStep < 2) {
+      setCurrentStep((currentStep + 1) as 1 | 2);
     }
   };
   
   // Navigate to previous step
   const prevStep = () => {
     if (currentStep > 1) {
-      setCurrentStep((currentStep - 1) as 1 | 2 | 3);
+      setCurrentStep((currentStep - 1) as 1 | 2);
     }
   };
   
@@ -133,25 +133,14 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ layout, onThemeSelect, is
         </div>
         
         {/* Connector */}
-        <div className={`w-12 h-0.5 ${currentStep > 1 ? 'bg-indigo-600' : 'bg-slate-200'}`} />
+        <div className={`w-5 h-0.5 ${currentStep > 1 ? 'bg-indigo-600' : 'bg-slate-200'}`} />
         
         {/* Step 2: Colors */}
         <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${currentStep >= 2 ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-500'}`}>
           <span className="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center text-sm font-medium">
-            {currentStep > 2 ? <FaCheck className="w-3 h-3" /> : '2'}
+            <FaCheck className="w-3 h-3" />
           </span>
           <span className="text-sm font-medium">Colors</span>
-        </div>
-        
-        {/* Connector */}
-        <div className={`w-12 h-0.5 ${currentStep > 2 ? 'bg-indigo-600' : 'bg-slate-200'}`} />
-        
-        {/* Step 3: Name */}
-        <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${currentStep >= 3 ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-500'}`}>
-          <span className="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center text-sm font-medium">
-            3
-          </span>
-          <span className="text-sm font-medium">Name</span>
         </div>
       </div>
     </div>
@@ -165,7 +154,6 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ layout, onThemeSelect, is
         <p className="text-slate-500">
           {currentStep === 1 && "Choose your font pairing"}
           {currentStep === 2 && "Select your color palette"}
-          {currentStep === 3 && "Name your theme"}
         </p>
         {storeTrades.length > 0 && (
           <p className="text-[1.8vh] text-indigo-600 mt-1">
@@ -373,99 +361,8 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ layout, onThemeSelect, is
               </div>
             </div>
             
-            {/* Navigation Buttons */}
+            {/* Navigation Buttons - Go directly to editor */}
             <div className="flex justify-between mt-8">
-              <button
-                onClick={prevStep}
-                className="flex items-center gap-2 px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition-colors"
-              >
-                <FaArrowLeft className="w-4 h-4" />
-                Back
-              </button>
-              <button
-                onClick={nextStep}
-                className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors"
-              >
-                Next: Name
-                <FaArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          </motion.div>
-        )}
-        
-        {currentStep === 3 && (
-          <motion.div
-            key="step3"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-6"
-          >
-            {/* Theme Name */}
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
-                  <FaTag className="text-emerald-600" />
-                </div>
-                <h3 className="font-semibold text-slate-800 text-lg">Theme Name</h3>
-              </div>
-              
-              <input
-                type="text"
-                value={themeName}
-                onChange={(e) => handleThemeNameChange(e.target.value)}
-                placeholder="Enter theme name (e.g., Summer Collection, Modern Elegance)"
-                className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-700"
-              />
-              <p className="text-xs text-slate-400 mt-2">
-                A descriptive name helps you identify this theme later
-              </p>
-            </div>
-            
-            {/* Preview Section */}
-            <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white">
-              <h3 className="font-semibold mb-4">Theme Preview</h3>
-              <div 
-                className="p-4 rounded-lg"
-                style={{ 
-                  backgroundColor: customColors[4] || '#f9fafb',
-                  fontFamily: customFonts.primary
-                }}
-              >
-                <h4 
-                  className="text-xl font-bold"
-                  style={{ color: customColors[0], fontFamily: customFonts.primary }}
-                >
-                  {themeName || "Your Theme"}
-                </h4>
-                <p 
-                  className="mt-2"
-                  style={{ color: customColors[1], fontFamily: customFonts.secondary }}
-                >
-                  This is how your heading text will look with the primary font.
-                </p>
-                <p 
-                  className="text-[1.8vh] mt-2"
-                  style={{ color: customColors[2], fontFamily: customFonts.tertiary }}
-                >
-                  Secondary text uses the tertiary font for body content.
-                </p>
-                <div className="flex gap-2 mt-3">
-                  {customColors.slice(0, 5).map((color, i) => (
-                    <div
-                      key={i}
-                      className="px-3 py-1 rounded-full text-xs text-white"
-                      style={{ backgroundColor: color }}
-                    >
-                      Color {i + 1}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            
-            {/* Navigation Buttons */}
-            <div className="flex justify-between">
               <button
                 onClick={prevStep}
                 className="flex items-center gap-2 px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition-colors"
@@ -485,8 +382,8 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ layout, onThemeSelect, is
                   </>
                 ) : (
                   <>
-                    Create Layout & Continue
-                    <FaCheck className="w-5 h-5" />
+                    Create Layout
+                    <FaArrowRight className="w-5 h-5" />
                   </>
                 )}
               </button>

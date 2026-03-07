@@ -58,6 +58,8 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
       return () => window.removeEventListener("scroll", handleScroll);
     }, [hideNavbar, showNavbar]);
 
+    hideNavbar();
+
   const dispatch = useAppDispatch();
   const [store, setStore] = useState<StoreType | null>(null); // Local state for the store
   const [loading, setLoading] = useState<boolean>(true); // Loading state

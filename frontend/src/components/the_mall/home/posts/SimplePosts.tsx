@@ -31,7 +31,7 @@ export const WelcomeToTheMall = ({ fonts }: WelcomeToTheMallProps) => {
           // Load default font
           WebFont.load({
               google: {
-                  families: ['Alfa Slab One', 'Poppins:400,500,600'],
+                  families: ['Alfa Slab One', 'Play', 'Poppins:400,500,600'],
               },
           });
       }
@@ -45,45 +45,45 @@ export const WelcomeToTheMall = ({ fonts }: WelcomeToTheMallProps) => {
           </p>
           
           {/* Main Poster Container */}
-          <div className="relative flex items-center justify-center text-center w-full aspect-[4/5] md:aspect-square rounded-lg overflow-hidden shadow-2xl">
+          <div className="relative flex items-center justify-start text-center w-full aspect-[1/1.414] rounded-lg overflow-hidden shadow-2xl">
               {/* Live Background */}
               <div className="absolute inset-0 w-full h-full">
                   <LiveBackground />
               </div>
               
               {/* Dark Overlay with gradient */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/70"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/30 to-black/70"></div>
               
               {/* Content Container */}
-              <div className="relative z-10 flex flex-col items-center justify-center px-6 py-8 space-y-4">
+              <div className="relative z-10 px-3 flex flex-col items-start justify-center w-full py-8 space-y-4">
                   {/* Decorative top element */}
-                  <div className="flex items-center gap-2 mb-2">
+                  {/* <div className="flex items-center gap-2 mb-2">
                       <div className="w-8 h-[2px] bg-white/60"></div>
                       <div className="w-2 h-2 rounded-full bg-white/60"></div>
                       <div className="w-8 h-[2px] bg-white/60"></div>
-                  </div>
+                  </div> */}
                   
                   {/* Main Title */}
-                  <h1 
+                  {/* <h1 
                       style={{ fontFamily: fonts?.heading || "'Alfa Slab One', cursive", lineHeight: "1" }}
                       className="text-white text-[5.5vh] md:text-[8vh] tracking-wide drop-shadow-lg"
                   >
                       Welcome to
-                  </h1>
+                  </h1> */}
                   <h1 
-                      style={{ fontFamily: fonts?.heading || "'Alfa Slab One', cursive", lineHeight: "1" }}
-                      className="text-white text-[6.5vh] md:text-[10vh] tracking-wide drop-shadow-lg"
+                      style={{ fontFamily: fonts?.heading || "'Play', cursive", lineHeight: "1" }}
+                      className="text-white text-[6.5vh] md:text-[10vh] tracking-wide font-semibold drop-shadow-lg"
                   >
                       The Mall
                   </h1>
                   
                   {/* Decorative line */}
-                  <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full my-4"></div>
+                  {/* <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full my-4"></div> */}
                   
                   {/* Subtitle */}
                   <p 
                     style={{ fontFamily: fonts?.subheading || "'Poppins', sans-serif" }}
-                    className="text-white/90 text-[1.8vh] md:text-[2.2vh] font-medium max-w-xs md:max-w-sm leading-relaxed drop-shadow"
+                    className="text-white/90 text-[1.8vh] text-start md:text-[2.2vh] font-medium max-w-xs md:max-w-sm leading-relaxed drop-shadow"
                   >
                     Discover amazing stores, unique products — or open your own. The Mall is now welcoming vendors.
                   </p>
@@ -91,7 +91,7 @@ export const WelcomeToTheMall = ({ fonts }: WelcomeToTheMallProps) => {
                   {/* Get Started Button */}
                   <a 
                       href="/get-started"
-                      className="mt-6 px-8 py-3 bg-white text-black font-semibold rounded-xl text-[1.8vh] md:text-[2vh] hover:bg-white/90 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2 group"
+                      className="mt-6 px-6 py-2 bg-white text-black text-[1.8vh] md:text-[2vh] hover:bg-white/90 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2 group"
                       style={{ fontFamily: fonts?.subheading || "'Poppins', sans-serif" }}
                   >
                       Get Started

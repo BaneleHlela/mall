@@ -48,13 +48,13 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 
   const [form, setForm] = useState<FormState>({
-    name: 'Banele Clothing',
+    name: '',
     nickname: '',
     logo: { url: '', text: '' },
     businessType: 'sole',
     thumbnail: '//example.com/images/thumbnails/product5.jpg',
     slogan: '',
-    contact: { phone: '0712364567', email: 'demo@my-store.com' },
+    contact: { phone: '', email: 'contact@themallbeta.com' },
     departments: ["clothing"],
     socials: [{ platform: 'whatsapp', url: 'wa.me' }],
     location: { type: 'Point', coordinates: [30.08534999999999, -27.74885549999999], nickname: '', address: '' },

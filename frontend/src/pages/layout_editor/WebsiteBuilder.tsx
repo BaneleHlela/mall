@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { IoPower } from 'react-icons/io5';
 import { useAppSelector, useAppDispatch } from '../../app/hooks.ts';
 import LayoutSettings from '../../components/layout_settings/LayoutSettings.tsx';
@@ -7,7 +7,7 @@ import TopBar from '../../components/layout_settings/topbar/TopBar.tsx';
 import { fetchStoreBySlug, setCurrentStore } from '../../features/stores/storeSlice';
 import { TbLoader3 } from "react-icons/tb";
 import { setStore } from '../../features/store_admin/storeAdminSlice.ts';
-import { editLayout, getLayout } from '../../features/layouts/layoutSlice.ts';
+import { editLayout, getLayout, captureLayoutScreenshot } from '../../features/layouts/layoutSlice.ts';
 import { setInitialLayout } from '../../features/layouts/layoutSettingsSlice.ts';
 import { getDynamicSizeMap, getZoomScaleClass } from '../../utils/helperFunctions.ts';
 import { BreadcrumbProvider } from '../../contexts/BreadcrumbContext.tsx';
@@ -48,6 +48,7 @@ const deviceStyles = {
 
 const WebsiteBuilderContent: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [sizeMap, setSizeMap] = useState(getDynamicSizeMap());
   const [device, setDevice] = useState<'mobile' | 'tablet' | 'desktop'>('mobile');
   const [zoom, setZoom] = useState(sizeMap[device].scale);
@@ -55,6 +56,7 @@ const WebsiteBuilderContent: React.FC = () => {
   const [storeId, setStoreId] = useState<string | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(true);
   const [quickAccessSection, setQuickAccessSection] = useState<'fonts' | 'colors' | null>(null);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   
 
   const store = useAppSelector((state) => state.stores.currentStore);
@@ -115,6 +117,43 @@ const WebsiteBuilderContent: React.FC = () => {
     fetchLayoutAndStore();
   }, [dispatch, layoutId]);
 
+  // Handle save and exit - capture screenshot and redirect to store layouts
+  const handleSaveAndExit = async () => {
+    if (!layoutId || isSaving) return;
+    
+    setIsSaving(true);
+    
+    try {
+      // First save any pending layout changes
+      if (settings) {
+        await dispatch(editLayout({
+          layoutId: settings._id as string,
+          layoutConfig: settings,
+        }));
+      }
+      
+      // Capture the screenshot
+      await dispatch(captureLayoutScreenshot(layoutId));
+      
+      // Navigate to store layouts dashboard
+      if (storeId) {
+        navigate(`/dashboard/${storeId}/layouts`);
+      } else {
+        navigate(-1);
+      }
+    } catch (error) {
+      console.error('Failed to save layout:', error);
+      // Still try to navigate back even if there was an error
+      if (storeId) {
+        navigate(`/dashboard/${storeId}/layouts`);
+      } else {
+        navigate(-1);
+      }
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   // Handle loading and missing store
   if (loading) {
     return (
@@ -150,6 +189,7 @@ const WebsiteBuilderContent: React.FC = () => {
         setZoom={setZoom} 
         showDeviceSelector={!isSettingsOpen} 
         onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+        onSave={handleSaveAndExit}
       />
 
       <div className="w-full website-builder h-[calc(100vh-3.5rem)] lg:h-[calc(100vh-3.5rem)] flex flex-row relative">

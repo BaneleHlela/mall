@@ -312,7 +312,7 @@ const StoreDashboardLayouts = () => {
         {/* New Layout Modal */}
         {showNewLayoutModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-y-scroll">
-            <div className="relative w-full max-w-2xl lg:mx-4 bg-white rounded-2xl shadow-2xl overflow-y-scroll lg:overflow-hidden animate-fadeIn">
+            <div className="relative w-full max-w-2xl lg:mx-4 bg-white rounded-2xl shadow-2xl overflow-y-scroll lg:overflow-hidden animate-fadeIn  scale-85 lg:scale-100 origin-center">
               {/* Modal Header */}
               <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600">
                 <h2 className="text-xl font-semibold text-white">Create New Website</h2>
@@ -347,7 +347,7 @@ const StoreDashboardLayouts = () => {
                         </div>
                         <h3 className="text-lg font-semibold text-gray-800 mb-2">Internal Website</h3>
                         <p className="text-sm text-gray-600 text-center mb-3">
-                          Build a beautiful website using our drag-and-drop builder with pre-designed components
+                          Build a beautiful website using our simple website builder with pre-designed components
                         </p>
                         <span className="px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
                           FREE
