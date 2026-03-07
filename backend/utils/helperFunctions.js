@@ -69,37 +69,37 @@ export const captureStoreThumbnail = async (storeId) => {
 };
 
 // Capture StoreCard Thumbnail (1447 x 900 px)
-export const captureStoreCardThumbnail = async (storeId) => {
-  if (!storeId) {
-    throw new Error('storeId is required to capture the storeCard thumbnail');
+export const captureStoreCardThumbnail = async (layoutId) => {
+  if (!layoutId) {
+    throw new Error('layoutId is required to capture the storeCard thumbnail');
   }
 
-  const url = `${process.env.CLIENT_URL}/stores/${storeId}`;
+  const url = `${process.env.CLIENT_URL}/layouts/${layoutId}/preview`;
   console.log(`Capturing storeCard for: ${url}`);
 
   try {
     const screenshotBuffer = await captureScreenshot(url, 1447, 900);
     return screenshotBuffer;
   } catch (error) {
-    console.error(`Failed to capture storeCard for store ${storeId}:`, error);
+    console.error(`Failed to capture storeCard for layout ${layoutId}:`, error);
     throw error;
   }
 };
 
 // Capture Reely Thumbnail (360 x 660 px)
-export const captureReelyThumbnail = async (storeId) => {
-  if (!storeId) {
-    throw new Error('storeId is required to capture the reely thumbnail');
+export const captureReelyThumbnail = async (layoutId) => {
+  if (!layoutId) {
+    throw new Error('layoutId is required to capture the reely thumbnail');
   }
 
-  const url = `${process.env.CLIENT_URL}/stores/${storeId}`;
+  const url = `${process.env.CLIENT_URL}/layouts/${layoutId}/preview`;
   console.log(`Capturing reely for: ${url}`);
 
   try {
     const screenshotBuffer = await captureScreenshot(url, 360, 660);
     return screenshotBuffer;
   } catch (error) {
-    console.error(`Failed to capture reely for store ${storeId}:`, error);
+    console.error(`Failed to capture reely for layout ${layoutId}:`, error);
     throw error;
   }
 };

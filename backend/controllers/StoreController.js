@@ -1069,13 +1069,19 @@ export const captureStoreCardAuto = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Store not found" });
     }
 
+    // Get layoutId from website configuration
+    const layoutId = store.website?.layoutId;
+    if (!layoutId) {
+      return res.status(400).json({ message: "Store does not have a layoutId set. Please configure the store's website layout first." });
+    }
+
     // Delete old storeCard thumbnail if it exists
     if (store.thumbnails && store.thumbnails.storeCard) {
       await deleteThumbnailFromGCS(store.thumbnails.storeCard);
     }
 
-    // Capture screenshot at 1447 x 900
-    const screenshotBuffer = await captureStoreCardThumbnail(store._id.toString());
+    // Capture screenshot at 1447 x 900 using layoutId
+    const screenshotBuffer = await captureStoreCardThumbnail(layoutId.toString());
 
     // Upload to GCS
     const destination = `stores/${store.slug}/thumbnails/storeCard/${Date.now()}_storeCard.png`;
@@ -1110,13 +1116,19 @@ export const captureReelyAuto = expressAsyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Store not found" });
     }
 
+    // Get layoutId from website configuration
+    const layoutId = store.website?.layoutId;
+    if (!layoutId) {
+      return res.status(400).json({ message: "Store does not have a layoutId set. Please configure the store's website layout first." });
+    }
+
     // Delete old reely thumbnail if it exists
     if (store.thumbnails && store.thumbnails.reely) {
       await deleteThumbnailFromGCS(store.thumbnails.reely);
     }
 
-    // Capture screenshot at 360 x 660
-    const screenshotBuffer = await captureReelyThumbnail(store._id.toString());
+    // Capture screenshot at 360 x 660 using layoutId
+    const screenshotBuffer = await captureReelyThumbnail(layoutId.toString());
 
     // Upload to GCS
     const destination = `stores/${store.slug}/thumbnails/reely/${Date.now()}_reely.png`;

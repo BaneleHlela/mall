@@ -29,7 +29,14 @@ const initializeStoreThumbnails = async () => {
     // 3. Process each store
     for (const store of stores) {
       try {
-        console.log(`📸 Processing thumbnails for store: ${store._id} (${store.name || "Unnamed"})`);
+        // Get layoutId from website configuration
+        const layoutId = store.website?.layoutId;
+        if (!layoutId) {
+          console.log(`⚠️ Skipping store ${store._id} - no layoutId set in website configuration`);
+          continue;
+        }
+
+        console.log(`📸 Processing thumbnails for store: ${store._id} (${store.name || "Unnamed"}) with layoutId: ${layoutId}`);
 
         // Delete old thumbnails if they exist
         if (store.thumbnails && store.thumbnails.storeCard) {
@@ -53,15 +60,15 @@ const initializeStoreThumbnails = async () => {
         }
 
         // Generate and upload storeCard thumbnail (desktop - 1447x900)
-        console.log(`   📱 Capturing storeCard (desktop) for store: ${store._id}`);
-        const storeCardBuffer = await captureStoreCardThumbnail(store._id.toString());
+        console.log(`   📱 Capturing storeCard (desktop) for store: ${store._id} with layoutId: ${layoutId}`);
+        const storeCardBuffer = await captureStoreCardThumbnail(layoutId.toString());
         const storeCardFileName = `stores/${store._id}/thumbnails/storeCard.png`;
         await uploadToUploads(storeCardBuffer, storeCardFileName);
         const storeCardUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${storeCardFileName}`;
 
         // Generate and upload reely thumbnail (mobile - 360x660)
-        console.log(`   📱 Capturing reely (mobile) for store: ${store._id}`);
-        const reelyBuffer = await captureReelyThumbnail(store._id.toString());
+        console.log(`   📱 Capturing reely (mobile) for store: ${store._id} with layoutId: ${layoutId}`);
+        const reelyBuffer = await captureReelyThumbnail(layoutId.toString());
         const reelyFileName = `stores/${store._id}/thumbnails/reely.png`;
         await uploadToUploads(reelyBuffer, reelyFileName);
         const reelyUrl = `https://storage.googleapis.com/the-mall-uploads-giza/${reelyFileName}`;

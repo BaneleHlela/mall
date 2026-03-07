@@ -137,61 +137,72 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
 
     await page.goto(url, { waitUntil: "networkidle2", timeout: 0 });
 
-    // React render delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // allow React / scripts to finish rendering
+    await page.waitForTimeout(2000);
 
-    // Scroll page to trigger lazy images
-    // await page.evaluate(async () => {
-    //   await new Promise((resolve) => {
-    //     let totalHeight = 0;
-    //     const distance = 500;
+    // ------------------------------------
+    // SCROLL PAGE (trigger lazy loading)
+    // ------------------------------------
+    await page.evaluate(async () => {
+      await new Promise((resolve) => {
+        let totalHeight = 0;
+        const distance = 500;
 
-    //     const timer = setInterval(() => {
-    //       const scrollHeight = document.body.scrollHeight;
+        const timer = setInterval(() => {
+          const scrollHeight = document.body.scrollHeight;
 
-    //       window.scrollBy(0, distance);
-    //       totalHeight += distance;
+          window.scrollBy(0, distance);
+          totalHeight += distance;
 
-    //       if (totalHeight >= scrollHeight) {
-    //         clearInterval(timer);
-    //         window.scrollTo(0, 0);
-    //         setTimeout(resolve, 1000);
-    //       }
-    //     }, 300);
-    //   });
-    // });
+          if (totalHeight >= scrollHeight) {
+            clearInterval(timer);
+            window.scrollTo(0, 0);
+            setTimeout(resolve, 1000);
+          }
+        }, 300);
+      });
+    });
 
-    // Wait for images and animations
-    // await page.evaluate(async () => {
+    // ------------------------------------
+    // WAIT FOR IMAGES + ANIMATIONS
+    // ------------------------------------
+    await page.evaluate(async () => {
 
-    //   const imagePromises = Array.from(document.images).map((img) => {
-    //     if (img.complete && img.naturalHeight !== 0) return;
+      // wait for images
+      const imagePromises = Array.from(document.images).map((img) => {
+        if (img.complete && img.naturalHeight !== 0) return;
 
-    //     return new Promise((resolve) => {
-    //       img.addEventListener("load", resolve);
-    //       img.addEventListener("error", resolve);
-    //     });
-    //   });
+        return new Promise((resolve) => {
+          img.addEventListener("load", resolve);
+          img.addEventListener("error", resolve);
+        });
+      });
 
-    //   const animationPromises = Array.from(document.querySelectorAll("*")).map(
-    //     (element) => {
-    //       const style = window.getComputedStyle(element);
-    //       const dur = parseFloat(style.animationDuration) || 0;
-    //       const delay = parseFloat(style.animationDelay) || 0;
-    //       const total = (dur + delay) * 1000;
+      // wait for css animations
+      const animationPromises = Array.from(document.querySelectorAll("*")).map(
+        (element) => {
+          const style = window.getComputedStyle(element);
+          const dur = parseFloat(style.animationDuration) || 0;
+          const delay = parseFloat(style.animationDelay) || 0;
+          const total = (dur + delay) * 1000;
 
-    //       if (total > 0) {
-    //         return new Promise((resolve) => setTimeout(resolve, total));
-    //       }
-    //     }
-    //   );
+          if (total > 0) {
+            return new Promise((resolve) => setTimeout(resolve, total));
+          }
+        }
+      );
 
-    //   await Promise.all([...imagePromises, ...animationPromises]);
-    // });
+      await Promise.all([...imagePromises, ...animationPromises]);
+    });
 
-    // Final stabilization
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // ------------------------------------
+    // FINAL STABILIZATION
+    // ------------------------------------
+    await page.waitForTimeout(1000);
 
+    // ------------------------------------
+    // TAKE SCREENSHOT
+    // ------------------------------------
     const screenshotBuffer = await page.screenshot({
       fullPage: true,
     });
