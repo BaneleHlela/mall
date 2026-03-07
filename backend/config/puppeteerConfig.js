@@ -112,19 +112,20 @@ import puppeteer from 'puppeteer';
 
 export const captureScreenshot = async (url, width = 1280, height = 800) => {
   let browser;
+
   try {
     browser = await puppeteer.launch({
       headless: true,
-      executablePath: '/usr/bin/chromium-browser',
+      executablePath: "/usr/bin/chromium-browser",
       args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-gpu',
-        '--disable-web-security'
-      ]
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--disable-web-security",
+        "--allow-running-insecure-content"
+      ],
     });
-    
 
     const page = await browser.newPage();
 
@@ -134,78 +135,84 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
       deviceScaleFactor: 1,
     });
 
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 0 });
+    await page.goto(url, { waitUntil: "networkidle2", timeout: 0 });
 
-    // ----- WAIT FOR PAGE TO FULLY STABILIZE -----
+    // allow React / scripts to finish rendering
+    await page.waitForTimeout(2000);
+
+    // ------------------------------------
+    // SCROLL PAGE (trigger lazy loading)
+    // ------------------------------------
+    await page.evaluate(async () => {
+      await new Promise((resolve) => {
+        let totalHeight = 0;
+        const distance = 500;
+
+        const timer = setInterval(() => {
+          const scrollHeight = document.body.scrollHeight;
+
+          window.scrollBy(0, distance);
+          totalHeight += distance;
+
+          if (totalHeight >= scrollHeight) {
+            clearInterval(timer);
+            window.scrollTo(0, 0);
+            setTimeout(resolve, 1000);
+          }
+        }, 300);
+      });
+    });
+
+    // ------------------------------------
+    // WAIT FOR IMAGES + ANIMATIONS
+    // ------------------------------------
     await page.evaluate(async () => {
 
-      // -------------------------
-      // WAIT FOR IMAGES TO LOAD
-      // -------------------------
+      // wait for images
       const imagePromises = Array.from(document.images).map((img) => {
-        if (img.complete) return;
+        if (img.complete && img.naturalHeight !== 0) return;
+
         return new Promise((resolve) => {
           img.addEventListener("load", resolve);
           img.addEventListener("error", resolve);
         });
       });
 
-      // -------------------------
-      // WAIT FOR ANIMATIONS
-      // -------------------------
-      const animationPromises = Array.from(
-        document.querySelectorAll("*")
-      ).map((element) => {
-        const style = window.getComputedStyle(element);
-        const dur = parseFloat(style.animationDuration) || 0;
-        const delay = parseFloat(style.animationDelay) || 0;
-        const total = (dur + delay) * 1000;
+      // wait for css animations
+      const animationPromises = Array.from(document.querySelectorAll("*")).map(
+        (element) => {
+          const style = window.getComputedStyle(element);
+          const dur = parseFloat(style.animationDuration) || 0;
+          const delay = parseFloat(style.animationDelay) || 0;
+          const total = (dur + delay) * 1000;
 
-        if (total > 0) {
-          return new Promise((resolve) => setTimeout(resolve, total));
+          if (total > 0) {
+            return new Promise((resolve) => setTimeout(resolve, total));
+          }
         }
-      });
+      );
 
-      // -------------------------
-      // WAIT FOR SCROLLING TO FINISH
-      // -------------------------
-      const waitForScrollEnd = new Promise((resolve) => {
-        let timer;
-        let lastY = window.scrollY;
-
-        const onScroll = () => {
-          clearTimeout(timer);
-          timer = setTimeout(() => {
-            if (window.scrollY === lastY) {
-              window.removeEventListener("scroll", onScroll);
-              resolve(true);
-            } else {
-              lastY = window.scrollY;
-            }
-          }, 350);
-        };
-
-        window.addEventListener("scroll", onScroll);
-        onScroll(); // run immediately in case scroll already happened
-      });
-
-      // -------------------------
-      // FINAL WAIT
-      // -------------------------
-      await Promise.all([
-        ...imagePromises,
-        ...animationPromises,
-        waitForScrollEnd,
-      ]);
+      await Promise.all([...imagePromises, ...animationPromises]);
     });
 
-    // ----- TAKE STABLE SCREENSHOT -----
-    const screenshotBuffer = await page.screenshot({ fullPage: true });
+    // ------------------------------------
+    // FINAL STABILIZATION
+    // ------------------------------------
+    await page.waitForTimeout(1000);
+
+    // ------------------------------------
+    // TAKE SCREENSHOT
+    // ------------------------------------
+    const screenshotBuffer = await page.screenshot({
+      fullPage: true,
+    });
+
     return screenshotBuffer;
+
   } catch (error) {
-    console.error('Error capturing screenshot with Puppeteer:', error);
-    throw new Error('Failed to capture screenshot');
+    console.error("Error capturing screenshot with Puppeteer:", error);
+    throw new Error("Failed to capture screenshot");
   } finally {
     if (browser) await browser.close();
   }
-}; 
+};
