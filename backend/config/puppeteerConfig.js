@@ -138,7 +138,7 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
     await page.goto(url, { waitUntil: "networkidle2", timeout: 0 });
 
     // allow React / scripts to finish rendering
-    await page.waitForTimeout(2000);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // ------------------------------------
     // SCROLL PAGE (trigger lazy loading)
@@ -168,7 +168,6 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
     // ------------------------------------
     await page.evaluate(async () => {
 
-      // wait for images
       const imagePromises = Array.from(document.images).map((img) => {
         if (img.complete && img.naturalHeight !== 0) return;
 
@@ -178,7 +177,6 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
         });
       });
 
-      // wait for css animations
       const animationPromises = Array.from(document.querySelectorAll("*")).map(
         (element) => {
           const style = window.getComputedStyle(element);
@@ -198,7 +196,7 @@ export const captureScreenshot = async (url, width = 1280, height = 800) => {
     // ------------------------------------
     // FINAL STABILIZATION
     // ------------------------------------
-    await page.waitForTimeout(1000);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // ------------------------------------
     // TAKE SCREENSHOT
