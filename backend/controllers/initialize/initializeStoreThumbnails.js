@@ -4,7 +4,7 @@ import Store from "../../models/StoreModel.js";
 import { captureStoreCardThumbnail, captureReelyThumbnail } from "../../utils/helperFunctions.js";
 import { uploadToUploads, deleteFromUploads } from "../../config/gcsClient.js";
 
-dotenv.config({ path: "../../../.env" });
+dotenv.config({});
 
 const initializeStoreThumbnails = async () => {
   console.log("MONGODB_URL:", process.env.MONGODB_URL);

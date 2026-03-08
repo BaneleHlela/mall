@@ -79,7 +79,7 @@ export const fetchStoresInRange = createAsyncThunk<
 
 export const fetchStoresByOwner = createAsyncThunk<Store[], string>(
   'stores/fetchStoresByOwner',
-  async (ownerId) => {
+  async () => {
     const response = await axios.get(`${STORE_API_URL}/my-stores`);
     return response.data;
   }

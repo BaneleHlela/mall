@@ -148,6 +148,7 @@ export const login = expressAsyncHandler(async (req, res) => {
         
         await storeRefreshToken(user._id, refreshToken);
         setCookies(res, accessToken, refreshToken);
+        console.log("User logged in:", user.email, accessToken);	
 
         user.lastLogin = new Date();
         await user.save();
