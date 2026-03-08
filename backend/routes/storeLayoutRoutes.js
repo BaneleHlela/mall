@@ -6,6 +6,7 @@ import {
     deleteLayoutConfig,
     getLayoutByDemoStore,
     getDemoLayouts,
+    getDemoMenubars,
     replaceLayoutColor,
     createLayoutConfigWithSettings,
     updateLayoutConfigWithSettings,
@@ -20,6 +21,7 @@ const router = express.Router();
 // Specific routes
 router.post("/", /*protectRoute,*/ createLayoutConfig);
 router.get('/demo', getDemoLayouts);
+router.get('/demo-menubars', getDemoMenubars);
 router.post('/with-settings', createLayoutConfigWithSettings);
 router.put('/update-with-settings', updateLayoutConfigWithSettings);
 router.get('/store/:storeId', getStoreLayouts)

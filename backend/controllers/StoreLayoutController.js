@@ -228,6 +228,26 @@ export const getDemoLayouts = expressAsyncHandler(async (req, res) => {
     res.json(filteredLayouts);
 });
 
+// Get only menubar configs from demo stores
+export const getDemoMenubars = expressAsyncHandler(async (req, res) => {
+    // Fetch demo layouts with menubar config and screenshot
+    const demoLayouts = await StoreLayout.find({ 
+        isDemo: true, 
+        store: { $ne: null },
+        menubar: { $exists: true, $ne: {} }
+    })
+    .populate('store', '_id name slug trades thumbnail')
+    .select('name menubar store screenshot')
+    .limit(20);
+
+    if (!demoLayouts || demoLayouts.length === 0) {
+        res.status(404);
+        throw new Error("No demo menubars found.");
+    }
+
+    res.json(demoLayouts);
+});
+
 // Update Layout Configuration
 export const updateLayoutConfig = expressAsyncHandler(async (req, res) => {
   const { layoutId } = req.params;

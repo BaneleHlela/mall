@@ -68,6 +68,18 @@ export const fetchDemoLayouts = createAsyncThunk(
     }
 );
 
+export const fetchDemoMenubars = createAsyncThunk(
+    "layouts/fetchDemoMenubars",
+    async (_, thunkAPI) => {
+      try {
+        const response = await axios.get(`${API_URL}/api/layouts/demo-menubars`);
+        return response.data;
+      } catch (error: any) {
+        return thunkAPI.rejectWithValue(error.response?.data || "Failed to fetch demo menubars");
+      }
+    }
+);
+
 export const createLayoutWithSettings = createAsyncThunk(
     'layouts/createLayoutWithSettings',
     async (
@@ -252,6 +264,17 @@ const layoutSlice = createSlice({
             .addCase(fetchDemoLayouts.rejected, (state, action) => {
                 state.isLoading = true;
                 state.error = action.error.message || "Failed to fetch demo layouts";
+            })
+            .addCase(fetchDemoMenubars.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(fetchDemoMenubars.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.demoMenubars = action.payload;
+            })
+            .addCase(fetchDemoMenubars.rejected, (state, action) => {
+                state.isLoading = true;
+                state.error = action.error.message || "Failed to fetch demo menubars";
             })
             .addCase(createLayoutWithSettings.pending, (state) => {
                 state.isLoading = true;

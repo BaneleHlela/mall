@@ -4,7 +4,7 @@ import FirstOrderSubSettingsContainer from "../FirstOrderSubSettingsContainer";
 import PopularStoreMenubarSettings from "./popular/PopularStoreMenubarSettings";
 import { AnimatePresence } from "framer-motion";
 import SlidingPanel from "../supporting/SlidingPanel";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaLayerGroup } from "react-icons/fa";
 import { updateSetting } from "../../../features/layouts/layoutSettingsSlice";
 import StoreAlertDivSettings from "../extras/alert_div/StoreAlertDivSettings";
 import Swal from "sweetalert2";
@@ -17,11 +17,13 @@ import CakeMenubarSettings from "./cake/CakeMenubarSettings";
 import { useBreadcrumbs } from "../../../contexts/BreadcrumbContext";
 import { Menu, Bell } from "lucide-react";
 import { motion } from "framer-motion";
+import DemoMenubarSelector from "./DemoMenubarSelector";
 
 const MenubarSettings = () => {
   const settings = useAppSelector((state) => state.layoutSettings);
   const { variation, alertDiv } = useAppSelector((state) => state.layoutSettings.menubar || {});
   const [activePanel, setActivePanel] = useState<string | null>(null);
+  const [showDemoSelector, setShowDemoSelector] = useState(false);
   const { addBreadcrumb, removeBreadcrumb, currentPanel } = useBreadcrumbs();
   const closePanel = () => {
     setActivePanel(null);
@@ -60,6 +62,17 @@ const MenubarSettings = () => {
   if (!alertDiv || alertDiv.display != true) {
     return (
       <div className="space-y-[.8vh] flex flex-col w-full items-center">
+        {/* Demo Menubar Selector Button */}
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full flex items-center justify-center space-x-[.8vh] py-[1.2vh] px-[1.6vh] bg-gradient-to-r from-purple-100 to-purple-50 border border-purple-200 text-purple-700 rounded-xl hover:from-purple-200 hover:to-purple-100 transition-all shadow-sm mb-4"
+          onClick={() => setShowDemoSelector(true)}
+        >
+          <FaLayerGroup className="text-[2vh]" />
+          <span className="text-[1.8vh] font-medium">Browse Demo Menubars</span>
+        </motion.button>
+
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -76,6 +89,11 @@ const MenubarSettings = () => {
           {variation === "artMenubar" && <ArtMenubarSettings />}
           {variation === "cakeMenubar" && <CakeMenubarSettings />}
         </div>
+
+        <DemoMenubarSelector 
+          isOpen={showDemoSelector} 
+          onClose={() => setShowDemoSelector(false)} 
+        />
       </div>
     );
   }
@@ -83,6 +101,17 @@ const MenubarSettings = () => {
   if (alertDiv && alertDiv.display == true) {
     return (
       <div className="space-y-[.8vh] p-[.4vh]">
+        {/* Demo Menubar Selector Button */}
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full flex items-center justify-center space-x-[.8vh] py-[1.2vh] px-[1.6vh] bg-gradient-to-r from-purple-100 to-purple-50 border border-purple-200 text-purple-700 rounded-xl hover:from-purple-200 hover:to-purple-100 transition-all shadow-sm mb-2"
+          onClick={() => setShowDemoSelector(true)}
+        >
+          <FaLayerGroup className="text-[2vh]" />
+          <span className="text-[1.8vh] font-medium">Browse Demo Menubars</span>
+        </motion.button>
+
         <FirstOrderSubSettingsContainer
           name="Menubar"
           onClick={() => handlePanelOpen("menubar_settings", "Menubar")}
@@ -130,6 +159,11 @@ const MenubarSettings = () => {
             </SlidingPanel>
           )}
         </AnimatePresence>
+
+        <DemoMenubarSelector 
+          isOpen={showDemoSelector} 
+          onClose={() => setShowDemoSelector(false)} 
+        />
       </div>
     );
   }

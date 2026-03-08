@@ -27,7 +27,6 @@ import PayFastPage from "./pages/payments/PayFastPage";
 import ComingSoon from "./components/the_mall/ComingSoon";
 import MallCartPage from "./pages/cart/MallCartPage";
 import { HiOutlineChatAlt2 } from "react-icons/hi";
-import { checkAuth } from "./features/user/userSlice";
 import "./features/api/axiosInstance"; // Initialize axios interceptors
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import DataDeletion from "./pages/DataDeletion";

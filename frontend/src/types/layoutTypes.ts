@@ -10,6 +10,7 @@ export interface LayoutState {
     layoutSettings: Layout | null;
     isLoading: boolean;
     error: string | null;
+    demoMenubars?: any[];
 }
   
 

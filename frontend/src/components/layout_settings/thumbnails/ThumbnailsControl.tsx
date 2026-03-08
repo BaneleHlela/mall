@@ -9,6 +9,7 @@ import {
 import { IoCamera, IoTrash, IoCloudUpload, IoRefresh, IoImage } from "react-icons/io5";
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import { TbLoader3 } from "react-icons/tb";
 
 const mysweetalert = withReactContent(Swal);
 
@@ -54,7 +55,7 @@ const ThumbnailCard: React.FC<ThumbnailCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className=" bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
       {/* Header */}
       <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
         <div className="flex items-center justify-between">
@@ -72,13 +73,13 @@ const ThumbnailCard: React.FC<ThumbnailCardProps> = ({
 
       {/* Preview */}
       <div className="p-4">
-        <div className={`relative ${aspectRatio} w-full bg-gray-100 rounded-lg overflow-hidden border-2 border-dashed border-gray-200 group`}>
+        <div className={`relative ${aspectRatio} max-h-[25vh] w-full bg-gray-100 rounded-lg overflow-hidden border-2 border-dashed border-gray-200 group`}>
           {currentUrl ? (
             <>
               <img
                 src={currentUrl}
                 alt={`${name} thumbnail`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain max-h-[25vh]"
               />
               <div className="absolute inset-0 bg-black/0 hover:bg-black/50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
                 <button
@@ -119,7 +120,7 @@ const ThumbnailCard: React.FC<ThumbnailCardProps> = ({
                   : 'bg-gray-900 text-white hover:bg-gray-800'
               }`}
             >
-              <IoCloudUpload size={16} />
+              {isLoading ? <TbLoader3 size={16} className="animate-spin mx-auto" /> : <IoCloudUpload size={16} />}
               Upload
             </button>
           </label>
@@ -134,7 +135,7 @@ const ThumbnailCard: React.FC<ThumbnailCardProps> = ({
                   : 'bg-blue-500 text-white hover:bg-blue-600'
               }`}
             >
-              <IoRefresh size={16} />
+              {isLoading ? <TbLoader3 size={16} className="animate-spin mx-auto" /> : <IoRefresh size={16} /> }
               Capture
             </button>
           )}
@@ -308,7 +309,7 @@ const ThumbnailsControl: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col max-w-md items-center border-2 border-gray-200 rounded-md shadow-md w-full max-w-md py-4 px-4 overflow-y-scroll hide-scrollbar">
+    <div className="h-full flex flex-col max-w-md items-center border-2 border-gray-200 rounded-md shadow-md w-full py-4 px-4 overflow-y-scroll hide-scrollbar">
       <div className="flex items-center gap-2 mb-4">
         <IoCamera size={20} className="text-gray-700" />
         <h2 className="text-lg font-semibold">Store Thumbnails</h2>
@@ -328,12 +329,12 @@ const ThumbnailsControl: React.FC = () => {
         ))}
       </div>
 
-      {isLoading && (
+      {/* {isLoading && (
         <div className="mt-4 flex items-center gap-2 text-gray-600">
           <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-900 rounded-full animate-spin" />
           <span className="text-sm">Processing...</span>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

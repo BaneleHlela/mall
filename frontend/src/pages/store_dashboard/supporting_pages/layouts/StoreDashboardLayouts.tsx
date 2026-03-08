@@ -11,6 +11,7 @@ import { FaPlus, FaGlobe, FaExternalLinkAlt, FaPaintBrush, FaTimes, FaCheck } fr
 import { FiLayout, FiPlus } from "react-icons/fi";
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import { TbLoader3 } from "react-icons/tb";
 
 const mysweetalert = withReactContent(Swal);
 
@@ -291,7 +292,7 @@ const StoreDashboardLayouts = () => {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white">
-                <FiLayout className="text-lg" />
+                {isLoading ? <TbLoader3 className="text-lg animate-spin mx-auto" /> : <FiLayout className="text-lg" />}
               </div>
               <div>
                 <h1 className="text-lg font-bold text-slate-800">Layouts</h1>
