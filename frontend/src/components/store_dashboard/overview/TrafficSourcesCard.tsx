@@ -17,7 +17,7 @@ const trafficSources: TrafficSource[] = [
 
 export default function TrafficSourcesCard() {
   return (
-    <div className="w-full h-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="relative w-full h-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
       {/* Header */}
       <div className="p-6 border-b border-slate-100">
         <h2 className="text-lg font-semibold text-slate-800">Traffic Sources</h2>
@@ -27,7 +27,7 @@ export default function TrafficSourcesCard() {
       </div>
 
       {/* Content */}
-      <div className="p-6 space-y-5">
+      <div className="relative p-6 space-y-5">
         {trafficSources.map((source) => {
           const Icon = source.icon;
           return (
@@ -50,6 +50,7 @@ export default function TrafficSourcesCard() {
             </div>
           );
         })}
+        <div className="absolute inset-0 w-full h-full backdrop-blur-sm z-2"></div>
       </div>
 
       {/* Footer */}

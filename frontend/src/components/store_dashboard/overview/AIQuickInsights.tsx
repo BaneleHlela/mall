@@ -27,7 +27,7 @@ const AIQuickInsights: React.FC<AIQuickInsightsProps> = ({ insights }) => {
       </div>
 
       {/* Insights List */}
-      <div className="p-6">
+      <div className="relative p-6">
         <ul className="space-y-4">
           {insights.map((insight, index) => {
             const type = insight.type || (index === 0 ? 'positive' : index === 1 ? 'positive' : 'neutral');
@@ -58,6 +58,7 @@ const AIQuickInsights: React.FC<AIQuickInsightsProps> = ({ insights }) => {
             );
           })}
         </ul>
+        <div className="absolute inset-0 w-full h-full backdrop-blur-sm z-2"></div>
       </div>
 
       {/* Footer */}

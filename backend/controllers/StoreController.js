@@ -64,7 +64,7 @@ export const getStore = expressAsyncHandler(async (req, res) => {
           // If it's not a valid ObjectId, assume it's a slug
           store = await Store.findOne({ slug: storeSlug }).populate({
               path: 'team.member',
-              select: 'name email', // Select specific fields from the User model
+              select: 'fisrtName lastName username email', // Select specific fields from the User model
           });
       }
 

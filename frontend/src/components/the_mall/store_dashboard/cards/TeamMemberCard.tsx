@@ -26,9 +26,9 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
   const initials = `${firstName?.charAt(0) || ''}${lastName?.charAt(0) || ''}`;
 
   return (
-    <div className="group bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col">
+    <div className="relative group bg-white aspect-3/4 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col">
       {/* Avatar Section */}
-      <div className="relative h-40 bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center">
+      <div className="relative h-full bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center">
         {avatar ? (
           <img
             src={avatar}
@@ -42,7 +42,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
         )}
         
         {/* Action Buttons Overlay */}
-        <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <div className="absolute top-3 right-3 flex gap-2 transition-opacity duration-200">
           {deletable && (
             <button 
               onClick={(e) => {
@@ -66,7 +66,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
         </div>
 
         {/* Status Badge */}
-        <div className="absolute bottom-3 left-3">
+        <div className="absolute top-3 left-3">
           <span className="px-2.5 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-medium text-slate-600 shadow-sm">
             {position}
           </span>
@@ -74,7 +74,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
       </div>
 
       {/* Info Section */}
-      <div className="flex-1 flex flex-col p-4">
+      <div className="absolute bottom-1 bg-white/90 w-[95%] ml-[2.5%] flex-1 flex flex-col p-[1.5vh] rounded-[2vh]">
         <h3 className="font-semibold text-slate-800 text-base truncate">
           {fullName}
         </h3>

@@ -38,7 +38,8 @@ const EditTeamMemberModal: React.FC<Props> = ({ open, onClose, member }) => {
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
-    if (!store?.slug || !member.member.username) return window.alert('Store information is missing. Please try again later.');
+    console.log(member);
+    if (!store?.slug || !member.member.username) return window.alert(`Store information is missing. Please try again later. ${store?.slug} ${member.username}`);
     try {
       await dispatch(
         editTeamMember({

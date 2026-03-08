@@ -32,7 +32,7 @@ export const StoreDashboardOverviewStatCard = ({
   const isPositive = percentage >= 0;
   
   return (
-    <div className="w-full">
+    <div className="relative w-full z-0">
       {/* Header with icon and title */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
@@ -83,6 +83,8 @@ export const StoreDashboardOverviewStatCard = ({
           <span>{Math.abs(percentage)}%</span>
         </div>
       </div>
+      {/* Lock */}
+      <div className="absolute inset-0 backdrop-blur-sm z-2 w-full h-full rounded-lg"></div>
     </div>
   );
 };

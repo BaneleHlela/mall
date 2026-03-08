@@ -14,7 +14,7 @@ interface TopItemsTableProps {
 
 const TopItemsTable: React.FC<TopItemsTableProps> = ({ title, products }) => {
   return (
-    <div className="w-full h-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="relative w-full h-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
       {/* Header */}
       <div className="p-6 border-b border-slate-100">
         <h2 className="text-lg font-semibold text-slate-800">{title}</h2>
@@ -24,7 +24,7 @@ const TopItemsTable: React.FC<TopItemsTableProps> = ({ title, products }) => {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto relative">
         <table className="w-full">
           <thead>
             <tr className="bg-slate-50 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
@@ -82,6 +82,7 @@ const TopItemsTable: React.FC<TopItemsTableProps> = ({ title, products }) => {
             ))}
           </tbody>
         </table>
+        <div className="absolute inset-0 w-full h-full backdrop-blur-sm z-2"></div>
       </div>
 
       {/* Footer */}
@@ -90,6 +91,7 @@ const TopItemsTable: React.FC<TopItemsTableProps> = ({ title, products }) => {
           View all products →
         </button>
       </div>
+      
     </div>
   )
 }

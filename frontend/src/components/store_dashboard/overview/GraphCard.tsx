@@ -39,7 +39,7 @@ const GraphCard: React.FC<GraphCardProps> = ({
   const gradientId = `gradient-${color.replace("#", "")}`;
 
   return (
-    <div className="w-full h-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="relative w-full h-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
       <div className="p-6 h-full flex flex-col">
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
@@ -64,7 +64,7 @@ const GraphCard: React.FC<GraphCardProps> = ({
         </div>
         
         {/* Chart */}
-        <div className="flex-1 min-h-0">
+        <div className="relative flex-1 min-h-0">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>
@@ -107,6 +107,8 @@ const GraphCard: React.FC<GraphCardProps> = ({
           </ResponsiveContainer>
         </div>
       </div>
+      {/* Lock */}
+      <div className="absolute inset-0 w-full h-full backdrop-blur-sm"></div>
     </div>
   )
 }
