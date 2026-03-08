@@ -41,12 +41,12 @@ const SecondProductCard: React.FC<StoreProductCardProps> = ({
 
       // If all variation prices are the same
       if (minPrice === maxPrice) {
-      return `R${formatPriceWithSpaces(minPrice)}${minPrice % 1 === 0 ? '.00' : ''}`;
+      return `R${formatPriceWithSpaces(minPrice)}`;
       }
-      return `R${formatPriceWithSpaces(minPrice)}${minPrice % 1 === 0 ? '.00' : ''} - R${formatPriceWithSpaces(maxPrice)}${maxPrice % 1 === 0 ? '.00' : ''}`;
+      return `R${formatPriceWithSpaces(minPrice)} - R${formatPriceWithSpaces(maxPrice)}`;
   } 
   if (typeof price === 'number') {
-      return `R${formatPriceWithSpaces(price)}${price % 1 === 0 ? '.00' : ''}`;
+      return `R${formatPriceWithSpaces(price)}`;
   }
     return '';
   };
@@ -183,6 +183,8 @@ return {
 
 export function formatPriceWithSpaces(price?: number): string {
     if (typeof price !== 'number') return '';
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    const formatted = price.toFixed(2); // Always show 2 decimal places
+    const [integerPart, decimalPart] = formatted.split('.');
+    return integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + '.' + decimalPart;
 }
   

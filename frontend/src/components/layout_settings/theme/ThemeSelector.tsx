@@ -18,7 +18,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ layout, onThemeSelect, is
   const store = useAppSelector((state) => state.storeAdmin.store);
   
   // Get store trades/departments
-  const storeTrades = store?.trades || [];
+  const storeTrades = store?.departments || [];
   
   // Get recommendations based on department
   const fontPairings = getAllFontPairings(storeTrades);
@@ -103,7 +103,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ layout, onThemeSelect, is
   
   // Handle continue to editor
   const handleContinue = () => {
-    onThemeSelect(customFonts, customColors, themeName || `${store?.name || "My"}-Theme`);
+    onThemeSelect(customFonts, customColors, themeName || `${store?.name || "New"} Layout`);
   };
   
   // Navigate to next step

@@ -34,7 +34,7 @@ const HeroWithDivAndImage = () => {
       {/* Button */}
       {config.button?.show && (
         <div
-          className={`w-full flex flex-row mt-8 z-2 ${
+          className={`w-full flex flex-row mt-4 lg:mt-8 z-2 ${
             config.button?.position === "center"
               ? "justify-center"
               : config.button?.position === "start"
@@ -68,7 +68,7 @@ const HeroWithDivAndImage = () => {
         style={{
           ...getBackgroundStyles(adjustContainer(config.background.container)),
         }}
-        className="w-full h-full flex justify-center items-center bg-white"
+        className="w-full h-full flex justify-center items-center"
       >
         {/* ✅ Inline Swiper pagination styling */}
         <style>

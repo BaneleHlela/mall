@@ -82,6 +82,18 @@ export const departmentThemes: Record<string, ThemeRecommendation> = {
     department: "Food & Beverage",
     fontPairings: [
       {
+        name: "Active Fast Food",
+        primary: "AR One Sans",
+        secondary: "Luckiest Guy",
+        tertiary: "AR One Sans",
+      },
+      {
+        name: "Classic Diner",
+        primary: "Lobster",
+        secondary: "Open Sans",
+        tertiary: "Roboto",
+      },
+      {
         name: "Tasty & Modern",
         primary: "Poppins",
         secondary: "Open Sans",
@@ -102,8 +114,13 @@ export const departmentThemes: Record<string, ThemeRecommendation> = {
     ],
     colorPalettes: [
       {
+        name: "Khona Kota Colors",
+        colors: ["#f8edeb", "#d62828", "#f1c40f", "#000000", "#1d3557"],
+        description: "Bright and appetizing",
+      },
+      {
         name: "Appetizing Orange",
-        colors: ["#7c2d12", "#c2410c", "#ea580c", "#fb923c", "#ffedd5"],
+        colors: ["#ffedd5", "#c2410c", "#ea580c", "#fb923c", "#7c2d12"],
         description: "Warm and appetizing",
       },
       {
