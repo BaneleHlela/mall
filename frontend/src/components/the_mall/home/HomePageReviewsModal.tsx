@@ -89,7 +89,7 @@ const HomePageReviewsModal: React.FC<HomePageReviewsModalProps> = ({ onClose, st
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: "100%" }}
       transition={{ type: "spring", stiffness: 80, damping: 15 }}
-      className="fixed inset-0 bg-white z-[9999] flex flex-col justify-between lg:px-[30%]"
+      className="fixed inset-0 bg-white z-1000 flex flex-col justify-between lg:px-[30%] maw-w-md"
     >
       {/* Header */}
       <div className="flex justify-between items-center py-4 px-[.8vh] border-b border-gray-300">
@@ -144,7 +144,7 @@ const HomePageReviewsModal: React.FC<HomePageReviewsModalProps> = ({ onClose, st
       {/* Bottom Review Input */}
       <form
         onSubmit={handleSubmit}
-        className="absolute bottom-0 left-0 w-full bg-white border-t border-gray-300 px-2 py-1 lg:px-[10%]"
+        className="absolute bottom-0 left-0 w-full bg-white border-gray-300 px-2 py-1 lg:px-[20%]"
       >
         {error && <p className="text-red-500 text-center text-sm">{error}</p>}
         {message && <p className="text-green-500 text-center text-sm">{message}</p>}

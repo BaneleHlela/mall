@@ -12,6 +12,7 @@ import StoreLayoutButton from "../../shared_layout_components/StoreLayoutButton"
 import { mockLayout } from "../../../../major_updates/mockLayout";
 import { getBackgroundStyles, getTextStyles } from "../../../../utils/stylingFunctions";
 import RestuarantSidebar from "./RestuarantSidebar";
+import HomePageReviewsModal from "../../../../components/the_mall/home/HomePageReviewsModal";
 
 
 
@@ -20,6 +21,7 @@ const RestuarantMenubar = () => {
   const scrollY = useMotionValue(0);
   const scrollDirection = useMotionValue("up");
   const [isOpen, setOpen] = useState(false);
+  const [isReviewsModalOpen, setReviewsModalOpen] = useState(false);
   const store = useAppSelector((state) => state.stores.currentStore);
   const { fonts, colors } = useAppSelector((state) => state.layoutSettings);
   const storeSlug = store?.slug as string;
@@ -143,6 +145,7 @@ const RestuarantMenubar = () => {
                                 <StoreMenubarHeart
                                     size={layout.menubar.topbar.cart.size}
                                     color={colors[layout.menubar.topbar.cart.color as keyof typeof colors]}
+                                    onDoubleClick={() => store && setReviewsModalOpen(true)}
                                 />
                             </div>
                         )}
@@ -192,6 +195,7 @@ const RestuarantMenubar = () => {
                             type: layout.menubar.topbar.button.function || 'buy',
                             routes: layout.routes, //@ts-ignore-next-line
                             contactNumber: store?.contact.phone,
+                            storeSlug: store?.slug as string,
                         })
                     }
                     style={{
@@ -215,6 +219,7 @@ const RestuarantMenubar = () => {
                     <StoreMenubarHeart
                         size={layout.menubar.topbar.cart.size}
                         color={colors[layout.menubar.topbar.cart.color as keyof typeof colors]}
+                        onDoubleClick={() => store && setReviewsModalOpen(true)}
                     />
                 </div>
             </div>
@@ -248,6 +253,10 @@ const RestuarantMenubar = () => {
             links={links}
             style={mockLayout.menubar.sidebar}
         />
+        {/* Reviews Modal */}
+        {isReviewsModalOpen && store && (
+            <HomePageReviewsModal onClose={() => setReviewsModalOpen(false)} store={store}/>
+        )}
     </motion.nav>
   );
 };

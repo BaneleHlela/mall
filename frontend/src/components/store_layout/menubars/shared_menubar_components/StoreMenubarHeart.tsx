@@ -7,11 +7,13 @@ import toast from 'react-hot-toast';
 interface StoreMenubarHeartProps {
     color?: string;
     size?: string;
+    onDoubleClick?: () => void;
 }
 
 const StoreMenubarHeart: React.FC<StoreMenubarHeartProps> = ({
     color,
     size,
+    onDoubleClick,
 }) => {
     const dispatch = useAppDispatch();
     const store = useAppSelector((state) => state.stores.currentStore);
@@ -38,7 +40,11 @@ const StoreMenubarHeart: React.FC<StoreMenubarHeartProps> = ({
     };
 
     return (
-        <button onClick={handleFavoriteClick} className="focus:outline-none">
+        <button 
+            onClick={handleFavoriteClick} 
+            onDoubleClick={onDoubleClick}
+            className="focus:outline-none"
+        >
             {isFavorite ? 
                 <GoHeartFill 
                     style={{

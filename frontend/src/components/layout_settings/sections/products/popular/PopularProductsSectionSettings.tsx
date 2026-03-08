@@ -15,6 +15,8 @@ import BorderEditor from '../../../background/BorderEditor';
 import { Underline } from 'lucide-react';
 import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings';
 import ColorPicker from '../../../supporting/ColorPicker';
+import AcceptingOrdersButtonSettings from '../shared/AcceptingOrdersButtonSettings';
+import PickupOrDeliverySettings from '../shared/PickupOrDeliverySettings';
 
 
 const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
@@ -52,6 +54,14 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
             <FirstOrderSubSettingsContainer
                 name="Category Selector"
                 onClick={() => setActivePanel("categorySelector")}
+            />
+            <FirstOrderSubSettingsContainer
+                name="Accepting Orders Button"
+                onClick={() => setActivePanel("acceptingOrdersButton")}
+            />
+            <FirstOrderSubSettingsContainer
+                name="Pickup or Delivery"
+                onClick={() => setActivePanel("pickupOrDelivery")}
             />
             
             {/* Text */}
@@ -298,6 +308,24 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                                  }
                              />
                          </div>
+                    </SlidingPanel>
+                )}
+                {activePanel === "acceptingOrdersButton" && (
+                    <SlidingPanel key="acceptingOrdersButton" isOpen={true} onClose={closePanel} title="Accepting Orders Button">
+                        <AcceptingOrdersButtonSettings 
+                            settings={settings} 
+                            handleSettingChange={handleSettingChange} 
+                            objectPath={objectPath}
+                        />
+                    </SlidingPanel>
+                )}
+                {activePanel === "pickupOrDelivery" && (
+                    <SlidingPanel key="pickupOrDelivery" isOpen={true} onClose={closePanel} title="Pickup or Delivery">
+                        <PickupOrDeliverySettings 
+                            settings={settings} 
+                            handleSettingChange={handleSettingChange} 
+                            objectPath={objectPath}
+                        />
                     </SlidingPanel>
                 )}
                 {activePanel === "card" && (

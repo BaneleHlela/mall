@@ -11,6 +11,7 @@ import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import AcceptingOrdersButton from '../../../extras/buttons/AcceptingOrdersButton';
 
 const PopularProductsSection = () => {
   const settings = useAppSelector((state) => state.layoutSettings.sections.products);
@@ -31,7 +32,7 @@ const PopularProductsSection = () => {
     const currentUrl = window.location.href;
 
     if (currentUrl.includes('layouts')) {
-      navigate(`/layouts/${store?.slug}/preview/product/${productSlug}`);
+      navigate(`/layouts/${store?.slug}/preview/product/${productSlug}#singleProduct`);
     } else if (store && store.slug) {
       navigate(`/stores/${store.slug}/product/${productSlug}`);
     } else {
@@ -54,6 +55,42 @@ const PopularProductsSection = () => {
           <UnderlinedText style={settings.text.subheading} />
         )}
       </div>
+      {settings.acceptingOrdersButton?.show && (
+        <div className={`w-full flex flex-col justify-center 
+          ${settings.acceptingOrdersButton.position === "center" && "items-center"}
+          ${settings.acceptingOrdersButton.position === "end" && "items-end"}
+          ${settings.acceptingOrdersButton.position === "start" && "items-start"}
+          mb-2 py-[1vh]`}>
+          <AcceptingOrdersButton operationTimes={store?.operationTimes} manualStatus={store?.manualStatus} style={settings.acceptingOrdersButton} />
+      </div>
+      )}
+      {settings.pickupOrDelivery?.show && (
+        <div
+          style={{
+            ...getBackgroundStyles(settings.pickupOrDelivery.background, colors),
+            padding: "0px"
+          }} 
+          className="flex w-[80%] lg:w-[30%] border overflow-hidden mb-10 lg:mb-15">
+          {/* Pickup */}
+          <div 
+            style={{
+              ...getBackgroundStyles(settings.pickupOrDelivery.background, colors),
+              border: "none",
+              borderRight: `${settings.pickupOrDelivery.background.border.width} ${settings.pickupOrDelivery.background.border.style} ${colors[settings.pickupOrDelivery.background.border.color as keyof typeof colors]}`,
+              width: "50%",
+              borderRadius: "0px",
+            }} className="w-1/2 text-center bg-blue-100">Pickup</div>
+          {/* Deliver */}
+          <div
+            style={{
+                ...getBackgroundStyles(settings.pickupOrDelivery.background, colors),
+                border: "none",
+                borderLeft: `${settings.pickupOrDelivery.background.border.width} ${settings.pickupOrDelivery.background.border.style} ${colors[settings.pickupOrDelivery.background.border.color as keyof typeof colors]}`,
+                width: "50%",
+                borderRadius: "0px",
+            }} className="w-1/2 text-center">Deliver</div>
+        </div>
+      )}
 
       {/* Category Selector */}
       {store?.categories?.products && settings.categorySelector.show && (
@@ -81,14 +118,14 @@ const PopularProductsSection = () => {
             slidesPerView={visibleCount}
             spaceBetween={parseFloat(getResponsiveDimension(settings.grid.gap))}
             grabCursor={true}
-            pagination={false}
-            navigation={true}
+            pagination={true}
+            navigation={false}
             autoplay={{
               delay: 4000, 
               disableOnInteraction: false, 
               pauseOnMouseEnter: true, 
             }}
-            className="my-3"
+            className="z-10"
           >
             {products.map((product) => (
               <SwiperSlide key={product._id}>

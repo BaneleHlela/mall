@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { getBackgroundStyles, getTextStyles } from '../../../../../../utils/stylingFunctions';
 import StoreButton from '../../../buttons/StoreButton';
 import UnderlinedText from '../../../text/UnderlinedText';
+import StoreLayoutButton from '../../../../shared_layout_components/StoreLayoutButton';
+import { SlArrowDown, SlArrowUp } from 'react-icons/sl';
+import { IoIosHeart, IoIosHeartEmpty } from 'react-icons/io';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 interface PriceVariation {
   variation: string;
@@ -27,33 +31,36 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
   onClick,
   marking
 }) => {
-
+  const [showInteractions, setShowInteractions] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const { fonts, colors } = useAppSelector((state) => state.layoutSettings);
   // --- Determine what price to show ---
-const displayPrice = () => {
-  if (prices && prices.length > 0) {
-    const amounts = prices.map(p => p.amount);
-    const minPrice = Math.min(...amounts);
-    const maxPrice = Math.max(...amounts);
+  const displayPrice = () => {
+    if (prices && prices.length > 0) {
+      const amounts = prices.map(p => p.amount);
+      const minPrice = Math.min(...amounts);
+      const maxPrice = Math.max(...amounts);
 
-    // If all variation prices are the same
-    if (minPrice === maxPrice) {
-      return `R${formatPriceWithSpaces(minPrice)}${minPrice % 1 === 0 ? '.00' : ''}`;
+      // If all variation prices are the same
+      if (minPrice === maxPrice) {
+        return `R${formatPriceWithSpaces(minPrice)}${minPrice % 1 === 0 ? '.00' : ''}`;
+      }
+      return `R${formatPriceWithSpaces(minPrice)}${minPrice % 1 === 0 ? '.00' : ''} - R${formatPriceWithSpaces(maxPrice)}${maxPrice % 1 === 0 ? '.00' : ''}`;
+    } 
+    if (typeof price === 'number') {
+      return `R${formatPriceWithSpaces(price)}${price % 1 === 0 ? '.00' : ''}`;
     }
-    return `R${formatPriceWithSpaces(minPrice)}${minPrice % 1 === 0 ? '.00' : ''} - R${formatPriceWithSpaces(maxPrice)}${maxPrice % 1 === 0 ? '.00' : ''}`;
-  } 
-  if (typeof price === 'number') {
-    return `R${formatPriceWithSpaces(price)}${price % 1 === 0 ? '.00' : ''}`;
-  }
-  return '';
-};
+    return '';
+  };
+  
 
   return (
     <div 
-      onClick={onClick}
+      onClick={() => {}}
       style={{
         ...getBackgroundStyles(style.background),
       }}
-      className={`flex group w-full h-full
+      className={`flex group w-full h-fit
           ${style.stack.mobile === "column" ? "flex-col" : "flex-row" }
           lg:${style.stack.desktop === "column" ? "flex-col" : "flex-row" }
       hover:scale-101`}
@@ -63,6 +70,7 @@ const displayPrice = () => {
         style={{
           ...getBackgroundStyles(style.image)
         }}
+        onClick={onClick}
         className='overflow-hidden relative'
       >
         <img 
@@ -81,6 +89,23 @@ const displayPrice = () => {
             {marking || "New"}
           </button>
         )}
+        {/* Heart */}
+        <div
+          style={{
+            color: colors[style.textAndButton.text.name.color as keyof typeof colors] || '#fff',
+          }}
+          className="absolute bottom-2 left-2 text-white z-2 cursor-pointer opacity-100"
+          onClick={(e) => { 
+            e.stopPropagation(); 
+            setIsLiked(prev => !prev); 
+          }}
+        >
+            {isLiked ? (
+                <IoIosHeart className={`text-[4vh] fill-[${colors[style.textAndButton.text.name.color as keyof typeof colors]}]`}/>
+            ) : (
+                <IoIosHeartEmpty className='text-[4vh]'/>
+            )}
+        </div>
       </div>
 
       {/* Text and button */}
@@ -126,12 +151,29 @@ const displayPrice = () => {
                 ${style.textAndButton.button.position === "end" && "justify-end"} 
             `}
           >
-            <StoreButton 
+            <StoreLayoutButton 
               style={style.textAndButton.button} 
               onClick={() => {}} 
             />
           </div>
         </div>
+      </div>
+      <div className="flex items-center justify-end w-full">
+        <button
+          onClick={() => setShowInteractions(prev => !prev)}
+          className={`flex py-2 items-center justify-center
+            ${!showInteractions ? '' : ''}`}
+        >
+          {showInteractions ? (
+            <>
+              <SlArrowUp className="ml-2 text-[2vh] opacity-0" />
+            </>
+          ) : (
+            <>
+            <SlArrowDown className="ml-2 text-[2vh] opacity-0" />
+            </>
+          )}
+        </button>
       </div>
     </div>
   )

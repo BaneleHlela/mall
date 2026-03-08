@@ -3,6 +3,10 @@
 
 @import "tailwindcss";
 
+.swiper-pagination {
+  bottom: -5px !important;
+}
+
 .hide-scrollbar::-webkit-scrollbar {
     display: none;
 }

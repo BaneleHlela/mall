@@ -10,6 +10,8 @@ import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings'
 import BorderEditor from '../../../background/BorderEditor';
 import { getSetting } from '../../../../../utils/helperFunctions';
 import OptionsToggler from '../../../supporting/OptionsToggler';
+import AcceptingOrdersButtonSettings from '../shared/AcceptingOrdersButtonSettings';
+import PickupOrDeliverySettings from '../shared/PickupOrDeliverySettings';
 
 const ProductsWithVerySimpleCardSettings: React.FC<SectionEditorProps> = ({
     settings,
@@ -170,97 +172,20 @@ const ProductsWithVerySimpleCardSettings: React.FC<SectionEditorProps> = ({
                 )}
                 {activePanel === "acceptingOrdersButton" && (
                     <SlidingPanel key="acceptingOrdersButton" isOpen={true} onClose={closePanel} title="Accepting Orders Button">
-                        <div className="space-y-[.3vh]">
-                            <SubSettingsContainer
-                                name="Position"
-                                SettingsComponent={
-                                    <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
-                                        <OptionsToggler
-                                            label="Position"
-                                            options={["center", "start", "end"]}
-                                            value={getSetting("acceptingOrdersButton.position", settings, objectPath)}
-                                            onChange={(value) => handleSettingChange(`${objectPath}.acceptingOrdersButton.position`, value)}
-                                        />
-                                    </div>
-                                }
-                            />
-                            <SubSettingsContainer
-                                name="Text"
-                                SettingsComponent={
-                                    <div className="px-2">
-                                        <TextEditor
-                                            objectPath={`${objectPath}.acceptingOrdersButton.text`}
-                                            settings={settings}
-                                            handleSettingChange={handleSettingChange}
-                                            allow={["input", "fontFamily", "color", "fontSize", "weight", "animation", "lineHeight"]}
-                                            responsiveSize={false}
-                                        />
-                                    </div>
-                                }
-                            />
-                            <SubSettingsContainer
-                                name="Background"
-                                SettingsComponent={
-                                    <BackgroundEditor
-                                        objectPath={`${objectPath}.acceptingOrdersButton.background`}
-                                        settings={settings}
-                                        handleSettingChange={handleSettingChange}
-                                        allow={["color", "shadow", "border", "padding", "shadow"]}
-                                        widthUnit='%'
-                                        responsiveSize={false}
-                                    />
-                                }
-                            />
-                        </div>
+                        <AcceptingOrdersButtonSettings 
+                            settings={settings} 
+                            handleSettingChange={handleSettingChange} 
+                            objectPath={objectPath}
+                        />
                     </SlidingPanel>
                 )}
                 {activePanel === "pickupOrDelivery" && (
                     <SlidingPanel key="pickupOrDelivery" isOpen={true} onClose={closePanel} title="Pickup or Delivery">
-                        <div className="space-y-[.3vh]">
-                            <SubSettingsContainer
-                                name="Position"
-                                SettingsComponent={
-                                    <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
-                                        <OptionsToggler
-                                            label="Position"
-                                            options={["center", "start", "end"]}
-                                            value={getSetting("pickupOrDelivery.position", settings, objectPath)}
-                                            onChange={(value) => handleSettingChange(`${objectPath}.pickupOrDelivery.position`, value)}
-                                        />
-                                    </div>
-                                }
-                            />
-                            <SubSettingsContainer
-                                name="Font Family"
-                                SettingsComponent={
-                                    <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
-                                        <select
-                                            value={getSetting("pickupOrDelivery.fontFamily", settings, objectPath)}
-                                            onChange={(e) => handleSettingChange(`${objectPath}.pickupOrDelivery.fontFamily`, e.target.value)}
-                                        >
-                                            <option value="primary">Primary</option>
-                                            <option value="secondary">Secondary</option>
-                                        </select>
-                                    </div>
-                                }
-                            />
-                            <SubSettingsContainer
-                                name="Background"
-                                SettingsComponent={
-                                    <div className="space-y-[.3vh]">
-                                        <BackgroundEditor
-                                            objectPath={`${objectPath}.pickupOrDelivery.background`}
-                                            settings={settings}
-                                            handleSettingChange={handleSettingChange}
-                                            allow={["width", "padding", "border"]}
-                                            widthUnit="%"
-                                            responsiveSize
-                                            responsivePadding
-                                        />
-                                    </div>
-                                }
-                            />
-                        </div>
+                        <PickupOrDeliverySettings 
+                            settings={settings} 
+                            handleSettingChange={handleSettingChange} 
+                            objectPath={objectPath}
+                        />
                     </SlidingPanel>
                 )}
                 {activePanel === "categoryDivider" && (

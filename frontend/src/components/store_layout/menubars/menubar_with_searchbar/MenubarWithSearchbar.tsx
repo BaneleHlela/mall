@@ -12,6 +12,7 @@ import { useStoreButtonClickHandler } from "../../extras/buttons/useStoreButtonC
 import BlueSidebar from "./BlueSidebar";
 import StoreLayoutButton from "../../shared_layout_components/StoreLayoutButton";
 import { getTextStyles } from "../../../../utils/stylingFunctions";
+import HomePageReviewsModal from "../../../../components/the_mall/home/HomePageReviewsModal";
 
 
 
@@ -22,6 +23,7 @@ const MenubarWithSearchbar = () => {
   const scrollDirection = useMotionValue("up");
   const [isOpen, setOpen] = useState(false);
   const [isSearchbarOpen, setSearchbarOpen] = useState(false);
+  const [isReviewsModalOpen, setReviewsModalOpen] = useState(false);
   const store = useAppSelector((state) => state.stores.currentStore);
   const storeSlug = store?.slug as string;
   const handleButtonClick = useStoreButtonClickHandler();
@@ -169,6 +171,7 @@ const MenubarWithSearchbar = () => {
                                             <StoreMenubarHeart
                                                 size={layout.menubar.topbar.cart.size || "4vh"}
                                                 color={colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors]}
+                                                onDoubleClick={() => store && setReviewsModalOpen(true)}
                                             />
                                         </div>
                                     )}
@@ -221,6 +224,7 @@ const MenubarWithSearchbar = () => {
                             type: 'buy',
                             routes: layout.routes, //@ts-ignore-next-line
                             contactNumber: store?.contact.phone,
+                            storeSlug: store?.slug as string,
                         })
                     }
                     style={{
@@ -272,6 +276,7 @@ const MenubarWithSearchbar = () => {
                     <StoreMenubarHeart
                         size="4vh"
                         color={layout.colors.secondary}
+                        onDoubleClick={() => store && setReviewsModalOpen(true)}
                     />
                 </div>
             </div>
@@ -304,6 +309,10 @@ const MenubarWithSearchbar = () => {
                 backgroundColor: colors[layout.menubar.sidebar.backgroundColor as keyof typeof colors] || colors[layout.colors.primary as keyof typeof colors],
             }}
         />
+        {/* Reviews Modal */}
+        {isReviewsModalOpen && store && (
+            <HomePageReviewsModal onClose={() => setReviewsModalOpen(false)} store={store}/>
+        )}
     </motion.nav>
   );
 };

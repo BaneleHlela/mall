@@ -63,13 +63,13 @@ const Menubar = () => {
         stiffness: 260,
         damping: 25,
       }}
-      className="
-        fixed z-100 text-white bg-black shadow-sm
+      className={`
+        ${isHidden ?  "hidden" : "fixed"} z-100 text-white bg-black shadow-sm
         flex items-center justify-evenly space-x-1
         h-[5vh] w-full bottom-0 lg:px-[3vh]
         lg:top-0 lg:bottom-auto lg:left-0 lg:h-screen lg:w-[5vh]
         lg:flex-col lg:pt-[5vh]
-      "
+      `}
     >
       <Link to="/" className="p-[1vh]">
         <House size="3.1vh" />

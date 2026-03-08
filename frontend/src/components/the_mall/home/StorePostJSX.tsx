@@ -183,7 +183,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
                 className="relative flex items-center w-full h-[5vh] p-[.6vh] cursor-pointer"
             >
                 <div className="w-full h-full bg-black text-white rounded-[.8vh] border-[.2vh] px-[1.5vh] pr-[10vh] flex items-center font-[500]">
-                Ratings & Reviews
+                    Reviews & Feedback
                 </div>
                 <div className="absolute right-[1.5vh] px-[.5vh]">
                 <StorePosterRatingStars rating={store.rating.averageRating} color='text-white'/>

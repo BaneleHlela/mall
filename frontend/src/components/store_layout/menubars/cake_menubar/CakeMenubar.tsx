@@ -13,6 +13,7 @@ import StoreMenubarCart from '../shared_menubar_components/StoreMenubarCart';
 import StoreMenubarHamburger from '../shared_menubar_components/StoreMenubarHamburger';
 import BlueSidebar from '../menubar_with_searchbar/BlueSidebar';
 import StoreLayoutButton from '../../shared_layout_components/StoreLayoutButton';
+import HomePageReviewsModal from '../../../../components/the_mall/home/HomePageReviewsModal';
 
 const CakeMenubar = () => {
     const layout = useAppSelector((state) => state.layoutSettings);
@@ -21,6 +22,7 @@ const CakeMenubar = () => {
     const scrollY = useMotionValue(0);
     const scrollDirection = useMotionValue("up");
     const [isOpen, setOpen] = useState(false);
+    const [isReviewsModalOpen, setReviewsModalOpen] = useState(false);
     const store = useAppSelector((state) => state.stores.currentStore);
     const storeSlug = store?.slug as string;
     const handleButtonClick = useStoreButtonClickHandler();
@@ -109,6 +111,7 @@ const CakeMenubar = () => {
                           use={config.topbar.logo.use}
                           logoUrl={config.topbar.logo.logoUrl}
                           logoText={config.topbar.logo.style.text.input || store?.name}
+                          position="start"
                           style={{
                               text: {...config.topbar.logo.style.text},
                               background: {...config.topbar.logo.style.background, color: colors[layout.colors.secondary as keyof typeof colors]},
@@ -128,6 +131,7 @@ const CakeMenubar = () => {
                     <StoreMenubarHeart
                         size={layout.menubar.topbar.cart.size || "4vh"}
                         color={colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors]}
+                        onDoubleClick={() => store && setReviewsModalOpen(true)}
                     />
                     {store?.trades.includes('products') && (
                       <StoreMenubarCart 
@@ -164,6 +168,7 @@ const CakeMenubar = () => {
                           use={config.topbar.logo.use}
                           logoUrl={config.topbar.logo.logoUrl}
                           logoText={config.topbar.logo.style.text.input || store?.name}
+                          position="start"
                           style={{
                               text: {...config.topbar.logo.style.text},
                               background: {...config.topbar.logo.style.background, color: colors[layout.colors.secondary as keyof typeof colors]},
@@ -205,6 +210,7 @@ const CakeMenubar = () => {
                             type: 'buy',
                             routes: layout.routes, //@ts-ignore-next-line
                             contactNumber: store?.contact.phone,
+                            storeSlug: store?.slug as string,
                         })
                     }
                     style={{
@@ -223,6 +229,7 @@ const CakeMenubar = () => {
                         <StoreMenubarHeart
                           size={layout.menubar.topbar.cart.size || "4vh"}
                           color={colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors]}
+                          onDoubleClick={() => store && setReviewsModalOpen(true)}
                       />
                       {store?.trades.includes('products') && (
                         <StoreMenubarCart 
@@ -269,6 +276,10 @@ const CakeMenubar = () => {
                     backgroundColor: colors[layout.menubar.sidebar.backgroundColor as keyof typeof colors] || colors[layout.colors.primary as keyof typeof colors],
                 }}
             />
+            {/* Reviews Modal */}
+            {isReviewsModalOpen && store && (
+                <HomePageReviewsModal onClose={() => setReviewsModalOpen(false)} store={store}/>
+            )}
         </motion.nav>
     )
 }

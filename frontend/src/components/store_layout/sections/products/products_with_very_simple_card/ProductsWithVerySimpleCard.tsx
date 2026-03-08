@@ -54,6 +54,7 @@ const ProductsWithVerySimpleCard = () => {
             </div>
 
             {/* Accepting Order button (red if closed, orange if pickup only, green if both) */}
+            {config.acceptingOrdersButton?.show && (
             <div className={`w-full flex flex-col justify-center 
                 ${config.acceptingOrdersButton.position === "center" && "items-center"}
                 ${config.acceptingOrdersButton.position === "end" && "items-end"}
@@ -61,7 +62,9 @@ const ProductsWithVerySimpleCard = () => {
                 mb-2 py-[1vh]`}>
                 <AcceptingOrdersButton operationTimes={store?.operationTimes} manualStatus={store?.manualStatus} style={config.acceptingOrdersButton} />
             </div>
+            )}
             {/* Pickup or Delivery Button */}
+            {config.pickupOrDelivery?.show && (
             <div
               style={{
                 ...getBackgroundStyles(config.pickupOrDelivery.background, colors),
@@ -87,6 +90,7 @@ const ProductsWithVerySimpleCard = () => {
                     borderRadius: "0px",
                 }} className="w-1/2 text-center">Deliver</div>
             </div>
+            )}
             {/* Category Selector */}
             {store?.categories?.products && config.categorySelector.show && (
               <div className="w-full py-4 flex flex-row justify-center">

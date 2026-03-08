@@ -208,7 +208,6 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                                     handleSettingChange={handleSettingChange}
                                     allowInput
                                     responsiveSize
-                                    useQuill
                                 />
                             </div>
                         </SlidingPanel>

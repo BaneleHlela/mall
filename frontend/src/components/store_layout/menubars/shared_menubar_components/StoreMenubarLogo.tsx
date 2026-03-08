@@ -9,6 +9,7 @@ interface StoreMenubarLogoProps {
     use: string;
     logoUrl?: string[];
     logoText?: string;
+    position?: 'center' | 'end' | 'start';
     style?: {
         text: TextSettings,
         background: BackgroundSettings
@@ -20,6 +21,7 @@ const StoreMenubarLogo: React.FC<StoreMenubarLogoProps> = ({
     use = 'logo',
     logoUrl = [],
     logoText = 'Store Logo',
+    position,
     style,
 }) => {
     const store = useAppSelector((state) => state.stores.currentStore);
@@ -35,9 +37,14 @@ const StoreMenubarLogo: React.FC<StoreMenubarLogoProps> = ({
 
     const hasLogoImages = logoUrl.length > 0;
 
+    // Determine justify-content based on position prop or fallback to conditional logic
+    const justifyContent = position 
+        ? `justify-${position}`
+        : (menubarVariation === "cakeMenubar" && footerVariation !== "fastFoodFooter" ? "justify-start" : "justify-center");
+
     return (
         <Link  to={linkTo} className={`flex items-center lg:justify-start h-fit w-fit max-w-fit pl-1 mb-1 pr-1 p-0
-            ${menubarVariation === "cakeMenubar" && footerVariation !== "fastFoodFooter" ? "justify-start" : "justify-center"}
+            ${justifyContent}
         `}>
             {use === 'logo' && hasLogoImages ? (
                 <img
