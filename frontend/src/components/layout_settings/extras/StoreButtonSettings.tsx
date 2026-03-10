@@ -31,7 +31,7 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({
   const handleSettingChange = (field: string, value: any) => {
     dispatch(updateSetting({ field, value }));
   };
-  const buttonFunctions = ['services', 'call', 'products', 'packages'];
+  const buttonFunctions = ['services', 'call', 'products', 'packages', 'whatsapp', 'email'];
 
   return (
     <div className="space-y-[.35vh]">

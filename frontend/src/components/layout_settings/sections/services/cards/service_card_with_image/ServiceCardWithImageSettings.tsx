@@ -130,7 +130,7 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
           </SlidingPanel>
         )}
         {activePanel === "Button" && (
-            <SlidingPanel onClose={closePanel} isOpen={true} title="Book Button Settings">
+            <SlidingPanel onClose={closePanel} isOpen={true} title="Services Card Button">
               <StoreButtonSettings 
                 settings={settings} 
                 objectPath={`${objectPath}.textAndButton.button`}

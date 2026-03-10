@@ -59,9 +59,11 @@ const HeroWithBox = () => {
                                 style={style.button}
                                 onClick={() =>
                                     handleButtonClick({
-                                    type: style.button.function,
-                                    routes: routes, //@ts-ignore-next-line
-                                    contactNumber: store?.contact.phone,
+                                        type: style.button.function,
+                                        routes: routes, //@ts-ignore-next-line
+                                        contactNumber: store?.contact.phone,
+                                        storeSlug: store?.slug || '',
+                                        contactEmail: store?.contact.email || '',  
                                     })
                                 }
                             />
@@ -124,9 +126,11 @@ const HeroWithBox = () => {
                                 style={style.button}
                                 onClick={() =>
                                     handleButtonClick({
-                                    type: style.button.function,
-                                    routes: routes, //@ts-ignore-next-line
-                                    contactNumber: store?.contact.phone,
+                                        type: style.button.function,
+                                        routes: routes, //@ts-ignore-next-line
+                                        contactNumber: store?.contact.phone,
+                                        storeSlug: store?.slug || '',
+                                        contactEmail: store?.contact.email || '',  
                                     })
                                 }
                             />

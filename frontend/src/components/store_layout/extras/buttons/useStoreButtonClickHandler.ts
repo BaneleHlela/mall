@@ -1,12 +1,13 @@
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
-type ActionType = 'services' | 'buy' | 'subscribe' | 'call' | 'book';
+type ActionType = 'services' | 'buy' | 'subscribe' | 'call' | 'book' | 'email' | 'shop' | 'packages' | 'whatsapp';
 
 interface ButtonClickHandlerOptions {
   storeSlug: string;
   type: ActionType;
   routes: Record<string, any>;
   contactNumber?: string;
+  contactEmail?: string;
 }
 
 export const useStoreButtonClickHandler = () => {
@@ -17,7 +18,7 @@ export const useStoreButtonClickHandler = () => {
   const isHomePage = location.pathname === '/';
   const isLayoutRoute = location.pathname.startsWith('/layouts') && layoutId;
 
-  return ({ type, routes, contactNumber, storeSlug }: ButtonClickHandlerOptions) => {
+  return ({ type, routes, contactNumber, contactEmail, storeSlug }: ButtonClickHandlerOptions) => {
     if (!storeSlug && !isLayoutRoute) {
       console.error('storeSlug is missing and you are not inside a layout route');
       return;
@@ -75,6 +76,32 @@ export const useStoreButtonClickHandler = () => {
           return;
         }
         window.location.href = `tel:${contactNumber}`;
+        break;
+
+
+      /* ---------------------------------------
+         EMAIL  → mailto: link
+      ---------------------------------------- */
+      case 'email':
+        if (!contactEmail) {
+          console.error('Missing contactEmail');
+          return;
+        }
+        window.location.href = `mailto:${contactEmail}`;
+        break;
+
+
+      /* ---------------------------------------
+         WHATSAPP  → wa.me link
+      ---------------------------------------- */
+      case 'whatsapp':
+        if (!contactNumber) {
+          console.error('Missing contactNumber');
+          return;
+        }
+        // Remove any non-digit characters from the phone number
+        const cleanNumber = contactNumber.replace(/\D/g, '');
+        window.location.href = `https://wa.me/${cleanNumber}`;
         break;
 
 

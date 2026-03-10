@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md';
 import UnderlinedText from '../../../extras/text/UnderlinedText';
 import { useNavigate } from 'react-router-dom';
+import { useStoreButtonClickHandler } from '../../../extras/buttons/useStoreButtonClickHandler';
 
 const SimpleServicesSection = () => {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ const SimpleServicesSection = () => {
   const layoutId = useAppSelector((state) => state.layoutSettings._id);
   const colors = useAppSelector((state) => state.layoutSettings.colors);
   const fonts = useAppSelector((state) => state.layoutSettings.fonts);
+  const handleButtonClick = useStoreButtonClickHandler();
+  const routes = useAppSelector((state) => state.layoutSettings.routes);
 
   const visibleCount = window.innerWidth < 768 ? settings.grid.columns.mobile : settings.grid.columns.desktop;
   const [activeGroupIndex, setActiveGroupIndex] = useState(0);
@@ -134,7 +137,15 @@ const SimpleServicesSection = () => {
                     imageUrl={service.images?.[0] || ".placeholder-image.png"}
                     price={service.price}
                     style={settings.card}
-                    onClick={() => handleServiceButtonClick(service.slug || "")}
+                    onClick={() =>
+                        handleButtonClick({
+                            type: settings.card.button.function,
+                            routes: routes, //@ts-ignore-next-line
+                            contactNumber: store?.contact.phone,
+                            storeSlug: store?.slug || '',
+                            contactEmail: store?.contact.email || '',  
+                        })
+                    }
                   />
                 ))}
               </motion.div>
@@ -208,7 +219,16 @@ const SimpleServicesSection = () => {
                 imageUrl={service.images?.[0] || ".placeholder-image.png"}
                 price={service.price}
                 style={settings.card}
-                onClick={() => handleServiceButtonClick(service.slug || "")}
+                onClick={() =>
+                  handleButtonClick({
+                      type: settings.card.button.function,
+                      routes: routes, //@ts-ignore-next-line
+                      contactNumber: store?.contact.phone,
+                      storeSlug: store?.slug || '',
+                      contactEmail: store?.contact.email || '',  
+                  })
+                }
+                //onClick={() => handleServiceButtonClick(service.slug || "")}
               />
             ))}
           </div>
