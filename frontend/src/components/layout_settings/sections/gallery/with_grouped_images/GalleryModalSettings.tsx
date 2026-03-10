@@ -168,7 +168,7 @@ const GalleryModalSettings: React.FC<SupportingSettingsProps> = ({
                         <UnderlinedTextSettings
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            objectPath={`${objectPath}.text.groupDescription`}
+                            objectPath={`${objectPath}.imagesModal.text.groupDescription`}
                             responsiveSize
                         />
                     </div>

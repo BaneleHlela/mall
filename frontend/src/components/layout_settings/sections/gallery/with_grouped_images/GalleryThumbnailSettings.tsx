@@ -86,14 +86,15 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
         <SubSettingsContainer
             name="Background"
             SettingsComponent={
-            <div className="px-2 space-y-2">
+            <div className="space-y-[.4vh]">
                 <BackgroundEditor
                     objectPath={`${objectPath}.imagesModal.background.thumbnail`}
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={["color", "shadow", "border"]}
+                    allow={["color", "shadow", "height", "border"]}
                     heightUnit='vh'
                     responsiveSize
+                    
                 />
             </div>
             }

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { createPortal } from 'react-dom';
 import { useAppSelector } from '../../../../../app/hooks';
 import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../../../../../utils/stylingFunctions';
 import { IoMdClose } from 'react-icons/io';
-import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md';
+import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
 import UnderlinedText from '../../../extras/text/UnderlinedText';
 
 interface SingleGroupImagesProps {
@@ -54,6 +55,8 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
     const colors = useAppSelector((state) => state.layoutSettings.colors);
     const fonts = useAppSelector((state) => state.layoutSettings.fonts);
 
+    const modalRoot = document.body;
+
     const handleNext = () => {
         setDirection('right');
         setActiveIndex((prev) => (prev + 1) % totalGroups);
@@ -75,7 +78,6 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
         <div
             style={{
                 ...getBackgroundStyles(style.background.thumbnail, colors),
-                height: 'fit-content',
             }}
             className="h-fit"
         >
@@ -97,12 +99,12 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
             <div className="w-full">
                 <UnderlinedText style={descriptionTextStyle} input={groupDescrition} />
             </div>
-            {showGrid && style.addModal && (
+            {showGrid && style.addModal && createPortal(
                 <div
                     style={{
                         ...getBackgroundStyles(style.background.modal, colors),
                     }}
-                    className="fixed inset-0 h-screen w-screen overflow-auto z-50 hide-scrollbar"
+                    className="fixed inset-0 h-screen w-screen overflow-auto z-[9999] hide-scrollbar"
                 >
                     {/* Close Button */}
                     <div className="flex justify-end">
@@ -125,31 +127,9 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                     </div>
 
                     {isHorizontal ? (
-                        <div className="fixed inset-0 h-screen w-screen flex flex-col justify-between items-center overflow-hidden">
-                            {/* Navigation Buttons */}
-                            <div className="flex justify-between absolute top-1/2 w-full z-10">
-                                <button
-                                    onClick={handlePrev}
-                                    style={{
-                                        ...getTextStyles(style.toggleButtons, fonts, colors),
-                                        ...getBackgroundStyles(style.toggleButtons.background, colors),
-                                    }}
-                                >
-                                    <MdOutlineKeyboardArrowLeft />
-                                </button>
-                                <button
-                                    onClick={handleNext}
-                                    style={{
-                                        ...getTextStyles(style.toggleButtons, fonts, colors),
-                                        ...getBackgroundStyles(style.toggleButtons.background, colors),
-                                    }}
-                                >
-                                    <MdOutlineKeyboardArrowRight />
-                                </button>
-                            </div>
-
+                        <div className="relative inset-0 h-full w-full flex flex-col justify-between items-center overflow-hidden">
                             {/* Animated Image Group */}
-                            <div className="w-full flex h-fit justify-center items-center">
+                            <div className="w-full flex h-fit justify-center items-center pt-16">
                                 <AnimatePresence custom={direction} mode="wait">
                                     <motion.div
                                         key={activeIndex}
@@ -211,6 +191,27 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                                     ))}
                                 </div>
                             )}
+
+                            {/* Navigation Buttons - Bottom Right */}
+                            <div className="absolute top-0 right-0 flex items-center gap-1 z-20 font-semibold pb-4 pr-4">
+                                <button 
+                                    onClick={handlePrev}
+                                    className="flex items-center px-2 py-1 text-sm"
+                                    
+                                >
+                                    <MdArrowBackIos />
+                                    <p className="mb-[.1vh]">Prev</p>
+                                </button>
+                                <div style={{backgroundColor: colors[style.text.heading?.color as keyof typeof colors] || '#000000'}} className="h-5 w-[.2vh]"></div>
+                                <button 
+                                    onClick={handleNext}
+                                    className="flex items-center px-2 py-1 text-sm"
+                                    
+                                >
+                                    <p className="mb-[.15vh]">Next</p>
+                                    <MdArrowForwardIos />
+                                </button>
+                            </div>
                         </div>
                     ) : (
                         <div
@@ -233,8 +234,10 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                             ))}
                         </div>
                     )}
-                </div>
+                </div>,
+                modalRoot
             )}
+            <div className="h-[10vh] w-full"></div>
         </div>
     );
 };

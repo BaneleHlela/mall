@@ -194,6 +194,8 @@ const ArtMenubar = () => {
                             type: 'buy',
                             routes: layout.routes, //@ts-ignore-next-line
                             contactNumber: store?.contact.phone,
+                            contactEmail: store?.contact.email,
+                            storeSlug: store?.slug as string,
                         })
                     }
                     style={{

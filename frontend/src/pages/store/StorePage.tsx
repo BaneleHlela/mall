@@ -256,6 +256,13 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
                 {/* <ArtMenubar /> */}
               </>
             )}
+            {/* Static div for mobile, so alert div can appear */}
+            <div  
+              style={{
+                height: settings.menubar?.topbar?.background?.height.mobile,
+                width: "100%",
+              }}
+              className="lg:hidden"/>
             {settings?.menubar?.alertDiv?.display && (
                   <StoreAlertDiv config={settings.menubar.alertDiv} />
             )}

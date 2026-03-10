@@ -138,7 +138,9 @@ const SimpleServicesSection = () => {
                     price={service.price}
                     style={settings.card}
                     onClick={() =>
-                        handleButtonClick({
+                      settings.card.textAndButton.button.function === 'book'
+                        ? handleServiceButtonClick(service.slug || "")
+                        : handleButtonClick({
                             type: settings.card.textAndButton.button.function,
                             routes: routes, //@ts-ignore-next-line
                             contactNumber: store?.contact.phone,
@@ -220,13 +222,15 @@ const SimpleServicesSection = () => {
                 price={service.price}
                 style={settings.card}
                 onClick={() =>
-                  handleButtonClick({
-                      type: settings.card.textAndButton.button.function,
-                      routes: routes, //@ts-ignore-next-line
-                      contactNumber: store?.contact.phone,
-                      storeSlug: store?.slug || '',
-                      contactEmail: store?.contact.email || '',  
-                  })
+                  settings.card.textAndButton.button.function === 'book'
+                    ? handleServiceButtonClick(service.slug || "")
+                    : handleButtonClick({
+                        type: settings.card.textAndButton.button.function,
+                        routes: routes, //@ts-ignore-next-line
+                        contactNumber: store?.contact.phone,
+                        storeSlug: store?.slug || '',
+                        contactEmail: store?.contact.email || '',  
+                    })
                 }
                 //onClick={() => handleServiceButtonClick(service.slug || "")}
               />

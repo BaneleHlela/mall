@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
 import SingleGroupImages, { getGridColumnClasses } from './SingleGroupImages';
 import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../../../../../utils/stylingFunctions';
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide, type SwiperRef } from "swiper/react";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import UnderlinedText from '../../../extras/text/UnderlinedText';
 
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
 
 interface GalleryGroup {
   input: string;
@@ -21,7 +22,7 @@ const GalleryWithGroupedImages = () => {
    const settings = useAppSelector((state) => state.layoutSettings.sections.gallery);
    const colors = useAppSelector((state) => state.layoutSettings.colors);
    const groups: Record<string, GalleryGroup> = settings.imagesModal.images;
-
+  const swiperRef = useRef<SwiperRef | null>(null);
   const stack = settings.imagesModal.grids.thumbnail.stack;
   const isMobile = window.innerWidth < 768;
   const isHorizontal = (isMobile && stack.mobile === 'horizontal') || (!isMobile && stack.desktop === 'horizontal');
@@ -60,7 +61,7 @@ const GalleryWithGroupedImages = () => {
       {/* Stack Layouts */}
       {isHorizontal ? (
         <div
-          className="w-full"
+          className="relative w-full"
           style={{ // @ts-ignore
             '--swiper-pagination-color': colors[settings.text.heading.color as keyof typeof colors],
             '--swiper-pagination-bullet-inactive-color': colors[settings.text.heading.color as keyof typeof colors] + '55',
@@ -68,15 +69,21 @@ const GalleryWithGroupedImages = () => {
           }}
         >
           <Swiper
-            modules={[ Autoplay , Navigation]}
+            ref={swiperRef}
+            modules={[ Autoplay , Navigation, Pagination]}
             slidesPerView={1}
             spaceBetween={15}
             grabCursor={true}
-            navigation={true}
-            className=""
+            navigation={{
+              prevEl: '.swiper-button-prev',
+              nextEl: '.swiper-button-next',
+            }}
+            pagination={false}
+            className="z-10"
             autoplay={{
               delay: 3000, 
               disableOnInteraction: false,
+              pauseOnMouseEnter: true,
             }}
             loop={true}
           >
@@ -105,6 +112,25 @@ const GalleryWithGroupedImages = () => {
               </SwiperSlide>
             ))}
           </Swiper>
+          {/* Custom Navigation Buttons */}
+          <div className="absolute bottom-0 right-0 flex items-center gap-1 z-20 font-semibold">
+            <button 
+              onClick={() => swiperRef.current?.swiper.slidePrev()}
+              className="flex items-center px-2 py-1 text-sm"
+            >
+              <MdArrowBackIos />
+              <p className="mb-[.1vh]">Prev</p>
+            </button>
+            <div style={{backgroundColor: colors[settings.text.heading.color as keyof typeof colors]}} className="h-5 w-[.2vh]"></div>
+            <button 
+              onClick={() => swiperRef.current?.swiper.slideNext()}
+              className="flex items-center px-2 py-1 text-sm"
+            >
+             
+             <p className="mb-[.15vh]">Next</p>
+             <MdArrowForwardIos />
+            </button>
+          </div>
         </div>
       ) : (
         <div

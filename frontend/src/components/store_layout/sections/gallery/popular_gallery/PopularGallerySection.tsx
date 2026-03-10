@@ -72,23 +72,24 @@ const PopularGallerySection = () => {
         {/* ================= GALLERY ================= */}
         {isHorizontal ? (
             <Swiper
-            modules={[Pagination, Navigation]}
-            spaceBetween={parseFloat(gap)}
-            slidesPerView={columns}
-            navigation
-            pagination={{ clickable: true }}
+                modules={[Pagination, Navigation]}
+                spaceBetween={parseFloat(gap)}
+                slidesPerView={columns}
+                navigation
+                grabCursor={true}
+                pagination={{ clickable: true }}
             >
             {images.map((img: any, index: any) => (
                 <SwiperSlide key={index}>
-                <GalleryItem
-                    img={img}
-                    height={getResponsiveDimension(settings.images.background.height)}
-                    likedImages={likedImages}
-                    toggleLike={toggleLike}
-                    onClick={handleImageClick}
-                    styles={imageBackgroundStyles}
-                    textStyles={settings.images.text}
-                />
+                    <GalleryItem
+                        img={img}
+                        height={getResponsiveDimension(settings.images.background.height)}
+                        likedImages={likedImages}
+                        toggleLike={toggleLike}
+                        onClick={handleImageClick}
+                        styles={imageBackgroundStyles}
+                        textStyles={settings.images.text}
+                    />
                 </SwiperSlide>
             ))}
             </Swiper>
