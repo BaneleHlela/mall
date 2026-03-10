@@ -139,7 +139,7 @@ const SimpleServicesSection = () => {
                     style={settings.card}
                     onClick={() =>
                         handleButtonClick({
-                            type: settings.card.button.function,
+                            type: settings.card.textAndButton.button.function,
                             routes: routes, //@ts-ignore-next-line
                             contactNumber: store?.contact.phone,
                             storeSlug: store?.slug || '',
@@ -221,7 +221,7 @@ const SimpleServicesSection = () => {
                 style={settings.card}
                 onClick={() =>
                   handleButtonClick({
-                      type: settings.card.button.function,
+                      type: settings.card.textAndButton.button.function,
                       routes: routes, //@ts-ignore-next-line
                       contactNumber: store?.contact.phone,
                       storeSlug: store?.slug || '',

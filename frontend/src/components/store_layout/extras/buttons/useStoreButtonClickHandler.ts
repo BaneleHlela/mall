@@ -87,6 +87,7 @@ export const useStoreButtonClickHandler = () => {
           console.error('Missing contactEmail');
           return;
         }
+        console.log(`Opening email client for: ${contactEmail}`);
         window.location.href = `mailto:${contactEmail}`;
         break;
 
@@ -101,6 +102,7 @@ export const useStoreButtonClickHandler = () => {
         }
         // Remove any non-digit characters from the phone number
         const cleanNumber = contactNumber.replace(/\D/g, '');
+        
         window.location.href = `https://wa.me/${cleanNumber}`;
         break;
 
