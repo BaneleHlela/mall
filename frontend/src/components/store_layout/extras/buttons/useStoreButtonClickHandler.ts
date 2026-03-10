@@ -100,9 +100,20 @@ export const useStoreButtonClickHandler = () => {
           console.error('Missing contactNumber');
           return;
         }
-        // Remove any non-digit characters from the phone number
-        const cleanNumber = contactNumber.replace(/\D/g, '');
-        
+
+        // Remove non-digit characters
+        let cleanNumber = contactNumber.replace(/\D/g, '');
+
+        // If number starts with 0 (local SA format), replace with country code 27
+        if (cleanNumber.startsWith('0')) {
+          cleanNumber = '27' + cleanNumber.substring(1);
+        }
+
+        // If number doesn't already start with 27, prepend it
+        if (!cleanNumber.startsWith('27')) {
+          cleanNumber = '27' + cleanNumber;
+        }
+
         window.location.href = `https://wa.me/${cleanNumber}`;
         break;
 

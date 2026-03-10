@@ -67,7 +67,7 @@ const TheMallTopbar = () => {
 
 
   return (
-    <div className={`fixed top-0 w-[100vw] h-[14vh] min-h-[14vh] lg:min-h-[10vh] lg:h-[8vh] lg:max-h-[8vh] inset-0 z-50 bg-black flex flex-col items-center lg:px-[10%] text-white transition-transform duration-300 ${isHidden ? '-translate-y-full' : ''}`}>
+    <div className={`fixed top-0 w-[100vw] z-1000 h-[14vh] min-h-[14vh] lg:min-h-[10vh] lg:h-[8vh] lg:max-h-[8vh] inset-0 z-50 bg-black flex flex-col items-center lg:px-[10%] text-white transition-transform duration-300 ${isHidden ? '-translate-y-full' : ''}`}>
       <div className="h-full w-full">
         {/* Desktop */}
         <div className="hidden lg:flex w-full h-full flex-row justify-between items-center">
