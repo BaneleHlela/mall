@@ -158,8 +158,8 @@ const StoreDashboardLayouts = () => {
 
   const handleCustomLayout = () => {
     // WhatsApp number placeholder - replace with actual number later
-    const whatsappNumber = "1234567890"; // Placeholder
-    const message = encodeURIComponent("Hi! I'm interested in getting a custom website built for my store. I'd like to know more about the pricing and process.");
+    const whatsappNumber = "+27823587199"; // Placeholder
+    const message = encodeURIComponent(`Hi! I'm interested in getting a custom website built for my store, ${store?.slug}. I'd like to know more about the pricing and process.`);
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
     window.open(whatsappUrl, '_blank');
     setShowNewLayoutModal(false);
@@ -494,6 +494,7 @@ const StoreDashboardLayouts = () => {
                     onRename={() => handleRenameLayout(layout._id || '', layout.name || 'Store Layout')}
                     onDelete={() => handleDeleteLayout(layout._id || '')}
                     isActive={store?.website?.layoutId === layout._id}
+                    storeName={store?.name}
                   />
                 );
               })}

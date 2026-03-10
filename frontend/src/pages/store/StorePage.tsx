@@ -262,7 +262,7 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
                 height: settings.menubar?.topbar?.background?.height.mobile,
                 width: "100%",
               }}
-              className="lg:hidden"/>
+              className={`lg:hidden ${settings.menubar.variation === "restuarantMenubar" && "hidden"}`}/>
             {settings?.menubar?.alertDiv?.display && (
                   <StoreAlertDiv config={settings.menubar.alertDiv} />
             )}

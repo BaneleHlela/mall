@@ -9,6 +9,9 @@ import { TbLoader3 } from "react-icons/tb";
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import ThemeSelector from "../../../../../components/layout_settings/theme/ThemeSelector";
+import { useIsMobile } from "../../../../../app/hooks/useIsMobile";
+import WhatsAppSupportButton from "../../../../../components/the_mall/support/WhatsAppSupportButton";
+import { User } from "lucide-react";
 
 const mysweetalert = withReactContent(Swal);
 
@@ -18,8 +21,10 @@ const LayoutCreator = () => {
 
   const availableLayouts = useAppSelector((state) => state.layout.layouts);
   const store = useAppSelector((state) => state.storeAdmin.store);
+  const user = useAppSelector((state) => state.user.user);
   const isLoading = useAppSelector((state) => state.layout.isLoading);
   const activeLayout = useAppSelector((state) => state.layout.activeLayout);
+  const isMobile = useIsMobile();
 
   const [step, setStep] = useState<"select" | "customize">("select");
   const [selectedLayout, setSelectedLayout] = useState<any>(null);
@@ -34,6 +39,31 @@ const LayoutCreator = () => {
   };
 
   const handleSelect = (layout: any) => {
+    // Show WhatsApp popup on mobile instead of going to theme selector
+    if (isMobile) {
+      const message = `Hello, my name is ${user ? `${user?.firstName} ${user?.lastName}` : `No user`}  and I am the owner of ${store?.name || 'my store'}. I would like assistance with creating a website using the "${layout.name || 'selected layout'}". Could you please help me set it up? My preferred colors are...`;
+      
+      mysweetalert.fire({
+        title: "Mobile Website Creation Not Available",
+        html: (
+          <div className="text-center">
+            <p className="mb-4 text-gray-600">
+              Website creation is not available on mobile devices. 
+              Chat with us on WhatsApp and we'll help you create your website!
+            </p>
+            <div className="flex justify-center">
+              <WhatsAppSupportButton message={message} />
+            </div>
+          </div>
+        ),
+        showConfirmButton: false,
+        customClass: {
+          htmlContainer: 'mobile-whatsapp-popup'
+        }
+      });
+      return;
+    }
+    
     setSelectedLayout(layout);
     setStep("customize");
   };

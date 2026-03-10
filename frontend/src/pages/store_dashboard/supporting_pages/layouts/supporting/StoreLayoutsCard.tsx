@@ -10,6 +10,8 @@ import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { FaExternalLinkAlt } from "react-icons/fa";
 import type { LayoutSource } from "../../../../../types/layoutTypes";
+import { useIsMobile } from "../../../../../app/hooks/useIsMobile";
+import WhatsAppSupportButton from "../../../../../components/the_mall/support/WhatsAppSupportButton";
 
 const mysweetalert = withReactContent(Swal);
 
@@ -27,14 +29,17 @@ interface StoreLayoutCardProps {
   onDelete: () => void;
   edit?: boolean;
   isActive?: boolean;
+  storeName?: string;
+  ownerName?: string;
 }
 
-const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onSetActive, onRename, onDelete, edit = true, isActive = false }) => {
+const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onSetActive, onRename, onDelete, edit = true, isActive = false, storeName, ownerName }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [showButtons, setShowButtons] = useState(false);
   const [isSettingActive, setIsSettingActive] = useState(false);
   const isLoading = useAppSelector((state) => state.layout.isLoading);
+  const isMobile = useIsMobile();
 
   const isExternal = layout.source?.source === 'external';
   const externalUrl = layout.source?.websiteUrl;
@@ -263,6 +268,32 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
                     onClick={(e) => {
                       e.stopPropagation();
                       setShowButtons(false);
+                      
+                      // Show WhatsApp popup on mobile
+                      if (isMobile) {
+                        const message = `Hello, I would like assistance with editing my website layout "${layout.name || 'Store Layout'}". Could you please help me to...`;
+                        
+                        mysweetalert.fire({
+                          title: "Mobile Editing Not Available",
+                          html: (
+                            <div className="text-center">
+                              <p className="mb-4 text-gray-600">
+                                Website editing is currently not available on mobile devices. 
+                                Chat with us on WhatsApp and we'll help you edit your website!
+                              </p>
+                              <div className="flex justify-center">
+                                <WhatsAppSupportButton message={message} />
+                              </div>
+                            </div>
+                          ),
+                          showConfirmButton: false,
+                          customClass: {
+                            htmlContainer: 'mobile-whatsapp-popup'
+                          }
+                        });
+                        return;
+                      }
+                      
                       onSelect(layout._id);
                     }}
                     className="flex flex-col items-center justify-center p-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-lg transition-colors"

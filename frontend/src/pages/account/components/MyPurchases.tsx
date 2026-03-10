@@ -132,7 +132,7 @@ const OrdersSection: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       id: 'ORD-001',
       date: '2024-01-15',
       status: 'Delivered',
-      total: 89.99,
+      total: 1665.00,
       items: ['Wireless Headphones', 'Phone Case'],
       store: 'Tech Store'
     },
@@ -140,7 +140,7 @@ const OrdersSection: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       id: 'ORD-002',
       date: '2024-01-10',
       status: 'Processing',
-      total: 45.50,
+      total: 842.00,
       items: ['Coffee Beans', 'Mug'],
       store: 'Coffee Shop'
     }
@@ -210,7 +210,7 @@ const OrdersSection: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <div className="p-5 flex justify-between items-center">
                   <div>
                     <p className="text-xs text-gray-500">{order.date}</p>
-                    <p className="font-semibold text-gray-800">${order.total.toFixed(2)}</p>
+                    <p className="font-semibold text-gray-800">R{order.total.toFixed(2)}</p>
                   </div>
                   <button className="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-xl transition-colors">
                     View Details
@@ -312,7 +312,7 @@ const SubscriptionsSection: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       id: 'SUB-001',
       name: 'Premium Membership',
       provider: 'Fitness Center',
-      price: 29.99,
+      price: 555.00,
       billing: 'Monthly',
       nextBilling: '2024-02-01',
       status: 'Active'
@@ -363,7 +363,7 @@ const SubscriptionsSection: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-4 mb-4">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-gray-500 text-sm">Price</span>
-                      <span className="font-semibold text-gray-800">${subscription.price} / {subscription.billing}</span>
+                      <span className="font-semibold text-gray-800">R{subscription.price} / {subscription.billing}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-500 text-sm">Next billing</span>

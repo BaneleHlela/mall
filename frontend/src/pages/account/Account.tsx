@@ -167,7 +167,7 @@ const Account: React.FC = () => {
           
           {/* User Name */}
           <h2 className="mt-[.6vh] text-xl font-semibold text-white tracking-tight">
-            {user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.username || 'Guest User'}
+            {user?.firstName && user?.lastName ? user?.username : user?.username || 'Guest User'}
           </h2>
           
           {/* Member Badge */}

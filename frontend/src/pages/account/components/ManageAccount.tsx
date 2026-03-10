@@ -104,7 +104,7 @@ const ManageAccount: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <h2 className="mt-3 text-lg font-semibold text-gray-800">
               {user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.username || 'User'}
             </h2>
-            <p className="text-sm text-gray-500">{user?.email || 'No email set'}</p>
+            <p className="text-sm text-gray-500">{user?.username || 'No email set'}</p>
           </div>
         </div>
 
