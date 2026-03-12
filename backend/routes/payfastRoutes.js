@@ -83,19 +83,19 @@ router.post(
   // Remove last ampersand
   pfParamString = pfParamString.slice(0, -1);
 
-  const expectedSignature = pfValidSignature(receivedData, pfParamString, process.env.PAYFAST_PASSPHRASE);
+  const expectedSignature = pfValidSignature(pfData, pfParamString, process.env.PAYFAST_PASSPHRASE);
   console.log("Expected Signature:", expectedSignature);
 
-  if (receivedSignature !== expectedSignature) {
+  if (!expectedSignature) {
     console.error("❌ PayFast signature mismatch");
     return res.status(400).send("Invalid signature");
   }
 
   console.log("✅ PayFast signature verified");
 
-  if (receivedData.payment_status === "COMPLETE") {
-    const orderId = receivedData.m_payment_id;
-    const paymentType = receivedData.custom_str1 || "product"; // optional: send type as custom_str1
+  if (pfData.payment_status === "COMPLETE") {
+    const orderId = pfData.m_payment_id;
+    const paymentType = pfData.custom_str1 || "product"; // optional: send type as custom_str1
     
     switch (paymentType) {
       case "subscription":
@@ -104,7 +104,7 @@ router.post(
             'subscription.isActive': true,
             'subscription.startDate': new Date(),
             'subscription.plan': 'pre-launch',
-            'subscription.amount': parseFloat(receivedData.amount_gross),
+            'subscription.amount': parseFloat(pfData.amount_gross),
           });
           console.log("Subscription activated for store:", orderId);
         } catch (error) {
