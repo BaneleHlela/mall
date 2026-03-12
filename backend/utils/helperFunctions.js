@@ -184,3 +184,15 @@ export const generatePayFastSignatureOrderFixed = (data, passPhrase = null) => {
 
   return crypto.createHash("md5").update(getString).digest("hex");
 };
+
+
+export const pfValidSignature = (pfData, pfParamString, pfPassphrase = null ) => {
+  // Calculate security signature
+  let tempParamString = '';
+  if (pfPassphrase !== null) {
+    pfParamString +=`&passphrase=${encodeURIComponent(pfPassphrase.trim()).replace(/%20/g, "+")}`;
+  }
+
+  const signature = crypto.createHash("md5").update(pfParamString).digest("hex");
+  return pfData['signature'] === signature;
+};
