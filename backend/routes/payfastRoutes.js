@@ -85,7 +85,6 @@ router.post(
 
   const expectedSignature = pfValidSignature(receivedData, pfParamString, process.env.PAYFAST_PASSPHRASE);
   console.log("Expected Signature:", expectedSignature);
-  console.log("Received Signature:", receivedSignature);
 
   if (receivedSignature !== expectedSignature) {
     console.error("❌ PayFast signature mismatch");
