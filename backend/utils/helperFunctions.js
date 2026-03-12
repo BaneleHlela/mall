@@ -138,7 +138,7 @@ export const captureStoreLayoutScreenshot = async (layoutId) => {
 };
 
 
-export const generatePayfastSignature = (data, passPhrase = null) => {
+export const generatePayFastSignature = (data, passPhrase = null) => {
   // Create parameter string
   let pfOutput = "";
   for (let key in data) {
