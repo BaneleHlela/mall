@@ -91,7 +91,7 @@ router.post(
     return res.status(400).send("Invalid signature");
   }
 
-  console.log("✅ PayFast signature verified");
+  console.log("✅ PayFast signature verified", pfData);
 
   if (pfData.payment_status === "COMPLETE") {
     const orderId = pfData.m_payment_id;

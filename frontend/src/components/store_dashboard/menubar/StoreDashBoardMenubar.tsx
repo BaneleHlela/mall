@@ -1,7 +1,6 @@
 import {
   RiQuestionAnswerLine,
   RiVipCrown2Fill,
-  RiVipCrown2Line,
 } from "react-icons/ri";
 import {
   FaUserCheck,
@@ -24,7 +23,7 @@ import DashboardLink from "./DashboardLink";
 import type { Store } from "../../../types/storeTypes";
 import { IoMdClose } from "react-icons/io";
 import StorePosterRatingStars from "../../the_mall/basic_store_post/StorePosterRatingStars";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MdOutlineCleaningServices } from "react-icons/md";
 import { FaKey } from "react-icons/fa";
 import { useState } from "react";
@@ -173,12 +172,11 @@ const StoreDashBoardMenubar = ({
   setIsMobileMenuOpen,
 }: Props) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
   const [showHelpPopup, setShowHelpPopup] = useState(false);
   
   // For demo purposes - in real app, this would come from store data
-  const [isPremiumSubscribed, setIsPremiumSubscribed] = useState(false);
+  const isPremiumSubscribed = store.subscription.isActive || false;
 
   const user = useAppSelector((state) => state.user.user);
 

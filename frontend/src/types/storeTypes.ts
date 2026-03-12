@@ -42,6 +42,13 @@ export interface Store {
   _id?: string;
   slug: string;
   description: string;
+  subscription: {
+    isActive: boolean;
+    plan: 'free' | 'premium' | 'enterprise';
+    startDate?: Date;
+    expiresAt?: Date;
+    amount: number;
+  };
   thumbnail: string;
   thumbnails: {
     storeCard: string;
