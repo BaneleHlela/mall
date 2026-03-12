@@ -57,7 +57,7 @@ export const initiatePayFastPayment = async (params: PayFastPaymentParams): Prom
 export const initiatePremiumUpgrade = async (storeId: string, userEmail: string): Promise<void> => {
   await initiatePayFastPayment({
     orderId: storeId,
-    amount: 29.0, // Premium monthly price
+    amount: 25.0, // Premium monthly price
     email: userEmail,
     description: 'Premium Store Subscription',
     paymentType: 'premium',

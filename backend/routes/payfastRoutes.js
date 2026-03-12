@@ -6,7 +6,7 @@ import Store from "../models/StoreModel.js";
 const router = express.Router();
 
 router.post("/create", async (req, res) => {
-  console.log(req.body);
+  console.log("Received request:", req.body);
   const { orderId, amount, email, paymentType } = req.body;
 
   const itemNameMap = {
@@ -15,8 +15,6 @@ router.post("/create", async (req, res) => {
     donation: "Donation",
     package: "Package Payment",
   };
-
-  console.log(process.env.FRONTEND_PUBLIC_URL, process.env.BACKEND_URL);
 
   const FRONTEND_URL = process.env.FRONTEND_PUBLIC_URL || "https://themallbeta.com";
   const BACKEND_URL = process.env.BACKEND_URL || "https://api.themallbeta.com";
@@ -46,7 +44,7 @@ router.post("/create", async (req, res) => {
     process.env.PAYFAST_PASSPHRASE
   );
 
-  console.log(paymentData, signature);
+  console.log("paymentData and signature:", paymentData, signature);
 
 
   res.json({
