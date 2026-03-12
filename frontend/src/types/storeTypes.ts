@@ -111,6 +111,11 @@ export interface Store {
     overriddenAt?: Date;
     overriddenBy?: string;
   };
+  delivers?: {
+    enabled: boolean;
+    scope: 'local' | 'national' | 'worldwide';
+    range: number;
+  };
 }
 
 export interface OperationTimes {

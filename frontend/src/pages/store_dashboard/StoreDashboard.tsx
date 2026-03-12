@@ -23,6 +23,7 @@ import StoreBusinessHoursSettings from "./supporting_pages/settings/StoreBusines
 import StoreLocationSettings from "./supporting_pages/settings/StoreLocationSettings";
 import StoreSocialSettings from "./supporting_pages/settings/StoreSocialSettings";
 import StoreAboutSettings from "./supporting_pages/settings/StoreAboutSettings";
+import StoreDeliverySettings from "./supporting_pages/settings/StoreDeliverySettings";
 import StoreDashboardPosters from "./supporting_pages/StoreDashboardPosters";
 import StoreSubscriptions from "./supporting_pages/StoreSubscriptions";
 import { fetchStoreServices } from "../../features/services/servicesSlice";
@@ -168,6 +169,7 @@ const StoreDashboard = () => {
                         <Route path="/settings/location" element={<StoreLocationSettings />} />
                         <Route path="/settings/socials" element={<StoreSocialSettings />} />
                         <Route path="/settings/about" element={<StoreAboutSettings />} />
+                        <Route path="/settings/delivery" element={<StoreDeliverySettings />} />
                     </Routes>
                 </main>
             </div>

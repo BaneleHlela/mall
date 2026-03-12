@@ -264,9 +264,14 @@ const storeSchema = new mongoose.Schema(
         type: Boolean,
         default: false,
       },
+      scope: {
+        type: String,
+        enum: ['local', 'national', 'worldwide'],
+        default: 'local',
+      },
       range: {
         type: Number, 
-        default: 0,
+        default: 0,  // Only applicable when scope is 'local'
       },
     },
     visits: {

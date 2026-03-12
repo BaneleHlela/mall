@@ -12,7 +12,8 @@ import {
   FaTrash,
   FaStore,
   FaChevronRight,
-  FaExclamationTriangle
+  FaExclamationTriangle,
+  FaTruck
 } from 'react-icons/fa';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import type { RootState } from '../../../app/store';
@@ -75,6 +76,14 @@ const StoreSettings = () => {
       icon: FaMapMarkerAlt, 
       linkTo: `/dashboard/${storeSlug}/settings/location`,
       color: 'from-green-500 to-emerald-500'
+    },
+    { 
+      id: 'delivery', 
+      label: 'Delivery', 
+      description: 'Configure delivery options',
+      icon: FaTruck, 
+      linkTo: `/dashboard/${storeSlug}/settings/delivery`,
+      color: 'from-cyan-500 to-blue-500'
     },
     { 
       id: 'socials', 

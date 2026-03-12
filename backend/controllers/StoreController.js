@@ -125,7 +125,7 @@ export const getStores = expressAsyncHandler(async (req, res) => {
       },
     ]);
   } else {
-    let sortOption = { createdAt: -1 }; // default newest first
+    let sortOption = { 'rating.numberOfRatings': -1 }; // default newest first
 
     switch (sortBy) {
       case 'top-rated':
@@ -141,7 +141,6 @@ export const getStores = expressAsyncHandler(async (req, res) => {
         sortOption = { 'likes.count': -1 };
         break;
     }
-
     stores = await Store.find(searchFilter).sort(sortOption).populate('team.member');
   }
 
@@ -323,6 +322,11 @@ export const editStore = expressAsyncHandler(async (req, res) => {
   // Update flag (admin only)
   if (req.body.flag !== undefined) {
     store.flag = req.body.flag;
+  }
+
+  // Update delivery information
+  if (req.body.delivers) {
+    store.delivers = req.body.delivers;
   }
 
   // Save the updated store
