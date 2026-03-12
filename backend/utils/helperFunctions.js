@@ -151,6 +151,8 @@ export const generatePayFastSignature = (data, passPhrase = null) => {
 
   // Remove last ampersand
   let getString = pfOutput.slice(0, -1);
+  console.log("String before passphrase:", getString);
+  
   if (passPhrase !== null) {
     getString +=`&passphrase=${encodeURIComponent(passPhrase.trim()).replace(/%20/g, "+")}`;
   }
