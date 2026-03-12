@@ -4,7 +4,8 @@ import {
 	PASSWORD_RESET_SUCCESS_TEMPLATE,
 	VERIFICATION_EMAIL_TEMPLATE,
   WELCOME_EMAIL_TEMPLATE,
-  STORE_CREATED_EMAIL_TEMPLATE
+  STORE_CREATED_EMAIL_TEMPLATE,
+  SUBSCRIPTION_ACTIVATED_EMAIL_TEMPLATE
 
 } from "./emailTemplates.js";
 
@@ -107,5 +108,37 @@ export const sendStoreCreatedEmail = async (email, name, storeName, dashboardURL
 
 export const sendStoreIsLiveEmail = async () => {
 
+};
+
+export const sendSubscriptionActivatedEmail = async (email, ownerName, storeName, plan, amount, startDate) => {
+  try {
+    const FRONTEND_URL = process.env.FRONTEND_PUBLIC_URL || "https://themallbeta.com";
+    const dashboardURL = `${FRONTEND_URL}/store-dashboard`;
+    
+    const formattedDate = new Date(startDate).toLocaleDateString('en-ZA', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    const html = SUBSCRIPTION_ACTIVATED_EMAIL_TEMPLATE
+      .replace("{ownerName}", ownerName || "Store Owner")
+      .replace("{storeName}", storeName)
+      .replace("{plan}", plan || "Pre-launch")
+      .replace("{amount}", amount || "0")
+      .replace("{startDate}", formattedDate)
+      .replace("{dashboardURL}", dashboardURL);
+
+    const response = await sendMail({
+      to: email,
+      subject: `🎉 Your subscription for "${storeName}" is now active!`,
+      html,
+    });
+
+    console.log("Subscription activated email sent successfully", response);
+  } catch (error) {
+    console.error("Error sending subscription activated email:", error);
+    throw new Error(`Error sending subscription activated email: ${error}`);
+  }
 };
 

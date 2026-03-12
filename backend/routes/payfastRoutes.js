@@ -2,6 +2,7 @@ import express from "express";
 import crypto from "crypto";
 import { generatePayFastSignature, generatePayFastSignatureOrderFixed, pfValidSignature } from "../utils/helperFunctions.js";
 import Store from "../models/StoreModel.js";
+import { sendSubscriptionActivatedEmail } from "../emails/email.js";
 
 const router = express.Router();
 
@@ -107,6 +108,27 @@ router.post(
             'subscription.amount': parseFloat(pfData.amount_gross),
           });
           console.log("Subscription activated for store:", orderId);
+          
+          // Send notification email to store owner about subscription activation
+          try {
+            const store = await Store.findById(orderId);
+            if (store && store.contact && store.contact.email) {
+              await sendSubscriptionActivatedEmail(
+                store.contact.email,
+                "Store Owner",
+                store.name,
+                store.subscription?.plan || "Pre-launch",
+                store.subscription?.amount || pfData.amount_gross,
+                store.subscription?.startDate || new Date()
+              );
+              console.log("Subscription activation email sent to:", store.contact.email);
+            } else {
+              console.warn("Store email not found for subscription activation notification");
+            }
+          } catch (emailError) {
+            console.error("Error sending subscription activation email:", emailError);
+          }
+          
         } catch (error) {
           console.error("Error activating subscription:", error);
         }

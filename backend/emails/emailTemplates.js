@@ -50,7 +50,7 @@ export const VERIFICATION_EMAIL_TEMPLATE = `
     </p>
 
     <p style="font-size:14px; color:#555; line-height:1.7; margin-bottom:32px;">
-      If you didn’t create an account with The Mall, you can safely ignore this email.
+      If you didn't create an account with The Mall, you can safely ignore this email.
     </p>
 
     <p style="font-size:16px; margin-bottom:4px;">
@@ -61,7 +61,7 @@ export const VERIFICATION_EMAIL_TEMPLATE = `
     <hr style="border:none; border-top:1px solid #eee; margin:32px 0;" />
 
     <p style="font-size:13px; color:#888; line-height:1.6;">
-      You’re receiving this email because a new account was created using this email address.
+      You're receiving this email because a new account was created using this email address.
     </p>
 
   </div>
@@ -152,7 +152,7 @@ export const WELCOME_EMAIL_TEMPLATE = `
 
     <!-- Header -->
     <h1 style="font-size:28px; font-weight:700; margin-bottom:8px;">
-      You’re Early. And That Matters.
+      You're Early. And That Matters.
     </h1>
 
     <p style="font-size:16px; margin-bottom:24px; color:#444;">
@@ -164,7 +164,7 @@ export const WELCOME_EMAIL_TEMPLATE = `
     </p>
 
     <p style="font-size:16px; line-height:1.7; margin-bottom:16px;">
-      We’re genuinely excited to have you here at this early stage. The Mall isn’t just another marketplace — it’s a platform built to give businesses of all kinds the space and tools to create strong brands and grow online, without limits.
+      We're genuinely excited to have you here at this early stage. The Mall isn't just another marketplace — it's a platform built to give businesses of all kinds the space and tools to create strong brands and grow online, without limits.
     </p>
 
     <p style="font-size:16px; line-height:1.7; margin-bottom:16px;">
@@ -172,12 +172,12 @@ export const WELCOME_EMAIL_TEMPLATE = `
     </p>
 
     <p style="font-size:16px; line-height:1.7; margin-bottom:20px;">
-      You’re early. And that matters.
+      You're early. And that matters.
     </p>
 
     <!-- Bullet Section -->
     <div style="margin-bottom:28px;">
-      <p style="font-weight:600; margin-bottom:10px;">Here’s what you can do right now:</p>
+      <p style="font-weight:600; margin-bottom:10px;">Here's what you can do right now:</p>
       <ul style="padding-left:18px; line-height:1.8; margin:0;">
         <li>Create your own store</li>
         <li>Experiment with layouts and features</li>
@@ -195,7 +195,7 @@ export const WELCOME_EMAIL_TEMPLATE = `
     </div>
 
     <p style="font-size:16px; line-height:1.7; margin-bottom:32px;">
-      We’re still building. Still improving. Still expanding. And we’re excited to grow alongside you.
+      We're still building. Still improving. Still expanding. And we're excited to grow alongside you.
     </p>
 
     <p style="font-size:16px; margin-bottom:4px;">
@@ -206,7 +206,7 @@ export const WELCOME_EMAIL_TEMPLATE = `
     <hr style="border:none; border-top:1px solid #eee; margin:32px 0;" />
 
     <p style="font-size:13px; color:#888; line-height:1.6;">
-      You’re receiving this email because you signed up for The Mall.
+      You're receiving this email because you signed up for The Mall.
     </p>
 
   </div>
@@ -243,7 +243,7 @@ export const STORE_CREATED_EMAIL_TEMPLATE = `
     </p>
 
     <p style="font-size:16px; line-height:1.7; margin-bottom:16px;">
-      Now it’s time to bring it to life. Style it. Add your products, services, rentals — whatever you’re selling. Make it yours.
+      Now it's time to bring it to life. Style it. Add your products, services, rentals — whatever you're selling. Make it yours.
     </p>
 
     <!-- Pre-launch Highlight Box  -->
@@ -279,7 +279,7 @@ export const STORE_CREATED_EMAIL_TEMPLATE = `
     </p>
 
     <p style="font-size:16px; line-height:1.7; margin-bottom:32px;">
-      Let’s build momentum.
+      Let's build momentum.
     </p>
 
     <p style="font-size:16px; margin-bottom:4px;">
@@ -290,7 +290,7 @@ export const STORE_CREATED_EMAIL_TEMPLATE = `
     <hr style="border:none; border-top:1px solid #eee; margin:32px 0;" />
 
     <p style="font-size:13px; color:#888; line-height:1.6;">
-      You’re receiving this email because you created a store on The Mall.
+      You're receiving this email because you created a store on The Mall.
     </p>
 
   </div>
@@ -299,3 +299,87 @@ export const STORE_CREATED_EMAIL_TEMPLATE = `
 </html>
 `;
 
+
+export const SUBSCRIPTION_ACTIVATED_EMAIL_TEMPLATE = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscription Activated</title>
+</head>
+<body style="margin:0; padding:0; background-color:#ffffff; font-family: Arial, Helvetica, sans-serif; color:#222;">
+
+  <div style="max-width:600px; margin:0 auto; padding:40px 24px;">
+
+    <!-- Header -->
+    <h1 style="font-size:28px; font-weight:700; margin-bottom:8px;">
+      🎉 Your Subscription is Active!
+    </h1>
+
+    <p style="font-size:16px; margin-bottom:24px; color:#444;">
+      Hello {ownerName},
+    </p>
+
+    <p style="font-size:16px; line-height:1.7; margin-bottom:16px;">
+      Great news! Your subscription for <strong>{storeName}</strong> has been successfully activated on <strong>The Mall</strong>.
+    </p>
+
+    <!-- Subscription Details Box -->
+    <div style="margin: 28px 0; padding: 20px 24px; background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-radius: 10px; border-left: 4px solid #22c55e;">
+      <p style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #166534; margin: 0 0 12px 0;">
+        Subscription Details
+      </p>
+      <p style="font-size: 15px; line-height: 1.6; color: #374151; margin: 0 0 8px 0;">
+        <strong>Plan:</strong> {plan}
+      </p>
+      <p style="font-size: 15px; line-height: 1.6; color: #374151; margin: 0 0 8px 0;">
+        <strong>Amount Paid:</strong> R{amount}
+      </p>
+      <p style="font-size: 15px; line-height: 1.6; color: #374151; margin: 0;">
+        <strong>Start Date:</strong> {startDate}
+      </p>
+    </div>
+
+    <p style="font-size:16px; line-height:1.7; margin-bottom:16px;">
+      Your store is now live and accessible to customers. Here's what you can do next:
+    </p>
+
+    <!-- Features List -->
+    <div style="margin-bottom:28px;">
+      <ul style="padding-left:18px; line-height:1.8; margin:0;">
+        <li>Complete your store profile and add a compelling description</li>
+        <li>Add products, services, or rentals to your store</li>
+        <li>Customize your store's appearance and layout</li>
+        <li>Share your store with potential customers</li>
+      </ul>
+    </div>
+
+    <!-- CTA Button -->
+    <div style="text-align:left; margin-bottom:32px;">
+      <a href="{dashboardURL}" 
+         style="background-color:#4379ba; color:#ffffff; text-decoration:none; padding:14px 24px; border-radius:6px; font-weight:600; display:inline-block;">
+        Go to Dashboard
+      </a>
+    </div>
+
+    <p style="font-size:16px; line-height:1.7; margin-bottom:16px;">
+      Thank you for being part of The Mall. We're excited to see your business grow!
+    </p>
+
+    <p style="font-size:16px; margin-bottom:4px;">
+      — The Mall Team
+    </p>
+
+    <!-- Footer -->
+    <hr style="border:none; border-top:1px solid #eee; margin:32px 0;" />
+
+    <p style="font-size:13px; color:#888; line-height:1.6;">
+      You're receiving this email because your subscription on The Mall has been activated.
+    </p>
+
+  </div>
+
+</body>
+</html>
+`;

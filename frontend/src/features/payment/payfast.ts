@@ -60,6 +60,6 @@ export const initiatePremiumUpgrade = async (storeId: string, userEmail: string)
     amount: 25.0, // Premium monthly price
     email: userEmail,
     description: 'Premium Store Subscription',
-    paymentType: 'premium',
+    paymentType: 'subscription',
   });
 };
