@@ -139,23 +139,22 @@ export const captureStoreLayoutScreenshot = async (layoutId) => {
 
 
 export const generatePayFastSignature = (data, passPhrase = null) => {
+  // Create parameter string
   let pfOutput = "";
-
-  // Sort keys alphabetically
-  const keys = Object.keys(data).sort();
-
-  for (let key of keys) {
-    if (data[key] !== "") {
-      pfOutput += `${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, "+")}&`;
+  for (let key in data) {
+    if(data.hasOwnProperty(key)){
+      if (data[key] !== "") {
+        pfOutput +=`${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, "+")}&`
+      }
     }
   }
 
+  // Remove last ampersand
   let getString = pfOutput.slice(0, -1);
-  console.log("Signature String:", getString);
-  
   if (passPhrase !== null) {
-    getString += `&passphrase=${encodeURIComponent(passPhrase.trim()).replace(/%20/g, "+")}`;
+    getString +=`&passphrase=${encodeURIComponent(passPhrase.trim()).replace(/%20/g, "+")}`;
   }
 
   return crypto.createHash("md5").update(getString).digest("hex");
 };
+

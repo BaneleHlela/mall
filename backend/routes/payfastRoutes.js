@@ -80,6 +80,8 @@ router.post(
     return res.status(400).send("Invalid signature");
   }
 
+  console.log("✅ PayFast signature verified");
+
   if (receivedData.payment_status === "COMPLETE") {
     const orderId = receivedData.m_payment_id;
     const paymentType = receivedData.custom_str1 || "product"; // optional: send type as custom_str1
