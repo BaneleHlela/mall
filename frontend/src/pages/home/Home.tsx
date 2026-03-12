@@ -486,7 +486,17 @@ const HomePage = () => {
       </button>
       )}
       {/* Background Image (FOR DESKTOP) */}
-      <div className="absolute inset-0 hidden lg:flex w-full h-full min-h-screen">
+      <div className="absolute inset-0 hidden lg:flex flex-col w-full h-full min-h-screen">
+        <img 
+          src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/photo-collage.png%20(2).png" 
+          alt="home-bg-image" 
+          className="h-screen w-full object-cover opacity-25 pointer-events-none select-none" 
+        />
+        <img 
+          src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/photo-collage.png%20(2).png" 
+          alt="home-bg-image" 
+          className="h-screen w-full object-cover opacity-25 pointer-events-none select-none" 
+        />
         <img 
           src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/photo-collage.png%20(2).png" 
           alt="home-bg-image" 

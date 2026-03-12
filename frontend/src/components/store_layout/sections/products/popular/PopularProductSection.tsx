@@ -34,7 +34,7 @@ const PopularProductsSection = () => {
     if (currentUrl.includes('layouts')) {
       navigate(`/layouts/${store?.slug}/preview/product/${productSlug}#singleProduct`);
     } else if (store && store.slug) {
-      navigate(`/stores/${store.slug}/product/${productSlug}`);
+      navigate(`/stores/${store.slug}/product/${productSlug}#singleProduct`);
     } else {
       console.error('Store ID is not available');
     }

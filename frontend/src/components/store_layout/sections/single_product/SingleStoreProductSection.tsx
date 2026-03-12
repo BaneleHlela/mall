@@ -85,14 +85,15 @@ const SingleStoreProductSection = () => {
     const handleAddToCart = () => {
         // Please login toaster if not logged in.
         if (!user) {
-            toast.error('Please log in to add items to your cart.', {
-                style: {
-                    background: '#fef2f2',
-                    color: '#991b1b',
-                    fontFamily: 'Outfit',
-                },
-                icon: '❌',
-            });
+            // toast.error('Please log in to add items to your cart.', {
+            //     style: {
+            //         background: '#fef2f2',
+            //         color: '#991b1b',
+            //         fontFamily: 'Outfit',
+            //     },
+            //     icon: '❌',
+            // });
+            navigate('/login')
             return;
         }
 
