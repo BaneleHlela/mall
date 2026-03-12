@@ -67,15 +67,15 @@ router.post(
   async (req, res) => {
   console.log("Received ITN:", req.body);
   
-  const receivedData = { ...req.body }; 
-  const receivedSignature = receivedData.signature;
-  delete receivedData.signature;
-
+  // const receivedData = { ...req.body }; 
+  // const receivedSignature = receivedData.signature;
+  // delete receivedData.signature;
+  const pfData = JSON.parse(JSON.stringify(req.body));
 
   let pfParamString = "";
-  for (let key in receivedData) {
-    if(receivedData.hasOwnProperty(key) && key !== "signature"){
-      pfParamString +=`${key}=${encodeURIComponent(receivedData[key].trim()).replace(/%20/g, "+")}&`;
+  for (let key in pfData) {
+    if(pfData.hasOwnProperty(key) && key !== "signature"){
+      pfParamString +=`${key}=${encodeURIComponent(pfData[key].trim()).replace(/%20/g, "+")}&`;
     }
   }
 
