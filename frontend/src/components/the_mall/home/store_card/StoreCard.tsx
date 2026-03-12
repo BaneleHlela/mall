@@ -24,7 +24,8 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
 
   const user = useAppSelector((state) => state.user.user)
   
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation(); // Prevent triggering when clicking the heart
     navigate(`/stores/${store.slug}`);
   };
 
@@ -58,14 +59,10 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
   return (
     <div
         onClick={handleClick}
-        className={`relative aspect-4/3 border-1 border-gray-200 border-b-gray-500 rounded-[2px]  overflow-hidden ${allowShadow && "shadow-sm"} absolute inset-0 bg-white/10 backdrop-blur-md transition-transform transform hover:-translate-y-1 z-0`}
+        onDoubleClick={handleFavoriteClick}
+        className={`relative aspect-4/3 border-1 border-gray-200  overflow-hidden ${allowShadow && "shadow-[0px_0px_12px_0px_rgba(0,_0,_0,_0.1)]"} absolute inset-0 bg-white/10 backdrop-blur-md transition-transform transform hover:-translate-y-1 z-0 rounded-[1.5vh] lg:rounded-[2vh] overflow-hidden`}
     >
-      {/* Glassy background */}
-      <div className="flex flex-row justify-end items-center h-[6%] space-x-[.5vh] w-full px-[2%] bg-gray-700 shadow z-1">
-        <span className="h-[40%] aspect-square bg-gray-400 rounded-full "></span>
-        <span className="h-[40%] aspect-square bg-gray-400 rounded-full "></span>
-        <span className="h-[40%] aspect-square bg-gray-400 rounded-full "></span>
-      </div>
+      
       {/* Image */}
       <div className={`relative ${mini ? "h-[65%]": "h-[72%]"} `}>
         <img src={store.thumbnails.storeCard || store.thumbnail} alt="store-thumbnail" className="w-full h-full object-cover -z-1" />
@@ -107,12 +104,12 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
           )}
         </div>
       </div>
-      <div className={`${mini ? "h-[40%]" : "h-[28%]"} shadow-md z-1`}>
+      <div className={`flex flex-col justify-center ${mini ? "h-[40%]" : "h-[28%]"} shadow-md z-1 `}>
         {/* Store name */}
         <h3 className={`text-center font-semibold text-gray-900
           ${mini ? "text-[1.5vh]": "text-[90%]"} line-clamp-1`}>{store.nickname || store.name}</h3>
         {/* Details */}
-        <div className="flex flex-row justify-between items-center px-[.8vh]">
+        <div className="flex flex-row justify-between items-center px-[.8vh] mb-[.25vh]">
           <button
             onClick={handleFavoriteClick}
             className=""
@@ -126,7 +123,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
           </button>
           
           {/* Open Status */}
-          <span className={statusClasses}>
+          <span className={`${statusClasses} line-clamp-1`}>
             {storeStatus.message}
           </span>
           {/* Closed status */}
