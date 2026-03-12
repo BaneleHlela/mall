@@ -3,6 +3,7 @@ import { GiCheckMark } from 'react-icons/gi'
 import { useAppSelector } from '../../../app/hooks'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { API_URL } from '../../../features/context'
 
 interface StoreSuccessOverlayProps {
   onClose: () => void
@@ -14,7 +15,7 @@ const StoreSuccessOverlay: React.FC<StoreSuccessOverlayProps> = ({ onClose }) =>
   const navigate = useNavigate()
 
   const handleButtonClick = async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/payments/payfast/create`, {
+    const res = await fetch(`${API_URL}/api/payments/payfast/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

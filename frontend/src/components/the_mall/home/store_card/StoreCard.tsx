@@ -60,7 +60,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
     <div
         onClick={handleClick}
         onDoubleClick={handleFavoriteClick}
-        className={`relative aspect-4/3 border-1 border-gray-200  overflow-hidden ${allowShadow && "shadow-[0px_0px_12px_0px_rgba(0,_0,_0,_0.1)]"} absolute inset-0 bg-white/10 backdrop-blur-md transition-transform transform hover:-translate-y-1 z-0 rounded-[1.5vh] lg:rounded-[2vh] overflow-hidden`}
+        className={`relative aspect-4/3 border-1 border-gray-200  overflow-hidden ${allowShadow && "shadow-[0px_0px_12px_0px_rgba(0,_0,_0,_0.1)]"} absolute inset-0 bg-white/10 backdrop-blur-md transition-transform transform hover:-translate-y-1 z-0 rounded-[1.2vh] lg:rounded-[1.7vh] overflow-hidden`}
     >
       
       {/* Image */}
