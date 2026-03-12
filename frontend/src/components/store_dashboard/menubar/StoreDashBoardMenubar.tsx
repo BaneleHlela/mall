@@ -24,11 +24,13 @@ import DashboardLink from "./DashboardLink";
 import type { Store } from "../../../types/storeTypes";
 import { IoMdClose } from "react-icons/io";
 import StorePosterRatingStars from "../../the_mall/basic_store_post/StorePosterRatingStars";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MdOutlineCleaningServices } from "react-icons/md";
 import { FaKey } from "react-icons/fa";
 import { useState } from "react";
 import WhatsAppSupportButton from "../../the_mall/support/WhatsAppSupportButton";
+import { useAppSelector } from "../../../app/hooks";
+import { initiatePremiumUpgrade } from "../../../features/payment/payfast";
 
 interface Props {
   store: Store;
@@ -144,7 +146,14 @@ const PremiumModal = ({
             </div>
 
             {/* CTA Button */}
-            <button className="w-full py-3 px-6 bg-gradient-to-r from-amber-500 via-orange-500 to-pink-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+            <button //@ts-ignore 
+              onClick={() => { //@ts-ignore
+                if (user?.email && store._id) { //@ts-ignore
+                  initiatePremiumUpgrade(store._id, user.email); //@ts-ignore
+                }
+              }}
+              className="w-full py-3 px-6 bg-gradient-to-r from-amber-500 via-orange-500 to-pink-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+            >
               Upgrade to Premium
             </button>
             
@@ -164,11 +173,14 @@ const StoreDashBoardMenubar = ({
   setIsMobileMenuOpen,
 }: Props) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
   const [showHelpPopup, setShowHelpPopup] = useState(false);
   
   // For demo purposes - in real app, this would come from store data
   const [isPremiumSubscribed, setIsPremiumSubscribed] = useState(false);
+
+  const user = useAppSelector((state) => state.user.user);
 
   const handleLinkClick = () => {
     if (isMobileMenuOpen && setIsMobileMenuOpen) {
@@ -187,8 +199,16 @@ const StoreDashBoardMenubar = ({
   };
 
   const handlePremiumClick = () => {
+    console.log("Premium Clicked");
     handleLinkClick();
-    setIsPremiumModalOpen(true);
+    if (user?.email && store._id) {
+      initiatePremiumUpgrade(store._id, user?.email);
+    }
+    else {
+      navigate('/login', {
+        state: { from: `/dashboard/${store.slug}` }
+      });
+    }
   };
 
   return (

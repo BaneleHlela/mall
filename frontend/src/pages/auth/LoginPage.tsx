@@ -12,7 +12,8 @@ import { TbLoader3 } from "react-icons/tb";
 const LoginPage = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const from = (location.state as any)?.from?.pathname || '/';
+	const from = (location.state as any)?.from?.pathname;
+	console.log(from);
 	
 
 	const [email, setEmail] = useState("");
@@ -32,7 +33,11 @@ const LoginPage = () => {
 		const resultAction = await dispatch(login({ email, password }));
 	  
 		if (login.fulfilled.match(resultAction)) {
-		  navigate(from, { replace: true });
+			if (from) {
+				navigate(from, { replace: true });
+			} else {
+				navigate(-1);
+			}
 		}
 	};
 	  

@@ -115,7 +115,7 @@ const AppContent: React.FC = () => {
         <Route 
           path="/dashboard/:storeSlug/*" 
           element={ 
-            <StoreDashboard />
+              <StoreDashboard />            
           } 
         />
         <Route path="/get-started" element={<GetStartedPage />} />

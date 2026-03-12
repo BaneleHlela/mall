@@ -3,7 +3,7 @@ import { GiCheckMark } from 'react-icons/gi'
 import { useAppSelector } from '../../../app/hooks'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { API_URL } from '../../../features/context'
+import { initiatePayFastPayment } from '../../../features/payment/payfast'
 
 interface StoreSuccessOverlayProps {
   onClose: () => void
@@ -15,36 +15,15 @@ const StoreSuccessOverlay: React.FC<StoreSuccessOverlayProps> = ({ onClose }) =>
   const navigate = useNavigate()
 
   const handleButtonClick = async () => {
-    const res = await fetch(`${API_URL}/api/payments/payfast/create`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        orderId: store?._id,
+    if (store?._id && user?.email) {
+      await initiatePayFastPayment({
+        orderId: store._id,
         amount: 25.0,
-        email: user?.email,
+        email: user.email,
         description: `Pre-launch deal payment for store ${store?.name}`,
         paymentType: 'subscription',
-      }),
-    });
-
-    const data = await res.json();
-
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = data.paymentUrl;
-  
-    Object.entries(data.paymentData).forEach(([key, value]) => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = key;
-      input.value = String(value);
-      form.appendChild(input);
-    });
-  
-    document.body.appendChild(form);
-    form.submit();
+      });
+    }
   }
 
   return (
