@@ -136,6 +136,8 @@ const PopularProductsSection = () => {
                   price={product.price}
                   prices={product.prices}
                   style={settings.card}
+                  productId={product._id}
+                  storeId={store?._id}
                   onClick={() => handleProductClick(product.slug)}
                 />
               </SwiperSlide>
@@ -173,6 +175,8 @@ const PopularProductsSection = () => {
                 prices={product.prices}
                 marking={product.marking}
                 style={settings.card}
+                productId={product._id}
+                storeId={store?._id}
                 onClick={() => handleProductClick(product.slug)}
               />
             ))}

@@ -5,7 +5,8 @@ import UnderlinedText from '../../../text/UnderlinedText';
 import StoreLayoutButton from '../../../../shared_layout_components/StoreLayoutButton';
 import { SlArrowDown, SlArrowUp } from 'react-icons/sl';
 import { IoIosHeart, IoIosHeartEmpty } from 'react-icons/io';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
+import { addToCart } from '../../../../../../features/cart/cartSlice';
 
 interface PriceVariation {
   variation: string;
@@ -15,11 +16,13 @@ interface PriceVariation {
 interface StoreProductCardProps {
   title: string;
   price?: number;
-  prices?: PriceVariation[];  // <-- new
+  prices?: PriceVariation[];
   marking?: string;
   imageUrl: string;
   style: any;
   onClick?: () => void;
+  productId?: string;
+  storeId?: string;
 }
 
 const PopularProductCard: React.FC<StoreProductCardProps> = ({
@@ -29,11 +32,15 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
   style,
   imageUrl,
   onClick,
-  marking
+  marking,
+  productId,
+  storeId
 }) => {
   const [showInteractions, setShowInteractions] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const { fonts, colors } = useAppSelector((state) => state.layoutSettings);
+  const user = useAppSelector((state) => state.user.user);
+  const dispatch = useAppDispatch();
   // --- Determine what price to show ---
   const displayPrice = () => {
     if (prices && prices.length > 0) {
@@ -153,7 +160,25 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
           >
             <StoreLayoutButton 
               style={style.textAndButton.button} 
-              onClick={() => {}} 
+              onClick={() => {
+                if (!user) {
+                  // Optionally redirect to login or show a message
+                  console.log('Please log in to add items to cart');
+                  return;
+                }
+                if (productId && storeId) {
+                  // Default to first variation if available (the one being displayed)
+                  const defaultVariation = prices && prices.length > 0 ? prices[0].variation : undefined;
+                  dispatch(addToCart({
+                    storeId: storeId,
+                    productId: productId,
+                    quantity: 1,
+                    variation: defaultVariation,
+                  }));
+                } else {
+                  console.error('Missing productId or storeId');
+                }
+              }} 
             />
           </div>
         </div>

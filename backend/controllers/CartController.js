@@ -15,7 +15,7 @@ export const addToCart = async (req, res) => {
 
     // ✅ Determine correct price based on variation
     let selectedPrice = product.price || 0;
-    if (variation && product.prices?.length > 0) {
+    if (variation && variation.length > 0 && product.prices?.length > 0) {
       const matchedVariation = product.prices.find(p => p.variation === variation);
       if (matchedVariation) {
         selectedPrice = matchedVariation.amount;

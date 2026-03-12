@@ -33,7 +33,7 @@ const StoreMenubarLogo: React.FC<StoreMenubarLogoProps> = ({
 
     const linkTo = isPreviewMode
       ? `/layouts/${layoutId}/preview`
-      : `/stores/${store?._id}`;
+      : `/stores/${store?.slug}`;
 
     const hasLogoImages = logoUrl.length > 0;
 
