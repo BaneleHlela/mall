@@ -152,7 +152,7 @@ export const generatePayFastSignature = (data, passPhrase = null) => {
   // Remove last ampersand
   let getString = pfOutput.slice(0, -1);
   console.log("String before passphrase:", getString);
-  
+
   if (passPhrase !== null) {
     getString +=`&passphrase=${encodeURIComponent(passPhrase.trim()).replace(/%20/g, "+")}`;
   }
@@ -160,3 +160,27 @@ export const generatePayFastSignature = (data, passPhrase = null) => {
   return crypto.createHash("md5").update(getString).digest("hex");
 };
 
+export const generatePayFastSignatureOrderFixed = (data, passPhrase = null) => {
+
+  const keys = Object.keys(data)
+    .filter(key => key !== "signature")
+    .sort();
+
+  let pfOutput = "";
+
+  for (const key of keys) {
+    const value = data[key] ?? "";
+
+    pfOutput += `${key}=${encodeURIComponent(value.trim()).replace(/%20/g, "+")}&`;
+  }
+
+  let getString = pfOutput.slice(0, -1);
+
+  if (passPhrase) {
+    getString += `&passphrase=${encodeURIComponent(passPhrase.trim()).replace(/%20/g, "+")}`;
+  }
+
+  console.log("PayFast Signature String:", getString);
+
+  return crypto.createHash("md5").update(getString).digest("hex");
+};

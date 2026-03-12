@@ -1,6 +1,6 @@
 import express from "express";
 import crypto from "crypto";
-import { generatePayFastSignature } from "../utils/helperFunctions.js";
+import { generatePayFastSignature, generatePayFastSignatureOrderFixed } from "../utils/helperFunctions.js";
 import Store from "../models/StoreModel.js";
 
 const router = express.Router();
@@ -71,7 +71,7 @@ router.post(
   const receivedSignature = receivedData.signature;
   delete receivedData.signature;
 
-  const expectedSignature = generatePayFastSignature(receivedData, process.env.PAYFAST_PASSPHRASE);
+  const expectedSignature = generatePayFastSignatureOrderFixed(receivedData, process.env.PAYFAST_PASSPHRASE);
   console.log("Expected Signature:", expectedSignature);
   console.log("Received Signature:", receivedSignature);
 
