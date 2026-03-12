@@ -25,12 +25,13 @@ import toast from 'react-hot-toast';
 const HomePage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate(); // Initialize the navigate function
-  const user = useAppSelector((state: RootState) => state.user.user);
+  const user = useAppSelector((state) => state.user.user);
   const departmentRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
 
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
+  const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const imageScrollRef = useRef<HTMLDivElement>(null);
   const touchStartXRef = useRef<number>(0);
@@ -316,6 +317,7 @@ const HomePage = () => {
             jsx={
               <WelcomeToTheMall />
             }
+            onModalOpen={setIsReviewsModalOpen}
           />
           <StorePostJSX
             tipFor='Announcement'
@@ -323,28 +325,33 @@ const HomePage = () => {
               <MallMVPAnnouncement />
             }
             color="text-green-500"
+            onModalOpen={setIsReviewsModalOpen}
           />
           <StorePostJSX
             tipFor='Tips and Updates'
             jsx={
               <WhatIsECommerce />
             }
+            onModalOpen={setIsReviewsModalOpen}
           />
           <StorePostJSX
             tipFor='Tips for Vendors'
             jsx={<WhatIsMVP />}
             color="text-orange-400"
+            onModalOpen={setIsReviewsModalOpen}
           />
           <StorePostJSX
             tipFor='Tips for Vendors'
             jsx={<Branding />}
             color="text-orange-400"
+            onModalOpen={setIsReviewsModalOpen}
           />
           <StorePostJSX
             tipFor='Tips and Updates'
             jsx={
               <LaunchDate/>
             }
+            onModalOpen={setIsReviewsModalOpen}
           />
           
           <StorePostJSX
@@ -353,6 +360,7 @@ const HomePage = () => {
               <SupplyChain />
             }
             color="text-orange-400"
+            onModalOpen={setIsReviewsModalOpen}
           />
           <StorePostJSX
             tipFor='Tips and Updates'
@@ -360,6 +368,7 @@ const HomePage = () => {
               <FreePikPosters />
             }
             color="text-orange-400"
+            onModalOpen={setIsReviewsModalOpen}
           />
           <StorePostJSX
             tipFor='Tips for Vendors'
@@ -367,6 +376,7 @@ const HomePage = () => {
               <MultipleLayoutsPost />
             }
             color="text-orange-400"
+            onModalOpen={setIsReviewsModalOpen}
           />
           <StorePostJSX
             tipFor='Announcement'
@@ -374,6 +384,7 @@ const HomePage = () => {
               <YouCanInvest />
             }
             color="text-blue-500"
+            onModalOpen={setIsReviewsModalOpen}
           />
           <StorePostJSX
             tipFor='Announcement'
@@ -381,6 +392,7 @@ const HomePage = () => {
               <LookOutForRedFlags />
             }
             color="text-blue-500"
+            onModalOpen={setIsReviewsModalOpen}
           />
           <StorePostJSX 
             tipFor='Announcement'
@@ -396,6 +408,7 @@ const HomePage = () => {
               </>
             }
             color="text-blue-500"
+            onModalOpen={setIsReviewsModalOpen}
           />
           {/* {StoreHomePosters.map((post, index) => (
             <BasicStorePost key={index} {...post} />
@@ -404,11 +417,13 @@ const HomePage = () => {
             tipFor='Tips for Vendors'
             message='The mall lets you create a website for R0!'
             color="text-orange-400"
+            onModalOpen={setIsReviewsModalOpen}
           />
           <TipsAndUpdates 
             tipFor='Tips for Vendors'
             message='The mall lets you create a website for R0!'
             color="text-orange-400"
+            onModalOpen={setIsReviewsModalOpen}
           />
           {/* <BasicStorePost 
             storeSlug={"ennock-m-art"}
@@ -462,18 +477,25 @@ const HomePage = () => {
         )} */}
       </div>
       {/* Add post button */}
+      {!isReviewsModalOpen && (
       <button 
         onClick={handleAddPostClick}
         className='fixed bottom-[6vh] right-2 p-[1.2vh] bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-full z-100 shadow-lg hover:shadow-xl hover:scale-110 active:scale-95 transition-all duration-200 ease-out'
       >
         <MdAdd className='text-[4vh]'/>
       </button>
+      )}
       {/* Background Image (FOR DESKTOP) */}
-      <div className="absolute inset-0 hidden lg:flex w-full h-full max-h-screen">
+      <div className="absolute inset-0 hidden lg:flex w-full h-full min-h-screen">
         <img 
           src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/photo-collage.png%20(2).png" 
           alt="home-bg-image" 
-          className="h-full w-full object-cover opacity-25 pointer-events-none select-none" 
+          className="h-screen w-full object-cover opacity-25 pointer-events-none select-none" 
+        />
+        <img 
+          src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/photo-collage.png%20(2).png" 
+          alt="home-bg-image" 
+          className="h-screen w-full object-cover opacity-25 pointer-events-none select-none" 
         />
       </div>
     </div>

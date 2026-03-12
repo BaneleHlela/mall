@@ -28,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { MdOutlineCleaningServices } from "react-icons/md";
 import { FaKey } from "react-icons/fa";
 import { useState } from "react";
+import WhatsAppSupportButton from "../../the_mall/support/WhatsAppSupportButton";
 
 interface Props {
   store: Store;
@@ -164,6 +165,7 @@ const StoreDashBoardMenubar = ({
 }: Props) => {
   const navigate = useNavigate();
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
+  const [showHelpPopup, setShowHelpPopup] = useState(false);
   
   // For demo purposes - in real app, this would come from store data
   const [isPremiumSubscribed, setIsPremiumSubscribed] = useState(false);
@@ -181,7 +183,7 @@ const StoreDashBoardMenubar = ({
 
   const handleHelpClick = () => {
     handleLinkClick();
-    navigate(`/dashboard/${store.slug}/store-help`);
+    setShowHelpPopup(true);
   };
 
   const handlePremiumClick = () => {
@@ -433,6 +435,31 @@ const StoreDashBoardMenubar = ({
         onClose={() => setIsPremiumModalOpen(false)}
         isSubscribed={isPremiumSubscribed}
       />
+
+      {/* WhatsApp Help Popup */}
+      {showHelpPopup && (
+        <div className="fixed z-50 inset-0 bg-black/50 flex items-center justify-center">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 relative shadow-2xl">
+            <button 
+              onClick={() => setShowHelpPopup(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              <IoMdClose className="w-6 h-6" />
+            </button>
+            
+            <div className="text-center">
+              <h3 className="text-2xl font-bold mb-4 text-gray-800">Need Help?</h3>
+              <p className="text-gray-600 mb-6">
+                Chat with us on WhatsApp for instant support and assistance with your store.
+              </p>
+              <WhatsAppSupportButton 
+                message={`Hi! I need help with my store ${store.name} on The Mall. Can you please assist me?`}
+                className="w-full justify-center"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

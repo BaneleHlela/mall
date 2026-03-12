@@ -52,7 +52,7 @@ export const WelcomeToTheMall = ({ fonts }: WelcomeToTheMallProps) => {
               </div>
               
               {/* Dark Overlay with gradient */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/30 to-black/70"></div>
+              <div className="absolute inset-0 bg-black/20"></div>
               
               {/* Content Container */}
               <div className="relative z-10 px-3 flex flex-col items-start justify-center w-full py-8 space-y-4">

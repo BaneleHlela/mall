@@ -278,8 +278,8 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
                           html: (
                             <div className="text-center">
                               <p className="mb-4 text-gray-600">
-                                Website editing is currently not available on mobile devices. 
-                                Chat with us on WhatsApp and we'll help you edit your website!
+                                Website editing is currently not available on mobile devices. Please find a desktop or  
+                                chat with us on WhatsApp and we'll help you edit your website!
                               </p>
                               <div className="flex justify-center">
                                 <WhatsAppSupportButton message={message} />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaPhone, FaWhatsapp, FaFacebookMessenger, FaEnvelope, FaPaperPlane, FaQuestionCircle, FaBook, FaUsers } from 'react-icons/fa';
 import { IoChevronBackOutline } from 'react-icons/io5';
+import { API_URL } from '../../../features/context';
 
 interface HelpProps {
   onBack: () => void;
@@ -18,12 +19,36 @@ const Help: React.FC<HelpProps> = ({ onBack }) => {
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    setTimeout(() => {
-      alert('Your message has been sent! We\'ll get back to you soon.');
-      setEmailForm({ subject: '', message: '', email: '', name: '' });
+
+    try {
+      const response = await fetch(`${API_URL}/api/email/send-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          destinationEmail: "contact@themallbeta.com",
+          senderEmail: emailForm.email,
+          name: emailForm.name,
+          subject: emailForm.subject,
+          message: emailForm.message,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.message || "Failed to send message.");
+      }
+
+      alert("Your message has been sent! We'll get back to you soon.");
+      setEmailForm({ subject: "", message: "", email: "", name: "" });
+    } catch (error: any) {
+      console.error(error);
+      alert(error?.message || "Unable to send message. Please try again later.");
+    } finally {
       setIsSubmitting(false);
-    }, 2000);
+    }
   };
 
   const contactOptions = [
@@ -31,9 +56,9 @@ const Help: React.FC<HelpProps> = ({ onBack }) => {
       id: 'phone',
       label: 'Phone Support',
       icon: FaPhone,
-      value: '+1 (555) 123-4567',
+      value: '+2782 583 7199',
       description: 'Call us for immediate assistance',
-      action: () => window.open('tel:+15551234567'),
+      action: () => window.open('tel:+2825837199'),
       gradient: 'from-blue-500 to-cyan-600',
       shadowColor: 'shadow-blue-200/50'
     },
@@ -41,9 +66,9 @@ const Help: React.FC<HelpProps> = ({ onBack }) => {
       id: 'whatsapp',
       label: 'WhatsApp',
       icon: FaWhatsapp,
-      value: '+1 (555) 123-4567',
+      value: '+27 82 583 7199',
       description: 'Chat with us on WhatsApp',
-      action: () => window.open('https://wa.me/15551234567'),
+      action: () => window.open('https://wa.me/+27825837199'),
       gradient: 'from-emerald-500 to-teal-600',
       shadowColor: 'shadow-emerald-200/50'
     },
@@ -51,9 +76,9 @@ const Help: React.FC<HelpProps> = ({ onBack }) => {
       id: 'messenger',
       label: 'Messenger',
       icon: FaFacebookMessenger,
-      value: '@themallsupport',
+      value: '@themallmvp',
       description: 'Message us on Facebook',
-      action: () => window.open('https://m.me/themallsupport'),
+      action: () => window.open('https://m.me/themallmvp'),
       gradient: 'from-violet-500 to-purple-600',
       shadowColor: 'shadow-violet-200/50'
     }

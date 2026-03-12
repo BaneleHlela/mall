@@ -3,14 +3,28 @@ import {
   LayoutDashboard, ChartArea, ShoppingBag, 
   ClockArrowUp, CalendarArrowUp, UsersRound, 
   HandHelping, Settings, Images, LogOut,
+  X
 } from "lucide-react";
 import { TbSection } from "react-icons/tb";
 import { FaStore } from "react-icons/fa";
 import DashboardLink from "../../store_dashboard/menubar/DashboardLink";
+import WhatsAppSupportButton from "../../the_mall/support/WhatsAppSupportButton";
+import { useState } from "react";
 
 
 
 const DashBoardMenubar = () => {
+  const [showHelpPopup, setShowHelpPopup] = useState(false);
+
+  const handleHelpClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowHelpPopup(true);
+  };
+
+  const closePopup = () => {
+    setShowHelpPopup(false);
+  };
+
   return (
     <div className="hidden lg:flex relative pl-2 pr-2 min-w-[18vw] h-full shadow-sm bg-white flex-col">
       {/* Store name and reviews */}
@@ -88,17 +102,47 @@ const DashBoardMenubar = () => {
           icon={<Settings className="text-[2.5vh]" />} 
           text="Settings" 
         />
-        <DashboardLink 
-          linkTo={`/creators-dashboard/store-help`} 
-          icon={<MessageCircleQuestion className="text-[2.5vh]" />} 
-          text="Help" 
-        />
+        <div 
+          className="cursor-pointer"
+          onClick={handleHelpClick}
+        >
+          <DashboardLink 
+            linkTo="#" 
+            icon={<MessageCircleQuestion className="text-[2.5vh]" />} 
+            text="Help" 
+          />
+        </div>
         <DashboardLink 
           linkTo={`/creators-dashboard/exit`} 
           icon={<LogOut className="text-[2.5vh]" />} 
           text="exit" 
         />
       </div>
+
+      {/* WhatsApp Help Popup */}
+      {showHelpPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 relative shadow-2xl">
+            <button 
+              onClick={closePopup}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            
+            <div className="text-center">
+              <h3 className="text-2xl font-bold mb-4 text-gray-800">Need Help?</h3>
+              <p className="text-gray-600 mb-6">
+                Chat with us on WhatsApp for instant support and assistance with your store.
+              </p>
+              <WhatsAppSupportButton 
+                message="Hi! I need help with my store on The Mall. Can you please assist me?"
+                className="w-full justify-center"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

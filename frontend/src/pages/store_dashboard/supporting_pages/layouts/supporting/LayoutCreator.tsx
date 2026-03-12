@@ -48,8 +48,8 @@ const LayoutCreator = () => {
         html: (
           <div className="text-center">
             <p className="mb-4 text-gray-600">
-              Website creation is not available on mobile devices. 
-              Chat with us on WhatsApp and we'll help you create your website!
+              Website creation is not available on mobile devices. Please find a desktop or
+              chat with us on WhatsApp and we'll quickly help you create your website!
             </p>
             <div className="flex justify-center">
               <WhatsAppSupportButton message={message} />

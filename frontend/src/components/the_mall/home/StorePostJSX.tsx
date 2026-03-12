@@ -19,9 +19,10 @@ interface StorePostJSXProps {
     jsx?: React.ReactNode;
     color?: string;
     showTipsIcon?: boolean;
+    onModalOpen?: (isOpen: boolean) => void;
 }
 
-const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors", jsx, color = "text-orange-400", showTipsIcon = true }) => {
+const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors", jsx, color = "text-orange-400", showTipsIcon = true, onModalOpen }) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,13 +49,18 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
             setLoading(false);
         }
         };
-
+        // @ts-ignore-next-line
         if ("themall") getStore();
     }, [dispatch, "themall"]);
 
     useEffect(() => {
-        if (isModalOpen) hideNavbar();
-        else showNavbar();
+        if (isModalOpen) {
+            hideNavbar();
+            onModalOpen?.(true);
+        } else {
+            showNavbar();
+            onModalOpen?.(false);
+        }
     }, [isModalOpen]);
 
     // If store is not loaded yet, return null

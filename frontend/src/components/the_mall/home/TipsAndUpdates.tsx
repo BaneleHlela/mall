@@ -17,9 +17,10 @@ interface TipsAndUpdatesProps {
     tipFor?: string;
     message?: string;
     color?: string;
+    onModalOpen?: (isOpen: boolean) => void;
 }
 
-const TipsAndUpdates: React.FC<TipsAndUpdatesProps> = ({ tipFor = "Tips for Vendors", message = "The mall lets you create a website for R0!", color = "text-orange-400" }) => {
+const TipsAndUpdates: React.FC<TipsAndUpdatesProps> = ({ tipFor = "Tips for Vendors", message = "The mall lets you create a website for R0!", color = "text-orange-400", onModalOpen }) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,13 +47,18 @@ const TipsAndUpdates: React.FC<TipsAndUpdatesProps> = ({ tipFor = "Tips for Vend
             setLoading(false);
         }
         };
-
+        // @ts-ignore-next-line
         if ("themall") getStore();
     }, [dispatch, "themall"]);
   
     useEffect(() => {
-        if (isModalOpen) hideNavbar();
-        else showNavbar();
+        if (isModalOpen) {
+            hideNavbar();
+            onModalOpen?.(true);
+        } else {
+            showNavbar();
+            onModalOpen?.(false);
+        }
     }, [isModalOpen]);
     
     // If store is not loaded yet, return null
@@ -100,7 +106,7 @@ const TipsAndUpdates: React.FC<TipsAndUpdatesProps> = ({ tipFor = "Tips for Vend
         }
     
         dispatch(
-          updateUser({
+          updateUser({ //@ts-ignore-next-line
               user: user._id, // userId
               favoriteStore: store._id, // storeId
             })
