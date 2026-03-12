@@ -20,6 +20,7 @@ const Help: React.FC<HelpProps> = ({ onBack }) => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    console.log("Submitting email form with data:", emailForm);
     try {
       const response = await fetch(`${API_URL}/api/email/send-email`, {
         method: "POST",

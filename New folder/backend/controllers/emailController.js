@@ -2,14 +2,25 @@ import nodemailer from "nodemailer";
 import asyncHandler from "express-async-handler";
 
 export const sendEmail = asyncHandler(async (req, res) => {
-  const { destinationEmail, senderEmail, firstName, lastName, message, phone } = req.body;
+  const {
+    destinationEmail = process.env.CONTACT_EMAIL || "contact@themallbeta.com",
+    senderEmail,
+    name,
+    firstName,
+    lastName,
+    subject,
+    message,
+    phone,
+  } = req.body;
 
-  if (!destinationEmail || !senderEmail || !firstName || !lastName || !message || !phone) {
+  const senderName = (name || `${firstName || ""} ${lastName || ""}`)
+    .trim();
+  const emailSubject = (subject || `Message from ${senderName || senderEmail}`).trim();
+
+  if (!senderEmail || !senderName || !message) {
     res.status(400);
-    throw new Error("All fields are required.");
+    throw new Error("senderEmail, sender name, and message are required.");
   }
-
-  console.log(phone);
 
   // Create a transporter
   const transporter = nodemailer.createTransport({
@@ -24,24 +35,21 @@ export const sendEmail = asyncHandler(async (req, res) => {
 
   // Email options
   const mailOptions = {
-    from: `"${firstName} ${lastName}" <${senderEmail}>`, // Sender's name and email
-    to: destinationEmail, // Destination email
-    subject: `Enquiry from ${firstName} ${lastName}`, // Subject line
+    from: `"${senderName}" <${senderEmail}>`,
+    to: destinationEmail,
+    subject: emailSubject,
     html: `
-        <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">
-          <p>Dear Recipient,</p>
-          <p>This is to confirm that your exam was submitted. Do not reply to this email</p>
-          <p>Kind regards,
-          
-          <p style="margin-top: 30px;">
-            <a href="tel:${phone}" 
-              style="display: inline-block; padding: 10px 20px; background-color: #007BFF; color: white; 
-                      text-decoration: none; border-radius: 5px; font-weight: bold;">
-              Track here
-            </a>
-          </p>
+      <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">
+        <p><strong>From:</strong> ${senderName} &lt;${senderEmail}&gt;</p>
+        ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ""}
+        <p><strong>Subject:</strong> ${emailSubject}</p>
+        <p><strong>Message:</strong></p>
+        <div style="padding: 12px; background: #f7f7f7; border-radius: 8px;">${message
+          .replace(/\n/g, "<br />")}
         </div>
-      `,
+        <p style="margin-top: 24px;">Thanks,<br/>The Mall Support Team</p>
+      </div>
+    `,
   };
 
   try {

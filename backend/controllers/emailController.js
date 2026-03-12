@@ -6,36 +6,50 @@ export const sendEmail = asyncHandler(async (req, res) => {
     destinationEmail = process.env.CONTACT_EMAIL || "contact@themallbeta.com",
     senderEmail,
     name,
+    firstName,
+    lastName,
     subject,
     message,
     phone,
   } = req.body;
 
-  if (!senderEmail || !name || !subject || !message) {
+  const senderName = (name || `${firstName || ""} ${lastName || ""}`)
+    .trim();
+  const emailSubject = (subject || `Message from ${senderName || senderEmail}`).trim();
+  console.log("Received email send request:", {
+    destinationEmail,
+    senderEmail,
+    senderName, 
+    emailSubject,
+    message,
+    phone,
+  });
+  if (!senderEmail || !senderName || !message) {
     res.status(400);
-    throw new Error("senderEmail, name, subject and message are required.");
+    throw new Error("senderEmail, sender name, and message are required.");
   }
 
   // Create a transporter
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST, // e.g., "smtp.gmail.com"
     port: process.env.SMTP_PORT, // e.g., 587
-    secure: true, // true for 465, false for other ports
+    secure: true, 
     auth: {
       user: process.env.SMTP_USER, // Your SMTP username
       pass: process.env.GMAIL_APP_PASSWORD, // Your SMTP password
     },
   });
-
+  console.log("SMTP transporter created successfully.");
   // Email options
   const mailOptions = {
-    from: `"${name}" <${senderEmail}>`,
+    from: `"${senderName}" <${senderEmail}>`,
     to: destinationEmail,
-    subject,
+    subject: emailSubject,
     html: `
       <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">
-        <p><strong>From:</strong> ${name} &lt;${senderEmail}&gt;</p>
+        <p><strong>From:</strong> ${senderName} &lt;${senderEmail}&gt;</p>
         ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ""}
+        <p><strong>Subject:</strong> ${emailSubject}</p>
         <p><strong>Message:</strong></p>
         <div style="padding: 12px; background: #f7f7f7; border-radius: 8px;">${message
           .replace(/\n/g, "<br />")}
