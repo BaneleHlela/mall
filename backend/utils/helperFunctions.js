@@ -138,22 +138,23 @@ export const captureStoreLayoutScreenshot = async (layoutId) => {
 };
 
 export const generatePayFastSignature = (data, passPhrase = null) => {
-  // Create parameter string
-  let pfOutput = "";
-  for (let key in data) {
-    if(data.hasOwnProperty(key)){
-      if (data[key] !== "") {
-        pfOutput +=`${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, "+")}&`
-      }
-    }
+  // PayFast requires parameters to be sorted alphabetically when generating the signature.
+  // Also ensure we only include the passphrase when it is explicitly provided.
+  const keys = Object.keys(data)
+    .filter((key) => data[key] !== undefined && data[key] !== null && data[key] !== "")
+    .sort();
+
+  const items = keys.map((key) => {
+    const value = String(data[key]).trim();
+    return `${key}=${encodeURIComponent(value).replace(/%20/g, "+")}`;
+  });
+
+  if (passPhrase && String(passPhrase).trim() !== "") {
+    items.push(`passphrase=${encodeURIComponent(String(passPhrase).trim()).replace(/%20/g, "+")}`);
   }
 
-  // Remove last ampersand
-  let getString = pfOutput.slice(0, -1);
-  if (passPhrase !== null) {
-    getString +=`&passphrase=${encodeURIComponent(passPhrase.trim()).replace(/%20/g, "+")}`;
-  }
-
+  const getString = items.join("&");
   return crypto.createHash("md5").update(getString).digest("hex");
-}; 
+};
+
 

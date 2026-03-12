@@ -16,9 +16,10 @@ router.post("/create", async (req, res) => {
     package: "Package Payment",
   };
 
-  const FRONTEND_URL = process.env.FRONTEND_PUBLIC_URL || "https://lula-slakeless-hortatively.ngrok-free.dev";
-  const BACKEND_URL = process.env.BACKEND_URL || "https://lula-slakeless-hortatively.ngrok-free.dev";
+  console.log(process.env.FRONTEND_PUBLIC_URL, process.env.BACKEND_URL);
 
+  const FRONTEND_URL = process.env.FRONTEND_PUBLIC_URL || "https://themallbeta.com";
+  const BACKEND_URL = process.env.BACKEND_URL || "https://api.themallbeta.com";
 
 
   const paymentData = {
@@ -81,9 +82,9 @@ router.post(
     return res.status(400).send("Invalid signature");
   }
 
-  if (data.payment_status === "COMPLETE") {
-    const orderId = data.m_payment_id;
-    const paymentType = data.custom_str1 || "product"; // optional: send type as custom_str1
+  if (receivedData.payment_status === "COMPLETE") {
+    const orderId = receivedData.m_payment_id;
+    const paymentType = receivedData.custom_str1 || "product"; // optional: send type as custom_str1
     
     switch (paymentType) {
       case "subscription":
@@ -92,7 +93,7 @@ router.post(
             'subscription.isActive': true,
             'subscription.startDate': new Date(),
             'subscription.plan': 'pre-launch',
-            'subscription.amount': parseFloat(data.amount_gross),
+            'subscription.amount': parseFloat(receivedData.amount_gross),
           });
           console.log("Subscription activated for store:", orderId);
         } catch (error) {
