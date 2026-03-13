@@ -36,7 +36,7 @@ const ForgotPasswordPage = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="max-w-[60vh] w-full h-full lg:h-[80%] flex flex-col justify-evenly backdrop-filter backdrop-blur-xl lg:rounded-[1vh] shadow-xl overflow-hidden p-[2vh]"
+      className="bg-white max-w-[60vh] w-full h-screen lg:h-screen flex flex-col justify-evenly backdrop-filter backdrop-blur-xl lg:rounded-[1vh] shadow-xl overflow-hidden p-[2vh]"
     >
       {/* Top banner image */}
       <div className="w-full h-[20%]">
