@@ -6,13 +6,11 @@ export const setCookies = (res, accessToken, refreshToken) => {
 		secure: isProduction,
 		sameSite: isProduction ? "none" : "lax",
 		maxAge: 15 * 60 * 1000,
-		domain: isProduction ? "www.themallbeta.com" : "localhost",
 	});
 	res.cookie("refreshToken", refreshToken, {
 		httpOnly: true,
 		secure: isProduction,
 		sameSite: isProduction ? "none" : "lax",
 		maxAge: 7 * 24 * 60 * 60 * 1000,
-		domain: isProduction ? "www.themallbeta.com" : "localhost",
 	});
 };
