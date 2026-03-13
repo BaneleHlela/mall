@@ -467,14 +467,15 @@ export const verifyEmail = expressAsyncHandler(async (req, res) => {
 
 // check auth
 export const checkAuth = expressAsyncHandler(async (req, res) => {
-    const user = await User.findById(req.userId).select("-password");
+  console.log(req)
+  const user = await User.findById(req.userId).select("-password");
   
-    if (!user) {
-      res.status(400);
-      throw new Error("User not found");
-    }
-  
-    res.status(200).json({ success: true, user });
+  if (!user) {
+    res.status(400);
+    throw new Error("User not found");
+  }
+
+  res.status(200).json({ success: true, user });
 });
 
 // refresh access token
