@@ -12,6 +12,8 @@ export const handleOAuthSuccess = async (
   }
 
   const { accessToken, refreshToken } = generateTokens(user._id);
+
+  console.log("Generated tokens for user:", user.email, { accessToken, refreshToken });
   await storeRefreshToken(user._id, refreshToken);
   setCookies(res, accessToken, refreshToken);
 
