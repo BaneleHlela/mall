@@ -38,7 +38,7 @@ const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
 const corsOptions = {
-    origin: [process.env.CLIENT_URL, "https://themallbeta.com",  "https://mall-cyan.vercel.app/", "http://localhost:5173", "https://mall-frontend-z609.onrender.com", "http://mall-frontend.s3-website.eu-north-1.amazonaws.com"],
+    origin: [process.env.CLIENT_URL, "https://themallbeta.com", "https://www.themallbeta.com",,  "https://mall-cyan.vercel.app/", "http://localhost:5173", "https://mall-frontend-z609.onrender.com", "http://mall-frontend.s3-website.eu-north-1.amazonaws.com"],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
