@@ -7,11 +7,15 @@ export const verifyToken = (req, res, next) => {
 		const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
 
 		if (!decoded) return res.status(401).json({ success: false, message: "Unauthorized - invalid token" });
-
+		console.log("Decoded token in verifyToken middleware: ", decoded);
 		req.userId = decoded.userId;
 		next();
 	} catch (error) {
+		// Return 401 for token expiration so frontend can trigger refresh
+		if (error.name === "TokenExpiredError") {
+			return res.status(401).json({ success: false, message: "Token expired" });
+		}
 		console.log("Error in verifyToken ", error);
-		return res.status(500).json({ success: false, message: "Server error" });
+		return res.status(401).json({ success: false, message: "Unauthorized - token verification failed" });
 	}
 };

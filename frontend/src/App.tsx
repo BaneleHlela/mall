@@ -30,6 +30,7 @@ import { HiOutlineChatAlt2 } from "react-icons/hi";
 import "./features/api/axiosInstance"; // Initialize axios interceptors
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import DataDeletion from "./pages/DataDeletion";
+import { checkAuth } from "./features/user/userSlice";
 
 const AppContent: React.FC = () => {
   const dispatch = useDispatch();
@@ -44,22 +45,22 @@ const AppContent: React.FC = () => {
     };
 
     // Handle auth logout event when token refresh fails
-    const handleAuthLogout = () => {
-      navigate('/login');
-    };
+    // const handleAuthLogout = () => {
+    //   navigate('/login');
+    // };
 
     window.addEventListener("message", handleMessage);
-    window.addEventListener('auth:logout', handleAuthLogout);
+    //window.addEventListener('auth:logout', handleAuthLogout);
     return () => {
       window.removeEventListener("message", handleMessage);
-      window.removeEventListener('auth:logout', handleAuthLogout);
+      //window.removeEventListener('auth:logout', handleAuthLogout);
     };
   }, [dispatch, navigate]);
 
-  // Check Auth
-  // useEffect(() => {
-  //   dispatch(checkAuth() as any);
-  // }, [dispatch]);
+  //Check Auth
+  useEffect(() => {
+    dispatch(checkAuth() as any);
+  }, [dispatch]);
   
   return (
     <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-fit w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar">  

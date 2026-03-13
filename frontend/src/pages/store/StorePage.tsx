@@ -210,7 +210,14 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
  };
 
  if (loading) {
-    return <TbLoader3  size={45} className='animate-spin mx-auto'/>;
+      return (
+          <div className="h-screen w-screen flex items-center justify-center bg-slate-50">
+              <div className="flex flex-col items-center gap-4">
+                  <div className="w-12 h-12 border-4 border-slate-200 border-t-gray-700 rounded-full animate-spin" />
+                  <p className="text-slate-500 font-medium">Loading dashboard...</p>
+              </div>
+          </div>
+      );
   }
 
   if (!store) {

@@ -97,7 +97,7 @@ const setupInterceptors = () => {
 
         try {
           // Call the refresh token endpoint
-          await api.get('/api/user/refresh-token', {
+          await api.post('/api/user/refresh-token', {}, {
             withCredentials: true,
           });
 
@@ -156,7 +156,7 @@ const setupInterceptors = () => {
 
         try {
           // Call the refresh token endpoint using the default axios
-          await axios.get(`${API_URL}/api/user/refresh-token`, {
+          await axios.post(`${API_URL}/api/user/refresh-token`, {}, {
             withCredentials: true,
           });
 

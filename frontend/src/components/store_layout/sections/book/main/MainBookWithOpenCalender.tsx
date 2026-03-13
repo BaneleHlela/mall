@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Listbox } from "@headlessui/react";
 import { format } from "date-fns";
 import ReactCalendar from "../../../extras/react_calendar/ReactCalendar";
@@ -21,6 +21,7 @@ interface MainBookWithOpenCalendarProps {
 const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({service}) => {
     // State to manage selected date, service, staff, and time
     const store = useAppSelector((state) => state.stores.currentStore);
+    const user = useAppSelector((state) => state.user.user);
     const [selectedDate, setSelectedDate] = useState<Value>(null);
     const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
     const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
@@ -86,6 +87,12 @@ const MainBookWithOpenCalendar: React.FC<MainBookWithOpenCalendarProps> = ({serv
           alert("Please select a service, staff, date, and time.");
           return;
         }
+
+        if (!user) {
+            alert("You must be logged in to make a booking.");
+        }
+
+        
       
         const bookingData = {
           store: store?._id,
