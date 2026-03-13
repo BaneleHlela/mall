@@ -5,7 +5,7 @@ import { handleOAuthSuccess } from "../utils/handleOAuthSuccess.js";
 const router = express.Router();
 
 // Google Authentication
-router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+router.get("/google", passport.authenticate("google", { scope: ["profile", "email"], accessType: "offline", prompt: "consent" }));
 
 router.get(
   "/google/callback",

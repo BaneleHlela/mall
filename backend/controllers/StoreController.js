@@ -361,7 +361,6 @@ export const deleteStore = expressAsyncHandler(async (req, res) => {
 });
 
 export const getStoresByOwner = expressAsyncHandler(async (req, res) => {
-  console.log("Fetching stores for user:", req.user);
   const { _id } = req.user;
 
   // Find stores where the user is part of the team (regardless of their role)
