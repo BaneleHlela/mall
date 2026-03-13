@@ -63,7 +63,7 @@ const AppContent: React.FC = () => {
   }, [dispatch]);
   
   return (
-    <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-fit w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar">  
+    <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-fit w-screen max-w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar">  
       <Menubar /> 
       <Routes>
         <Route path="/" element={<Home />} />

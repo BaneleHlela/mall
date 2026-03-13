@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { fetchStores } from '../../features/stores/storeSlice';
+import { selectIsPostReviewModalOpen } from '../../features/posts/postSlice';
 import type { RootState } from '../../app/store';
 import TheMallTopbar from '../../components/the_mall/topbar/TheMallTopbar';
 import { departments, StoreHomePosters } from '../../utils/helperObjects';
@@ -26,6 +27,7 @@ const HomePage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate(); // Initialize the navigate function
   const user = useAppSelector((state) => state.user.user);
+  const isPostReviewModalOpen = useAppSelector(selectIsPostReviewModalOpen);
   const departmentRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
 
 
@@ -150,6 +152,8 @@ const HomePage = () => {
     });
   };
 
+  console.log(user?.stores.length);
+
 
   return (
     <div className="relative  w-full h-full overflow-y-scroll hide-scrollbar bg-gray-100 flex flex-col items-center">
@@ -240,7 +244,25 @@ const HomePage = () => {
           >
             
             {/* Add your store */}
-            {user?.stores.length === 0 || !user  && (
+            {user?.stores.length === 0  && (
+              <div onClick={() => navigate("/add-store")} className="relative flex justify-center h-[20vh] lg:h-[27vh] bg-amber-500 aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102">
+                {/* Image */}
+                <div className="w-full">
+                  <img 
+                    src="https://storage.googleapis.com/the-mall-uploads-giza/stores/686e76aa96f14c28650b671d/images/Promote%20Your%20Shop%20in%20Style.png" 
+                    alt="Mall theme image" 
+                    className="w-full h-full object-cover rounded-[1vh]" 
+                  />
+                </div>
+                {/* Button */}
+                <div className="absolute bottom-0 flex justify-center items-center w-full h-[20%] bg-[#0000001f]  rounded-b-[1vh]">
+                  <button className=" bg-black text-white border-[.2vh] border-white rounded-full">
+                    <FiPlus className='text-[2.5vh]'/>
+                  </button>
+                </div>
+              </div>
+            )}
+            {!user && (
               <div onClick={() => navigate("/add-store")} className="relative flex justify-center h-[20vh] lg:h-[27vh] bg-amber-500 aspect-3/5 cursor-pointer rounded-[1vh] hover:scale-102">
                 {/* Image */}
                 <div className="w-full">
@@ -318,6 +340,7 @@ const HomePage = () => {
               <WelcomeToTheMall />
             }
             onModalOpen={setIsReviewsModalOpen}
+            isFeedbackPost
           />
           <StorePostJSX
             tipFor='Announcement'
@@ -477,13 +500,13 @@ const HomePage = () => {
         )} */}
       </div>
       {/* Add post button */}
-      {!isReviewsModalOpen && (
-      <button 
-        onClick={handleAddPostClick}
-        className='fixed bottom-[6vh] right-2 p-[1.2vh] bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-full z-100 shadow-lg hover:shadow-xl hover:scale-110 active:scale-95 transition-all duration-200 ease-out'
-      >
-        <MdAdd className='text-[4vh]'/>
-      </button>
+      {!isReviewsModalOpen && !isPostReviewModalOpen && (
+        <button 
+          onClick={handleAddPostClick}
+          className='fixed bottom-[6vh] right-2 p-[1.2vh] bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-full z-100 shadow-lg hover:shadow-xl hover:scale-110 active:scale-95 transition-all duration-200 ease-out'
+        >
+          <MdAdd className='text-[4vh]'/>
+        </button>
       )}
       {/* Background Image (FOR DESKTOP) */}
       <div className="absolute inset-0 hidden lg:flex flex-col w-full h-full min-h-screen">

@@ -27,6 +27,7 @@ import sectionRoutes from "./routes/sectionRoutes.js";
 import posterRoutes from "./routes/posterRoutes.js"
 import rentalRoutes from "./routes/rentalRoutes.js";
 import payfastRoutes from "./routes/payfastRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
 
 import "./config/passportConfig.js";
 
@@ -79,6 +80,7 @@ app.use("/api/sections", sectionRoutes);
 app.use('/api/posters', posterRoutes);
 app.use('/api/rentals', rentalRoutes);
 app.use("/api/payments/payfast", payfastRoutes);
+app.use("/api/posts", postRoutes);
 
 
 app.use(notFound);

@@ -1,11 +1,28 @@
 import { FaCircleDollarToSlot } from "react-icons/fa6"
 import { IoIosFlag } from "react-icons/io";
 import  LiveBackground  from "./LiveBackground";
+import PostInteraction from "./PostInteraction";
 import { useEffect, useState } from "react";
 import WebFont from "webfontloader";
 import { FontFamily } from "@tiptap/extension-text-style";
 
 const fonts = ["Alfa Slab One"]
+
+// Post identifiers for database linking
+const POST_IDS = {
+    WELCOME: "welcome-to-mall",
+    WHAT_IS_ECOMMERCE: "what-is-ecommerce",
+    WHAT_IS_MVP: "what-is-mvp",
+    MALL_BETA: "mall-still-beta",
+    YOU_CAN_INVEST: "you-can-invest",
+    RED_FLAGS: "look-out-for-red-flags",
+    DIVERSIFY: "diversify",
+    WHY_INVEST: "why-invest",
+    IMAGE_CONSENT: "image-consent",
+    MVP_ANNOUNCEMENT: "mvp-announcement",
+    LAUNCH_DATE: "launch-date",
+    BRANDING: "branding",
+} as const;
 
 interface WelcomeToTheMallProps {
   fonts?: {
@@ -16,126 +33,114 @@ interface WelcomeToTheMallProps {
 }
 
 export const WelcomeToTheMall = ({ fonts }: WelcomeToTheMallProps) => {
-  // Load fonts dynamically
-  useEffect(() => {
-      if (fonts) {
-          const fontsToLoad = Object.values(fonts).filter(Boolean) as string[];
-          if (fontsToLoad.length > 0) {
-              WebFont.load({
-                  google: {
-                      families: fontsToLoad,
-                  },
-              });
-          }
-      } else {
-          // Load default font
-          WebFont.load({
-              google: {
-                  families: ['Alfa Slab One', 'Play', 'Poppins:400,500,600'],
-              },
-          });
-      }
-  }, [fonts]);
+    // Load fonts dynamically
+    useEffect(() => {
+        if (fonts) {
+            const fontsToLoad = Object.values(fonts).filter(Boolean) as string[];
+            if (fontsToLoad.length > 0) {
+                WebFont.load({
+                    google: {
+                        families: fontsToLoad,
+                    },
+                });
+            }
+        } else {
+            // Load default font
+            WebFont.load({
+                google: {
+                    families: ['Alfa Slab One', 'Play', 'Poppins:400,500,600'],
+                },
+            });
+        }
+    }, [fonts]);
 
-  return (
-      <div className="w-full">
-          {/* Welcome message above the poster */}
-          <p className="font-normal py-[1vh]">
-              Welcome to the Mall! We're so excited to have you. 
-          </p>
-          
-          {/* Main Poster Container */}
-          <div className="relative flex items-center justify-start text-center w-full aspect-[1/1.414] rounded-lg overflow-hidden shadow-2xl">
-              {/* Live Background */}
-              <div className="absolute inset-0 w-full h-full">
-                  <LiveBackground />
-              </div>
-              
-              {/* Dark Overlay with gradient */}
-              <div className="absolute inset-0 bg-black/20"></div>
-              
-              {/* Content Container */}
-              <div className="relative z-10 px-3 flex flex-col items-start justify-center w-full py-8 space-y-4">
-                  {/* Decorative top element */}
-                  {/* <div className="flex items-center gap-2 mb-2">
-                      <div className="w-8 h-[2px] bg-white/60"></div>
-                      <div className="w-2 h-2 rounded-full bg-white/60"></div>
-                      <div className="w-8 h-[2px] bg-white/60"></div>
-                  </div> */}
-                  
-                  {/* Main Title */}
-                  {/* <h1 
-                      style={{ fontFamily: fonts?.heading || "'Alfa Slab One', cursive", lineHeight: "1" }}
-                      className="text-white text-[5.5vh] md:text-[8vh] tracking-wide drop-shadow-lg"
-                  >
-                      Welcome to
-                  </h1> */}
-                  <h1 
-                      style={{ fontFamily: fonts?.heading || "'Play', cursive", lineHeight: "1" }}
-                      className="text-white text-[6.5vh] md:text-[10vh] tracking-wide font-semibold drop-shadow-lg"
-                  >
-                      The Mall
-                  </h1>
-                  
-                  {/* Decorative line */}
-                  {/* <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full my-4"></div> */}
-                  
-                  {/* Subtitle */}
-                  <p 
-                    style={{ fontFamily: fonts?.subheading || "'Poppins', sans-serif" }}
-                    className="text-white/90 text-[1.8vh] text-start md:text-[2.2vh] font-medium max-w-xs md:max-w-sm leading-relaxed drop-shadow"
-                  >
-                    Discover amazing stores, unique products — or open your own. The Mall is now welcoming vendors.
-                  </p>
-                  
-                  {/* Get Started Button */}
-                  <a 
-                      href="/get-started"
-                      className="mt-6 px-6 py-2 bg-white text-black text-[1.8vh] md:text-[2vh] hover:bg-white/90 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2 group"
-                      style={{ fontFamily: fonts?.subheading || "'Poppins', sans-serif" }}
-                  >
-                      Get Started
-                      <svg 
-                          className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-1" 
-                          fill="none" 
-                          stroke="currentColor" 
-                          viewBox="0 0 24 24"
-                      >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                  </a>
-              </div>
-              
-              {/* Corner decorations */}
-              <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-white/30 rounded-tl-lg"></div>
-              <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-white/30 rounded-tr-lg"></div>
-              <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-white/30 rounded-bl-lg"></div>
-              <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-white/30 rounded-br-lg"></div>
-          </div>
-      </div>
-  )
+    return (
+        <PostInteraction postIdentifier={POST_IDS.WELCOME} postTitle="Welcome to The Mall">
+        <div className="w-full overflow-hidden">
+            {/* Welcome message above the poster */}
+            <p className="font-normal py-[1vh]">
+                Welcome to the Mall! We're so excited to have you. 
+            </p>
+            
+            {/* Main Poster Container */}
+            <div className="relative flex items-center justify-start text-center w-full aspect-[1/1.414] rounded-lg overflow-hidden shadow-2xl">
+                {/* Live Background */}
+                <div className="absolute inset-0 w-full h-full">
+                    <LiveBackground />
+                </div>
+                
+                {/* Dark Overlay with gradient */}
+                <div className="absolute inset-0 bg-black/20"></div>
+                
+                {/* Content Container */}
+                <div className="relative z-10 px-3 flex flex-col items-start justify-center w-full py-8 space-y-4">
+                    {/* Main Title */}
+                    <h1 
+                        style={{ fontFamily: fonts?.heading || "'Play', cursive", lineHeight: "1" }}
+                        className="text-white text-[6.5vh] md:text-[10vh] tracking-wide font-semibold drop-shadow-lg"
+                    >
+                        The Mall
+                    </h1>
+                    
+                    {/* Subtitle */}
+                    <p 
+                        style={{ fontFamily: fonts?.subheading || "'Poppins', sans-serif" }}
+                        className="text-white/90 text-[1.8vh] text-start md:text-[2.2vh] font-medium max-w-xs md:max-w-sm leading-relaxed drop-shadow"
+                    >
+                        Discover amazing stores, unique products — or open your own. The Mall is now welcoming vendors.
+                    </p>
+                    
+                    {/* Get Started Button */}
+                    <a 
+                        href="/get-started"
+                        className="mt-6 px-6 py-2 bg-white text-black text-[1.8vh] md:text-[2vh] hover:bg-white/90 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2 group"
+                        style={{ fontFamily: fonts?.subheading || "'Poppins', sans-serif" }}
+                    >
+                        Get Started
+                        <svg 
+                            className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-1" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </a>
+                </div>
+                
+                {/* Corner decorations */}
+                <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-white/30 rounded-tl-lg"></div>
+                <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-white/30 rounded-tr-lg"></div>
+                <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-white/30 rounded-bl-lg"></div>
+                <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-white/30 rounded-br-lg"></div>
+            </div>
+        </div>
+        </PostInteraction>
+    )
 }
 
 export const WhatIsECommerce = () => {
-  return (
-    <div className="w-full">
-      <p className="font-normal py-[1vh]">
-        According to <a href="https://www.salesforce.com/eu/commerce/ecommerce-platform/" target="_blank" rel="noopener noreferrer" className="underline">Salesforce</a>, an e-commerce platform allows businesses to sell products and services online.
-        <br /><br />
-        The Mall takes this a step further — it's not just about users creating profiles, but about stores having their own presence.
-        <br /><br />
-        Instead of people following people, customers interact with businesses. This transforms stores into living digital entities that can sell, communicate, build trust, and grow relationships — all in one place.
-      </p>
+    return (
+        <PostInteraction postIdentifier={POST_IDS.WHAT_IS_ECOMMERCE} postTitle="What is E-Commerce?">
+        <div className="w-full">
+        <p className="font-normal py-[1vh]">
+            According to <a href="https://www.salesforce.com/eu/commerce/ecommerce-platform/" target="_blank" rel="noopener noreferrer" className="underline">Salesforce</a>, an e-commerce platform allows businesses to sell products and services online.
+            <br /><br />
+            The Mall takes this a step further — it's not just about users creating profiles, but about stores having their own presence.
+            <br /><br />
+            Instead of people following people, customers interact with businesses. This transforms stores into living digital entities that can sell, communicate, build trust, and grow relationships — all in one place.
+        </p>
 
-      <div className="w-full min-h-[40px]">
-        <img 
-          src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Screenshot%202026-02-25%20100207.png" 
-          alt="" 
-          className="w-full h-full object-contain" 
-        />
-      </div>
-    </div>
-  )
+        <div className="w-full min-h-[40px]">
+            <img 
+            src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Screenshot%202026-02-25%20100207.png" 
+            alt="" 
+            className="w-full h-full object-contain" 
+            />
+        </div>
+        </div>
+        </PostInteraction>
+    )
 };
 
 export const WhatIsMVP = () => {

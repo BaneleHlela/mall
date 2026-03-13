@@ -20,9 +20,10 @@ interface StorePostJSXProps {
     color?: string;
     showTipsIcon?: boolean;
     onModalOpen?: (isOpen: boolean) => void;
+    isFeedbackPost?: boolean;
 }
 
-const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors", jsx, color = "text-orange-400", showTipsIcon = true, onModalOpen }) => {
+const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors", jsx, color = "text-orange-400", showTipsIcon = true, onModalOpen, isFeedbackPost = false }) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,10 +55,15 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
     }, [dispatch, "themall"]);
 
     useEffect(() => {
-        if (isModalOpen) {
+        if (isModalOpen && !isFeedbackPost) {
             hideNavbar();
             onModalOpen?.(true);
-        } else {
+        } 
+        if (!isModalOpen && !isFeedbackPost) {
+            showNavbar();
+            onModalOpen?.(false);
+        }
+        else {
             showNavbar();
             onModalOpen?.(false);
         }
@@ -153,46 +159,48 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
             >
                 {jsx}
             </div>
-            {/* Likes, Visits, or Share */}
-            <div className="flex justify-between w-full h-[5vh] px-[.8vh] border-t-[.1vh] border-gray-200">
-                <div className="flex items-center space-x-[1vh]">
-                    {/* Likes */}
-                    <div className="flex items-center space-x-1">
-                        <button
-                            onClick={handleFavoriteClick}
-                            className=""
-                        >
-                            {/* <p style={{lineHeight: "1"}} className="text-white text-[3.4vh] font-light">{store.likes.count}</p> */}
-                            {isFavorite ? (
-                                <GoHeartFill className="text-[3.5vh] text-black" />
-                                ) : (
-                                <GoHeart className="text-[3.5vh] text-black" />
-                            )}
-                        </button>
-                        <p className="font-[500]">{store.likes.count + Math.floor(Math.random() * 100) + 10} likes</p>
+            <div className={`${isFeedbackPost && 'hidden '} w-full`}>
+                {/* Likes, Visits, or Share */}
+                <div className="flex justify-between w-full h-[5vh] px-[.8vh] border-t-[.1vh] border-gray-200">
+                    <div className="flex items-center space-x-[1vh]">
+                        {/* Likes */}
+                        <div className="flex items-center space-x-1">
+                            <button
+                                onClick={handleFavoriteClick}
+                                className=""
+                            >
+                                {/* <p style={{lineHeight: "1"}} className="text-white text-[3.4vh] font-light">{store.likes.count}</p> */}
+                                {isFavorite ? (
+                                    <GoHeartFill className="text-[3.5vh] text-black" />
+                                    ) : (
+                                    <GoHeart className="text-[3.5vh] text-black" />
+                                )}
+                            </button>
+                            <p className="font-[500]">{store.likes.count + Math.floor(Math.random() * 100) + 10} likes</p>
+                        </div>
+                        {/* Visits */}
+                        <div className="flex items-center space-x-1">
+                            <BsDoorOpen className="text-[3vh] text-black" />
+                            <p className="font-[500]">{store.visits} visits</p>
+                        </div>
                     </div>
-                    {/* Visits */}
-                    <div className="flex items-center space-x-1">
-                        <BsDoorOpen className="text-[3vh] text-black" />
-                        <p className="font-[500]">{store.visits} visits</p>
+                    {/* Share */}
+                    <div className="flex h-full items-center cursor-pointer" onClick={handleShare}>
+                    <LiaShareSolid className="text-[3.8vh]" />
                     </div>
                 </div>
-                {/* Share */}
-                <div className="flex h-full items-center cursor-pointer" onClick={handleShare}>
-                <LiaShareSolid className="text-[3.8vh]" />
-                </div>
-            </div>
 
-            {/* Ratings & Reviews */}
-            <div
-                onClick={() => setIsModalOpen(true)}
-                className="relative flex items-center w-full h-[5vh] p-[.6vh] cursor-pointer"
-            >
-                <div className="w-full h-full bg-black text-white rounded-[.8vh] border-[.2vh] px-[1.5vh] pr-[10vh] flex items-center font-[500]">
-                    Reviews & Feedback
-                </div>
-                <div className="absolute right-[1.5vh] px-[.5vh]">
-                <StorePosterRatingStars rating={store.rating.averageRating} color='text-white'/>
+                {/* Ratings & Reviews */}
+                <div
+                    onClick={() => setIsModalOpen(true)}
+                    className="relative flex items-center w-full h-[5vh] p-[.6vh] cursor-pointer"
+                >
+                    <div className="w-full h-full bg-black text-white rounded-[.8vh] border-[.2vh] px-[1.5vh] pr-[10vh] flex items-center font-[500]">
+                        Reviews & Feedback
+                    </div>
+                    <div className="absolute right-[1.5vh] px-[.5vh]">
+                    <StorePosterRatingStars rating={store.rating.averageRating} color='text-white'/>
+                    </div>
                 </div>
             </div>
 

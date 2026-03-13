@@ -123,7 +123,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
           </button>
           
           {/* Open Status */}
-          <span className={`${statusClasses} line-clamp-1`}>
+          <span className={`${statusClasses} line-clamp-1 max-w-[60%]`}>
             {storeStatus.message}
           </span>
           {/* Closed status */}
