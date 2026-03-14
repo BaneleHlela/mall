@@ -163,6 +163,7 @@ export const getDonationById = asyncHandler(async (req, res) => {
 // Get store donations by storeSlug
 export const getStoreDonations = asyncHandler(async (req, res) => {
   const { storeSlug } = req.params;
+  const { activeOnly } = req.query;
 
   // Check if storeSlug is a valid ObjectId or a slug
   let query = {};
@@ -178,6 +179,10 @@ export const getStoreDonations = asyncHandler(async (req, res) => {
       throw new Error("Store not found");
     }
     query = { store: store._id };
+  }
+
+  if (activeOnly === 'true') {
+    query.isActive = true;
   }
 
   console.log(query);

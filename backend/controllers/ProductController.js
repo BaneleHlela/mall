@@ -211,7 +211,7 @@ export const getProductById = asyncHandler(async (req, res) => {
 // Get store products with optional category filter
 export const getStoreProducts =asyncHandler(async (req, res) => {
   const { storeId } = req.params;
-  const { category } = req.query;
+  const { category, activeOnly } = req.query;
 
   // Check if storeId is a valid ObjectId or a slug
   let query = {};
@@ -231,6 +231,10 @@ export const getStoreProducts =asyncHandler(async (req, res) => {
 
   if (category) {
     query.category = category; // Add category filter if provided
+  }
+
+  if (activeOnly === 'true') {
+    query.isActive = true;
   }
 
   console.log(query);

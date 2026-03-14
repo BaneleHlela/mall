@@ -103,9 +103,12 @@ export const deleteDonation = createAsyncThunk(
 // Fetch donations by storeSlug
 export const fetchStoreDonations = createAsyncThunk(
   'donations/fetchStoreDonations',
-  async ({ storeSlug }: { storeSlug: string }, thunkAPI) => {
+  async ({ storeSlug, activeOnly }: { storeSlug: string; activeOnly?: boolean }, thunkAPI) => {
     try {
-      const res = await axios.get(`${API_BASE}/store/${storeSlug}`);
+      const params = new URLSearchParams();
+      if (activeOnly !== undefined) params.append('activeOnly', activeOnly.toString());
+      const query = params.toString() ? `?${params.toString()}` : '';
+      const res = await axios.get(`${API_BASE}/store/${storeSlug}${query}`);
       return res.data as Donation[];
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to fetch store donations');

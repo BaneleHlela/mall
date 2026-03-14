@@ -18,13 +18,15 @@ const API_BASE = `${API_URL}/api/services`;
 export const fetchStoreServices = createAsyncThunk(
   'services/fetchStoreServices',
   async (
-    { storeSlug, category }: { storeSlug: string; category?: string },
+    { storeSlug, category, activeOnly }: { storeSlug: string; category?: string; activeOnly?: boolean },
     thunkAPI
   ) => {
     try {
-      const url = category
-        ? `${API_BASE}/store/${storeSlug}?category=${category}`
-        : `${API_BASE}/store/${storeSlug}`;
+      const params = new URLSearchParams();
+      if (category) params.append('category', category);
+      if (activeOnly !== undefined) params.append('activeOnly', activeOnly.toString());
+      const query = params.toString() ? `?${params.toString()}` : '';
+      const url = `${API_BASE}/store/${storeSlug}${query}`;
       const res = await axios.get(url);
       return res.data as Service[];
     } catch (err: any) {

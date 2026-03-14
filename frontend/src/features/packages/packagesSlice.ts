@@ -87,10 +87,13 @@ export const fetchUserPackages = createAsyncThunk(
 
 export const fetchStorePackages = createAsyncThunk(
     'packages/fetchStorePackages',
-    async ({ storeSlug, category }: { storeSlug: string; category?: string }, thunkAPI) => {
+    async ({ storeSlug, category, activeOnly }: { storeSlug: string; category?: string; activeOnly?: boolean }, thunkAPI) => {
         try {
-            const params = category ? `?category=${encodeURIComponent(category)}` : '';
-            const res = await axios.get(`${API_BASE}/store/${storeSlug}${params}`);
+            const params = new URLSearchParams();
+            if (category) params.append('category', category);
+            if (activeOnly !== undefined) params.append('activeOnly', activeOnly.toString());
+            const query = params.toString() ? `?${params.toString()}` : '';
+            const res = await axios.get(`${API_BASE}/store/${storeSlug}${query}`);
             return res.data as Package[];
         } catch (err: any) {
             return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to fetch store packages');

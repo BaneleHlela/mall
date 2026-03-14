@@ -119,35 +119,35 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
   // Fetch store services if applicable
   useEffect(() => {
     if (storeSlug) {
-        dispatch(fetchStoreServices({ storeSlug }));
+        dispatch(fetchStoreServices({ storeSlug, activeOnly: true }));
     }
   }, [dispatch]);
 
   // Fetch store products if applicable
   useEffect(() => {
     if (storeSlug && store?.slug) {
-      dispatch(fetchStoreProducts({ storeSlug: store.slug }));
+      dispatch(fetchStoreProducts({ storeSlug: store.slug, activeOnly: true }));
     }
   }, [storeSlug, dispatch, store]);
 
   // Fetch store rentals if applicable
   useEffect(() => {
     if (storeSlug && store?.trades.includes("rentals")) {
-      dispatch(fetchStoreRentals({ storeSlug }));
+      dispatch(fetchStoreRentals({ storeSlug, activeOnly: true }));
     }
   }, [storeSlug, dispatch, store]);
 
   // Fetch store services if applicable
   useEffect(() => {
   if (store?.trades.includes("services") && storeSlug) {
-    dispatch(fetchStoreServices({ storeSlug })); // Fetch services if needed
+    dispatch(fetchStoreServices({ storeSlug, activeOnly: true })); // Fetch services if needed
   }
   }, [store, storeSlug, dispatch]);
 
   // Fetch store donations if applicable
   useEffect(() => {
     if (store?.trades.includes("donations") && storeSlug) {
-      dispatch(fetchStoreDonations({ storeSlug: store.slug }));
+      dispatch(fetchStoreDonations({ storeSlug: store.slug, activeOnly: true }));
     }
   }, [store, storeSlug, dispatch]);
 

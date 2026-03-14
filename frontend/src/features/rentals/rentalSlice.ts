@@ -68,12 +68,15 @@ export const updateRental = createAsyncThunk(
 
 export const fetchStoreRentals = createAsyncThunk<
   Rental[],
-  { storeSlug: string; category?: string }
->("rentals/fetchStore", async ({ storeSlug, category }, { rejectWithValue }) => {
+  { storeSlug: string; category?: string; activeOnly?: boolean }
+>("rentals/fetchStore", async ({ storeSlug, category, activeOnly }, { rejectWithValue }) => {
   try {
     const queryParams = new URLSearchParams();
     if (category) {
       queryParams.append('category', category);
+    }
+    if (activeOnly !== undefined) {
+      queryParams.append('activeOnly', activeOnly.toString());
     }
     const query = queryParams.toString() ? `?${queryParams.toString()}` : "";
     const res = await axios.get(`${API_URL}/api/rentals/store/${storeSlug}${query}`);

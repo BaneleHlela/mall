@@ -43,7 +43,7 @@ const SecondStorePage = () => {
 
   useEffect(() => {
     if (store?.trades === 2 && storeId) {
-      dispatch(fetchStoreServices(storeId)); // Fetch services if needed
+      dispatch(fetchStoreServices({ storeSlug: storeId, activeOnly: true })); // Fetch services if needed
     }
   }, [store, storeId, dispatch]);
 

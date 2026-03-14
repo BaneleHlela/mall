@@ -33,9 +33,9 @@ const FirstServices = () => {
   useEffect(() => {
     if (storeId) {
       if (selectedCategory === "all") {
-        dispatch(fetchStoreServices({ storeId }));
+        dispatch(fetchStoreServices({ storeSlug: storeId, activeOnly: true }));
       } else {
-        dispatch(fetchStoreServices({ storeId, category: selectedCategory }));
+        dispatch(fetchStoreServices({ storeSlug: storeId, category: selectedCategory, activeOnly: true }));
       }
     }
   }, [storeId, selectedCategory, dispatch]);

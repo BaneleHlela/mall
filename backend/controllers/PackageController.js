@@ -87,7 +87,7 @@ export const updatePackage = asyncHandler(async (req, res) => {
 
 export const getStorePackages = asyncHandler(async (req, res) => {
   const { storeSlug } = req.params;
-  const { category } = req.query;
+  const { category, activeOnly } = req.query;
   console.log(storeSlug);
   
   // Check if storeSlug is a valid ObjectId or a slug
@@ -108,6 +108,10 @@ export const getStorePackages = asyncHandler(async (req, res) => {
   // Add category filter if provided
   if (category) {
     query.category = category;
+  }
+
+  if (activeOnly === 'true') {
+    query.isActive = true;
   }
 
   console.log(query);

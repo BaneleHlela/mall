@@ -23,7 +23,8 @@ const PackagesSection = () => {
     if (storeSlug) {
         dispatch(fetchStorePackages({ 
           storeSlug: storeSlug, 
-          category: selectedCategory !== 'all' ? selectedCategory : undefined 
+          category: selectedCategory !== 'all' ? selectedCategory : undefined,
+          activeOnly: true
         }));
     }
   }, [storeSlug, selectedCategory, dispatch]);

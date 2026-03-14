@@ -9,6 +9,8 @@ import { MdVerified } from 'react-icons/md';
 import { updateUser} from '../../../../features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks.ts';
 import { GoHeartFill, GoHeart } from "react-icons/go";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 interface StoreCardProps {
   store: Store;
@@ -23,9 +25,36 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
   const dispatch = useAppDispatch();
 
   const user = useAppSelector((state) => state.user.user)
-  
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const mysweetalert = withReactContent(Swal);
+
+  // Check if store has a website
+  const hasWebsite = store.website && (
+    store.website.layoutId || 
+    store.website.source === 'custom' || 
+    store.website.websiteUrl
+  );
+
+  const handleClick = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation(); // Prevent triggering when clicking the heart
+    
+    if (!hasWebsite) {
+      const result = await mysweetalert.fire({
+        title: 'Store not ready',
+        text: 'Store has no website. If you are the owner of the store, go to dashboard to add a website/layout.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Go to Dashboard',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+      });
+
+      if (result.isConfirmed) {
+        navigate(`/dashboard/${store.slug}/settings`);
+      }
+      return;
+    }
+    
     navigate(`/stores/${store.slug}`);
   };
 

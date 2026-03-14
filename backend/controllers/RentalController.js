@@ -207,7 +207,7 @@ export const getRentalById = async (req, res) => {
 
 export const getStoreRentals = asyncHandler(async (req, res) => {
   const { storeId } = req.params;
-  const { category } = req.query;
+  const { category, activeOnly } = req.query;
 
   // Check if storeId is a valid ObjectId or a slug
   let query = {};
@@ -227,6 +227,10 @@ export const getStoreRentals = asyncHandler(async (req, res) => {
 
   if (category) {
     query.category = category;
+  }
+
+  if (activeOnly === 'true') {
+    query.isActive = true;
   }
 
   try {

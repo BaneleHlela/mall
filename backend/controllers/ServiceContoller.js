@@ -244,7 +244,7 @@ export const getServiceById = async (req, res) => {
 
 export const getStoreServices = asyncHandler(async (req, res) => {
   const { storeId } = req.params;
-  const { category } = req.query;
+  const { category, activeOnly } = req.query;
 
   // Check if storeId is a valid ObjectId or a slug
   let query = {};
@@ -264,6 +264,10 @@ export const getStoreServices = asyncHandler(async (req, res) => {
 
   if (category) {
     query.category = category;
+  }
+
+  if (activeOnly === 'true') {
+    query.isActive = true;
   }
 
   try {

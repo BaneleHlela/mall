@@ -12,14 +12,28 @@ import { TbLoader3 } from "react-icons/tb";
 const LoginPage = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const from = (location.state as any)?.from?.pathname;
+	const queryParams = new URLSearchParams(location.search);
+	const redirectFromQuery = queryParams.get('redirect');
+	const fromState = (location.state as any)?.from?.pathname;
+	const from = fromState || redirectFromQuery || undefined;
 	
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
 	const dispatch = useDispatch<AppDispatch>();
-	const { isLoading, error } = useSelector((state: RootState) => state.user);
+	const { isLoading, error, isAuthenticated, isCheckingAuth } = useSelector((state: RootState) => state.user);
+
+	// Redirect already authenticated users away from login page
+	useEffect(() => {
+		if (!isCheckingAuth && isAuthenticated) {
+			if (from && from !== '/login' && from !== '/signup') {
+				navigate(from, { replace: true });
+			} else {
+				navigate('/', { replace: true });
+			}
+		}
+	}, [isCheckingAuth, isAuthenticated, from, navigate]);
 
 	useEffect(() => {
 		return () => {
@@ -32,10 +46,12 @@ const LoginPage = () => {
 		const resultAction = await dispatch(login({ email, password }));
 	  
 		if (login.fulfilled.match(resultAction)) {
-			if (from) {
+			// Try to navigate to the original protected route
+			if (from && from !== '/login' && from !== '/signup') {
 				navigate(from, { replace: true });
 			} else {
-				navigate(-1);
+				// Default to home
+				navigate('/', { replace: true });
 			}
 		}
 	};
