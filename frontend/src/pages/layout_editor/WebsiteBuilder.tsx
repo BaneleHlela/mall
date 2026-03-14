@@ -8,7 +8,7 @@ import { fetchStoreBySlug, setCurrentStore } from '../../features/stores/storeSl
 import { TbLoader3 } from "react-icons/tb";
 import { setStore } from '../../features/store_admin/storeAdminSlice.ts';
 import { editLayout, getLayout, captureLayoutScreenshot } from '../../features/layouts/layoutSlice.ts';
-import { setInitialLayout } from '../../features/layouts/layoutSettingsSlice.ts';
+import { setInitialLayout, undo, redo } from '../../features/layouts/layoutSettingsSlice.ts';
 import { getDynamicSizeMap, getZoomScaleClass } from '../../utils/helperFunctions.ts';
 import { BreadcrumbProvider } from '../../contexts/BreadcrumbContext.tsx';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -66,9 +66,22 @@ const WebsiteBuilderContent: React.FC = () => {
   const { layoutId } = useParams<{ layoutId: string }>();
   const { width, height, scale } = sizeMap[device];
 
+  // Keyboard shortcuts for undo/redo
   useEffect(() => {
-    setZoom(scale);
-  }, [device]);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'z') {
+        e.preventDefault();
+        if (e.shiftKey) {
+          dispatch(redo());
+        } else {
+          dispatch(undo());
+        }
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [dispatch]);
 
   useEffect(() => {
     if (settings) {

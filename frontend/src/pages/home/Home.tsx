@@ -333,7 +333,7 @@ const HomePage = () => {
           </div>
         )}
         {/* Feed  */}
-        <div className="space-y-[.35vh]">
+        <div className="space-y-[.6vh]">
           <StorePostJSX
             tipFor='Tips and Updates'
             jsx={

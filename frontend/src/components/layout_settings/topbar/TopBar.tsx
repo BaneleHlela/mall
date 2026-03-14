@@ -4,6 +4,9 @@ import ZoomControls from "./ZoomControls";
 import { IoIosArrowRoundBack, IoIosArrowRoundForward, IoIosSettings, IoIosEye } from "react-icons/io";
 import { Save, Undo2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { LuUndo, LuRedo2 } from "react-icons/lu";
+import { useAppSelector, useAppDispatch } from "../../../app/hooks";
+import { undo, redo } from "../../../features/layouts/layoutSettingsSlice";
 
 type DeviceType = 'mobile' | 'tablet' | 'desktop';
 
@@ -19,6 +22,15 @@ type TopBarProps = {
 const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick, onSave }: TopBarProps) => {
   const navigate = useNavigate();
   const { layoutId } = useParams<{ layoutId: string }>();
+  const dispatch = useAppDispatch();
+  
+  // Get history state for undo/redo
+  const layoutSettings = useAppSelector((state: any) => state.layoutSettings);
+  const historyIndex = layoutSettings._historyIndex ?? -1;
+  const historyLength = layoutSettings._history?.length ?? 0;
+  const canUndo = historyIndex > 0;
+  const canRedo = historyIndex < historyLength - 1;
+
   
   return (
     <>
@@ -26,15 +38,48 @@ const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick, onSave 
       <div className="hidden lg:flex items-center justify-between h-[8vh] bg-gradient-to-r from-stone-800 to-stone-700 px-[1.6vh] shadow-lg">
         {/* Left Section - Back & Save */}
         <div className="flex items-center space-x-[1.2vh]">
+          {/* Exit Button */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => {}}
-            className="flex items-center space-x-[.8vh] px-[1.6vh] py-[.8vh] bg-white/10 text-white/50 rounded-lg cursor-not-allowed"
-            disabled
+            onClick={() => navigate(`/dashboard/${layoutSettings.store.slug}`)}
+            className="flex items-center space-x-[.8vh] px-[1.6vh] py-[.8vh] bg-red-500 text-white rounded-lg"
           >
-            <IoIosArrowRoundBack className="text-[2vh]" />
-            <span className="text-[1.8vh] font-medium">Back</span>
+            <IoIosArrowRoundBack className="text-[2.2vh]" />
+            <span className="text-[1.8vh] font-medium">Exit</span>
+          </motion.button>
+          {/* Undo Feature */}
+          <motion.button
+            whileHover={{ scale: canUndo ? 1.05 : 1 }}
+            whileTap={{ scale: canUndo ? 0.95 : 1 }}
+            onClick={() => dispatch(undo())}
+            disabled={!canUndo}
+            className={`flex items-center space-x-[.8vh] px-[1.6vh] py-[.8vh] rounded-lg transition-all ${
+              canUndo 
+                ? 'bg-white/50 text-white hover:bg-white/60' 
+                : 'bg-white/20 text-white/40 cursor-not-allowed'
+            }`}
+            title={canUndo ? 'Undo (Ctrl+Z)' : 'Nothing to undo'}
+          >
+            <LuUndo className="text-[2vh]" />
+            <span className="text-[1.8vh] font-medium">Undo</span>
+          </motion.button>
+          
+          {/* Redo Feature */}
+          <motion.button
+            whileHover={{ scale: canRedo ? 1.05 : 1 }}
+            whileTap={{ scale: canRedo ? 0.95 : 1 }}
+            onClick={() => dispatch(redo())}
+            disabled={!canRedo}
+            className={`flex items-center space-x-[.8vh] px-[1.6vh] py-[.8vh] rounded-lg transition-all ${
+              canRedo 
+                ? 'bg-white/50 text-white hover:bg-white/60' 
+                : 'bg-white/20 text-white/40 cursor-not-allowed'
+            }`}
+            title={canRedo ? 'Redo (Ctrl+Shift+Z)' : 'Nothing to redo'}
+          >
+            <LuRedo2 className="text-[2vh]" />
+            <span className="text-[1.8vh] font-medium">Redo</span>
           </motion.button>
           
           <motion.button
@@ -44,7 +89,7 @@ const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick, onSave 
             className="flex items-center space-x-[.8vh] px-[2vh] py-[.8vh] bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white rounded-lg shadow-md transition-all"
           >
             <Save size={16} />
-            <span className="text-[1.8vh] font-medium">Create Layout</span>
+            <span className="text-[1.8vh] font-medium">Save Layout</span>
           </motion.button>
         </div>
 
@@ -96,6 +141,34 @@ const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick, onSave 
           </div>
 
           <div className="flex items-center space-x-[.8vh]">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => dispatch(undo())}
+              disabled={!canUndo}
+              className={`w-9 h-9 flex items-center justify-center rounded-lg transition-all ${
+                canUndo 
+                  ? 'bg-white/20 text-white' 
+                  : 'bg-white/10 text-white/30 cursor-not-allowed'
+              }`}
+              title={canUndo ? 'Undo' : 'Nothing to undo'}
+            >
+              <LuUndo className="text-lg" />
+            </motion.button>
+            
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => dispatch(redo())}
+              disabled={!canRedo}
+              className={`w-9 h-9 flex items-center justify-center rounded-lg transition-all ${
+                canRedo 
+                  ? 'bg-white/20 text-white' 
+                  : 'bg-white/10 text-white/30 cursor-not-allowed'
+              }`}
+              title={canRedo ? 'Redo' : 'Nothing to redo'}
+            >
+              <LuRedo2 className="text-lg" />
+            </motion.button>
+            
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => window.open(`/layouts/${layoutId}/preview`, '_blank')}

@@ -2,12 +2,18 @@ import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/tool
 import type { Layout } from "../../types/layoutTypes"; 
 import { defaultLayoutConfig } from '../../utils/defaults/defaultLayoutConfig';
 
-
+// Extended state with history for undo/redo
+interface LayoutSettingsState extends Layout {
+  _history: Layout[];
+  _historyIndex: number;
+}
 
 // Define the initial state using that type
 //@ts-ignore
-const initialState: Layout = {
+const initialState: LayoutSettingsState = {
   ...defaultLayoutConfig,
+  _history: [],
+  _historyIndex: -1,
 };
 
 
@@ -15,11 +21,26 @@ const layoutSettingsSlice = createSlice({
   name: 'layoutSettings',
   initialState,
   reducers: {
-    setInitialLayout: (_state, action: PayloadAction<Layout>) => {
-      return action.payload;
+    setInitialLayout: (state, action: PayloadAction<Layout>) => {
+      const newState = action.payload as LayoutSettingsState;
+      state._history = [newState];
+      state._historyIndex = 0;
+      Object.assign(state, newState);
     },
-    updateSetting: (state, action: PayloadAction<{ field: string; value: any }>) => {
-      const {field, value} = action.payload;
+    updateSetting: (state, action: PayloadAction<{ field: string; value: any; skipHistory?: boolean }>) => {
+      const {field, value, skipHistory} = action.payload;
+      
+      // Push current state to history before updating (unless skipped)
+      if (!skipHistory) {
+        // Remove any future states if we're not at the end of history
+        const newHistory = state._history.slice(0, state._historyIndex + 1);
+        // Clone current state (excluding internal history properties)
+        const { _history, _historyIndex, ...currentState } = state;
+        newHistory.push(currentState as Layout);
+        state._history = newHistory;
+        state._historyIndex = newHistory.length - 1;
+      }
+
       const keys = field.split('.');
       let current: any = state;
 
@@ -35,11 +56,29 @@ const layoutSettingsSlice = createSlice({
         }
       })
     },
+    undo: (state) => {
+      if (state._historyIndex > 0) {
+        state._historyIndex -= 1;
+        const previousState = state._history[state._historyIndex] as LayoutSettingsState;
+        // Restore all properties except history tracking
+        const { _history, _historyIndex, ...rest } = previousState;
+        Object.assign(state, rest);
+      }
+    },
+    redo: (state) => {
+      if (state._historyIndex < state._history.length - 1) {
+        state._historyIndex += 1;
+        const nextState = state._history[state._historyIndex] as LayoutSettingsState;
+        // Restore all properties except history tracking
+        const { _history, _historyIndex, ...rest } = nextState;
+        Object.assign(state, rest);
+      }
+    },
     updateRouteOrder: (state, action) => {
       state.routeOrder = action.payload;
     },
   },
 });
 
-export const { updateSetting, setInitialLayout, updateRouteOrder } = layoutSettingsSlice.actions;
+export const { updateSetting, setInitialLayout, updateRouteOrder, undo, redo } = layoutSettingsSlice.actions;
 export default layoutSettingsSlice.reducer;
