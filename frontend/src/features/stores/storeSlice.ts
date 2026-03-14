@@ -181,6 +181,7 @@ export const cloneStore = createAsyncThunk<Store, { storeId: string; data: Clone
   'stores/cloneStore',
   async ({ storeId, data }, thunkAPI) => {
     try {
+      console.log("Cloning store with data:", storeId, data);
       const response = await axios.post(`${STORE_API_URL}/${storeId}/clone`, data);
       return response.data.store;
     } catch (error) {

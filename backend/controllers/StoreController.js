@@ -1175,6 +1175,7 @@ export const captureReelyAuto = expressAsyncHandler(async (req, res) => {
 export const cloneStore = expressAsyncHandler(async (req, res) => {
   try {
     const { storeId } = req.params;
+    console.log(`Cloning store with ID: ${storeId}`);
     const { nickname, location, contact } = req.body;
     const userId = req.user._id;
 
@@ -1197,6 +1198,50 @@ export const cloneStore = expressAsyncHandler(async (req, res) => {
     const locationSuffix = nickname ? generateSlug(nickname) : `location-${Date.now()}`;
     const newSlug = await generateUniqueSlug(`${baseSlug}-${locationSuffix}`);
 
+    // Check if original store has internal website
+    const isInternalWebsite = originalStore.website?.source === 'internal';
+    
+    let newLayouts = [];
+    let newWebsite = originalStore.website;
+
+    // If website is internal, clone the layouts
+    if (isInternalWebsite && originalStore.layouts && originalStore.layouts.length > 0) {
+      // Fetch the original layouts
+      const originalLayouts = await StoreLayout.find({ _id: { $in: originalStore.layouts } });
+      
+      // Clone each layout with the new store reference
+      for (const layout of originalLayouts) {
+        const clonedLayout = new StoreLayout({
+          name: layout.name,
+          nickname: layout.nickname,
+          screenshot: layout.screenshot,
+          source: layout.source,
+          store: null, // Will be set after store is created
+          routes: layout.routes,
+          routeOrder: layout.routeOrder,
+          colors: layout.colors,
+          fonts: layout.fonts,
+          isDemo: layout.isDemo,
+          floats: layout.floats,
+          background: layout.background,
+          menubar: layout.menubar,
+          sections: layout.sections,
+        });
+        
+        await clonedLayout.save();
+        newLayouts.push(clonedLayout._id);
+        
+        // If this was the layout used in website config, update website to use new layout
+        if (originalStore.website?.layoutId && 
+            layout._id.toString() === originalStore.website.layoutId.toString()) {
+          newWebsite = {
+            ...originalStore.website,
+            layoutId: clonedLayout._id
+          };
+        }
+      }
+    }
+
     // Create cloned store
     const clonedStore = new Store({
       name: originalStore.name,
@@ -1212,8 +1257,8 @@ export const cloneStore = expressAsyncHandler(async (req, res) => {
       categories: originalStore.categories,
       socials: originalStore.socials,
       operationTimes: originalStore.operationTimes,
-      layouts: originalStore.layouts,
-      website: originalStore.website,
+      layouts: newLayouts.length > 0 ? newLayouts : originalStore.layouts,
+      website: newWebsite,
       businessType: originalStore.businessType,
       payment: originalStore.payment,
       delivers: originalStore.delivers,
@@ -1228,6 +1273,14 @@ export const cloneStore = expressAsyncHandler(async (req, res) => {
     });
 
     await clonedStore.save();
+
+    // If we cloned layouts, update the store reference in each cloned layout
+    if (newLayouts.length > 0) {
+      await StoreLayout.updateMany(
+        { _id: { $in: newLayouts } },
+        { store: clonedStore._id }
+      );
+    }
 
     // Add store to user's stores array
     await User.findByIdAndUpdate(userId, { $push: { stores: clonedStore._id } });

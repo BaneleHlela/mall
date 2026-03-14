@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FiCopy, FiX, FiMapPin, FiPhone, FiMail, FiMessageCircle } from 'react-icons/fi';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { cloneStore } from '../../../features/stores/storeSlice';
@@ -13,6 +13,30 @@ interface CloneStoreModalProps {
 const CloneStoreModal: React.FC<CloneStoreModalProps> = ({ store, isOpen, onClose }) => {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => state.stores.isLoading);
+  const addressInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (!isOpen || !addressInputRef.current) return;
+
+    const initAutocomplete = async () => {
+      const { Autocomplete } = await google.maps.importLibrary("places") as google.maps.PlacesLibrary;
+      
+      const autocomplete = new Autocomplete(addressInputRef.current!);
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (place.geometry?.location) {
+          setFormData((prev) => ({
+            ...prev,
+            address: place.formatted_address || '', //@ts-ignore
+            lat: place.geometry.location.lat().toString(), //@ts-ignore
+            lng: place.geometry.location.lng().toString(),
+          }));
+        }
+      });
+    };
+
+    initAutocomplete();
+  }, [isOpen]);
 
   const [formData, setFormData] = useState({
     nickname: '',
@@ -45,7 +69,6 @@ const CloneStoreModal: React.FC<CloneStoreModalProps> = ({ store, isOpen, onClos
       contact: {
         phone: formData.phone || store.contact?.phone,
         email: formData.email || store.contact?.email,
-        whatsapp: formData.whatsapp || store.contact?.whatsapp,
       },
     };
 
@@ -115,44 +138,41 @@ const CloneStoreModal: React.FC<CloneStoreModalProps> = ({ store, isOpen, onClos
               Address
             </label>
             <input
+              ref={addressInputRef}
               type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              placeholder="Enter the new location address"
+              placeholder="Search for a location..."
+              defaultValue={formData.address}
               className="w-full px-4 py-2 text-[1.6vh] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
 
-          {/* Coordinates */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-[1.5vh] font-[500] text-gray-700 mb-1">
-                Latitude
-              </label>
-              <input
-                type="text"
-                name="lat"
-                value={formData.lat}
-                onChange={handleChange}
-                placeholder="-26.2041"
-                className="w-full px-4 py-2 text-[1.6vh] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              />
+          {/* Coordinates (display only) */}
+          {(formData.lat || formData.lng) && (
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[1.5vh] font-[500] text-gray-700 mb-1">
+                  Latitude
+                </label>
+                <input
+                  type="text"
+                  value={formData.lat}
+                  readOnly
+                  className="w-full px-4 py-2 text-[1.6vh] border border-gray-200 rounded-lg bg-gray-50 text-gray-600"
+                />
+              </div>
+              <div>
+                <label className="block text-[1.5vh] font-[500] text-gray-700 mb-1">
+                  Longitude
+                </label>
+                <input
+                  type="text"
+                  value={formData.lng}
+                  readOnly
+                  className="w-full px-4 py-2 text-[1.6vh] border border-gray-200 rounded-lg bg-gray-50 text-gray-600"
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-[1.5vh] font-[500] text-gray-700 mb-1">
-                Longitude
-              </label>
-              <input
-                type="text"
-                name="lng"
-                value={formData.lng}
-                onChange={handleChange}
-                placeholder="28.0473"
-                className="w-full px-4 py-2 text-[1.6vh] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              />
-            </div>
-          </div>
+          )}
 
           {/* Contact Details */}
           <div className="pt-2 border-t border-gray-100">
