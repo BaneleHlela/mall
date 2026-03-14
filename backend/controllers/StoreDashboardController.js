@@ -38,11 +38,24 @@ export const editStore = expressAsyncHandler(async (req, res) => {
 });
   
 
-// Delete a store
+// Delete a store (soft delete)
 export const deleteStore = expressAsyncHandler(async (req, res) => {
   const { storeId } = req.params;
+  console.log("Attempting to delete store with ID:", storeId);
 
-  const deletedStore = await Store.findByIdAndDelete(storeId);
+  const store = await Store.findById(storeId);
+
+  if (!store) {
+    res.status(404);
+    throw new Error("Store not found");
+  }
+
+  // Soft delete - set isDeleted to true instead of actually deleting
+  const deletedStore = await Store.findByIdAndUpdate(
+    storeId,
+    { isDeleted: true },
+    { new: true }
+  );
 
   if (deletedStore) {
     res.json({ message: 'Store deleted successfully.' });

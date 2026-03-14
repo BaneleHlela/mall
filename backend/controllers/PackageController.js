@@ -97,7 +97,7 @@ export const getStorePackages = asyncHandler(async (req, res) => {
     query = { store: new mongoose.Types.ObjectId(storeSlug) };
   } else {
     // If it's not a valid ObjectId, assume it's a slug and find the store by slug
-    const store = await Store.findOne({ slug: storeSlug });
+    const store = await Store.findOne({ slug: storeSlug, isDeleted: { $ne: true } });
     if (!store) {
       res.status(404);
       throw new Error("Store not found");

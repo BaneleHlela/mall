@@ -12,11 +12,11 @@ const CLIENT_URL = process.env.CLIENT_URL;
 // Generate unique slug
 const generateUniqueSlug = async (name) => {
   let slug = generateSlug(name);
-  let existingStore = await Store.findOne({ slug });
+  let existingStore = await Store.findOne({ slug, isDeleted: { $ne: true } });
   let counter = 1;
   while (existingStore) {
     slug = `${generateSlug(name)}-${counter}`;
-    existingStore = await Store.findOne({ slug });
+    existingStore = await Store.findOne({ slug, isDeleted: { $ne: true } });
     counter++;
   }
   return slug;
@@ -68,7 +68,7 @@ export const getStore = expressAsyncHandler(async (req, res) => {
           });
       }
 
-      if (!store) {
+      if (!store || store.isDeleted) {
           return res.status(404).json({ message: 'Store not found' });
       }
 
@@ -83,10 +83,11 @@ export const getStore = expressAsyncHandler(async (req, res) => {
 export const getStores = expressAsyncHandler(async (req, res) => {
   const { search, department, sortBy, userLat, userLng } = req.query;
 
-  let searchFilter = {};
+  let searchFilter = { isDeleted: { $ne: true } };
   
   if (search) {
     searchFilter = {
+      ...searchFilter,
       $or: [
         { name: { $regex: search.toString(), $options: 'i' } },
         { slogan: { $regex: search.toString(), $options: 'i' } },
@@ -161,6 +162,7 @@ export const getStoresNearby = expressAsyncHandler(async (req, res) => {
     const searchRange = parseFloat(range) * 1000; // Convert km to meters
 
     const stores = await Store.find({
+      isDeleted: { $ne: true },
       location: {
         $near: {
           $geometry: {
@@ -182,7 +184,7 @@ export const getStoresNearby = expressAsyncHandler(async (req, res) => {
 // Get demo stores
 export const getDemoStores = expressAsyncHandler(async (req, res) => {
   try {
-    const stores = await Store.find({ isDemo: true }).populate('team.member');
+    const stores = await Store.find({ isDemo: true, isDeleted: { $ne: true } }).populate('team.member');
 
     if (!stores || stores.length === 0) {
       return res.status(404).json({ message: 'No demo stores found' });
@@ -340,11 +342,23 @@ export const editStore = expressAsyncHandler(async (req, res) => {
 
   
 
-// Delete a store
+// Delete a store (soft delete)
 export const deleteStore = expressAsyncHandler(async (req, res) => {
     const { storeId } = req.params;
   
-    const deletedStore = await Store.findByIdAndDelete(storeId);
+    const store = await Store.findById(storeId);
+
+    if (!store) {
+      res.status(404);
+      throw new Error("Store not found");
+    }
+
+    // Soft delete - set isDeleted to true instead of actually deleting
+    const deletedStore = await Store.findByIdAndUpdate(
+      storeId,
+      { isDeleted: true },
+      { new: true }
+    );
   
     if (deletedStore) {
       // Remove the store from all team members' stores arrays
@@ -364,7 +378,8 @@ export const getStoresByOwner = expressAsyncHandler(async (req, res) => {
   const { _id } = req.user;
 
   // Find stores where the user is part of the team (regardless of their role)
-  const stores = await Store.find({ "team.member": _id }).populate('team.member');
+  // Exclude deleted stores
+  const stores = await Store.find({ "team.member": _id, isDeleted: { $ne: true } }).populate('team.member');
 
   res.status(200).json(stores);
 });

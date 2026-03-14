@@ -5,8 +5,9 @@ import type { Image } from "../../types/storeTypes";
 import type { Store } from '../../types/storeTypes';
 import { API_URL } from '../context';
 
-const STORE_API_URL = '/api/dashboard'; 
+const STORE_API_URL = `${API_URL}/api/stores`; 
 const STORE_URL = `${API_URL}/api/stores`;
+const STORE_DASHBOARD_URL = `${API_URL}/api/store-dashboard`;
 
 interface AddTeamMemberParams {
   storeId: string;
@@ -34,7 +35,7 @@ export const editStore = createAsyncThunk<
   'store_admin/editStore',
   async ({ storeSlug, updatedStore }, thunkAPI) => {
     try {
-      const response = await axios.put(`${STORE_URL}/edit/${storeSlug}`, updatedStore);
+      const response = await axios.put(`${STORE_API_URL}/edit/${storeSlug}`, updatedStore);
       return response.data; // should be the updated store
     } catch (error) {
       console.error('Error editing store:', error);
@@ -50,7 +51,7 @@ export const searchUsersByUsername = createAsyncThunk<
   'store_admin/searchUsersByUsername',
   async (username: string, thunkAPI) => {
     try {
-      const response = await axios.get(`${API_URL}/api/user/search-users?q=${username}`);
+      const response = await axios.get(`${STORE_API_URL}/api/user/search-users?q=${username}`);
       return response.data;
     } catch (error) {
       console.error('User search failed:', error);
@@ -63,7 +64,7 @@ export const searchUsersByUsername = createAsyncThunk<
 export const deleteStore = createAsyncThunk<string, string>(
     'store_admin/deleteStore',
     async (storeId) => {
-      const response = await axios.delete(`${STORE_API_URL}/delete/${storeId}`);
+      const response = await axios.delete(`${STORE_DASHBOARD_URL}/delete/${storeId}`);
       return response.data;
     }
 );
@@ -80,7 +81,7 @@ export const linkLayoutToStore = createAsyncThunk<string, string>(
 export const fetchStore = createAsyncThunk<Store, string>(
   'store_admin/fetchStore',
   async (storeSlug) => {
-    const response = await axios.get(`${STORE_URL}/${storeSlug}`);
+    const response = await axios.get(`${STORE_API_URL}/${storeSlug}`);
     return response.data;
   }
 );

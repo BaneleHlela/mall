@@ -18,6 +18,7 @@ import {
 import { IoMdArrowDropdown } from 'react-icons/io';
 import type { RootState } from '../../../app/store';
 import { fetchStoreBySlug } from '../../../features/stores/storeSlice';
+import { deleteStore } from '../../../features/store_admin/storeAdminSlice';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 
@@ -116,9 +117,27 @@ const StoreSettings = () => {
       reverseButtons: true,
     });
 
-    if (result.isConfirmed) {
-      // TODO: Implement delete store functionality
-      console.log('Delete store confirmed');
+    if (result.isConfirmed && store?._id) {
+      try {
+        await dispatch(deleteStore(store._id) as any).unwrap();
+        
+        await mysweetalert.fire({
+          title: 'Store Deleted',
+          text: 'Your store has been successfully deleted.',
+          icon: 'success',
+          confirmButtonColor: '#6366f1',
+        });
+        
+        // Navigate to the user's dashboard
+        navigate('/my-stores');
+      } catch (error) {
+        await mysweetalert.fire({
+          title: 'Error',
+          text: 'Failed to delete store. Please try again.',
+          icon: 'error',
+          confirmButtonColor: '#dc2626',
+        });
+      }
     }
   };
 

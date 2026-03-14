@@ -173,7 +173,7 @@ export const getStoreDonations = asyncHandler(async (req, res) => {
   } else {
     // If it's not a valid ObjectId, assume it's a slug and find the store by slug
     const Store = (await import('../models/StoreModel.js')).default;
-    const store = await Store.findOne({ slug: storeSlug });
+    const store = await Store.findOne({ slug: storeSlug, isDeleted: { $ne: true } });
     if (!store) {
       res.status(404);
       throw new Error("Store not found");

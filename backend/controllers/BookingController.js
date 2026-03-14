@@ -269,7 +269,7 @@ export const getAvailableBookingTimes = async (req, res) => {
     
     // Fetch Store
     const store = await Store.findById(storeId);
-    if (!store) {
+    if (!store || store.isDeleted) {
       return res.status(404).json({ message: 'Store not found' });
     }
 
