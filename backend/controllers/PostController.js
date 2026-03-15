@@ -2,6 +2,45 @@ import Post from "../models/PostModel.js";
 import PostReview from "../models/PostReviewModel.js";
 import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
+import { generateSlug } from "../utils/helperFunctions.js";
+import crypto from "crypto";
+
+// Generate a unique post identifier
+const generateUniqueIdentifier = async (title) => {
+    const baseSlug = title ? generateSlug(title) : "post";
+    let identifier = baseSlug;
+    let counter = 0;
+    
+    while (await Post.findOne({ identifier })) {
+        counter++;
+        identifier = `${baseSlug}-${crypto.randomBytes(2).toString('hex')}`;
+    }
+    
+    return identifier;
+};
+
+// Create a new post
+export const createPost = asyncHandler(async (req, res) => {
+    const { title } = req.body;
+    
+    const identifier = await generateUniqueIdentifier(title || "");
+    
+    const post = new Post({
+        identifier,
+        title,
+        likes: {
+            count: 0,
+            users: []
+        },
+        rating: {
+            averageRating: 0,
+            numberOfRatings: 0
+        }
+    });
+    
+    await post.save();
+    res.status(201).json(post);
+});
 
 // Get post by identifier
 export const getPost = asyncHandler(async (req, res) => {

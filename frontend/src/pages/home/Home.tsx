@@ -5,7 +5,7 @@ import { selectIsPostReviewModalOpen } from '../../features/posts/postSlice';
 import type { RootState } from '../../app/store';
 import TheMallTopbar from '../../components/the_mall/topbar/TheMallTopbar';
 import { departments, StoreHomePosters } from '../../utils/helperObjects';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Store } from 'lucide-react';
 import React from 'react';
 import DepartmentSelectorWithImages from './supporting/DepartmentSelectorWithImages';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +14,7 @@ import BasicStorePost from '../../components/the_mall/basic_store_post/BasicStor
 import TipsAndUpdates from '../../components/the_mall/home/TipsAndUpdates';
 import { FaTools } from 'react-icons/fa';
 import StorePostJSX from '../../components/the_mall/home/StorePostJSX';
-import { LaunchDate, LookOutForRedFlags, WelcomeToTheMall, WhatIsECommerce, WhatIsMVP, YouCanInvest, MallMVPAnnouncement, Branding } from '../../components/the_mall/home/posts/SimplePosts';
+import { LaunchDate, LookOutForRedFlags, WelcomeToTheMall, WhatIsECommerce, WhatIsMVP, YouCanInvest, MallMVPAnnouncement, Branding, MostImportantPoster, NoAyikhoPoster, VariousPosters } from '../../components/the_mall/home/posts/SimplePosts';
 import MultipleLayoutsPost from '../../components/the_mall/home/posts/MultipleLayoutsPost';
 import FreePikPosters from '../../components/the_mall/home/posts/FreePikPosters';
 import SupplyChain from '../../components/the_mall/home/posts/SupplyChain';
@@ -343,6 +343,31 @@ const HomePage = () => {
             onModalOpen={setIsReviewsModalOpen}
             isFeedbackPost
           />
+          <StorePostJSX
+            tipFor='Tips And Updates'
+            jsx={
+              <MostImportantPoster />
+            }
+            onModalOpen={setIsReviewsModalOpen}
+            isFeedbackPost
+          />
+          <StorePostJSX
+            tipFor='Tips And Updates'
+            jsx={
+              <NoAyikhoPoster />
+            }
+            onModalOpen={setIsReviewsModalOpen}
+            isFeedbackPost
+          />
+          <StorePostJSX
+            tipFor='Tips And Updates'
+            jsx={
+              <VariousPosters />
+            }
+            onModalOpen={setIsReviewsModalOpen}
+            isFeedbackPost
+          />
+
           <StorePostJSX
             tipFor='Announcement'
             jsx={

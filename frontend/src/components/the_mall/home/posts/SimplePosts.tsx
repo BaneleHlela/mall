@@ -4,7 +4,12 @@ import  LiveBackground  from "./LiveBackground";
 import PostInteraction from "./PostInteraction";
 import { useEffect, useState } from "react";
 import WebFont from "webfontloader";
-import { FontFamily } from "@tiptap/extension-text-style";
+import { BackgroundColor, FontFamily } from "@tiptap/extension-text-style";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import FramedPoster from "../../posters/FramedPoster";
+import SlidingPosters from "../../posters/SlidingPosters";
+import { color } from "framer-motion";
 
 const fonts = ["Alfa Slab One"]
 
@@ -22,6 +27,9 @@ export const POST_IDS = {
     MVP_ANNOUNCEMENT: "mvp-announcement",
     LAUNCH_DATE: "launch-date",
     BRANDING: "branding",
+    MOST_IMPORTANT_POSTER: "most-important-poster",
+    NO_AYIKHO_POSTER: "no-ayikho-poster",
+    VARIOUS_POSTERS: "various-posters",
 } as const;
 
 interface WelcomeToTheMallProps {
@@ -119,29 +127,163 @@ export const WelcomeToTheMall = ({ fonts }: WelcomeToTheMallProps) => {
     )
 }
 
+export const MostImportantPoster = () => {
+  const posterImages = [
+    "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/digital%20poster%20-%202%20(1).png",
+    "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/digital%20poster%20-%201.png",
+  ]
+  return (
+      <PostInteraction postIdentifier={POST_IDS.MOST_IMPORTANT_POSTER} postTitle="Most Important Poster">
+        <div className="w-full">
+        <p className="font-normal py-[1vh]">
+          Drive traffic to your store by letting people know you have a website on The Mall. Attach something like: <br/><br/>
+          "Check out my store on The Mall!: <a 
+            href="https://www.themallbeta.com/mall-graphic-design" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-blue-600 underline"
+          >
+            www.themallbeta.com/mall-graphic-design
+          </a>" <br className="mb"/><br/>
+          IT'S FREE!!!
+        </p>
+
+        {/* Poster Images mapped using swiper */}
+        <div className="w-full aspect-square overflow-hidden">
+          <Swiper
+            modules={[Pagination, Navigation, Autoplay]}
+            
+            autoplay={{
+              delay: 4000, 
+              disableOnInteraction: true, 
+              pauseOnMouseEnter: true, 
+            }}
+            className="w-full h-fit"
+            loop={true}
+          >
+            {posterImages.map((src, index) => (
+              <SwiperSlide key={index} className="w-full h-full">
+                <img
+                  src={src}
+                  alt={`Poster ${index + 1}`}
+                  className="w-full aspect-square object-cover"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+        
+        </div>
+      </PostInteraction>
+  )
+};
+
+export const NoAyikhoPoster = () => {
+  const posterImages = [
+    {
+      url: "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Ayikho%201%20(1).png",
+      color: "#fef3c71a",
+    },
+    {
+      url: "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Copy%20of%20Ayikho%201%20(1).png",
+      color : "#fef3c71a",
+    }
+  ]
+  return (
+      <PostInteraction postIdentifier={POST_IDS.NO_AYIKHO_POSTER} postTitle="No Ayikho Poster">
+        <div className="w-full">
+        <p className="font-normal py-[1vh]">
+          Remind your customers to check stock online with nice these physcal posters. <br className="mb"/><br/>
+          IT'S FREE FOR SELECTED STORES!!!
+        </p>
+
+        {/* Poster Images mapped using swiper */}
+        <div className="w-full aspect-square overflow-hidden">
+          <Swiper
+            modules={[Pagination, Navigation, Autoplay]}
+            
+            autoplay={{
+              delay: 4000, 
+              disableOnInteraction: true, 
+              pauseOnMouseEnter: true, 
+            }}
+            className="w-full h-fit"
+            loop={true}
+          >
+            {posterImages.map((src, index) => (
+              <SwiperSlide key={index} className="w-full h-full">
+                <FramedPoster
+                  imageUrl={src.url}
+                  color={src.color}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+        
+        </div>
+      </PostInteraction>
+  )
+};
+
 export const WhatIsECommerce = () => {
     return (
         <PostInteraction postIdentifier={POST_IDS.WHAT_IS_ECOMMERCE} postTitle="What is E-Commerce?">
-        <div className="w-full">
-        <p className="font-normal py-[1vh]">
-            According to <a href="https://www.salesforce.com/eu/commerce/ecommerce-platform/" target="_blank" rel="noopener noreferrer" className="underline">Salesforce</a>, an e-commerce platform allows businesses to sell products and services online.
-            <br /><br />
-            The Mall takes this a step further — it's not just about users creating profiles, but about stores having their own presence.
-            <br /><br />
-            Instead of people following people, customers interact with businesses. This transforms stores into living digital entities that can sell, communicate, build trust, and grow relationships — all in one place.
-        </p>
+          <div className="w-full">
+          <p className="font-normal py-[1vh]">
+              According to <a href="https://www.salesforce.com/eu/commerce/ecommerce-platform/" target="_blank" rel="noopener noreferrer" className="underline">Salesforce</a>, an e-commerce platform allows businesses to sell products and services online.
+              <br /><br />
+              The Mall takes this a step further — it's not just about users creating profiles, but about stores having their own presence.
+              <br /><br />
+              Instead of people following people, customers interact with businesses. This transforms stores into living digital entities that can sell, communicate, build trust, and grow relationships — all in one place.
+          </p>
 
-        <div className="w-full min-h-[40px]">
-            <img 
-            src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Screenshot%202026-02-25%20100207.png" 
-            alt="" 
-            className="w-full h-full object-contain" 
-            />
-        </div>
-        </div>
+          <div className="w-full min-h-[40px]">
+              <img 
+              src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Screenshot%202026-02-25%20100207.png" 
+              alt="" 
+              className="w-full h-full object-contain" 
+              />
+          </div>
+          </div>
         </PostInteraction>
     )
 };
+
+export const VariousPosters = () => {
+  const posterImages = [
+    "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Screenshot%202025-12-08%20120235.png",
+    "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Screenshot%202025-12-08%20115934.png",
+    "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Screenshot%202025-12-08%20120351.png",
+    "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Screenshot%202025-12-08%20120156.png",
+    "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Screenshot%202025-12-08%20120328.png",
+    "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Screenshot%202025-12-08%20121222.png",
+    "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Screenshot%202025-12-08%20121535.png",
+  ]
+  return (
+      <PostInteraction postIdentifier={POST_IDS.VARIOUS_POSTERS} postTitle="Most Important Poster">
+        <div className="w-full">
+        <p className="font-normal py-[1vh]">
+          Get posters that compliment your brand or the occasion.<br/> <br/>Visit 
+          <a 
+            href="https://www.canva.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-blue-600 underline mx-1"
+          >
+            Canva
+          </a>
+          for designs. Then visit our design store so we'll help you design and print them for you. 
+        </p>
+
+        {/* Poster Images - Sliding posters displaying multiple at once */}
+        <SlidingPosters imageUrl={posterImages} color="#fef3c71a" />
+        
+        </div>
+      </PostInteraction>
+  )
+}
+
 
 export const WhatIsMVP = () => {
   return (

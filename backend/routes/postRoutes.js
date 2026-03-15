@@ -1,6 +1,7 @@
 import express from "express";
 import { protectRoute } from "../middlewares/authMiddleware.js";
 import {
+    createPost,
     getPost,
     togglePostLike,
     createPostReview,
@@ -10,6 +11,9 @@ import {
 } from "../controllers/PostController.js";
 
 const router = express.Router();
+
+// Create a new post
+router.post("/", /*protectRoute,*/ createPost);
 
 // Get post by identifier
 router.get("/:identifier", getPost);
