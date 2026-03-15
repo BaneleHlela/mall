@@ -105,6 +105,19 @@ export const deleteService = createAsyncThunk(
   }
 );
 
+// Toggle or update service isActive status
+export const updateServiceIsActive = createAsyncThunk(
+  'services/updateIsActive',
+  async ({ serviceId, isActive }: { serviceId: string; isActive: boolean }, thunkAPI) => {
+    try {
+      const res = await axios.patch(`${API_BASE}/isActive/${serviceId}`, { isActive });
+      return res.data as Service;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to update service status');
+    }
+  }
+);
+
 // 🧩 Slice
 const servicesSlice = createSlice({
   name: 'services',
@@ -173,6 +186,27 @@ const servicesSlice = createSlice({
         state.selectedService = action.payload;
       })
       .addCase(fetchServiceBySlug.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+
+      // Update isActive status
+      .addCase(updateServiceIsActive.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateServiceIsActive.fulfilled, (state, action: PayloadAction<Service>) => {
+        state.isLoading = false;
+        const index = state.services.findIndex(s => s._id === action.payload._id);
+        if (index !== -1) {
+          state.services[index] = action.payload;
+        }
+        // If the currently selected service is this one, update it too
+        if (state.selectedService?._id === action.payload._id) {
+          state.selectedService = action.payload;
+        }
+      })
+      .addCase(updateServiceIsActive.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

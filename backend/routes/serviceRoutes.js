@@ -6,6 +6,7 @@ import {
     deleteService,
     getServiceById,
     getServiceBySlug,
+    updateIsActive,
   } from '../controllers/ServiceContoller.js';
 import { uploadServiceImages } from '../middlewares/uploadMiddleware.js';
 
@@ -17,5 +18,6 @@ router.get('/store/:storeId', getStoreServices);
 router.delete('/:id', deleteService);
 router.get('/:id', getServiceById);
 router.get('/slug/:slug', getServiceBySlug);
+router.patch('/isActive/:serviceId', updateIsActive);
 
 export default router;

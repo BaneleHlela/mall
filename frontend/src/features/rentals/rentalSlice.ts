@@ -122,6 +122,19 @@ export const deleteRental = createAsyncThunk(
   }
 );
 
+// Toggle or update rental isActive status
+export const updateRentalIsActive = createAsyncThunk(
+  'rentals/updateIsActive',
+  async ({ rentalId, isActive }: { rentalId: string; isActive: boolean }, { rejectWithValue }) => {
+    try {
+      const res = await axios.patch(`${API_URL}/api/rentals/isActive/${rentalId}`, { isActive });
+      return res.data as Rental;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || 'Failed to update rental status');
+    }
+  }
+);
+
 const rentalsSlice = createSlice({
   name: "rentals",
   initialState,
@@ -228,6 +241,26 @@ const rentalsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteRental.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // Update isActive status
+      .addCase(updateRentalIsActive.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateRentalIsActive.fulfilled, (state, action: PayloadAction<Rental>) => {
+        state.loading = false;
+        const index = state.rentals.findIndex(r => r._id === action.payload._id);
+        if (index !== -1) {
+          state.rentals[index] = action.payload;
+        }
+        if (state.currentRental && state.currentRental._id === action.payload._id) {
+          state.currentRental = action.payload;
+        }
+        state.error = null;
+      })
+      .addCase(updateRentalIsActive.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

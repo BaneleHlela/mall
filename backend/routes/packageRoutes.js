@@ -13,6 +13,7 @@ import {
     updateUserPackageSessions,
     likePackage,
     unlikePackage,
+    updateIsActive,
 } from "../controllers/PackageController.js";
 import { protectRoute } from "../middlewares/authMiddleware.js";
 
@@ -30,5 +31,6 @@ router.post("/:packageId/like", protectRoute, likePackage);
 router.delete("/:packageId/like", protectRoute, unlikePackage);
 router.get("/user/packages", protectRoute, getUserPackages);
 router.patch("/user/package/:userPackageId/sessions", protectRoute, updateUserPackageSessions);
+router.patch('/isActive/:packageId', updateIsActive);
 
 export default router;

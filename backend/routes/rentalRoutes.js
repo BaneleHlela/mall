@@ -6,6 +6,7 @@ import {
     deleteRental,
     getRentalById,
     getRentalBySlug,
+    updateIsActive,
   } from '../controllers/RentalController.js';
 import { uploadRentalImages } from '../middlewares/uploadMiddleware.js';
 
@@ -17,5 +18,6 @@ router.get('/store/:storeId', getStoreRentals);
 router.delete('/:id', deleteRental);
 router.get('/:id', getRentalById);
 router.get('/slug/:slug', getRentalBySlug);
+router.patch('/isActive/:rentalId', updateIsActive);
 
 export default router;

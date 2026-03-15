@@ -4,7 +4,7 @@ import DashboardFilterByStatus from '../../../components/store_dashboard/extras/
 import DashboardPagination from '../../../components/store_dashboard/tables/DashboardPagination';
 import DashboardStoreItemsTable from '../../../components/store_dashboard/tables/DashboardStoreItemsTable';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { deleteRental, updateRental } from '../../../features/rentals/rentalSlice';
+import { deleteRental, updateRentalIsActive } from '../../../features/rentals/rentalSlice';
 import type { Rental } from '../../../types/rentalTypes';
 import type { Service } from '../../../types/serviceTypes';
 import type { Product } from '../../../types/productTypes';
@@ -87,13 +87,11 @@ const DashboardStoreRentals = () => {
       cancelButtonText: "No",
       preConfirm: async () => {
         try {
-          const formData = new FormData();
-          formData.append('isActive', newStatus.toString());
           const resultAction = await dispatch(
-            updateRental({ id: rental._id as string, formData })
+            updateRentalIsActive({ rentalId: rental._id as string, isActive: newStatus })
           );
 
-          if (updateRental.fulfilled.match(resultAction)) {
+          if (updateRentalIsActive.fulfilled.match(resultAction)) {
             return true;
           } else {
             const payload = resultAction.payload;

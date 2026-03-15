@@ -59,6 +59,19 @@ export const deletePackage = createAsyncThunk(
     }
 );
 
+// Toggle or update package isActive status
+export const updatePackageIsActive = createAsyncThunk(
+    'packages/updateIsActive',
+    async ({ packageId, isActive }: { packageId: string; isActive: boolean }, thunkAPI) => {
+        try {
+            const res = await axios.patch(`${API_BASE}/isActive/${packageId}`, { isActive });
+            return res.data as Package;
+        } catch (err: any) {
+            return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to update package status');
+        }
+    }
+);
+
 // Thunks for Users (Purchase/Fetch packages)
 
 export const purchasePackage = createAsyncThunk(
@@ -204,6 +217,26 @@ const packagesSlice = createSlice({
                 state.storePackages = action.payload;
             })
             .addCase(fetchStorePackages.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload as string;
+            })
+            // Update isActive status
+            .addCase(updatePackageIsActive.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(updatePackageIsActive.fulfilled, (state, action: PayloadAction<Package>) => {
+                state.isLoading = false;
+                const index = state.packages.findIndex(p => p._id === action.payload._id);
+                if (index !== -1) {
+                    state.packages[index] = action.payload;
+                }
+                const storeIndex = state.storePackages.findIndex(p => p._id === action.payload._id);
+                if (storeIndex !== -1) {
+                    state.storePackages[storeIndex] = action.payload;
+                }
+            })
+            .addCase(updatePackageIsActive.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload as string;
             });

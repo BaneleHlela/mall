@@ -1,4 +1,7 @@
+import { QrCode } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import QRCodePosterExample from "./the_mall/basic_store_post/QRCodePosterExample";
+import QRCodeGenerator from "./the_mall/posters/QRCodeGenerator";
 
 const Scribbler: React.FC = () => {
   const mainRef = useRef<HTMLElement | null>(null);
@@ -22,16 +25,10 @@ const Scribbler: React.FC = () => {
 
   console.log(window.scrollY);
   return (
-    <>
-      <header>{scrollText}</header>
-
-      <main
-        ref={mainRef}
-        style={{ height: "200vh", overflow: "auto" }}
-      >
-        Content
-      </main>
-    </>
+    <div className="h-screen flex items-center justify-center">
+      <QRCodeGenerator storeSlug="emagwinyeni" />
+    </div>
+    
   );
 };
 

@@ -362,3 +362,27 @@ export const unlikePackage = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'Package unliked successfully', favouritePackages: user.favourites.packages });
 });
 
+export const updateIsActive = asyncHandler(async (req, res) => {
+  const { packageId } = req.params;
+  const { isActive } = req.body;
+
+  // Validate input
+  if (typeof isActive !== 'boolean') {
+    res.status(400);
+    throw new Error('isActive must be a boolean value.');
+  }
+
+  // Find package
+  const pkg = await Package.findById(packageId);
+  if (!pkg) {
+    res.status(404);
+    throw new Error('Package not found.');
+  }
+
+  // Update and save
+  pkg.isActive = isActive;
+  const updatedPackage = await pkg.save();
+
+  res.status(200).json(updatedPackage);
+});
+

@@ -21,6 +21,7 @@ import SupplyChain from '../../components/the_mall/home/posts/SupplyChain';
 import { MdAdd } from 'react-icons/md';
 import { IoStorefrontOutline } from 'react-icons/io5';
 import toast from 'react-hot-toast';
+import { POST_IDS } from '../../components/the_mall/home/posts/SimplePosts';
 
 
 const HomePage = () => {
@@ -156,7 +157,7 @@ const HomePage = () => {
 
 
   return (
-    <div className="relative  w-full h-full overflow-y-scroll hide-scrollbar bg-gray-100 flex flex-col items-center">
+    <div className="relative w-full h-full lg:h-screen overflow-y-scroll hide-scrollbar bg-gray-100 flex flex-col items-center">
       {/* Menubar */}
       <TheMallTopbar />
       <div className="w-[100vw] h-[14vh] min-h-[14vh] lg:min-h-[10vh] lg:h-[10vh]"></div>
@@ -509,7 +510,16 @@ const HomePage = () => {
         </button>
       )}
       {/* Background Image (FOR DESKTOP) */}
-      <div className="absolute inset-0 hidden lg:flex flex-col w-full h-full min-h-screen">
+      <div className="absolute inset-0 lg:flex flex-col w-full h-full min-h-screen">
+        {/* Background Image mapped to the length of POST_IDS */}
+        {/* {POST_IDS && Object.keys(POST_IDS).map((key, index) => (
+          <img 
+            key={key}
+            src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/photo-collage.png%20(2).png" 
+            alt={`home-bg-image-${index}`}
+            className="h-screen w-full object-cover opacity-25 pointer-events-none select-none"
+          />
+        ))} */}
         <img 
           src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/photo-collage.png%20(2).png" 
           alt="home-bg-image" 
@@ -518,17 +528,17 @@ const HomePage = () => {
         <img 
           src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/photo-collage.png%20(2).png" 
           alt="home-bg-image" 
-          className="h-screen w-full object-cover opacity-25 pointer-events-none select-none" 
+          className="lg:hidden h-screen w-full object-cover opacity-25 pointer-events-none select-none" 
         />
         <img 
           src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/photo-collage.png%20(2).png" 
           alt="home-bg-image" 
-          className="h-screen w-full object-cover opacity-25 pointer-events-none select-none" 
+          className="lg:hidden h-screen w-full object-cover opacity-25 pointer-events-none select-none" 
         />
         <img 
           src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/photo-collage.png%20(2).png" 
           alt="home-bg-image" 
-          className="h-screen w-full object-cover opacity-25 pointer-events-none select-none" 
+          className="lg:hidden h-screen w-full object-cover opacity-25 pointer-events-none select-none" 
         />
       </div>
     </div>

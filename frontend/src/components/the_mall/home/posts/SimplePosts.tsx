@@ -9,7 +9,7 @@ import { FontFamily } from "@tiptap/extension-text-style";
 const fonts = ["Alfa Slab One"]
 
 // Post identifiers for database linking
-const POST_IDS = {
+export const POST_IDS = {
     WELCOME: "welcome-to-mall",
     WHAT_IS_ECOMMERCE: "what-is-ecommerce",
     WHAT_IS_MVP: "what-is-mvp",

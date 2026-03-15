@@ -319,3 +319,27 @@ export const deleteService = async (req, res) => {
   }
 };
 
+export const updateIsActive = asyncHandler(async (req, res) => {
+  const { serviceId } = req.params;
+  const { isActive } = req.body;
+
+  // Validate input
+  if (typeof isActive !== 'boolean') {
+    res.status(400);
+    throw new Error('isActive must be a boolean value.');
+  }
+
+  // Find service
+  const service = await Service.findById(serviceId);
+  if (!service) {
+    res.status(404);
+    throw new Error('Service not found.');
+  }
+
+  // Update and save
+  service.isActive = isActive;
+  const updatedService = await service.save();
+
+  res.status(200).json(updatedService);
+});
+

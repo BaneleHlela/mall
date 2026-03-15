@@ -2,7 +2,7 @@ import React from 'react'
 
 const QRCodePosterExample = () => {
   return (
-    <div className='w-[20%] text-center border-10'>
+    <div className='h-[50vh]w-[20%] text-center border-10'>
         <img 
             src="https://storage.googleapis.com/the-mall-uploads-giza/stores/690b86f9423e034c4fec9d69/images/qrcode2.png" 
             alt="" 

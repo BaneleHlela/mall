@@ -376,9 +376,6 @@ export const updateIsActive = asyncHandler(async (req, res) => {
   product.isActive = isActive;
   const updatedProduct = await product.save();
 
-  res.status(200).json({
-    message: 'Product status updated successfully.',
-    product: updatedProduct,
-  });
+  res.status(200).json(updatedProduct);
 });
 

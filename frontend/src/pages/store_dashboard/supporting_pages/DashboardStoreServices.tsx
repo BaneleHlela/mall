@@ -5,7 +5,7 @@ import DashboardPagination from '../../../components/store_dashboard/tables/Dash
 import DashboardStoreItemsTable from '../../../components/store_dashboard/tables/DashboardStoreItemsTable';
 import AddServiceModal from '../../../components/store_dashboard/modals/AddServiceModal';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { deleteService, updateService, clearError } from '../../../features/services/servicesSlice';
+import { deleteService, updateServiceIsActive, clearError } from '../../../features/services/servicesSlice';
 import type { Service } from '../../../types/serviceTypes';
 import type { Product } from '../../../types/productTypes';
 import type { Package } from '../../../types/packageTypes';
@@ -87,10 +87,10 @@ const DashBoardStoreServices = () => {
       preConfirm: async () => {
         try {
           const resultAction = await dispatch(
-            updateService({ id: service._id as string, data: { isActive: newStatus } })
+            updateServiceIsActive({ serviceId: service._id as string, isActive: newStatus })
           );
 
-          if (updateService.fulfilled.match(resultAction)) {
+          if (updateServiceIsActive.fulfilled.match(resultAction)) {
             return true;
           } else {
             const payload = resultAction.payload;

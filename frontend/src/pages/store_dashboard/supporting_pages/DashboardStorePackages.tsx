@@ -4,7 +4,7 @@ import DashboardPagination from '../../../components/store_dashboard/tables/Dash
 import DashboardStoreItemsTable from '../../../components/store_dashboard/tables/DashboardStoreItemsTable';
 import AddPackageModal from '../../../components/store_dashboard/modals/AddPackageModal';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { deletePackage, updatePackage } from '../../../features/packages/packagesSlice';
+import { deletePackage, updatePackageIsActive } from '../../../features/packages/packagesSlice';
 import type { Package } from '../../../types/packageTypes';
 import type { Product } from '../../../types/productTypes';
 import type { Service } from '../../../types/serviceTypes';
@@ -85,10 +85,10 @@ const DashBoardStorePackages = () => {
       preConfirm: async () => {
         try {
           const resultAction = await dispatch(
-            updatePackage({ id: pkg._id, data: { isActive: newStatus } })
+            updatePackageIsActive({ packageId: pkg._id, isActive: newStatus })
           );
 
-          if (updatePackage.fulfilled.match(resultAction)) {
+          if (updatePackageIsActive.fulfilled.match(resultAction)) {
             return true;
           } else {
             const payload = resultAction.payload;

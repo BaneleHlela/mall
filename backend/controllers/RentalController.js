@@ -281,3 +281,27 @@ export const deleteRental = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+export const updateIsActive = asyncHandler(async (req, res) => {
+  const { rentalId } = req.params;
+  const { isActive } = req.body;
+
+  // Validate input
+  if (typeof isActive !== 'boolean') {
+    res.status(400);
+    throw new Error('isActive must be a boolean value.');
+  }
+
+  // Find rental
+  const rental = await Rental.findById(rentalId);
+  if (!rental) {
+    res.status(404);
+    throw new Error('Rental not found.');
+  }
+
+  // Update and save
+  rental.isActive = isActive;
+  const updatedRental = await rental.save();
+
+  res.status(200).json(updatedRental);
+});
