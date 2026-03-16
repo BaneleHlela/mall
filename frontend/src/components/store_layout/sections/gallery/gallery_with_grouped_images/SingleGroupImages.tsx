@@ -93,7 +93,7 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                 />
             </div>
 
-            <div className="w-full">
+            <div className="w-full mt-3 lg:mt-5">
                 <UnderlinedText style={textStyle} input={groupName} />
             </div>
             <div className="w-full">

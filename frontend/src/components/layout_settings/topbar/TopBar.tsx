@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { LuUndo, LuRedo2 } from "react-icons/lu";
 import { useAppSelector, useAppDispatch } from "../../../app/hooks";
 import { undo, redo } from "../../../features/layouts/layoutSettingsSlice";
+import { TbLoader3 } from "react-icons/tb";
 
 type DeviceType = 'mobile' | 'tablet' | 'desktop';
 
@@ -22,6 +23,7 @@ type TopBarProps = {
 const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick, onSave }: TopBarProps) => {
   const navigate = useNavigate();
   const { layoutId } = useParams<{ layoutId: string }>();
+  const isLoading = useAppSelector((state) => state.layout.isLoading);
   const dispatch = useAppDispatch();
   
   // Get history state for undo/redo
@@ -88,7 +90,8 @@ const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick, onSave 
             onClick={onSave}
             className="flex items-center space-x-[.8vh] px-[2vh] py-[.8vh] bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white rounded-lg shadow-md transition-all"
           >
-            <Save size={16} />
+            {isLoading ? <TbLoader3 className="animate-spin" size={16} /> : <Save size={16} />}
+            
             <span className="text-[1.8vh] font-medium">Save Layout</span>
           </motion.button>
         </div>

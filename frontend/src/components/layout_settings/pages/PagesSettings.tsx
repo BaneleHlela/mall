@@ -86,6 +86,7 @@ const SortablePageItem = ({
         dragProps={{ attributes, listeners, setNodeRef }}
         isDragging={isDragging}
         icon={page.icon}
+        deletable
       />
     </div>
   );

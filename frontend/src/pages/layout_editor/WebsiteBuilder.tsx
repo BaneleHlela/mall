@@ -14,6 +14,7 @@ import { BreadcrumbProvider } from '../../contexts/BreadcrumbContext.tsx';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoIosSettings } from 'react-icons/io';
 import { Type, Palette } from 'lucide-react';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const deviceStyles = {
@@ -83,27 +84,6 @@ const WebsiteBuilderContent: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [dispatch]);
 
-  useEffect(() => {
-    if (settings) {
-      const saveLayout = async () => {
-        try {
-          await dispatch(
-            editLayout({
-              // @ts-ignore
-              layoutId: settings._id,
-              layoutConfig: settings,
-            })
-          );
-        } catch (error) {
-          console.error('Failed to save layout:', error);
-        }
-      };
-
-      saveLayout();
-      const timeoutId = setTimeout(saveLayout, 5000);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [settings, dispatch]);
 
   useEffect(() => {
     const fetchLayoutAndStore = async () => {
@@ -132,6 +112,7 @@ const WebsiteBuilderContent: React.FC = () => {
 
   // Handle save and exit - capture screenshot and redirect to store layouts
   const handleSaveAndExit = async () => {
+    console.log("Saving layout and capturing screenshot...", { layoutId, storeId });
     if (!layoutId || isSaving) return;
     
     setIsSaving(true);
@@ -146,16 +127,34 @@ const WebsiteBuilderContent: React.FC = () => {
       }
       
       // Capture the screenshot
-      await dispatch(captureLayoutScreenshot(layoutId));
+      //await dispatch(captureLayoutScreenshot(layoutId));
+      
+      // Show success message
+      toast.success('Layout saved successfully!', {
+        style: {
+          background: '#10b981',
+          color: '#fff',
+        },
+      });
+
+      console.log("Layout saved and screenshot captured successfully");
       
       // Navigate to store layouts dashboard
-      if (storeId) {
-        navigate(`/dashboard/${storeId}/layouts`);
-      } else {
-        navigate(-1);
-      }
+      // setTimeout(() => {
+      //   if (storeId) {
+      //     navigate(`/dashboard/${storeId}/layouts`);
+      //   } else {
+      //     navigate(-1);
+      //   }
+      // }, 1000);
     } catch (error) {
       console.error('Failed to save layout:', error);
+      toast.error('Failed to save layout. Please try again.', {
+        style: {
+          background: '#ef4444',
+          color: '#fff',
+        },
+      });
       // Still try to navigate back even if there was an error
       if (storeId) {
         navigate(`/dashboard/${storeId}/layouts`);
@@ -192,10 +191,20 @@ const WebsiteBuilderContent: React.FC = () => {
     );
   }
 
-  console.log(zoom);
   // Main builder layout
   return (
     <div className="h-screen w-screen overflow-hidden bg-gradient-to-br from-stone-100 via-stone-50 to-stone-100 font-[Outfit]">
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 3000,
+          style: {
+            borderRadius: '8px',
+            padding: '12px',
+          },
+        }}
+      />
       <TopBar 
         setDevice={setDevice} 
         zoom={zoom} 

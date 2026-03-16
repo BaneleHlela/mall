@@ -33,9 +33,9 @@ const FramedPoster: React.FC<FramedPosterProps> = ({
             alt="Poster Frame"
             className='absolute inset-0 w-full h-full object-cover pointer-events-none opacity-5'
         />
-        <p className="scale-80 text-gray-800">FLYER</p>
+        <p className="scale-80 text-gray-800">BROCHURE</p>
     </div>
   )
 }
 
-export default FramedPoster
+export default FramedPoster;

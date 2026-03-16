@@ -30,6 +30,7 @@ const StoreImages: React.FC<StoreImagesProps> = ({onImageSelect}) => {
 
 
   const handleDeleteImage = (imageUrl: string) => {
+    //use my sweet alert first for confirmations
     if (currentStore?._id) {
       dispatch(deleteStoreGalleryImage({ storeSlug: currentStore.slug, imageUrl }))
         .unwrap()

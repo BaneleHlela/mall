@@ -17,7 +17,7 @@ const GalleryItem = ({
     console.log(textStyles)
     return (
         <div
-        style={{ ...styles, height }}
+        style={{ ...styles, height, minHeight: "fit-content" }}
         className="relative overflow-hidden flex flex-col cursor-pointer hover:opacity-80"
         onClick={() => onClick(img)}
         >
@@ -46,13 +46,14 @@ const GalleryItem = ({
 
         {/* 📝 Text */}
         {hasText && (
-            <div className="w-full text-center p-2 shrink-0">
+            <div className="flex justify-around w-full text-center p-2 pt-5 shrink-0">
             {img.title && (
                 <p 
                     style={{
                         ...getTextStyles(textStyles.title, fonts, colors),
+                        marginTop: "5px",
                     }}
-                className="text-sm font-semibold">{img.title}</p>
+                className="text-sm font-semibold px-5">{img.title}</p>
             )}
             {img.description && (
                 <p 

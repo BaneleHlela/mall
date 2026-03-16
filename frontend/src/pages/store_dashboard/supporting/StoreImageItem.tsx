@@ -45,7 +45,7 @@ const StoreImageItem: React.FC<StoreImageItemProps> = ({ img, onDelete, onUse })
             </button>
           )}
           
-          {link.includes("images") && (
+          {true && (
             <button 
               onClick={() => onDelete(img._id)}
               disabled={isLoading}
