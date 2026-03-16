@@ -25,7 +25,7 @@ const StoreFloatingButton = ({
         }}
         className=''
       >
-        {config.show === "chat" && (
+        {config.show === "chat" || config.show === "whatsapp" && (
           <IoMdChatboxes size={config.style?.icon?.size} color={colors[config.style?.icon?.color as keyof typeof colors]} />
         )}
         {config.show === "home" && (

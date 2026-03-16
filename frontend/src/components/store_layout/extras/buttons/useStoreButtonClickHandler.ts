@@ -117,7 +117,8 @@ export const useStoreButtonClickHandler = () => {
           cleanNumber = '27' + cleanNumber;
         }
 
-        window.location.href = `https://wa.me/${cleanNumber}`;
+        const url =  `https://wa.me/${cleanNumber}`;
+        window.open(url, '_blank');
         break;
 
 

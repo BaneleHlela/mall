@@ -45,8 +45,8 @@ export const createLayout = createAsyncThunk('layouts/createLayout', async (layo
 export const editLayout = createAsyncThunk(
     'layouts/editLayout',
     async ({ layoutId, layoutConfig }: { layoutId: string; layoutConfig: Layout }) => {
-        const response = await axios.put(`${API_URL}/api/layouts/${layoutId}`, layoutConfig);
-        return response.data;
+      const response = await axios.put(`${API_URL}/api/layouts/${layoutId}`, layoutConfig);
+      return response.data;
     }
 );
 

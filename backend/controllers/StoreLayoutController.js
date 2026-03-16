@@ -361,9 +361,9 @@ export const updateLayoutConfig = expressAsyncHandler(async (req, res) => {
   }
 
   // Example: update layout settings
-  if (body.settings) {
-    Object.assign(layout.settings, body.settings);
-  }
+  // if (body.settings) {
+  //   Object.assign(layout.settings, body.settings);
+  // }
 
   // Save
   const updatedLayout = await StoreLayout.findByIdAndUpdate(

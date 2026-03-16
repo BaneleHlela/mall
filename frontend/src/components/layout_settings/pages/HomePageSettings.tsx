@@ -56,17 +56,11 @@ const SortableItem = ({
   onRename: (section: string, newName: string) => void;
   isInMenubar: boolean;
 }) => {
-  const [draggable, setDraggable] = useState(false);
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-  };
-
-  const handleDoubleClick = () => {
-    setDraggable(true);
-    setTimeout(() => setDraggable(false), 2000);
   };
 
   const handleRename = (newName: string) => {
@@ -77,9 +71,7 @@ const SortableItem = ({
     <div
       ref={setNodeRef}
       style={style}
-      onDoubleClick={handleDoubleClick}
-      {...(draggable ? attributes : {})}
-      {...(draggable ? listeners : {})}
+      className={isDragging ? 'z-50' : ''}
     >
       <SettingsContainer
         name={name}
@@ -90,6 +82,9 @@ const SortableItem = ({
         replaceble={true}
         deletable
         renamable={isInMenubar}
+        isDraggable
+        dragProps={{ attributes, listeners, setNodeRef }}
+        isDragging={isDragging}
       />
     </div>
   );

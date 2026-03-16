@@ -62,10 +62,10 @@ const PopularGallerySection = () => {
         <div id="gallery" style={getBackgroundStyles(settings.background)}>
         {(settings.text.heading.input || settings.text.subheading.input) && (
             <div className="w-full">
-            <UnderlinedText style={settings.text.heading} />
-            {settings.text.subheading.input && (
-                <UnderlinedText style={settings.text.subheading} />
-            )}
+                <UnderlinedText style={settings.text.heading} />
+                {settings.text.subheading.input && (
+                    <UnderlinedText style={settings.text.subheading} />
+                )}
             </div>
         )}
 

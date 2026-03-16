@@ -1,11 +1,25 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { updateSetting } from "../../../features/layouts/layoutSettingsSlice";
 import type { Routes, Route } from "../../../types/layoutTypes";
-import FirstOrderSubSettingsContainer from "../FirstOrderSubSettingsContainer";
+import SettingsContainer from "../SettingsContainer";
 import SlidingPanel from "../supporting/SlidingPanel";
 import { AnimatePresence } from "framer-motion";
 import { useBreadcrumbs } from "../../../contexts/BreadcrumbContext";
+import { 
+  DndContext, 
+  closestCenter, 
+  PointerSensor, 
+  useSensor, 
+  useSensors 
+} from "@dnd-kit/core";
+import { 
+  arrayMove, 
+  SortableContext, 
+  useSortable, 
+  verticalListSortingStrategy 
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import HomePageSettings from "./HomePageSettings";
 import AboutPageSettings from "./AboutPageSettings";
 import ContactPageSettings from "./ContactPageSettings";
@@ -46,11 +60,45 @@ interface PageItem {
   requiresMenubarVariation?: string[]; // Show if menubar variation matches any of these
 }
 
+// Sortable wrapper for page items
+const SortablePageItem = ({
+  page,
+  onClick,
+  panelId,
+}: {
+  page: PageItem;
+  onClick: () => void;
+  panelId: string;
+}) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: page.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} className={isDragging ? 'z-50' : ''}>
+      <SettingsContainer
+        name={page.name}
+        onClick={onClick}
+        isDraggable
+        dragProps={{ attributes, listeners, setNodeRef }}
+        isDragging={isDragging}
+        icon={page.icon}
+      />
+    </div>
+  );
+};
+
 const PagesSettings = () => {
   const settings = useAppSelector((state) => state.layoutSettings);
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const { addBreadcrumb } = useBreadcrumbs();
   const dispatch = useAppDispatch();
+  
+  // Local state for page order (for drag-and-drop)
+  const [pageOrder, setPageOrder] = useState<string[]>([]);
 
   const closePanel = () => setActivePanel(null);
 
@@ -147,17 +195,52 @@ const PagesSettings = () => {
     });
   }, [settings?.routes, settings?.menubar?.variation]);
 
+  // Initialize page order when filtered pages change for the first time
+  useEffect(() => {
+    if (pageOrder.length === 0 && filteredPageSettings.length > 0) {
+      setPageOrder(filteredPageSettings.map(p => p.id));
+    }
+  }, [filteredPageSettings, pageOrder.length]);
+
+  // Sort pages based on page order
+  const sortedPages = useMemo(() => {
+    if (pageOrder.length === 0) return filteredPageSettings;
+    return [...filteredPageSettings].sort((a, b) => {
+      const indexA = pageOrder.indexOf(a.id);
+      const indexB = pageOrder.indexOf(b.id);
+      if (indexA === -1 && indexB === -1) return 0;
+      if (indexA === -1) return 1;
+      if (indexB === -1) return -1;
+      return indexA - indexB;
+    });
+  }, [filteredPageSettings, pageOrder]);
+
+  const sensors = useSensors(useSensor(PointerSensor));
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const oldIndex = sortedPages.findIndex(p => p.id === active.id);
+      const newIndex = sortedPages.findIndex(p => p.id === over.id);
+      const newOrder = arrayMove(pageOrder, oldIndex, newIndex);
+      setPageOrder(newOrder);
+    }
+  };
+
   return (
     <div className="p-1 space-y-2">
-      {filteredPageSettings.map((page) => (
-        <FirstOrderSubSettingsContainer
-          key={page.id}
-          name={page.name}
-          onClick={() => handlePanelOpen(page.id, page.name)}
-          panelId={page.id}
-          icon={page.icon}
-        />
-      ))}
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={sortedPages.map(p => p.id)} strategy={verticalListSortingStrategy}>
+          {sortedPages.map((page) => (
+            <SortablePageItem
+              key={page.id}
+              page={page}
+              onClick={() => handlePanelOpen(page.id, page.name)}
+              panelId={page.id}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
 
       <AnimatePresence>
         {filteredPageSettings.map((page) => (

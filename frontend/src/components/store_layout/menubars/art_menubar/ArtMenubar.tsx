@@ -191,7 +191,7 @@ const ArtMenubar = () => {
                 <StoreLayoutButton 
                     onClick={() =>
                         handleButtonClick({
-                            type: 'buy',
+                            type: layout.menubar.topbar.desktop.button.function || "none",
                             routes: layout.routes, //@ts-ignore-next-line
                             contactNumber: store?.contact.phone,
                             contactEmail: store?.contact.email,

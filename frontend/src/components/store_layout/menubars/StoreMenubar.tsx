@@ -4,6 +4,7 @@ import CakeMenubar from './cake_menubar/CakeMenubar';
 import MenubarWithSearchbar from './menubar_with_searchbar/MenubarWithSearchbar';
 import RestuarantMenubar from './restuarant_menubar/RestuarantMenubar';
 import { useScrollVisibility } from '../hooks/useScrollVisibility';
+import DesignMenubar from './design_menubar/DesignMenubar';
 
 const StoreMenubar = () => {
   const variation = useAppSelector((state) => state.layoutSettings.menubar.variation);
@@ -25,6 +26,10 @@ const StoreMenubar = () => {
 
     if (variation === "cakeMenubar") {
       return <CakeMenubar />
+    }
+
+    if (variation === "designMenubar") {
+      return <DesignMenubar />
     }
 
     return <></>

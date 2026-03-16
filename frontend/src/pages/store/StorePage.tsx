@@ -340,6 +340,28 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
                     if (settings.floats.floatingButton?.show === "chat") {
                       setIsChatOpen(true);
                     }
+                    if (settings.floats.floatingButton?.show === "home") {
+                      // scroll up to top smoothly
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
+                    if (settings.floats.floatingButton?.show === "whatsapp") {
+                      const whatsappSocial = store?.socials?.find(
+                        (social) => social.platform === "whatsapp"
+                      )?.url;
+
+                      let whatsappNumber =
+                        whatsappSocial && whatsappSocial !== "wa.me"
+                          ? whatsappSocial
+                          : store?.contact?.phone;
+                      if (whatsappNumber) {
+                        // add +27 (region if not already included)
+                        if (!whatsappNumber.startsWith("+27")) {
+                          whatsappNumber = "+27" + whatsappNumber;
+                        }
+                        const url = `https://wa.me/${whatsappNumber}`;
+                        window.open(url, "_blank");
+                      }
+                    }
                   }}
                 />
               </div>

@@ -86,7 +86,7 @@ const MenubarSettings = () => {
           {variation === "popular" && <PopularStoreMenubarSettings />}
           {variation === "menubarWithSearchbar" && <MenubarWithSearchbarSettings />}
           {variation === "restuarantMenubar" && <RestuarantMenubarSettings />}
-          {variation === "artMenubar" && <ArtMenubarSettings />}
+          {variation === "artMenubar" || variation === "designMenubar" && <ArtMenubarSettings />}
           {variation === "cakeMenubar" && <CakeMenubarSettings />}
         </div>
 

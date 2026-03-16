@@ -29,7 +29,7 @@ const StoreFloatingButtonSettings = () => {
             <div className="px-[.6vh]">
                 <OptionsToggler
                     label="show"
-                    options={["chat", "scroll-up", "home", "none"]}
+                    options={["chat", "scroll-up", "whatsapp", "home", "none"]}
                     value={getSetting("show", settings, objectPath)}
                     onChange={(newValue) =>
                         handleSettingChange(`${objectPath}.show`, newValue)

@@ -13,7 +13,8 @@ interface StoreMenubarLogoProps {
     style?: {
         text: TextSettings,
         background: BackgroundSettings
-    }
+    },
+    alignment?: 'left' | 'center' | 'right';
 }
 
 const StoreMenubarLogo: React.FC<StoreMenubarLogoProps> = ({
@@ -23,6 +24,7 @@ const StoreMenubarLogo: React.FC<StoreMenubarLogoProps> = ({
     logoText = 'Store Logo',
     position,
     style,
+    alignment
 }) => {
     const store = useAppSelector((state) => state.stores.currentStore);
     const menubarVariation = useAppSelector((state) => state.layoutSettings.menubar.variation)
@@ -44,7 +46,7 @@ const StoreMenubarLogo: React.FC<StoreMenubarLogoProps> = ({
 
     return (
         <Link  to={linkTo} className={`flex items-center lg:justify-start h-fit w-fit max-w-fit pl-1 mb-1 pr-1 p-0
-            ${justifyContent}
+            ${justifyContent} ${alignment === 'left' && 'justify-start'} ${alignment === 'center' && 'justify-center'} ${alignment === 'right' && 'justify-end'}
         `}>
             {use === 'logo' && hasLogoImages ? (
                 <img
