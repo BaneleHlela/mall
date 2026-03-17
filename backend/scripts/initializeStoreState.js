@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import Store from '../models/StoreModel.js';
 
 // Load environment variables
-dotenv.config({ path: '../.env' });
+dotenv.config({ });
 
 async function initializeStoreState() {
   console.log('Starting storeState initialization...');
@@ -19,8 +19,7 @@ async function initializeStoreState() {
     const result = await Store.updateMany(
       { 
         $or: [
-          { storeState: { $exists: false } },
-          { storeState: 'draft' }
+          { storeState: { $exists: true } },
         ]
       },
       [
@@ -28,7 +27,7 @@ async function initializeStoreState() {
           $set: {
             storeState: {
               $cond: {
-                if: { $eq: ['$isDemo', true] },
+                if: { $eq: ['$isDemo', 'true'] },
                 then: 'demo',
                 else: 'idle'
               }

@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import DeviceSelector from "./DeviceSelector";
 import ZoomControls from "./ZoomControls";
 import { IoIosArrowRoundBack, IoIosArrowRoundForward, IoIosSettings, IoIosEye } from "react-icons/io";
@@ -8,6 +8,8 @@ import { LuUndo, LuRedo2 } from "react-icons/lu";
 import { useAppSelector, useAppDispatch } from "../../../app/hooks";
 import { undo, redo } from "../../../features/layouts/layoutSettingsSlice";
 import { TbLoader3 } from "react-icons/tb";
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
 
 type DeviceType = 'mobile' | 'tablet' | 'desktop';
 
@@ -25,6 +27,8 @@ const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick, onSave 
   const { layoutId } = useParams<{ layoutId: string }>();
   const isLoading = useAppSelector((state) => state.layout.isLoading);
   const dispatch = useAppDispatch();
+  const [searchParams] = useSearchParams();
+  const isNew = searchParams.get('new') === 'true';
   
   // Get history state for undo/redo
   const layoutSettings = useAppSelector((state: any) => state.layoutSettings);
@@ -32,6 +36,23 @@ const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick, onSave 
   const historyLength = layoutSettings._history?.length ?? 0;
   const canUndo = historyIndex > 0;
   const canRedo = historyIndex < historyLength - 1;
+
+  const mysweetalert = withReactContent(Swal);
+
+  const handleExit = async () => {
+    const result = await mysweetalert.fire({
+      title: 'Exit Layout Editor?',
+      text: 'Any unsaved changes will not be applied.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Exit',
+      cancelButtonText: 'Cancel',
+    });
+
+    if (result.isConfirmed) {
+      navigate(`/dashboard/${layoutSettings.store.slug}/layouts`);
+    }
+  };
 
   
   return (
@@ -44,7 +65,7 @@ const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick, onSave 
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate(`/dashboard/${layoutSettings.store.slug}`)}
+            onClick={handleExit}
             className="flex items-center space-x-[.8vh] px-[1.6vh] py-[.8vh] bg-red-500 text-white rounded-lg"
           >
             <IoIosArrowRoundBack className="text-[2.2vh]" />
@@ -92,7 +113,7 @@ const TopBar = ({ setDevice, zoom, setZoom, showDeviceSelector, onClick, onSave 
           >
             {isLoading ? <TbLoader3 className="animate-spin" size={16} /> : <Save size={16} />}
             
-            <span className="text-[1.8vh] font-medium">Save Layout</span>
+            <span className="text-[1.8vh] font-medium">{isNew ? 'Create' : 'Save'} Layout</span>
           </motion.button>
         </div>
 

@@ -128,7 +128,8 @@ const StlyishHero: React.FC<StlyishHeroProps> = ({
                           objectPath={`${objectPath}.box.text.title`}
                           settings={settings}
                           handleSettingChange={handleSettingChange}
-                          allow={["input", "color", "weight", "fontFamily", "fontSize", "lineHeight", "letterSpacing", "textDecoration"]}
+                          allow={["input", "color", "weight", "fontFamily", "fontSize", "lineHeight", "textAlign", 
+                            "position", "letterSpacing", "textDecoration"]}
                           responsiveSize
                           responsivePadding
                           useTextarea

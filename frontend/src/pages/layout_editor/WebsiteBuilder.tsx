@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { IoPower } from 'react-icons/io5';
 import { useAppSelector, useAppDispatch } from '../../app/hooks.ts';
 import LayoutSettings from '../../components/layout_settings/LayoutSettings.tsx';
 import TopBar from '../../components/layout_settings/topbar/TopBar.tsx';
 import { fetchStoreBySlug, setCurrentStore } from '../../features/stores/storeSlice';
+import { editStore } from '../../features/store_admin/storeAdminSlice.ts';
 import { TbLoader3 } from "react-icons/tb";
 import { setStore } from '../../features/store_admin/storeAdminSlice.ts';
 import { editLayout, getLayout, captureLayoutScreenshot } from '../../features/layouts/layoutSlice.ts';
@@ -47,9 +48,12 @@ const deviceStyles = {
   },
 };
 
-const WebsiteBuilderContent: React.FC = () => {
+const WebsiteBuilderContent: React.FC<{ isNewLayout?: boolean }> = ({ isNewLayout = false }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isNew = searchParams.get('new') === 'true';
+  const [showNewLayoutOverlay, setShowNewLayoutOverlay] = useState(isNew || isNewLayout);
   const [sizeMap, setSizeMap] = useState(getDynamicSizeMap());
   const [device, setDevice] = useState<'mobile' | 'tablet' | 'desktop'>('mobile');
   const [zoom, setZoom] = useState(sizeMap[device].scale);
@@ -112,11 +116,9 @@ const WebsiteBuilderContent: React.FC = () => {
 
   // Handle save and exit - capture screenshot and redirect to store layouts
   const handleSaveAndExit = async () => {
-    console.log("Saving layout and capturing screenshot...", { layoutId, storeId });
     if (!layoutId || isSaving) return;
     
     setIsSaving(true);
-    
     try {
       // First save any pending layout changes
       if (settings) {
@@ -127,7 +129,27 @@ const WebsiteBuilderContent: React.FC = () => {
       }
       
       // Capture the screenshot
-      //await dispatch(captureLayoutScreenshot(layoutId));
+      if (isNew) {
+        await dispatch(captureLayoutScreenshot(layoutId));
+      }
+      
+      // if is new and store has no website (layouts, custom layout or external link), set as active layout
+      if (isNew && store && !store.website?.layoutId && !store.website?.websiteUrl) {
+        try {
+          await dispatch(editStore({
+            storeSlug: store.slug,
+            updatedStore: {
+              website: {
+                source: 'internal',
+                layoutId: layoutId
+              }
+            } as any
+          })).unwrap();
+          console.log('Layout set as active successfully');
+        } catch (error) {
+          console.error('Failed to set active layout:', error);
+        }
+      }
       
       // Show success message
       toast.success('Layout saved successfully!', {
@@ -205,6 +227,45 @@ const WebsiteBuilderContent: React.FC = () => {
           },
         }}
       />
+      
+      {/* New Layout Success Overlay */}
+      <AnimatePresence>
+        {showNewLayoutOverlay && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowNewLayoutOverlay(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: 'spring', duration: 0.5 }}
+              className="bg-white rounded-2xl p-8 max-w-md mx-4 text-center shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold text-stone-800 mb-2">New Layout Created!</h2>
+              <p className="text-stone-600 mb-6">
+                You have created a new layout for your store. Use this website builder to start editing it to your taste...
+              </p>
+              <button
+                onClick={() => setShowNewLayoutOverlay(false)}
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-3 rounded-full font-medium hover:from-indigo-500 hover:to-purple-500 transition-all transform hover:scale-105 shadow-lg"
+              >
+                Get Started
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <TopBar 
         setDevice={setDevice} 
         zoom={zoom} 
@@ -372,9 +433,9 @@ const WebsiteBuilderContent: React.FC = () => {
   );
 };
 
-const WebsiteBuilder: React.FC = () => (
+const WebsiteBuilder: React.FC<{ isNewLayout?: boolean }> = ({ isNewLayout }) => (
   <BreadcrumbProvider>
-    <WebsiteBuilderContent />
+    <WebsiteBuilderContent isNewLayout={isNewLayout} />
   </BreadcrumbProvider>
 );
 

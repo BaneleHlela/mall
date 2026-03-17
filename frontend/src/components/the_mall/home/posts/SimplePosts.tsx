@@ -67,7 +67,7 @@ export const WelcomeToTheMall = ({ fonts }: WelcomeToTheMallProps) => {
         <div className="w-full overflow-hidden">
             {/* Welcome message above the poster */}
             <p className="font-normal py-[1vh]">
-                Welcome to the Mall! We're so excited to have you. 
+                Welcome to the Mall! We're so excited to have you. Take a moment to explore the platform. This home page is your space to connect with customers, showcase your products, and grow your business. But for now it's your space to learn about the Mall itself. Scroll down to see some important posts that will help you get started and make the most of your experience here. We can't wait to see what you create!
             </p>
             
             {/* Main Poster Container */}

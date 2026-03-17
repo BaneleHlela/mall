@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useParams } from "react-router-dom";
+import { Routes, Route, useParams, useSearchParams } from "react-router-dom";
 import WebsiteBuilder from "./WebsiteBuilder";
 import type { RootState } from "../../app/store.ts";
 import WebsitePreview from "./WebsitePreview.tsx";
@@ -13,6 +13,8 @@ import CaptureLayout from "./CaptureLayout.tsx";
 
 const Layouts: React.FC = () => {
   const { layoutId } = useParams<{ layoutId: string }>();
+  const [searchParams] = useSearchParams();
+  const isNewLayout = searchParams.get('new') === 'true';
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState<boolean>(true);
   const settings = useAppSelector((state: RootState) => state.layoutSettings);
@@ -83,7 +85,7 @@ const Layouts: React.FC = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<WebsiteBuilder />} />
+      <Route path="/" element={<WebsiteBuilder isNewLayout={isNewLayout} />} />
       <Route path="/preview/*" element={<WebsitePreview storeSlug={storeSlug || ''} />} />
       <Route path="/capture/" element={<CaptureLayout />} />
     </Routes>

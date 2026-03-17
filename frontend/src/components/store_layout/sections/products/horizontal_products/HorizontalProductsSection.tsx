@@ -23,9 +23,9 @@ const HorizontalProductsSection = () => {
     const currentUrl = window.location.href;
 
     if (currentUrl.includes('layouts')) {
-      navigate(`/layouts/${store?.slug}/preview/product/${productSlug}`);
+      navigate(`/layouts/${store?.slug}/preview/product/${productSlug}#singleProduct`);
     } else if (store?.slug) {
-      navigate(`/stores/${store.slug}/product/${productSlug}`);
+      navigate(`/stores/${store.slug}/product/${productSlug}#singleProduct`);
     }
   };
 

@@ -2,16 +2,14 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import { fetchDemoLayouts, createLayoutWithSettings } from "../../../../../features/layouts/layoutSlice";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaEye, FaCheck, FaMagic } from "react-icons/fa";
+import { FaMagic } from "react-icons/fa";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import StoreLayoutCreatorCard from "./StoreLayoutCreatorCard";
 import { TbLoader3 } from "react-icons/tb";
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-import ThemeSelector from "../../../../../components/layout_settings/theme/ThemeSelector";
-import { useIsMobile } from "../../../../../app/hooks/useIsMobile";
 import WhatsAppSupportButton from "../../../../../components/the_mall/support/WhatsAppSupportButton";
-import { User } from "lucide-react";
+import { useIsMobile } from "../../../../../app/hooks/useIsMobile";
 
 const mysweetalert = withReactContent(Swal);
 
@@ -23,11 +21,8 @@ const LayoutCreator = () => {
   const store = useAppSelector((state) => state.storeAdmin.store);
   const user = useAppSelector((state) => state.user.user);
   const isLoading = useAppSelector((state) => state.layout.isLoading);
-  const activeLayout = useAppSelector((state) => state.layout.activeLayout);
   const isMobile = useIsMobile();
 
-  const [step, setStep] = useState<"select" | "customize">("select");
-  const [selectedLayout, setSelectedLayout] = useState<any>(null);
   const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
@@ -38,8 +33,8 @@ const LayoutCreator = () => {
     navigate(`/layouts/${layoutId}/preview`);
   };
 
-  const handleSelect = (layout: any) => {
-    // Show WhatsApp popup on mobile instead of going to theme selector
+  const handleSelect = async (layout: any) => {
+    // Show WhatsApp popup on mobile instead of creating the layout
     if (isMobile) {
       const message = `Hello, my name is ${user ? `${user?.firstName} ${user?.lastName}` : `No user`}  and I am the owner of ${store?.name || 'my store'}. I would like assistance with creating a website using the "${layout.name || 'selected layout'}". Could you please help me set it up? My preferred colors are...`;
       
@@ -64,45 +59,26 @@ const LayoutCreator = () => {
       return;
     }
     
-    setSelectedLayout(layout);
-    setStep("customize");
-  };
-
-  const handleBackClick = () => {
-    if (step === "customize") {
-      setStep("select");
-      setSelectedLayout(null);
-    } else {
-      navigate(`/dashboard/${store?._id}`);
-    }
-  };
-
-  const handleThemeSelect = async (fonts: { primary: string; secondary: string; tertiary: string }, colors: string[], themeName: string) => {
-    if (!selectedLayout || !store?._id) return;
-
+    // Immediately duplicate the layout and navigate to website builder
+    if (!store?._id) return;
+    
     setIsCreating(true);
-
+    
     try {
-      // Create layout with settings
+      // Create layout with default settings (duplicates the demo layout)
       const newLayout = await dispatch(createLayoutWithSettings({
-        layoutId: selectedLayout._id,
-        newColors: {
-          primary: colors[0] || "#000000",
-          secondary: colors[1] || "#333333",
-          accent: colors[2] || "#666666",
-          quad: colors[3] || "#999999",
-          pent: colors[4] || "#cccccc",
-        },
-        newFonts: fonts,
+        layoutId: layout._id,
+        newColors: layout.colors,
+        newFonts: layout.fonts,
         store: store._id,
-        themeName: themeName,
+        themeName: "Custom",
       })).unwrap();
 
       // Get the new layout ID
       const newLayoutId = newLayout?._id || newLayout;
 
-      // Automatically navigate to the layout editor
-      navigate(`/layouts/${newLayoutId || selectedLayout._id}`);
+      // Navigate straight to the website builder with a flag to indicate this is a new layout
+      navigate(`/layouts/${newLayoutId || layout._id}?new=true`);
 
     } catch (error) {
       console.error("Failed to create layout:", error);
@@ -115,6 +91,10 @@ const LayoutCreator = () => {
     } finally {
       setIsCreating(false);
     }
+  };
+
+  const handleBackClick = () => {
+    navigate(`/dashboard/${store?._id}`);
   };
 
   if (!store) {
@@ -140,7 +120,7 @@ const LayoutCreator = () => {
             </button>
             
             <h1 className="text-[2.2vh] lg:text-[2.5vh] font-bold text-slate-800">
-              {step === "select" ? "Choose a Layout" : "Customize Your Theme"}
+              Create Your Website
             </h1>
             
             <div className="w-24" /> {/* Spacer for centering */}
@@ -150,67 +130,66 @@ const LayoutCreator = () => {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-[2.4vh] lg:px-[3.2vh] py-[3.2vh]">
-        {step === "select" && (
-          <>
-            {/* Introduction */}
-            <div className="text-center mb-[3vh]">
-              <div className="inline-flex items-center justify-center w-[7vh] h-[7vh] bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mb-4 shadow-lg">
-                <FaMagic className="text-[3vh] text-white" />
-              </div>
-              <h2 className="text-[3vh] lg:text-[4vh] font-bold text-slate-800 mb-[.8vh]">Create Your Website</h2>
-              <p className="text-[2vh] text-slate-500 max-w-2xl mx-auto">
-                Select a layout template that matches your style. You'll be able to customize fonts, colors, and more.
-              </p>
+        {/* Loading overlay when creating layout */}
+        {isCreating && (
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+            <div className="bg-white rounded-lg p-8 flex flex-col items-center gap-4">
+              <TbLoader3 className="w-12 h-12 animate-spin text-indigo-600" />
+              <p className="text-lg font-medium text-gray-700">Creating your website...</p>
+              <p className="text-sm text-gray-500">This will just take a moment</p>
             </div>
-
-            {/* Layout Grid */}
-            {isLoading ? (
-              <div className="flex items-center justify-center py-20">
-                <TbLoader3 className="w-8 h-8 animate-spin text-indigo-600" />
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 gap-[2.4vh] xl:grid-cols-3">
-                {availableLayouts.map((layout) => {
-                  let storeId = '';
-                  if (typeof layout.store === 'object' && layout.store !== null) {
-                    storeId = String(layout.store._id);
-                  } else if (typeof layout.store === 'string') {
-                    storeId = layout.store;
-                  } else if (layout.store) {
-                    storeId = String(layout.store);
-                  }
-                  
-                  return (
-                    <StoreLayoutCreatorCard
-                      key={layout._id}
-                      layout={{
-                        _id: layout._id || '',
-                        store: storeId,
-                        name: layout.name,
-                        screenshot: layout.screenshot
-                      }}
-                      onSelect={(layout) => handleSelect(layout)}
-                      onView={() => handleView(layout._id || '')}
-                    />
-                  );
-                })}
-              </div>
-            )}
-
-            {availableLayouts.length === 0 && !isLoading && (
-              <div className="text-center py-20">
-                <p className="text-slate-500">No layouts available</p>
-              </div>
-            )}
-          </>
+          </div>
         )}
 
-        {step === "customize" && selectedLayout && (
-          <ThemeSelector
-            layout={selectedLayout}
-            onThemeSelect={handleThemeSelect}
-            isLoading={isCreating}
-          />
+        {/* Introduction */}
+        <div className="text-center mb-[3vh]">
+          <div className="inline-flex items-center justify-center w-[7vh] h-[7vh] bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mb-4 shadow-lg">
+            <FaMagic className="text-[3vh] text-white" />
+          </div>
+          <h2 className="text-[3vh] lg:text-[4vh] font-bold text-slate-800 mb-[.8vh]">Create Your Website</h2>
+          <p className="text-[2vh] text-slate-500 max-w-2xl mx-auto">
+            Select a layout template to get started. You'll be able to customize everything in the website builder.
+          </p>
+        </div>
+
+        {/* Layout Grid */}
+        {isLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <TbLoader3 className="w-8 h-8 animate-spin text-indigo-600" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-[2.4vh] xl:grid-cols-3">
+            {availableLayouts.map((layout) => {
+              let storeId = '';
+              if (typeof layout.store === 'object' && layout.store !== null) {
+                storeId = String(layout.store._id);
+              } else if (typeof layout.store === 'string') {
+                storeId = layout.store;
+              } else if (layout.store) {
+                storeId = String(layout.store);
+              }
+              
+              return (
+                <StoreLayoutCreatorCard
+                  key={layout._id}
+                  layout={{
+                    _id: layout._id || '',
+                    store: storeId,
+                    name: layout.name,
+                    screenshot: layout.screenshot
+                  }}
+                  onSelect={(layout) => handleSelect(layout)}
+                  onView={() => handleView(layout._id || '')}
+                />
+              );
+            })}
+          </div>
+        )}
+
+        {availableLayouts.length === 0 && !isLoading && (
+          <div className="text-center py-20">
+            <p className="text-slate-500">No layouts available</p>
+          </div>
         )}
       </div>
     </div>
