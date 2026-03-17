@@ -330,18 +330,19 @@ const StoreLayoutCard: React.FC<StoreLayoutCardProps> = ({ layout, onSelect, onS
                 </button>
 
                 {/* Capture Screenshot */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowButtons(false);
-                    handleCaptureScreenshot(e);
+                {!isExternal && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowButtons(false);
+                      handleCaptureScreenshot(e);
                   }}
                   className="flex flex-col items-center justify-center p-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-lg transition-colors"
                 >
                   <IoCamera className="text-lg text-white mb-1" />
                   <span className="text-[10px] font-medium text-white">Capture</span>
                 </button>
-
+                )}
                 {/* Delete */}
                 <button
                   onClick={(e) => {
