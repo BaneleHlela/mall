@@ -116,6 +116,7 @@ export interface Store {
     scope: 'local' | 'national' | 'worldwide';
     range: number;
   };
+  storeState?: 'demo' | 'idle' | 'live';
 }
 
 export interface OperationTimes {

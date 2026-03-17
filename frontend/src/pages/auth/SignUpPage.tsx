@@ -118,7 +118,7 @@ const SignUpPage = () => {
 			"Sign Up"
 			)}
 		</motion.button>
-    <div className="flex flex-col">
+    <div className="flex flex-col mt-3">
 				<div className="w-full flex flex-row items-center justify-between text-[2.2vh]">
 					<span className="h-[.15vh] w-[30%] bg-gray-600"></span>
 						Or sign up with

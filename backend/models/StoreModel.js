@@ -250,6 +250,11 @@ const storeSchema = new mongoose.Schema(
       type: String,
       default: false,
     },
+    storeState: {
+      type: String,
+      enum: ['demo', 'idle', 'live'],
+      default: 'draft',
+    },
     rating: {
       averageRating: {
         type: Number,

@@ -21,9 +21,10 @@ interface StorePostJSXProps {
     showTipsIcon?: boolean;
     onModalOpen?: (isOpen: boolean) => void;
     isFeedbackPost?: boolean;
+    storeSlug?: string;
 }
 
-const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors", jsx, color = "text-orange-400", showTipsIcon = true, onModalOpen, isFeedbackPost = false }) => {
+const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors", jsx, storeSlug, color = "text-orange-400", showTipsIcon = true, onModalOpen, isFeedbackPost = false }) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,7 +71,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
     }, [isModalOpen]);
 
     // If store is not loaded yet, return null
-    if (!store) {
+    if (!store || !storeSlug) {
         return null;
     }
 
@@ -127,15 +128,23 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
             <div className="flex justify-between items-center w-full h-[5vh] max-h-[5vh] lg:h-[6vh] lg:max-h-[6vh] overflow-hidden">
                 <div className="flex items-center h-full space-x-1">
                 {/* Thumbnail */}
-                <div className={`h-full aspect-square bg-gradient-to-r from-orange-500 via-orange-400 to-orange-700 rounded-full p-[.25vh]`}>
+                <div 
+                    onClick={() => {
+                        storeSlug ? navigate(`/stores/${storeSlug}`) : navigate(`/stores/${store?._id}`);
+                    }}
+                    className={`h-full aspect-square bg-gradient-to-r from-orange-500 via-orange-400 to-orange-700 rounded-full p-[.25vh]`}>
                     <img
-                        src="https://storage.googleapis.com/the-mall-uploads-giza/stores/686e76aa96f14c28650b671d/images/main.webp"
+                        src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Blue%20Modern%20Shopping%20Bag%20Logo.png"
                         alt=""
                         className="w-full h-full object-cover rounded-full"
                     />
                 </div>
                 {/* Text */}
-                <div onClick={() => navigate(`/stores/${store?._id}`)} className="flex flex-col justify-center h-full space-y-1">
+                <div 
+                    onClick={() => {
+                        storeSlug ? navigate(`/stores/${storeSlug}`) : navigate(`/stores/${store?._id}`);
+                    }}
+                    className="flex flex-col justify-center h-full space-y-1">
                     <div style={{ lineHeight: "1"}}  className={`font-semibold capitalize ${color}`}>{tipFor}</div>
                     <div style={{ lineHeight: "1"}} className="text-[1.8vh] text-gray-300">@themall</div>
                 </div>

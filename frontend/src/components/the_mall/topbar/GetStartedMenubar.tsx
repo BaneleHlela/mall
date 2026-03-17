@@ -7,9 +7,14 @@ const GetStartedMenubar = () => {
   return (
     <div className="sticky top-0 w-full h-[10vh] min-h-[10vh] bg-white shadow-sm flex items-center justify-between px-4 lg:px-[5vh] z-10">
       {/* Logo */}
-      <div className="flex items-center text-white border bg-amber-500 px-[1vh] py-[.75vh] lg:text-[3vh] lg:py-[1vh] lg:px-[1.5vh] rounded-[1vh] lg:rounded-[1.5vh]">
-        <p style={{fontFamily: "DM Serif Text"}} className="">The Mall</p>
-      </div>
+       <div className="w-fit h-[60%] flex items-center">
+            <p
+              style={{ fontFamily: "Bebas Neue" }}
+              className="text-black font-bold text-[3vh]"
+            >
+              The Mall
+            </p>
+        </div>
 
       {/* Navigation Links */}
       <div className="hidden md:flex items-center space-x-8">

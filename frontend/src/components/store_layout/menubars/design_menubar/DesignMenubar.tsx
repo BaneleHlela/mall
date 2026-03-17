@@ -100,7 +100,7 @@ const ArtMenubar = () => {
             borderBottom: `${layout.menubar.topbar.background.border.width} ${layout.menubar.topbar.background.border.style} ${colors[layout.menubar.topbar.background.border.color as keyof typeof colors]}` 
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="w-full h-fit bg-amber-50 sticky top-0 left-0 z-50 opacity-100"
+        className=" w-full h-fit bg-amber-50 sticky top-0 left-0 z-50 opacity-100"
     >
         {/* Mobile */}
         <div className="w-full h-[10.5vh] lg:hidden">

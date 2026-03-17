@@ -36,22 +36,28 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
 
   const handleClick = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation(); // Prevent triggering when clicking the heart
+
+    // Navigate to get-started if storeSlug is "themall" or if store has no website
+    if (store.slug === "themall") {
+      navigate("/get-started");
+      return;
+    }
     
     if (!hasWebsite) {
-      const result = await mysweetalert.fire({
-        title: 'Store not ready',
-        text: 'Store has no website. If you are the owner of the store, go to dashboard to add a website/layout.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Go to Dashboard',
-        cancelButtonText: 'Cancel',
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-      });
+    const result = await mysweetalert.fire({
+      title: 'Store not ready',
+      text: 'Store has no website. If you are the owner of the store, go to dashboard to add a website/layout.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Go to Dashboard',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+    });
 
-      if (result.isConfirmed) {
-        navigate(`/dashboard/${store.slug}/settings`);
-      }
+    if (result.isConfirmed) {
+      navigate(`/dashboard/${store.slug}/settings`);
+    }
       return;
     }
     

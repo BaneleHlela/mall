@@ -1,4 +1,5 @@
 import { useAppSelector } from "../../../../app/hooks";
+import TheMallStoreFooterSection from "../../custom_store_layout_components/themall_layout_components/TheMallStoreFooterSection";
 import FastFoodFooter from "./fast_food_footer/FastFoodFooter";
 import FooterWithSocialsAndEmail from "./footer_with_socials_and_email/FooterWithSocialsAndEmail";
 import FooterWithStoreDetailsFormAndButton from "./with_store_details_form_and_button/FooterWithStoreDetailsFormAndButton";
@@ -17,6 +18,9 @@ const StoreFooterSection = () => {
 
     case "fastFoodFooter":
       return <FastFoodFooter />;
+
+    case "mallFooter": 
+      return <TheMallStoreFooterSection />;
     default:
       return <>No footer found for {variation}</>; // or some fallback footer
   }

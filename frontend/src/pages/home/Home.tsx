@@ -342,6 +342,7 @@ const HomePage = () => {
             }
             onModalOpen={setIsReviewsModalOpen}
             isFeedbackPost
+            storeSlug='themall'
           />
           <StorePostJSX
             tipFor='Tips And Updates'
@@ -350,6 +351,7 @@ const HomePage = () => {
             }
             onModalOpen={setIsReviewsModalOpen}
             isFeedbackPost
+            storeSlug='mall-designs'
           />
           <StorePostJSX
             tipFor='Tips And Updates'
@@ -358,6 +360,7 @@ const HomePage = () => {
             }
             onModalOpen={setIsReviewsModalOpen}
             isFeedbackPost
+            storeSlug='mall-designs'
           />
           <StorePostJSX
             tipFor='Tips And Updates'
@@ -366,6 +369,7 @@ const HomePage = () => {
             }
             onModalOpen={setIsReviewsModalOpen}
             isFeedbackPost
+            storeSlug='mall-designs'
           />
 
           <StorePostJSX
@@ -375,6 +379,7 @@ const HomePage = () => {
             }
             color="text-green-500"
             onModalOpen={setIsReviewsModalOpen}
+            storeSlug='mall-designs'
           />
           <StorePostJSX
             tipFor='Tips and Updates'
@@ -382,18 +387,21 @@ const HomePage = () => {
               <WhatIsECommerce />
             }
             onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
           />
           <StorePostJSX
             tipFor='Tips for Vendors'
             jsx={<WhatIsMVP />}
             color="text-orange-400"
             onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
           />
           <StorePostJSX
             tipFor='Tips for Vendors'
             jsx={<Branding />}
             color="text-orange-400"
             onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
           />
           <StorePostJSX
             tipFor='Tips and Updates'
@@ -401,6 +409,7 @@ const HomePage = () => {
               <LaunchDate/>
             }
             onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
           />
           
           <StorePostJSX
@@ -410,6 +419,7 @@ const HomePage = () => {
             }
             color="text-orange-400"
             onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
           />
           <StorePostJSX
             tipFor='Tips and Updates'
@@ -418,6 +428,7 @@ const HomePage = () => {
             }
             color="text-orange-400"
             onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
           />
           <StorePostJSX
             tipFor='Tips for Vendors'
@@ -426,6 +437,7 @@ const HomePage = () => {
             }
             color="text-orange-400"
             onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
           />
           <StorePostJSX
             tipFor='Announcement'
@@ -434,6 +446,7 @@ const HomePage = () => {
             }
             color="text-blue-500"
             onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
           />
           <StorePostJSX
             tipFor='Announcement'
@@ -442,6 +455,7 @@ const HomePage = () => {
             }
             color="text-blue-500"
             onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
           />
           <StorePostJSX 
             tipFor='Announcement'
@@ -458,6 +472,7 @@ const HomePage = () => {
             }
             color="text-blue-500"
             onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
           />
           {/* {StoreHomePosters.map((post, index) => (
             <BasicStorePost key={index} {...post} />

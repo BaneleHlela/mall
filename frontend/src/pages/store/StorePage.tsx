@@ -1,7 +1,7 @@
 import type { Store as StoreType } from "../../types/storeTypes"; // Import the correct type for the store object
 import { useState, useEffect } from "react";
 import { TbLoader3 } from "react-icons/tb";
-import { Route, Routes, useLocation, useParams } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import WebFont from "webfontloader";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { fetchStoreServices } from "../../features/services/servicesSlice";
@@ -15,7 +15,7 @@ import {
 } from "./supporting/StorePagesCentral";
 import BasicStoreSearchResultsPage from "./supporting/BasicStoreSearchResultsPage";
 import StoreOrderOnlinePage from "./supporting/order_online/StoreOrderOnlinePage";
-import { getBackgroundStyles } from "../../utils/stylingFunctions";
+import { getBackgroundStyles, getResponsiveDimension } from "../../utils/stylingFunctions";
 import { setInitialLayout } from "../../features/layouts/layoutSettingsSlice";
 import { getLayout } from "../../features/layouts/layoutSlice";
 import { fetchStoreProducts } from "../../features/products/productsSlice";
@@ -36,13 +36,22 @@ import { useNavbar } from "../../utils/context/NavbarContext";
 
 const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const settings = useAppSelector((state) => state.layoutSettings);
   const { storeSlug: paramStoreSlug } = useParams<{ storeSlug: string }>();
   const storeSlug = propStoreSlug || paramStoreSlug
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [showStoreStateBadge, setShowStoreStateBadge] = useState(false);
   const isCartRoute = location.pathname.includes('/cart'); // Check if the current route is "/cart"
   const { hideNavbar, showNavbar } = useNavbar(); 
-  
+
+  // Navigate to get-started page if no storeSlug provided or storeSlug = "themall"
+  useEffect(() => {
+    if (!storeSlug || storeSlug === "themall") {
+      navigate("/get-started");
+    }
+  }, [storeSlug, navigate]);
+
   // Hide Navbar if scrolling down, show if scrolling up
     useEffect(() => {
       let lastScrollY = window.scrollY;
@@ -159,6 +168,17 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
       }
     }
   }, [location]);
+
+  // Show store state badge for 5 seconds when store loads
+  useEffect(() => {
+    if (store?.storeState) {
+      setShowStoreStateBadge(true);
+      const timer = setTimeout(() => {
+        setShowStoreStateBadge(false);
+      }, 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [store?.storeState]);
 
  
 
@@ -364,6 +384,16 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
                     }
                   }}
                 />
+              </div>
+            )}
+
+            {showStoreStateBadge && (store as any)?.storeState && (
+              <div style={{top: getResponsiveDimension(settings.menubar?.topbar?.background?.height)}} className={`fixed right-2 h-fit w-fit border-3 rounded-[1vh] px-2 font-bold z-40 mt-2 ${
+                (store as any).storeState === 'demo' ? 'border-red-500 text-red-500' : 
+                (store as any).storeState === 'idle' ? 'border-yellow-500 text-yellow-500' : 
+                (store as any).storeState === 'live' ? 'border-green-500 text-green-500' : ''
+              }`}>
+                {(store as any).storeState === 'demo' ? 'Demo' : (store as any).storeState === 'idle' ? 'Idle' : 'Live'}
               </div>
             )}
             {/* Chat Modal */}

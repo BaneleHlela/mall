@@ -74,7 +74,7 @@ const TheMallStoreHero = () => {
                 }}
                 className="text-[7vh] lg:text-[14vh] font-[400] z-1 text-shadow-2xs"
             >
-                <p className="text-[2vh] lg:text-[2.5vh] font-[Montserrat] text-gray-500">Improve your business</p>
+                <p className="text-[2vh] lg:text-[2.5vh] font-[Montserrat] text-gray-500 my-2">Improve your business</p>
                 <p style={{lineHeight: "1"}} className="">Tools, </p>
                 <p style={{lineHeight: "1"}} className="">Brand &</p>
                 <p style={{lineHeight: "1"}} className="text-blue-500">Visibility</p>
