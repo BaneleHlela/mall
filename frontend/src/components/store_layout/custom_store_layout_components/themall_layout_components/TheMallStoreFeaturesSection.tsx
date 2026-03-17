@@ -23,9 +23,9 @@ const TheMallStoreFeaturesSection = () => {
                 fontFamily: "Montserrat",
                 fontSize: "2.2vh"
             }} 
-            className="grid grid-cols-1 lg:grid-cols-3 lg:w-[85%] pt-[2vh] gap-[1vh] lg:gap-[3vh]"
+            className="grid grid-cols-1 lg:grid-cols-3 lg:w-[85%] pt-[2vh] gap-[1vh] lg:gap-[3vh] py-[4vh]"
         >
-            <div className="flex flex-col justify-evenly items-center text-center border border-[#6b63ffc7] p-[1vh] lg:px-[1.5vh] rounded-[1vh] bg-stone-100 font-[400]">
+            <div className="flex flex-col justify-evenly items-center text-center border border-[#6b63ffc7] p-[1vh] lg:px-[1.5vh] rounded-[1vh] bg-stone-100 font-[400] appear-flip-x">
                 <img 
                     src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/undraw_web-shopping_xd5k.svg" 
                     alt="card-image" 
@@ -35,7 +35,7 @@ const TheMallStoreFeaturesSection = () => {
                     Create your own branded store with customizable themes and layouts.
                 </p>
             </div>
-            <div className="flex flex-col justify-evenly items-center text-center border border-[#6b63ffc7] p-[1vh] lg:px-[1.5vh] rounded-[1vh] bg-stone-100 font-[400]">
+            <div className="flex flex-col justify-evenly items-center text-center border border-[#6b63ffc7] p-[1vh] lg:px-[1.5vh] rounded-[1vh] bg-stone-100 font-[400] appear-flip-x">
                 <img 
                     src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/undraw_details_sgb2.svg" 
                     alt="card-image" 
@@ -45,7 +45,7 @@ const TheMallStoreFeaturesSection = () => {
                     Sell products or services in one place. Manage inventory, orders, and payments easily.
                 </p>
             </div>
-            <div className="flex flex-col justify-evenly items-center text-center border border-[#6b63ffc7] p-[1vh] lg:px-[1.5vh] rounded-[1vh] bg-stone-100 font-[400]">
+            <div className="flex flex-col justify-evenly items-center text-center border border-[#6b63ffc7] p-[1vh] lg:px-[1.5vh] rounded-[1vh] bg-stone-100 font-[400] appear-flip-x">
                 <img 
                     src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/undraw_booked_bb22.svg" 
                     alt="card-image" 
@@ -55,7 +55,7 @@ const TheMallStoreFeaturesSection = () => {
                 Accept bookings and orders. Manage your schedule and availability with ease.
                 </p>
             </div>
-            <div className="flex flex-col justify-evenly items-center text-center border border-[#6b63ffc7] p-[1vh] lg:px-[1.5vh] rounded-[1vh] bg-stone-100 font-[400]">
+            <div className="flex flex-col justify-evenly items-center text-center border border-[#6b63ffc7] p-[1vh] lg:px-[1.5vh] rounded-[1vh] bg-stone-100 font-[400] appear-flip-x">
                 <img 
                     src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/undraw_handshake-deal_nwk6.svg" 
                     alt="card-image" 
@@ -65,7 +65,7 @@ const TheMallStoreFeaturesSection = () => {
                     Build trust through reviews and ratings from your customers.
                 </p>
             </div>
-            <div className="flex flex-col justify-evenly items-center text-center border border-[#6b63ffc7] p-[1vh] lg:px-[1.5vh] rounded-[1vh] bg-stone-100 font-[400]">
+            <div className="flex flex-col justify-evenly items-center text-center border border-[#6b63ffc7] p-[1vh] lg:px-[1.5vh] rounded-[1vh] bg-stone-100 font-[400] appear-flip-x">
                 <img 
                     src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/undraw_searching-everywhere_tffi.svg" 
                     alt="card-image" 
@@ -75,7 +75,7 @@ const TheMallStoreFeaturesSection = () => {
                     Reach customers beyond your area. Leverage our marketplace to grow your audience.
                 </p>
             </div>
-            <div className="flex flex-col justify-evenly items-center text-center border border-[#6b63ffc7] p-[1vh] lg:px-[1.5vh] rounded-[1vh] bg-stone-100 font-[400]">
+            <div className="flex flex-col justify-evenly items-center text-center border border-[#6b63ffc7] p-[1vh] lg:px-[1.5vh] rounded-[1vh] bg-stone-100 font-[400] appear-flip-x">
                 <img 
                     src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/undraw_metrics_5v8d.svg" 
                     alt="card-image" 

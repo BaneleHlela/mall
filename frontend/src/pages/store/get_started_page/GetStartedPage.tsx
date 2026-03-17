@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import TheMallStoreHero from '../../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStoreHero';
-import { useNavbar } from '../../../utils/context/NavbarContext';
+import { useNavbar, } from '../../../utils/context/NavbarContext';
 import WebFont from 'webfontloader';
 import TheMallStoreAboutSection from '../../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStoreAboutSection';
 import TheMallSocialFeatureSection from '../../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallSocialFeatureSection';
@@ -11,10 +11,13 @@ import GetStartedMenubar from '../../../components/the_mall/topbar/GetStartedMen
 import TheMallStorePlans from '../../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStorePlans';
 
 const GetStartedPage = () => {
-  const { hideNavbar, showNavbar } = useNavbar();
-  hideNavbar();
   const fonts = ["Outfit", "sans-serif", "DM Serif Text", "cursive", "Montserrat", "sans-serif"];
-  
+  const { hideNavbar, showNavbar } = useNavbar();
+
+  // Hide Navbar on Desktop
+  if (window.innerWidth >= 1024) {
+    hideNavbar();
+  }
   // Load Fonts Dynmically
   useEffect(() => {
     if (fonts) {

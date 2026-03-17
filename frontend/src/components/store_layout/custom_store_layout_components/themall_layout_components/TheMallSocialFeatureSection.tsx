@@ -2,7 +2,7 @@ import React from 'react'
 
 const TheMallSocialFeatureSection = () => {
   return (
-    <div style={{fontFamily: "Montserrat"}} className='flex flex-col lg:flex-row w-full lg:h-[100vh] bg-[#6c63ff] px-[1.5vh]  lg:py-[4vh] lg:px-[8vh]'>
+    <div style={{fontFamily: "Montserrat"}} className='flex flex-col lg:flex-row w-full lg:h-[100vh] bg-[#6c63ff] px-[1.5vh]  py-[4vh] lg:px-[8vh]'>
       {/* Image */}
       <div className="relative hidden lg:flex items-center justify-center w-full h-[40vh] lg:w-[50%] lg:h-full mt-[3vh] lg:mt-0">
         <img 
@@ -43,14 +43,14 @@ const TheMallSocialFeatureSection = () => {
       </div>
       {/* Text & CTA */}
       <div className="relative w-full lg:w-[50%] p-[2vh]">
-        <p className="text-[2.2vh] uppercase text-amber-500 font-semibold mb-[2vh]">A Social Platform</p>
+        <p className="text-[2.2vh] uppercase text-amber-500 font-semibold mb-[2vh]">A Educational Social Platform</p>
         <h2 style={{fontFamily: "DM Serif Text", lineHeight: "1"}} 
           className="w-[80%] text-[5vh] lg:text-[8vh] mb-[3vh] text-white"
         >
           A Mall for Customers <strong>—</strong> <span className='text-gray-200'>A Network for Builders.</span>
         </h2>
         <p  className="text-[2vh] text-white lg:text-[2.5vh]">
-          <strong>Your store isn’t isolated</strong> — it lives alongside a diverse collection of businesses, forming a true digital mall. This makes your brand easier to discover, explore, and follow.
+          <strong>Your store isn’t isolated</strong> — For vendors, this means increased visibility and free marketing opportunities. For customers, it offers the convenience of exploring a variety of stores in a single, seamless experience — creating a true win-win for both.
           <br/> <br/>
           But <strong>The Mall</strong> goes beyond visibility. <br/> 
           Just as professionals connect and grow on LinkedIn, entrepreneurs on The Mall can collaborate on ideas, build partnerships, merge ventures, and learn from one another. It’s not just commerce — it’s connection.
@@ -70,7 +70,7 @@ const TheMallSocialFeatureSection = () => {
                     alt="search-svg" 
                     className="h-[4vh] w-[4vh] lg:h-[6vh] lg:w-[6vh] object-cover bg-amber-500 rounded p-[.8vh] mt-[2vh]" 
                 />
-                <p className="mt-2">Connect with other businesses to form a "mall"</p>
+                <p className="mt-2">Connect & learn as your business grows</p>
             </div>
             {/* <div className="flex h-[4vh] lg:h-[6vh] gap-2 items-center text-white lg:text-[2.5vh]">
                 <img 

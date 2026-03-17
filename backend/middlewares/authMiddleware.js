@@ -59,8 +59,6 @@ export const isStoreAdmin = async (req, res, next) => {
     try {
         const { storeId } = req.params;
         const userId = req.user?._id;
-        console.log("Checking store admin for user ID:", userId, "and store ID:", storeId);
-
 
         if (!userId) {
             return res.status(401).json({ message: 'User ID missing from request. Check authentication middleware.' });

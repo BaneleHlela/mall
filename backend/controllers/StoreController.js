@@ -24,7 +24,6 @@ const generateUniqueSlug = async (name) => {
 
 // add store
 export const addStore = expressAsyncHandler(async (req, res) => {
-    console.log(req.user);
     const { _id, email, firstName } = req.user;
     // Create the store with the creator as the owner in the team
     const slug = await generateUniqueSlug(req.body.name);
@@ -36,6 +35,8 @@ export const addStore = expressAsyncHandler(async (req, res) => {
     });
 
     await created.save();
+
+    console.log("Store created successfully:", created);
     
     // Update the user's stores array
     await User.findByIdAndUpdate(

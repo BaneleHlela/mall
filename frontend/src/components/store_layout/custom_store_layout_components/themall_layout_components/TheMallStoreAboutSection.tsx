@@ -4,21 +4,18 @@ const TheMallStoreAboutSection = () => {
 
   const definitionAlternatives = ["and vision becomes reality.", "and dreams scale into enterprises.", "and ambition turns into impact.", "and local businesses scale globally."]
   return (
-    <div style={{fontFamily: "Montserrat"}} className='flex flex-col lg:flex-row w-full lg:h-[80vh] bg-stone-50  lg:py-[4vh] lg:px-[8vh]'>
+    <div id="about" style={{fontFamily: "Montserrat"}} className='flex flex-col lg:flex-row w-full lg:h-[80vh] bg-stone-50  py-[4vh] lg:px-[8vh]'>
       {/* Text & CTA */}
       <div className="relative w-full lg:w-[50%] p-[2vh]">
         <p className="text-[2.2vh] uppercase text-amber-500 font-semibold mb-[2vh]">What is the mall?</p>
         <h2 style={{fontFamily: "DM Serif Text", lineHeight: "1"}} 
           className="w-[80%] text-[5vh] lg:text-[8vh] mb-[3vh]"
         >
-          More than a marketplace. <br/><span className='text-gray-500'>It's a home for commerce</span>
+          A Social <br/> e-commerce Platform. 
         </h2>
-        <p  className="text-[2vh] text=gray-800 lg:text-[2.5vh]">
-          <strong>The Mall</strong> is where businesses become brands, customers become communities, {definitionAlternatives[Math.floor(Math.random() * definitionAlternatives.length)]}
-        </p>
         <p className="text-[2vh] text=gray-800 lg:text-[2.5vh]">
-          It is an e-commerce platform. No matter what you sell or how small you’re starting, 
-          The Mall equips you with the tools to manage your business, sharpen your skills, and scale seamlessly. But that’s only the beginning.
+          The Mall is a e-commerce platform that provides all the tools you need to run and grow your online business. <br/> <br/>
+          What makes it unique is its “mall” experience — instead of your store existing in isolation, it is placed alongside other stores within a shared digital marketplace. This allows customers to browse, discover, and interact with multiple businesses in one place, just like in a physical mall.<br/>
         </p>
         <div className="absolute top-[2%] right-[2%]">
           <img 

@@ -23,7 +23,7 @@ const TheMallStoreFooterSection = () => {
       <div className="flex flex-col lg:flex-row gap-[6vh] lg:gap-[12vh] text-center lg:text-left">
         <div className="flex flex-col gap-[1.5vh]">
           <h3 className="font-semibold text-[2.2vh] mb-[1vh]">Company</h3>
-          <a href="#" className="text-[2vh] hover:underline">About Us</a>
+          <a href="#about" className="text-[2vh] hover:underline">About Us</a>
           <a href="#" className="text-[2vh] hover:underline">Careers</a>
           <a href="#" className="text-[2vh] hover:underline">Blog</a>
         </div>
@@ -35,11 +35,12 @@ const TheMallStoreFooterSection = () => {
         </div>
         <div className="flex flex-col gap-[1.5vh]">
           <h3 className="font-semibold text-[2.2vh] mb-[1vh]">Contact</h3>
-            <a href="#" className="text-[2vh] hover:underline">Contact Us</a>
+            <a href="mailto:contact@themallbeta.com" className="text-[2vh] hover:underline">Contact Us</a>
             <a href="#" className="text-[2vh] hover:underline">Support</a>
             <a href="#" className="text-[2vh] hover:underline">FAQs</a>
         </div>
         </div>
+      <div className="h-[7vh] w-10 lg:hidden"></div>
     </div>
   )
 }

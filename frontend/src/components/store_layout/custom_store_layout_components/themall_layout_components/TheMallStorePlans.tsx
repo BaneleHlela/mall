@@ -84,7 +84,7 @@ const plans = [
         price: "R25",
         features: [
             "All business tools and programs",
-            "Unlimited Layouts",
+            "Unlimited Website Layouts",
             "Unlimited Posts",
             "15GB Cloud Storage",
             "AI Business Advisor",
@@ -97,7 +97,7 @@ const plans = [
         duration: "per month",
         features: [
             "All business tools and programs",
-            "Unlimited Layouts",
+            "Unlimited Website Layouts",
             "Unlimited Posts",
             "15GB Cloud Storage",
             "AI Business Advisor",
@@ -110,7 +110,7 @@ const plans = [
         duration: "per month",
         features: [
             "All business tools and programs",
-            "Unlimited Layouts",
+            "Unlimited Website Layouts",
             "Unlimited Posts",
             "15GB Cloud Storage",
             "AI Business Advisor",
@@ -121,7 +121,7 @@ const plans = [
 
 const TheMallStorePlans = () => {
   return (
-    <div className="w-full lg:w-[80%] flex flex-col items-center p-[2vh] lg:p-[4vh] bg-gray-100">
+    <div className="w-full lg:w-[80%] flex flex-col items-center p-[2vh] py-[4vh] lg:p-[4vh] bg-gray-100">
         <p className="text-[2.2vh] uppercase text-amber-500 font-semibold mb-[2vh]">IT'S A BARGAIN</p>
         <h2 className="text-3xl font-bold mb-8">Choose Your Plan</h2>
         <div className="w-full px-[1vh]">
@@ -151,6 +151,7 @@ const TheMallStorePlans = () => {
                             planDescription={plan.planDescription}
                             duration={plan.duration}
                         />
+                        <div className="h-10 w-10"></div>
                     </SwiperSlide>
                 ))}
             </Swiper>
