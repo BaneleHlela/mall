@@ -14,7 +14,7 @@ import BasicStorePost from '../../components/the_mall/basic_store_post/BasicStor
 import TipsAndUpdates from '../../components/the_mall/home/TipsAndUpdates';
 import { FaTools } from 'react-icons/fa';
 import StorePostJSX from '../../components/the_mall/home/StorePostJSX';
-import { LaunchDate, LookOutForRedFlags, WelcomeToTheMall, WhatIsECommerce, WhatIsMVP, YouCanInvest, MallMVPAnnouncement, Branding, MostImportantPoster, NoAyikhoPoster, VariousPosters, ListOfSuppliersByChioma, FourFirstTimeSmallBusinessMistakes, HowToStartBusinessWhiteLabeling, BusinessAdviceForSmallBusiness, YCStartingCompanyKeyTerms, YCSalesPlaybook, YCStartupIdeas, YCCoFounderRelationships } from '../../components/the_mall/home/posts/SimplePosts';
+import { LaunchDate, LookOutForRedFlags, WelcomeToTheMall, WhatIsECommerce, WhatIsMVP, YouCanInvest, MallMVPAnnouncement, Branding, MostImportantPoster, NoAyikhoPoster, VariousPosters, ListOfSuppliersByChioma, FourFirstTimeSmallBusinessMistakes, HowToStartBusinessWhiteLabeling, BusinessAdviceForSmallBusiness, YCStartingCompanyKeyTerms, YCSalesPlaybook, YCStartupIdeas, YCCoFounderRelationships, SBDBusinessPlan, SBDBusinessStrategy } from '../../components/the_mall/home/posts/SimplePosts';
 import MultipleLayoutsPost from '../../components/the_mall/home/posts/MultipleLayoutsPost';
 import FreePikPosters from '../../components/the_mall/home/posts/FreePikPosters';
 import SupplyChain from '../../components/the_mall/home/posts/SupplyChain';
@@ -22,6 +22,7 @@ import { MdAdd } from 'react-icons/md';
 import { IoStorefrontOutline } from 'react-icons/io5';
 import toast from 'react-hot-toast';
 import { POST_IDS } from '../../components/the_mall/home/posts/SimplePosts';
+import TheMallStoreFooterSection from '../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStoreFooterSection';
 
 
 const HomePage = () => {
@@ -417,6 +418,21 @@ const HomePage = () => {
             storeSlug='y-combinator'
             isFeedbackPost
           />
+          {/* Small Business Development Videos */}
+          <StorePostJSX
+            tipFor='Tips for Vendors'
+            jsx={<SBDBusinessPlan />}
+            onModalOpen={setIsReviewsModalOpen}
+            storeSlug='small-business-development'
+            isFeedbackPost
+          />
+          <StorePostJSX
+            tipFor='Tips for Vendors'
+            jsx={<SBDBusinessStrategy />}
+            onModalOpen={setIsReviewsModalOpen}
+            storeSlug='small-business-development'
+            isFeedbackPost
+          />
 
           {/* Most Important Poster */}
           <StorePostJSX
@@ -572,7 +588,7 @@ const HomePage = () => {
             }}
           /> */}
         </div>
-
+        <TheMallStoreFooterSection/>
         {/* Placeholder divs */}
         <div className="flex flex-col w-full h-[48vh] lg:h-[40vh] lg:flex-row">
           {/* For creators */}

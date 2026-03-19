@@ -120,10 +120,19 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
         <p 
           className={`absolute left-[1%] bg-white 
             ${mini ? 'text-[1.3vh] rounded-xs bottom-0' : 'text-[1.8vh] rounded bottom-[2%] '} text-center text-black min-w-[15%] px-[1%]`}>{distanceText}</p>
-        {/* Demo */}
-        <p className={`absolute  right-[1%] bg-yellow-400 round
-          ${mini ? 'text-[1.3vh] rounded-xs bottom-0' : 'text-[1.8vh] rounded bottom-[2%]'}
-          text-center text-black min-w-[15%] px-[1%]`}>Demo</p>
+        {/* Store State */}
+        {store.storeState && (
+          <p className={`absolute right-[1%] ${
+                (store as any).storeState === 'demo' ? 'bg-red-500 text-white' : 
+                (store as any).storeState === 'idle' ? 'bg-yellow-500 text-white' : 
+                (store as any).storeState === 'live' ? 'bg-green-500 text-white' : ''
+              }
+              round
+            ${mini ? 'text-[1.3vh] rounded-xs bottom-0' : 'text-[1.8vh] rounded bottom-[2%]'}
+            text-center text-black min-w-[15%] px-[1%] capitalize`}>
+            {store.storeState}
+          </p>
+        )}
         {/* Red flag */}
         {/* <div className="absolute top-1/2 left-1/2 text-red">
           <button className="text-red-600 z-10 h-full">

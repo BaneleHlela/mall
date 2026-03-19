@@ -39,6 +39,9 @@ export const POST_IDS = {
     YC_SALES_PLAYBOOK: "yc-sales-playbook",
     YC_STARTUP_IDEAS: "yc-startup-ideas",
     YC_COFOUNDER_RELATIONSHIPS: "yc-cofounder-relationships",
+    // Small Business Development Videos
+    SBD_BUSINESS_PLAN: "sbd-business-plan",
+    SBD_BUSINESS_STRATEGY: "sbd-business-strategy",
 } as const;
 
 interface WelcomeToTheMallProps {
@@ -314,6 +317,7 @@ export const WhatIsMVP = () => {
                   title="What is an MVP?"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
+                  scrolling="no"
                   className="w-full h-full"
               />
           </div>
@@ -434,7 +438,7 @@ export const LaunchDate = () => {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   
   // Launch date: March 15, 2026
-  const launchDate = new Date('2026-03-15T00:00:00');
+  const launchDate = new Date('2026-04-15T00:00:00');
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -506,7 +510,7 @@ export const LaunchDate = () => {
           <div className="flex items-center gap-2 mb-6">
             <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-white/60"></div>
             <span className="text-white/90 text-[1.6vh] md:text-[2vh] font-light tracking-widest">
-              MARCH 15, 2026
+              April 15, 2026
             </span>
             <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-white/60"></div>
           </div>
@@ -640,6 +644,7 @@ export const ListOfSuppliersByChioma = () => {
             title="Chioma Nkhubedu Suppliers"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            scrolling="no"
             className="w-full h-full"
           />
         </div>
@@ -664,6 +669,7 @@ export const FourFirstTimeSmallBusinessMistakes = () => {
             title="4 First Time Small Business Owner Mistakes"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            scrolling="no"
             className="w-full h-full "
           />
         </div>
@@ -682,12 +688,13 @@ export const HowToStartBusinessWhiteLabeling = () => {
         </p>
         
         {/* TikTok Video Embed */}
-        <div className="w-full aspect-[11/16] lg:aspect-[12/16] rounded-lg overflow-hidden mt-2">
+        <div className="w-full aspect-[11/16] lg:aspect-[12/16] rounded-lg overflow-y-hidden mt-2">
           <iframe
             src="https://www.tiktok.com/embed/v2/7560290220852202770"
             title="How to start a business through white labeling"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            scrolling="no"
             className="w-full h-full"
           />
         </div>
@@ -712,6 +719,7 @@ export const BusinessAdviceForSmallBusiness = () => {
             title="Business advice for small business"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            scrolling="no"
             className="w-full h-full"
           />
         </div>
@@ -736,6 +744,7 @@ export const YCStartingCompanyKeyTerms = () => {
             title="Starting A Company? The Key Terms You Should Know"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            scrolling="no"
             className="w-full h-full"
           />
         </div>
@@ -760,6 +769,7 @@ export const YCSalesPlaybook = () => {
             title="The Sales Playbook For Founders"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            scrolling="no"
             className="w-full h-full"
           />
         </div>
@@ -784,6 +794,7 @@ export const YCStartupIdeas = () => {
             title="How To Get And Evaluate Startup Ideas"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            scrolling="no"
             className="w-full h-full"
           />
         </div>
@@ -808,6 +819,57 @@ export const YCCoFounderRelationships = () => {
             title="Keys to Successful Co Founder Relationships"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            scrolling="no"
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+    </PostInteraction>
+  );
+};
+
+// Small Business Development: What Is A Business Plan?
+export const SBDBusinessPlan = () => {
+  return (
+    <PostInteraction postIdentifier={POST_IDS.SBD_BUSINESS_PLAN} postTitle="What Is A Business Plan? - Creating The Killer Business Plan">
+      <div className="w-full bg-white font-normal">
+        <p className="py-[1vh]">
+          Learn how to create a killer business plan that will help your small business succeed.
+        </p>
+        
+        {/* YouTube Video Embed */}
+        <div className="w-full aspect-video rounded-lg overflow-hidden mt-2">
+          <iframe
+            src="https://www.youtube.com/embed/mSMtJMLpBZc"
+            title="What Is A Business Plan? - Creating The Killer Business Plan"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            scrolling="no"
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+    </PostInteraction>
+  );
+};
+
+// Small Business Development: How to Develop Business Strategy
+export const SBDBusinessStrategy = () => {
+  return (
+    <PostInteraction postIdentifier={POST_IDS.SBD_BUSINESS_STRATEGY} postTitle="How to Develop Business Strategy for Your Business">
+      <div className="w-full bg-white font-normal">
+        <p className="py-[1vh]">
+          Learn how to develop an effective business strategy for your small business.
+        </p>
+        
+        {/* YouTube Video Embed */}
+        <div className="w-full aspect-video rounded-lg overflow-hidden mt-2">
+          <iframe
+            src="https://www.youtube.com/embed/81o65vbtGKo"
+            title="How to Develop Business Strategy for Your Business"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            scrolling="no"
             className="w-full h-full"
           />
         </div>

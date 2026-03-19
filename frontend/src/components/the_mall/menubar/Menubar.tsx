@@ -71,9 +71,18 @@ const Menubar = () => {
         lg:flex-col lg:pt-[5vh]
       `}
     >
-      <Link to="/" className="p-[1vh]">
-        <House size="3.1vh" />
-      </Link>
+      {location.pathname === "/" ? (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="p-[1vh]"
+        >
+          <House size="3.1vh" />
+        </button>
+      ) : (
+        <Link to="/" className="p-[1vh]">
+          <House size="3.1vh" />
+        </Link>
+      )}
 
       <Link to="/search" className="p-[1vh]">
         <Search size="3.1vh" />
