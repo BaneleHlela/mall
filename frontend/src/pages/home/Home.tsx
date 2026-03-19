@@ -14,7 +14,7 @@ import BasicStorePost from '../../components/the_mall/basic_store_post/BasicStor
 import TipsAndUpdates from '../../components/the_mall/home/TipsAndUpdates';
 import { FaTools } from 'react-icons/fa';
 import StorePostJSX from '../../components/the_mall/home/StorePostJSX';
-import { LaunchDate, LookOutForRedFlags, WelcomeToTheMall, WhatIsECommerce, WhatIsMVP, YouCanInvest, MallMVPAnnouncement, Branding, MostImportantPoster, NoAyikhoPoster, VariousPosters } from '../../components/the_mall/home/posts/SimplePosts';
+import { LaunchDate, LookOutForRedFlags, WelcomeToTheMall, WhatIsECommerce, WhatIsMVP, YouCanInvest, MallMVPAnnouncement, Branding, MostImportantPoster, NoAyikhoPoster, VariousPosters, ListOfSuppliersByChioma, FourFirstTimeSmallBusinessMistakes, HowToStartBusinessWhiteLabeling, BusinessAdviceForSmallBusiness } from '../../components/the_mall/home/posts/SimplePosts';
 import MultipleLayoutsPost from '../../components/the_mall/home/posts/MultipleLayoutsPost';
 import FreePikPosters from '../../components/the_mall/home/posts/FreePikPosters';
 import SupplyChain from '../../components/the_mall/home/posts/SupplyChain';
@@ -344,6 +344,48 @@ const HomePage = () => {
             isFeedbackPost
             storeSlug='themall'
           />
+          {/* List of Suppliers By Chioma */}
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
+              <ListOfSuppliersByChioma />
+            }
+            onModalOpen={setIsReviewsModalOpen}
+            isFeedbackPost
+            storeSlug='themall'
+          />
+          {/* Four First-Time Small Business Mistakes */}
+          <StorePostJSX
+            tipFor='Tips And Updates'
+            jsx={
+              <FourFirstTimeSmallBusinessMistakes />
+            }
+            isFeedbackPost
+            storeSlug='themall'
+            onModalOpen={setIsReviewsModalOpen}
+          />
+          {/* How to Start a Business Through white labelling */}
+          <StorePostJSX
+            tipFor='Tips And Updates'
+            jsx={
+              <HowToStartBusinessWhiteLabeling />
+            }
+            isFeedbackPost
+            storeSlug='themall'
+            onModalOpen={setIsReviewsModalOpen}
+          />
+          {/* Business Advice for Small Businesses */}
+          <StorePostJSX
+            tipFor='Tips And Updates'
+            jsx={
+              <BusinessAdviceForSmallBusiness />
+            }
+            isFeedbackPost
+            onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
+          />
+
+          {/* Most Important Poster */}
           <StorePostJSX
             tipFor='Tips And Updates'
             jsx={

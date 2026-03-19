@@ -30,6 +30,10 @@ export const POST_IDS = {
     MOST_IMPORTANT_POSTER: "most-important-poster",
     NO_AYIKHO_POSTER: "no-ayikho-poster",
     VARIOUS_POSTERS: "various-posters",
+    LIST_OF_SUPPLIERS_BY_CHIOMA: "list-of-suppliers-by-chioma",
+    FOUR_FIRST_TIME_SMALL_BUSINESS_MISTAKES: "four-first-time-small-business-mistakes",
+    HOW_TO_START_BUSINESS_WHITE_LABELING: "how-to-start-business-white-labeling",
+    BUSINESS_ADVICE_FOR_SMALL_BUSINESS: "business-advice-for-small-business",
 } as const;
 
 interface WelcomeToTheMallProps {
@@ -610,6 +614,102 @@ export const Branding = () => {
       </div>
     </div>
   )
+};
+
+// TikTok video component
+export const ListOfSuppliersByChioma = () => {
+  return (
+    <PostInteraction postIdentifier={POST_IDS.LIST_OF_SUPPLIERS_BY_CHIOMA} postTitle="ListOfSuppliersByChioma">
+      <div className="w-full bg-white font-normal">
+        <p className="py-[1vh]">
+          Chioma Nkhubedu with a list of suppliers that could be useful for your business 🔌
+        </p>
+        
+        {/* TikTok Video Embed */}
+        <div className="w-full aspect-[11/16] lg:aspect-[12/16] rounded-lg overflow-hidden mt-2">
+          <iframe
+            src="https://www.tiktok.com/embed/v2/7611541698073611541"
+            title="Chioma Nkhubedu Suppliers"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+    </PostInteraction>
+  );
+};
+
+// 4 first time small business owner mistakes component
+export const FourFirstTimeSmallBusinessMistakes = () => {
+  return (
+    <PostInteraction postIdentifier={POST_IDS.FOUR_FIRST_TIME_SMALL_BUSINESS_MISTAKES} postTitle="4 First Time Small Business Owner Mistakes">
+      <div className="w-full bg-white font-normal">
+        <p className="py-[1vh]">
+          4 first time small business owner mistakes by Chioma Nkhubedu
+        </p>
+        
+        {/* TikTok Video Embed */}
+        <div className="w-full aspect-[11/16] lg:aspect-[12/16] rounded-lg overflow-y-hidden hide-scrollbar mt-2">
+          <iframe
+            src="https://www.tiktok.com/embed/v2/7562144850314005780"
+            title="4 First Time Small Business Owner Mistakes"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full "
+          />
+        </div>
+      </div>
+    </PostInteraction>
+  );
+};
+
+// How to start a business through white labeling component
+export const HowToStartBusinessWhiteLabeling = () => {
+  return (
+    <PostInteraction postIdentifier={POST_IDS.HOW_TO_START_BUSINESS_WHITE_LABELING} postTitle="How to start a business through white labeling">
+      <div className="w-full bg-white font-normal">
+        <p className="py-[1vh]">
+          How to start a business through white labeling, by Chioma Nkhubedu
+        </p>
+        
+        {/* TikTok Video Embed */}
+        <div className="w-full aspect-[11/16] lg:aspect-[12/16] rounded-lg overflow-hidden mt-2">
+          <iframe
+            src="https://www.tiktok.com/embed/v2/7560290220852202770"
+            title="How to start a business through white labeling"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+    </PostInteraction>
+  );
+};
+
+// Business advice for small business component
+export const BusinessAdviceForSmallBusiness = () => {
+  return (
+    <PostInteraction postIdentifier={POST_IDS.BUSINESS_ADVICE_FOR_SMALL_BUSINESS} postTitle="Business advice for small business">
+      <div className="w-full bg-white font-normal">
+        <p className="py-[1vh]">
+          Business advice for small business, by Chioma Nkhubedu
+        </p>
+        
+        {/* TikTok Video Embed */}
+        <div className="w-full aspect-[11/16] lg:aspect-[12/16] rounded-lg overflow-hidden mt-2">
+          <iframe
+            src="https://www.tiktok.com/embed/v2/7585873614839368981"
+            title="Business advice for small business"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+    </PostInteraction>
+  );
 };
   
 // Bundle all together
