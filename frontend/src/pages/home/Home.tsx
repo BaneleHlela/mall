@@ -14,7 +14,7 @@ import BasicStorePost from '../../components/the_mall/basic_store_post/BasicStor
 import TipsAndUpdates from '../../components/the_mall/home/TipsAndUpdates';
 import { FaTools } from 'react-icons/fa';
 import StorePostJSX from '../../components/the_mall/home/StorePostJSX';
-import { LaunchDate, LookOutForRedFlags, WelcomeToTheMall, WhatIsECommerce, WhatIsMVP, YouCanInvest, MallMVPAnnouncement, Branding, MostImportantPoster, NoAyikhoPoster, VariousPosters, ListOfSuppliersByChioma, FourFirstTimeSmallBusinessMistakes, HowToStartBusinessWhiteLabeling, BusinessAdviceForSmallBusiness } from '../../components/the_mall/home/posts/SimplePosts';
+import { LaunchDate, LookOutForRedFlags, WelcomeToTheMall, WhatIsECommerce, WhatIsMVP, YouCanInvest, MallMVPAnnouncement, Branding, MostImportantPoster, NoAyikhoPoster, VariousPosters, ListOfSuppliersByChioma, FourFirstTimeSmallBusinessMistakes, HowToStartBusinessWhiteLabeling, BusinessAdviceForSmallBusiness, YCStartingCompanyKeyTerms, YCSalesPlaybook, YCStartupIdeas, YCCoFounderRelationships } from '../../components/the_mall/home/posts/SimplePosts';
 import MultipleLayoutsPost from '../../components/the_mall/home/posts/MultipleLayoutsPost';
 import FreePikPosters from '../../components/the_mall/home/posts/FreePikPosters';
 import SupplyChain from '../../components/the_mall/home/posts/SupplyChain';
@@ -383,6 +383,39 @@ const HomePage = () => {
             isFeedbackPost
             onModalOpen={setIsReviewsModalOpen}
             storeSlug='themall'
+          />
+          {/* Y Combinator Videos */}
+          <StorePostJSX
+            tipFor='Tips for Founders'
+            jsx={<YCStartingCompanyKeyTerms />}
+            color="text-red-500"
+            onModalOpen={setIsReviewsModalOpen}
+            storeSlug='y-combinator'
+            isFeedbackPost
+          />
+          <StorePostJSX
+            tipFor='Tips for Founders'
+            jsx={<YCSalesPlaybook />}
+            color="text-red-500"
+            onModalOpen={setIsReviewsModalOpen}
+            storeSlug='y-combinator'
+            isFeedbackPost
+          />
+          <StorePostJSX
+            tipFor='Tips for Founders'
+            jsx={<YCStartupIdeas />}
+            color="text-red-500"
+            onModalOpen={setIsReviewsModalOpen}
+            storeSlug='y-combinator'
+            isFeedbackPost
+          />
+          <StorePostJSX
+            tipFor='Tips for Founders'
+            jsx={<YCCoFounderRelationships />}
+            color="text-red-500"
+            onModalOpen={setIsReviewsModalOpen}
+            storeSlug='y-combinator'
+            isFeedbackPost
           />
 
           {/* Most Important Poster */}

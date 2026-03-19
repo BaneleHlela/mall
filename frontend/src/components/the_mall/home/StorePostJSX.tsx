@@ -134,7 +134,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
                     }}
                     className={`h-full aspect-square bg-gradient-to-r from-orange-500 via-orange-400 to-orange-700 rounded-full p-[.25vh]`}>
                     <img
-                        src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Blue%20Modern%20Shopping%20Bag%20Logo.png"
+                        src={store.thumbnails.profily|| "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Blue%20Modern%20Shopping%20Bag%20Logo.png"}
                         alt=""
                         className="w-full h-full object-cover rounded-full"
                     />
@@ -146,7 +146,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
                     }}
                     className="flex flex-col justify-center h-full space-y-1">
                     <div style={{ lineHeight: "1"}}  className={`font-semibold capitalize ${color}`}>{tipFor}</div>
-                    <div style={{ lineHeight: "1"}} className="text-[1.8vh] text-gray-300">@themall</div>
+                    <div style={{ lineHeight: "1"}} className="text-[1.8vh] text-gray-300">@{storeSlug || 'themall'}</div>
                 </div>
                 </div>
                 {/* Icon */}

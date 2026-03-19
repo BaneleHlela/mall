@@ -251,6 +251,17 @@ export const departments = {
       reelyThumbnail: "https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/pexels-valeriya-14794332.jpg",
       profilyThumbnail: "https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/pexels-valeriya-14794332.jpg",
     }]
+  },
+  investments: {
+    short: "Investments",
+    full: "Funding & Investments",
+    description: "Investment opportunities, funding options, and business growth capital.",
+    thumbnails: ["https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/pexels-pixabay-433333.jpg"],
+    content: [{
+      storeSlug: "Example Store",
+      reelyThumbnail: "https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/pexels-pixabay-433333.jpg",
+      profilyThumbnail: "https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/pexels-pixabay-433333.jpg",
+    }]
   } 
 };
 

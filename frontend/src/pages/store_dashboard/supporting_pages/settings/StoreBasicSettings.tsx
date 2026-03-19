@@ -12,8 +12,11 @@ import {
   FaEnvelope, 
   FaTag,
   FaChevronDown,
-  FaCheck
+  FaCheck,
+  FaTimesCircle
 } from 'react-icons/fa';
+
+const MAX_DEPARTMENTS = 3;
 
 const mysweetalert = withReactContent(Swal);
 
@@ -60,7 +63,7 @@ const StoreBasicSettings = () => {
         isValid = value.trim().length > 0;
         break;
       case 'departments':
-        isValid = value.length > 0;
+        isValid = value.length > 0 && value.length <= MAX_DEPARTMENTS;
         break;
       case 'contact.phone':
         isValid = /^[0-9]{10}$/.test(value);
@@ -90,10 +93,27 @@ const StoreBasicSettings = () => {
     }
   };
 
-  const handleDepartmentChange = (deptKey: string) => {
-    setForm(prev => ({ ...prev, departments: [deptKey] }));
-    setIsDeptOpen(false);
-    validateField('departments', [deptKey]);
+  const handleDepartmentToggle = (deptKey: string) => {
+    const currentDepts = form.departments || [];
+    
+    if (currentDepts.includes(deptKey)) {
+      // Remove department
+      setForm(prev => ({ ...prev, departments: currentDepts.filter(d => d !== deptKey) }));
+    } else {
+      // Add department if under limit
+      if (currentDepts.length < MAX_DEPARTMENTS) {
+        setForm(prev => ({ ...prev, departments: [...currentDepts, deptKey] }));
+      }
+    }
+    validateField('departments', currentDepts.includes(deptKey) 
+      ? currentDepts.filter(d => d !== deptKey) 
+      : [...currentDepts, deptKey]);
+  };
+
+  const handleRemoveDepartment = (deptKey: string) => {
+    const currentDepts = form.departments || [];
+    setForm(prev => ({ ...prev, departments: currentDepts.filter(d => d !== deptKey) }));
+    validateField('departments', currentDepts.filter(d => d !== deptKey));
   };
 
   const handleSave = async () => {
@@ -224,54 +244,79 @@ const StoreBasicSettings = () => {
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
                 <FaTag className="text-amber-500" />
-                Department <span className="text-red-500">*</span>
+                Department {!validation.departmentValid && <span className="text-red-500">*</span>}
               </label>
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setIsDeptOpen(prev => !prev)}
-                  className={`w-full flex justify-between items-center px-4 py-3 bg-slate-50 border-2 rounded-xl transition-colors
-                    ${!validation.departmentValid 
-                      ? 'border-red-300 bg-red-50' 
-                      : isDeptOpen 
-                        ? 'border-amber-500 bg-white' 
-                        : 'border-slate-200 hover:border-slate-300'
-                    }`}
-                >
-                  <span className={form.departments[0] ? 'text-slate-700' : 'text-slate-400'}>
-                    {form.departments[0] ? (departments as any)[form.departments[0]]?.full : 'Select Department'}
-                  </span>
-                  <FaChevronDown className={`text-slate-400 transition-transform ${isDeptOpen ? 'rotate-180' : ''}`} />
-                </button>
-                
-                {isDeptOpen && (
-                  <div className="absolute z-20 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl max-h-[250px] overflow-y-auto">
-                    {Object.entries(departments).map(([key, { full, description }]) => (
+              
+              {/* Selected Departments */}
+              {form.departments.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {form.departments.map(deptKey => (
+                    <span
+                      key={deptKey}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-amber-100 text-amber-700 rounded-full text-sm font-medium"
+                    >
+                      {(departments as any)[deptKey]?.full}
                       <button
-                        key={key}
                         type="button"
-                        onClick={() => handleDepartmentChange(key)}
-                        className={`w-full text-left p-3 hover:bg-slate-50 transition-colors flex items-center gap-3
-                          ${form.departments[0] === key ? 'bg-amber-50' : ''}`}
+                        onClick={() => handleRemoveDepartment(deptKey)}
+                        className="ml-1 hover:text-amber-900"
                       >
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0
-                          ${form.departments[0] === key ? 'bg-amber-500 border-amber-500' : 'border-slate-300'}`}
-                        >
-                          {form.departments[0] === key && <FaCheck className="text-white text-xs" />}
-                        </div>
-                        <div>
-                          <p className="font-medium text-slate-700">{full}</p>
-                          <p className="text-xs text-slate-400">{description}</p>
-                        </div>
+                        <FaTimesCircle size={14} />
                       </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+                    </span>
+                  ))}
+                </div>
+              )}
+              
+              {/* Add Department Button / Dropdown */}
+              {form.departments.length < MAX_DEPARTMENTS ? (
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setIsDeptOpen(prev => !prev)}
+                    className={`w-full flex justify-between items-center px-4 py-3 bg-slate-50 border-2 rounded-xl transition-colors
+                      ${!validation.departmentValid 
+                        ? 'border-red-300 bg-red-50' 
+                        : isDeptOpen 
+                          ? 'border-amber-500 bg-white' 
+                          : 'border-slate-200 hover:border-slate-300'
+                      }`}
+                  >
+                    <span className="text-slate-400">
+                      Add department ({form.departments.length}/{MAX_DEPARTMENTS})
+                    </span>
+                    <FaChevronDown className={`text-slate-400 transition-transform ${isDeptOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  
+                  {isDeptOpen && (
+                    <div className="absolute z-20 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl max-h-[250px] overflow-y-auto">
+                      {Object.entries(departments)
+                        .filter(([key]) => !form.departments.includes(key))
+                        .map(([key, { full, description }]) => (
+                          <button
+                            key={key}
+                            type="button"
+                            onClick={() => handleDepartmentToggle(key)}
+                            className="w-full text-left p-3 hover:bg-slate-50 transition-colors flex items-center gap-3"
+                          >
+                            <div className="w-5 h-5 rounded-full border-2 border-slate-300 flex-shrink-0" />
+                            <div>
+                              <p className="font-medium text-slate-700">{full}</p>
+                              <p className="text-xs text-slate-400">{description}</p>
+                            </div>
+                          </button>
+                        ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <p className="text-xs text-slate-500 italic">Maximum departments selected</p>
+              )}
+              
               {!validation.departmentValid && (
                 <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                  Department is required
+                  Please select at least one department (max {MAX_DEPARTMENTS})
                 </p>
               )}
             </div>

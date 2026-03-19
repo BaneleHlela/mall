@@ -34,6 +34,11 @@ export const POST_IDS = {
     FOUR_FIRST_TIME_SMALL_BUSINESS_MISTAKES: "four-first-time-small-business-mistakes",
     HOW_TO_START_BUSINESS_WHITE_LABELING: "how-to-start-business-white-labeling",
     BUSINESS_ADVICE_FOR_SMALL_BUSINESS: "business-advice-for-small-business",
+    // Y Combinator Videos
+    YC_STARTING_COMPANY_KEY_TERMS: "yc-starting-company-key-terms",
+    YC_SALES_PLAYBOOK: "yc-sales-playbook",
+    YC_STARTUP_IDEAS: "yc-startup-ideas",
+    YC_COFOUNDER_RELATIONSHIPS: "yc-cofounder-relationships",
 } as const;
 
 interface WelcomeToTheMallProps {
@@ -71,7 +76,10 @@ export const WelcomeToTheMall = ({ fonts }: WelcomeToTheMallProps) => {
         <div className="w-full overflow-hidden">
             {/* Welcome message above the poster */}
             <p className="font-normal py-[1vh]">
-                Welcome to the Mall! We're so excited to have you. Take a moment to explore the platform. This home page is your space to connect with customers, showcase your products, and grow your business. But for now it's your space to learn about the Mall itself. Scroll down to see some important posts that will help you get started and make the most of your experience here. We can't wait to see what you create!
+                Welcome to the Mall! We're so excited to have you. Take a moment to explore the platform. <br/><br/>
+                This home page is your space to connect with customers, showcase your products, and grow your business. But for now it's your space to learn about the Mall itself.<br/><br/>
+                Scroll down to see some important posts that will help you get started and make the most of your experience here. We can't wait to see what you create! <br/>
+                <p className="text-white">.</p>
             </p>
             
             {/* Main Poster Container */}
@@ -702,6 +710,102 @@ export const BusinessAdviceForSmallBusiness = () => {
           <iframe
             src="https://www.tiktok.com/embed/v2/7585873614839368981"
             title="Business advice for small business"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+    </PostInteraction>
+  );
+};
+
+// Y Combinator: Starting A Company? The Key Terms You Should Know
+export const YCStartingCompanyKeyTerms = () => {
+  return (
+    <PostInteraction postIdentifier={POST_IDS.YC_STARTING_COMPANY_KEY_TERMS} postTitle="Starting A Company? The Key Terms You Should Know">
+      <div className="w-full bg-white font-normal">
+        <p className="py-[1vh]">
+          Essential terms every founder should know when starting a company.
+        </p>
+        
+        {/* YouTube Video Embed */}
+        <div className="w-full aspect-video rounded-lg overflow-hidden mt-2">
+          <iframe
+            src="https://www.youtube.com/embed/wH3TKpALlw4"
+            title="Starting A Company? The Key Terms You Should Know"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+    </PostInteraction>
+  );
+};
+
+// Y Combinator: The Sales Playbook For Founders
+export const YCSalesPlaybook = () => {
+  return (
+    <PostInteraction postIdentifier={POST_IDS.YC_SALES_PLAYBOOK} postTitle="The Sales Playbook For Founders">
+      <div className="w-full bg-white font-normal">
+        <p className="py-[1vh]">
+          The Sales Playbook For Founders - Learn the essential sales strategies for building a successful startup.
+        </p>
+        
+        {/* YouTube Video Embed */}
+        <div className="w-full aspect-video rounded-lg overflow-hidden mt-2">
+          <iframe
+            src="https://www.youtube.com/embed/DH7REvnQ1y4"
+            title="The Sales Playbook For Founders"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+    </PostInteraction>
+  );
+};
+
+// Y Combinator: How To Get And Evaluate Startup Ideas
+export const YCStartupIdeas = () => {
+  return (
+    <PostInteraction postIdentifier={POST_IDS.YC_STARTUP_IDEAS} postTitle="How To Get And Evaluate Startup Ideas">
+      <div className="w-full bg-white font-normal">
+        <p className="py-[1vh]">
+          How to generate and evaluate startup ideas that have the potential to succeed.
+        </p>
+        
+        {/* YouTube Video Embed */}
+        <div className="w-full aspect-video rounded-lg overflow-hidden mt-2">
+          <iframe
+            src="https://www.youtube.com/embed/Th8JoIan4dg"
+            title="How To Get And Evaluate Startup Ideas"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+    </PostInteraction>
+  );
+};
+
+// Y Combinator: Keys to Successful Co Founder Relationships
+export const YCCoFounderRelationships = () => {
+  return (
+    <PostInteraction postIdentifier={POST_IDS.YC_COFOUNDER_RELATIONSHIPS} postTitle="Keys to Successful Co Founder Relationships">
+      <div className="w-full bg-white font-normal">
+        <p className="py-[1vh]">
+          The keys to building and maintaining successful co-founder relationships.
+        </p>
+        
+        {/* YouTube Video Embed */}
+        <div className="w-full aspect-video rounded-lg overflow-hidden mt-2">
+          <iframe
+            src="https://www.youtube.com/embed/A4SLDQDXdp0"
+            title="Keys to Successful Co Founder Relationships"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="w-full h-full"
