@@ -62,7 +62,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+//routes
 app.use("/api/user", userRoutes);
 app.use("/api/auth", OAuthRoutes);
 app.use("/api/layouts", storeLayoutRoutes);
