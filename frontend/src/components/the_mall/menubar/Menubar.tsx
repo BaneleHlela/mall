@@ -6,6 +6,8 @@ import { LuShoppingCart } from "react-icons/lu";
 import { HiOutlineChatAlt2 } from "react-icons/hi";
 import { useNavbar } from "../../../utils/context/NavbarContext";
 import { useState, useEffect, useRef } from "react";
+import { CiChat2, CiHeart, CiHome, CiSearch, CiShoppingCart, CiUser } from "react-icons/ci";
+import { PiUserCircleDashedThin } from "react-icons/pi";
 
 const shouldHideNav = (hiddenRoutes: string[], currentPath: string): boolean => {
   return hiddenRoutes.some((route) => currentPath.includes(route));
@@ -64,7 +66,7 @@ const Menubar = () => {
         damping: 25,
       }}
       className={`
-        ${isHidden ?  "hidden" : "fixed"} z-100 text-white bg-black shadow-sm
+        ${isHidden ?  "hidden" : "fixed"} z-100 bg-white shadow-md
         flex items-center justify-evenly space-x-1
         h-[5vh] w-full bottom-0 lg:px-[3vh]
         lg:top-0 lg:bottom-auto lg:left-0 lg:h-screen lg:w-[5vh]
@@ -76,32 +78,32 @@ const Menubar = () => {
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           className="p-[1vh]"
         >
-          <House size="3.1vh" />
+          <CiHome size="3.1vh" />
         </button>
       ) : (
         <Link to="/" className="p-[1vh]">
-          <House size="3.1vh" />
+          <CiHome size="3.1vh" />
         </Link>
       )}
 
-      <Link to="/search" className="p-[1vh]">
-        <Search size="3.1vh" />
+      <Link to="/search#search-content" className="p-[1vh]">
+        <CiSearch size="3.1vh" />
       </Link>
 
       <Link to="/chat" className="p-[1vh]">
-        <HiOutlineChatAlt2 size="3.1vh" />
+        <CiChat2 size="3.1vh" />
       </Link>
 
       <Link to="/cart" className="p-[1vh]">
-        <LuShoppingCart size="3.1vh" />
+        <CiShoppingCart size="3.1vh" />
       </Link>
 
       <Link to="/favorites" className="p-[1vh]">
-        <FaRegHeart size="3vh" />
+        <CiHeart size="3vh" />
       </Link>
 
       <Link to="/account" className="p-[1vh]">
-        <CircleUser size="3.1vh" />
+        <PiUserCircleDashedThin size="3.1vh" />
       </Link>
     </motion.nav>
   );

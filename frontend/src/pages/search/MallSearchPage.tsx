@@ -10,6 +10,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React from 'react';
 import { MdFilterList, MdClose } from 'react-icons/md';
 import { IoMdArrowDropdown } from 'react-icons/io';
+import TheMallStoreFooterSection from '../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStoreFooterSection';
 
 const relevanceOptions = [
   { key: 'relevance', label: 'Relevance' },
@@ -106,7 +107,9 @@ const MallSearchPage = () => {
       <TheMallTopbar />
       <div className="w-[100vw] h-[14vh] min-h-[14vh]"></div>
 
-      <div className="w-full lg:w-[80%] overflow-x-hidden hide-scrollbar flex flex-col">
+      <div
+        id="search-content" 
+        className="w-full lg:w-[80%] overflow-x-hidden hide-scrollbar flex flex-col">
         {/* Department Selector */}
         <div className="sticky top-0] lg:top-0 z-10 bg-white shadow-sm">
           <div className="relative flex items-center h-[7vh] min-h-[7vh] w-full">
@@ -319,9 +322,7 @@ const MallSearchPage = () => {
         </div>
 
         {/* Footer */}
-        <footer className="text-center py-[4vh] text-gray-500 text-[1.4vh] border-t border-gray-200 mt-auto mb-[5vh] lg:mb-0">
-          <p>© {new Date().getFullYear()} The Mall — Concept by Banele Hlela.</p>
-        </footer>
+        <TheMallStoreFooterSection />
       </div>
     </div>
   );

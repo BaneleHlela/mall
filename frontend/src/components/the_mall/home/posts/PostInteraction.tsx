@@ -126,9 +126,9 @@ const PostInteraction: React.FC<PostInteractionProps> = ({
             {showRating && (
                 <div
                     onClick={handleOpenModal}
-                    className="relative flex items-center w-full h-[5vh] p-[.6vh] cursor-pointer mt-1"
+                    className="relative flex items-center w-full px-[.6vh] cursor-pointer"
                 >
-                    <div className="w-full h-full bg-black text-white rounded-[.8vh] border-[.2vh] px-[1.5vh] pr-[10vh] flex items-center font-[500]">
+                    <div className="w-full h-full bg-black py-[.5vh] text-white rounded-[.8vh] border-[.2vh] px-[1.5vh] pr-[10vh] flex items-center font-[500]">
                         Reviews & Feedback
                     </div>
                     <div className="absolute right-[1.5vh] px-[.5vh] flex items-center gap-1">

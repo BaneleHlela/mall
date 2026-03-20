@@ -123,7 +123,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
     };
 
     return (
-        <div className='flex flex-col items-center bg-white px-[.5vh] py-[1vh] h-fit rounded-[1.5vh]'>
+        <div className='flex flex-col items-center bg-white px-[.5vh] pt-[1vh] h-fit rounded-[1.5vh]'>
             {/* Image and text */}
             <div className="flex justify-between items-center w-full h-[5vh] max-h-[5vh] lg:h-[6vh] lg:max-h-[6vh] overflow-hidden">
                 <div className="flex items-center h-full space-x-1">

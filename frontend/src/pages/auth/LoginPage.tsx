@@ -61,9 +61,9 @@ const LoginPage = () => {
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.5 }}
-			className='max-w-[60vh] w-full h-screen lg:h-screen flex flex-col justify-between backdrop-filter backdrop-blur-xl lg:rounded-[1vh] shadow-xl overflow-hidden px-[2vh] py-[4vh]'
+			className='max-w-[60vh] bg-white w-full h-screen lg:h-screen flex flex-col justify-between backdrop-filter backdrop-blur-xl lg:rounded-[1vh] shadow-xl overflow-hidden px-[2vh] py-[4vh]'
 		>
-			<div className="w-full h-[20%] ">
+			<div className="w-full h-[20%]">
 				<img 
 					src="https://storage.googleapis.com/the-mall-uploads-giza/stores/68726dde5987f5810dee5a8a/images/mall%20image.webp" 
 					alt="mall theme image" 
@@ -74,7 +74,7 @@ const LoginPage = () => {
 				<h2 className='text-[3vh] font-semibold'>
 					Welcome Back! 
 				</h2>
-				<p style={{lineHeight: "1.1"}} className="text-[2.2vh]">It's a great pleasure to have you login. Remember, you're on top of the world!</p>
+				<p style={{lineHeight: "1.1"}} className="text-[2.1vh] pt-2">It's a great pleasure to have you. Remember, you're on top of the world!</p>
 			</div>
 			
 			<div className=''>
@@ -107,7 +107,7 @@ const LoginPage = () => {
 					<motion.button
 						whileHover={{ scale: 1.02 }}
 						whileTap={{ scale: 0.98 }}
-						className='w-full py-[1.3vh] bg-gray-800 text-white font-bold rounded-[.5vh] shadow-lg focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200'
+						className='w-full py-[1.3vh] bg-gray-800 text-white font-bold rounded-[.5vh] shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200'
 						type='submit'
 						disabled={isLoading}
 					>
@@ -116,7 +116,7 @@ const LoginPage = () => {
 				</form>
 			</div>
 			<div className="flex flex-col">
-				<div className="w-full flex flex-row items-center justify-between text-[2.2vh]">
+				<div className="w-full flex flex-row items-center justify-between text-[2.2vh] text-gray-700">
 					<span className="h-[.15vh] w-[30%] bg-gray-600"></span>
 						Or sign in with
 					<span className="h-[.15vh] w-[30%] bg-gray-600"></span>
@@ -125,7 +125,7 @@ const LoginPage = () => {
 			</div>
 			
 			<div className='px-8 py-4 flex justify-center'>
-				<p className='text-sm text-gray-500'>
+				<p className='text-[1.7vh] text-gray-500'>
 					Don't have an account?{" "}
 					<Link to='/signup' className='text-blue-700 hover:underline'>
 						Sign up

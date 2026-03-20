@@ -10,9 +10,6 @@ import { openRangeModal, closeRangeModal } from "../../../features/rangeSlice";
 import RangeModal from "../../modals/RangeModal";
 import ProtectedRoute from "../authorization/ProtectedRoute";
 
-// Popular searches div gotta be functional 
-// ui
-
 const TheMallTopbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -28,29 +25,22 @@ const TheMallTopbar = () => {
   const user = useAppSelector((state: RootState) => state.user.user);
   const { isOpen: isRangeModalOpen } = useAppSelector((state: RootState) => state.range);
 
-  // Fetch stores whenever search term changes
   useEffect(() => {
     if (searchTerm.trim().length > 0) {
       dispatch(fetchStores({ search: searchTerm }));
     }
   }, [dispatch, searchTerm]);
 
-  // Hide topbar on scroll down, show on scroll up
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
       if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
-        // Scrolling down and past initial threshold
         setIsHidden(true);
       } else {
-        // Scrolling up
         setIsHidden(false);
       }
-      
       lastScrollY.current = currentScrollY;
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -63,19 +53,26 @@ const TheMallTopbar = () => {
     }
   };
 
-  const limitedResults = storeIds.slice(0, 4); // show only first 4 results
-
+  const limitedResults = storeIds.slice(0, 4);
 
   return (
-    <div className={`fixed top-0 w-[100vw] z-1000 h-[14vh] min-h-[14vh] lg:min-h-[10vh] lg:h-[8vh] lg:max-h-[8vh] inset-0 z-50 bg-black flex flex-col items-center lg:px-[10%] text-white transition-transform duration-300 ${isHidden ? '-translate-y-full' : ''}`}>
+    <div
+      className={`fixed top-0 w-[100vw] h-[14vh] min-h-[14vh] shadow-md lg:min-h-[10vh] lg:h-[8vh] lg:max-h-[8vh] inset-0 z-50
+        bg-white dark:bg-black
+        flex flex-col items-center lg:px-[10%]
+        text-gray-900 dark:text-white
+        transition-transform duration-300
+        ${isHidden ? '-translate-y-full' : ''}`}
+    >
       <div className="h-full w-full">
+
         {/* Desktop */}
         <div className="hidden lg:flex w-full h-full flex-row justify-between items-center">
           {/* Logo */}
           <div className="w-fit h-[60%] flex items-center">
             <p
               style={{ fontFamily: "Bebas Neue" }}
-              className="text-white font-bold text-[5vh]"
+              className="font-bold text-[5vh] text-gray-900 dark:text-white"
             >
               The Mall
             </p>
@@ -93,14 +90,12 @@ const TheMallTopbar = () => {
                 onKeyDown={handleKeyDown}
                 type="text"
                 placeholder="Search for stores, products, or services"
-                className="w-full h-full border p-[1vh] placeholder:text-[1.5vh] placeholder:text-stone-400 bg-[#3e3e3fe3] focus:outline-none"
-                style={{
-                  backgroundColor: '#3e3e3fe3',
-                  borderWidth: '1px',
-                  borderStyle: 'solid',
-                  borderColor: '#6b7280',
-                  borderRadius: '4px',
-                }}
+                className="w-full h-full border p-[1vh] placeholder:text-[1.5vh]
+                  placeholder:text-stone-400
+                  bg-stone-100 dark:bg-[#3e3e3fe3]
+                  text-gray-900 dark:text-white
+                  border-gray-300 dark:border-gray-500
+                  focus:outline-none rounded-[4px]"
               />
 
               {/* Results Preview Modal */}
@@ -110,78 +105,66 @@ const TheMallTopbar = () => {
                   onMouseLeave={() => setIsHovered(false)}
                   className="absolute top-[110%] bg-white w-full max-h-[350px] shadow-lg p-3 overflow-y-auto"
                 >
-                    <div className="w-full flex">
-                        <div className="w-[60%]">
-                            {isLoading ? (
-                                <p className="text-gray-500 text-sm px-2">Loading...</p>
-                            ) : limitedResults.length === 0 ? (
-                                <p className="text-gray-500 text-sm px-2">
-                                No results found
-                                </p>
-                            ) : (
-                                <div className="grid grid-cols-2 gap-3">
-                                {limitedResults.map((id) => (
-                                    <StoreCard
-                                      key={id}
-                                      store={storesById[id]}
-                                      user={user}
-                                      mini={true}
-                                    />
-                                ))}
-                                </div>
-                            )}
+                  <div className="w-full flex">
+                    <div className="w-[60%]">
+                      {isLoading ? (
+                        <p className="text-gray-500 text-sm px-2">Loading...</p>
+                      ) : limitedResults.length === 0 ? (
+                        <p className="text-gray-500 text-sm px-2">No results found</p>
+                      ) : (
+                        <div className="grid grid-cols-2 gap-3">
+                          {limitedResults.map((id) => (
+                            <StoreCard key={id} store={storesById[id]} user={user} mini={true} />
+                          ))}
                         </div>
-                        <div className="w-[40%] px-[1vh]">
-                            {/* Popular Searches */}
-                            <div className="mb-8 w-full">
-                                <h3 className="text-gray-800 font-bold text-sm mb-3 tracking-wide">
-                                    POPULAR SEARCHES
-                                </h3>
-                                    <ul className="space-y-2 text-gray-700 text-sm">
-                                    <li className="cursor-pointer hover:text-gray-900 transition-colors">
-                                        <span className="font-semibold">s</span>amsung phones
-                                    </li>
-                                    <li className="cursor-pointer hover:text-gray-900 transition-colors">
-                                        <span className="font-semibold">s</span>alad bowls
-                                    </li>
-                                    <li className="cursor-pointer hover:text-gray-900 transition-colors">
-                                        pots for <span className="font-semibold">s</span>ale
-                                    </li>
-                                    <li className="cursor-pointer hover:text-gray-900 transition-colors">
-                                        <span className="font-semibold">s</span>indisiwe church
-                                    </li>
-                                    <li className="cursor-pointer hover:text-gray-900 transition-colors">
-                                        <span className="font-semibold">s</span>khulisaneni pre school
-                                    </li>
-                                </ul>
-                            </div>
-                            {/* Brands & Categories */}
-                            <div>
-                                <h3 className="text-gray-800 font-bold text-sm mb-3 tracking-wide">
-                                    DEPARTMENTS & BRANDS
-                                </h3>
-                                <ul className="space-y-2 text-gray-700 text-sm">
-                                    <li className="cursor-pointer hover:text-gray-900 transition-colors">
-                                       Old Ka<span className="font-semibold">s</span>i 
-                                    </li>
-                                    <li className="cursor-pointer hover:text-gray-900 transition-colors">
-                                        Clothing and Fashion
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                      )}
                     </div>
-                    {/* View All Button */}
-                    {storeIds.length > 0 && (
-                        <button
-                        onClick={() =>
-                            navigate(`/search?query=${encodeURIComponent(searchTerm)}`)
-                        }
-                        className="w-full mt-3 py-2 text-sm font-semibold text-white bg-gray-900 rounded hover:bg-gray-800"
-                        >
-                        View All Results
-                        </button>
-                    )}
+                    <div className="w-[40%] px-[1vh]">
+                      <div className="mb-8 w-full">
+                        <h3 className="text-gray-800 font-bold text-sm mb-3 tracking-wide">
+                          POPULAR SEARCHES
+                        </h3>
+                        <ul className="space-y-2 text-gray-700 text-sm">
+                          <li className="cursor-pointer hover:text-gray-900 transition-colors">
+                            <span className="font-semibold">s</span>amsung phones
+                          </li>
+                          <li className="cursor-pointer hover:text-gray-900 transition-colors">
+                            <span className="font-semibold">s</span>alad bowls
+                          </li>
+                          <li className="cursor-pointer hover:text-gray-900 transition-colors">
+                            pots for <span className="font-semibold">s</span>ale
+                          </li>
+                          <li className="cursor-pointer hover:text-gray-900 transition-colors">
+                            <span className="font-semibold">s</span>indisiwe church
+                          </li>
+                          <li className="cursor-pointer hover:text-gray-900 transition-colors">
+                            <span className="font-semibold">s</span>khulisaneni pre school
+                          </li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h3 className="text-gray-800 font-bold text-sm mb-3 tracking-wide">
+                          DEPARTMENTS & BRANDS
+                        </h3>
+                        <ul className="space-y-2 text-gray-700 text-sm">
+                          <li className="cursor-pointer hover:text-gray-900 transition-colors">
+                            Old Ka<span className="font-semibold">s</span>i
+                          </li>
+                          <li className="cursor-pointer hover:text-gray-900 transition-colors">
+                            Clothing and Fashion
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  {storeIds.length > 0 && (
+                    <button
+                      onClick={() => navigate(`/search?query=${encodeURIComponent(searchTerm)}`)}
+                      className="w-full mt-3 py-2 text-sm font-semibold text-white bg-gray-900 rounded hover:bg-gray-800"
+                    >
+                      View All Results
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -189,7 +172,7 @@ const TheMallTopbar = () => {
             {/* Range */}
             <button
               onClick={() => dispatch(openRangeModal())}
-              className="text-[1vh] text-white hover:bg-white hover:bg-opacity-10 rounded p-1 transition-colors"
+              className="text-[1vh] text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded p-1 transition-colors"
             >
               <MdLocationSearching className="text-[3.2vh]" />
             </button>
@@ -197,9 +180,9 @@ const TheMallTopbar = () => {
             {/* Location */}
             <button
               onClick={() => navigate('/account')}
-              className="text-[1vh] text-black hover:bg-white hover:bg-opacity-10 rounded p-1 transition-colors"
+              className="text-[1vh] text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded p-1 transition-colors"
             >
-              <SlLocationPin className="text-[3vh] text-white" />
+              <SlLocationPin className="text-[3vh]" />
             </button>
           </div>
         </div>
@@ -208,27 +191,28 @@ const TheMallTopbar = () => {
         <div className="w-full h-full py-[.8vh] px-[.9vh] lg:hidden">
           <div className="w-full h-[50%] flex flex-row justify-between items-center">
             {/* Logo */}
-            <div className="w-fit h-[65%]">
-              <img
-                src="https://storage.googleapis.com/the-mall-uploads-giza/stores/6884a99461cfbcec1883b7dc/images/mall-logo.png"
-                alt="the-mall-logo"
-                className="w-fit h-full object-contain"
-              />
+            <div className="w-fit h-[60%] flex items-center">
+              <p
+                style={{ fontFamily: "Bebas Neue" }}
+                className="font-bold text-[3.5vh] ml-1 text-gray-900 dark:text-white"
+              >
+                The Mall
+              </p>
             </div>
 
             {/* Range and Location */}
             <div className="space-x-1">
               <button
                 onClick={() => dispatch(openRangeModal())}
-                className="text-[1vh] text-white hover:bg-white hover:bg-opacity-10 rounded p-1 transition-colors"
+                className="text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded p-1 transition-colors"
               >
                 <MdLocationSearching className="text-[3.2vh]" />
               </button>
               <button
                 onClick={() => navigate('/account')}
-                className="text-[1vh] text-black hover:bg-white hover:bg-opacity-10 rounded p-1 transition-colors"
+                className="text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded p-1 transition-colors"
               >
-                <SlLocationPin className="text-[3vh] text-white" />
+                <SlLocationPin className="text-[3vh]" />
               </button>
             </div>
           </div>
@@ -243,14 +227,12 @@ const TheMallTopbar = () => {
               onKeyDown={handleKeyDown}
               type="text"
               placeholder="Search for stores, products, or services"
-              className="w-full h-[80%] border p-[1vh] placeholder:text-[1.5vh] placeholder:text-stone-400 bg-[#3e3e3fe3] focus:outline-none"
-              style={{
-                backgroundColor: '#3e3e3fe3',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-                borderColor: '#6b7280',
-                borderRadius: '4px',
-              }}
+              className="w-full h-[80%] border p-[1vh] placeholder:text-[1.5vh]
+                placeholder:text-stone-400
+                bg-stone-100 dark:bg-[#3e3e3fe3]
+                text-gray-900 dark:text-white
+                border-gray-300 dark:border-gray-500
+                focus:outline-none rounded-[4px]"
             />
 
             {/* Mobile Search Results Popup */}
@@ -263,27 +245,17 @@ const TheMallTopbar = () => {
                 {isLoading ? (
                   <p className="text-gray-500 text-sm px-2">Loading...</p>
                 ) : limitedResults.length === 0 ? (
-                  <p className="text-gray-500 text-sm px-2">
-                    No results found
-                  </p>
+                  <p className="text-gray-500 text-sm px-2">No results found</p>
                 ) : (
                   <div className="grid grid-cols-2 gap-3 w-full">
                     {limitedResults.map((id) => (
-                      <StoreCard
-                        key={id}
-                        store={storesById[id]}
-                        user={user}
-                        mini={true}
-                      />
+                      <StoreCard key={id} store={storesById[id]} user={user} mini={true} />
                     ))}
                   </div>
                 )}
-                {/* View All Button */}
                 {storeIds.length > 0 && (
                   <button
-                    onClick={() =>
-                      navigate(`/search?query=${encodeURIComponent(searchTerm)}`)
-                    }
+                    onClick={() => navigate(`/search?query=${encodeURIComponent(searchTerm)}`)}
                     className="w-full mt-3 py-2 text-sm font-semibold text-white bg-gray-900 rounded hover:bg-gray-800"
                   >
                     View All Results
@@ -298,10 +270,7 @@ const TheMallTopbar = () => {
       {/* Modals */}
       {isRangeModalOpen && (
         <ProtectedRoute>
-          <RangeModal
-            open={isRangeModalOpen}
-            onClose={() => dispatch(closeRangeModal())}
-          />
+          <RangeModal open={isRangeModalOpen} onClose={() => dispatch(closeRangeModal())} />
         </ProtectedRoute>
       )}
     </div>
