@@ -6,14 +6,12 @@ import StoreMenubarLogo from "../shared_menubar_components/StoreMenubarLogo";
 import StoreMenubarHamburger from "../shared_menubar_components/StoreMenubarHamburger";
 import StoreMenubarSearchbar from "../shared_menubar_components/StoreMenubarSearchbar";
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../../../app/hooks";
 import { useStoreButtonClickHandler } from "../../extras/buttons/useStoreButtonClickHandler";
 import BlueSidebar from "./BlueSidebar";
 import StoreLayoutButton from "../../shared_layout_components/StoreLayoutButton";
 import { getTextStyles } from "../../../../utils/stylingFunctions";
-import HomePageReviewsModal from "../../../../components/the_mall/home/HomePageReviewsModal";
-
 
 
 const MenubarWithSearchbar = () => {
@@ -23,10 +21,10 @@ const MenubarWithSearchbar = () => {
   const scrollDirection = useMotionValue("up");
   const [isOpen, setOpen] = useState(false);
   const [isSearchbarOpen, setSearchbarOpen] = useState(false);
-  const [isReviewsModalOpen, setReviewsModalOpen] = useState(false);
   const store = useAppSelector((state) => state.stores.currentStore);
   const storeSlug = store?.slug as string;
   const handleButtonClick = useStoreButtonClickHandler();
+  const navigate = useNavigate();
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -171,7 +169,7 @@ const MenubarWithSearchbar = () => {
                                             <StoreMenubarHeart
                                                 size={layout.menubar.topbar.cart.size || "4vh"}
                                                 color={colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors]}
-                                                onDoubleClick={() => store && setReviewsModalOpen(true)}
+                                                onDoubleClick={() => store && navigate(`/reviews?store=${storeSlug}`)}
                                             />
                                         </div>
                                     )}
@@ -276,7 +274,7 @@ const MenubarWithSearchbar = () => {
                     <StoreMenubarHeart
                         size="4vh"
                         color={layout.colors.secondary}
-                        onDoubleClick={() => store && setReviewsModalOpen(true)}
+                        onDoubleClick={() => store && navigate(`/reviews?store=${storeSlug}`)}
                     />
                 </div>
             </div>
@@ -309,10 +307,6 @@ const MenubarWithSearchbar = () => {
                 backgroundColor: colors[layout.menubar.sidebar.backgroundColor as keyof typeof colors] || colors[layout.colors.primary as keyof typeof colors],
             }}
         />
-        {/* Reviews Modal */}
-        {isReviewsModalOpen && store && (
-            <HomePageReviewsModal onClose={() => setReviewsModalOpen(false)} store={store}/>
-        )}
     </motion.nav>
   );
 };

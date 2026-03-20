@@ -315,7 +315,7 @@ export const WhatIsMVP = () => {
               <iframe
                   src="https://www.youtube.com/embed/OUStxocWTso"
                   title="What is an MVP?"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   scrolling="no"
                   className="w-full h-full"
@@ -638,11 +638,11 @@ export const ListOfSuppliersByChioma = () => {
         </p>
         
         {/* TikTok Video Embed */}
-        <div className="w-full aspect-[11/16] lg:aspect-[12/16] rounded-lg overflow-hidden mt-2">
+        <div className="w-full bg-amber-700 aspect-[10/16] lg:aspect-[12/16] rounded-lg overflow-hidden mt-2">
           <iframe
             src="https://www.tiktok.com/embed/v2/7611541698073611541"
             title="Chioma Nkhubedu Suppliers"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             scrolling="no"
             className="w-full h-full"
@@ -663,11 +663,11 @@ export const FourFirstTimeSmallBusinessMistakes = () => {
         </p>
         
         {/* TikTok Video Embed */}
-        <div className="w-full aspect-[11/16] lg:aspect-[12/16] rounded-lg overflow-y-hidden hide-scrollbar mt-2">
+        <div className="w-full bg-amber-700 aspect-[10/16] lg:aspect-[12/16] rounded-lg overflow-y-hidden hide-scrollbar mt-2">
           <iframe
             src="https://www.tiktok.com/embed/v2/7562144850314005780"
             title="4 First Time Small Business Owner Mistakes"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             scrolling="no"
             className="w-full h-full "
@@ -688,11 +688,11 @@ export const HowToStartBusinessWhiteLabeling = () => {
         </p>
         
         {/* TikTok Video Embed */}
-        <div className="w-full aspect-[11/16] lg:aspect-[12/16] rounded-lg overflow-y-hidden mt-2">
+        <div className="w-full bg-amber-700 aspect-[10/16] lg:aspect-[12/16] rounded-lg overflow-y-hidden mt-2">
           <iframe
             src="https://www.tiktok.com/embed/v2/7560290220852202770"
             title="How to start a business through white labeling"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             scrolling="no"
             className="w-full h-full"
@@ -713,11 +713,11 @@ export const BusinessAdviceForSmallBusiness = () => {
         </p>
         
         {/* TikTok Video Embed */}
-        <div className="w-full aspect-[11/16] lg:aspect-[12/16] rounded-lg overflow-hidden mt-2">
+        <div className="w-full bg-amber-700 aspect-[10/16] lg:aspect-[12/16] rounded-lg overflow-hidden mt-2">
           <iframe
             src="https://www.tiktok.com/embed/v2/7585873614839368981"
             title="Business advice for small business"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             scrolling="no"
             className="w-full h-full"
@@ -742,7 +742,7 @@ export const YCStartingCompanyKeyTerms = () => {
           <iframe
             src="https://www.youtube.com/embed/wH3TKpALlw4"
             title="Starting A Company? The Key Terms You Should Know"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             scrolling="no"
             className="w-full h-full"
@@ -767,7 +767,7 @@ export const YCSalesPlaybook = () => {
           <iframe
             src="https://www.youtube.com/embed/DH7REvnQ1y4"
             title="The Sales Playbook For Founders"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             scrolling="no"
             className="w-full h-full"
@@ -792,7 +792,7 @@ export const YCStartupIdeas = () => {
           <iframe
             src="https://www.youtube.com/embed/Th8JoIan4dg"
             title="How To Get And Evaluate Startup Ideas"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             scrolling="no"
             className="w-full h-full"
@@ -817,7 +817,7 @@ export const YCCoFounderRelationships = () => {
           <iframe
             src="https://www.youtube.com/embed/A4SLDQDXdp0"
             title="Keys to Successful Co Founder Relationships"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             scrolling="no"
             className="w-full h-full"
@@ -842,7 +842,7 @@ export const SBDBusinessPlan = () => {
           <iframe
             src="https://www.youtube.com/embed/mSMtJMLpBZc"
             title="What Is A Business Plan? - Creating The Killer Business Plan"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             scrolling="no"
             className="w-full h-full"
@@ -867,7 +867,7 @@ export const SBDBusinessStrategy = () => {
           <iframe
             src="https://www.youtube.com/embed/81o65vbtGKo"
             title="How to Develop Business Strategy for Your Business"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             scrolling="no"
             className="w-full h-full"

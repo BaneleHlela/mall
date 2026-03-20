@@ -30,6 +30,7 @@ import { HiOutlineChatAlt2 } from "react-icons/hi";
 import "./features/api/axiosInstance"; // Initialize axios interceptors
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import DataDeletion from "./pages/DataDeletion";
+import AllReviews from "./pages/reviews/AllReviews";
 import { checkAuth } from "./features/user/userSlice";
 
 const AppContent: React.FC = () => {
@@ -151,6 +152,7 @@ const AppContent: React.FC = () => {
           path="/data-deletion"
           element={<DataDeletion />}
         />
+        <Route path="/reviews" element={<AllReviews />} />
         <Route
           path="/payment/*"
           element={<PayFastPage />}

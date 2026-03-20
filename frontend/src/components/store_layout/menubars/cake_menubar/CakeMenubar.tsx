@@ -3,7 +3,7 @@ import { mockLayout } from '../../../../major_updates/mockLayout'
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { useAppSelector } from '../../../../app/hooks';
 import { useStoreButtonClickHandler } from '../../extras/buttons/useStoreButtonClickHandler';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getBackgroundStyles, getTextStyles } from '../../../../utils/stylingFunctions';
 import StoreMenubarLogo from '../shared_menubar_components/StoreMenubarLogo';
 import StoreMenubar from '../StoreMenubar';
@@ -13,7 +13,6 @@ import StoreMenubarCart from '../shared_menubar_components/StoreMenubarCart';
 import StoreMenubarHamburger from '../shared_menubar_components/StoreMenubarHamburger';
 import BlueSidebar from '../menubar_with_searchbar/BlueSidebar';
 import StoreLayoutButton from '../../shared_layout_components/StoreLayoutButton';
-import HomePageReviewsModal from '../../../../components/the_mall/home/HomePageReviewsModal';
 
 const CakeMenubar = () => {
     const layout = useAppSelector((state) => state.layoutSettings);
@@ -22,10 +21,10 @@ const CakeMenubar = () => {
     const scrollY = useMotionValue(0);
     const scrollDirection = useMotionValue("up");
     const [isOpen, setOpen] = useState(false);
-    const [isReviewsModalOpen, setReviewsModalOpen] = useState(false);
     const store = useAppSelector((state) => state.stores.currentStore);
     const storeSlug = store?.slug as string;
     const handleButtonClick = useStoreButtonClickHandler();
+    const navigate = useNavigate();
 
     useEffect(() => {
         let lastY = window.scrollY;
@@ -131,7 +130,7 @@ const CakeMenubar = () => {
                     <StoreMenubarHeart
                         size={layout.menubar.topbar.cart.size || "4vh"}
                         color={colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors]}
-                        onDoubleClick={() => store && setReviewsModalOpen(true)}
+                        onDoubleClick={() => store && navigate(`/reviews?store=${storeSlug}`)}
                     />
                     {store?.trades.includes('products') && (
                       <StoreMenubarCart 
@@ -229,7 +228,7 @@ const CakeMenubar = () => {
                         <StoreMenubarHeart
                           size={layout.menubar.topbar.cart.size || "4vh"}
                           color={colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors]}
-                          onDoubleClick={() => store && setReviewsModalOpen(true)}
+                          onDoubleClick={() => store && navigate(`/reviews?store=${storeSlug}`)}
                       />
                       {store?.trades.includes('products') && (
                         <StoreMenubarCart 
@@ -276,10 +275,7 @@ const CakeMenubar = () => {
                     backgroundColor: colors[layout.menubar.sidebar.backgroundColor as keyof typeof colors] || colors[layout.colors.primary as keyof typeof colors],
                 }}
             />
-            {/* Reviews Modal */}
-            {isReviewsModalOpen && store && (
-                <HomePageReviewsModal onClose={() => setReviewsModalOpen(false)} store={store}/>
-            )}
+
         </motion.nav>
     )
 }

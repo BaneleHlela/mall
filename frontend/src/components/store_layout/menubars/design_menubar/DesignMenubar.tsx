@@ -4,29 +4,24 @@ import StoreMenubarCart from "../shared_menubar_components/StoreMenubarCart";
 import StoreMenubarHeart from "../shared_menubar_components/StoreMenubarHeart";
 import StoreMenubarLogo from "../shared_menubar_components/StoreMenubarLogo";
 import StoreMenubarHamburger from "../shared_menubar_components/StoreMenubarHamburger";
-import StoreMenubarSearchbar from "../shared_menubar_components/StoreMenubarSearchbar";
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../../../app/hooks";
 import { useStoreButtonClickHandler } from "../../extras/buttons/useStoreButtonClickHandler";
 import StoreLayoutButton from "../../shared_layout_components/StoreLayoutButton";
 import BlueSidebar from "../menubar_with_searchbar/BlueSidebar";
 import { getBackgroundStyles, getTextStyles } from "../../../../utils/stylingFunctions";
-import HomePageReviewsModal from "../../../../components/the_mall/home/HomePageReviewsModal";
 
-
-
-const ArtMenubar = () => {
+const DesignMenubar = () => {
   const layout = useAppSelector((state) => state.layoutSettings);
   const { colors, fonts } = useAppSelector((state) => state.layoutSettings);    
   const scrollY = useMotionValue(0);
   const scrollDirection = useMotionValue("up");
   const [isOpen, setOpen] = useState(false);
-  const [isSearchbarOpen, setSearchbarOpen] = useState(false);
-  const [isReviewsModalOpen, setReviewsModalOpen] = useState(false);
   const store = useAppSelector((state) => state.stores.currentStore);
   const storeSlug = store?.slug as string;
   const handleButtonClick = useStoreButtonClickHandler();
+  const navigate = useNavigate();
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -89,7 +84,7 @@ const ArtMenubar = () => {
     return [homeLink, ...inLinksArray, ...routeLinks];
   }, [layout.routes, layout.routeOrder, storeSlug, layout._id, useLocation()]);
   
-
+ 
   return (
     <motion.nav
         id="store_menubar"
@@ -100,28 +95,14 @@ const ArtMenubar = () => {
             borderBottom: `${layout.menubar.topbar.background.border.width} ${layout.menubar.topbar.background.border.style} ${colors[layout.menubar.topbar.background.border.color as keyof typeof colors]}` 
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className=" w-full h-fit bg-amber-50 sticky top-0 left-0 z-50 opacity-100"
+        className="w-full h-fit bg-amber-50 sticky top-0 left-0 z-50 opacity-100"
     >
         {/* Mobile */}
         <div className="w-full h-[10.5vh] lg:hidden">
             {/* Cart, logo, and text */}
             <div className="flex justify-between items-center w-full h-full px-[.5vh]">
-                
-                {/* Logo */}
-                <div className="flex items-center h-full">
-                    <StoreMenubarLogo 
-                        use={layout.menubar.topbar.logo.use}
-                        logoUrl={layout.menubar.topbar.logo.logoUrl}
-                        logoText={layout.menubar.topbar.logo.style.text.input || store?.name}
-                        style={{
-                            text: {...layout.menubar.topbar.logo.style.text},
-                            background: {...layout.menubar.topbar.logo.style.background},
-                        }}
-                        alignment="left"
-                    />
-                </div>
                 {/* Cart and heart */}
-                <div className="flex items-center space-x-1">
+                <div className="flex">
                     {store?.trades.includes('products') && (
                         <StoreMenubarCart 
                             style={{
@@ -138,20 +119,31 @@ const ArtMenubar = () => {
                     <StoreMenubarHeart
                         size={layout.menubar.topbar.cart.size || "4vh"}
                         color={colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors]}
-                        onDoubleClick={() => store && setReviewsModalOpen(true)}
+                        onDoubleClick={() => store && navigate(`/reviews?store=${storeSlug}`)}
                     />
-                    <StoreMenubarHamburger 
+                </div>
+                {/* Logo */}
+                <div className="flex items-center h-full">
+                    <StoreMenubarLogo 
+                        use={layout.menubar.topbar.logo.use}
+                        logoUrl={layout.menubar.topbar.logo.logoUrl}
+                        logoText={layout.menubar.topbar.logo.style.text.input || store?.name}
                         style={{
-                            variation: layout.menubar.topbar.hamburger.variation || 'cross',
-                            size: layout.menubar.topbar.hamburger.size || '5vh',
-                            color: colors[layout.menubar.topbar.hamburger.color as keyof typeof colors] || 'white',
-                            direction: 'left',
+                            text: {...layout.menubar.topbar.logo.style.text},
+                            background: {...layout.menubar.topbar.logo.style.background},
                         }}
-                        toggled={isOpen} toggle={setOpen}
                     />
                 </div>
                 {/* Hamburger */}
-                
+                <StoreMenubarHamburger 
+                    style={{
+                        variation: layout.menubar.topbar.hamburger.variation || 'cross',
+                        size: layout.menubar.topbar.hamburger.size || '5vh',
+                        color: colors[layout.menubar.topbar.hamburger.color as keyof typeof colors] || 'white',
+                        direction: 'left',
+                    }}
+                    toggled={isOpen} toggle={setOpen}
+                />
             </div>
         </div>
         {/* Desktop */}
@@ -228,7 +220,7 @@ const ArtMenubar = () => {
                     <StoreMenubarHeart
                         size={layout.menubar.topbar.cart.size || "4vh"}
                         color={colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors]}
-                        onDoubleClick={() => store && setReviewsModalOpen(true)}
+                        onDoubleClick={() => store && navigate(`/reviews?store=${storeSlug}`)}
                     />
                 </div>
             </div>
@@ -261,12 +253,9 @@ const ArtMenubar = () => {
                 backgroundColor: colors[layout.menubar.sidebar.backgroundColor as keyof typeof colors] || colors[layout.colors.primary as keyof typeof colors],
             }}
         />
-        {/* Reviews Modal */}
-        {isReviewsModalOpen && store && (
-            <HomePageReviewsModal onClose={() => setReviewsModalOpen(false)} store={store}/>
-        )}
+
     </motion.nav>
   );
 };
 
-export default ArtMenubar;
+export default DesignMenubar;

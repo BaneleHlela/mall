@@ -5,14 +5,13 @@ import { BiDotsHorizontalRounded } from 'react-icons/bi';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
 import { LiaShareSolid } from 'react-icons/lia';
 import { BsDoorOpen } from 'react-icons/bs';
-import HomePageReviewsModal from './HomePageReviewsModal';
 import StorePosterRatingStars from '../basic_store_post/StorePosterRatingStars';
-import { fetchStore } from '../../../features/store_admin/storeAdminSlice';
 import { useNavbar } from '../../../utils/context/NavbarContext';
 import { fetchStoreBySlug, setLoading } from '../../../features/stores/storeSlice';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { updateUser } from '../../../features/user/userSlice';
+import { Store } from 'lucide-react';
 
 interface StorePostJSXProps {
     tipFor?: string;
@@ -31,7 +30,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
     const [store, setStore] = useState<any>(null);
     const { hideNavbar, showNavbar } = useNavbar();
     const [loading, setLoading] = useState(true);
-
+    
     const user = useAppSelector((state) => state.user.user);
 
 
@@ -55,6 +54,8 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
         if ("themall") getStore();
     }, [dispatch, "themall"]);
 
+    console.log(store)
+
     useEffect(() => {
         if (isModalOpen && !isFeedbackPost) {
             hideNavbar();
@@ -74,6 +75,11 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
     if (!store || !storeSlug) {
         return null;
     }
+
+    // Navigate to reviews page
+    const handleReviewsClick = () => {
+        navigate('/reviews?mall=true');
+    };
 
     // Handle share functionality
     const handleShare = async (e: React.MouseEvent) => {
@@ -104,7 +110,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
         }
     };
 
-    const isFavorite = user?.favourites?.stores?.includes(store._id);
+    const isFavorite = store && user?.favourites?.stores?.includes(store._id);
 
     const handleFavoriteClick = (e: React.MouseEvent) => {
         e.stopPropagation(); // Prevent navigating when clicking the heart
@@ -134,7 +140,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
                     }}
                     className={`h-full aspect-square bg-gradient-to-r from-orange-500 via-orange-400 to-orange-700 rounded-full p-[.25vh]`}>
                     <img
-                        src={store.thumbnails.profily|| "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Blue%20Modern%20Shopping%20Bag%20Logo.png"}
+                        src={store.thumbnails?.profily || "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/Blue%20Modern%20Shopping%20Bag%20Logo.png"}
                         alt=""
                         className="w-full h-full object-cover rounded-full"
                     />
@@ -185,12 +191,12 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
                                     <GoHeart className="text-[3.5vh] text-black" />
                                 )}
                             </button>
-                            <p className="font-[500]">{store.likes.count + Math.floor(Math.random() * 100) + 10} likes</p>
+                            <p className="font-[500]">{store?.likes?.count + Math.floor(Math.random() * 100) + 10} likes</p>
                         </div>
                         {/* Visits */}
                         <div className="flex items-center space-x-1">
                             <BsDoorOpen className="text-[3vh] text-black" />
-                            <p className="font-[500]">{store.visits} visits</p>
+                            <p className="font-[500]">{store?.visits} visits</p>
                         </div>
                     </div>
                     {/* Share */}
@@ -201,22 +207,17 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
 
                 {/* Ratings & Reviews */}
                 <div
-                    onClick={() => setIsModalOpen(true)}
-                    className="relative flex items-center w-full h-[5vh] p-[.6vh] cursor-pointer"
+                    onClick={handleReviewsClick}
+                    className="relative flex items-center w-full px-[.6vh] cursor-pointer"
                 >
-                    <div className="w-full h-full bg-black text-white rounded-[.8vh] border-[.2vh] px-[1.5vh] pr-[10vh] flex items-center font-[500]">
+                    <div className="w-full h-full bg-black text-white rounded-[.8vh] border-[.2vh] px-[1.5vh] pr-[10vh] flex items-center font-normal">
                         Reviews & Feedback
                     </div>
                     <div className="absolute right-[1.5vh] px-[.5vh]">
-                    <StorePosterRatingStars rating={store.rating.averageRating} color='text-white'/>
+                    <StorePosterRatingStars rating={store?.rating?.averageRating || 0} color='text-white'/>
                     </div>
                 </div>
             </div>
-
-            {/* Reviews Modal */}
-            {isModalOpen && (
-                <HomePageReviewsModal onClose={() => setIsModalOpen(false)} store={store}/>
-            )}
         </div>
     );
 };

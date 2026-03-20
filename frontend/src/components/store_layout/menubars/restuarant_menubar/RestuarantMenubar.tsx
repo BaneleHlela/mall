@@ -5,14 +5,13 @@ import StoreMenubarHeart from "../shared_menubar_components/StoreMenubarHeart";
 import StoreMenubarLogo from "../shared_menubar_components/StoreMenubarLogo";
 import StoreMenubarHamburger from "../shared_menubar_components/StoreMenubarHamburger";
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../../../app/hooks";
 import { useStoreButtonClickHandler } from "../../extras/buttons/useStoreButtonClickHandler";
 import StoreLayoutButton from "../../shared_layout_components/StoreLayoutButton";
 import { mockLayout } from "../../../../major_updates/mockLayout";
 import { getBackgroundStyles, getTextStyles } from "../../../../utils/stylingFunctions";
 import RestuarantSidebar from "./RestuarantSidebar";
-import HomePageReviewsModal from "../../../../components/the_mall/home/HomePageReviewsModal";
 
 
 
@@ -21,11 +20,11 @@ const RestuarantMenubar = () => {
   const scrollY = useMotionValue(0);
   const scrollDirection = useMotionValue("up");
   const [isOpen, setOpen] = useState(false);
-  const [isReviewsModalOpen, setReviewsModalOpen] = useState(false);
   const store = useAppSelector((state) => state.stores.currentStore);
   const { fonts, colors } = useAppSelector((state) => state.layoutSettings);
   const storeSlug = store?.slug as string;
     const location = useLocation();
+    const navigate = useNavigate();
     const isPreviewMode = location.pathname.startsWith(`/layouts/${layout._id}/preview`);
     const basePath = isPreviewMode ? `/layouts/${layout._id}/preview` : `/stores/${storeSlug}`;
     const isHomePage = location.pathname === basePath;
@@ -145,7 +144,7 @@ const RestuarantMenubar = () => {
                                 <StoreMenubarHeart
                                     size={layout.menubar.topbar.cart.size}
                                     color={colors[layout.menubar.topbar.cart.color as keyof typeof colors]}
-                                    onDoubleClick={() => store && setReviewsModalOpen(true)}
+                                    onDoubleClick={() => store && navigate(`/reviews?store=${storeSlug}`)}
                                 />
                             </div>
                         )}
@@ -219,7 +218,7 @@ const RestuarantMenubar = () => {
                     <StoreMenubarHeart
                         size={layout.menubar.topbar.cart.size}
                         color={colors[layout.menubar.topbar.cart.color as keyof typeof colors]}
-                        onDoubleClick={() => store && setReviewsModalOpen(true)}
+                        onDoubleClick={() => store && navigate(`/reviews?store=${storeSlug}`)}
                     />
                 </div>
             </div>
@@ -253,10 +252,6 @@ const RestuarantMenubar = () => {
             links={links}
             style={mockLayout.menubar.sidebar}
         />
-        {/* Reviews Modal */}
-        {isReviewsModalOpen && store && (
-            <HomePageReviewsModal onClose={() => setReviewsModalOpen(false)} store={store}/>
-        )}
     </motion.nav>
   );
 };

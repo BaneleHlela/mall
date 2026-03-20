@@ -154,14 +154,12 @@ const HomePage = () => {
     });
   };
 
-  console.log(user?.stores.length);
-
 
   return (
     <div className="relative w-full h-full lg:h-screen overflow-y-scroll hide-scrollbar bg-gray-100 flex flex-col items-center">
       {/* Menubar */}
       <TheMallTopbar />
-      <div className="w-[100vw] h-[14vh] min-h-[14vh] lg:min-h-[10vh] lg:h-[10vh]"></div>
+      <div className="w-[100vw] h-[13vh] min-h-[13vh] lg:min-h-[10vh] lg:h-[10vh]"></div>
       {/* Content */}
       <div className="w-full space-y-1 lg:w-[35%] overflow-x-hidden hide-scrollbar z-2">
         {/* Department Selector */}

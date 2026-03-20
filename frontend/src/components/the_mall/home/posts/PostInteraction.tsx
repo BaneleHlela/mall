@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
 import { LiaShareSolid } from 'react-icons/lia';
 import { BsDoorOpen } from 'react-icons/bs';
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
-import PostReviewsModal from './PostReviewsModal';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { getPostStats, togglePostLike, setPostReviewModalOpen } from '../../../../features/posts/postSlice';
+import { getPostStats, togglePostLike } from '../../../../features/posts/postSlice';
+import { CiShare2 } from 'react-icons/ci';
+import { IoShareSocialOutline } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
 
 interface PostInteractionProps {
     postIdentifier: string;
@@ -23,8 +25,8 @@ const PostInteraction: React.FC<PostInteractionProps> = ({
     children
 }) => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const user = useAppSelector((state) => state.user.user);
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const postData = useAppSelector((state) => state.posts.posts[postIdentifier]);
     const loading = useAppSelector((state) => state.posts.isLoading);
@@ -42,14 +44,8 @@ const PostInteraction: React.FC<PostInteractionProps> = ({
         dispatch(togglePostLike(postIdentifier));
     };
 
-    const handleOpenModal = () => {
-        setIsModalOpen(true);
-        dispatch(setPostReviewModalOpen(true));
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-        dispatch(setPostReviewModalOpen(false));
+    const handleReviewsClick = () => {
+        navigate(`/reviews?post=${postIdentifier}`);
     };
 
     // Handle share functionality
@@ -118,17 +114,17 @@ const PostInteraction: React.FC<PostInteractionProps> = ({
                 
                 {/* Share */}
                 <div className="flex h-full items-center cursor-pointer" onClick={handleShare}>
-                    <LiaShareSolid className="text-[3.8vh]" />
+                    <IoShareSocialOutline className="text-[3.4vh]" />
                 </div>
             </div>
 
             {/* Ratings & Reviews */}
             {showRating && (
                 <div
-                    onClick={handleOpenModal}
+                    onClick={handleReviewsClick}
                     className="relative flex items-center w-full px-[.6vh] cursor-pointer"
                 >
-                    <div className="w-full h-full bg-black py-[.5vh] text-white rounded-[.8vh] border-[.2vh] px-[1.5vh] pr-[10vh] flex items-center font-[500]">
+                    <div className="w-full h-full bg-black py-[.5vh] text-white rounded-[.8vh] border-[.2vh] px-[1.5vh] pr-[10vh] flex items-center font-normal">
                         Reviews & Feedback
                     </div>
                     <div className="absolute right-[1.5vh] px-[.5vh] flex items-center gap-1">
@@ -148,15 +144,6 @@ const PostInteraction: React.FC<PostInteractionProps> = ({
                         )}
                     </div>
                 </div>
-            )}
-
-            {/* Reviews Modal */}
-            {isModalOpen && (
-                <PostReviewsModal 
-                    onClose={handleCloseModal} 
-                    postIdentifier={postIdentifier}
-                    postTitle={postTitle}
-                />
             )}
         </div>
     );

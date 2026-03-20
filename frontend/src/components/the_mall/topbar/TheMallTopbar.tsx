@@ -9,6 +9,9 @@ import { fetchStores } from "../../../features/stores/storeSlice";
 import { openRangeModal, closeRangeModal } from "../../../features/rangeSlice";
 import RangeModal from "../../modals/RangeModal";
 import ProtectedRoute from "../authorization/ProtectedRoute";
+import { PiMapPinSimpleAreaLight } from "react-icons/pi";
+import { CiLocationOn } from "react-icons/ci";
+import toast from "react-hot-toast";
 
 const TheMallTopbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -57,7 +60,7 @@ const TheMallTopbar = () => {
 
   return (
     <div
-      className={`fixed top-0 w-[100vw] h-[14vh] min-h-[14vh] shadow-md lg:min-h-[10vh] lg:h-[8vh] lg:max-h-[8vh] inset-0 z-50
+      className={`fixed top-0 w-[100vw] h-[13vh] min-h-[13vh] shadow lg:min-h-[10vh] lg:h-[8vh] lg:max-h-[8vh] inset-0 z-50
         bg-white dark:bg-black
         flex flex-col items-center lg:px-[10%]
         text-gray-900 dark:text-white
@@ -69,7 +72,7 @@ const TheMallTopbar = () => {
         {/* Desktop */}
         <div className="hidden lg:flex w-full h-full flex-row justify-between items-center">
           {/* Logo */}
-          <div className="w-fit h-[60%] flex items-center">
+          <div onClick={() => navigate("/")} className="w-fit h-[60%] flex items-center">
             <p
               style={{ fontFamily: "Bebas Neue" }}
               className="font-bold text-[5vh] text-gray-900 dark:text-white"
@@ -171,10 +174,24 @@ const TheMallTopbar = () => {
 
             {/* Range */}
             <button
-              onClick={() => dispatch(openRangeModal())}
+              onClick={() => {
+                if (!user) {
+                  toast.error("You must login to adjust search range", {
+                    duration: 4000,
+                    style: {
+                      background: '#fef2f2',
+                      color: '#991b1b',
+                      fontFamily: 'Outfit',
+                    },
+                    icon: '❌',
+                  });
+                  return;
+                }
+                dispatch(openRangeModal());
+              }}
               className="text-[1vh] text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded p-1 transition-colors"
             >
-              <MdLocationSearching className="text-[3.2vh]" />
+              <PiMapPinSimpleAreaLight className="text-[3.2vh]" />
             </button>
 
             {/* Location */}
@@ -182,16 +199,16 @@ const TheMallTopbar = () => {
               onClick={() => navigate('/account')}
               className="text-[1vh] text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded p-1 transition-colors"
             >
-              <SlLocationPin className="text-[3vh]" />
+              <CiLocationOn className="text-[3vh]" />
             </button>
           </div>
         </div>
 
         {/* Mobile */}
         <div className="w-full h-full py-[.8vh] px-[.9vh] lg:hidden">
-          <div className="w-full h-[50%] flex flex-row justify-between items-center">
+          <div className="w-full h-[45%] flex flex-row justify-between items-center">
             {/* Logo */}
-            <div className="w-fit h-[60%] flex items-center">
+            <div onClick={() => navigate("/")} className="w-fit h-[50%] flex items-center">
               <p
                 style={{ fontFamily: "Bebas Neue" }}
                 className="font-bold text-[3.5vh] ml-1 text-gray-900 dark:text-white"
@@ -201,24 +218,38 @@ const TheMallTopbar = () => {
             </div>
 
             {/* Range and Location */}
-            <div className="space-x-1">
+            <div className="">
               <button
-                onClick={() => dispatch(openRangeModal())}
+                onClick={() => {
+                  if (!user) {
+                    toast.error("You must login to adjust search range", {
+                      duration: 4000,
+                      style: {
+                        background: '#fef2f2',
+                        color: '#991b1b',
+                        fontFamily: 'Outfit',
+                      },
+                      icon: '❌',
+                    });
+                    return;
+                  }
+                  dispatch(openRangeModal());
+                }}
                 className="text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded p-1 transition-colors"
               >
-                <MdLocationSearching className="text-[3.2vh]" />
+                <PiMapPinSimpleAreaLight className="text-[3.2vh] mt-[.2vh]" />
               </button>
               <button
                 onClick={() => navigate('/account')}
                 className="text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded p-1 transition-colors"
               >
-                <SlLocationPin className="text-[3vh]" />
+                <CiLocationOn className="text-[3vh]" />
               </button>
             </div>
           </div>
 
           {/* Searchbar */}
-          <div className="w-full h-[50%] flex items-center relative">
+          <div className="w-full h-[55%] flex items-center relative">
             <input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
