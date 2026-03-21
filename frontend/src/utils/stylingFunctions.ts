@@ -173,17 +173,17 @@ export const getBackgroundStyles = (bg: BackgroundSettings = {}, colors?: any) =
 
     styles.backgroundColor = mappedColor;
   }
-
+  // shadow
   if (bg.shadow === true || bg.shadow === "true") {
     styles.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
   }
-
+  //height
   if (typeof bg.height === "object") styles.height = getResponsiveDimension(bg.height);
   else if (bg.height) styles.height = bg.height;
-
+  // width
   if (typeof bg.width === "object") styles.width = getResponsiveDimension(bg.width);
   else if (bg.width) styles.width = bg.width;
-
+  //margin
   if (typeof bg.margin === "object") styles.margin = getResponsiveDimension(bg.margin);
   else if (bg.margin) styles.margin = bg.margin;
 
@@ -203,7 +203,7 @@ export const getBackgroundStyles = (bg: BackgroundSettings = {}, colors?: any) =
       styles.paddingLeft = styles.paddingRight = bg.padding.x;
     }
   }
-
+  // opacity
   if (bg.opacity !== undefined) styles.opacity = bg.opacity;
 
   if (bg.border) {
@@ -227,7 +227,27 @@ export const getBackgroundStyles = (bg: BackgroundSettings = {}, colors?: any) =
 
     if (bg.border.radius) styles.borderRadius = bg.border.radius;
   }
+  // position
+  if (bg.position) {
+    if (bg.position.isAbsolute) {
+      styles.position = "absolute";
+    }
 
+    const mapPos = (key: "top" | "left" | "right" | "bottom") => {
+      const value = (bg.position as any)[key];
+      if (!value) return;
+
+      styles[key] =
+        typeof value === "object"
+          ? getResponsiveDimension(value)
+          : value;
+    };
+
+    mapPos("top");
+    mapPos("left");
+    mapPos("right");
+    mapPos("bottom");
+  }
   return styles;
 };
 

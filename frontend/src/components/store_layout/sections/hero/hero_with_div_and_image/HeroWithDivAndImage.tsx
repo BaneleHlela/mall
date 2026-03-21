@@ -1,12 +1,12 @@
 import { useAppSelector } from "../../../../../app/hooks";
 import { useWindowSize } from "../../../../../hooks/use-window-size";
 import { getBackgroundStyles } from "../../../../../utils/stylingFunctions";
-import StoreButton from "../../../extras/buttons/StoreButton";
 import { useStoreButtonClickHandler } from "../../../extras/buttons/useStoreButtonClickHandler";
 import UnderlinedText from "../../../extras/text/UnderlinedText";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import StoreLayoutButton from "../../../shared_layout_components/StoreLayoutButton";
+import StoreDivTag from "../../../shared_layout_components/StoreDivTag";
 
 const HeroWithDivAndImage = () => {
   const config = useAppSelector((state) => state.layoutSettings.sections.hero);
@@ -19,46 +19,56 @@ const HeroWithDivAndImage = () => {
   const imageFirst = isMobile ? config.imageFirst?.mobile : config.imageFirst?.desktop;
 
   const Container = () => (
-    <div
-      style={{
-        ...getBackgroundStyles(config.background.container),
-      }}
-      className="flex flex-col justify-center items-center overflow-hidden"
-    >
-      {/* Text */}
-      <div className=""></div>
-      {config.text.firstLine.show && <UnderlinedText style={config.text.firstLine} />}
-      {config.text.secondLine.show && <UnderlinedText style={config.text.secondLine} />}
-      {config.text.thirdLine.show && <UnderlinedText style={config.text.thirdLine} />}
-
-      {/* Button */}
-      {config.button?.show && (
-        <div
-          className={`w-full flex flex-row mt-4 lg:mt-8 z-2 ${
-            config.button?.position === "center"
-              ? "justify-center"
-              : config.button?.position === "start"
-              ? "justify-start"
-              : config.button?.position === "end"
-              ? "justify-end"
-              : ""
-          }`}
-        >
-          <StoreLayoutButton
-            style={config.button}
-            onClick={() =>
-              handleButtonClick({
-                type: config.button.function,
-                routes,
-                storeSlug: store?.slug ?? '',
-                contactNumber: store?.contact?.phone,
-              })
-            }
-          />
+  <StoreDivTag
+    style={config.background.container}
+    jsx={
+      <div className="flex flex-col justify-center items-center overflow-hidden w-full h-full">
+        
+        {/* Text */}
+        <div className="w-full h-10 bg-white">
+          <p style={{textAlign: 'center'}} className="">snacks</p>
         </div>
-      )}
-    </div>
-  );
+        {config.text.firstLine.show && (
+          <UnderlinedText style={config.text.firstLine} />
+        )}
+        {config.text.secondLine.show && (
+          <UnderlinedText style={config.text.secondLine} />
+        )}
+        {config.text.thirdLine.show && (
+          <UnderlinedText style={config.text.thirdLine} />
+        )}
+
+        {/* Button */}
+        {config.button?.show && (
+          <div
+            className={`w-full flex flex-row mt-4 lg:mt-8 z-10 ${
+              config.button?.position === "center"
+                ? "justify-center"
+                : config.button?.position === "start"
+                ? "justify-start"
+                : config.button?.position === "end"
+                ? "justify-end"
+                : ""
+            }`}
+          >
+            <StoreLayoutButton
+              style={config.button}
+              onClick={() =>
+                handleButtonClick({
+                  type: config.button.function,
+                  routes,
+                  storeSlug: store?.slug ?? '',
+                  contactNumber: store?.contact?.phone,
+                })
+              }
+            />
+          </div>
+        )}
+
+      </div>
+    }
+  />
+);
 
   const Image = () => {
     const images = isMobile ? config.image.url.mobile : config.image.url.desktop;

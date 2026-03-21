@@ -13,21 +13,21 @@ export default function LocationPicker({ onLocationSelect }: any) {
   const [location, setLocation] = useState(centerFallback);
 
   useEffect(() => {
-    const initMap = async () => {
+    const initMap = async (initialLocation = centerFallback) => {
       const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
       const { AdvancedMarkerElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
       const { Autocomplete } = await google.maps.importLibrary("places") as google.maps.PlacesLibrary;
 
       // Init Map
       mapInstance.current = new Map(mapRef.current!, {
-        center: location,
+        center: initialLocation,
         zoom: 15,
         mapId: 'DEMO_MAP_ID', 
       });
 
       // Init Marker
       markerRef.current = new AdvancedMarkerElement({
-        position: location,
+        position: initialLocation,
         map: mapInstance.current,
       });
 
@@ -61,17 +61,37 @@ export default function LocationPicker({ onLocationSelect }: any) {
           onLocationSelect({ ...clicked, address });
         }
       });
+
+      // Trigger initial location selection for user's location
+      if (initialLocation !== centerFallback) {
+        reverseGeocode(initialLocation.lat, initialLocation.lng).then((address) => {
+          onLocationSelect({ ...initialLocation, address });
+        });
+      }
     };
 
-    navigator.geolocation.getCurrentPosition((position) => {
-      const coords = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      };
-      setLocation(coords);
-      initMap();
-      }, initMap);
-    }, []);
+    // Try to get user's location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userCoords = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          setLocation(userCoords);
+          initMap(userCoords);
+        },
+        (error) => {
+          // Permission denied or error - use fallback
+          console.warn('Geolocation error:', error.message);
+          initMap(centerFallback);
+        },
+        { enableHighAccuracy: true, timeout: 5000 }
+      );
+    } else {
+      initMap(centerFallback);
+    }
+  }, []);
 
   const reverseGeocode = async (lat: number, lng: number) => {
     const res = await fetch(

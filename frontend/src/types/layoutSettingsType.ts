@@ -56,4 +56,30 @@ export interface BackgroundSettings {
     color?: string;
     radius?: string;
   };
+  position?: {
+    horizontalPlacement?: 'start' | 'center' | 'end'
+    isAbsolute?: boolean;
+    top?: string | ResponsiveValue;
+    left?: string | ResponsiveValue;
+    right?: string | ResponsiveValue;
+    bottom?: string | ResponsiveValue;
+  };
+  backgroundImage?: {
+    imageUrl: string[];
+    blur?: 'small' | 'medium' | 'large';
+    opacity?: string;
+  };
+  floatingImage?: {
+    imageUrl: string[];
+    height: string | ResponsiveValue;
+    width: string | ResponsiveValue;
+    position?: {
+      horizontalPlacement?: 'start' | 'center' | 'end'
+      isAbsolute?: boolean;
+      top?: string | ResponsiveValue;
+      left?: string | ResponsiveValue;
+      right?: string | ResponsiveValue;
+      bottom?: string | ResponsiveValue;
+    };
+  }
 }

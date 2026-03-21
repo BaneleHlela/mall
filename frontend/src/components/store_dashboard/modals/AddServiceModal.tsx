@@ -22,7 +22,7 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const store = useAppSelector((state) => state.storeAdmin.store);
-  const isLoading = useAppSelector((state) => state.services.loading);
+  const isLoading = useAppSelector((state) => state.services.isLoading);
 
   const [form, setForm] = useState({
     name: '',

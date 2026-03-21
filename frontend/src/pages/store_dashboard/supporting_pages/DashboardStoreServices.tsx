@@ -79,7 +79,7 @@ const DashBoardStoreServices = () => {
       title: "Change Service Status",
       text: `Are you sure you want to change the status of "${service.name}" to ${
         newStatus ? "Active" : "Inactive"
-      }?`,
+      }? This controls whether your service appears or doesn't on your store page.`,
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes",
@@ -194,6 +194,7 @@ const DashBoardStoreServices = () => {
               categories={categories ? categories : []}
               value={selectedCategory}
               onChange={setSelectedCategory}
+              categoryType='services'
             />
             <DashboardFilterByStatus
               value={selectedStatus}
