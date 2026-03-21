@@ -74,6 +74,7 @@ const BlueSidebar: React.FC<BlueSidebarProps> = ({
                       text: style.logo.style.text || {},
                       background: style.logo.style.background || {}
                   }}
+                  position='center'
               />
             </div>
         </div>

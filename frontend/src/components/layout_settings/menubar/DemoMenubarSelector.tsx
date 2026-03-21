@@ -42,7 +42,9 @@ const DemoMenubarSelector: React.FC<DemoMenubarSelectorProps> = ({ isOpen, onClo
   }, [isOpen, demoMenubars, dispatch]);
 
   // Filter to ensure we have valid demo menubars
-  const validDemoMenubars = demoMenubars || [];
+  const validDemoMenubars = (demoMenubars || []).filter(
+    (demo) => demo.isSharable
+  );
 
   const handleSelectMenubar = async (demoMenubar: DemoMenubar) => {
     setSelectedId(demoMenubar._id);

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import { fetchDemoLayouts, createLayoutWithSettings } from "../../../../../features/layouts/layoutSlice";
-import { useNavigate } from "react-router-dom";
+import { fetchStoreBySlug } from "../../../../../features/stores/storeSlice";
+import { setStore } from "../../../../../features/store_admin/storeAdminSlice";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { FaMagic } from "react-icons/fa";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import StoreLayoutCreatorCard from "./StoreLayoutCreatorCard";
@@ -16,6 +18,8 @@ const mysweetalert = withReactContent(Swal);
 const LayoutCreator = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const storeSlug = searchParams.get("store");
 
   const availableLayouts = useAppSelector((state) => state.layout.layouts);
   const store = useAppSelector((state) => state.storeAdmin.store);
@@ -25,8 +29,25 @@ const LayoutCreator = () => {
 
   const [isCreating, setIsCreating] = useState(false);
 
+  // Fetch store by slug if storeAdmin is empty and slug is provided
   useEffect(() => {
-    dispatch(fetchDemoLayouts(store?.trades || []));
+    const fetchStoreIfNeeded = async () => {
+      if (!store && storeSlug) {
+        try {
+          const result = await dispatch(fetchStoreBySlug(storeSlug)).unwrap();
+          dispatch(setStore(result));
+        } catch (error) {
+          console.error('Failed to fetch store:', error);
+        }
+      }
+    };
+    fetchStoreIfNeeded();
+  }, [dispatch, store, storeSlug]);
+
+  useEffect(() => {
+    if (store?.trades) {
+      dispatch(fetchDemoLayouts(store.trades));
+    }
   }, [dispatch, store?.trades]);
 
   const handleView = (layoutId: string) => {
@@ -159,30 +180,32 @@ const LayoutCreator = () => {
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-[2.4vh] xl:grid-cols-3">
-            {availableLayouts.map((layout) => {
-              let storeId = '';
-              if (typeof layout.store === 'object' && layout.store !== null) {
-                storeId = String(layout.store._id);
-              } else if (typeof layout.store === 'string') {
-                storeId = layout.store;
-              } else if (layout.store) {
-                storeId = String(layout.store);
-              }
-              
-              return (
-                <StoreLayoutCreatorCard
-                  key={layout._id}
-                  layout={{
-                    _id: layout._id || '',
-                    store: storeId,
-                    name: layout.name,
-                    screenshot: layout.screenshot
-                  }}
-                  onSelect={(layout) => handleSelect(layout)}
-                  onView={() => handleView(layout._id || '')}
-                />
-              );
-            })}
+            {availableLayouts
+              .filter((layout) => layout.isSharable === true)
+              .map((layout) => {
+                let storeId = '';
+                if (typeof layout.store === 'object' && layout.store !== null) {
+                  storeId = String(layout.store._id);
+                } else if (typeof layout.store === 'string') {
+                  storeId = layout.store;
+                } else if (layout.store) {
+                  storeId = String(layout.store);
+                }
+
+                return (
+                  <StoreLayoutCreatorCard
+                    key={layout._id}
+                    layout={{
+                      _id: layout._id || '',
+                      store: storeId,
+                      name: layout.name,
+                      screenshot: layout.screenshot
+                    }}
+                    onSelect={(layout) => handleSelect(layout)}
+                    onView={() => handleView(layout._id || '')}
+                  />
+                );
+              })}
           </div>
         )}
 

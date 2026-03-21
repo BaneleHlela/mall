@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { IoPower } from 'react-icons/io5';
+import { IoPower, IoClose } from 'react-icons/io5';
 import { useAppSelector, useAppDispatch } from '../../app/hooks.ts';
 import LayoutSettings from '../../components/layout_settings/LayoutSettings.tsx';
 import TopBar from '../../components/layout_settings/topbar/TopBar.tsx';
@@ -16,6 +16,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { IoIosSettings } from 'react-icons/io';
 import { Type, Palette } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
+import LayoutFontsSelector from '../../components/layout_settings/extras/LayoutFontsSelector';
+import LayoutColorSelector from '../../components/layout_settings/extras/LayoutColorSelector';
 
 
 const deviceStyles = {
@@ -61,6 +63,7 @@ const WebsiteBuilderContent: React.FC<{ isNewLayout?: boolean }> = ({ isNewLayou
   const [storeId, setStoreId] = useState<string | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(true);
   const [quickAccessSection, setQuickAccessSection] = useState<'fonts' | 'colors' | null>(null);
+  const [floatingPanel, setFloatingPanel] = useState<'fonts' | 'colors' | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   
 
@@ -375,7 +378,7 @@ const WebsiteBuilderContent: React.FC<{ isNewLayout?: boolean }> = ({ isNewLayou
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="fixed bottom-6 right-6 flex flex-col space-y-3 z-30"
+              className="fixed bottom-6 right-6 flex flex-row space-x-3 z-30"
             >
               {/* Fonts Button */}
               <motion.button
@@ -383,11 +386,12 @@ const WebsiteBuilderContent: React.FC<{ isNewLayout?: boolean }> = ({ isNewLayou
                 animate={{ opacity: 1, scale: 1 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  setIsSettingsOpen(true);
-                  setQuickAccessSection('fonts');
-                }}
-                className="w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-full shadow-xl flex items-center justify-center"
+                onClick={() => setFloatingPanel(floatingPanel === 'fonts' ? null : 'fonts')}
+                className={`w-12 h-12 rounded-full shadow-xl flex items-center justify-center transition-all ${
+                  floatingPanel === 'fonts' 
+                    ? 'bg-blue-700 ring-4 ring-blue-300' 
+                    : 'bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-500 hover:to-blue-400'
+                }`}
                 title="Fonts"
               >
                 <Type className="text-xl" />
@@ -399,11 +403,12 @@ const WebsiteBuilderContent: React.FC<{ isNewLayout?: boolean }> = ({ isNewLayou
                 animate={{ opacity: 1, scale: 1 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  setIsSettingsOpen(true);
-                  setQuickAccessSection('colors');
-                }}
-                className="w-12 h-12 bg-gradient-to-r from-purple-600 to-purple-500 text-white rounded-full shadow-xl flex items-center justify-center"
+                onClick={() => setFloatingPanel(floatingPanel === 'colors' ? null : 'colors')}
+                className={`w-12 h-12 rounded-full shadow-xl flex items-center justify-center transition-all ${
+                  floatingPanel === 'colors' 
+                    ? 'bg-purple-700 ring-4 ring-purple-300' 
+                    : 'bg-gradient-to-r from-purple-600 to-purple-500 text-white hover:from-purple-500 hover:to-purple-400'
+                }`}
                 title="Colors"
               >
                 <Palette className="text-xl" />
@@ -425,6 +430,65 @@ const WebsiteBuilderContent: React.FC<{ isNewLayout?: boolean }> = ({ isNewLayou
                   </motion.button>
                 )}
               </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Floating Panels for Fonts and Colors */}
+        <AnimatePresence>
+          {floatingPanel === 'fonts' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              transition={{ type: 'spring', duration: 0.3 }}
+              className="fixed bottom-24 right-6 w-80 bg-white rounded-2xl shadow-2xl z-40 overflow-hidden"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white">
+                <div className="flex items-center space-x-2">
+                  <Type className="text-xl" />
+                  <span className="font-semibold">Fonts</span>
+                </div>
+                <button
+                  onClick={() => setFloatingPanel(null)}
+                  className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                >
+                  <IoClose className="text-xl" />
+                </button>
+              </div>
+              {/* Content */}
+              <div className="max-h-96 overflow-y-auto">
+                <LayoutFontsSelector />
+              </div>
+            </motion.div>
+          )}
+
+          {floatingPanel === 'colors' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              transition={{ type: 'spring', duration: 0.3 }}
+              className="fixed bottom-24 right-6 w-80 bg-white rounded-2xl shadow-2xl z-40 overflow-hidden"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-500 text-white">
+                <div className="flex items-center space-x-2">
+                  <Palette className="text-xl" />
+                  <span className="font-semibold">Colors</span>
+                </div>
+                <button
+                  onClick={() => setFloatingPanel(null)}
+                  className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                >
+                  <IoClose className="text-xl" />
+                </button>
+              </div>
+              {/* Content */}
+              <div className="max-h-96 overflow-y-auto">
+                <LayoutColorSelector />
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

@@ -1,4 +1,4 @@
-export const API_URL = "https://api.themallbeta.com";
+export const API_URL = "http://localhost:5000";
 //"http://localhost:5000" 
 //"https://api.themallbeta.com";
 

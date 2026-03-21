@@ -40,6 +40,7 @@ export interface LayoutSource {
 }
 
 export interface Layout {
+    isSharable: boolean;
     name: string;
     _id?: string;
     routes: Routes;

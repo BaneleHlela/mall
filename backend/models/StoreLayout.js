@@ -96,6 +96,10 @@ const storeLayoutSchema = new mongoose.Schema({
         book: {},
         menu: {},
     },
+    isSharable: {
+        type: Boolean,
+        default: false,
+    }
 }, { 
     timestamps: true 
 });

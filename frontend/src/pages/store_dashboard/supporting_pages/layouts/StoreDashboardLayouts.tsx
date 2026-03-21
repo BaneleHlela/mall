@@ -98,7 +98,7 @@ const StoreDashboardLayouts = () => {
 
   const handleInternalLayout = () => {
     setShowNewLayoutModal(false);
-    navigate(`/layouts/create`);
+    navigate(`/layouts/create?store=${store?.slug}`);
   };
 
   const handleExternalLayout = () => {

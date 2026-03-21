@@ -237,7 +237,7 @@ export const getDemoMenubars = expressAsyncHandler(async (req, res) => {
         menubar: { $exists: true, $ne: {} }
     })
     .populate('store', '_id name slug trades thumbnail')
-    .select('name menubar store screenshot')
+    .select('name menubar store screenshot isSharable')
     .limit(20);
 
     if (!demoLayouts || demoLayouts.length === 0) {
