@@ -4,7 +4,7 @@ import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice'
 import { AnimatePresence } from 'framer-motion';
 import BackgroundEditor from '../../background/BackgroundEditor';
 import BorderEditor from '../../background/BorderEditor';
-import StoreButtonSettings from '../../extras/StoreButtonSettings';
+import StoreButtonSettings from '../../extras/StoreLayoutButtonSettings';
 import SubSettingsContainer from '../../extras/SubSettingsContainer';
 import UnderlinedTextSettings from '../../extras/text/UnderlinedTextSettings';
 import FirstOrderSubSettingsContainer from '../../FirstOrderSubSettingsContainer';

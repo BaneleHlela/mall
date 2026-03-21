@@ -328,7 +328,7 @@ export function getDynamicSizeMap() {
   }
   if (screenWidth > 1800) {
     return {
-      mobile:  { width: 360, height: 740, scale: 1.1 },
+      mobile:  { width: 360, height: 740, scale: 1},
       tablet:  { width: 700, height: 1024, scale: 0.72 },
       desktop: { width: 1380, height: 700, scale: 0.8 },
     };
@@ -337,8 +337,8 @@ export function getDynamicSizeMap() {
 
   // Large screens (desktop)
   return {
-    mobile:  { width: 412, height: 840, scale: 0.75 },
-    tablet:  { width: 775, height: 1024, scale: 0.62 },
+    mobile:  { width: 412, height: 840, scale: 0.7 },
+    tablet:  { width: 775, height: 1024, scale: 0.5 },
     desktop: { width: 1380, height: 700, scale: 0.7 },
   };
 }

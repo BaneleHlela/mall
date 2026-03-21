@@ -3,7 +3,7 @@ import type { SupportingSettingsProps } from '../../sections/gallery/with_groupe
 import { getSetting } from '../../../../utils/helperFunctions'
 import FirstOrderSubSettingsContainer from '../../FirstOrderSubSettingsContainer'
 import SlidingPanel from '../../supporting/SlidingPanel'
-import StoreButtonSettings from '../StoreButtonSettings'
+import StoreButtonSettings from '../StoreLayoutButtonSettings'
 import StoreAlertIconSettings from './supporting/StoreAlertIconSettings'
 import BackgroundEditor from '../../background/BackgroundEditor'
 import SubSettingsContainer from '../SubSettingsContainer'

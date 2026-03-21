@@ -4,7 +4,7 @@ import OptionsToggler from "../../../supporting/OptionsToggler";
 import SettingsSlider from "../../../supporting/SettingsSlider";
 import { useAppSelector } from "../../../../../app/hooks";
 import IconsSettingsHandler from "./IconsSettingsHandler";
-import StoreButtonSettings from "../../../extras/StoreButtonSettings";
+import StoreButtonSettings from "../../../extras/StoreLayoutButtonSettings";
 import FirstOrderSubSettingsContainer from "../../../FirstOrderSubSettingsContainer";
 import SlidingPanel from "../../../supporting/SlidingPanel";
 import { AnimatePresence } from "framer-motion";

@@ -104,6 +104,13 @@ export const getTextStyles = (text: TextSettings, fonts?: any, colors?: any) => 
   if (text.textTransform) styles.textTransform = text.textTransform;
   if (text.textAlign) styles.textAlign = text.textAlign;
 
+  // textMaxWidth (responsive)
+  if (text.textMaxWidth) {
+    styles.maxWidth = typeof text.textMaxWidth === "object"
+      ? getResponsiveDimension(text.textMaxWidth)
+      : text.textMaxWidth;
+  }
+
   if (typeof text.textShadow === "string") {
     styles.textShadow = text.textShadow;
   }
@@ -122,6 +129,53 @@ export const getTextStyles = (text: TextSettings, fonts?: any, colors?: any) => 
       styles.paddingLeft = styles.paddingRight = x;
     } else if (text.padding.x) {
       styles.paddingLeft = styles.paddingRight = text.padding.x;
+    }
+  }
+
+  // Placement (responsive)
+  if (text.placement) {
+    // Absolute positioning
+    if (text.placement.isAbsolute) {
+      styles.position = "absolute";
+
+      // Top
+      if (text.placement.top) {
+        styles.top = typeof text.placement.top === "object"
+          ? getResponsiveDimension(text.placement.top)
+          : text.placement.top;
+      }
+      // Left
+      if (text.placement.left) {
+        styles.left = typeof text.placement.left === "object"
+          ? getResponsiveDimension(text.placement.left)
+          : text.placement.left;
+      }
+      // Right
+      if (text.placement.right) {
+        styles.right = typeof text.placement.right === "object"
+          ? getResponsiveDimension(text.placement.right)
+          : text.placement.right;
+      }
+      // Bottom
+      if (text.placement.bottom) {
+        styles.bottom = typeof text.placement.bottom === "object"
+          ? getResponsiveDimension(text.placement.bottom)
+          : text.placement.bottom;
+      }
+    } else {
+      // Non-absolute positioning with margins
+      // Margin Top
+      if (text.placement.marginTop) {
+        styles.marginTop = typeof text.placement.marginTop === "object"
+          ? getResponsiveDimension(text.placement.marginTop)
+          : text.placement.marginTop;
+      }
+      // Margin Bottom
+      if (text.placement.marginBottom) {
+        styles.marginBottom = typeof text.placement.marginBottom === "object"
+          ? getResponsiveDimension(text.placement.marginBottom)
+          : text.placement.marginBottom;
+      }
     }
   }
 
@@ -227,14 +281,80 @@ export const getBackgroundStyles = (bg: BackgroundSettings = {}, colors?: any) =
 
     if (bg.border.radius) styles.borderRadius = bg.border.radius;
   }
-  // position
+  // position (string value for alignment like 'start', 'center', 'end')
   if (bg.position) {
-    if (bg.position.isAbsolute) {
+    if (typeof bg.position === 'string') {
+      switch (bg.position) {
+        case "start":
+          styles.justifyContent = "flex-start";
+          break;
+        case "center":
+          styles.justifyContent = "center";
+          break;
+        case "end":
+          styles.justifyContent = "flex-end";
+          break;
+      }
+    } else if (typeof bg.position === 'object') {
+      // Handle object position (for floating images etc.)
+      if (bg.position.isAbsolute) {
+        styles.position = "absolute";
+      }
+
+      if (bg.position.horizontalPlacement) {
+        switch (bg.position.horizontalPlacement) {
+          case "start":
+            styles.justifyContent = "flex-start";
+            break;
+          case "center":
+            styles.justifyContent = "center";
+            break;
+          case "end":
+            styles.justifyContent = "flex-end";
+            break;
+        }
+      }
+
+      const mapPos = (key: "top" | "left" | "right" | "bottom") => {
+        const value = (bg.position as any)?.[key];
+        if (!value) return;
+
+        styles[key] =
+          typeof value === "object"
+            ? getResponsiveDimension(value)
+            : value;
+      };
+
+      mapPos("top");
+      mapPos("left");
+      mapPos("right");
+      mapPos("bottom");
+    }
+  }
+
+  // placement (for more complex positioning)
+  if (bg.placement) {
+    if (bg.placement.isAbsolute) {
       styles.position = "absolute";
     }
 
+    // Handle position alignment (start/center/end)
+    if (bg.placement.position) {
+      switch (bg.placement.position) {
+        case "start":
+          styles.justifyContent = "flex-start";
+          break;
+        case "center":
+          styles.justifyContent = "center";
+          break;
+        case "end":
+          styles.justifyContent = "flex-end";
+          break;
+      }
+    }
+
     const mapPos = (key: "top" | "left" | "right" | "bottom") => {
-      const value = (bg.position as any)[key];
+      const value = (bg.placement as any)?.[key];
       if (!value) return;
 
       styles[key] =

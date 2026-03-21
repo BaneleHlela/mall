@@ -8,7 +8,7 @@ import { AnimatePresence } from 'framer-motion';
 import SlidingPanel from '../../../supporting/SlidingPanel';
 import TextEditor from '../../../text/TextEditor';
 import OptionsToggler from '../../../supporting/OptionsToggler';
-import StoreButtonSettings from '../../../extras/StoreButtonSettings';
+import StoreButtonSettings from '../../../extras/StoreLayoutButtonSettings';
 
 interface HeroWithTwoTextAreasSettingsProps {
     settings: any;

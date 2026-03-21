@@ -15,7 +15,7 @@ import ColorPicker from '../../supporting/ColorPicker';
 import SettingsSlider from '../../supporting/SettingsSlider';
 import BackgroundEditor from '../../background/BackgroundEditor';
 import TextEditor from '../../text/TextEditor';
-import StoreButtonSettings from '../../extras/StoreButtonSettings';
+import StoreButtonSettings from '../../extras/StoreLayoutButtonSettings';
 
 const RestuarantMenubarSettings = () => {
     const [activePanel, setActivePanel] = useState<string | null>(null);

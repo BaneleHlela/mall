@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../../../../app/hooks";
 import { updateSetting } from "../../../../../features/layouts/layoutSettingsSlice";
 import { getSetting } from "../../../../../utils/helperFunctions";
 import BackgroundEditor from "../../../background/BackgroundEditor";
-import StoreButtonSettings from "../../../extras/StoreButtonSettings";
+import StoreButtonSettings from "../../../extras/StoreLayoutButtonSettings";
 import CartSettings from "../../CartSettings";
 import DesktopTopbarSettings from "./DesktopTopbarSettings";
 import MobileTopbarSettings from "./MobileTopbarSettings";

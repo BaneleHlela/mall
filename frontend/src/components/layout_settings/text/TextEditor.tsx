@@ -22,7 +22,6 @@ const TextEditor: React.FC<EditorProps> = ({
     scrollAnimationsOnly = false
 }) => {
     const isAllowed = (key: string) => !allow || allow.includes(key);
-    const storeColors = useAppSelector((state) => state.layoutSettings.colors);
 
     useEffect(() => {
         if (responsivePadding) {
@@ -91,6 +90,20 @@ const TextEditor: React.FC<EditorProps> = ({
 
     return (
         <div className="space-y-[.35vh]">
+          {/* Show/Hide Toggle */}
+          {isAllowed("show") && (
+            <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100">
+              <OptionsToggler
+                label="Show"
+                options={["Yes", "No"]}
+                value={getSetting("show", settings, objectPath) ? "Yes" : "No"}
+                onChange={(newValue) =>
+                  handleSettingChange(`${objectPath}.show`, newValue === "Yes")
+                }
+              />
+            </div>
+          )}
+
           {/* Input/Text Section */}
           {isAllowed("input") && (
             <div className="bg-white rounded-xl p-[1vh] shadow-sm border border-stone-100">
@@ -131,20 +144,6 @@ const TextEditor: React.FC<EditorProps> = ({
                   }
                 />
               )}
-            </div>
-          )}
-
-          {/* Show/Hide Toggle */}
-          {isAllowed("show") && (
-            <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100">
-              <OptionsToggler
-                label="Show"
-                options={["Yes", "No"]}
-                value={getSetting("show", settings, objectPath) ? "Yes" : "No"}
-                onChange={(newValue) =>
-                  handleSettingChange(`${objectPath}.show`, newValue === "Yes")
-                }
-              />
             </div>
           )}
 
@@ -203,7 +202,7 @@ const TextEditor: React.FC<EditorProps> = ({
             <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100">
               <OptionsToggler
                 label="Weight"
-                options={["normal", "bold", "bolder", "lighter"]}
+                options={["normal",  "500", "550", "600", "bold", "bolder", "lighter"]}
                 value={getSetting("weight", settings, objectPath)}
                 onChange={(newValue) =>
                   handleChange("weight")({
@@ -506,6 +505,345 @@ const TextEditor: React.FC<EditorProps> = ({
                   />
                 </>
               )}
+            </div>
+          )}
+          {/* Placement Section */}
+          {isAllowed("placement") && (
+            <div className="bg-white rounded-xl p-[1.5vh] shadow-sm border border-stone-100 space-y-[1vh]">
+              <h4 className="text-[1.6vh] font-semibold text-stone-500 uppercase tracking-wide">Positioning</h4>
+              
+              {/* Absolute Positioning Toggle */}
+              <OptionsToggler
+                label="isAbsolute"
+                options={["Yes", "No"]}
+                value={getSetting("placement.isAbsolute", settings, objectPath) ? "Yes" : "No"}
+                onChange={(newValue) =>
+                  handleSettingChange(`${objectPath}.placement.isAbsolute`, newValue === "Yes")
+                }
+              />
+
+              {/* Show horizontalPlacement and margins when NOT absolute */}
+              {!getSetting("placement.isAbsolute", settings, objectPath) && (
+                <>
+                  {/* Horizontal Placement */}
+                  {/* <OptionsToggler
+                    label="Horizontal Placement"
+                    options={["start", "center", "end"]}
+                    value={getSetting("placement.horizontalPlacement", settings, objectPath) || "start"}
+                    onChange={(newValue) =>
+                      handleSettingChange(`${objectPath}.placement.horizontalPlacement`, newValue)
+                    }
+                  /> */}
+
+                  {/* Margin Top - Mobile & Desktop */}
+                  <h5 className="text-[1.4vh] font-medium text-stone-400">Margin Top</h5>
+                  <SettingsSlider
+                    label="Mobile"
+                    value={parseFloat(getSetting("placement.marginTop.mobile", settings, objectPath) || "0")}
+                    unit="vh"
+                    step={0.1}
+                    min={0}
+                    max={20}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.marginTop.mobile")(event);
+                    }}
+                  />
+                  <SettingsSlider
+                    label="Desktop"
+                    value={parseFloat(getSetting("placement.marginTop.desktop", settings, objectPath) || "0")}
+                    unit="vh"
+                    step={0.1}
+                    min={0}
+                    max={20}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.marginTop.desktop")(event);
+                    }}
+                  />
+
+                  {/* Margin Bottom - Mobile & Desktop */}
+                  <h5 className="text-[1.4vh] font-medium text-stone-400">Margin Bottom</h5>
+                  <SettingsSlider
+                    label="Mobile"
+                    value={parseFloat(getSetting("placement.marginBottom.mobile", settings, objectPath) || "0")}
+                    unit="vh"
+                    step={0.1}
+                    min={0}
+                    max={20}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.marginBottom.mobile")(event);
+                    }}
+                  />
+                  <SettingsSlider
+                    label="Desktop"
+                    value={parseFloat(getSetting("placement.marginBottom.desktop", settings, objectPath) || "0")}
+                    unit="vh"
+                    step={0.1}
+                    min={0}
+                    max={20}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.marginBottom.desktop")(event);
+                    }}
+                  />
+                </>
+              )}
+
+              {/* Show top, left, right, bottom when IS absolute */}
+              {getSetting("placement.isAbsolute", settings, objectPath) && (
+                <>
+                  {/* Top - Mobile & Desktop */}
+                  <h5 className="text-[1.4vh] font-medium text-stone-400">Top</h5>
+                  <SettingsSlider
+                    label="Mobile"
+                    value={parseFloat(getSetting("placement.top.mobile", settings, objectPath) || "0")}
+                    unit="%"
+                    step={1}
+                    min={0}
+                    max={100}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.top.mobile")(event);
+                    }}
+                  />
+                  <SettingsSlider
+                    label="Desktop"
+                    value={parseFloat(getSetting("placement.top.desktop", settings, objectPath) || "0")}
+                    unit="%"
+                    step={1}
+                    min={0}
+                    max={100}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.top.desktop")(event);
+                    }}
+                  />
+
+                  {/* Left - Mobile & Desktop */}
+                  <h5 className="text-[1.4vh] font-medium text-stone-400">Left</h5>
+                  <SettingsSlider
+                    label="Mobile"
+                    value={parseFloat(getSetting("placement.left.mobile", settings, objectPath) || "0")}
+                    unit="%"
+                    step={1}
+                    min={0}
+                    max={100}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.left.mobile")(event);
+                    }}
+                  />
+                  <SettingsSlider
+                    label="Desktop"
+                    value={parseFloat(getSetting("placement.left.desktop", settings, objectPath) || "0")}
+                    unit="%"
+                    step={1}
+                    min={0}
+                    max={100}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.left.desktop")(event);
+                    }}
+                  />
+
+                  {/* Right - Mobile & Desktop */}
+                  <h5 className="text-[1.4vh] font-medium text-stone-400">Right</h5>
+                  <SettingsSlider
+                    label="Mobile"
+                    value={parseFloat(getSetting("placement.right.mobile", settings, objectPath) || "0")}
+                    unit="%"
+                    step={1}
+                    min={0}
+                    max={100}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.right.mobile")(event);
+                    }}
+                  />
+                  <SettingsSlider
+                    label="Desktop"
+                    value={parseFloat(getSetting("placement.right.desktop", settings, objectPath) || "0")}
+                    unit="%"
+                    step={1}
+                    min={0}
+                    max={100}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.right.desktop")(event);
+                    }}
+                  />
+
+                  {/* Bottom - Mobile & Desktop */}
+                  <h5 className="text-[1.4vh] font-medium text-stone-400">Bottom</h5>
+                  <SettingsSlider
+                    label="Mobile"
+                    value={parseFloat(getSetting("placement.bottom.mobile", settings, objectPath) || "0")}
+                    unit="%"
+                    step={1}
+                    min={0}
+                    max={100}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.bottom.mobile")(event);
+                    }}
+                  />
+                  <SettingsSlider
+                    label="Desktop"
+                    value={parseFloat(getSetting("placement.bottom.desktop", settings, objectPath) || "0")}
+                    unit="%"
+                    step={1}
+                    min={0}
+                    max={100}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.bottom.desktop")(event);
+                    }}
+                  />
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Underline Section */}
+          {isAllowed("underline") && (
+            <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100 space-y-[1vh]">
+              <h4 className="text-[1.6vh] font-semibold text-stone-500 uppercase tracking-wide">Underline</h4>
+              
+              {/* Show Toggle */}
+              <OptionsToggler
+                label="Show Underline"
+                options={["Yes", "No"]}
+                value={getSetting("underline.show", settings, objectPath) ? "Yes" : "No"}
+                onChange={(newValue) =>
+                  handleSettingChange(`${objectPath}.underline.show`, newValue === "Yes")
+                }
+              />
+
+              {/* Position */}
+              <OptionsToggler
+                label="Position"
+                options={["start", "center", "end"]}
+                value={getSetting("underline.position", settings, objectPath) ? "Yes" : "No"}
+                onChange={(newValue) =>
+                  handleSettingChange(`${objectPath}.underline.position`, newValue)
+                }
+              />
+
+               {/* Left - Mobile & Desktop */}
+                <h5 className="text-[1.4vh] font-medium text-stone-400">Left</h5>
+                <SettingsSlider
+                  label="Mobile"
+                  value={parseFloat(getSetting("underline.left.mobile", settings, objectPath) || "0")}
+                  unit="%"
+                  step={1}
+                  min={0}
+                  max={100}
+                  onChange={(newVal) => {
+                    const event = {
+                      target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
+                    } as React.ChangeEvent<HTMLInputElement>;
+                    handleChange("underline.left.mobile")(event);
+                  }}
+                />
+                <SettingsSlider
+                  label="Desktop"
+                  value={parseFloat(getSetting("underline.left.desktop", settings, objectPath) || "0")}
+                  unit="%"
+                  step={1}
+                  min={0}
+                  max={100}
+                  onChange={(newVal) => {
+                    const event = {
+                      target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
+                    } as React.ChangeEvent<HTMLInputElement>;
+                    handleChange("underline.left.desktop")(event);
+                  }}
+                />
+
+              {/* Width */}
+              <SettingsSlider
+                label="Width"
+                value={parseFloat(getSetting("underline.width", settings, objectPath) || "100")}
+                unit="%"
+                step={1}
+                min={10}
+                max={100}
+                onChange={(newVal) => {
+                  const event = {
+                    target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
+                  } as React.ChangeEvent<HTMLInputElement>;
+                  handleChange("underline.width")(event);
+                }}
+              />
+
+              {/* Height */}
+              <SettingsSlider
+                label="Height"
+                value={parseFloat(getSetting("underline.height", settings, objectPath) || "2")}
+                unit="px"
+                step={1}
+                min={1}
+                max={20}
+                onChange={(newVal) => {
+                  const event = {
+                    target: Object.assign(document.createElement("input"), { value: `${newVal}px` })
+                  } as React.ChangeEvent<HTMLInputElement>;
+                  handleChange("underline.height")(event);
+                }}
+              />
+
+              {/* Color */}
+              <OptionsToggler
+                label="Color"
+                options={["primary", "secondary", "accent", "quad", "pent"]}
+                value={getSetting("underline.color", settings, objectPath) || "primary"}
+                onChange={(newValue) =>
+                  handleSettingChange(`${objectPath}.underline.color`, newValue)
+                }
+                showColorSwatches={true}
+              />
+
+              {/* Margin Top */}
+              <SettingsSlider
+                label="Margin Top"
+                value={parseFloat(getSetting("underline.marginTop", settings, objectPath) || "5")}
+                unit="px"
+                step={1}
+                min={0}
+                max={50}
+                onChange={(newVal) => {
+                  const event = {
+                    target: Object.assign(document.createElement("input"), { value: `${newVal}px` })
+                  } as React.ChangeEvent<HTMLInputElement>;
+                  handleChange("underline.marginTop")(event);
+                }}
+              />
             </div>
           )}
         </div>

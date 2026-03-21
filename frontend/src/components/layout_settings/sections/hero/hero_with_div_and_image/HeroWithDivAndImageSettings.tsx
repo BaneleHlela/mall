@@ -8,7 +8,9 @@ import { AnimatePresence } from 'framer-motion';
 import SlidingPanel from '../../../supporting/SlidingPanel';
 import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings';
 import OptionsToggler from '../../../supporting/OptionsToggler';
-import StoreButtonSettings from '../../../extras/StoreButtonSettings';
+import StoreButtonSettings from '../../../extras/StoreLayoutButtonSettings';
+import { set } from 'lodash';
+import TextEditor from '../../../text/TextEditor';
 
 interface HeroWithBoxSettingsProps {
     settings: any;
@@ -119,7 +121,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                                         objectPath={`${objectPath}.background.container`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={[ "height", "width", "color", "padding" ]}
+                                        allow={["backgroundImage", "floatingImage", "height", "width", "color", "padding" ]}
                                         widthUnit="%"
                                         heightUnit="%"
                                         responsiveSize
@@ -128,29 +130,61 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                                 </div>
                                 }
                             />
-                            {/* Text Lines */}
                             <FirstOrderSubSettingsContainer
-                                name="Text"
-                                onClick={() => setActivePanel("textLines")}
+                                name="Details"
+                                onClick={() => setActivePanel("details")}
                             />
-                            {/* Button */}
-                            <FirstOrderSubSettingsContainer
-                                name="Button"
-                                onClick={() => setActivePanel("button")}
-                            />
+                            
                         </div>
+                    </SlidingPanel>
+                )}
+                {activePanel === "details" && (
+                    <SlidingPanel
+                        key="details"
+                        isOpen
+                        onClose={() => setActivePanel("container")}
+                        title="details"
+                    >
+                        {/* Details Background Settings */}
+                        <SubSettingsContainer
+                            name="Background"
+                            SettingsComponent={
+                            <div className="px-[.15vh] space-y-[.3vh]">
+                                <BackgroundEditor
+                                    objectPath={`${objectPath}.background.container.details`}
+                                    settings={settings}
+                                    handleSettingChange={handleSettingChange}
+                                    allow={["backgroundImage", "height", "width", "color", "padding", "border" ]}
+                                    widthUnit="%"
+                                    heightUnit="%"
+                                    responsiveSize
+                                    responsivePadding
+                                />
+                            </div>
+                            }
+                        />
+                        {/* Text Lines */}
+                        <FirstOrderSubSettingsContainer
+                            name="Text"
+                            onClick={() => setActivePanel("textLines")}
+                        />
+                        {/* Button */}
+                        <FirstOrderSubSettingsContainer
+                            name="Button"
+                            onClick={() => setActivePanel("button")}
+                        />
                     </SlidingPanel>
                 )}
                 {activePanel === "textLines" && (
                     <SlidingPanel
                         key="textLines"
                         isOpen={true}
-                        onClose={() => setActivePanel("container")}
+                        onClose={() => setActivePanel("details")}
                         title="Text Lines"
                     >
                         <div className="px-2 space-y-1 py-1">
                         {/* Text Width Settings */}
-                        <SubSettingsContainer
+                        {/* <SubSettingsContainer
                             name="Text Width"
                             SettingsComponent={
                             <div className="px-2 space-y-2">
@@ -164,7 +198,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                                 />
                             </div>
                             }
-                        />
+                        /> */}
 
                         {/* Individual Line Settings */}
                         {["firstLine", "secondLine", "thirdLine"].map((lineKey) => (
@@ -186,7 +220,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                             title={`Text Line: ${lineKey.replace("Line", " Line")}`}
                         >
                             <div className="px-2 space-y-[.6vh]">
-                                <OptionsToggler
+                                {/* <OptionsToggler
                                     label="Show"
                                     options={["true", "false"]}
                                     value={
@@ -200,14 +234,15 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                                         value === "true"
                                         )
                                     }
-                                />
+                                /> */}
 
-                                <UnderlinedTextSettings
+                                <TextEditor
                                     objectPath={`${objectPath}.text.${lineKey}`}
                                     settings={settings}
                                     handleSettingChange={handleSettingChange}
-                                    allowInput
+                                    allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                                     responsiveSize
+                                    useTextarea
                                 />
                             </div>
                         </SlidingPanel>
@@ -226,6 +261,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                             allowFunction
                             allowPosition
                             allowSimpleShow
+                            responsiveBackground
                         />
                     </SlidingPanel>
                 )}

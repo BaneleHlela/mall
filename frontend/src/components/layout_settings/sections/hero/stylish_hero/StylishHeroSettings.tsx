@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getSetting } from "../../../../../utils/helperFunctions";
 import BackgroundEditor from "../../../background/BackgroundEditor";
-import StoreButtonSettings from "../../../extras/StoreButtonSettings";
+import StoreButtonSettings from "../../../extras/StoreLayoutButtonSettings";
 import SubSettingsContainer from "../../../extras/SubSettingsContainer";
 import MultipleLayoutImagesHandler from "../../../supporting/MultipleLayoutImagesHandler";
 import TextEditor from "../../../text/TextEditor";

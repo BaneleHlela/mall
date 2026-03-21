@@ -19,7 +19,7 @@ interface Props {
 }
 
 const MultipleLayoutImagesHandler: React.FC<Props> = ({
-  images,
+  images = [],
   max = Infinity,
   min = 0,
   onChange,

@@ -1,7 +1,7 @@
 import { AnimatePresence } from 'framer-motion'
 import React, { useState } from 'react'
 import BackgroundEditor from '../../../background/BackgroundEditor'
-import StoreButtonSettings from '../../../extras/StoreButtonSettings'
+import StoreButtonSettings from '../../../extras/StoreLayoutButtonSettings'
 import SubSettingsContainer from '../../../extras/SubSettingsContainer'
 import FirstOrderSubSettingsContainer from '../../../FirstOrderSubSettingsContainer'
 import SlidingPanel from '../../../supporting/SlidingPanel'

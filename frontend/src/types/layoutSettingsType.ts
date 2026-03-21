@@ -1,23 +1,42 @@
 export interface TextSettings {
   input?: string;
-    fontFamily?: string;
-    fontSize?: string | {
-      mobile: string;
-      desktop: string;
-    };
-    weight?: string;
-    fontWeight?: string;
-    color?: string;
-    textShadow?: boolean;
-    lineHeight?: string;
-    letterSpacing?: string;
-    textDecoration?: string;
-    textTransform?: string;
-    fontStyle?: string;
-    padding?: PaddingValue;
-    backgroundColor?: string;
-    textAlign?: string;
-    textMaxWidth?: ResponsiveValue;
+  fontFamily?: string;
+  fontSize?: string | {
+    mobile: string;
+    desktop: string;
+  };
+  animation?: string;
+  weight?: string;
+  fontWeight?: string;
+  color?: string;
+  textShadow?: boolean;
+  lineHeight?: string;
+  letterSpacing?: string;
+  textDecoration?: string;
+  textTransform?: string;
+  fontStyle?: string;
+  padding?: PaddingValue;
+  backgroundColor?: string;
+  textAlign?: string;
+  textMaxWidth?: ResponsiveValue;
+  placement?: {
+    isAbsolute?: boolean;
+    top?: ResponsiveValue;
+    left?: ResponsiveValue;
+    right?: ResponsiveValue;
+    bottom?: ResponsiveValue;
+    marginBottom?: ResponsiveValue;
+    marginTop: ResponsiveValue;
+  };
+  underline?: {
+    show: boolean;
+    width: string;
+    height: string;
+    color: string;
+    marginTop: string;
+    position?:  'start' | 'center' | 'end',
+    left?: ResponsiveValue;
+  }
 }
   
 export interface EditorProps {
@@ -56,13 +75,21 @@ export interface BackgroundSettings {
     color?: string;
     radius?: string;
   };
-  position?: {
+  position?: 'start' | 'center' | 'end' | {
     horizontalPlacement?: 'start' | 'center' | 'end'
     isAbsolute?: boolean;
     top?: string | ResponsiveValue;
     left?: string | ResponsiveValue;
     right?: string | ResponsiveValue;
     bottom?: string | ResponsiveValue;
+  };
+  placement?: {
+    position?: 'start' | 'center' | 'end'
+    isAbsolute?: boolean;
+    top?: ResponsiveValue;
+    left?: ResponsiveValue;
+    right?: ResponsiveValue;
+    bottom?: ResponsiveValue;
   };
   backgroundImage?: {
     imageUrl: string[];
@@ -71,15 +98,14 @@ export interface BackgroundSettings {
   };
   floatingImage?: {
     imageUrl: string[];
+    opacity?: string;
     height: string | ResponsiveValue;
     width: string | ResponsiveValue;
     position?: {
-      horizontalPlacement?: 'start' | 'center' | 'end'
-      isAbsolute?: boolean;
-      top?: string | ResponsiveValue;
-      left?: string | ResponsiveValue;
-      right?: string | ResponsiveValue;
-      bottom?: string | ResponsiveValue;
+      top?: ResponsiveValue;
+      left?: ResponsiveValue;
+      right?: ResponsiveValue;
+      bottom?: ResponsiveValue;
     };
   }
 }

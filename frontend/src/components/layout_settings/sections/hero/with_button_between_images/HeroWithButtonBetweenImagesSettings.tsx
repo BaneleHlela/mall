@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getSetting } from "../../../../../utils/helperFunctions";
 import BackgroundEditor from "../../../background/BackgroundEditor";
-import StoreButtonSettings from "../../../extras/StoreButtonSettings";
+import StoreButtonSettings from "../../../extras/StoreLayoutButtonSettings";
 import SubSettingsContainer from "../../../extras/SubSettingsContainer";
 import FirstOrderSubSettingsContainer from "../../../FirstOrderSubSettingsContainer";
 import ColorPicker from "../../../supporting/ColorPicker";

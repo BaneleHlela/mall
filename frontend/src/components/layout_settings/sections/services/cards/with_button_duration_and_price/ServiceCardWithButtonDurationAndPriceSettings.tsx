@@ -6,7 +6,7 @@ import FirstOrderSubSettingsContainer from '../../../../FirstOrderSubSettingsCon
 import SlidingPanel from '../../../../supporting/SlidingPanel'
 import TextEditor from '../../../../text/TextEditor'
 import { AnimatePresence } from 'framer-motion'
-import StoreButtonSettings from '../../../../extras/StoreButtonSettings'
+import StoreButtonSettings from '../../../../extras/StoreLayoutButtonSettings'
 
 const ServiceCardWithButtonDurationAndPriceSettings: React.FC<SectionEditorProps> = ({
   settings,

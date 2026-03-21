@@ -10,7 +10,7 @@ import TextEditor from '../../text/TextEditor';
 import { getSetting } from '../../../../utils/helperFunctions';
 import OptionsToggler from '../../supporting/OptionsToggler';
 import UnderlinedTextSettings from '../../extras/text/UnderlinedTextSettings';
-import StoreButtonSettings from '../../extras/StoreButtonSettings';
+import StoreButtonSettings from '../../extras/StoreLayoutButtonSettings';
 
 const SingleStoreProductSectionSettings = () => {
     const dispatch = useAppDispatch();

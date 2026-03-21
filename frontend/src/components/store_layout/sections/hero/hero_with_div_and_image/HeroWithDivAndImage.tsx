@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import StoreLayoutButton from "../../../shared_layout_components/StoreLayoutButton";
 import StoreDivTag from "../../../shared_layout_components/StoreDivTag";
+import StoreTextTag from "../../../shared_layout_components/StoreTextTag";
 
 const HeroWithDivAndImage = () => {
   const config = useAppSelector((state) => state.layoutSettings.sections.hero);
@@ -17,61 +18,73 @@ const HeroWithDivAndImage = () => {
   const { width: windowWidth } = useWindowSize();
   const isMobile = windowWidth ? windowWidth < 740 : false;
   const imageFirst = isMobile ? config.imageFirst?.mobile : config.imageFirst?.desktop;
-
   const Container = () => (
   <StoreDivTag
-    style={config.background.container}
+    style={config.background.container || {}}
     jsx={
-      <div className="flex flex-col justify-center items-center overflow-hidden w-full h-full">
-        
-        {/* Text */}
-        <div className="w-full h-10 bg-white">
-          <p style={{textAlign: 'center'}} className="">snacks</p>
+      <StoreDivTag
+        style={config.background.container.details || {}}
+        jsx={
+        <div className="flex flex-col justify-center items-center overflow-hidden w-full h-full">
+          {/* Text */}
+          <StoreTextTag 
+            style={config.text.firstLine}
+          />
+          <StoreTextTag 
+            style={config.text.secondLine}
+          />
+          <StoreTextTag 
+            style={config.text.thirdLine}
+          />
+          {/* {config.text.firstLine.show && (
+            <UnderlinedText style={config.text.firstLine} />
+          )} */}
+          {/* {config.text.secondLine.show && (
+            <UnderlinedText style={config.text.secondLine} />
+          )} */}
+          {/* {config.text.thirdLine.show && (
+            <UnderlinedText style={config.text.thirdLine} />
+          )} */}
+
+          {/* Button */}
+          
+          {config.button?.show && (
+            <div
+              className={`w-full flex flex-row mt-4 lg:mt-8 z-10 ${
+                config.button?.position === "center"
+                  ? "justify-center"
+                  : config.button?.position === "start"
+                  ? "justify-start"
+                  : config.button?.position === "end"
+                  ? "justify-end"
+                  : ""
+              }`}
+            >
+              <StoreLayoutButton
+                style={config.button}
+                onClick={() =>
+                  handleButtonClick({
+                    type: config.button.function,
+                    routes,
+                    storeSlug: store?.slug ?? '',
+                    contactNumber: store?.contact?.phone,
+                  })
+                }
+              />
+            </div>
+          )}
+          
         </div>
-        {config.text.firstLine.show && (
-          <UnderlinedText style={config.text.firstLine} />
-        )}
-        {config.text.secondLine.show && (
-          <UnderlinedText style={config.text.secondLine} />
-        )}
-        {config.text.thirdLine.show && (
-          <UnderlinedText style={config.text.thirdLine} />
-        )}
-
-        {/* Button */}
-        {config.button?.show && (
-          <div
-            className={`w-full flex flex-row mt-4 lg:mt-8 z-10 ${
-              config.button?.position === "center"
-                ? "justify-center"
-                : config.button?.position === "start"
-                ? "justify-start"
-                : config.button?.position === "end"
-                ? "justify-end"
-                : ""
-            }`}
-          >
-            <StoreLayoutButton
-              style={config.button}
-              onClick={() =>
-                handleButtonClick({
-                  type: config.button.function,
-                  routes,
-                  storeSlug: store?.slug ?? '',
-                  contactNumber: store?.contact?.phone,
-                })
-              }
-            />
-          </div>
-        )}
-
-      </div>
+        }/>
     }
   />
 );
 
   const Image = () => {
-    const images = isMobile ? config.image.url.mobile : config.image.url.desktop;
+    const images = isMobile ? config.image?.url?.mobile : config.image?.url?.desktop;
+
+    // Handle empty or undefined images array - render placeholder or nothing
+    const hasImages = Array.isArray(images) && images.length > 0;
 
     return (
       <div
@@ -101,15 +114,23 @@ const HeroWithDivAndImage = () => {
           loop
           className="w-full h-full"
         >
-          {images?.map((imgUrl: string, idx: number) => (
-            <SwiperSlide key={idx}>
-              <img
-                src={imgUrl}
-                alt={`Hero ${idx + 1}`}
-                className="object-cover w-full h-full"
-              />
+          {hasImages ? (
+            images.map((imgUrl: string, idx: number) => (
+              <SwiperSlide key={idx}>
+                <img
+                  src={imgUrl}
+                  alt={`Hero ${idx + 1}`}
+                  className="object-cover w-full h-full"
+                />
+              </SwiperSlide>
+            ))
+          ) : (
+            <SwiperSlide>
+              <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                <p className="text-gray-400">No images available</p>
+              </div>
             </SwiperSlide>
-          ))}
+          )}
         </Swiper>
       </div>
     );
@@ -120,7 +141,7 @@ const HeroWithDivAndImage = () => {
       style={{
         ...getBackgroundStyles(config.background),
       }}
-      className="w-full overflow-hidden"
+      className="w-full h-full overflow-hidden"
     >
       {imageFirst ? (
         <div className="w-full h-full flex flex-col lg:flex-row">

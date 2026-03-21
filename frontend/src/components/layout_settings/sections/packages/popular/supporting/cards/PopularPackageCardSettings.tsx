@@ -2,7 +2,7 @@ import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { getSetting } from "../../../../../../../utils/helperFunctions";
 import BackgroundEditor from "../../../../../background/BackgroundEditor";
-import StoreButtonSettings from "../../../../../extras/StoreButtonSettings";
+import StoreButtonSettings from "../../../../../extras/StoreLayoutButtonSettings";
 import SubSettingsContainer from "../../../../../extras/SubSettingsContainer";
 import UnderlinedTextSettings from "../../../../../extras/text/UnderlinedTextSettings";
 import FirstOrderSubSettingsContainer from "../../../../../FirstOrderSubSettingsContainer";

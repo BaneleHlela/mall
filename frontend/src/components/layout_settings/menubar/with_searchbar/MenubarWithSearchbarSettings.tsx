@@ -13,7 +13,7 @@ import BorderEditor from '../../background/BorderEditor';
 import BackgroundEditor from '../../background/BackgroundEditor';
 import SettingsSlider from '../../supporting/SettingsSlider';
 import TextEditor from '../../text/TextEditor';
-import StoreButtonSettings from '../../extras/StoreButtonSettings';
+import StoreButtonSettings from '../../extras/StoreLayoutButtonSettings';
 
 const MenubarWithSearchbarSettings = () => {
     const [activePanel, setActivePanel] = useState<string | null>(null);

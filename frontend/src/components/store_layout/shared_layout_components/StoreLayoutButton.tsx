@@ -1,5 +1,8 @@
 import React from 'react'
 import { getBackgroundStyles, getTextStyles } from '../../../utils/stylingFunctions';
+import StoreDivTag from './StoreDivTag';
+import { useAppSelector } from '../../../app/hooks';
+import StoreTextTag from './StoreTextTag';
 
 interface StoreButtonProps {
     onClick: () => void;
@@ -12,7 +15,8 @@ const StoreLayoutButton: React.FC<StoreButtonProps> = ({
     style,
     isLoading = false,
 }) => {
-    // Destructure with fallback values for safe access
+  const {fonts, colors} = useAppSelector(state => state.layoutSettings);
+  // Destructure with fallback values for safe access
   const {
     text = {
       animation: '',
@@ -42,18 +46,22 @@ const StoreLayoutButton: React.FC<StoreButtonProps> = ({
   } = style || {}; // Fallback to empty object if style.style is undefined
 
     return (
+      <StoreDivTag
+        style={background}
+        jsx={
         <button
-            className="z-10"
             onClick={onClick}
             style={{
-                ...getTextStyles(style.text),
-                ...getBackgroundStyles(background),
+                ...getTextStyles(style.text, fonts, colors),
             }}
+            className="flex justify-center items-center w-full h-full z-10"
         >
-            <p className={`${text.animation || ''} flex flex-col justify-center items-center h-full w-full hover:underline z-10`}>
+            <p className={`${text.animation || ''} w-fit hover:underline z-10`}>
                 {text.input || 'Click Me'}  {/* Fallback to 'Click Me' if text.input is undefined */}
             </p>
         </button>
+        }
+      />
     )
 }
 

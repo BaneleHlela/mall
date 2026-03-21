@@ -6,7 +6,7 @@ import BackgroundEditor from '../../background/BackgroundEditor';
 import TextEditor from '../../text/TextEditor';
 import SubSettingsContainer from '../../extras/SubSettingsContainer';
 import SingleLayoutImageHandler from '../../supporting/SingleLayoutImageHandler';
-import StoreButtonSettings from '../../extras/StoreButtonSettings';
+import StoreButtonSettings from '../../extras/StoreLayoutButtonSettings';
 import ColorPicker from '../../supporting/ColorPicker';
 import FirstOrderSubSettingsContainer from '../../FirstOrderSubSettingsContainer';
 import SlidingPanel from '../../supporting/SlidingPanel';

@@ -6,7 +6,7 @@ import FirstOrderSubSettingsContainer from '../../../../FirstOrderSubSettingsCon
 import SlidingPanel from '../../../../supporting/SlidingPanel'
 import TextEditor from '../../../../text/TextEditor'
 import { AnimatePresence } from 'framer-motion'
-import StoreButtonSettings from '../../../../extras/StoreButtonSettings'
+import StoreButtonSettings from '../../../../extras/StoreLayoutButtonSettings'
 import OptionsToggler from '../../../../supporting/OptionsToggler'
 import MultipleLayoutImagesHandler from '../../../../supporting/MultipleLayoutImagesHandler'
 import { getSetting } from '../../../../../../utils/helperFunctions'
