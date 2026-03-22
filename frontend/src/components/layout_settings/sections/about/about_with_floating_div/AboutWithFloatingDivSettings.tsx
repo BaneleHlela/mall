@@ -9,6 +9,7 @@ import TextEditor from "../../../text/TextEditor";
 import SlidingPanel from "../../../supporting/SlidingPanel";
 import { AnimatePresence } from "framer-motion";
 import FirstOrderSubSettingsContainer from "../../../FirstOrderSubSettingsContainer";
+import StoreButtonSettings from "../../../extras/StoreLayoutButtonSettings";
 
 const AboutWithFloatingDivSettings = () => {
     const dispatch = useAppDispatch();
@@ -135,6 +136,11 @@ const AboutWithFloatingDivSettings = () => {
                             name="Paragraph"
                             onClick={() => setActivePanel("paragraph")}
                         />
+                        {/* Button */}
+                        <FirstOrderSubSettingsContainer
+                            name="Button"
+                            onClick={() => setActivePanel("button")}
+                        />
                     </SlidingPanel>
                 )}
             </AnimatePresence>
@@ -195,6 +201,23 @@ const AboutWithFloatingDivSettings = () => {
                             allow={["input", "fontFamily", "fontSize", "color", "weight", "placement"]}
                             useTextarea
                             responsiveSize
+                        />
+                    </SlidingPanel>
+                )}
+                {activePanel === "button" && (
+                    <SlidingPanel
+                        key="button"
+                        isOpen={true}
+                        onClose={closePanel}
+                        title="Hero Button"
+                    >
+                        <StoreButtonSettings
+                            objectPath={`${objectPath}.container.button`}
+                            settings={settings}
+                            allowFunction
+                            allowPosition
+                            allowSimpleShow
+                            responsiveBackground
                         />
                     </SlidingPanel>
                 )}

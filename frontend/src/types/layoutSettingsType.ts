@@ -67,6 +67,8 @@ export interface BackgroundSettings {
   height?: string | ResponsiveValue;
   width?: string| ResponsiveValue;
   margin?: string| ResponsiveValue;
+  marginTop?: ResponsiveValue;
+  marginBottom?: ResponsiveValue;
   padding?: PaddingValue;
   opacity?: string;
   border?: {

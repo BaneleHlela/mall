@@ -47,7 +47,7 @@ const StoreDivTag = ({ style = {}, jsx }: Props) => {
         {floatingImageSrc && (
           <img 
             style={{
-              ...getBackgroundStyles(style?.floatingImage || {}),
+              ...getBackgroundStyles(style?.floatingImage || {}, colors),
             }}
             src={floatingImageSrc}
             className="absolute object-cover z-10"

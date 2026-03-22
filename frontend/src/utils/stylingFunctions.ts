@@ -241,6 +241,20 @@ export const getBackgroundStyles = (bg: BackgroundSettings = {}, colors?: any) =
   if (typeof bg.margin === "object") styles.margin = getResponsiveDimension(bg.margin);
   else if (bg.margin) styles.margin = bg.margin;
 
+  // Margin Top (similar to text styles)
+  if (bg.marginTop) {
+    styles.marginTop = typeof bg.marginTop === "object"
+      ? getResponsiveDimension(bg.marginTop)
+      : bg.marginTop;
+  }
+
+  // Margin Bottom (similar to text styles)
+  if (bg.marginBottom) {
+    styles.marginBottom = typeof bg.marginBottom === "object"
+      ? getResponsiveDimension(bg.marginBottom)
+      : bg.marginBottom;
+  }
+
   // padding
   if (typeof bg.padding === "object") {
     if (typeof bg.padding.y === "object") {
