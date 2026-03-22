@@ -7,6 +7,7 @@ import AboutWithImageBehindTextSettings from "./with_image_behind_text/AboutWith
 import AboutWithImageNextToTextSettings from "./with_image_next_to_text/AboutWithImageNextToTextSettings";
 import ShortAboutSettings from "./short_about/ShortAboutSettings";
 import AboutWithLineAndImageSettings from "./with_line_and_image/AboutWithLineAndImageSettings";
+import AboutWithFloatingDivSettings from "./about_with_floating_div/AboutWithFloatingDivSettings";
 
 const AboutSettingsSection = () => {
     const dispatch = useAppDispatch();
@@ -79,6 +80,10 @@ const AboutSettingsSection = () => {
             case "aboutWithLineAndImage":
                 return (
                     <AboutWithLineAndImageSettings />
+                )
+            case "aboutWithFloatingDiv":
+                return (
+                    <AboutWithFloatingDivSettings />
                 )
             default:
                 return <div>No settings found for {settings.sections.about.variation}</div>;

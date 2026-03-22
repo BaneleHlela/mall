@@ -446,50 +446,49 @@ export const mockLayout = {
             }
         },                                 
         about: {
+            variation: "aboutWithFloatingDiv",
             background: {
                 color: "primary",
-            },
-            text: {
-                header: {
-                    input: "Made With Love & Sauce",
-                    fontFamily: "primary",
-                    fontSize: {
-                        mobile: "4vh",
-                        desktop: "5vh"
-                    }
-                },
-                details: {
-                    fontSize: {
-                        mobile: "2.4vh",
-                        desktop: "3vh"
-                    },
-                    fontFamily: "primary",
-                },
-                address: {
-                    input: "123 Mthatheni Street, Madadeni 2951"
-                },
-                openingHours: {
-                    input: "<strong>Mon-Fri:</strong> 8am - 6pm<br/><strong>Sat:</strong> 9am - 4pm<br/><strong>Sun:</strong> Closed"
+                height: {
+                    mobile: "80vh",
+                    desktop: "80vh"
                 }
             },
-            logo: {
-                use: "logo",
-                logoUrl: ["https://storage.googleapis.com/the-mall-uploads-giza/stores/khona-kota-chips/images/icon.png"],
-                text: {
-                    input: "",
-                    color: "primary",
-                    fontSize: {
-                        mobile: "3vh",
-                        desktop: "4vh"
-                    },
-                    weight: "bold",
-                    letterSpacing: "0px",
-                    textDecoration: "none"
+            heading: {
+                input: "Made With Love & Sauce",
+                fontFamily: "primary",
+                fontSize: {
+                    mobile: "4vh",
+                    desktop: "5vh"
                 },
                 background: {
-                    width: {
-                        mobile: "20%",
-                        desktop: "25vh"
+                    
+                }
+            },
+            container: {
+                background: { 
+                    color: "primary",
+                    height: {
+                        mobile: "80vh",
+                        desktop: "80vh"
+                    }
+                },
+                text: {
+                    subheading: {
+                        input: "Made With Love & Sauce",
+                        fontFamily: "primary",
+                        fontSize: {
+                            mobile: "4vh",
+                            desktop: "5vh"
+                        }
+                    },
+                    paragraph: {
+                        input: "Made With Love & Sauce. Made With Love & Sauce",
+                        fontFamily: "primary",
+                        fontSize: {
+                            mobile: "2vh",
+                            desktop: "3vh"
+                        }
                     }
                 }
             },

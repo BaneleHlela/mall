@@ -1,5 +1,6 @@
 import { useAppSelector } from "../../../../app/hooks";
 import type { SectionProps } from "../../../../types/layoutTypes"
+import AboutWithFloatingDiv from "./about_with_floating_div/AboutWithFloatingDiv";
 import DoctorAbout from "./doctor_about/DoctorAbout";
 import ShortAbout from "./short_about/ShortAbout";
 import AboutWithImageBehindText from "./with_image_behind_text/AboutWithImageBehindText";
@@ -35,6 +36,12 @@ const StoreAboutSection = ({id}: SectionProps) => {
   if (variation === "aboutWithImageBehindText") {
     return (
       <AboutWithImageBehindText />
+    )
+  }
+
+  if (variation === "aboutWithFloatingDiv") {
+    return (
+      <AboutWithFloatingDiv />
     )
   }
 }
