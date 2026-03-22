@@ -61,9 +61,9 @@ const TheMallTopbar = () => {
   return (
     <div
       className={`fixed top-0 w-[100vw] h-[13vh] min-h-[13vh] shadow lg:min-h-[10vh] lg:h-[8vh] lg:max-h-[8vh] inset-0 z-50
-        bg-white dark:bg-black
+        bg-white dar:bg-black
         flex flex-col items-center lg:px-[10%]
-        text-gray-900 dark:text-white
+        text-gray-900 dar:text-white
         transition-transform duration-300
         ${isHidden ? '-translate-y-full' : ''}`}
     >
@@ -75,7 +75,7 @@ const TheMallTopbar = () => {
           <div onClick={() => navigate("/")} className="w-fit h-[60%] flex items-center">
             <p
               style={{ fontFamily: "Bebas Neue" }}
-              className="font-bold text-[5vh] text-gray-900 dark:text-white"
+              className="font-bold text-[5vh] text-gray-900 dar:text-white"
             >
               The Mall
             </p>
@@ -95,9 +95,9 @@ const TheMallTopbar = () => {
                 placeholder="Search for stores, products, or services"
                 className="w-full h-full border p-[1vh] placeholder:text-[1.5vh]
                   placeholder:text-stone-400
-                  bg-stone-100 dark:bg-[#3e3e3fe3]
-                  text-gray-900 dark:text-white
-                  border-gray-300 dark:border-gray-500
+                  bg-stone-100 dar:bg-[#3e3e3fe3]
+                  text-gray-900 dar:text-white
+                  border-gray-300 dar:border-gray-500
                   focus:outline-none rounded-[4px]"
               />
 
@@ -189,7 +189,7 @@ const TheMallTopbar = () => {
                 }
                 dispatch(openRangeModal());
               }}
-              className="text-[1vh] text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded p-1 transition-colors"
+              className="text-[1vh] text-gray-900 dar:text-white hover:bg-black/10 dar:hover:bg-white/10 rounded p-1 transition-colors"
             >
               <PiMapPinSimpleAreaLight className="text-[3.2vh]" />
             </button>
@@ -197,7 +197,7 @@ const TheMallTopbar = () => {
             {/* Location */}
             <button
               onClick={() => navigate('/account')}
-              className="text-[1vh] text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded p-1 transition-colors"
+              className="text-[1vh] text-gray-900 dar:text-white hover:bg-black/10 dar:hover:bg-white/10 rounded p-1 transition-colors"
             >
               <CiLocationOn className="text-[3vh]" />
             </button>
@@ -211,7 +211,7 @@ const TheMallTopbar = () => {
             <div onClick={() => navigate("/")} className="w-fit h-[50%] flex items-center">
               <p
                 style={{ fontFamily: "Bebas Neue" }}
-                className="font-bold text-[3.5vh] ml-1 text-gray-900 dark:text-white"
+                className="font-bold text-[3.5vh] ml-1 text-gray-900 dar:text-white"
               >
                 The Mall
               </p>
@@ -235,13 +235,13 @@ const TheMallTopbar = () => {
                   }
                   dispatch(openRangeModal());
                 }}
-                className="text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded p-1 transition-colors"
+                className="text-gray-900 dar:text-white hover:bg-black/10 dar:hover:bg-white/10 rounded p-1 transition-colors"
               >
                 <PiMapPinSimpleAreaLight className="text-[3.2vh] mt-[.2vh]" />
               </button>
               <button
                 onClick={() => navigate('/account')}
-                className="text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 rounded p-1 transition-colors"
+                className="text-gray-900 dar:text-white hover:bg-black/10 dar:hover:bg-white/10 rounded p-1 transition-colors"
               >
                 <CiLocationOn className="text-[3vh]" />
               </button>
@@ -260,9 +260,9 @@ const TheMallTopbar = () => {
               placeholder="Search for stores, products, or services"
               className="w-full h-[80%] border p-[1vh] placeholder:text-[1.5vh]
                 placeholder:text-stone-400
-                bg-stone-100 dark:bg-[#3e3e3fe3]
-                text-gray-900 dark:text-white
-                border-gray-300 dark:border-gray-500
+                bg-stone-100 dar:bg-[#3e3e3fe3]
+                text-gray-900 dar:text-white
+                border-gray-300 dar:border-gray-500
                 focus:outline-none rounded-[4px]"
             />
 

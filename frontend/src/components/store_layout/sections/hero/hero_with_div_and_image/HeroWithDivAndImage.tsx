@@ -18,6 +18,9 @@ const HeroWithDivAndImage = () => {
   const { width: windowWidth } = useWindowSize();
   const isMobile = windowWidth ? windowWidth < 740 : false;
   const imageFirst = isMobile ? config.imageFirst?.mobile : config.imageFirst?.desktop;
+
+  console.log(config);
+  
   const Container = () => (
   <StoreDivTag
     style={config.background.container || {}}

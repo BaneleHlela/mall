@@ -45,7 +45,7 @@ const HeroSettings = () => {
   const handleSettingChange = (field: string, value: any) => {
     dispatch(updateSetting({ field, value }));
   };
-  console.log(variation);
+  console.log(settings.sections.hero);
   switch (variation) {
     case "first":
       return <FirstHeroSettings />;

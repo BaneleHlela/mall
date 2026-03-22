@@ -8,6 +8,7 @@ import AboutWithImageNextToTextSettings from "./with_image_next_to_text/AboutWit
 import ShortAboutSettings from "./short_about/ShortAboutSettings";
 import AboutWithLineAndImageSettings from "./with_line_and_image/AboutWithLineAndImageSettings";
 import AboutWithFloatingDivSettings from "./about_with_floating_div/AboutWithFloatingDivSettings";
+import AboutWithDivAndImageSettings from "./about_with_div_and_image/AboutWithImageAndDivSettings";
 
 const AboutSettingsSection = () => {
     const dispatch = useAppDispatch();
@@ -60,6 +61,17 @@ const AboutSettingsSection = () => {
                     <div className="space-y-1">
                         {menuBarToggle}
                         <AboutWithImageBehindTextSettings
+                            settings={settings}
+                            handleSettingChange={handleSettingChange}
+                        />
+                    </div>
+                );
+
+            case "aboutWithDivAndImage":
+                return (
+                    <div className="space-y-1">
+                        {menuBarToggle}
+                        <AboutWithDivAndImageSettings
                             settings={settings}
                             handleSettingChange={handleSettingChange}
                         />

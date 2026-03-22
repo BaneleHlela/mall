@@ -51,6 +51,7 @@ const BlueSidebar: React.FC<BlueSidebarProps> = ({
   style
 }) => {
   const store = useAppSelector((state) => state.stores.currentStore);
+  const { fonts, colors} = useAppSelector((state) => state.layoutSettings)
   console.log(style.links.padding?.y);
   return (
     isOpen && (
@@ -97,6 +98,7 @@ const BlueSidebar: React.FC<BlueSidebarProps> = ({
                     borderBottom: `1px solid ${style.links.borderColor}`,
                     fontWeight: style.links.fontWeight,
                     fontSize: style.links.fontSize,
+                    ...getTextStyles(style.links, fonts, colors)
                   }}
                   className={`flex flex-col justify-center capitalize text-[2.8vh] py-[1.5vh] hover:scale-102
                     ${style.links.alignment === "left" ? "text-left" : ""}

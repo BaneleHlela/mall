@@ -21,7 +21,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
 }) => {
     const objectPath = "sections.hero";
     const [activePanel, setActivePanel] = useState<string | null>(null);
-    const cclsePanel = () => setActivePanel(null);
+    const closePanel = () => setActivePanel(null);
     
     return (
         <div className="space-y-[.3vh]">
@@ -241,6 +241,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                                     allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                                     responsiveSize
                                     useTextarea
+                                    responsivePadding
                                 />
                             </div>
                         </SlidingPanel>
@@ -250,7 +251,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                     <SlidingPanel
                         key="button"
                         isOpen={true}
-                        onClose={closePanel}
+                        onClose={() => setActivePanel('details')}
                         title="Hero Button"
                     >
                         <StoreButtonSettings

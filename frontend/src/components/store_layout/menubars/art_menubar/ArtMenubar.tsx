@@ -164,7 +164,7 @@ const ArtMenubar = () => {
                 />
             </div>
             {/* Links */}
-            <div className="h-full w-[50%] ml-[20%] flex flex-col justify-center items-start">
+            <div className="h-full w-[50%] ml-[15%] mr-[5%] flex flex-col justify-center items-start">
                 <div 
                     className='w-full h-full flex flex-col items-start'
                 >
@@ -184,7 +184,7 @@ const ArtMenubar = () => {
                 </div>
             </div>
             {/* Searchbar, cart & favorite */}
-            <div className="flex justify-end items-center space-x-[1vh]  w-[20%] h-[40%]">
+            <div className="flex justify-end items-center space-x-[1vh]  w-[25%] h-[40%]">
                 <StoreLayoutButton 
                     onClick={() =>
                         handleButtonClick({

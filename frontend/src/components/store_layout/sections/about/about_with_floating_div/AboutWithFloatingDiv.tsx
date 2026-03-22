@@ -55,12 +55,12 @@ const AboutWithFloatingDiv = () => {
                                     <StoreLayoutButton
                                         style={config.container.button}
                                         onClick={() =>
-                                        handleButtonClick({
-                                            type: config.container.button.function,
-                                            routes,
-                                            storeSlug: store?.slug ?? '',
-                                            contactNumber: store?.contact?.phone,
-                                        })
+                                            handleButtonClick({
+                                                type: config.container.button.function,
+                                                routes,
+                                                storeSlug: store?.slug ?? '',
+                                                contactNumber: store?.contact?.phone,
+                                            })
                                         }
                                     />
                                     </div>
