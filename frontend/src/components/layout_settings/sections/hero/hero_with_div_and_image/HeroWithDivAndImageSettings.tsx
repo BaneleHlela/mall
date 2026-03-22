@@ -6,10 +6,8 @@ import { getSetting } from '../../../../../utils/helperFunctions';
 import FirstOrderSubSettingsContainer from '../../../FirstOrderSubSettingsContainer';
 import { AnimatePresence } from 'framer-motion';
 import SlidingPanel from '../../../supporting/SlidingPanel';
-import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings';
 import OptionsToggler from '../../../supporting/OptionsToggler';
 import StoreButtonSettings from '../../../extras/StoreLayoutButtonSettings';
-import { set } from 'lodash';
 import TextEditor from '../../../text/TextEditor';
 
 interface HeroWithBoxSettingsProps {
@@ -23,7 +21,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
 }) => {
     const objectPath = "sections.hero";
     const [activePanel, setActivePanel] = useState<string | null>(null);
-    const closePanel = () => setActivePanel(null);
+    const cclsePanel = () => setActivePanel(null);
     
     return (
         <div className="space-y-[.3vh]">
