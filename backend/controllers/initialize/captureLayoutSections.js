@@ -5,7 +5,7 @@ import Section from "../../models/SectionModel.js";
 import { captureScreenshot } from "../../config/puppeteerConfig.js";
 import { uploadToUploads } from "../../config/gcsClient.js";
 
-dotenv.config({ path: "../../../.env" });
+dotenv.config({ });
 
 const captureLayoutSections = async (layoutId) => {
   if (!layoutId) {
