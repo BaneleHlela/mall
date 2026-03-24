@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
 import SingleGroupImages, { getGridColumnClasses } from './SingleGroupImages';
 import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../../../../../utils/stylingFunctions';
@@ -23,6 +23,7 @@ const GalleryWithGroupedImages = () => {
    const colors = useAppSelector((state) => state.layoutSettings.colors);
    const groups: Record<string, GalleryGroup> = settings.imagesModal.images;
   const swiperRef = useRef<SwiperRef | null>(null);
+  const [likedImages, setLikedImages] = useState<Set<string>>(new Set());
   const stack = settings.imagesModal.grids.thumbnail.stack;
   const isMobile = window.innerWidth < 768;
   const isHorizontal = (isMobile && stack.mobile === 'horizontal') || (!isMobile && stack.desktop === 'horizontal');
@@ -37,6 +38,14 @@ const GalleryWithGroupedImages = () => {
   for (let i = 0; i < allGroups.length; i += visibleCount) {
     slides.push(allGroups.slice(i, i + visibleCount));
   }
+
+  const toggleLike = (url: string) => {
+      setLikedImages(prev => {
+      const next = new Set(prev);
+      next.has(url) ? next.delete(url) : next.add(url);
+      return next;
+      });
+  };
 
 
   return (
@@ -106,6 +115,8 @@ const GalleryWithGroupedImages = () => {
                       images={groupData.images}
                       textStyle={settings.text.groupName}
                       style={settings.imagesModal}
+                      likedImages={likedImages}
+                      toggleLike={toggleLike}
                     />
                   ))}
                 </div>
@@ -153,6 +164,8 @@ const GalleryWithGroupedImages = () => {
               textStyle={settings.text.groupName}
               descriptionTextStyle={settings.text.groupDescription}
               style={settings.imagesModal}
+              likedImages={likedImages}
+              toggleLike={toggleLike}
             />
           ))}
         </div>

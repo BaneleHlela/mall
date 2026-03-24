@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { useAppSelector } from '../../../../../app/hooks';
 import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../../../../../utils/stylingFunctions';
-import { IoMdClose } from 'react-icons/io';
+import { IoMdClose, IoIosHeart, IoIosHeartEmpty } from 'react-icons/io';
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
 import UnderlinedText from '../../../extras/text/UnderlinedText';
 
@@ -16,6 +16,8 @@ interface SingleGroupImagesProps {
     style: any;
     descriptionTextStyle: any;
     addModal?: boolean;
+    likedImages?: Set<string>;
+    toggleLike?: (url: string) => void;
 }
 
 export function getGridColumnClasses({
@@ -40,6 +42,8 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
     textStyle,
     descriptionTextStyle,
     addModal = true,
+    likedImages,
+    toggleLike,
 }) => {
     const [showGrid, setShowGrid] = useState(false);
     const isMobile = window.innerWidth < 768;
@@ -82,15 +86,33 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
             className="h-fit"
         >
             <div className="text-center h-fit">
-                <img
-                    style={{
-                        ...getBackgroundStyles(style.background.image, colors),
-                    }}
-                    src={thumbnail[0]}
-                    alt="Thumbnail"
-                    className="w-full object-cover cursor-pointer hover:opacity-80 transition-opacity duration-300"
-                    onClick={() => setShowGrid(true)}
-                />
+                <div className="relative">
+                    <img
+                        style={{
+                            ...getBackgroundStyles(style.background.image, colors),
+                        }}
+                        src={thumbnail[0]}
+                        alt="Thumbnail"
+                        className="w-full object-cover cursor-pointer hover:opacity-80 transition-opacity duration-300"
+                        onClick={() => setShowGrid(true)}
+                    />
+                    {/* ❤️ Like Button */}
+                    {toggleLike && (
+                        <div
+                            className="absolute bottom-2 left-2 text-white z-10"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                toggleLike(thumbnail[0]);
+                            }}
+                        >
+                            {likedImages?.has(thumbnail[0]) ? (
+                                <IoIosHeart className="text-[2.5vh] fill-red-500" />
+                            ) : (
+                                <IoIosHeartEmpty className="text-[2.5vh]" />
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className="w-full mt-3 lg:mt-5">
@@ -144,13 +166,30 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                                         }}
                                     >
                                         {currentImages.map((imageUrl, index) => (
-                                            <img
-                                                key={index}
-                                                src={imageUrl}
-                                                alt={`Image ${index + 1}`}
-                                                className="w-full h-auto object-cover hover:opacity-80 transition-opacity duration-300"
-                                                style={getBackgroundStyles(style.background.modalImage, colors)}
-                                            />
+                                            <div key={index} className="relative">
+                                                <img
+                                                    src={imageUrl}
+                                                    alt={`Image ${index + 1}`}
+                                                    className="w-full h-auto object-cover hover:opacity-80 transition-opacity duration-300"
+                                                    style={getBackgroundStyles(style.background.modalImage, colors)}
+                                                />
+                                                {/* ❤️ Like Button */}
+                                                {toggleLike && (
+                                                    <div
+                                                        className="absolute bottom-2 left-2 text-white z-10"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            toggleLike(imageUrl);
+                                                        }}
+                                                    >
+                                                        {likedImages?.has(imageUrl) ? (
+                                                            <IoIosHeart className="text-[2.5vh] fill-red-500" />
+                                                        ) : (
+                                                            <IoIosHeartEmpty className="text-[2.5vh]" />
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
                                         ))}
                                     </motion.div>
                                 </AnimatePresence>
@@ -224,13 +263,30 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                             })}`}
                         >
                             {images.map((imageUrl, index) => (
-                                <img
-                                    key={index}
-                                    src={imageUrl}
-                                    alt={`Image ${index + 1}`}
-                                    className="w-full h-auto object-cover hover:opacity-80 transition-opacity duration-300"
-                                    style={getBackgroundStyles(style.background.modalImage, colors)}
-                                />
+                                <div key={index} className="relative">
+                                    <img
+                                        src={imageUrl}
+                                        alt={`Image ${index + 1}`}
+                                        className="w-full h-auto object-cover hover:opacity-80 transition-opacity duration-300"
+                                        style={getBackgroundStyles(style.background.modalImage, colors)}
+                                    />
+                                    {/* ❤️ Like Button */}
+                                    {toggleLike && (
+                                        <div
+                                            className="absolute bottom-2 left-2 text-white z-10"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                toggleLike(imageUrl);
+                                            }}
+                                        >
+                                            {likedImages?.has(imageUrl) ? (
+                                                <IoIosHeart className="text-[2.5vh] fill-red-500" />
+                                            ) : (
+                                                <IoIosHeartEmpty className="text-[2.5vh]" />
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
                             ))}
                         </div>
                     )}
