@@ -13,11 +13,11 @@ const captureLayoutSections = async (layoutId) => {
     process.exit(1);
   }
 
-  console.log("MONGODB_URL:", process.env.MONGODB_URL);
+  //console.log("MONGODB_URL:", process.env.MONGODB_URL);
 
   try {
     // 1️⃣ Connect to MongoDB
-    await mongoose.connect("mongodb+srv://gizahlela_db_user:nIc44vojis9UcY9V@cluster0.jf9trd5.mongodb.net/the_mall", {
+    await mongoose.connect(process.env.MONGODB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
