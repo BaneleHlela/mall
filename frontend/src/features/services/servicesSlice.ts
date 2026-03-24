@@ -145,21 +145,48 @@ const servicesSlice = createSlice({
       })
 
       // Create
+      .addCase(createService.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
       .addCase(createService.fulfilled, (state, action: PayloadAction<Service>) => {
+        state.isLoading = false;
         state.services.push(action.payload);
+      })
+      .addCase(createService.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       })
 
       // Update
+      .addCase(updateService.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
       .addCase(updateService.fulfilled, (state, action: PayloadAction<Service>) => {
+        state.isLoading = false;
         const index = state.services.findIndex(s => s._id === action.payload._id);
         if (index !== -1) {
           state.services[index] = action.payload;
         }
       })
+      .addCase(updateService.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
 
       // Delete
+      .addCase(deleteService.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
       .addCase(deleteService.fulfilled, (state, action: PayloadAction<string>) => {
+        state.isLoading = false;
         state.services = state.services.filter(s => s._id !== action.payload);
+      })
+      .addCase(deleteService.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       })
 
       // Fetch by ID

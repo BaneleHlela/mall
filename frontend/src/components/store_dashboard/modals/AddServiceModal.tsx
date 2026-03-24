@@ -140,7 +140,7 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
           
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+            className="absolute top-4 right-4 w-8 h-8 z-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors"
           >
             <IoClose className="text-white" size={18} />
           </button>

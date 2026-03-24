@@ -70,7 +70,7 @@ const StoreImages: React.FC<StoreImagesProps> = ({onImageSelect}) => {
         </div>
 
         {/* Upload Section */}
-        <div className="p-4 lg:p-5 border-b max-h-[30vh] overflow-y-scroll hide-scrollbar border-slate-100 bg-slate-50/50">
+        <div className="relative p-4 lg:p-5 border-b max-h-[30vh] overflow-y-scroll hide-scrollbar border-slate-100 bg-slate-50/50">
           <UploadStoreImage />
         </div>
 

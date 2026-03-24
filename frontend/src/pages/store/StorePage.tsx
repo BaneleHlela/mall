@@ -101,6 +101,7 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
             if (result.website.source === 'external' && result.website.websiteUrl) {
               // Redirect to external website
               window.location.href = result.website.websiteUrl;
+              navigate('/search');
               return;
             } else if ((result.website.source === 'internal' || result.website.source === 'custom') && result.website.layoutId && !location.pathname.includes("layouts")) {
               const layoutResult = await dispatch(getLayout(result.website.layoutId)).unwrap(); // Fetch layout and unwrap the result

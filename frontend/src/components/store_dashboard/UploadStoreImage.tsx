@@ -90,7 +90,7 @@ const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeSlug }) => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="flex flex-col items-center w-full max-w-2xl mx-auto">
       <div className="flex items-center gap-3 mb-4">
         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white">
           <FiUploadCloud className="text-sm" />
@@ -106,7 +106,7 @@ const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeSlug }) => {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`relative border-2 border-dashed rounded-xl p-6 transition-all ${
+        className={`relative w-full border-2 border-dashed rounded-xl p-6 transition-all ${
           isDragOver 
             ? 'border-purple-400 bg-purple-50' 
             : 'border-slate-200 hover:border-slate-300 bg-slate-50/50'
@@ -202,7 +202,7 @@ const UploadStoreImage: React.FC<UploadStoreImageProps> = ({ storeSlug }) => {
         <button
           onClick={handleUpload}
           disabled={isLoading}
-          className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-medium text-sm hover:from-purple-600 hover:to-pink-600 transition-all shadow-sm hover:shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
+          className="absolute top-0 mt-4 w-full max-w-[500px] flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-medium text-sm hover:from-purple-600 hover:to-pink-600 transition-all shadow-sm hover:shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {isLoading ? (
             <>

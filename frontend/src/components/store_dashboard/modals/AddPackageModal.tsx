@@ -66,7 +66,7 @@ const SortableFeatureItem = ({ feature, onRemove }: { feature: string; onRemove:
 const AddPackageModal: React.FC<AddPackageModalProps> = ({ open, onClose, package: pkg }) => {
   const dispatch = useAppDispatch();
   const store = useAppSelector((state) => state.storeAdmin.store);
-  const isLoading = useAppSelector((state) => state.packages.loading);
+  const isLoading = useAppSelector((state) => state.packages.isLoading);
 
   const [form, setForm] = useState({
     name: '',
