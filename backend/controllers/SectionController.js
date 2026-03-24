@@ -5,13 +5,17 @@ import { uploadToUploads } from '../config/gcsClient.js';
 
 export const uploadStoreSection = expressAsyncHandler(async (req, res) => {
   try {
-    const { name, variation } = req.body;
+    const { name, variation, layout } = req.body;
     const mobileFile = req.files?.mobile?.[0];
     const desktopFile = req.files?.desktop?.[0];
 
 
     if (!mobileFile || !desktopFile) {
       return res.status(400).json({ message: "Both mobile and desktop images are required." });
+    }
+
+    if (!name || !variation || !layout) {
+      return res.status(400).json({ message: "Name, Variation and Layout not defined" });
     }
 
     const mobileFileName = `mobile-${Date.now()}-${mobileFile.originalname}`;

@@ -33,7 +33,7 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                             objectPath={`${objectPath}.background`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={["width", "color", "floatingImage", "padding", "height"]}
+                            allow={["width", "color", "floatingImage", "backgroundImage", "padding", "height"]}
                             widthUnit="%"
                             heightUnit='vh'
                             responsiveSize

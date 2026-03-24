@@ -23,7 +23,6 @@ const SimpleServicesSection = () => {
   const fonts = useAppSelector((state) => state.layoutSettings.fonts);
   const handleButtonClick = useStoreButtonClickHandler();
   const routes = useAppSelector((state) => state.layoutSettings.routes);
-
   const visibleCount = window.innerWidth < 768 ? settings.grid.columns.mobile : settings.grid.columns.desktop;
   const [activeGroupIndex, setActiveGroupIndex] = useState(0);
   const [direction, setDirection] = useState<"left" | "right">("right");
@@ -64,6 +63,7 @@ const SimpleServicesSection = () => {
     setActiveGroupIndex((prev) => (prev === 0 ? totalGroups - 1 : prev - 1));
   };
 
+
   return (
     <StoreDivTag
       style={settings.background}
@@ -95,7 +95,7 @@ const SimpleServicesSection = () => {
 
         {/* Services Content - with Category Dividers */}
         {isHorizontal ? (
-          settings.categoryDivider?.show && store?.categories?.services ? (
+          settings.categoryDivider?.show && store?.categories?.services?.length !== 0 ? (
             // Horizontal with Category Dividers
             ((selectedCategory && selectedCategory !== 'all') ? [selectedCategory] : store?.categories?.services || [])?.map((category: string) => {
               const categoryServices = selectedCategory && selectedCategory !== 'all' 
@@ -290,21 +290,22 @@ const SimpleServicesSection = () => {
           )
         ) : (
           // Vertical (grid layout)
-          settings.categoryDivider?.show && store?.categories?.services ? (
+          settings.categoryDivider?.show && store?.categories?.services?.length !== 0 ? (
             // Vertical with Category Dividers
             ((selectedCategory && selectedCategory !== 'all') ? [selectedCategory] : store?.categories?.services || [])?.map((category: string) => {
               const categoryServices = selectedCategory && selectedCategory !== 'all' 
                 ? services.filter(service => service.category === selectedCategory)
                 : services.filter(service => service.category === category);
               if (categoryServices.length === 0) return null;
-              console.log(categoryServices)
+              console.log("categoryServices", categoryServices)
 
               const categoryDividerStyle = getTextStyles(settings.categoryDivider, fonts, colors);
 
               return (
                 <div key={category} className="w-full">
+                  {services[0]._id}
                   <p style={{ ...categoryDividerStyle }} className="capitalize">
-                    {category}
+                    {category} here
                   </p>
                   <div
                     className={`w-full flex flex-row ${
@@ -352,45 +353,45 @@ const SimpleServicesSection = () => {
           ) : (
             // Vertical without Category Dividers
             <div
-            className={`w-full flex flex-row ${
-              settings.grid.container.background.position === "center" ? "justify-center" :
-              settings.grid.container.background.position === "start" ? "justify-start" : "justify-end"
-            }`}
-          >
-            <div
-              style={{
-                ...getBackgroundStyles(settings.grid.container.background, colors),
-                gap: getResponsiveDimension(settings.grid.gap)
-              }}
-              className={`grid px-1 ${getGridColumnClasses({
-                mobile: settings.grid.columns.mobile,
-                desktop: settings.grid.columns.desktop,
-              })}`}
+              className={`w-full flex flex-row ${
+                settings.grid.container.background.position === "center" ? "justify-center" :
+                settings.grid.container.background.position === "start" ? "justify-start" : "justify-end"
+              }`}
             >
-              {services.map((service, index) => (
-                <ServiceCardWithImage
-                  key={service._id}
-                  title={service.name}
-                  duration={service.duration}
-                  description={service.description}
-                  imageUrl={service.images?.[0] || ".placeholder-image.png"}
-                  price={service.price}
-                  style={settings.card}
-                  onClick={() =>
-                    settings.card.textAndButton.button.function === 'book'
-                      ? handleServiceButtonClick(service.slug || "")
-                      : handleButtonClick({
-                          type: settings.card.textAndButton.button.function,
-                          routes: routes, //@ts-ignore-next-line
-                          contactNumber: store?.contact.phone,
-                          storeSlug: store?.slug || '',
-                          contactEmail: store?.contact.email || '',  
-                      })
-                  }
-                />
-              ))}
+              <div
+                style={{
+                  ...getBackgroundStyles(settings.grid.container.background, colors),
+                  gap: getResponsiveDimension(settings.grid.gap)
+                }}
+                className={`grid px-1 ${getGridColumnClasses({
+                  mobile: settings.grid.columns.mobile,
+                  desktop: settings.grid.columns.desktop,
+                })}`}
+              >
+                {services.map((service, index) => (
+                  <ServiceCardWithImage
+                    key={service._id}
+                    title={service.name}
+                    duration={service.duration}
+                    description={service.description}
+                    imageUrl={service.images?.[0] || ".placeholder-image.png"}
+                    price={service.price}
+                    style={settings.card}
+                    onClick={() =>
+                      settings.card.textAndButton.button.function === 'book'
+                        ? handleServiceButtonClick(service.slug || "")
+                        : handleButtonClick({
+                            type: settings.card.textAndButton.button.function,
+                            routes: routes, //@ts-ignore-next-line
+                            contactNumber: store?.contact.phone,
+                            storeSlug: store?.slug || '',
+                            contactEmail: store?.contact.email || '',  
+                        })
+                    }
+                  />
+                ))}
+              </div>
             </div>
-          </div>
           )
         )}
       </div>

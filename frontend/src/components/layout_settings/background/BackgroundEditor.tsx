@@ -568,6 +568,219 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
           }
         />
       )}
+      {/* Background Image */}
+      {isAllowed("backgroundImage") && (
+        <SubSettingsContainer
+          name="Background Image"
+          SettingsComponent={
+            <div className="space-y-[1.5vh]">
+              {/* Image Upload */}
+              <div className="bg-stone-50 rounded-lg p-[1vh] border border-stone-200">
+                <h4 className="text-[1.4vh] font-semibold text-stone-500 uppercase tracking-wide mb-[1vh]">Image</h4>
+                <MultipleLayoutImagesHandler
+                  objectPath={`${objectPath}.backgroundImage.imageUrl`}
+                  min={0}
+                  max={1}
+                  images={getSetting("backgroundImage.imageUrl", settings, objectPath)}
+                />
+              </div>
+
+              {/* Height Settings (hidden) */}
+              <div className="hidden bg-stone-50 rounded-lg p-[1vh] border border-stone-200">
+                <h4 className="text-[1.4vh] font-semibold text-stone-500 uppercase tracking-wide mb-[1vh]">Height</h4>
+                <SettingsSlider
+                  label="Mobile"
+                  value={parseFloat(getSetting("floatingImage.height.mobile", settings, objectPath) || "10")}
+                  unit="vh"
+                  min={1}
+                  max={50}
+                  step={0.5}
+                  onChange={(newVal) => {
+                    const event = {
+                      target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
+                    } as React.ChangeEvent<HTMLInputElement>;
+                    handleSettingChange(`${objectPath}.floatingImage.height.mobile`, `${newVal}vh`);
+                  }}
+                />
+                <SettingsSlider
+                  label="Desktop"
+                  value={parseFloat(getSetting("floatingImage.height.desktop", settings, objectPath) || "15")}
+                  unit="vh"
+                  min={1}
+                  max={50}
+                  step={0.5}
+                  onChange={(newVal) => {
+                    const event = {
+                      target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
+                    } as React.ChangeEvent<HTMLInputElement>;
+                    handleSettingChange(`${objectPath}.floatingImage.height.desktop`, `${newVal}vh`);
+                  }}
+                />
+              </div>
+
+              {/* Width Settings (hidden) */}
+              <div className="hidden bg-stone-50 rounded-lg p-[1vh] border border-stone-200">
+                <h4 className="text-[1.4vh] font-semibold text-stone-500 uppercase tracking-wide mb-[1vh]">Width</h4>
+                <SettingsSlider
+                  label="Mobile"
+                  value={parseFloat(getSetting("floatingImage.width.mobile", settings, objectPath) || "20")}
+                  unit="vw"
+                  min={1}
+                  max={100}
+                  step={1}
+                  onChange={(newVal) => {
+                    const event = {
+                      target: Object.assign(document.createElement("input"), { value: `${newVal}vw` })
+                    } as React.ChangeEvent<HTMLInputElement>;
+                    handleSettingChange(`${objectPath}.floatingImage.width.mobile`, `${newVal}vw`);
+                  }}
+                />
+                <SettingsSlider
+                  label="Desktop"
+                  value={parseFloat(getSetting("floatingImage.width.desktop", settings, objectPath) || "30")}
+                  unit="vw"
+                  min={1}
+                  max={100}
+                  step={1}
+                  onChange={(newVal) => {
+                    const event = {
+                      target: Object.assign(document.createElement("input"), { value: `${newVal}vw` })
+                    } as React.ChangeEvent<HTMLInputElement>;
+                    handleSettingChange(`${objectPath}.floatingImage.width.desktop`, `${newVal}vw`);
+                  }}
+                />
+              </div>
+              {/* Opacity */}
+              <div className=" bg-stone-50 rounded-lg p-[1vh] border border-stone-200 space-y-[1vh]">
+                <SettingsSlider
+                  label="Opacity"
+                  value={parseFloat(getSetting("backgroundImage.opacity", settings, objectPath) || "0")}
+                  unit="%"
+                  min={0}
+                  max={100}
+                  step={1}
+                  onChange={(newVal) => {
+                    handleSettingChange(`${objectPath}.backgroundImage.opacity`, `${newVal}%`);
+                  }}
+                />
+              </div>
+              {/* Position Settings (hidden) */}
+              <div className="hidden bg-stone-50 rounded-lg p-[1vh] border border-stone-200 space-y-[1vh]">
+                <h4 className="text-[1.4vh] font-semibold text-stone-500 uppercase tracking-wide">Position</h4>
+                
+                {/* Top Position */}
+                <div>
+                  <h5 className="text-[1.2vh] font-medium text-stone-400 mb-[0.5vh]">Top</h5>
+                  <SettingsSlider
+                    label="Mobile"
+                    value={parseFloat(getSetting("floatingImage.position.top.mobile", settings, objectPath) || "0")}
+                    unit="%"
+                    min={0}
+                    max={100}
+                    step={1}
+                    onChange={(newVal) => {
+                      handleSettingChange(`${objectPath}.floatingImage.position.top.mobile`, `${newVal}%`);
+                    }}
+                  />
+                  <SettingsSlider
+                    label="Desktop"
+                    value={parseFloat(getSetting("floatingImage.position.top.desktop", settings, objectPath) || "0")}
+                    unit="%"
+                    min={0}
+                    max={100}
+                    step={1}
+                    onChange={(newVal) => {
+                      handleSettingChange(`${objectPath}.floatingImage.position.top.desktop`, `${newVal}%`);
+                    }}
+                  />
+                </div>
+
+                
+                {/* Left Position */}
+                <div>
+                  <h5 className="text-[1.2vh] font-medium text-stone-400 mb-[0.5vh]">Left</h5>
+                  <SettingsSlider
+                    label="Mobile"
+                    value={parseFloat(getSetting("floatingImage.position.left.mobile", settings, objectPath) || "0")}
+                    unit="%"
+                    min={0}
+                    max={100}
+                    step={1}
+                    onChange={(newVal) => {
+                      handleSettingChange(`${objectPath}.floatingImage.position.left.mobile`, `${newVal}%`);
+                    }}
+                  />
+                  <SettingsSlider
+                    label="Desktop"
+                    value={parseFloat(getSetting("floatingImage.position.left.desktop", settings, objectPath) || "0")}
+                    unit="%"
+                    min={0}
+                    max={100}
+                    step={1}
+                    onChange={(newVal) => {
+                      handleSettingChange(`${objectPath}.floatingImage.position.left.desktop`, `${newVal}%`);
+                    }}
+                  />
+                </div>
+
+                {/* Right Position */}
+                {/* <div>
+                  <h5 className="text-[1.2vh] font-medium text-stone-400 mb-[0.5vh]">Right</h5>
+                  <SettingsSlider
+                    label="Mobile"
+                    value={parseFloat(getSetting("floatingImage.position.right.mobile", settings, objectPath) || "0")}
+                    unit="%"
+                    min={0}
+                    max={100}
+                    step={1}
+                    onChange={(newVal) => {
+                      handleSettingChange(`${objectPath}.floatingImage.position.right.mobile`, `${newVal}%`);
+                    }}
+                  />
+                  <SettingsSlider
+                    label="Desktop"
+                    value={parseFloat(getSetting("floatingImage.position.right.desktop", settings, objectPath) || "0")}
+                    unit="%"
+                    min={0}
+                    max={100}
+                    step={1}
+                    onChange={(newVal) => {
+                      handleSettingChange(`${objectPath}.floatingImage.position.right.desktop`, `${newVal}%`);
+                    }}
+                  />
+                </div> */}
+
+                {/* Bottom Position */}
+                <div>
+                  <h5 className="text-[1.2vh] font-medium text-stone-400 mb-[0.5vh]">Bottom</h5>
+                  <SettingsSlider
+                    label="Mobile"
+                    value={parseFloat(getSetting("floatingImage.position.bottom.mobile", settings, objectPath) || "0")}
+                    unit="%"
+                    min={0}
+                    max={100}
+                    step={1}
+                    onChange={(newVal) => {
+                      handleSettingChange(`${objectPath}.floatingImage.position.bottom.mobile`, `${newVal}%`);
+                    }}
+                  />
+                  <SettingsSlider
+                    label="Desktop"
+                    value={parseFloat(getSetting("floatingImage.position.bottom.desktop", settings, objectPath) || "0")}
+                    unit="%"
+                    min={0}
+                    max={100}
+                    step={1}
+                    onChange={(newVal) => {
+                      handleSettingChange(`${objectPath}.floatingImage.position.bottom.desktop`, `${newVal}%`);
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          }
+        />
+      )}
       {/* Floating Image */}
       {isAllowed("floatingImage") && (
         <SubSettingsContainer
