@@ -86,7 +86,7 @@ const ArtMenubar = () => {
     return [homeLink, ...inLinksArray, ...routeLinks];
   }, [layout.routes, layout.routeOrder, storeSlug, layout._id, useLocation()]);
   
- 
+  
   return (
     <motion.nav
         id="store_menubar"

@@ -25,14 +25,14 @@ const StoreDivTag = ({ style = {}, jsx }: Props) => {
     <div
       style={{
         ...getBackgroundStyles(style || {}, colors),
-        maxHeight: "100%",
+        minHeight: "fit-content"
       }}
-      className="w-full h-full overflow-hidden"
+      className="w-full h-full min-h-fit overflow-y-scroll hide-scrollbar"
     >
       <div className="relative w-full h-full">
 
         {/* Content */}
-        <div className="relative w-full h-full z-10">
+        <div className="relative w-full h-full min-h-fit z-10">
           {jsx}
         </div>
 

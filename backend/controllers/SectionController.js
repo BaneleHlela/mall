@@ -106,7 +106,6 @@ export const copySectionFromLayout = expressAsyncHandler(async (req, res) => {
     const updateField = `sections.${sectionName}`;
 
     // Console log for debugging
-    console.log(sourceSectionConfig.variation)
 
     const updatedTargetLayout = await StoreLayout.findByIdAndUpdate(
       targetLayoutId,
@@ -121,7 +120,6 @@ export const copySectionFromLayout = expressAsyncHandler(async (req, res) => {
       }
     );
 
-    console.log(updatedTargetLayout.sections[sectionName].variation);
 
     if (!updatedTargetLayout) {
       return res.status(404).json({ message: "Target layout not found" });

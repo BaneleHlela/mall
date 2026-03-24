@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { IoPower, IoClose } from 'react-icons/io5';
 import { useAppSelector, useAppDispatch } from '../../app/hooks.ts';
@@ -18,6 +18,60 @@ import { Type, Palette } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import LayoutFontsSelector from '../../components/layout_settings/extras/LayoutFontsSelector';
 import LayoutColorSelector from '../../components/layout_settings/extras/LayoutColorSelector';
+
+// Fields that updateLayoutConfig handles in the backend
+const PARTIAL_UPDATE_FIELDS = [
+  'store',
+  'background',
+  'floats',
+  'routes',
+  'routeOrder',
+  'name',
+  'menubar',
+  'colors',
+  'fonts',
+];
+
+const SECTION_FIELDS = [
+  'sections.footer',
+  'sections.about',
+  'sections.hero',
+  'sections.products',
+  'sections.FAQs',
+  'sections.searchResults',
+  'sections.contact',
+  'sections.reviews',
+  'sections.gallery',
+  'sections.singleProduct',
+  'sections.services',
+  'sections.bookService',
+  'sections.rentals',
+  'sections.donations',
+  'sections.packages',
+  'sections.book',
+  'sections.menu',
+];
+
+// Build a partial config object from dirty fields
+const buildPartialConfig = (dirtyFields: Set<string>, fullSettings: any): any => {
+  const partialConfig: any = {};
+  
+  dirtyFields.forEach(field => {
+    if (field.startsWith('sections.')) {
+      // Handle nested sections
+      const sectionKey = field.replace('sections.', '');
+      const sections = fullSettings.sections as Record<string, any>;
+      if (sections && sections[sectionKey] !== undefined) {
+        partialConfig.sections = partialConfig.sections || {};
+        partialConfig.sections[sectionKey] = sections[sectionKey];
+      }
+    } else if (fullSettings[field] !== undefined) {
+      partialConfig[field] = fullSettings[field];
+    }
+  });
+  
+  return partialConfig;
+};
 
 
 const deviceStyles = {
@@ -65,6 +119,8 @@ const WebsiteBuilderContent: React.FC<{ isNewLayout?: boolean }> = ({ isNewLayou
   const [quickAccessSection, setQuickAccessSection] = useState<'fonts' | 'colors' | null>(null);
   const [floatingPanel, setFloatingPanel] = useState<'fonts' | 'colors' | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [dirtyFields, setDirtyFields] = useState<Set<string>>(new Set());
+  const [lastSavedSettings, setLastSavedSettings] = useState<any>(null);
   
 
   const store = useAppSelector((state) => state.stores.currentStore);
@@ -99,6 +155,9 @@ const WebsiteBuilderContent: React.FC<{ isNewLayout?: boolean }> = ({ isNewLayou
           setLoading(true);
           const layoutResult = await dispatch(getLayout(layoutId)).unwrap();
           dispatch(setInitialLayout(layoutResult));
+          
+          // Initialize lastSavedSettings after layout is loaded
+          setLastSavedSettings(JSON.parse(JSON.stringify(layoutResult)));
 
           if (layoutResult.store) {
             setStoreId(layoutResult.store._id);
@@ -117,18 +176,90 @@ const WebsiteBuilderContent: React.FC<{ isNewLayout?: boolean }> = ({ isNewLayou
     fetchLayoutAndStore();
   }, [dispatch, layoutId]);
 
+  // Autosave: Track changes and save with 500ms debounce
+  useEffect(() => {
+    if (!layoutId || !settings || !lastSavedSettings) return;
+
+    // Find newly dirty fields by comparing current settings with last saved
+    const newDirtyFields = new Set<string>();
+    
+    // Check top-level fields
+    PARTIAL_UPDATE_FIELDS.forEach(field => {
+      const currentValue = JSON.stringify(settings[field as keyof typeof settings]);
+      const lastValue = JSON.stringify(lastSavedSettings[field as keyof typeof lastSavedSettings]);
+      if (currentValue !== lastValue) {
+        newDirtyFields.add(field);
+      }
+    });
+    
+    // Check section fields
+    SECTION_FIELDS.forEach(field => {
+      const sectionKey = field.replace('sections.', '');
+      const sections = settings.sections as Record<string, any>;
+      const lastSections = lastSavedSettings.sections as Record<string, any>;
+      const currentValue = sections ? JSON.stringify(sections[sectionKey]) : 'undefined';
+      const lastValue = lastSections ? JSON.stringify(lastSections[sectionKey]) : 'undefined';
+      if (currentValue !== lastValue) {
+        newDirtyFields.add(field);
+      }
+    });
+
+    // If there are dirty fields, update our tracking
+    if (newDirtyFields.size > 0) {
+      setDirtyFields(prev => {
+        const updated = new Set(prev);
+        newDirtyFields.forEach(field => updated.add(field));
+        return updated;
+      });
+    }
+  }, [settings, lastSavedSettings, layoutId]);
+
+  // Debounced autosave effect
+  useEffect(() => {
+    if (dirtyFields.size === 0 || !layoutId) return;
+
+    const timeout = setTimeout(async () => {
+      // Build partial config from dirty fields
+      const partialConfig = buildPartialConfig(dirtyFields, settings);
+      
+      console.log('Autosaving partial config:', Object.keys(partialConfig));
+      
+      try {
+        await dispatch(editLayout({
+          layoutId,
+          layoutConfig: partialConfig,
+        }));
+        
+        // Update last saved settings to current
+        setLastSavedSettings(JSON.parse(JSON.stringify(settings)));
+        setDirtyFields(new Set());
+        
+        console.log('Autosave successful');
+      } catch (error) {
+        console.error('Autosave failed:', error);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [dirtyFields, settings, layoutId, dispatch]);
+
   // Handle save and exit - capture screenshot and redirect to store layouts
   const handleSaveAndExit = async () => {
     if (!layoutId || isSaving) return;
     
     setIsSaving(true);
     try {
-      // First save any pending layout changes
-      if (settings) {
+      // Save any pending layout changes using partial updates
+      if (dirtyFields.size > 0) {
+        const partialConfig = buildPartialConfig(dirtyFields, settings);
         await dispatch(editLayout({
           layoutId: settings._id as string,
-          layoutConfig: settings,
+          layoutConfig: partialConfig,
         }));
+        
+        // Update last saved settings after successful save
+        setLastSavedSettings(JSON.parse(JSON.stringify(settings)));
+        setDirtyFields(new Set());
       }
       
       // Capture the screenshot

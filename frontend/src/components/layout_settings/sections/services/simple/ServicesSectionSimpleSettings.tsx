@@ -33,7 +33,7 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                             objectPath={`${objectPath}.background`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={["width", "color", "padding", "height"]}
+                            allow={["width", "color", "floatingImage", "padding", "height"]}
                             widthUnit="%"
                             heightUnit='vh'
                             responsiveSize
@@ -50,6 +50,10 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
             <FirstOrderSubSettingsContainer
                 name="Category Selector"
                 onClick={() => setActivePanel("categorySelector")}
+            />
+            <FirstOrderSubSettingsContainer
+                name="Category Divider"
+                onClick={() => setActivePanel("categoryDivider")}
             />
             
             {/* Text */}
@@ -295,6 +299,30 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                                         />
                                     </div>
                                 }
+                            />
+                        </div>
+                    </SlidingPanel>
+                )}
+                {activePanel === "categoryDivider" && (
+                    <SlidingPanel key="categoryDivider" isOpen={true} onClose={closePanel} title="Category Divider">
+                        <div className="space-y-[.3vh]">
+                            <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
+                               <OptionsToggler
+                                    label="Show"
+                                    options={["Yes", "No"]}
+                                    value={getSetting("categoryDivider.show", settings, objectPath) ? "Yes" : "No"}
+                                    onChange={(newValue) =>
+                                        handleSettingChange(`${objectPath}.categorySelector.show`, newValue === "Yes")
+                                    }
+                                />
+                            </div>
+                            <TextEditor
+                                objectPath={`${objectPath}.categoryDivider`}
+                                settings={settings}
+                                handleSettingChange={handleSettingChange}
+                                allow={["fontFamily", "color", "placement", "textAlign", "weight", "fontSize", "padding"]}
+                                responsivePadding
+                                responsiveSize
                             />
                         </div>
                     </SlidingPanel>

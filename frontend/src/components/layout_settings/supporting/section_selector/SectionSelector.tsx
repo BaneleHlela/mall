@@ -10,13 +10,13 @@ import { selectActiveLayout } from '../../../../features/layouts/layoutSlice';
 interface SectionSelectorProps {
   sectionToReplace?: string;
   onClose: () => void;
-  onSelect?: (sectionName: string) => void;
+  onSelect?: (sectionName: string, sourceLayoutId?: string) => void;
   addingPage?: boolean; // Optional prop to indicate if we're adding a page instead of a section
 }
 
 const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToReplace, addingPage = false, onSelect}) => {
   const dispatch = useAppDispatch();
-  const { sections, loading, error } = useAppSelector((state) => state.sections);
+  const { sections, isLoading, error } = useAppSelector((state) => state.sections);
   const activeLayout = useAppSelector(state => state.layoutSettings);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
@@ -69,8 +69,8 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
   
   const handleSelectSectionVariation = async (section: Section) => {
     if (addingPage) {
-      // When adding a page, just call onSelect with the section variation
-      onSelect?.(section.variation);
+      // When adding a page, pass both the section variation and the source layout ID
+      onSelect?.(section.variation, section.layout);
       onClose();
       return;
     }
@@ -135,7 +135,7 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (isLoading) return <div>isLoading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -165,13 +165,13 @@ const SectionSelector: React.FC<SectionSelectorProps> = ({onClose, sectionToRepl
         )}
         {/* Section Grid */}
         <div className="h-full bg-stone-50 overflow-y-auto w-[75%] p-2">
-          {selectedSection && sections.length === 0 && !loading && (
+          {selectedSection && sections.length === 0 && !isLoading && (
             <div className="p-4 text-center text-sm text-gray-700 italic">
               No variations available for "{selectedSection}"
             </div>
           )}
 
-          {sections.length === 0 && !loading && !sectionToReplace && (
+          {sections.length === 0 && !isLoading && !sectionToReplace && (
             <div className="p-4 text-center text-sm text-gray-700 italic">
               Select a section type from the sidebar to view available variations
             </div>

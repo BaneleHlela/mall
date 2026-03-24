@@ -1,8 +1,9 @@
 import React from 'react'
 import { getBackgroundStyles, getTextStyles } from '../../../../../../utils/stylingFunctions';
 import StoreButton from '../../../buttons/StoreButton';
-import UnderlinedText from '../../../text/UnderlinedText';
+import StoreTextTag from '../../../text/StoreTextTag';
 import StoreLayoutButton from '../../../../shared_layout_components/StoreLayoutButton';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 interface StoreServiceCardProps {
     title: string;
@@ -23,11 +24,12 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
     description,
     onClick,
 }) => {
+    const { colors, fonts } = useAppSelector(state => state.layoutSettings)
 
     return (
         <div 
             style={{
-                ...getBackgroundStyles(style.background),
+                ...getBackgroundStyles(style.background, colors),
             }}
             className={`flex min-h-fit overflow-hidden group
                 ${style.stack.mobile === "column" ? "flex-col" : "flex-row" }
@@ -37,7 +39,7 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
             {/* Image */}
             <div 
                 style={{
-                    ...getBackgroundStyles(style.image)
+                    ...getBackgroundStyles(style.image, colors)
                 }}
                 className=''
             >
@@ -50,8 +52,8 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
             {/* Text and button */}
             <div
                 style={{
-                    ...getBackgroundStyles(calculateTextDimensions(style.stack, style.image)),
-                    ...getBackgroundStyles(style.textAndButton.background)
+                    ...getBackgroundStyles(calculateTextDimensions(style.stack, style.image), colors),
+                    ...getBackgroundStyles(style.textAndButton.background, colors)
                 }} 
                 className={`
                         flex flex-col justify-between overflow-hidden min-h-fit
@@ -61,13 +63,13 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                     `}
             >
                 {/* Name */}
-                <UnderlinedText style={style.textAndButton.text.name} input={title}/>
+                <StoreTextTag style={style.textAndButton.text.name} input={title}/>
                 <div className="mt-2"></div>
                 {/* Description */}
                 {style.textAndButton.text.show.description && (
                     <p style={{
-                        ...getTextStyles(style.textAndButton.text),
-                        paddingTop: "0.5rem"
+                            ...getTextStyles(style.textAndButton.text, fonts, colors),
+                            paddingTop: "0.5rem"
                         }} 
                         className="line-clamp-4 pt-2"
                     >
@@ -78,7 +80,7 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                 {/* Duration */}
                 {style.textAndButton.text.show.duration && (
                     <p style={{
-                        ...getTextStyles(style.textAndButton.text)
+                        ...getTextStyles(style.textAndButton.text, fonts, colors)
                         }} 
                         className=""
                     >
@@ -89,7 +91,7 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                 {style.textAndButton.text.show.price && (
                     <p 
                         style={{
-                            ...getTextStyles(style.textAndButton.text)
+                            ...getTextStyles(style.textAndButton.text, fonts, colors)
                         }} 
                         className=""
                     >

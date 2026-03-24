@@ -39,7 +39,7 @@ const ServicesSectionSettings = () => {
     }
 
     return (
-        <div>ServicesSectionSettings</div>
+        <div>No settings found for {variation}</div>
     )
 }
 

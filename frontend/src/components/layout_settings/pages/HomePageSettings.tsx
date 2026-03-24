@@ -14,7 +14,8 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { updateSetting } from "../../../features/layouts/layoutSettingsSlice";
+import { updateSetting, setInitialLayout } from "../../../features/layouts/layoutSettingsSlice";
+import { copySectionFromLayout } from "../../../features/sections/sectionSlice";
 import SettingsContainer from "../SettingsContainer";
 import SlidingPanel from "../supporting/SlidingPanel";
 import { AnimatePresence } from "framer-motion";
@@ -35,7 +36,6 @@ import ProductsSectionSettings from "../sections/products/ProductsSectionSetting
 import FAQsSectionSettings from "../sections/FAQs/FAQsSectionSettings";
 import DonationsSettings from "../sections/donations/DonationsSectionSettings";
 import RentalsSectionSettings from "../sections/rentals/RentalsSectionSettings";
-import { StorePackagesSection } from "../../store_layout/sections/StoreSections";
 import StorePackagesSectionSettings from "../sections/packages/StorePackagesSectionSettings";
 import StoreMenuSectionSettings from "../sections/menu/StoreMenuSectionSettings";
 
@@ -93,6 +93,7 @@ const SortableItem = ({
 
 const HomePageSettings = () => {
   const dispatch = useAppDispatch();
+  const settings = useAppSelector((state) => state.layoutSettings);
   const routes = useAppSelector((state) => state.layoutSettings.routes);
   const homeSections = routes.home?.contains || [];
   const MySwal = withReactContent(Swal);
@@ -140,15 +141,48 @@ const HomePageSettings = () => {
     });
   };
 
-  const handleAddSection = (section: string) => {
+  const handleAddSection = async (section: string, sourceLayoutId?: string) => {
     if (homeSections.includes(section)) return;
 
-    dispatch(
-      updateSetting({
-        field: "routes.home.contains",
-        value: [...homeSections, section],
-      })
-    );
+    const activeLayoutId = settings?._id;
+    if (!activeLayoutId) {
+      console.error('No active layout found');
+      setIsAddingSection(false);
+      return;
+    }
+
+    // Use the provided sourceLayoutId or fall back to activeLayoutId
+    const layoutIdToUse = sourceLayoutId || activeLayoutId;
+
+    try {
+      // Call the backend to add the section to the layout
+      const result = await dispatch(copySectionFromLayout({
+        sourceLayoutId: layoutIdToUse,
+        targetLayoutId: activeLayoutId,
+        sectionName: section
+      }));
+
+      // Check if the dispatch was successful
+      if (copySectionFromLayout.fulfilled.match(result)) {
+        const { layout } = result.payload;
+        
+        // Update the layout settings state with the complete updated layout from backend
+        dispatch(setInitialLayout(layout));
+
+        // Now add the section to routes.home.contains
+        dispatch(
+          updateSetting({
+            field: "routes.home.contains",
+            value: [...homeSections, section],
+          })
+        );
+      } else {
+        console.error('Failed to add section:', result.payload);
+      }
+    } catch (error) {
+      console.error('Error adding section:', error);
+    }
+
     setIsAddingSection(false);
   };
 
@@ -270,7 +304,7 @@ const HomePageSettings = () => {
                 setShowSectionSelector(false);
                 setIsAddingSection(false);
               }}
-              onSelect={(selectedSection) => {
+              onSelect={(selectedSection, sourceLayoutId) => {
                 if (sectionToReplace) {
                   // Replace logic
                   const updated = homeSections.map((sec) =>
@@ -284,7 +318,7 @@ const HomePageSettings = () => {
                   );
                 } else {
                   // Add logic
-                  handleAddSection(selectedSection);
+                  handleAddSection(selectedSection, sourceLayoutId);
                 }
 
                 setSectionToReplace(null);

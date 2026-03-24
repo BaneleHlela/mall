@@ -8,6 +8,7 @@ const StoreTextTag = ({style, customInput}: {style: TextSettings, customInput?: 
     if (!style.input || customInput) {
         return null
     }
+
     return (
         <div className={`flex items-center w-full ${style.textAlign === 'center' && 'justify-center'}
             ${style.textAlign === 'start' && 'justify-start'}

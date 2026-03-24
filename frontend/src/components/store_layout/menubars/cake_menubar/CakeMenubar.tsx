@@ -85,7 +85,7 @@ const CakeMenubar = () => {
       
         return [homeLink, ...inLinksArray, ...routeLinks];
     }, [layout.routes, layout.routeOrder, storeSlug, layout._id, useLocation()]);
-
+    console.log(links);
     return (
         <motion.nav
             id="store_menubar"

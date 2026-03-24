@@ -15,13 +15,13 @@ export interface Section {
 
 interface SectionsState {
   sections: Section[];
-  loading: boolean;
+  isLoading: boolean;
   error: string | null;
 }
 
 const initialState: SectionsState = {
   sections: [],
-  loading: false,
+  isLoading: false,
   error: null,
 };
 
@@ -111,62 +111,62 @@ const sectionsSlice = createSlice({
     clearSections(state) {
       state.sections = [];
       state.error = null;
-      state.loading = false;
+      state.isLoading = false;
     },
   },
   extraReducers: (builder) => {
     builder
        // Upload store section/
       .addCase(uploadStoreSection.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(uploadStoreSection.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.sections.push(action.payload); // Add the uploaded section to the sections array
         state.error = null;
       })
       .addCase(uploadStoreSection.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.payload as string; // Set the error message
       })
       // Fetch store section
       .addCase(fetchSections.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(fetchSections.fulfilled, (state, action: PayloadAction<Section[]>) => {
-        state.loading = false;
+        state.isLoading = false;
         state.sections = action.payload;
       })
       .addCase(fetchSections.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.payload as string;
       })
       // Copy section from layout
       .addCase(copySectionFromLayout.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(copySectionFromLayout.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = null;
       })
       .addCase(copySectionFromLayout.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.payload as string;
       })
       // Add section from layout
       .addCase(addSectionFromLayout.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
         state.error = null;
       })
       .addCase(addSectionFromLayout.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = null;
       })
       .addCase(addSectionFromLayout.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.payload as string;
       });
   },
