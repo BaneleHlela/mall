@@ -95,10 +95,29 @@ const StepSocials: React.FC = () => {
 
     const formatSocialUrl = (platform: string, url: string): string => {
         switch (platform) {
-            case 'whatsapp':
-                return `https://wa.me/${url.replace(/\D/g, '')}`;
-            case 'phone':
-                return `tel:${url.replace(/\D/g, '')}`;
+            case 'whatsapp': {
+                // Extract digits only
+                const digits = url.replace(/\D/g, '');
+                // Ensure South African number format: +27 instead of 0
+                let formattedNumber = digits;
+                if (digits.startsWith('0')) {
+                    formattedNumber = '27' + digits.substring(1);
+                } else if (!digits.startsWith('27') && digits.length >= 9) {
+                    formattedNumber = '27' + digits;
+                }
+                return `https://wa.me/${formattedNumber}`;
+            }
+            case 'phone': {
+                const digits = url.replace(/\D/g, '');
+                // Ensure South African number format: +27 instead of 0
+                let formattedNumber = digits;
+                if (digits.startsWith('0')) {
+                    formattedNumber = '27' + digits.substring(1);
+                } else if (!digits.startsWith('27') && digits.length >= 9) {
+                    formattedNumber = '27' + digits;
+                }
+                return `tel:+${formattedNumber}`;
+            }
             default:
                 return url;
         }

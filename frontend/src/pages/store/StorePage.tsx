@@ -374,12 +374,18 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
                         whatsappSocial && whatsappSocial !== "wa.me"
                           ? whatsappSocial
                           : store?.contact?.phone;
+                      
                       if (whatsappNumber) {
-                        // add +27 (region if not already included)
-                        if (!whatsappNumber.startsWith("+27")) {
-                          whatsappNumber = "+27" + whatsappNumber;
+                        // Extract digits only
+                        const digits = whatsappNumber.replace(/\D/g, '');
+                        // Ensure South African number format: +27 instead of 0
+                        let formattedNumber = digits;
+                        if (digits.startsWith('0')) {
+                          formattedNumber = '27' + digits.substring(1);
+                        } else if (!digits.startsWith('27') && digits.length >= 9) {
+                          formattedNumber = '27' + digits;
                         }
-                        const url = `https://wa.me/${whatsappNumber}`;
+                        const url = `https://wa.me/${formattedNumber}`;
                         window.open(url, "_blank");
                       }
                     }

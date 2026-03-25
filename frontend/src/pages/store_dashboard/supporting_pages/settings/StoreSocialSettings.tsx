@@ -123,55 +123,63 @@ const StoreSocialSettings = () => {
     }
 
     switch (platform) {
-      case 'whatsapp':
-        const whatsappNumber = url.replace(/\D/g, '');
-        if (whatsappNumber.length < 10) {
-          return { valid: false, message: 'Please enter a valid WhatsApp number' };
+      case 'whatsapp': {
+        const whatsappDigits = url.replace(/\D/g, '');
+        if (whatsappDigits.length < 9) {
+          return { valid: false, message: 'Please enter a valid South African WhatsApp number (e.g., 082 123 4567)' };
         }
         return { valid: true, message: '' };
+      }
       
-      case 'phone':
-        const phoneNumber = url.replace(/\D/g, '');
-        if (phoneNumber.length < 10) {
-          return { valid: false, message: 'Please enter a valid phone number' };
+      case 'phone': {
+        const phoneDigits = url.replace(/\D/g, '');
+        if (phoneDigits.length < 9) {
+          return { valid: false, message: 'Please enter a valid South African phone number (e.g., 082 123 4567)' };
         }
         return { valid: true, message: '' };
+      }
       
-      case 'facebook':
+      case 'facebook': {
         if (!url.includes('facebook.com') && !url.startsWith('http')) {
           return { valid: false, message: 'Please enter a valid Facebook URL' };
         }
         return { valid: true, message: '' };
+      }
       
-      case 'twitter':
+      case 'twitter': {
         if (!url.includes('twitter.com') && !url.includes('x.com') && !url.startsWith('http')) {
           return { valid: false, message: 'Please enter a valid Twitter/X URL' };
         }
         return { valid: true, message: '' };
+      }
       
-      case 'instagram':
+      case 'instagram': {
         if (!url.includes('instagram.com') && !url.startsWith('http')) {
           return { valid: false, message: 'Please enter a valid Instagram URL' };
         }
         return { valid: true, message: '' };
+      }
       
-      case 'linkedin':
+      case 'linkedin': {
         if (!url.includes('linkedin.com') && !url.startsWith('http')) {
           return { valid: false, message: 'Please enter a valid LinkedIn URL' };
         }
         return { valid: true, message: '' };
+      }
       
-      case 'pinterest':
+      case 'pinterest': {
         if (!url.includes('pinterest.com') && !url.startsWith('http')) {
           return { valid: false, message: 'Please enter a valid Pinterest URL' };
         }
         return { valid: true, message: '' };
+      }
       
-      case 'youtube':
+      case 'youtube': {
         if (!url.includes('youtube.com') && !url.includes('youtu.be') && !url.startsWith('http')) {
           return { valid: false, message: 'Please enter a valid YouTube URL' };
         }
         return { valid: true, message: '' };
+      }
       
       default:
         return { valid: true, message: '' };
@@ -180,10 +188,30 @@ const StoreSocialSettings = () => {
 
   const formatSocialUrl = (platform: string, url: string): string => {
     switch (platform) {
-      case 'whatsapp':
-        return `https://wa.me/${url.replace(/\D/g, '')}`;
-      case 'phone':
-        return `tel:${url.replace(/\D/g, '')}`;
+      case 'whatsapp': {
+        // Extract digits only
+        const digits = url.replace(/\D/g, '');
+        // Ensure South African number format: +27 instead of 0
+        let formattedNumber = digits;
+        if (digits.startsWith('0')) {
+          formattedNumber = '27' + digits.substring(1);
+        } else if (!digits.startsWith('27') && digits.length >= 9) {
+          // If it doesn't start with 0 or 27, assume it's without country code
+          formattedNumber = '27' + digits;
+        }
+        return `https://wa.me/${formattedNumber}`;
+      }
+      case 'phone': {
+        const digits = url.replace(/\D/g, '');
+        // Ensure South African number format: +27 instead of 0
+        let formattedNumber = digits;
+        if (digits.startsWith('0')) {
+          formattedNumber = '27' + digits.substring(1);
+        } else if (!digits.startsWith('27') && digits.length >= 9) {
+          formattedNumber = '27' + digits;
+        }
+        return `tel:+${formattedNumber}`;
+      }
       default:
         return url;
     }

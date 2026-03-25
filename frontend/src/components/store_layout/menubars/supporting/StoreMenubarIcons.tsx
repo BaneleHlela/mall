@@ -48,11 +48,11 @@ interface StoreMenubarIconsProps {
     asFloat?: boolean;
 }
 
-export const socials = [
-    { platform: 'whatsapp', url: 'https://wa.me/0797604204', _id: '68502c4db7cdd894b89e9602' },
-    { platform: 'phone', url: 'tel:0797604204', _id: '68502c4db7cdd894b89e9603' },
-    { platform: 'twitter', url: 'https://x.com/Skipfornow__1', _id: '68502c4db7cdd894b89e9604' },
-];
+// export const socials = [
+//     { platform: 'whatsapp', url: 'https://wa.me/27697604204', _id: '68502c4db7cdd894b89e9602' },
+//     { platform: 'phone', url: 'tel:+27697604204', _id: '68502c4db7cdd894b89e9603' },
+//     { platform: 'twitter', url: 'https://x.com/Skipfornow__1', _id: '68502c4db7cdd894b89e9604' },
+// ];
 
 
 const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({ style, asFloat }) => {
@@ -90,10 +90,31 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({ style, asFloat })
         }
     };
 
-    const handleRedirect = (url: string) => {
-        if (url.startsWith("http") || url.startsWith("https")) {
+    const handleRedirect = (url: string, platform: string) => {
+        if ((url.startsWith("http") || url.startsWith("https")) && platform !== "whatsapp") {
           window.open(url, "_blank"); // Open external links in a new tab
-        } else if (url.startsWith("tel:") || url.startsWith("mailto:")) {
+        } if (platform === "whatsapp") {
+            if (url) {
+                // Extract number from URL
+                let number = url.replace("https://wa.me/", "").trim();
+
+                // Remove any spaces or non-digit characters
+                number = number.replace(/\D/g, "");
+
+                // Convert SA local format to international
+                if (number.startsWith("0")) {
+                number = "+27" + number.slice(1);
+                } else if (!number.startsWith("27")) {
+                number = "+27" + number;
+                } else {
+                number = "+" + number;
+                }
+
+                const formattedUrl = `https://wa.me/${number}`;
+                window.open(formattedUrl, "_blank")
+            }
+        }
+        else if (url.startsWith("tel:") || url.startsWith("mailto:")) {
           window.location.href = url; // Handle phone or email links
         }
     };
@@ -119,7 +140,7 @@ const StoreMenubarIcons: React.FC<StoreMenubarIconsProps> = ({ style, asFloat })
                             ...getBackgroundStyles(style?.iconBackground || {}),
                         }}
                         className="flex items-center justify-between rounded-full cursor-pointer hover:scale-110"
-                        onClick={() => handleRedirect(social.url)}
+                        onClick={() => handleRedirect(social.url, platform)}
                     >
                         {renderIcon(platform)}
                     </div>
