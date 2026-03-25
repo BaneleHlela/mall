@@ -271,7 +271,7 @@ export const getStoreServices = asyncHandler(async (req, res) => {
   }
 
   try {
-    const services = await Service.find(query).sort({ createdAt: -1 }).populate('performers', "firstName lastName _id");
+    const services = await Service.find(query).sort({ updatedAt: -1 }).populate('performers', "firstName lastName _id");
     res.status(200).json(services);
   } catch (error) {
     console.error('Error fetching store services:', error);

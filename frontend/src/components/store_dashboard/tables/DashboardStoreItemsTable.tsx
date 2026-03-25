@@ -43,7 +43,7 @@ const DashboardStoreItemsTable: React.FC<DashboardStoreItemsTableProps> = ({
       const firstPrice = item.prices[0].amount;
       return firstPrice !== undefined ? `R${firstPrice}` : 'N/A';
     }
-    if ('price' in item && typeof item.price === 'object' && item.price.value !== undefined) {
+    if ('price' in item && item.price && typeof item.price === 'object' && item.price.value !== undefined) {
       return `R${item.price.value}`;
     }
     return item.price !== undefined ? `R${item.price}` : 'N/A';

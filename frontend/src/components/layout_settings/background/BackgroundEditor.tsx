@@ -93,7 +93,7 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
             />
           </div>
         )}
-        {isAllowed("backgroundImage") && (
+        {isAllowed("backgroundmage") && (
           <div className="bg-white rounded-xl shadow-sm border border-stone-100 px-[1vh]">
             <MultipleLayoutImagesHandler
                 objectPath={`${objectPath}.backgroundImage.imageUrl`}

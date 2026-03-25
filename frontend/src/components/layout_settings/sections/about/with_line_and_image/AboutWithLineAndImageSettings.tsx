@@ -128,12 +128,14 @@ const AboutWithLineAndImageSettings = () => {
                         isOpen={true}
                     >
                         <div className="px-[.65vh] space-y-[.3vh]">
-                            <UnderlinedTextSettings
+                            <TextEditor
+                                objectPath={`${objectPath}.text.heading`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                objectPath={`${objectPath}.text.heading`}
-                                allowInput
+                                allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                                 responsiveSize
+                                useTextarea
+                                responsivePadding
                             />
                         </div>
                     </SlidingPanel>
@@ -148,12 +150,14 @@ const AboutWithLineAndImageSettings = () => {
                         isOpen={true}
                     >
                         <div className="px-[.65vh] space-y-[.3vh]">
-                            <UnderlinedTextSettings
+                            <TextEditor
+                                objectPath={`${objectPath}.text.subheading`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                objectPath={`${objectPath}.text.subheading`}
-                                allowInput
+                                allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                                 responsiveSize
+                                useTextarea
+                                responsivePadding
                             />
                         </div>
                     </SlidingPanel>

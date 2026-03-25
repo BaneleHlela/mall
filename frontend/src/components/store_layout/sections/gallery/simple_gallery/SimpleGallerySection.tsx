@@ -8,6 +8,7 @@ import { Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import StoreTextTag from '../../../shared_layout_components/StoreTextTag';
 
 const SimpleGallerySection = () => {
     const settings = useAppSelector((state) => state.layoutSettings.sections.gallery);
@@ -49,12 +50,13 @@ const SimpleGallerySection = () => {
             {(settings.text.heading.input || settings.text.subheading.input) && (
                 <div className='w-full'>
                     <div className="w-full">
-                        <UnderlinedText style={settings.text.heading} />
-                        {settings.text.subheading.input && (
-                            <UnderlinedText style={settings.text.subheading} />
-                        )}
+                        
                     </div>
                 </div>
+            )}
+            <StoreTextTag style={settings.text.heading} />
+            {settings.text.subheading.input && (
+                <StoreTextTag style={settings.text.subheading} />
             )}
 
             {/* Images Grid */}

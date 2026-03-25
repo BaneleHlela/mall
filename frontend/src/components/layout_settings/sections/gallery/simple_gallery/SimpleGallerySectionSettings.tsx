@@ -10,6 +10,7 @@ import OptionsToggler from "../../../supporting/OptionsToggler";
 import ResponsiveGridSettings from "../../../extras/ResponsiveGridSettings";
 import BorderEditor from "../../../background/BorderEditor";
 import MultipleLayoutImagesHandler from "../../../supporting/MultipleLayoutImagesHandler";
+import TextEditor from "../../../text/TextEditor";
 
 const SimpleGallerySectionSettings: React.FC<SectionSettingsProps>  = ({
     settings,
@@ -71,12 +72,14 @@ const SimpleGallerySectionSettings: React.FC<SectionSettingsProps>  = ({
                 {activePanel === "heading" && (
                     <SlidingPanel key="heading" isOpen={true} onClose={() => setActivePanel("Text")} title="Heading Settings">
                         <div className="space-y-[.3vh]">
-                            <UnderlinedTextSettings
+                            <TextEditor
+                                objectPath={`${objectPath}.text.heading`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                objectPath={`${objectPath}.text.heading`}
-                                allowInput
+                                allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                                 responsiveSize
+                                useTextarea
+                                responsivePadding
                             />
                         </div>
                     </SlidingPanel>
@@ -84,12 +87,14 @@ const SimpleGallerySectionSettings: React.FC<SectionSettingsProps>  = ({
                 {activePanel === "subheading" && (
                     <SlidingPanel key="subheading" isOpen={true} onClose={() => setActivePanel("Text")} title="Subheading Settings">
                         <div className="space-y-[.3vh]">
-                            <UnderlinedTextSettings
+                            <TextEditor
+                                objectPath={`${objectPath}.text.subheading`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                objectPath={`${objectPath}.text.subheading`}
-                                allowInput
+                                allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                                 responsiveSize
+                                useTextarea
+                                responsivePadding
                             />
                         </div>
                     </SlidingPanel>

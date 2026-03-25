@@ -140,24 +140,29 @@ const HeroWithDivAndImage = () => {
   };
 
   return (
-    <div
-      style={{
-        ...getBackgroundStyles(config.background),
-      }}
-      className="w-full h-full overflow-hidden"
-    >
-      {imageFirst ? (
-        <div className="w-full h-full flex flex-col lg:flex-row">
-          <Image />
-          <Container />
+    <StoreDivTag
+      style={config.background}
+      jsx={
+        <div
+          style={{
+            ...getBackgroundStyles(config.background),
+          }}
+          className="w-full h-full overflow-hidden"
+        >
+          {imageFirst ? (
+            <div className="w-full h-full flex flex-col lg:flex-row">
+              <Image />
+              <Container />
+            </div>
+          ) : (
+            <div className="w-full h-full flex flex-col lg:flex-row">
+              <Container />
+              <Image />
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="w-full h-full flex flex-col lg:flex-row">
-          <Container />
-          <Image />
-        </div>
-      )}
-    </div>
+      }
+    />
   );
 };
 
