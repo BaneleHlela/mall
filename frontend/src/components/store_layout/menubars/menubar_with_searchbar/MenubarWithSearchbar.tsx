@@ -11,7 +11,7 @@ import { useAppSelector } from "../../../../app/hooks";
 import { useStoreButtonClickHandler } from "../../extras/buttons/useStoreButtonClickHandler";
 import BlueSidebar from "./BlueSidebar";
 import StoreLayoutButton from "../../shared_layout_components/StoreLayoutButton";
-import { getTextStyles } from "../../../../utils/stylingFunctions";
+import { getBackgroundStyles, getTextStyles } from "../../../../utils/stylingFunctions";
 
 
 const MenubarWithSearchbar = () => {
@@ -92,15 +92,16 @@ const MenubarWithSearchbar = () => {
         id="store_menubar"
         style={{ 
             y,
-            backgroundColor: layout.colors.primary,    
+            backgroundColor: layout.colors.primary,
+            ...getBackgroundStyles(layout.menubar.topbar.background, colors)  
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         className="w-full h-fit bg-amber-50 sticky top-0 left-0 z-50 shadow"
     >
         {/* Mobile */}
-        <div className="w-full h-[13.5vh] lg:hidden">
+        <div className="w-full h-full lg:hidden">
             {layout.menubar.topbar.stack.map((stackItem: string, index: number) => (
-                <div key={index} className="w-full h-1/2 p-[1vh]">
+                <div key={index} className="w-full h-1/2 py-[1.5%]">
                     {stackItem === 'searchbar' && (
                         <StoreMenubarSearchbar
                             isOpen={isSearchbarOpen}

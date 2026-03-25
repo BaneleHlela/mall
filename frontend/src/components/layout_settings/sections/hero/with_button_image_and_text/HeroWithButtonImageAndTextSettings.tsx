@@ -35,7 +35,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
               objectPath={`${objectPath}.background`}
               settings={settings}
               handleSettingChange={handleSettingChange}
-              allow={["opacity", "height"]}
+              allow={["opacity", "backgroundImage", "floatingImage", "color", "height"]}
               widthUnit="vw"
               heightUnit="vh"
               responsiveSize
@@ -45,7 +45,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
       />
 
       {/* Image Settings */}
-      <SubSettingsContainer
+      {/* <SubSettingsContainer
         name="Image"
         SettingsComponent={
           <div className="px-2 space-y-[.5vh] py-1">
@@ -57,7 +57,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
             />
           </div>
         }
-      />
+      /> */}
 
       {/* Text Lines - Refactored */}
       <FirstOrderSubSettingsContainer
@@ -82,7 +82,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
           >
             <div className="px-2 space-y-[.5vh] py-1">
               {/* Text Width Settings */}
-              <SubSettingsContainer
+              {/* <SubSettingsContainer
                 name="Text Width"
                 SettingsComponent={
                   <div className="px-2 space-y-2">
@@ -96,7 +96,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
                     />
                   </div>
                 }
-              />
+              /> */}
 
               {/* Individual Line Settings */}
               {["firstLine", "secondLine", "thirdLine"].map((lineKey) => (
@@ -121,6 +121,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
               objectPath={`${objectPath}.button`}
               settings={settings}
               allowFunction
+              responsiveBackground
             />
           </SlidingPanel>
         )}
@@ -133,7 +134,7 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
               title={`Text Line: ${lineKey.replace("Line", " Line")}`}
             >
               <div className="px-2 space-y-2">
-                <OptionsToggler
+                {/* <OptionsToggler
                   label="Show"
                   options={["true", "false"]}
                   value={
@@ -147,14 +148,16 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
                       value === "true"
                     )
                   }
-                />
+                /> */}
 
-                <UnderlinedTextSettings
-                  objectPath={`${objectPath}.text.${lineKey}`}
-                  settings={settings}
-                  handleSettingChange={handleSettingChange}
-                  allowInput
-                  responsiveSize
+                <TextEditor
+                    objectPath={`${objectPath}.text.${lineKey}`}
+                    settings={settings}
+                    handleSettingChange={handleSettingChange}
+                    allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
+                    responsiveSize
+                    useTextarea
+                    responsivePadding
                 />
               </div>
             </SlidingPanel>

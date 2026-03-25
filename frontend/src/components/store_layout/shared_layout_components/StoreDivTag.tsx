@@ -40,7 +40,7 @@ const StoreDivTag = ({ style = {}, jsx }: Props) => {
         {bgImageSrc && (
           <img 
             src={bgImageSrc}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover backdrop-blur-lg"
           />
         )}
         {/* Floating Image (fully guarded) */}

@@ -31,7 +31,7 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({
   const handleSettingChange = (field: string, value: any) => {
     dispatch(updateSetting({ field, value }));
   };
-  const buttonFunctions = ['services', 'call', 'products', 'packages', 'whatsapp', 'email'];
+  const buttonFunctions = ['services', 'call', 'shop', 'packages', 'whatsapp', 'email'];
 
   return (
     <div className="space-y-[.35vh]">
@@ -97,7 +97,7 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({
             objectPath={`${objectPath}.background`}
             settings={settings}
             handleSettingChange={handleSettingChange}
-            allow={["color", "placement", "shadow", "border", "padding", "shadow", "width", "height"]}
+            allow={["color", "placement", "animation", "shadow", "border", "padding", "shadow", "width", "height"]}
             widthUnit='%'
             heightUnit='vh'
             responsiveSize={responsiveBackground}

@@ -202,7 +202,7 @@ const TextEditor: React.FC<EditorProps> = ({
             <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100">
               <OptionsToggler
                 label="Weight"
-                options={["normal",  "500", "550", "600", "bold", "bolder", "lighter"]}
+                options={["normal",  "500", "550", "600", "bold", "bolder", "lighter", "900"]}
                 value={getSetting("weight", settings, objectPath)}
                 onChange={(newValue) =>
                   handleChange("weight")({
