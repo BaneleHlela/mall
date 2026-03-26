@@ -60,7 +60,7 @@ const FirstFAQsSettings = () => {
                                         objectPath={`${objectPath}.text.header`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={[ "color", "fontFamily", "fontSize", "weight", "input" ]}
+                                        allow={[ "color", "fontFamily", "textAlign", "fontSize", "fontStyle", "weight", "input" ]}
                                         responsiveSize
                                     />
                                 </div>
@@ -194,7 +194,7 @@ const FirstFAQsSettings = () => {
                                         objectPath={`${objectPath}.text.QnAs.style.title`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={[ "color", "fontFamily", "fontSize", "weight" ]}
+                                        allow={[ "color", "fontFamily", "fontSize", "weight", "textAlign" ]}
                                         responsiveSize
                                     />
                                 </div>
@@ -208,7 +208,7 @@ const FirstFAQsSettings = () => {
                                         objectPath={`${objectPath}.text.QnAs.style.paragraph`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={[ "color", "fontFamily", "fontSize", "weight"]}
+                                        allow={[ "color", "fontFamily", "fontSize", "textAlign", "weight"]}
                                         responsiveSize
                                         responsivePadding
                                     />

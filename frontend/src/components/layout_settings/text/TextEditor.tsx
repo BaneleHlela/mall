@@ -103,6 +103,18 @@ const TextEditor: React.FC<EditorProps> = ({
               />
             </div>
           )}
+          {isAllowed("hide") && (
+            <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100">
+              <OptionsToggler
+                label="Hide"
+                options={["Yes", "No"]}
+                value={getSetting("hide", settings, objectPath) ? "Yes" : "No"}
+                onChange={(newValue) =>
+                  handleSettingChange(`${objectPath}.hide`, newValue === "Yes")
+                }
+              />
+            </div>
+          )}
 
           {/* Input/Text Section */}
           {isAllowed("input") && (
@@ -202,7 +214,7 @@ const TextEditor: React.FC<EditorProps> = ({
             <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100">
               <OptionsToggler
                 label="Weight"
-                options={["normal",  "500", "550", "600", "bold", "bolder", "lighter", "900"]}
+                options={["normal",  "500", "550", "600", "bold", "bolder", "lighter", "100", "200", "900"]}
                 value={getSetting("weight", settings, objectPath)}
                 onChange={(newValue) =>
                   handleChange("weight")({

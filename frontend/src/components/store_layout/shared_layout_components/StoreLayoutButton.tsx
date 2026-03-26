@@ -2,7 +2,7 @@ import React from 'react'
 import { getBackgroundStyles, getTextStyles } from '../../../utils/stylingFunctions';
 import StoreDivTag from './StoreDivTag';
 import { useAppSelector } from '../../../app/hooks';
-import StoreTextTag from './StoreTextTag';
+import StoreTextTag from '../extras/text/StoreTextTag';
 
 interface StoreButtonProps {
     onClick: () => void;
@@ -54,11 +54,13 @@ const StoreLayoutButton: React.FC<StoreButtonProps> = ({
             style={{
                 ...getTextStyles(style.text, fonts, colors),
             }}
-            className="flex justify-center items-center w-full h-full z-10"
+            className="flex justify-center items-center text-center w-full h-full z-10"
         >
-            <p className={`${text.animation || ''} w-fit hover:underline z-10`}>
-                {text.input || 'Click Me'}  {/* Fallback to 'Click Me' if text.input is undefined */}
-            </p>
+            
+            <StoreTextTag
+              style={style.text}
+              input={text.input || 'Click Me'}
+            /> 
         </button>
         }
       />

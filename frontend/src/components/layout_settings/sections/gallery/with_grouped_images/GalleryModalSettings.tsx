@@ -105,7 +105,7 @@ const GalleryModalSettings: React.FC<SupportingSettingsProps> = ({
                     objectPath={`${objectPath}.imagesModal.background.modalImage`}
                     settings={settings}
                     handleSettingChange={handleSettingChange}
-                    allow={["height", "border"]}
+                    allow={["height", "border", "animation"]}
                     heightUnit='vh'
                     responsiveSize
                 />
@@ -153,11 +153,14 @@ const GalleryModalSettings: React.FC<SupportingSettingsProps> = ({
             {activePanel === "group_name" && (
                 <SlidingPanel key="group_name" isOpen={true} onClose={() => setActivePanel("Text")} title="Name Settings">
                     <div className="space-y-[.3vh]">
-                        <UnderlinedTextSettings
+                        <TextEditor
+                            objectPath={`${objectPath}.imagesModal.text.groupName`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            objectPath={`${objectPath}.imagesModal.text.groupName`}
+                            allow={["fontFamily", "animation", "fontStyle", "weight", "hide", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                             responsiveSize
+                            useTextarea
+                            responsivePadding
                         />
                     </div>
                 </SlidingPanel>
@@ -165,11 +168,14 @@ const GalleryModalSettings: React.FC<SupportingSettingsProps> = ({
             {activePanel === "group_description" && (
                 <SlidingPanel key="group_description" isOpen={true} onClose={() => setActivePanel("Text")} title="Description Settings">
                     <div className="space-y-[.3vh]">
-                        <UnderlinedTextSettings
+                        <TextEditor
+                            objectPath={`${objectPath}.imagesModal.text.groupDescription`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            objectPath={`${objectPath}.imagesModal.text.groupDescription`}
+                            allow={["fontFamily", "animation", "fontStyle", "textAlign", "weight", "hide", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                             responsiveSize
+                            useTextarea
+                            responsivePadding
                         />
                     </div>
                 </SlidingPanel>

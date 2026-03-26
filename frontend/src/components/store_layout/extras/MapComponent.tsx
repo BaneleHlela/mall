@@ -30,8 +30,8 @@ const MapComponent: React.FC<MapComponentProps> = ({ lat, lng, name, image, styl
 
   // Safely access image properties with defaults
   const imageUrl = image?.url?.[0] || '';
-  const imageHeight = image?.background?.height || '100px';
-  const imageWidth = image?.background?.width || '160px';
+  const imageHeight = image?.background?.height || '50px';
+  const imageWidth = image?.background?.width || '50px';
 
   useEffect(() => {
     if (!window.google || !mapRef.current) return;

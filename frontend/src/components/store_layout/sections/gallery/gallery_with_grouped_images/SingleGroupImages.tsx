@@ -6,6 +6,7 @@ import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../.
 import { IoMdClose, IoIosHeart, IoIosHeartEmpty } from 'react-icons/io';
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
 import UnderlinedText from '../../../extras/text/UnderlinedText';
+import StoreTextTag from '../../../extras/text/StoreTextTag';
 
 interface SingleGroupImagesProps {
     groupName: string;
@@ -82,6 +83,7 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
         <div
             style={{
                 ...getBackgroundStyles(style.background.thumbnail, colors),
+                //height: "fit-content"
             }}
             className="h-fit"
         >
@@ -90,6 +92,7 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                     <img
                         style={{
                             ...getBackgroundStyles(style.background.image, colors),
+                            //height: "fit-content"
                         }}
                         src={thumbnail[0]}
                         alt="Thumbnail"
@@ -106,21 +109,16 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                             }}
                         >
                             {likedImages?.has(thumbnail[0]) ? (
-                                <IoIosHeart className="text-[2.5vh] fill-red-500" />
+                                <IoIosHeart className="text-[180%] fill-red-500" />
                             ) : (
-                                <IoIosHeartEmpty className="text-[2.5vh]" />
+                                <IoIosHeartEmpty className="text-[180%]" />
                             )}
                         </div>
                     )}
                 </div>
             </div>
-
-            <div className="w-full mt-3 lg:mt-5">
-                <UnderlinedText style={textStyle} input={groupName} />
-            </div>
-            <div className="w-full">
-                <UnderlinedText style={descriptionTextStyle} input={groupDescrition} />
-            </div>
+            <StoreTextTag style={textStyle} input={groupName} />
+            <StoreTextTag style={descriptionTextStyle} input={groupDescrition} />
             {showGrid && style.addModal && createPortal(
                 <div
                     style={{
@@ -139,13 +137,9 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                     </div>
 
                     {/* Title & Description */}
-                    <div className="flex flex-col items-center text-center my-4">
-                        <div className="w-full">
-                            <UnderlinedText style={style.text.groupName} input={groupName} />
-                        </div>
-                        <div className="w-full">
-                            <UnderlinedText style={style.text.groupDescription} input={groupDescrition} />
-                        </div>
+                    <div className="w-full flex flex-col items-center text-center my-4">
+                        <StoreTextTag style={style.text.groupName} input={groupName} />
+                        <StoreTextTag style={style.text.groupDescription} input={groupDescrition} />
                     </div>
 
                     {isHorizontal ? (
@@ -267,7 +261,8 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                                     <img
                                         src={imageUrl}
                                         alt={`Image ${index + 1}`}
-                                        className="w-full h-auto object-cover hover:opacity-80 transition-opacity duration-300"
+                                        className={`w-full h-auto object-cover hover:opacity-80 transition-opacity duration-300
+                                            ${style.background.modalImage.animation}`}
                                         style={getBackgroundStyles(style.background.modalImage, colors)}
                                     />
                                     {/* ❤️ Like Button */}
@@ -293,7 +288,7 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                 </div>,
                 modalRoot
             )}
-            <div className="h-[10vh] w-full"></div>
+            <div className="hidden h-[10vh] w-full"></div>
         </div>
     );
 };

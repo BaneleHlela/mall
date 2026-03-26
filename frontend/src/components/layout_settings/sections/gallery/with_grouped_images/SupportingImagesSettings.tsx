@@ -42,6 +42,7 @@ const SupportingImagesSettings: React.FC<SupportingSettingsProps> = ({
   };
 
   const handleDeleteClick = (groupKey: string) => async () => {
+    console.log(groupKey)
     const result = await Swal.fire({
       title: 'Are you sure?',
       text: `Do you want to delete "${imageGroups[groupKey]?.input || groupKey}"?`,

@@ -10,6 +10,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
+import StoreTextTag from '../../../shared_layout_components/StoreTextTag';
 
 interface GalleryGroup {
   input: string;
@@ -56,7 +57,7 @@ const GalleryWithGroupedImages = () => {
         >   
             {/* Heading + Subheading */}
             <div className="w-full">
-              <UnderlinedText style={settings.text.heading} />
+              <StoreTextTag style={settings.text.heading} />
               
               {settings.text.subheading.input && (
                 <div className='lg:max-w-[50%]'> 

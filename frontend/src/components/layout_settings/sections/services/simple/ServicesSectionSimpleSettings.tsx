@@ -84,11 +84,11 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                 {activePanel === "heading" && (
                     <SlidingPanel key="heading" isOpen={true} onClose={() => setActivePanel("Text")} title="Heading Settings">
                         <div className="space-y-[.3vh]">
-                            <UnderlinedTextSettings
+                            <TextEditor
+                                objectPath={`${objectPath}.text.heading`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                objectPath={`${objectPath}.text.heading`}
-                                allowInput
+                                allow={["input", "fontFamily", "fontStyle", "color", "fontSize", "weight", "animation", "placement", "textAlign", "lineHeight"]}
                                 responsiveSize
                             />
                         </div>
@@ -97,11 +97,11 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                 {activePanel === "subheading" && (
                     <SlidingPanel key="subheading" isOpen={true} onClose={() => setActivePanel("Text")} title="subheading Settings">
                         <div className="space-y-[.3vh]">
-                            <UnderlinedTextSettings
+                            <TextEditor
+                                objectPath={`${objectPath}.text.subheading`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                objectPath={`${objectPath}.text.subheading`}
-                                allowInput
+                                allow={["input", "fontFamily", "fontStyle", "color", "fontSize", "weight", "animation", "placement", "textAlign", "lineHeight"]}
                                 responsiveSize
                             />
                         </div>

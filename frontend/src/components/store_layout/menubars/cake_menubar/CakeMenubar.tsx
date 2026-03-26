@@ -99,7 +99,7 @@ const CakeMenubar = () => {
                 borderBottom: `${config.topbar.background.border.width} ${config.topbar.background.border.style} ${colors[config.topbar.background.border.color as keyof typeof colors]}` 
             }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="w-full h-fit bg-amber-50 sticky top-0 left-0 z-50 shadow opacity-100"
+            className="w-full h-fit bg-amber-50 sticky top-0 left-0 z-50 opacity-100"
         >  
             {/* Mobile */}
             <div className="flex justify-between items-center w-full h-full lg:hidden">

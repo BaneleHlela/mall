@@ -5,6 +5,7 @@ export interface TextSettings {
     mobile: string;
     desktop: string;
   };
+  hide?: boolean;
   animation?: string;
   weight?: string;
   fontWeight?: string;

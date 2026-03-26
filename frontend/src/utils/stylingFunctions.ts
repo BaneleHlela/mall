@@ -38,6 +38,10 @@ export const getTextStyles = (text: TextSettings, fonts?: any, colors?: any) => 
 
   if (text.weight) styles.fontWeight = text.weight;
 
+  if (text.hide) {
+    styles.display = "none"
+  }
+
   if (text.textShadow === true) {
     styles.textShadow = "2px 2px 5px rgba(0,0,0,0.4)";
   }

@@ -44,7 +44,7 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                         objectPath={`${objectPath}.background`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["color", "width", "padding", "shadow"]}
+                        allow={["color", "width", "padding", "shadow", "floatingImage"]}
                         widthUnit="%"
                         heightUnit="%"
                         responsiveSize
@@ -235,6 +235,8 @@ const FooterWithStoreDetailsButtonAndFormOrLocationSettings: React.FC<SectionEdi
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
                                         allow={["height", "width"]}
+                                        widthUnit='px'
+                                        heightUnit='px'
                                     />
                                 }
                             />

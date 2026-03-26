@@ -80,13 +80,13 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({
       <SubSettingsContainer
         name="Text"
         SettingsComponent={
-              <TextEditor
-                  objectPath={`${objectPath}.text`}
-                  settings={settings}
-                  handleSettingChange={handleSettingChange}
-                  allow={["input", "fontFamily", "color", "fontSize", "weight", "animation", "lineHeight"]}
-                  responsiveSize={false}
-              />
+          <TextEditor
+              objectPath={`${objectPath}.text`}
+              settings={settings}
+              handleSettingChange={handleSettingChange}
+              allow={["input", "fontFamily", "fontStyle", "color", "fontSize", "weight", "animation", "placement", "textAlign", "lineHeight"]}
+              responsiveSize
+          />
         }
       />
 

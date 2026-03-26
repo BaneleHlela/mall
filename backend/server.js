@@ -28,7 +28,6 @@ import posterRoutes from "./routes/posterRoutes.js"
 import rentalRoutes from "./routes/rentalRoutes.js";
 import payfastRoutes from "./routes/payfastRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
-
 import "./config/passportConfig.js";
 
 

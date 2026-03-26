@@ -63,15 +63,47 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
     if (unit === "%") {
       return { min: 0, max: 100, step: 1 };
     }
+    if (unit === "px")
+      return { min: 0, max: 400, step: 1 }
     return { min: .1, max: 35, step: .1 };
   };
   const animationOptions = [
     { value: "none", label: "None" },
+
+    // Directional
     { value: "upToDown", label: "Up to Down" },
     { value: "downToUp", label: "Down to Up" },
     { value: "leftToRight", label: "Left to Right" },
     { value: "rightToLeft", label: "Right to Left" },
+
+    // Basic
     { value: "fade", label: "Fade" },
+
+    // Appear base
+    { value: "appear", label: "Appear" },
+
+    // Appear variants
+    { value: "appear-from-bottom", label: "Appear From Bottom" },
+    { value: "appear-from-top", label: "Appear From Top" },
+    { value: "appear-from-left", label: "Appear From Left" },
+    { value: "appear-from-right", label: "Appear From Right" },
+
+    { value: "appear-rotate", label: "Appear Rotate" },
+    { value: "appear-blur", label: "Appear Blur" },
+    { value: "appear-slide-scale", label: "Appear Slide Scale" },
+    { value: "appear-pop", label: "Appear Pop" },
+    { value: "appear-reveal", label: "Appear Reveal" },
+
+    { value: "appear-fade-width", label: "Appear Fade Width" },
+    { value: "appear-fade-height", label: "Appear Fade Height" },
+
+    { value: "appear-skew", label: "Appear Skew" },
+
+    { value: "appear-zoom-in", label: "Appear Zoom In" },
+    { value: "appear-zoom-out", label: "Appear Zoom Out" },
+
+    { value: "appear-flip-x", label: "Appear Flip X" },
+    { value: "appear-flip-y", label: "Appear Flip Y" }
   ];
 
 

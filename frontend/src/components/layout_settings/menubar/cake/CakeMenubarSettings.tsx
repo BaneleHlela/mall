@@ -74,7 +74,7 @@ const CakeMenubarSettings = () => {
                                     settings={settings}
                                     responsivePadding
                                     responsiveSize
-                                    allow={["color", "height", "padding", "border", "opacity"]}
+                                    allow={["color", "height", "padding", "border", "shadow", "opacity"]}
                                 />
                             }
                         />

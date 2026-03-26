@@ -127,12 +127,16 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                             onClick={() => setActivePanel("group_name")}
                         />
                         {/* Description */}
-                        {!settings.sections.gallery.imagesModal.addModal && (
+                        {/* {!settings.sections.gallery.imagesModal.addModal && (
                             <FirstOrderSubSettingsContainer
                                 name="Group Description"
                                 onClick={() => setActivePanel("group_description")}
                             />
-                        )}
+                        )} */}
+                        <FirstOrderSubSettingsContainer
+                            name="Group Description"
+                            onClick={() => setActivePanel("group_description")}
+                        />
                     </div>
                     
                 </SlidingPanel>
@@ -140,12 +144,14 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
             {activePanel === "group_name" && (
                 <SlidingPanel key="group_name" isOpen={true} onClose={() => setActivePanel("Text")} title="Name Settings">
                     <div className="space-y-[.3vh]">
-                        <UnderlinedTextSettings
+                        <TextEditor
+                            objectPath={`${objectPath}.text.groupName`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            objectPath={`${objectPath}.text.groupName`}
-                            allowInput
+                            allow={["fontFamily", "animation", "weight", "hide", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                             responsiveSize
+                            useTextarea
+                            responsivePadding
                         />
                     </div>
                 </SlidingPanel>
@@ -153,11 +159,20 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
             {activePanel === "group_description" && (
                 <SlidingPanel key="group_description" isOpen={true} onClose={() => setActivePanel("Text")} title="Description Settings">
                     <div className="space-y-[.3vh]">
-                        <UnderlinedTextSettings
+                        {/* <UnderlinedTextSettings
                             settings={settings}
                             handleSettingChange={handleSettingChange}
                             objectPath={`${objectPath}.text.groupDescription`}
                             responsiveSize
+                        /> */}
+                        <TextEditor
+                            objectPath={`${objectPath}.text.groupDescription`}
+                            settings={settings}
+                            handleSettingChange={handleSettingChange}
+                            allow={["fontFamily", "animation", "weight", "hide", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
+                            responsiveSize
+                            useTextarea
+                            responsivePadding
                         />
                     </div>
                 </SlidingPanel>
