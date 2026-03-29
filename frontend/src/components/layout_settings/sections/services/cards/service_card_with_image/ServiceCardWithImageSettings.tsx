@@ -105,6 +105,15 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
                         value={getSetting("textAndButton.text.show.price", settings, objectPath) ? "yes" : "no"}
                         onChange={(value) => handleSettingChange(`${objectPath}.textAndButton.text.show.price`, value === "yes")}
                     />
+                    {getSetting("textAndButton.text.show.price", settings, objectPath) && (
+                        <OptionsToggler
+                            label="Use From"
+                            options={["yes", "no"]}
+                            value={getSetting("textAndButton.text.show.from", settings, objectPath) ? "yes" : "no"}
+                            onChange={(value) => handleSettingChange(`${objectPath}.textAndButton.text.show.from`, value === "yes")}
+                        />
+                    )}
+                        
                     <OptionsToggler
                         label="Show duration"
                         options={["yes", "no"]}
@@ -142,11 +151,13 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
         )}
         {activePanel === "Service Name" && (
             <SlidingPanel onClose={closePanel} isOpen={true} title="Service Name Settings">
-                <UnderlinedTextSettings
+                <TextEditor
                   objectPath={`${objectPath}.textAndButton.text.name`}
                   settings={settings}
                   handleSettingChange={handleSettingChange}
                   responsiveSize
+                  responsivePadding
+                  allow={["fontFamily", "fontSize", "color", "weight", "fontStyle", "padding", "textAlign"]}
                 />
             </SlidingPanel>
         )}

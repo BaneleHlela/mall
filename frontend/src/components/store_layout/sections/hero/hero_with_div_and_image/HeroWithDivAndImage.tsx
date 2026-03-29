@@ -1,6 +1,6 @@
 import { useAppSelector } from "../../../../../app/hooks";
 import { useWindowSize } from "../../../../../hooks/use-window-size";
-import { getBackgroundStyles } from "../../../../../utils/stylingFunctions";
+import { getBackgroundStyles, getBorderStyles } from "../../../../../utils/stylingFunctions";
 import { useStoreButtonClickHandler } from "../../../extras/buttons/useStoreButtonClickHandler";
 import UnderlinedText from "../../../extras/text/UnderlinedText";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -93,8 +93,10 @@ const HeroWithDivAndImage = () => {
       <div
         style={{
           ...getBackgroundStyles(adjustContainer(config.background.container)),
+          ...getBackgroundStyles(config.background.image || {}),
+          border: "none", // Override border if it exists in image background
         }}
-        className="w-full h-full flex justify-center items-center"
+        className="w-full h-full flex justify-center items-center overflow-hidden"
       >
         {/* ✅ Inline Swiper pagination styling */}
         <style>
@@ -122,6 +124,7 @@ const HeroWithDivAndImage = () => {
               <SwiperSlide key={idx}>
                 <img
                   src={imgUrl}
+                  style={{...getBorderStyles(config.background.image?.border || {})}}
                   alt={`Hero ${idx + 1}`}
                   className="object-cover w-full h-full"
                 />

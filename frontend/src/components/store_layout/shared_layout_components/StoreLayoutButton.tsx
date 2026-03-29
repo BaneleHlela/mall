@@ -58,7 +58,7 @@ const StoreLayoutButton: React.FC<StoreButtonProps> = ({
         >
             
             <StoreTextTag
-              style={style.text}
+              style={{textAlign: "center", ...style.text, }}
               input={text.input || 'Click Me'}
             /> 
         </button>

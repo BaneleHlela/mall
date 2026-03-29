@@ -45,15 +45,16 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                 name="Background"
                 SettingsComponent={
                 <div className="px-[.15vh] space-y-[.3vh]">
-                    <BackgroundEditor
-                        objectPath={`${objectPath}.background`}
-                        settings={settings}
-                        handleSettingChange={handleSettingChange}
-                        allow={["height", "width", "floatingImage"]}
-                        widthUnit="%"
-                        heightUnit="vh"
-                        responsiveSize
-                    />
+                        <BackgroundEditor
+                            objectPath={`${objectPath}.background`}
+                            settings={settings}
+                            handleSettingChange={handleSettingChange}
+                            allow={["height", "width", "floatingImage"]}
+                            widthUnit="%"
+                            heightUnit="vh"
+                            responsiveSize
+                            responsivePadding
+                        />
                 </div>
                 }
             />
@@ -76,6 +77,23 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                         isOpen
                     >
                         <div className="px-[.3vh] space-y-[.3vh] py-[.15vh]">
+                            {/* Background */}
+                             <SubSettingsContainer
+                                name="Background"
+                                SettingsComponent={
+                                    <BackgroundEditor
+                                        objectPath={`${objectPath}.background.image`}
+                                        settings={settings}
+                                        handleSettingChange={handleSettingChange}
+                                        allow={["border", "padding"]}
+                                        widthUnit="%"
+                                        heightUnit="vh"
+                                        responsiveSize
+                                        responsivePadding
+                                    />
+                                }
+                            />
+                            {/* Image URLs */}
                             <SubSettingsContainer
                                 name="Mobile"
                                 SettingsComponent = {

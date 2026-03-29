@@ -95,7 +95,7 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                         }} 
                         className=""
                     >
-                        R{price}
+                       {style.textAndButton.text?.show?.from && <span>From </span>} R{price}
                     </p>
                 )}
                 <div className="mb-2"></div>

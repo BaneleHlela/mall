@@ -194,12 +194,14 @@ const AboutWithLineAndImageSettings = () => {
                         isOpen={true}
                     >
                         <div className="px-[.65vh] space-y-[.3vh]">
-                            <UnderlinedTextSettings
+                            <TextEditor
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
                                 objectPath={`${objectPath}.text.secondSubheading`}
-                                allowInput
+                                allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                                 responsiveSize
+                                useTextarea
+                                responsivePadding
                             />
                         </div>
                     </SlidingPanel>
@@ -218,7 +220,7 @@ const AboutWithLineAndImageSettings = () => {
                                 objectPath={`${objectPath}.text.secondParagraph`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                allow={["input", "fontFamily", "fontSize", "color", "weight", "fontStyle", "padding"]}
+                                allow={["input", "fontFamily",  "textAlign", "fontSize", "color", "weight", "fontStyle", "padding"]}
                                 responsivePadding
                                 responsiveSize
                                 useQuill
