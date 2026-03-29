@@ -15,6 +15,7 @@ import BorderEditor from '../../../background/BorderEditor';
 import { Underline } from 'lucide-react';
 import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings';
 import ColorPicker from '../../../supporting/ColorPicker';
+import SettingsSlider from '../../../supporting/SettingsSlider';
 import AcceptingOrdersButtonSettings from '../../products/shared/AcceptingOrdersButtonSettings';
 import PickupOrDeliverySettings from '../../products/shared/PickupOrDeliverySettings';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
@@ -183,7 +184,7 @@ const PopularFeaturedProductsSectionSettings: React.FC<SectionEditorProps> = ({
             dispatch(fetchStoreProducts({ storeSlug: store.slug, activeOnly: true }));
         }
     }, [store?.slug, dispatch, store]);
-    
+
     const sensors = useSensors(useSensor(PointerSensor));
 
     const handleProductToggle = (productId: string) => {
@@ -303,12 +304,14 @@ const PopularFeaturedProductsSectionSettings: React.FC<SectionEditorProps> = ({
                 {activePanel === "heading" && (
                     <SlidingPanel key="heading" isOpen={true} onClose={() => setActivePanel("Text")} title="Heading Settings">
                         <div className="space-y-[.3vh]">
-                            <UnderlinedTextSettings
+                            <TextEditor
+                                objectPath={`${objectPath}.text.heading`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                objectPath={`${objectPath}.text.heading`}
-                                allowInput
+                                allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                                 responsiveSize
+                                useTextarea
+                                responsivePadding
                             />
                         </div>
                     </SlidingPanel>
@@ -316,12 +319,14 @@ const PopularFeaturedProductsSectionSettings: React.FC<SectionEditorProps> = ({
                 {activePanel === "subheading" && (
                     <SlidingPanel key="subheading" isOpen={true} onClose={() => setActivePanel("Text")} title="subheading Settings">
                         <div className="space-y-[.3vh]">
-                            <UnderlinedTextSettings
+                            <TextEditor
+                                objectPath={`${objectPath}.text.subheading`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                objectPath={`${objectPath}.text.subheading`}
-                                allowInput
+                                allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                                 responsiveSize
+                                useTextarea
+                                responsivePadding
                             />
                         </div>
                     </SlidingPanel>
@@ -390,6 +395,32 @@ const PopularFeaturedProductsSectionSettings: React.FC<SectionEditorProps> = ({
                                                 desktop: { min: 0, max: 100 }
                                             }}
                                         />
+                                        {/* Check if mobile is horizontal before showing mobile slider */}
+                                        {settings.sections.featuredProducts?.stack?.mobile === 'horizontal' && (
+                                            <div className="pt-2">
+                                                <SettingsSlider
+                                                    label="Mobile Swiper Offset"
+                                                    value={getSetting("grid.swiperOffset.mobile", settings, objectPath) ?? 0.1}
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.05}
+                                                    onChange={(value) => handleSettingChange(`${objectPath}.grid.swiperOffset.mobile`, value)}
+                                                />
+                                            </div>
+                                        )}
+                                        {/* Check if desktop is horizontal before showing desktop slider */}
+                                        {settings.sections.featuredProducts?.stack?.desktop === 'horizontal' && (
+                                            <div className="pt-2">
+                                                <SettingsSlider
+                                                    label="Desktop Swiper Offset"
+                                                    value={getSetting("grid.swiperOffset.desktop", settings, objectPath) ?? 0.1}
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.05}
+                                                    onChange={(value) => handleSettingChange(`${objectPath}.grid.swiperOffset.desktop`, value)}
+                                                />
+                                            </div>
+                                        )}
                                     </> 
                                 }
                             />
@@ -472,7 +503,11 @@ const PopularFeaturedProductsSectionSettings: React.FC<SectionEditorProps> = ({
                 )}
                 {activePanel === "card" && (
                     <SlidingPanel key="card" isOpen={true} onClose={() => setActivePanel("cards")} title="Card Settings">
-                        <PopularProductCardSettings settings={settings} handleSettingChange={handleSettingChange}/>
+                        <PopularProductCardSettings 
+                            settings={settings} 
+                            handleSettingChange={handleSettingChange}
+                            objectPath={`${objectPath}.card`}
+                        />
                     </SlidingPanel>
                 )}
                 {activePanel === "productSelector" && (

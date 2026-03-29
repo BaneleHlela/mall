@@ -14,6 +14,7 @@ import "swiper/css/navigation";
 import AcceptingOrdersButton from '../../../extras/buttons/AcceptingOrdersButton';
 import StoreLayoutButton from '../../../shared_layout_components/StoreLayoutButton';
 import { useStoreButtonClickHandler } from '../../../extras/buttons/useStoreButtonClickHandler';
+import StoreTextTag from '../../../extras/text/StoreTextTag';
 
 const PopularFeaturedProductsSection = () => {
   const config = useAppSelector((state) => state.layoutSettings.sections.featuredProducts);
@@ -25,12 +26,11 @@ const PopularFeaturedProductsSection = () => {
   const routes = useAppSelector((state) => state.layoutSettings.routes);
 
   // Filter products based on selected product IDs and maintain order
-  const productIds = config.productIds || [];
+  const productIds = config.productIds ? config.productIds : [];
   const featuredProducts = productIds.length > 0
     ? productIds.map((id: string) => allProducts.find(p => p._id === id)).filter(Boolean)
     : [];
 
-  console.log(config.productIds);
 
 
   const isMobile = window.innerWidth < 768;
@@ -61,11 +61,13 @@ const PopularFeaturedProductsSection = () => {
     >
       {/* Heading + Subheading */}
       <div className="w-full">
-        <UnderlinedText style={config.text.heading} />
+        <StoreTextTag 
+          style={config.text.heading}
+        />
         
-        {config.text.subheading.input && (
-          <UnderlinedText style={config.text.subheading} />
-        )}
+        <StoreTextTag 
+          style={config.text.subheading}
+        />
       </div>
       {config.acceptingOrdersButton?.show && (
         <div className={`w-full flex flex-col justify-center 
@@ -127,7 +129,7 @@ const PopularFeaturedProductsSection = () => {
         >
           <Swiper
             modules={[Pagination, Navigation, Autoplay]}
-            slidesPerView={visibleCount + 0.1}
+            slidesPerView={visibleCount + (isMobile ? (config.grid.swiperOffset?.mobile ?? 0) : (config.grid.swiperOffset?.desktop ?? 0))}
             centeredSlides={true}
             spaceBetween={parseFloat(getResponsiveDimension(config.grid.gap))}
             grabCursor={true}

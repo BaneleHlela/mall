@@ -50,6 +50,7 @@ const SECTION_FIELDS = [
   'sections.packages',
   'sections.book',
   'sections.menu',
+  "sections.featuredProducts",
 ];
 
 // Build a partial config object from dirty fields

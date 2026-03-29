@@ -15,13 +15,13 @@ import UnderlinedTextSettings from '../../../../extras/text/UnderlinedTextSettin
 
 const ProductCardSettings: React.FC<SectionEditorProps> = ({
   settings,
-  handleSettingChange
+  handleSettingChange,
+  objectPath,
 }) => {
-  const objectPath="sections.products.card";
+  //const"sections.products.card";
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
   const services = useAppSelector((state) => state.services.services)
-  console.log(services)
 
 
   return (

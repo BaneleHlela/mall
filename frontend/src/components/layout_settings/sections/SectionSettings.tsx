@@ -5,6 +5,7 @@ import { useAppSelector } from '../../../app/hooks';
 export interface SectionEditorProps {
   settings: any;
   handleSettingChange: (field: string, value: any) => void;
+  objectPath?: string;
 }
 const SectionSettings = () => {
   const routes = useAppSelector((state) => state.layoutSettings.routes);
