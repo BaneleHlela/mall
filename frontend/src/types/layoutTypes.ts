@@ -73,6 +73,7 @@ export interface Layout {
     menubar?: any;
     welcomeDiv?: any;
     sections: {
+        featuredProducts: any;
         gallery?: any;
         products?: any;
         services?: any;

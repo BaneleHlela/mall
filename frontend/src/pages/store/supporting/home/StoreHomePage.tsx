@@ -19,6 +19,8 @@ import StoreFAQsSection from "../../../../components/store_layout/sections/FAQs/
 import StoreDonationsSection from "../../../../components/store_layout/sections/donations/StoreDonationsSection";
 import StoreRentalsSection from "../../../../components/store_layout/sections/rentals/StoreRentalsSection";
 import ErrorBoundary from "../../../../components/ErrorBoundary";
+import FeaturedProductsSectionSettings from "../../../../components/layout_settings/sections/featured_products/FeaturedProductsSectionSettings";
+import FeatureProductsSection from "../../../../components/store_layout/sections/featured_products/FeatureProductsSection";
 
 const StoreHome = () => {
   const settings = useAppSelector((state) => state.layoutSettings);
@@ -48,6 +50,7 @@ const StoreHome = () => {
     rentals: withErrorBoundary(<StoreRentalsSection />),
     team: withErrorBoundary(<StoreTeamSection />),
     FAQs: withErrorBoundary(<StoreFAQsSection />),
+    featuredProducts: withErrorBoundary(<FeatureProductsSection />),
   };
   
 

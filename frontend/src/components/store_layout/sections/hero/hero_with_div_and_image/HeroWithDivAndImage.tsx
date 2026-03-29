@@ -19,7 +19,6 @@ const HeroWithDivAndImage = () => {
   const isMobile = windowWidth ? windowWidth < 740 : false;
   const imageFirst = isMobile ? config.imageFirst?.mobile : config.imageFirst?.desktop;
 
-  console.log(config);
   
   const Container = () => (
   <StoreDivTag
@@ -106,7 +105,7 @@ const HeroWithDivAndImage = () => {
                 background: ${config.background.container.color || '#000'};
                 opacity: 0.3;
             }
-            .swiper-pagination-bullet-active {
+            .swiper-pagcd froination-bullet-active {
                 background: ${config.background.container.color || '#000'};
                 opacity: 1;
                 transform: scale(1.2);

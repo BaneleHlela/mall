@@ -253,10 +253,11 @@ export const updateLayoutConfig = expressAsyncHandler(async (req, res) => {
   const { layoutId } = req.params;
   const body = req.body;
   const layout = await StoreLayout.findById(layoutId);
+  
   if (!layout) {
     return res.status(404).json({ message: "Layout not found" });
   }
-  
+  // Update sections.hero only if present
   if (body.store) {
     layout.store = body.store;
   };
@@ -299,7 +300,10 @@ export const updateLayoutConfig = expressAsyncHandler(async (req, res) => {
     layout.sections.about = body.sections.about;
   }
 
-  // Example: update sections.hero only if present
+  if (body.sections?.featuredProducts) {
+    layout.sections.featuredProducts = body.sections.featuredProducts;
+  }
+
   if (body.sections?.hero) {
     layout.sections.hero = body.sections.hero;
   }

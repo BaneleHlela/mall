@@ -95,6 +95,7 @@ const storeLayoutSchema = new mongoose.Schema({
         bookService: {},
         book: {},
         menu: {},
+        featuredProducts: {},
     },
     isSharable: {
         type: Boolean,

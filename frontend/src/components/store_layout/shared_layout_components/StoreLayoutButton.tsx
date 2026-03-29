@@ -52,7 +52,7 @@ const StoreLayoutButton: React.FC<StoreButtonProps> = ({
         <button
             onClick={onClick}
             style={{
-                ...getTextStyles(style.text, fonts, colors),
+                ...getTextStyles(style.text || {}, fonts, colors),
             }}
             className="flex justify-center items-center text-center w-full h-full z-10"
         >
