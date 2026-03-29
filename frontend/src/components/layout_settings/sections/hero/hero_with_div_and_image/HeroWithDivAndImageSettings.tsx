@@ -49,7 +49,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                             objectPath={`${objectPath}.background`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={["height", "width", "floatingImage"]}
+                            allow={["height", "width", "floatingImage", "color"]}
                             widthUnit="%"
                             heightUnit="vh"
                             responsiveSize
@@ -85,7 +85,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                                         objectPath={`${objectPath}.background.image`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={["border", "padding"]}
+                                        allow={["border", "padding", "color"]}
                                         widthUnit="%"
                                         heightUnit="vh"
                                         responsiveSize

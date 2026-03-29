@@ -74,7 +74,7 @@ const CakeMenubarSettings = () => {
                                     settings={settings}
                                     responsivePadding
                                     responsiveSize
-                                    allow={["color", "height", "padding", "border", "shadow", "opacity"]}
+                                    allow={["width", "color", "height", "padding", "border", "shadow", "opacity"]}
                                 />
                             }
                         />
@@ -235,17 +235,9 @@ const CakeMenubarSettings = () => {
                     >
                         <>
                             {/* Links */}
-                            <SubSettingsContainer
-                                key="desktop_links"
+                            <FirstOrderSubSettingsContainer
                                 name="Links"
-                                SettingsComponent={
-                                    <TextEditor
-                                        objectPath="menubar.topbar.desktop.links"
-                                        settings={settings}
-                                        handleSettingChange={handleSettingChange}
-                                        allow={["color", "fontFamily", 'fontSize', "weight"]}
-                                    />
-                                }
+                                onClick={() => setActivePanel('desktop_links')}
                             />
                             {/* Button */}
                             <FirstOrderSubSettingsContainer
@@ -253,6 +245,42 @@ const CakeMenubarSettings = () => {
                                 onClick={() => setActivePanel('desktop_button')}
                             />
                         </>
+                    </SlidingPanel>
+                )}
+                {activePanel === 'desktop_links' && (
+                    <SlidingPanel
+                        key="desktop_links"
+                        isOpen={true}
+                        onClose={() => setActivePanel('desktop')}
+                        title="Desktop Links Settings"
+                    >
+                        {/* Text */}
+                        <SubSettingsContainer
+                            key="desktop_links_text"
+                            name="Links"
+                            SettingsComponent={
+                                <TextEditor
+                                    objectPath="menubar.topbar.desktop.links"
+                                    settings={settings}
+                                    handleSettingChange={handleSettingChange}
+                                    allow={["color", "fontFamily", 'fontSize', "weight"]}
+                                />
+                            }
+                        />
+                        {/* Background */}
+                        <SubSettingsContainer
+                            key="desktop_links_background"
+                            name="Links Background"
+                            SettingsComponent={
+                                <BackgroundEditor
+                                    objectPath="menubar.topbar.desktop.links.background"
+                                    handleSettingChange={handleSettingChange}
+                                    settings={settings}
+                                    allow={["color", "padding", "border", "shadow"]}
+                                    responsivePadding
+                                />
+                            }
+                        />
                     </SlidingPanel>
                 )}
                 {activePanel === 'desktop_button' && (

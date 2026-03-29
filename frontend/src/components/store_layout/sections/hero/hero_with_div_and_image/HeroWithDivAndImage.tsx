@@ -95,6 +95,7 @@ const HeroWithDivAndImage = () => {
           ...getBackgroundStyles(adjustContainer(config.background.container)),
           ...getBackgroundStyles(config.background.image || {}),
           border: "none", // Override border if it exists in image background
+          borderRadius: "0px",
         }}
         className="w-full h-full flex justify-center items-center overflow-hidden"
       >

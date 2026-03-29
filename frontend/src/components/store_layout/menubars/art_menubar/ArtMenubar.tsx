@@ -168,13 +168,14 @@ const ArtMenubar = () => {
                 <div 
                     className='w-full h-full flex flex-col items-start'
                 >
-                    <ul className="hidden lg:flex flex-row h-full justify-center items-center text-center capitalize space-x-0">
+                    <ul className="hidden lg:flex flex-row h-full space-x-1 justify-center items-center text-center capitalize">
                     {links.map(({ to, label }) => (
                         <li
                             key={label}
-                            className='px-[2vh] hover:underline hover:text-gray-800 min-h-fit flex flex-col justify-center line-clamp-1'
+                            className='px-[2vh] hover:underline  hover:text-gray-800 min-h-fit flex flex-col justify-center line-clamp-1'
                             style={{
                                 ...getTextStyles(layout.menubar.topbar.desktop.links, fonts, colors),
+                                ...getBackgroundStyles(layout.menubar.topbar.desktop.links.background || {}, colors),
                             }}
                         >
                             <Link to={to}>{label}</Link>

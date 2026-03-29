@@ -36,7 +36,7 @@ const StoreMenubar = () => {
   }
 
   return (
-    <div className={`fixed lg:static top-0 w-full z-40 transition-transform duration-300 ${isHidden ? '-translate-y-full' : ''}`}>
+    <div className={`fixed lg:static top-0 w-full flex items-center justify-center z-40 transition-transform duration-300 ${isHidden ? '-translate-y-full' : ''}`}>
       {renderMenubar()}
     </div>
   )

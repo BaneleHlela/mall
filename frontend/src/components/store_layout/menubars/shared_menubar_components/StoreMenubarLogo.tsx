@@ -53,7 +53,7 @@ const StoreMenubarLogo: React.FC<StoreMenubarLogoProps> = ({
                     style={{...getBackgroundStyles(style?.background, colors), backgroundColor: 'transparent'}}
                     src={getResponsiveBackgroundImage(logoUrl)}
                     alt='store logo'
-                    className='flex items-center justify-center max-h-full w-full object-contain bg-white'
+                    className='flex items-center justify-center max-h-full w-full object-contain'
                 />
             ) : (
             <div

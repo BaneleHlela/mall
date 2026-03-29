@@ -58,7 +58,7 @@ const RestuarantMenubarSettings = () => {
                                         objectPath={`menubar.topbar.background`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={["height", "color", "padding"]}
+                                        allow={["width", "height", "color", "padding"]}
                                         responsivePadding
                                         widthUnit="vw"
                                         heightUnit="vh"
@@ -122,8 +122,8 @@ const RestuarantMenubarSettings = () => {
                             onClick={() => setActivePanel('logo')}
                         />
                         <FirstOrderSubSettingsContainer
-                            name="Desktop Button Settings"
-                            onClick={() => setActivePanel('button')}
+                            name="Desktop Settings"
+                            onClick={() => setActivePanel('desktop')}
                         />
                         {/* <div className="rounded border-2 border-white text-center p-[.5vh] shadow">
                             <p className="mb-[1vh]">Mobile Topbar Layout</p>
@@ -190,6 +190,77 @@ const RestuarantMenubarSettings = () => {
                         objectPath="menubar.topbar.logo"
                     />
                 </SlidingPanel>
+                )}
+                {activePanel === 'desktop' && (
+                    <SlidingPanel
+                        key="desktop"
+                        isOpen={true}
+                        onClose={closePanel}
+                        title="Desktop Topbar Settings"
+                    >
+                        <>
+                            {/* Links */}
+                            <FirstOrderSubSettingsContainer
+                                name="Links"
+                                onClick={() => setActivePanel('desktop_links')}
+                            />
+                            {/* Button */}
+                            <FirstOrderSubSettingsContainer
+                                name="Desktop Button"
+                                onClick={() => setActivePanel('desktop_button')}
+                            />
+                        </>
+                    </SlidingPanel>
+                )}
+                {activePanel === 'desktop_links' && (
+                    <SlidingPanel
+                        key="desktop_links"
+                        isOpen={true}
+                        onClose={() => setActivePanel('desktop')}
+                        title="Desktop Links Settings"
+                    >
+                        {/* Text */}
+                        <SubSettingsContainer
+                            key="desktop_links_text"
+                            name="Links"
+                            SettingsComponent={
+                                <TextEditor
+                                    objectPath="menubar.topbar.desktop.links"
+                                    settings={settings}
+                                    handleSettingChange={handleSettingChange}
+                                    allow={["color", "fontFamily", 'fontSize', "weight"]}
+                                />
+                            }
+                        />
+                        {/* Background */}
+                        <SubSettingsContainer
+                            key="desktop_links_background"
+                            name="Links Background"
+                            SettingsComponent={
+                                <BackgroundEditor
+                                    objectPath="menubar.topbar.desktop.links.background"
+                                    handleSettingChange={handleSettingChange}
+                                    settings={settings}
+                                    allow={["color", "padding", "border", "shadow"]}
+                                    responsivePadding
+                                />
+                            }
+                        />
+                    </SlidingPanel>
+                )}
+                {activePanel === 'desktop_button' && (
+                    <SlidingPanel
+                        key="desktop_button"
+                        isOpen={true}
+                        onClose={() => setActivePanel('desktop')}
+                        title="Desktop Button Settings"
+                    >
+                        <StoreButtonSettings
+                            objectPath="menubar.topbar.desktop.button"
+                            settings={settings}
+                            allowFunction={true}
+                        />
+                    </SlidingPanel>
                 )}
                 {activePanel === "button" && (
                     <SlidingPanel
