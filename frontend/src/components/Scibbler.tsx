@@ -24,7 +24,6 @@ const Scribbler: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  console.log(window.scrollY);
   return (
     <div className="h-screen w-full max-w-md flex items-center justify-center">
       <QRCodeGenerator storeSlug="yo-solution" />
