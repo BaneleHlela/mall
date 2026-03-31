@@ -378,40 +378,41 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
               handleSettingChange(`${objectPath}.placement.isAbsolute`, newValue === "Yes")
             }
           />
+          
+            {/* Items Positioning */}
+            {/* Items Position X */}
+            <OptionsToggler
+              label="Items Position X"
+              options={["start", "center", "end", "evenly", "between"]}
+              value={getSetting("placement.itemsPosition.x", settings, objectPath) || "center"}
+              onChange={(newValue) =>
+                handleSettingChange(`${objectPath}.placement.itemsPosition.x`, newValue)
+              }
+            />
+            {/* Items Position Y */}
+            <OptionsToggler
+              label="Items Position Y"
+              options={["start", "center", "end", "evenly", "between"]}
+              value={getSetting("placement.itemsPosition.y", settings, objectPath) || "center"}
+              onChange={(newValue) =>
+                handleSettingChange(`${objectPath}.placement.itemsPosition.y`, newValue)
+              }
+            />
 
           {/* Show horizontalPlacement and margins when NOT absolute */}
           {!getSetting("placement.isAbsolute", settings, objectPath) && (
             <>
-              {/* Horizontal Placement */}
-              <OptionsToggler
-                label="Position"
-                options={["start", "center", "end"]}
-                value={getSetting("placement.position", settings, objectPath) || "start"}
-                onChange={(newValue) =>
-                  handleSettingChange(`${objectPath}.placement.position`, newValue)
-                }
-              />
-
-              {/* Items Position X */}
-              {/* <OptionsToggler
-                label="Items Position X"
-                options={["start", "center", "end", "evenly"]}
-                value={getSetting("placement.itemsPosition.x", settings, objectPath) || "center"}
-                onChange={(newValue) =>
-                  handleSettingChange(`${objectPath}.placement.itemsPosition.x`, newValue)
-                }
-              /> */}
-
-              {/* Items Position Y */}
-              {/* <OptionsToggler
-                label="Items Position Y"
-                options={["start", "center", "end", "evenly"]}
-                value={getSetting("placement.itemsPosition.y", settings, objectPath) || "center"}
-                onChange={(newValue) =>
-                  handleSettingChange(`${objectPath}.placement.itemsPosition.y`, newValue)
-                }
-              /> */}
-
+              
+              
+            <OptionsToggler
+              label="Position"
+              options={["start", "center", "end"]}
+              value={getSetting("placement.position", settings, objectPath) || "start"}
+              onChange={(newValue) =>
+                handleSettingChange(`${objectPath}.placement.position`, newValue)
+              }
+            />
+              
               {/* Margin Top - Mobile & Desktop */}
               <h5 className="text-[1.4vh] font-medium text-stone-400">Margin Top</h5>
               <SettingsSlider

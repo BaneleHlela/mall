@@ -301,6 +301,7 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
               style={{
                 height: settings.menubar?.topbar?.background?.height.mobile,
                 width: "100%",
+                margin: getResponsiveDimension(settings.menubar?.topbar?.background?.placement?.marginTop || {desktop: "0px", mobile: "0px"}),
               }}
               className={`lg:hidden ${settings.menubar.variation === "restuarantMenubar" && "hidden"}`}/>
             {settings?.menubar?.alertDiv?.display && (

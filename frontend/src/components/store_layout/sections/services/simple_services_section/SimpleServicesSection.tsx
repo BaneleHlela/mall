@@ -309,13 +309,11 @@ const SimpleServicesSection = () => {
                 ? services.filter(service => service.category === selectedCategory)
                 : services.filter(service => service.category === category);
               if (categoryServices.length === 0) return null;
-              console.log("categoryServices", categoryServices)
 
               const categoryDividerStyle = getTextStyles(settings.categoryDivider, fonts, colors);
 
               return (
                 <div key={category} className="w-full">
-                  {services[0]._id}
                   <p style={{ ...categoryDividerStyle }} className="capitalize">
                     {category} here
                   </p>

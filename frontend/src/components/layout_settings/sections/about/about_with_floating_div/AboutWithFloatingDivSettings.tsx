@@ -157,7 +157,7 @@ const AboutWithFloatingDivSettings = () => {
                             objectPath={`${objectPath}.container.background`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={["color", "padding", "height", "width", "placement", "border", "floatingImage"]}
+                            allow={["color", "padding", "height", "width", "placement", "opacity", "border", "floatingImage"]}
                             heightUnit="%"
                             widthUnit="%"
                             responsiveSize
@@ -179,7 +179,7 @@ const AboutWithFloatingDivSettings = () => {
                             objectPath={`${objectPath}.container.text.subheading`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={["input", "fontFamily", "fontSize", "color", "weight", "underline"]}
+                            allow={["input", "fontFamily", "fontSize", "color", "textDecoration", "textAlign", "weight", "underline"]}
                             responsiveSize
                         />
                     </SlidingPanel>
@@ -198,7 +198,7 @@ const AboutWithFloatingDivSettings = () => {
                             objectPath={`${objectPath}.container.text.paragraph`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={["input", "fontFamily", "fontSize", "color", "weight", "placement"]}
+                            allow={["input", "fontFamily", "fontSize", "color", "weight", "textAlign", "placement"]}
                             useTextarea
                             responsiveSize
                         />

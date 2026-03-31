@@ -188,10 +188,9 @@ export const updateProduct = asyncHandler(async (req, res) => {
     category: category || product.category,
     isActive: isActive ?? product.isActive,
     tags: tags || product.tags,
-    marking: marking || product.marking,
+    marking: marking,
     images: updatedImages,
   };
-
   // 6️⃣ Save updated product
   const updatedProduct = await Product.findByIdAndUpdate(productId, updatedProductData, { new: true });
   if (!updatedProduct) {

@@ -68,7 +68,7 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
       style={{
         ...getBackgroundStyles(style.background, colors),
       }}
-      className={`flex group w-full h-fit
+      className={`flex justify-between group w-full h-fit
           ${style.stack.mobile === "column" ? "flex-col" : "flex-row" }
           lg:${style.stack.desktop === "column" ? "flex-col" : "flex-row" }
       hover:scale-101`}
@@ -121,8 +121,7 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
         style={{
           ...getBackgroundStyles(calculateTextDimensions(style.stack, style.image), colors),
           ...getBackgroundStyles(style.textAndButton.background, colors),
-          height: "fit-content",
-          
+          height: "fit-content",          
         }} 
         className="flex flex-col justify-between min-h-fit"
       >
@@ -175,7 +174,7 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-end w-full">
+      {/* <div className="flex items-center justify-end w-full">
         <button
           onClick={() => setShowInteractions(prev => !prev)}
           className={`flex py-2 items-center justify-center
@@ -191,7 +190,7 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
             </>
           )}
         </button>
-      </div>
+      </div> */}
     </div>
   )
 }

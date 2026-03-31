@@ -27,7 +27,7 @@ const StoreDivTag = ({ style = {}, jsx }: Props) => {
       case 'center': return 'justify-center';
       case 'end': return 'justify-end';
       case 'evenly': return 'justify-evenly';
-      default: return 'justify-center';
+      default: return '';
     }
   };
 
@@ -37,7 +37,7 @@ const StoreDivTag = ({ style = {}, jsx }: Props) => {
       case 'center': return 'items-center';
       case 'end': return 'items-end';
       case 'evenly': return 'items-stretch';
-      default: return 'items-center';
+      default: return '';
     }
   };
 
@@ -45,7 +45,6 @@ const StoreDivTag = ({ style = {}, jsx }: Props) => {
   const itemsPositionY = style?.placement?.itemsPosition?.y;
   const justifyClass = getJustifyContent(itemsPositionX);
   const alignClass = getAlignItems(itemsPositionY);
-
 
   return (
     <div
@@ -55,10 +54,20 @@ const StoreDivTag = ({ style = {}, jsx }: Props) => {
       }}
       className={`flex items-center w-full h-full min-h-fit overflow-y-scroll hide-scrollbar`}
     >
-      <div className="relative w-full h-full">
+      <div className="relative w-full h-full min-h-fit">
 
         {/* Content */}
-        <div className="relative w-full h-full min-h-fit z-10">
+        <div className={`relative w-full h-full min-h-fit z-10 flex flex-col 
+          ${itemsPositionX === "between" && "items-between"}
+          ${itemsPositionX === "evenly" && "items-evenly"}
+          ${itemsPositionX === "start" && "items-start"}
+          ${itemsPositionX === "center" && "items-center"}
+          ${itemsPositionX === "end" && "items-end"}
+          ${itemsPositionY === "between" && "justify-between"}
+          ${itemsPositionY === "evenly" && "justify-evenly"}
+          ${itemsPositionY === "start" && "justify-start"}
+          ${itemsPositionY === "center" && "justify-center"}
+          ${itemsPositionY === "end" && "justify-end"}`}>
           {jsx}
         </div>
 

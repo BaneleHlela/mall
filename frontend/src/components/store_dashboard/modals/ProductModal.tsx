@@ -178,6 +178,15 @@ const ProductModal: React.FC<ProductModalProps> = ({
     images.forEach((file) => {
       formData.append('images', file);
     });
+
+    console.log('Submitting form with data:', {
+      name: form.name,
+      description: form.description,
+      stockQuantity: form.stockQuantity,
+      category: form.category,
+      isActive: form.isActive,
+      marking: form.marking,
+    });
   
     try {
       if (product?._id) {

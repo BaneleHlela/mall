@@ -63,6 +63,10 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                 name="Pickup or Delivery"
                 onClick={() => setActivePanel("pickupOrDelivery")}
             />
+            <FirstOrderSubSettingsContainer
+                name="Category Divider"
+                onClick={() => setActivePanel("categoryDivider")}
+            />
             
             {/* Text */}
             <FirstOrderSubSettingsContainer
@@ -335,6 +339,30 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                             handleSettingChange={handleSettingChange} 
                             objectPath={objectPath}
                         />
+                    </SlidingPanel>
+                )}
+                {activePanel === "categoryDivider" && (
+                    <SlidingPanel key="categoryDivider" isOpen={true} onClose={closePanel} title="Category Divider">
+                        <div className="space-y-[.3vh]">
+                            <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
+                                <OptionsToggler
+                                    label="Show"
+                                    options={["Yes", "No"]}
+                                    value={getSetting("categoryDivider.show", settings, objectPath) ? "Yes" : "No"}
+                                    onChange={(newValue) =>
+                                        handleSettingChange(`${objectPath}.categoryDivider.show`, newValue === "Yes")
+                                    }
+                                />
+                            </div>
+                            <TextEditor
+                                objectPath={`${objectPath}.categoryDivider`}
+                                settings={settings}
+                                handleSettingChange={handleSettingChange}
+                                responsiveSize
+                                responsivePadding
+                                allow={["fontFamily", "fontSize", "color", "weight", "padding", "textAlign", "textDecoration", "letterSpacing", "lineHeight", "placement"]}
+                            />
+                        </div>
                     </SlidingPanel>
                 )}
                 {activePanel === "card" && (

@@ -15,7 +15,7 @@ const AboutWithFloatingDiv = () => {
         <StoreDivTag
             style={config.background}
             jsx={
-                <div className='w-full h-full'>
+                <>
                     {/* Text */}
                     <StoreDivTag
                         style={config.heading.background}
@@ -31,7 +31,8 @@ const AboutWithFloatingDiv = () => {
                     <StoreDivTag
                         style={config.container.background}
                         jsx={
-                            <div className='w-full h-full flex flex-col justify-between'>
+                            //<div className='w-full h-full flex flex-col justify-between'>
+                            <>
                                 {/* Subheading */}
                                 <StoreTextTag
                                     style={config.container.text.subheading}
@@ -40,7 +41,7 @@ const AboutWithFloatingDiv = () => {
                                 <StoreTextTag
                                     style={config.container.text.paragraph}
                                 />
-                                {config.container.button?.show && (
+                                {/* {config.container.button?.show && (
                                     <div
                                     className={`w-full flex flex-row mt-4 lg:mt-8 z-10 ${
                                         config.container.button?.position === "center"
@@ -64,12 +65,22 @@ const AboutWithFloatingDiv = () => {
                                         }
                                     />
                                     </div>
-                                )}
-                            </div>
+                                )} */}
+                                <StoreLayoutButton
+                                    style={config.container.button}
+                                    onClick={() =>
+                                        handleButtonClick({
+                                            type: config.container.button.function,
+                                            routes,
+                                            storeSlug: store?.slug ?? '',
+                                            contactNumber: store?.contact?.phone,
+                                        })
+                                    }
+                                />
+                            </>
                         }
                     />
-                    
-                </div>
+                </>       
             }
         />
     )

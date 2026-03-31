@@ -70,12 +70,18 @@ const SortablePageItem = ({
   page,
   onClick,
   onDelete,
+  onRename,
   panelId,
+  isRenamable,
+  routeName,
 }: {
   page: PageItem;
   onClick: () => void;
   onDelete: (pageId: string) => void;
+  onRename: (pageId: string, newName: string) => void;
   panelId: string;
+  isRenamable: boolean;
+  routeName: string;
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: page.id });
 
@@ -84,17 +90,23 @@ const SortablePageItem = ({
     transition,
   };
 
+  const handleRename = (newName: string) => {
+    onRename(page.id, newName);
+  };
+
   return (
     <div ref={setNodeRef} style={style} className={isDragging ? 'z-50' : ''}>
       <SettingsContainer
-        name={page.name}
+        name={routeName}
         onClick={onClick}
         onDeleteClick={() => onDelete(page.id)}
+        onRename={handleRename}
         isDraggable
         dragProps={{ attributes, listeners, setNodeRef }}
         isDragging={isDragging}
         icon={page.icon}
         deletable
+        renamable={isRenamable}
       />
     </div>
   );
@@ -260,6 +272,22 @@ const PagesSettings = () => {
     });
   };
 
+  // Handle rename - update the route name in routes.<sectionName>.name
+  const handleRename = (pageId: string, newName: string) => {
+    const routes = settings?.routes as Routes | undefined;
+    if (!routes) return;
+
+    // Get the current route
+    const currentRoute = routes[pageId as keyof Routes];
+    if (!currentRoute) return;
+
+    // Update the name
+    dispatch(updateSetting({
+      field: `routes.${pageId}.name`,
+      value: newName
+    }));
+  };
+
   // All available page settings
   const allPageSettings: PageItem[] = [
     { id: "home", routeKey: "home", name: "Home", icon: <Home size={16} />, component: <HomePageSettings /> },
@@ -378,15 +406,25 @@ const PagesSettings = () => {
       )}
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={sortedPages.map(p => p.id)} strategy={verticalListSortingStrategy}>
-          {sortedPages.map((page) => (
-            <SortablePageItem
-              key={page.id}
-              page={page}
-              onClick={() => handlePanelOpen(page.id, page.name)}
-              panelId={page.id}
-              onDelete={() => handleDeleteClick(page.id)}
-            />
-          ))}
+          {sortedPages.map((page) => {
+            // Pages that should NOT be renamable: home, singleProduct, searchResults
+            const isRenamable = !['home', 'singleProduct', 'searchResults'].includes(page.id);
+            // Get the actual route name from settings
+            const routes = settings?.routes as Routes | undefined;
+            const routeName = routes?.[page.id as keyof Routes]?.name || page.name;
+            return (
+              <SortablePageItem
+                key={page.id}
+                page={page}
+                onClick={() => handlePanelOpen(page.id, page.name)}
+                panelId={page.id}
+                onDelete={() => handleDeleteClick(page.id)}
+                onRename={handleRename}
+                isRenamable={isRenamable}
+                routeName={routeName}
+              />
+            );
+          })}
         </SortableContext>
       </DndContext>
 

@@ -89,8 +89,8 @@ export interface BackgroundSettings {
   placement?: {
     position?: 'start' | 'center' | 'end'
     itemsPosition?: {
-      x: 'start' | 'center' | 'end' | 'evenly';
-      y: 'start' | 'center' | 'end' | 'evenly';
+      x?: 'start' | 'center' | 'end' | 'evenly' | 'between';
+      y?: 'start' | 'center' | 'end' | 'evenly' | 'between';
     };
     isAbsolute?: boolean;
     top?: ResponsiveValue;

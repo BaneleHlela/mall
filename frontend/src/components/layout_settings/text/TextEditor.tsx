@@ -91,7 +91,7 @@ const TextEditor: React.FC<EditorProps> = ({
     return (
         <div className="space-y-[.35vh]">
           {/* Show/Hide Toggle */}
-          {isAllowed("show") && (
+          {/* {isAllowed("show") && (
             <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100">
               <OptionsToggler
                 label="Show"
@@ -102,7 +102,7 @@ const TextEditor: React.FC<EditorProps> = ({
                 }
               />
             </div>
-          )}
+          )} */}
           {isAllowed("hide") && (
             <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100">
               <OptionsToggler
@@ -403,7 +403,7 @@ const TextEditor: React.FC<EditorProps> = ({
             <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100">
               <OptionsToggler
                 label="Text Align"
-                options={["center", "left", "right", "justify"]}
+                options={["center", "left", "end", "justify"]}
                 value={getSetting("textAlign", settings, objectPath)}
                 onChange={(newValue) =>
                   handleSettingChange(`${objectPath}.textAlign`, newValue)
@@ -546,6 +546,7 @@ const TextEditor: React.FC<EditorProps> = ({
                       handleSettingChange(`${objectPath}.placement.horizontalPlacement`, newValue)
                     }
                   /> */}
+                  
 
                   {/* Margin Top - Mobile & Desktop */}
                   <h5 className="text-[1.4vh] font-medium text-stone-400">Margin Top</h5>
