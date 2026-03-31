@@ -12,6 +12,7 @@ import MultipleLayoutImagesHandler from '../../../../supporting/MultipleLayoutIm
 import { getSetting } from '../../../../../../utils/helperFunctions'
 import { useAppSelector } from '../../../../../../app/hooks'
 import UnderlinedTextSettings from '../../../../extras/text/UnderlinedTextSettings'
+import StoreLayoutButtonSettings from '../../../../extras/StoreLayoutButtonSettings'
 
 const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
   settings,
@@ -140,12 +141,13 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
         )}
         {activePanel === "Button" && (
             <SlidingPanel onClose={closePanel} isOpen={true} title="Services Card Button">
-              <StoreButtonSettings 
+              <StoreLayoutButtonSettings 
                 settings={settings} 
                 objectPath={`${objectPath}.textAndButton.button`}
                 allowPosition
                 allowShow
                 allowFunction
+                responsiveBackground
               />
             </SlidingPanel>
         )}
@@ -157,17 +159,19 @@ const ServiceCardWithImageSettings: React.FC<SectionEditorProps> = ({
                   handleSettingChange={handleSettingChange}
                   responsiveSize
                   responsivePadding
-                  allow={["fontFamily", "fontSize", "color", "weight", "fontStyle", "padding", "textAlign"]}
+                  allow={["fontFamily", "fontSize", "color", "textDecoration", "textTransform", "weight", "fontStyle", "padding", "textAlign"]}
                 />
             </SlidingPanel>
         )}
         {activePanel === "Service Details" && (
             <SlidingPanel onClose={closePanel} isOpen={true} title="Service Details Settings">
-                <UnderlinedTextSettings
-                  objectPath={`${objectPath}.textAndButton.text`}
+                <TextEditor
+                  objectPath={`${objectPath}.textAndButton.text.description`}
                   settings={settings}
                   handleSettingChange={handleSettingChange}
                   responsiveSize
+                  responsivePadding
+                  allow={["fontFamily", "fontSize", "color", "weight", "fontStyle", "padding", "textAlign"]}
                 />
             </SlidingPanel>
         )}

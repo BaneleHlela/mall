@@ -4,6 +4,9 @@ import StoreButton from '../../../buttons/StoreButton';
 import StoreTextTag from '../../../text/StoreTextTag';
 import StoreLayoutButton from '../../../../shared_layout_components/StoreLayoutButton';
 import { useAppSelector } from '../../../../../../app/hooks';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
+import 'swiper/css';
 
 interface StoreServiceCardProps {
     title: string;
@@ -11,6 +14,7 @@ interface StoreServiceCardProps {
     description: string;
     price?: number;
     imageUrl: string;
+    images?: string[]; // Add support for multiple images
     style: any;
     onClick?: () => void;
 }
@@ -21,11 +25,12 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
     price,
     style,
     imageUrl,
+    images,
     description,
     onClick,
 }) => {
     const { colors, fonts } = useAppSelector(state => state.layoutSettings)
-
+    console.log(images)
     return (
         <div 
             style={{
@@ -36,18 +41,40 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                 lg:${style.stack.desktop === "column" ? "flex-col" : "flex-row" }
             hover:scale-102`}
         >
-            {/* Image */}
+            {/* Image with Swiper for multiple images */}
             <div 
                 style={{
                     ...getBackgroundStyles(style.image, colors)
                 }}
                 className=''
             >
-                <img 
-                    src={imageUrl} 
-                    alt="Service Image" 
-                    className='w-full h-full object-cover'
-                />
+                {images && images.length > 1 ? (
+                    <Swiper
+                        modules={[Autoplay]}
+                        autoplay={{
+                            delay: 4000,
+                            disableOnInteraction: true,
+                        }}
+                        loop={true}
+                        className="w-full h-full"
+                    >
+                        {images.map((img, index) => (
+                            <SwiperSlide key={index}>
+                                <img 
+                                    src={img} 
+                                    alt={`${title} - Image ${index + 1}`} 
+                                    className='w-full h-full object-cover'
+                                />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                ) : (
+                    <img 
+                        src={imageUrl} 
+                        alt="Service Image" 
+                        className='w-full h-full object-cover'
+                    />
+                )}
             </div>
             {/* Text and button */}
             <div
@@ -63,8 +90,8 @@ const ServiceCardWithImage: React.FC<StoreServiceCardProps> = ({
                     `}
             >
                 {/* Name */}
-                <StoreTextTag style={style.textAndButton.text.name} input={title}/>
-                <div className="mt-2"></div>
+                <StoreTextTag style={style.textAndButton.text.name} input={title} className={"line-clamp-1"}/>
+                
                 {/* Description */}
                 {style.textAndButton.text.show.description && (
                     <p style={{

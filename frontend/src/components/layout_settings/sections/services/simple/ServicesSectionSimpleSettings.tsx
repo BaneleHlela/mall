@@ -9,6 +9,7 @@ import TextEditor from '../../../text/TextEditor';
 import ResponsiveGridSettings from '../../../extras/ResponsiveGridSettings';
 import ServiceCardWithImageSettings from '../cards/service_card_with_image/ServiceCardWithImageSettings';
 import OptionsToggler from '../../../supporting/OptionsToggler';
+import SettingsSlider from '../../../supporting/SettingsSlider';
 import { getSetting } from '../../../../../utils/helperFunctions';
 import BorderEditor from '../../../background/BorderEditor';
 import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings';
@@ -241,6 +242,32 @@ const ServicesSectionSimpleSettings: React.FC<SectionEditorProps> = ({
                                                 desktop: { min: 0, max: 100 }
                                             }}
                                         />
+                                        {/* Check if mobile is horizontal before showing mobile slider */}
+                                        {settings.services?.grid?.container?.stack?.mobile === 'horizontal' && (
+                                            <div className="pt-2">
+                                                <SettingsSlider
+                                                    label="Mobile Swiper Offset"
+                                                    value={getSetting("grid.swiperOffset.mobile", settings, objectPath) ?? 0.1}
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.05}
+                                                    onChange={(value) => handleSettingChange(`${objectPath}.grid.swiperOffset.mobile`, value)}
+                                                />
+                                            </div>
+                                        )}
+                                        {/* Check if desktop is horizontal before showing desktop slider */}
+                                        {settings.services?.grid?.container?.stack?.desktop === 'horizontal' && (
+                                            <div className="pt-2">
+                                                <SettingsSlider
+                                                    label="Desktop Swiper Offset"
+                                                    value={getSetting("grid.swiperOffset.desktop", settings, objectPath) ?? 0.1}
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.05}
+                                                    onChange={(value) => handleSettingChange(`${objectPath}.grid.swiperOffset.desktop`, value)}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 }
                             />

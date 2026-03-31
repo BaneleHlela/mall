@@ -180,6 +180,7 @@ const PopularProductsSection = () => {
                             />
                           ))}
                         </div>
+                        <div className="h-[25px] w-full"></div>
                       </SwiperSlide>
                     ))}
                   </Swiper>
@@ -246,6 +247,7 @@ const PopularProductsSection = () => {
                     storeId={store?._id}
                     onClick={() => handleProductClick(product.slug)}
                   />
+                  <div className="h-[25px] w-full"></div>
                 </SwiperSlide>
               ))}
             </Swiper>

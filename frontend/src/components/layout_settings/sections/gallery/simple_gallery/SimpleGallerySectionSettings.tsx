@@ -122,21 +122,16 @@ const SimpleGallerySectionSettings: React.FC<SectionSettingsProps>  = ({
                             <SubSettingsContainer
                                 name="Image Background"
                                 SettingsComponent={
-                                    <div className="px-2 space-y-2">
-                                        <BorderEditor
-                                            objectPath={`${objectPath}.images.background.border`}
-                                            settings={settings}
-                                            handleSettingChange={handleSettingChange}
-                                            allow={["width", "style", "color", "radius"]}
-                                        />
+                                    <div className="px-[.35vh] space-y-[.8vh]">
                                         <BackgroundEditor
                                             objectPath={`${objectPath}.images.background`}
                                             settings={settings}
                                             handleSettingChange={handleSettingChange}
-                                            allow={["height"]}
+                                            allow={["height", "border"]}
                                             responsiveSize
                                             heightUnit="vh"
                                         />
+                                        
                                     </div>
                                 }
                             />

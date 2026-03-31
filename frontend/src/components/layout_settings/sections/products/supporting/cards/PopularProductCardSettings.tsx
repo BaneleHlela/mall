@@ -12,6 +12,7 @@ import MultipleLayoutImagesHandler from '../../../../supporting/MultipleLayoutIm
 import { getSetting } from '../../../../../../utils/helperFunctions'
 import { useAppSelector } from '../../../../../../app/hooks'
 import UnderlinedTextSettings from '../../../../extras/text/UnderlinedTextSettings'
+import StoreLayoutButtonSettings from '../../../../extras/StoreLayoutButtonSettings'
 
 const ProductCardSettings: React.FC<SectionEditorProps> = ({
   settings,
@@ -157,12 +158,13 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
           </SlidingPanel>
         )}
         {activePanel === "Button" && (
-            <SlidingPanel onClose={closePanel} isOpen={true} title="Book Button Settings">
-              <StoreButtonSettings 
+            <SlidingPanel onClose={closePanel} isOpen={true} title="Add To Cart Button Settings">
+              <StoreLayoutButtonSettings 
                 settings={settings} 
                 objectPath={`${objectPath}.textAndButton.button`} 
                 allowPosition 
                 allowShow
+                responsiveBackground
               />
             </SlidingPanel>
         )}

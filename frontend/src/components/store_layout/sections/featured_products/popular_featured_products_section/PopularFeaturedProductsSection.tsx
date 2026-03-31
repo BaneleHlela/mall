@@ -130,7 +130,7 @@ const PopularFeaturedProductsSection = () => {
           />
         </div>
       )}
-
+      
       {/* Horizontal (swiper) */}
       {isHorizontal ? (
         <div
@@ -140,7 +140,7 @@ const PopularFeaturedProductsSection = () => {
             '--swiper-navigation-color': colors[config.text.heading.color as keyof typeof colors],
             ...getBackgroundStyles(config.grid.container.background, colors),
           }}
-          className="w-full pl-2 h-fit border-y-2"
+          className="relative w-full pl-2 h-fit border-y-2"
         >
           <Swiper
             ref={swiperRef}
@@ -149,7 +149,7 @@ const PopularFeaturedProductsSection = () => {
             centeredSlides={false}
             spaceBetween={parseFloat(getResponsiveDimension(config.grid.gap))}
             grabCursor={true}
-            pagination={true}
+            pagination={false}
             navigation={{
               prevEl: '.swiper-button-prev',
               nextEl: '.swiper-button-next',
@@ -174,28 +174,28 @@ const PopularFeaturedProductsSection = () => {
                   storeId={store?._id}
                   onClick={() => handleProductClick(product.slug)}
                 />
+                <div className="h-[25px] w-full"></div>
               </SwiperSlide>
             ))}
           </Swiper>
           {/* Custom Navigation Buttons */}
-          <div className="absolute bg-amber-700 bottom-0 right-0 flex items-center gap-1 z-20 font-semibold">
-            <button 
-              onClick={() => swiperRef.current?.swiper.slidePrev()}
-              className="flex items-center px-2 py-1 text-sm"
-            >
-              <MdArrowBackIos />
-              <p className="mb-[.1vh]">Prev</p>
-            </button>
-            <div style={{backgroundColor: colors[config.text.heading.color as keyof typeof colors]}} className="h-5 w-[.2vh]"></div>
-            <button 
-              onClick={() => swiperRef.current?.swiper.slideNext()}
-              className="flex items-center px-2 py-1 text-sm"
-            >
-             
-             <p className="mb-[.15vh]">Next</p>
-             <MdArrowForwardIos />
-            </button>
-          </div>
+            <div style={{color: colors[config.card.textAndButton.text.name.color as keyof typeof colors]}} className={`absolute bottom-0 right-0 flex items-center gap-1 z-20 ${featuredProducts.length === 1 && "hidden"}`}>
+              <button 
+                onClick={() => swiperRef.current?.swiper.slidePrev()}
+                className="flex items-center px-2 py-1 text-sm"
+              >
+                <MdArrowBackIos />
+                <p className="mb-[.1vh]">Prev</p>
+              </button>
+              <div style={{backgroundColor: colors[config.text.heading.color as keyof typeof colors]}} className="h-5 w-[.2vh]"></div>
+              <button 
+                onClick={() => swiperRef.current?.swiper.slideNext()}
+                className="flex items-center px-2 py-1 text-sm"
+              >
+                <p className="mb-[.15vh]">Next</p>
+                <MdArrowForwardIos />
+              </button>
+            </div>
         </div>
       ) : (
         // Vertical Grid
@@ -212,7 +212,7 @@ const PopularFeaturedProductsSection = () => {
             style={{
               ...getBackgroundStyles(config.grid.container.background, colors),
               gap: getResponsiveDimension(config.grid.gap),
-              gridAutoRows: "1fr"
+              gridAutoRows: "1fr",
             }}
             className={`grid px-1 items-stretch ${getGridColumnClasses({
               mobile: config.grid.columns.mobile,
@@ -254,7 +254,7 @@ const PopularFeaturedProductsSection = () => {
             }
             style={config.showMoreButton || {}}
           />
-        </div>
+      </div>
     </div>
   );
 };

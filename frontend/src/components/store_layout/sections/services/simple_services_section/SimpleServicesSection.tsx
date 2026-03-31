@@ -141,7 +141,7 @@ const SimpleServicesSection = () => {
                     <Swiper
                       ref={swiperRef}
                       modules={[ Autoplay , Navigation, Pagination]}
-                      slidesPerView={1}
+                      slidesPerView={visibleCount + (isMobile ? (settings.grid.swiperOffset?.mobile ?? 0) : (settings.grid.swiperOffset?.desktop ?? 0))}
                       spaceBetween={15}
                       grabCursor={true}
                       navigation={{
@@ -151,8 +151,8 @@ const SimpleServicesSection = () => {
                       pagination={false}
                       className="z-10"
                       autoplay={{
-                        delay: 3000, 
-                        disableOnInteraction: false,
+                        delay: 4000, 
+                        disableOnInteraction: true,
                         pauseOnMouseEnter: true,
                       }}
                       loop={true}
@@ -173,6 +173,7 @@ const SimpleServicesSection = () => {
                                 duration={service.duration}
                                 description={service.description}
                                 imageUrl={service.images?.[0] || ".placeholder-image.png"}
+                                images={service.images}
                                 price={service.price}
                                 style={settings.card}
                                 onClick={() =>
@@ -189,6 +190,7 @@ const SimpleServicesSection = () => {
                               />
                             ))}
                           </div>
+                          <div className="h-[25px] w-full"></div>
                         </SwiperSlide>
                       ))}
                     </Swiper>
@@ -228,7 +230,7 @@ const SimpleServicesSection = () => {
               <Swiper
                 ref={swiperRef}
                 modules={[ Autoplay , Navigation, Pagination]}
-                slidesPerView={1}
+                slidesPerView={visibleCount + (isMobile ? (settings.grid.swiperOffset?.mobile ?? 0) : (settings.grid.swiperOffset?.desktop ?? 0))}
                 spaceBetween={15}
                 grabCursor={true}
                 navigation={{
@@ -238,8 +240,8 @@ const SimpleServicesSection = () => {
                 pagination={false}
                 className="z-10"
                 autoplay={{
-                  delay: 3000, 
-                  disableOnInteraction: false,
+                  delay: 4000, 
+                  disableOnInteraction: true,
                   pauseOnMouseEnter: true,
                 }}
                 loop={true}
@@ -260,6 +262,7 @@ const SimpleServicesSection = () => {
                           duration={service.duration}
                           description={service.description}
                           imageUrl={service.images?.[0] || ".placeholder-image.png"}
+                          images={service.images}
                           price={service.price}
                           style={settings.card}
                           onClick={() =>
@@ -276,6 +279,7 @@ const SimpleServicesSection = () => {
                         />
                       ))}
                     </div>
+                    <div className="h-[25px] w-full"></div>
                   </SwiperSlide>
                 ))}
               </Swiper>
@@ -340,6 +344,7 @@ const SimpleServicesSection = () => {
                           duration={service.duration}
                           description={service.description}
                           imageUrl={service.images?.[0] || ".placeholder-image.png"}
+                          images={service.images}
                           price={service.price}
                           style={settings.card}
                           onClick={() =>
@@ -385,6 +390,7 @@ const SimpleServicesSection = () => {
                     duration={service.duration}
                     description={service.description}
                     imageUrl={service.images?.[0] || ".placeholder-image.png"}
+                    images={service.images}
                     price={service.price}
                     style={settings.card}
                     onClick={() =>

@@ -5,10 +5,11 @@ import { useAppSelector } from '../../../../app/hooks';
 interface StoreTextTagProps {
     style?: any;
     input?: string | number;
+    className?: string;
 }
 
 
-const StoreTextTag: React.FC<StoreTextTagProps> = ({style, input}) => {
+const StoreTextTag: React.FC<StoreTextTagProps> = ({style, input, className}) => {
     const { fonts, colors } = useAppSelector(state => state.layoutSettings)
 
     return (
@@ -20,7 +21,7 @@ const StoreTextTag: React.FC<StoreTextTagProps> = ({style, input}) => {
                 style={{
                     ...getTextStyles(style, fonts, colors),
                 }}
-                className={`relative ${style.animation}`}
+                className={`relative ${style.animation} ${className || ''}`}
             >
                 {input || style.input}
                 {style.underline?.show && (
