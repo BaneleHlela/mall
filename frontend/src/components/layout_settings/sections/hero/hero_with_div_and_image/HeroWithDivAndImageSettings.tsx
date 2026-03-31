@@ -147,7 +147,7 @@ const HeroWithDivAndImageSettings: React.FC<HeroWithBoxSettingsProps> = ({
                                 }
                             />
                             <FirstOrderSubSettingsContainer
-                                name="Details"
+                                name="Text & Button"
                                 onClick={() => setActivePanel("details")}
                             />
                             

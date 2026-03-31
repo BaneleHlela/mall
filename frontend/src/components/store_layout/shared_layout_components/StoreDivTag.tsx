@@ -20,6 +20,32 @@ const StoreDivTag = ({ style = {}, jsx }: Props) => {
     ? getResponsiveBackgroundImage(style.floatingImage.imageUrl)
     : undefined;
 
+  // ✅ Map itemsPosition to flex classes
+  const getJustifyContent = (x: string | undefined) => {
+    switch (x) {
+      case 'start': return 'justify-start';
+      case 'center': return 'justify-center';
+      case 'end': return 'justify-end';
+      case 'evenly': return 'justify-evenly';
+      default: return 'justify-center';
+    }
+  };
+
+  const getAlignItems = (y: string | undefined) => {
+    switch (y) {
+      case 'start': return 'items-start';
+      case 'center': return 'items-center';
+      case 'end': return 'items-end';
+      case 'evenly': return 'items-stretch';
+      default: return 'items-center';
+    }
+  };
+
+  const itemsPositionX = style?.placement?.itemsPosition?.x;
+  const itemsPositionY = style?.placement?.itemsPosition?.y;
+  const justifyClass = getJustifyContent(itemsPositionX);
+  const alignClass = getAlignItems(itemsPositionY);
+
 
   return (
     <div
@@ -27,7 +53,7 @@ const StoreDivTag = ({ style = {}, jsx }: Props) => {
         ...getBackgroundStyles(style || {}, colors),
         minHeight: "fit-content"
       }}
-      className="w-full h-full min-h-fit overflow-y-scroll hide-scrollbar"
+      className={`flex items-center w-full h-full min-h-fit overflow-y-scroll hide-scrollbar`}
     >
       <div className="relative w-full h-full">
 
@@ -53,7 +79,6 @@ const StoreDivTag = ({ style = {}, jsx }: Props) => {
             className="absolute object-cover z-10"
           />
         )}
-
       </div>
     </div>
   )

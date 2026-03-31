@@ -16,7 +16,7 @@ import UnderlinedTextSettings from '../../../../extras/text/UnderlinedTextSettin
 const ProductCardSettings: React.FC<SectionEditorProps> = ({
   settings,
   handleSettingChange,
-  objectPath,
+  objectPath = "sections.products.card",
 }) => {
   //const"sections.products.card";
   const [activePanel, setActivePanel] = useState<string | null>(null);
@@ -47,7 +47,7 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
                         objectPath={`${objectPath}.background`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["color", "border", "height", "padding"]}
+                        allow={["color", "border", "height", "padding", "shadow"]}
                         heightUnit="vh"
                         responsiveSize
                         responsivePadding
@@ -64,7 +64,7 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
                         objectPath={`${objectPath}.image`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["border", "width", "height"]}
+                        allow={["border", "width", "height", "shadow"]}
                         widthUnit='%'
                         heightUnit='%'
                         responsiveSize
@@ -92,6 +92,10 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
         {activePanel === "Text" && (
           <SlidingPanel onClose={closePanel} isOpen={true} title="Card Text Settings">
             <div className="space-y-[.3vh] ">
+                {/* <FirstOrderSubSettingsContainer
+                    name="Background"
+                    onClick={() => setActivePanel("text_background")}
+                /> */}
                 <FirstOrderSubSettingsContainer
                     name="Product Name"
                     onClick={() => setActivePanel("product_name")}
@@ -128,21 +132,27 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
         )}
         {activePanel === "product_name" && (
           <SlidingPanel onClose={() => setActivePanel("text")} isOpen={true} title="Product Name Settings">
-              <UnderlinedTextSettings
-                objectPath={`${objectPath}.textAndButton.text.name`}
-                settings={settings}
-                handleSettingChange={handleSettingChange}
-                responsiveSize
+              <TextEditor
+                  objectPath={`${objectPath}.textAndButton.text.name`}
+                  settings={settings}
+                  handleSettingChange={handleSettingChange}
+                  allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
+                  responsiveSize
+                  useTextarea
+                  responsivePadding
               />
           </SlidingPanel>
         )}
         {activePanel === "product_price" && (
           <SlidingPanel onClose={() => setActivePanel("text")} isOpen={true} title="Product Price Settings">
-              <UnderlinedTextSettings
-                objectPath={`${objectPath}.textAndButton.text`}
-                settings={settings}
-                handleSettingChange={handleSettingChange}
-                responsiveSize
+              <TextEditor
+                  objectPath={`${objectPath}.textAndButton.text`}
+                  settings={settings}
+                  handleSettingChange={handleSettingChange}
+                  allow={["fontFamily", "animation", "weight", "hide", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
+                  responsiveSize
+                  useTextarea
+                  responsivePadding
               />
           </SlidingPanel>
         )}

@@ -84,7 +84,7 @@ const StoreButtonSettings: React.FC<StoreButtonSettingsProps> = ({
               objectPath={`${objectPath}.text`}
               settings={settings}
               handleSettingChange={handleSettingChange}
-              allow={["input", "fontFamily", "fontStyle", "color", "fontSize", "weight", "animation", "placement", "textAlign", "lineHeight"]}
+              allow={["input", "fontFamily", "fontStyle", "color", "fontSize", "weight", "animation", "placement", "textAlign", "lineHeight", "textDecoration"]}
               responsiveSize
           />
         }

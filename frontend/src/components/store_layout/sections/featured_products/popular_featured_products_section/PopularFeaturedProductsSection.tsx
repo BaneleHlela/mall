@@ -1,4 +1,6 @@
+import React, { useRef } from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
+import { Swiper, SwiperSlide, type SwiperRef } from "swiper/react";
 import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../../../../../utils/stylingFunctions';
 import { getGridColumnClasses } from '../../gallery/gallery_with_grouped_images/SingleGroupImages';
 import CategorySelector from '../../../extras/category_selector/CategorySelector';
@@ -6,8 +8,9 @@ import PopularProductCard from '../../../extras/cards/product/popular/PopularPro
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import UnderlinedText from '../../../extras/text/UnderlinedText';
-import { Swiper, SwiperSlide } from "swiper/react";
+
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -15,12 +18,14 @@ import AcceptingOrdersButton from '../../../extras/buttons/AcceptingOrdersButton
 import StoreLayoutButton from '../../../shared_layout_components/StoreLayoutButton';
 import { useStoreButtonClickHandler } from '../../../extras/buttons/useStoreButtonClickHandler';
 import StoreTextTag from '../../../extras/text/StoreTextTag';
+import StoreDivTag from '../../../shared_layout_components/StoreDivTag';
 
 const PopularFeaturedProductsSection = () => {
+  const swiperRef = useRef<SwiperRef | null>(null);
   const config = useAppSelector((state) => state.layoutSettings.sections.featuredProducts);
   const allProducts = useAppSelector((state) => state.products.products);
   const store = useAppSelector((state) => state.stores.currentStore);
-  const colors = useAppSelector((state) => state.layoutSettings.colors);
+  const { fonts, colors } = useAppSelector((state) => state.layoutSettings);
   const navigate = useNavigate();
   const handleButtonClick = useStoreButtonClickHandler();
   const routes = useAppSelector((state) => state.layoutSettings.routes);
@@ -72,37 +77,47 @@ const PopularFeaturedProductsSection = () => {
       {config.acceptingOrdersButton?.show && (
         <div className={`w-full flex flex-col justify-center 
           ${config.acceptingOrdersButton.position === "center" && "items-center"}
-          ${config.acceptingOrdersButton.position === "end" && "items-end"}
+          ${config.acceptingOrdersButton.position === "end" && "items-end "}
           ${config.acceptingOrdersButton.position === "start" && "items-start"}
-          mb-2 py-[1vh]`}>
+          mb-2 p-[1vh]`}>
           <AcceptingOrdersButton operationTimes={store?.operationTimes} manualStatus={store?.manualStatus} style={config.acceptingOrdersButton} />
       </div>
       )}
       {config.pickupOrDelivery?.show && (
-        <div
-          style={{
-            ...getBackgroundStyles(config.pickupOrDelivery.background, colors),
-            padding: "0px"
-          }} 
-          className="flex w-[80%] lg:w-[30%] border overflow-hidden mb-10 lg:mb-15">
-          {/* Pickup */}
-          <div 
-            style={{
-              ...getBackgroundStyles(config.pickupOrDelivery.background, colors),
-              border: "none",
-              borderRight: `${config.pickupOrDelivery.background.border.width} ${config.pickupOrDelivery.background.border.style} ${colors[config.pickupOrDelivery.background.border.color as keyof typeof colors]}`,
-              width: "50%",
-              borderRadius: "0px",
-            }} className="w-1/2 text-center bg-blue-100">Pickup</div>
-          {/* Deliver */}
-          <div
-            style={{
-                ...getBackgroundStyles(config.pickupOrDelivery.background, colors),
-                border: "none",
-                borderLeft: `${config.pickupOrDelivery.background.border.width} ${config.pickupOrDelivery.background.border.style} ${colors[config.pickupOrDelivery.background.border.color as keyof typeof colors]}`,
-                width: "50%",
-                borderRadius: "0px",
-            }} className="w-1/2 text-center">Deliver</div>
+        <div className={`w-full flex flex-col justify-center 
+          ${config.pickupOrDelivery.position === "center" && "items-center"}
+          ${config.pickupOrDelivery.position === "end" && "items-end"}
+          ${config.pickupOrDelivery.position === "start" && "items-start"}
+        mb-2`}>
+          <StoreDivTag
+            style={{...config.pickupOrDelivery.background, padding: { x: "0px", y: "0px"}}}
+            jsx={
+              <div
+                style={{
+                  padding: "0px",
+                }} 
+                className="flex">
+                {/* Pickup */}
+                <div 
+                  style={{
+                    ...getTextStyles(config.pickupOrDelivery, fonts, colors),
+                    border: "none",
+                    borderRight: `${config.pickupOrDelivery.background.border.width} ${config.pickupOrDelivery.background.border.style} ${colors[config.pickupOrDelivery.background.border.color as keyof typeof colors]}`,
+                    width: "50%",
+                    borderRadius: "0px",
+                  }} className="w-1/2 h-full text-center bg-blue-100">Pickup</div>
+                {/* Deliver */}
+                <div
+                  style={{
+                      ...getTextStyles(config.pickupOrDelivery, fonts, colors),
+                      border: "none",
+                      borderLeft: `${config.pickupOrDelivery.background.border.width} ${config.pickupOrDelivery.background.border.style} ${colors[config.pickupOrDelivery.background.border.color as keyof typeof colors]}`,
+                      width: "50%",
+                      borderRadius: "0px",
+                  }} className="w-1/2 h-full text-center">Deliver</div>
+              </div>
+            }
+          />
         </div>
       )}
 
@@ -128,13 +143,17 @@ const PopularFeaturedProductsSection = () => {
           className="w-full pl-2 h-fit border-y-2"
         >
           <Swiper
+            ref={swiperRef}
             modules={[Pagination, Navigation, Autoplay]}
             slidesPerView={visibleCount + (isMobile ? (config.grid.swiperOffset?.mobile ?? 0) : (config.grid.swiperOffset?.desktop ?? 0))}
-            centeredSlides={true}
+            centeredSlides={false}
             spaceBetween={parseFloat(getResponsiveDimension(config.grid.gap))}
             grabCursor={true}
             pagination={true}
-            navigation={false}
+            navigation={{
+              prevEl: '.swiper-button-prev',
+              nextEl: '.swiper-button-next',
+            }}
             autoplay={{
               delay: 4000, 
               disableOnInteraction: false, 
@@ -158,6 +177,25 @@ const PopularFeaturedProductsSection = () => {
               </SwiperSlide>
             ))}
           </Swiper>
+          {/* Custom Navigation Buttons */}
+          <div className="absolute bg-amber-700 bottom-0 right-0 flex items-center gap-1 z-20 font-semibold">
+            <button 
+              onClick={() => swiperRef.current?.swiper.slidePrev()}
+              className="flex items-center px-2 py-1 text-sm"
+            >
+              <MdArrowBackIos />
+              <p className="mb-[.1vh]">Prev</p>
+            </button>
+            <div style={{backgroundColor: colors[config.text.heading.color as keyof typeof colors]}} className="h-5 w-[.2vh]"></div>
+            <button 
+              onClick={() => swiperRef.current?.swiper.slideNext()}
+              className="flex items-center px-2 py-1 text-sm"
+            >
+             
+             <p className="mb-[.15vh]">Next</p>
+             <MdArrowForwardIos />
+            </button>
+          </div>
         </div>
       ) : (
         // Vertical Grid
@@ -199,17 +237,24 @@ const PopularFeaturedProductsSection = () => {
         </div>
       )}
       {/* View More Button (na) */}
-      <StoreLayoutButton
-        onClick={() =>
-            handleButtonClick({
-                type: "shop",
-                routes,
-                storeSlug: store?.slug ?? '',
-                contactNumber: store?.contact?.phone,
-            })
-        }
-        style={config.viewMoreButton || {}}
-      />
+      <div className={`flex
+        ${config.showMoreButton?.background.placement.position === "center" && "justify-center"}
+        ${config.showMoreButton?.background.placement.position === "start" && "justify-start"}
+        ${config.showMoreButton?.background.placement.position === "end" && "justify-end"}
+        mt-5 w-full
+        `}>
+          <StoreLayoutButton
+            onClick={() =>
+                handleButtonClick({
+                    type: "shop",
+                    routes,
+                    storeSlug: store?.slug ?? '',
+                    contactNumber: store?.contact?.phone,
+                })
+            }
+            style={config.showMoreButton || {}}
+          />
+        </div>
     </div>
   );
 };

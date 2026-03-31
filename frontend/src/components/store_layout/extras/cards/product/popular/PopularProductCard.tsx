@@ -7,6 +7,7 @@ import { SlArrowDown, SlArrowUp } from 'react-icons/sl';
 import { IoIosHeart, IoIosHeartEmpty } from 'react-icons/io';
 import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
 import { addToCart } from '../../../../../../features/cart/cartSlice';
+import StoreTextTag from '../../../text/StoreTextTag';
 
 interface PriceVariation {
   variation: string;
@@ -65,7 +66,7 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
     <div 
       onClick={() => {}}
       style={{
-        ...getBackgroundStyles(style.background),
+        ...getBackgroundStyles(style.background, colors),
       }}
       className={`flex group w-full h-fit
           ${style.stack.mobile === "column" ? "flex-col" : "flex-row" }
@@ -75,7 +76,7 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
       {/* Image */}
       <div 
         style={{
-          ...getBackgroundStyles(style.image)
+          ...getBackgroundStyles(style.image, colors),
         }}
         onClick={onClick}
         className='overflow-hidden relative'
@@ -88,8 +89,8 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
         {marking && (
           <button
             style={{
-              ...getTextStyles(style.markingButton.text),
-              ...getBackgroundStyles(style.markingButton.background)
+              ...getTextStyles(style.markingButton.text, fonts, colors),
+              ...getBackgroundStyles(style.markingButton.background, colors),
             }} 
             className="absolute top-[.5vh] left-[.5vh] bg-black text-white"
           >
@@ -118,27 +119,18 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
       {/* Text and button */}
       <div
         style={{
-          ...getBackgroundStyles(calculateTextDimensions(style.stack, style.image)),
-          ...getBackgroundStyles(style.textAndButton.background),
+          ...getBackgroundStyles(calculateTextDimensions(style.stack, style.image), colors),
+          ...getBackgroundStyles(style.textAndButton.background, colors),
+          height: "fit-content",
+          
         }} 
-        className="px-[1.3vh] flex flex-col justify-between min-h-fit"
+        className="flex flex-col justify-between min-h-fit"
       >
         {/* Name */}
-        <UnderlinedText style={style.textAndButton.text.name} input={title}/>
+        <StoreTextTag style={style.textAndButton.text.name} input={title}/>
 
         {/* Price */}
-        <p 
-          style={{
-            ...getTextStyles(style.textAndButton.text)
-          }} 
-          className={`
-            ${style.textAndButton.text.position === "center" && "text-center"}
-            ${style.textAndButton.text.position === "start" && "text-start"}
-            ${style.textAndButton.text.position === "end" && "text-end"}
-          `}
-        >
-          {displayPrice()}
-        </p>
+        <StoreTextTag style={style.textAndButton.text} input={displayPrice()}/>
 
         {/* Button */}
         <div 

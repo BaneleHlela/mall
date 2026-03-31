@@ -35,6 +35,8 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, X, Plus } from 'lucide-react';
 import { fetchStoreProducts } from '../../../../../features/products/productsSlice';
+import StoreLayoutButton from '../../../../store_layout/shared_layout_components/StoreLayoutButton';
+import StoreLayoutButtonSettings from '../../../extras/StoreLayoutButtonSettings';
 
 interface ProductItem {
   _id: string;
@@ -233,6 +235,11 @@ const PopularFeaturedProductsSectionSettings: React.FC<SectionEditorProps> = ({
               selectedIds={selectedProductIds}
               onToggle={handleProductToggle}
             />
+            {/* Product Selector - NEW */}
+            <FirstOrderSubSettingsContainer
+                name="Selected Products"
+                onClick={() => setActivePanel("productSelector")}
+            />
 
             {/* Background Settings */}
             <SubSettingsContainer
@@ -243,7 +250,7 @@ const PopularFeaturedProductsSectionSettings: React.FC<SectionEditorProps> = ({
                             objectPath={`${objectPath}.background`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={["width", "color", "padding",]}
+                            allow={["width", "color", "padding", "placement"]}
                             widthUnit="%"
                             responsiveSize
                             responsivePadding
@@ -256,7 +263,7 @@ const PopularFeaturedProductsSectionSettings: React.FC<SectionEditorProps> = ({
                 name="Text"
                 onClick={() => setActivePanel("Text")}
             />
-            <FirstOrderSubSettingsContainer
+            {/* <FirstOrderSubSettingsContainer
                 name="Category Selector"
                 onClick={() => setActivePanel("categorySelector")}
             />
@@ -267,7 +274,7 @@ const PopularFeaturedProductsSectionSettings: React.FC<SectionEditorProps> = ({
             <FirstOrderSubSettingsContainer
                 name="Pickup or Delivery"
                 onClick={() => setActivePanel("pickupOrDelivery")}
-            />
+            /> */}
             
             {/* Text */}
             <FirstOrderSubSettingsContainer
@@ -275,11 +282,12 @@ const PopularFeaturedProductsSectionSettings: React.FC<SectionEditorProps> = ({
                 onClick={() => setActivePanel("cards")}
             />
             
-            {/* Product Selector - NEW */}
-            <FirstOrderSubSettingsContainer
-                name="Featured Products"
-                onClick={() => setActivePanel("productSelector")}
+            {/* Show More Button */}
+             <FirstOrderSubSettingsContainer
+                name="Show More Button"
+                onClick={() => setActivePanel("show_more_button")}
             />
+            
 
             <AnimatePresence>
                 {activePanel === "Text" && (
@@ -548,6 +556,16 @@ const PopularFeaturedProductsSectionSettings: React.FC<SectionEditorProps> = ({
                         </div>
                     </SlidingPanel>
                 )}
+                {activePanel === "show_more_button" && (
+                    <SlidingPanel key="show_more_button" isOpen={true} onClose={closePanel} title="Show More Button Settings">
+                        <StoreLayoutButtonSettings
+                            objectPath={`${objectPath}.showMoreButton`}
+                            settings={settings}
+                            responsiveBackground
+                        />
+                    </SlidingPanel>
+                )}
+
             </AnimatePresence>
         </div>
     )

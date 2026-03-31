@@ -392,6 +392,26 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
                 }
               />
 
+              {/* Items Position X */}
+              {/* <OptionsToggler
+                label="Items Position X"
+                options={["start", "center", "end", "evenly"]}
+                value={getSetting("placement.itemsPosition.x", settings, objectPath) || "center"}
+                onChange={(newValue) =>
+                  handleSettingChange(`${objectPath}.placement.itemsPosition.x`, newValue)
+                }
+              /> */}
+
+              {/* Items Position Y */}
+              {/* <OptionsToggler
+                label="Items Position Y"
+                options={["start", "center", "end", "evenly"]}
+                value={getSetting("placement.itemsPosition.y", settings, objectPath) || "center"}
+                onChange={(newValue) =>
+                  handleSettingChange(`${objectPath}.placement.itemsPosition.y`, newValue)
+                }
+              /> */}
+
               {/* Margin Top - Mobile & Desktop */}
               <h5 className="text-[1.4vh] font-medium text-stone-400">Margin Top</h5>
               <SettingsSlider

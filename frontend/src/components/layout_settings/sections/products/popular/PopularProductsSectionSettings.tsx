@@ -92,12 +92,21 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                 {activePanel === "heading" && (
                     <SlidingPanel key="heading" isOpen={true} onClose={() => setActivePanel("Text")} title="Heading Settings">
                         <div className="space-y-[.3vh]">
-                            <UnderlinedTextSettings
+                            {/* <UnderlinedTextSettings
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
                                 objectPath={`${objectPath}.text.heading`}
                                 allowInput
                                 responsiveSize
+                            /> */}
+                            <TextEditor
+                                objectPath={`${objectPath}.text.heading`}
+                                settings={settings}
+                                handleSettingChange={handleSettingChange}
+                                allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
+                                responsiveSize
+                                useTextarea
+                                responsivePadding
                             />
                         </div>
                     </SlidingPanel>

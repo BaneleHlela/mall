@@ -62,7 +62,7 @@ const ArtMenubarSettings = () => {
                                     responsivePadding
                                     responsiveSize
                                     widthUnit='%'
-                                    allow={["color", "shadow", "width", "height", "padding", "border", "opacity"]}
+                                    allow={["color", "shadow", "width", "height", "padding", "border", "opacity", "placement"]}
                                 />
                             }
                         />

@@ -1,4 +1,6 @@
+import React, { useRef } from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
+import { Swiper, SwiperSlide, type SwiperRef } from "swiper/react";
 import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../../../../../utils/stylingFunctions';
 import { getGridColumnClasses } from '../../gallery/gallery_with_grouped_images/SingleGroupImages';
 import CategorySelector from '../../../extras/category_selector/CategorySelector';
@@ -6,14 +8,17 @@ import PopularProductCard from '../../../extras/cards/product/popular/PopularPro
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import UnderlinedText from '../../../extras/text/UnderlinedText';
-import { Swiper, SwiperSlide } from "swiper/react";
+
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import AcceptingOrdersButton from '../../../extras/buttons/AcceptingOrdersButton';
+import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
+import StoreTextTag from '../../../extras/text/StoreTextTag';
 
 const PopularProductsSection = () => {
+  const swiperRef = useRef<SwiperRef | null>(null);
   const settings = useAppSelector((state) => state.layoutSettings.sections.products);
   const products = useAppSelector((state) => state.products.products);
   const store = useAppSelector((state) => state.stores.currentStore);
@@ -49,10 +54,10 @@ const PopularProductsSection = () => {
     >
       {/* Heading + Subheading */}
       <div className="w-full">
-        <UnderlinedText style={settings.text.heading} />
+        <StoreTextTag style={settings.text.heading} />
         
         {settings.text.subheading.input && (
-          <UnderlinedText style={settings.text.subheading} />
+          <StoreTextTag style={settings.text.subheading} />
         )}
       </div>
       {settings.acceptingOrdersButton?.show && (
@@ -114,6 +119,7 @@ const PopularProductsSection = () => {
           className="w-full pl-2 h-fit border-y-2"
         >
           <Swiper
+            ref={swiperRef}
             modules={[Pagination, Navigation, Autoplay]}
             slidesPerView={visibleCount}
             spaceBetween={parseFloat(getResponsiveDimension(settings.grid.gap))}
@@ -143,6 +149,25 @@ const PopularProductsSection = () => {
               </SwiperSlide>
             ))}
           </Swiper>
+          {/* Custom Navigation Buttons */}
+          <div className="absolute bottom-0 right-0 flex items-center gap-1 z-20 font-semibold">
+            <button 
+              onClick={() => swiperRef.current?.swiper.slidePrev()}
+              className="flex items-center px-2 py-1 text-sm"
+            >
+              <MdArrowBackIos />
+              <p className="mb-[.1vh]">Prev</p>
+            </button>
+            <div style={{backgroundColor: colors[settings.text.heading.color as keyof typeof colors]}} className="h-5 w-[.2vh]"></div>
+            <button 
+              onClick={() => swiperRef.current?.swiper.slideNext()}
+              className="flex items-center px-2 py-1 text-sm"
+            >
+             
+             <p className="mb-[.15vh]">Next</p>
+             <MdArrowForwardIos />
+            </button>
+          </div>
         </div>
       ) : (
         // Vertical Grid

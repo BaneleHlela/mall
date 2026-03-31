@@ -3,6 +3,7 @@ import SubSettingsContainer from '../../../extras/SubSettingsContainer';
 import OptionsToggler from '../../../supporting/OptionsToggler';
 import BackgroundEditor from '../../../background/BackgroundEditor';
 import { getSetting } from '../../../../../utils/helperFunctions';
+import TextEditor from '../../../text/TextEditor';
 
 interface PickupOrDeliverySettingsProps {
   settings: any;
@@ -43,17 +44,18 @@ const PickupOrDeliverySettings: React.FC<PickupOrDeliverySettingsProps> = ({
         }
       />
       <SubSettingsContainer
-        name="Font Family"
+        name="Text"
         SettingsComponent={
-          <div className="border-[.1vh] rounded-[.6vh] px-[.6vh]">
-            <select
-              value={getSetting("pickupOrDelivery.fontFamily", settings, objectPath)}
-              onChange={(e) => handleSettingChange(`${objectPath}.pickupOrDelivery.fontFamily`, e.target.value)}
-            >
-              <option value="primary">Primary</option>
-              <option value="secondary">Secondary</option>
-            </select>
-          </div>
+         <TextEditor
+            objectPath={`${objectPath}.pickupOrDelivery`}
+            settings={settings}
+            handleSettingChange={handleSettingChange}
+            allow={["fontFamily"]}
+            responsiveSize
+            useTextarea
+            responsivePadding
+        />
+
         }
       />
       <SubSettingsContainer
@@ -64,7 +66,7 @@ const PickupOrDeliverySettings: React.FC<PickupOrDeliverySettingsProps> = ({
               objectPath={`${objectPath}.pickupOrDelivery.background`}
               settings={settings}
               handleSettingChange={handleSettingChange}
-              allow={["width", "padding", "border"]}
+              allow={["width", "padding", "border", "height"]}
               widthUnit="%"
               responsiveSize
               responsivePadding
