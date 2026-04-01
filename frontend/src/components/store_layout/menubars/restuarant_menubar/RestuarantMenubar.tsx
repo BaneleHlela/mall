@@ -178,6 +178,7 @@ const RestuarantMenubar = () => {
                             className='px-[2vh] hover:underline hover:text-gray-800 min-h-fit flex flex-col justify-center'
                             style={{
                                 ...getTextStyles(layout.menubar.topbar.links.text, fonts, colors),
+                                ...getBackgroundStyles(layout.menubar.topbar.links.background || {}, colors),
                             }}
                         >
                             <Link to={to}>{label}</Link>

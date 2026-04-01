@@ -1,7 +1,8 @@
 // SimpleStoreImagesSlideshow.tsx
 
 import React, { useState, useEffect, useRef } from 'react';
-import { getBorderStyles } from '../../../../utils/stylingFunctions';
+import { getBackgroundStyles, getBorderStyles } from '../../../../utils/stylingFunctions';
+import { useAppSelector } from '../../../../app/hooks';
 
 export interface SlideshowProps {
   images: string[];
@@ -18,6 +19,7 @@ export interface SlideshowProps {
 }
 
 const SimpleStoreImagesSlider: React.FC<SlideshowProps> = ({ images, height = "50vh", width = "50vw", style }) => {
+  const colors = useAppSelector((state) => state.layoutSettings.colors);
   const [currentIndex, setCurrentIndex] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
 
@@ -51,7 +53,7 @@ const SimpleStoreImagesSlider: React.FC<SlideshowProps> = ({ images, height = "5
       style={{
         height: height,
         width: width,
-        ...getBorderStyles(style.border),
+        ...getBackgroundStyles(style || {}, colors),
       }}
       className="relative overflow-hidden"
     >

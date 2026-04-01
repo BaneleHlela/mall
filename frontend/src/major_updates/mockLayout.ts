@@ -327,122 +327,36 @@ export const mockLayout = {
     },
     sections: {
         hero: {
-            variation: "heroWithTwoTextAreas",
+            variation: "heroWithSlidingImages",
+            topMargin: "50px",
             background: {
-                height: {
-                    mobile: "fit-content",
-                    desktop: "fit-content"
-                },
-                width: {
-                    mobile: "100%",
-                    desktop: "100%"
-                },
-                color: "pent",
-                container: {
-                    color: "primary",
-                    width: {
-                        mobile: "100%",
-                        desktop: "100%"
-                    },
-                    height: {
-                        mobile: "39%",
-                        desktop: "101%"
-                    },
-                    padding: {
-                        y: {
-                            desktop: "2.6vh",
-                            mobile: "2.6vh"
-                        },
-                        x: {
-                            desktop: "2.4vh",
-                            mobile: "2.4vh"
-                        }
-                    }
+                color: "primary", 
+            }, 
+            images: [
+                "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100115.png",
+                "https://storage.cloud.google.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100136.png",
+                "https://storage.googleapis.com/the-mall-uploads-giza/stores/68493743d048e16019611f6f/images/Screenshot%202025-06-11%20100200.png" 
+            ],
+            smallSlider: {
+                variation: "stopAndGo",
+                margin: {
+                    mobile: "2px",
+                    desktop: "5px"
                 },
                 border: {
-                    width: "0vh",
-                    style: "none",
-                    radius: "0vh"
+                    width: "5px",
+                    style: "solid",
+                    color: "white",
+                    radius: "0",
                 }
             },
-            text: {
-                firstArea: {
-                    input: "Welcome to Our Store",
-                    fontFamily: "secondary",
-                    color: "secondary",
-                    fontSize: {
-                        mobile: "5.100000000000001vh",
-                        desktop: "7vh"
-                    },
-                    weight: "normal"	
-                },
-                secondArea: {
-                    input: "Discover amazing products and great deals. Shop now and enjoy exclusive offers!",
-                    fontFamily: "secondary",
-                    color: "secondary",
-                    fontSize: {
-                        mobile: "3.8000000000000016vh",
-                        desktop: "5.2vh"
-                    },
-                    weight: "normal"	
+            largeSlider: {
+                border: {
+                    width: "0px",
+                    style: "solid",
+                    color: "white",
+                    radius: "0",
                 }
-            },
-            image: {
-                url: {
-                    mobile: [
-                        "https://storage.googleapis.com/the-mall-uploads-giza/stores/6895c4d6a50d393f431b9d47/images/522961668_2800125136849645_1163671612854122411_n.jpg",
-                        "https://storage.googleapis.com/the-mall-uploads-giza/stores/6895c4d6a50d393f431b9d47/images/CarrotCakeLoaf_03.jpg"
-                    ],
-                    desktop: [
-                        "https://storage.googleapis.com/the-mall-uploads-giza/stores/6895c4d6a50d393f431b9d47/images/522961668_2800125136849645_1163671612854122411_n.jpg",
-                        "https://storage.googleapis.com/the-mall-uploads-giza/stores/6895c4d6a50d393f431b9d47/images/CarrotCakeLoaf_03.jpg"
-                    ]
-                },
-                background: {
-                    height: {
-                        mobile: "50vh",
-                        desktop: "60vh",
-                    },
-                    width: { 
-                        mobile: "100%",
-                        desktop: "100%",
-                    },
-                    border: {
-                        width: "0px",
-                        style: "solid",
-                        radius: "0px",
-                    }
-                },
-            },
-            button: {
-                function: "buyNow",
-                show: true,
-                style: {
-                    text: {
-                        input: "Buy Now",
-                        fontFamily: "secondary",
-                        color: "primary",
-                        fontSize: "1.2em",
-                        fontWeight: "bold",
-                        letterSpacing: "0px"
-                    },
-                    background: {
-                        width: "190px",
-                        color: "accent",
-                        shadow: true,
-                        border: {
-                        width: "3px",
-                        style: "solid",
-                        color: "primary",
-                        radius: "0px"
-                        }
-                    }
-                },
-                position: "center"
-            },
-            imageFirst: {
-                desktop: false,
-                mobile: false
             }
         },                                 
         about: {

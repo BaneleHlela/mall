@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import StoreMenubarCart from "../shared_menubar_components/StoreMenubarCart";
 import StoreMenubarHeart from "../shared_menubar_components/StoreMenubarHeart";
 import StoreMenubarLogo from "../shared_menubar_components/StoreMenubarLogo";
@@ -16,6 +16,7 @@ import { getBackgroundStyles, getTextStyles } from "../../../../utils/stylingFun
 
 const MenubarWithSearchbar = () => {
   const layout = useAppSelector((state) => state.layoutSettings); 
+  const config = useAppSelector((state) => state.layoutSettings.menubar);
   const { fonts, colors } = useAppSelector((state) => state.layoutSettings)   
   const scrollY = useMotionValue(0);
   const scrollDirection = useMotionValue("up");
@@ -109,7 +110,7 @@ const MenubarWithSearchbar = () => {
                             style={{
                                 input: {
                                     fontFamily: layout.fonts.primary,
-                                    backgroundColor: layout.colors.primary,
+                                    backgroundColor: config.topbar.background.color,
                                     border: {
                                         width: layout.menubar.topbar.search.border.width,
                                         style: layout.menubar.topbar.search.border.style,
@@ -119,7 +120,7 @@ const MenubarWithSearchbar = () => {
                                 },
                                 overlay: {
                                     color: layout.colors.secondary,
-                                    backgroundColor: layout.colors.primary,
+                                    backgroundColor: config.topbar.background.color,
                                     button: {
                                         backgroundColor: layout.colors.accent,
                                         color: layout.colors.primary,
@@ -129,7 +130,7 @@ const MenubarWithSearchbar = () => {
                         />
                     )}
                     {stackItem === 'heartLogo' && (
-                        <div className="flex items-center justify-between w-full h-full px-[.5vh]">
+                        <div className="flex items-center justify-between w-full h-full">
                             {layout.menubar.topbar.order.map((item: string) => (
                                 <div key={item} className="flex h-full items-center">
                                     {item === 'hamburger' && (
@@ -200,13 +201,14 @@ const MenubarWithSearchbar = () => {
                 <div 
                     className='w-full h-full flex flex-col items-start'
                 >
-                    <ul className="hidden lg:flex flex-row h-full justify-center items-center text-center capitalize space-x-0">
+                    <ul className="hidden lg:flex flex-row h-full justify-center items-center text-center capitalize space-x-1">
                         {links.map(({ to, label }) => (
                             <li
                                 key={label}
                                 className='px-[2vh] hover:underline hover:text-gray-800 min-h-fit flex flex-col justify-center line-clamp-1'
                                 style={{
                                     ...getTextStyles(layout.menubar.topbar.desktop.links, fonts, colors),
+                                    ...getBackgroundStyles(layout.menubar.topbar.desktop.links.background || {}, colors),
                                 }}
                             >
                                 <Link to={to}>{label}</Link>
@@ -241,7 +243,7 @@ const MenubarWithSearchbar = () => {
                     style={{
                         input: {
                             fontFamily: layout.fonts.primary,
-                            backgroundColor: layout.colors.primary,
+                            backgroundColor: config.topbar.background.color,
                             border: {
                                 width: layout.menubar.topbar.search.border.width,
                                 style: layout.menubar.topbar.search.border.style,
@@ -251,7 +253,7 @@ const MenubarWithSearchbar = () => {
                         },
                         overlay: {
                             color: layout.colors.secondary,
-                            backgroundColor: layout.colors.primary,
+                            backgroundColor: config.topbar.background.color,
                             button: {
                                 backgroundColor: layout.colors.accent,
                                 color: layout.colors.primary,

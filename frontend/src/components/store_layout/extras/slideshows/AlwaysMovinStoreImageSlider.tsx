@@ -1,6 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import { getBorderStyles } from "../../../../utils/stylingFunctions";
 import type { Border } from "../../../../types/layoutTypes";
+import type { BackgroundSettings } from "../../../../types/layoutSettingsType";
+import { useAppSelector } from "../../../../app/hooks";
 
 interface ImageSliderProps {
   images: string[];
@@ -8,6 +10,7 @@ interface ImageSliderProps {
   height: string;
   margin:string;
   border: Border;
+  background?: BackgroundSettings;
 }
 
 const AlwaysMovingImageSlider: React.FC<ImageSliderProps> = ({
@@ -18,6 +21,7 @@ const AlwaysMovingImageSlider: React.FC<ImageSliderProps> = ({
   border = {width: "5px", color: "solid", style: "white", radius: "0"}
 }) => {
   const trackRef = useRef<HTMLDivElement>(null);
+  const colors = useAppSelector((state) => state.layoutSettings.colors);
   
   useEffect(() => {
     const track = trackRef.current;
@@ -49,7 +53,7 @@ const AlwaysMovingImageSlider: React.FC<ImageSliderProps> = ({
             src={src}
             alt={`Slide ${idx}`}
             style={{ 
-              ...getBorderStyles(border),
+              ...getBorderStyles(border, colors),
               width, height, margin: margin 
             }}
             className="m-1 h-auto object-cover flex-shrink-0 border-4 border-white"

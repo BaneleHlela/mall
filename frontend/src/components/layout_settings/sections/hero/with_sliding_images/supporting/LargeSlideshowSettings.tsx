@@ -7,7 +7,7 @@ interface LargeSliderSettingsProps {
 }
 
 const LargeSliderSettings: React.FC<LargeSliderSettingsProps> = ({ settings, handleSettingChange }) => {
-    const objectPath = "hero.largeSlider";
+    const objectPath = "sections.hero.largeSlider";
 
     return (
         <div className="space-y-4">
@@ -17,7 +17,11 @@ const LargeSliderSettings: React.FC<LargeSliderSettingsProps> = ({ settings, han
                     settings={settings}
                     handleSettingChange={handleSettingChange}
                     objectPath={`${objectPath}`}
-                    allow={["border"]}
+                    allow={["border", "shadow", "height", "width", "margin", "padding", "opacity", "color"]}
+                    responsivePadding
+                    responsiveSize
+                    widthUnit='%'
+                    heightUnit='%'
                 />
             </div>
         </div>

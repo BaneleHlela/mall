@@ -10,7 +10,7 @@ interface SmallSliderSettingsProps {
 }
 
 const SmallSliderSettings: React.FC<SmallSliderSettingsProps> = ({ settings, handleSettingChange }) => {
-    const objectPath = "hero.smallSlider";
+    const objectPath = "sections.hero.smallSlider";
 
     const handleChange = (field: string) => (value: any) => {
         handleSettingChange(`${objectPath}.${field}`, value);

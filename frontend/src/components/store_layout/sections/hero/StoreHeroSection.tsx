@@ -1,6 +1,5 @@
 import { useAppSelector } from '../../../../app/hooks';
 import HeroWithImagePatternAndBox from './hero_with_pattern_image_and_box/HeroWithImagePatternAndBox';
-import HeroWithSlidingImages from './second/HeroWithSlidingImages';
 import HeroWithButtonBetweenImagesSection from './hero_with_button_between_images/HeroWithButtonBetweenImages';
 import HeroWithButtonImageAndText from './hero_with_button_image_and_text/HeroWithButtonImageAndText';
 import HeroWithReviewCardAndEmailForm from './with_review_card_and_email_form/HeroWithReviewCardAndEmailForm';
@@ -8,6 +7,7 @@ import HeroWithBox from './hero_with_box/HeroWithBox';
 import HeroWithDivAndImage from './hero_with_div_and_image/HeroWithDivAndImage';
 import StylishHero from './styling_hero/StylishHero';
 import HeroWithTwoTextAreas from './hero_with_two_text_areas/HeroWithTwoTextAreas';
+import HeroWithSlidingImages from './hero_with_sliding_imaegs/HeroWithSlidingImages';
 
 const StoreHeroSection = () => {
   const variation = useAppSelector(
@@ -33,7 +33,7 @@ const StoreHeroSection = () => {
     case 'heroWithDivAndImage':
       return <HeroWithDivAndImage />;
 
-    case 'firstHero':
+    case "heroWithSlidingImages":
       return <HeroWithSlidingImages />;
 
     case 'heroWithButtonImageAndText':

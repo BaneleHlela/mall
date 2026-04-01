@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import type { Border } from "../../../../types/layoutTypes";
-import { getBorderStyles } from "../../../../utils/stylingFunctions";
+import { getBackgroundStyles, getBorderStyles } from "../../../../utils/stylingFunctions";
+import { useAppSelector } from "../../../../app/hooks";
 
 interface ImageSliderProps {
   images: string[];
@@ -21,7 +22,7 @@ const StopAndGoImageSlider: React.FC<ImageSliderProps> = ({
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const [replicatedImages, setReplicatedImages] = useState([...images, ...images, ...images]); // Initialize with the original images
   const sliderRef = useRef<HTMLDivElement>(null);
-
+  const { colors } = useAppSelector((state) => state.layoutSettings);
   const imageWidthPx = parseInt("100");
 
   useEffect(() => {
@@ -79,7 +80,7 @@ const StopAndGoImageSlider: React.FC<ImageSliderProps> = ({
             src={src}
             alt={`Slide ${idx}`}
             style={{ 
-              ...getBorderStyles(border),
+              ...getBackgroundStyles(border, colors),
               width, height, margin: margin 
             }}
             className="h-auto object-cover flex-shrink-0"

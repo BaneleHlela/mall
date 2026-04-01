@@ -26,6 +26,19 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
 }) => {
   const isAllowed = (key: string) => !allow || allow.includes(key);
 
+  // Helper function to check if a value is in ResponsiveValue format
+  const isResponsiveValue = (value: any): boolean => {
+    return value && typeof value === 'object' && 'mobile' in value && 'desktop' in value;
+  };
+
+  // Helper function to convert a plain string value to ResponsiveValue format
+  const convertToResponsiveValue = (value: any): { mobile: string; desktop: string } => {
+    if (typeof value === 'string') {
+      return { mobile: value, desktop: value };
+    }
+    return value;
+  };
+
   useEffect(() => {
     if (responsivePadding) {
       const currentPadding = getSetting("padding", settings, objectPath);
@@ -38,6 +51,22 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
       }
     }
   }, [responsivePadding, settings, objectPath, handleSettingChange]);
+
+  // Auto-convert string values to ResponsiveValue format when responsiveSize is enabled
+  useEffect(() => {
+    if (responsiveSize) {
+      // Convert height if it's a string
+      const height = getSetting("height", settings, objectPath);
+      if (height && typeof height === 'string') {
+        handleSettingChange(`${objectPath}.height`, { mobile: height, desktop: height });
+      }
+      // Convert width if it's a string
+      const width = getSetting("width", settings, objectPath);
+      if (width && typeof width === 'string') {
+        handleSettingChange(`${objectPath}.width`, { mobile: width, desktop: width });
+      }
+    }
+  }, [responsiveSize, settings, objectPath, handleSettingChange]);
 
   const handleChange =
     (field: string) =>
@@ -186,6 +215,14 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
           <h4 className="text-[1.5vh] font-semibold text-stone-500 uppercase tracking-wide">Height</h4>
           {responsiveSize ? (
             <>
+              {/* Auto-convert height to responsive format if it's a string */}
+              {(() => {
+                const height = getSetting("height", settings, objectPath);
+                if (height && typeof height === 'string') {
+                  handleSettingChange(`${objectPath}.height`, { mobile: height, desktop: height });
+                }
+                return null;
+              })()}
               <SettingsSlider
                 label="Mobile"
                 value={parseInt(getSetting("height.mobile", settings, objectPath) || "110")}
@@ -229,6 +266,14 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
           <h4 className="text-[1.5vh] font-semibold text-stone-500 uppercase tracking-wide">Width</h4>
           {responsiveSize ? (
             <>
+              {/* Auto-convert width to responsive format if it's a string */}
+              {(() => {
+                const width = getSetting("width", settings, objectPath);
+                if (width && typeof width === 'string') {
+                  handleSettingChange(`${objectPath}.width`, { mobile: width, desktop: width });
+                }
+                return null;
+              })()}
               <SettingsSlider
                 label="Mobile"
                 value={parseInt(getSetting("width.mobile", settings, objectPath) || "10")}

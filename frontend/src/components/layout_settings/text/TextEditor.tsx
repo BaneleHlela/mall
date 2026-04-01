@@ -23,6 +23,19 @@ const TextEditor: React.FC<EditorProps> = ({
 }) => {
     const isAllowed = (key: string) => !allow || allow.includes(key);
 
+    // Helper function to check if a value is in ResponsiveValue format
+    const isResponsiveValue = (value: any): boolean => {
+        return value && typeof value === 'object' && 'mobile' in value && 'desktop' in value;
+    };
+
+    // Helper function to convert a plain string value to ResponsiveValue format
+    const convertToResponsiveValue = (value: any): { mobile: string; desktop: string } => {
+        if (typeof value === 'string') {
+            return { mobile: value, desktop: value };
+        }
+        return value;
+    };
+
     useEffect(() => {
         if (responsivePadding) {
             const currentPadding = getSetting("padding", settings, objectPath);
@@ -35,6 +48,16 @@ const TextEditor: React.FC<EditorProps> = ({
             }
         }
     }, [responsivePadding, settings, objectPath, handleSettingChange]);
+
+    // Auto-convert string values to ResponsiveValue format when responsiveSize is enabled
+    useEffect(() => {
+        if (responsiveSize) {
+            const textMaxWidth = getSetting("textMaxWidth", settings, objectPath);
+            if (textMaxWidth && typeof textMaxWidth === 'string') {
+                handleSettingChange(`${objectPath}.textMaxWidth`, { mobile: textMaxWidth, desktop: textMaxWidth });
+            }
+        }
+    }, [responsiveSize, settings, objectPath, handleSettingChange]);
 
 
     const handleChange =
@@ -264,6 +287,14 @@ const TextEditor: React.FC<EditorProps> = ({
               <h4 className="text-[1.6vh] font-semibold text-stone-500 uppercase tracking-wide">Font Size</h4>
               {responsiveSize ? (
                 <>
+                  {/* Auto-convert fontSize to responsive format if it's a string */}
+                  {(() => {
+                    const fontSize = getSetting("fontSize", settings, objectPath);
+                    if (fontSize && typeof fontSize === 'string') {
+                      handleSettingChange(`${objectPath}.fontSize`, { mobile: fontSize, desktop: fontSize });
+                    }
+                    return null;
+                  })()}
                   <SettingsSlider
                     label="Mobile"
                     value={parseFloat(getSetting("fontSize.mobile", settings, objectPath) || '2.1')}

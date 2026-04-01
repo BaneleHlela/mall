@@ -3,7 +3,6 @@ import { updateSetting } from "../../../../features/layouts/layoutSettingsSlice"
 import FirstHeroSettings from "./first/FirstHeroSettings"
 import HeroWithButtonBetweenImagesSettings from "./with_button_between_images/HeroWithButtonBetweenImagesSettings";
 import HeroWithImagePatternAndBoxSettings from "./with_image_pattern_and_box/HeroWithImagePatternAndBoxSettings";
-import HeroWithSlidingImages from "./with_sliding_images/HeroWithSlidingImagesSettings";
 import HeroWithButtonImageAndTextSettings from "./with_button_image_and_text/HeroWithButtonImageAndTextSettings";
 import HeroWithReviewCardAndEmailFormSettings from "./with_review_card_and_email_form/HeroWithReviewCardAndEmailFormSettings";
 import HeroWithBoxSettings from "./hero_with_box/HeroWithBoxSettings";
@@ -11,6 +10,7 @@ import HeroWithDivAndImageSettings from "./hero_with_div_and_image/HeroWithDivAn
 import StylishHero from "../../../store_layout/sections/hero/styling_hero/StylishHero";
 import StylishHeroSettings from "./stylish_hero/StylishHeroSettings";
 import HeroWithTwoTextAreasSettings from "./hero_with_two_text_areas/HeroWithTwoTextAreasSettings";
+import HeroWithSlidingImagesSettings from "./with_sliding_images/HeroWithSlidingImagesSettings";
 
 export const handleAddSectionToLinks = (
   dispatch: any,
@@ -61,7 +61,7 @@ const HeroSettings = () => {
       );
 
     case "heroWithSlidingImages":
-      return <HeroWithSlidingImages />;
+      return <HeroWithSlidingImagesSettings />;
 
     case "heroWithButtonBetweenImages":
       return (

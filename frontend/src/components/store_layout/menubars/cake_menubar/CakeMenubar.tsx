@@ -192,6 +192,7 @@ const CakeMenubar = () => {
                                 className='px-[2vh] hover:underline hover:text-gray-800 min-h-fit flex flex-col justify-center line-clamp-1'
                                 style={{
                                     ...getTextStyles(layout.menubar.topbar.desktop.links, fonts, colors),
+                                    ...getBackgroundStyles(layout.menubar.topbar.desktop.links.background || {}, colors),
                                 }}
                             >
                                 <Link to={to}>{label}</Link>
