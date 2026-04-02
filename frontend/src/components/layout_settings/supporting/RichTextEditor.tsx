@@ -302,7 +302,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         {/* Editor */}
         <EditorContent
           editor={editor}
-          className="prose max-w-none p-3 min-h-[200px] focus:outline-none  text-shadow-xs"
+          className="prose max-w-none p-3 min-h-[50px] focus:outline-none  text-shadow-xs"
         />
       </div>
     </div>

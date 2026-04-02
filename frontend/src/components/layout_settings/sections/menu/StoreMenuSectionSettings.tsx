@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks'
 import PopularStoreMenuSectionSettings from './popular/PopularStoreMenuSectionSettings';
 import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice';

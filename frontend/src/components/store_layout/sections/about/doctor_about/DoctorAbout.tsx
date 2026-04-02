@@ -4,10 +4,12 @@ import { mockLayout } from '../../../../../major_updates/mockLayout';
 import { getBackgroundStyles, getTextStyles } from '../../../../../utils/stylingFunctions';
 import StoreLayoutButton from '../../../shared_layout_components/StoreLayoutButton';
 import { useStoreButtonClickHandler } from '../../../extras/buttons/useStoreButtonClickHandler';
+import StoreTextTag from '../../../extras/text/StoreTextTag';
 
 const DoctorAbout = () => {
     const { colors, fonts, routes } = useAppSelector(state => state.layoutSettings);
     const config = useAppSelector(state => state.layoutSettings.sections.about);
+    const store = useAppSelector(state => state.stores.currentStore);
     const handleButtonClick = useStoreButtonClickHandler();
 
 
@@ -20,69 +22,71 @@ const DoctorAbout = () => {
         >
             {/* config */}
             <div className="flex flex-col items-center lg:space-y-[4vh] px-[2vh] justify-between lg:justify-center w-full h-[60%] lg:h-full lg:w-[50%] lg:px-[15vh]">
+                {/* First Text Section */}
                 <div className="text-center lg:text-start">
-                    <h2 
+                    {/* <h2 
                         style={{
                             ...getTextStyles(config.text.firstSection.header),
                         }}
                         className=""
                     >
                         {config.text.firstSection.header.input}
-                    </h2>
-                    <p 
+                    </h2> */}
+                    <StoreTextTag
+                        style={config.text.firstSection.header}
+                        input={config.text.firstSection.header.input}
+                    />
+                    <StoreTextTag
+                        style={config.text.firstSection.paragraph}
+                        input={config.text.firstSection.paragraph.input}
+                    />
+                    {/* <p 
                         style={{
                             ...getTextStyles(config.text.firstSection.paragraph),
                         }}
                         className=""
                     >
                         {config.text.firstSection.paragraph.input}
-                    </p>
+                    </p> */}
                 </div>
                 <div className="text-center lg:text-start">
-                    <h2 
+                    {/* <h2 
                         style={{
                             ...getTextStyles(config.text.secondSection.header),
                         }}
                         className="mt-[3vh]"
                     >
                         {config.text.secondSection.header.input}
-                    </h2>
-                    <p 
+                    </h2> */}
+                    <StoreTextTag
+                        style={config.text.secondSection.header}
+                        input={config.text.secondSection.header.input}
+                    />
+                    <StoreTextTag
+                        style={config.text.secondSection.details}
+                        input={config.text.secondSection.details.input}
+                    />
+                    {/* <p 
                         style={{
                             ...getTextStyles(config.text.secondSection.details),
                         }}
                         className=""
                     >
                         {config.text.secondSection.details.input}
-                    </p>
+                    </p> */}
                 </div>
                 <div className="my-[2vh] lg:my-0">
                     {/* Button */}
                     <StoreLayoutButton 
-                        onClick={() => //@ts-ignore
-                            handleButtonClick({ //@ts-ignore
-                                type: 'buy', //@ts-ignore
-                                routes: routes, //@ts-ignore-next-line
-                                contactNumber: store?.contact.phone, //@ts-ignore
+                        onClick={() => 
+                            handleButtonClick({ 
+                                type: config.button.type, 
+                                routes: routes, 
+                                contactNumber: store?.contact.phone, 
+                                storeSlug: store?.slug || '',
                             })
                         }
-                        style={{
-                            text: {
-                                color: colors.primary,
-                                input: config.button.text.input,
-                            },
-                            background: {
-                                color: colors.accent,
-                                padding: config.button.background.padding,
-                                width: config.button.background.width,
-                                border: {
-                                    width: config.button.background.border.width,
-                                    style: config.button.background.border.style,
-                                    color: colors.secondary,
-                                    radius: config.button.background.border.radius,
-                                },
-                            },
-                        }}
+                        style={config.button}
                     />
                 </div>
             </div>

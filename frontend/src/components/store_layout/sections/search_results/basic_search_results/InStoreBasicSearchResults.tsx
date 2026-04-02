@@ -3,12 +3,15 @@ import StoreSearchResultsFilters from '../shared_search_results_components/Store
 import BasicSearchProductCard from '../shared_search_results_components/BasicSearchProductCard';
 import { mockLayout } from '../../../../../major_updates/mockLayout';
 import { SlArrowDown } from 'react-icons/sl';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../../../../app/hooks';
+import { updateSetting } from '../../../../../features/layouts/layoutSettingsSlice';
 import { getBackgroundStyles, getTextStyles } from '../../../../../utils/stylingFunctions';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const InStoreBasicSearchResults = () => {
+    const dispatch = useAppDispatch();
     const config = useAppSelector((state) => state.layoutSettings.sections.searchResults);
+    const layoutId = useAppSelector((state) => state.layoutSettings._id);
     const store = useAppSelector((state) => state.stores.currentStore);
     const products = useAppSelector((state) => state.products.products);
     const {colors, fonts} = useAppSelector((state) => state.layoutSettings);
@@ -58,6 +61,24 @@ const InStoreBasicSearchResults = () => {
             product.description.toLowerCase().includes(searchQuery.toLowerCase())
         )
         : products;
+
+    useEffect(() => {
+        if (!config) {
+            dispatch(updateSetting({
+                field: 'sections.searchResults',
+                value: mockLayout.sections.searchResults,
+            }));
+        }
+    }, [config, dispatch]);
+
+    if (!config) {
+        return (
+            <div className="flex items-center justify-center w-full min-h-[50vh]">
+                <span className="text-[2vh]">Loading...</span>
+            </div>
+        );
+    }
+
     return (
         <div style={{...getBackgroundStyles(config.background)}} className='flex flex-col w-full min-h-fit lg:w-[80%] px-[1vh] py-[3vh]'>
             {/* Searchbar */}
@@ -97,7 +118,7 @@ const InStoreBasicSearchResults = () => {
                     </div>
                 )}
                 {/* Results */}
-                <div className="w-full lg:w-3/4 p-[1vh] text-[2.2vh]">
+                <div className={`w-full ${hasCategories && "lg:w-3/4"} p-[1vh] text-[2.2vh]`}>
                     {/* Results for & Sort By */}
                     <div style={{...getTextStyles(config.sort.text)}} className="flex flex-col justify-center lg:flex-row lg:justify-between items-end lg:items-center w-full space-y-[1vh] text-[2.2vh]">
                         <p className="w-full text-center lg:w-fit">{filteredProducts.length} results found for "{searchQuery}"</p>

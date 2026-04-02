@@ -5,7 +5,6 @@ import StepBasic from './steps/StepBasic';
 import StepTrade from './steps/StepTrade';
 import StepBusinessHours from './steps/StepBusinessHours';
 import StepLocation from './steps/StepLocation';
-import StepAbout from './steps/StepAbout';
 import { LiaStoreSolid } from 'react-icons/lia';
 import StoreSuccessOverlay from '../StoreSuccessOverlay';
 import { createStore } from '../../../../features/stores/storeSlice';
@@ -17,15 +16,13 @@ import { useNavigate } from 'react-router-dom';
 import { IoClose, IoAlertCircle } from 'react-icons/io5';
 import { FaCheck } from 'react-icons/fa';
 
-const steps = [StepBasic, StepTrade, StepBusinessHours, StepLocation, StepDelivers, StepAbout, StepSocials];
+const steps = [StepBasic, StepTrade, StepBusinessHours, StepLocation, StepSocials];
 
 const stepTitles = [
   'Basic Details',
   'What You Sell',
   'Operating Hours',
   'Location',
-  'Delivery',
-  'About',
   'Socials'
 ];
 
@@ -44,7 +41,17 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
    const storeError = useAppSelector((state) => state.stores.error);
    const user = useAppSelector((state) => state.user.user);
    
-  const StepComponent = steps[step];
+   const hasProducts = form.trades.includes('products');
+   
+   const currentSteps = hasProducts 
+     ? [StepBasic, StepTrade, StepBusinessHours, StepLocation, StepDelivers, StepSocials]
+     : [StepBasic, StepTrade, StepBusinessHours, StepLocation, StepSocials];
+   
+   const currentStepTitles = hasProducts
+     ? ['Basic Details', 'What You Sell', 'Operating Hours', 'Location', 'Delivery', 'Socials']
+     : ['Basic Details', 'What You Sell', 'Operating Hours', 'Location', 'Socials'];
+   
+   const StepComponent = currentSteps[step];
 
   // Track which steps have been completed (have valid data)
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
@@ -183,11 +190,11 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
         {/* Progress Line Fill */}
         <div 
           className="absolute left-0 top-1/2 transform -translate-y-1/2 h-[.4vh] bg-indigo-600 rounded transition-all duration-300"
-          style={{ width: `${(step / (steps.length - 1)) * 100}%` }}
+          style={{ width: `${(step / (currentSteps.length - 1)) * 100}%` }}
         ></div>
         
         {/* Step Circles */}
-        {steps.map((_, index) => {
+        {currentSteps.map((_, index) => {
           const isCompleted = completedSteps.has(index) || index < step;
           const isCurrent = index === step;
           
@@ -216,7 +223,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
                 {isCompleted ? <FaCheck size={12} /> : index + 1}
               </button>
               <span className={`text-[1.4vh] mt-1 hidden sm:block ${isCurrent ? 'text-indigo-600 font-medium' : 'text-gray-500'}`}>
-                {stepTitles[index].split(' ')[0]}
+                {currentStepTitles[index].split(' ')[0]}
               </span>
             </div>
           );
@@ -243,8 +250,8 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
       
       {/* Current Step Title */}
       <div className="text-center mb-[1.2vh]">
-        <h2 className="text-lg font-semibold text-gray-800">{stepTitles[step]}</h2>
-        <p className="text-xs text-gray-500">Step {step + 1} of {steps.length}</p>
+        <h2 className="text-lg font-semibold text-gray-800">{currentStepTitles[step]}</h2>
+        <p className="text-xs text-gray-500">Step {step + 1} of {currentSteps.length}</p>
       </div>
 
       <AnimatePresence custom={direction} mode="wait">
@@ -296,7 +303,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
         
         {/* Step indicator dots for mobile */}
         <div className="flex sm:hidden gap-1">
-          {steps.map((_, index) => (
+          {currentSteps.map((_, index) => (
             <div 
               key={index} 
               className={`w-[.8vh] h-[.8vh] rounded-full transition-colors ${index === step ? 'bg-indigo-600' : index < step ? 'bg-indigo-300' : 'bg-gray-300'}`}
@@ -304,7 +311,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
           ))}
         </div>
         
-        {step === steps.length - 1 ? (
+        {step === currentSteps.length - 1 ? (
             <button
                 type="button"
                 onClick={handleSubmit} 
@@ -326,7 +333,7 @@ const CreateStoreFormInner: React.FC<CreateStoreFormInnerProps> = ({ isDemo = fa
               ) : (
             <button
                 onClick={handleNextStep}
-                disabled={step === steps.length - 1}
+                disabled={step === currentSteps.length - 1}
                 className="px-[2.2vh] py-[1vh] text-[1.8vh] font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-all hover:scale-105 disabled:bg-gray-400 disabled:hover:scale-100 flex items-center gap-2 shadow-md"
             >
                 Next

@@ -4,6 +4,7 @@ import AddToMenuBarToggler from '../../extras/AddToMenubarToggler';
 import HorizontalProductSettings from './horizontal_products/HorizontalProductSettings';
 import PopularProductsSectionSettings from './popular/PopularProductsSectionSettings';
 import ProductsWithVerySimpleCardSettings from './products_with_very_simple_card/ProductsWithVerySimpleCardSettings';
+import SectionPositionMover from '../../supporting/SectionPositionMover';
 
 const ProductsSectionSettings = () => {
     const dispatch = useAppDispatch();
@@ -17,6 +18,7 @@ const ProductsSectionSettings = () => {
     if ( variation === "productsSectionPopular") {
         return (
             <>
+                <SectionPositionMover section="products" />
                 <AddToMenuBarToggler section='products' />
                 <PopularProductsSectionSettings settings={settings} handleSettingChange={handleSettingChange}/>
             </>
@@ -26,6 +28,7 @@ const ProductsSectionSettings = () => {
     if (variation === "horizontalProducts") {
         return (
             <>
+                <SectionPositionMover section="products" />
                 <AddToMenuBarToggler section='products' />
                 <HorizontalProductSettings />
             </>
@@ -35,6 +38,7 @@ const ProductsSectionSettings = () => {
     if (variation === "productWithVerySimpleCard") {
         return (
             <>
+                <SectionPositionMover section="products" />
                 <AddToMenuBarToggler section='products' />
                 <ProductsWithVerySimpleCardSettings settings={settings} handleSettingChange={handleSettingChange}/>
             </>

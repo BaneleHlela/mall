@@ -128,9 +128,11 @@ const StoreMenubarSearchbar: React.FC<StoreMenubarSearchbarProps> = ({
         };
         if (isOverlayOpen) {
             document.addEventListener('mousedown', handleClickOutside);
+            document.body.style.overflow = 'hidden';
         }
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
+            document.body.style.overflow = '';
         };
     }, [isOverlayOpen]);
 

@@ -137,7 +137,7 @@ const ProductCardSettings: React.FC<SectionEditorProps> = ({
                   objectPath={`${objectPath}.textAndButton.text.name`}
                   settings={settings}
                   handleSettingChange={handleSettingChange}
-                  allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
+                  allow={["fontFamily", "animation", "weight", "textDecoration", "textTransform", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                   responsiveSize
                   useTextarea
                   responsivePadding

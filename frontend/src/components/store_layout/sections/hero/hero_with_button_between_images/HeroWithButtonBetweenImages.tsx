@@ -7,16 +7,19 @@ import {
 } from "../../../../../utils/stylingFunctions";
 import StoreLayoutButton from "../../../shared_layout_components/StoreLayoutButton";
 import UnderlinedText from "../../../extras/text/UnderlinedText";
+import StoreTextTag from "../../../extras/text/StoreTextTag";
+import { useStoreButtonClickHandler } from "../../../extras/buttons/useStoreButtonClickHandler";
 
 const HeroWithButtonBetweenImagesSection = () => {
   const store = useAppSelector((state) => state.stores.currentStore);
   const style = useAppSelector((state) => state.layoutSettings.sections.hero);
   const { colors, fonts }  = useAppSelector((state) => state.layoutSettings);
+  const handleButtonClick = useStoreButtonClickHandler;
 
   return (
     <div
       style={{
-        ...getBackgroundStyles(style.background),
+        ...getBackgroundStyles(style.background, colors),
         fontFamily: style.fontFamily,
       }} 
       className="w-full min-h-fit"
@@ -28,7 +31,7 @@ const HeroWithButtonBetweenImagesSection = () => {
         {/* Top div */}
         {style.topDiv.display && (
           <div style={{...getBackgroundStyles(style.topDiv.background, colors)}} className="bg-amber-600 h-[13%] w-full flex flex-col justify-center items-center text-center">
-            <UnderlinedText style={style.topDiv.text.style} 
+            <StoreTextTag style={style.topDiv.text.style} 
               input={style.topDiv.text.style.input?.trim() === ""
                 ? store?.name
                 : style.topDiv.text.style.input}
@@ -46,7 +49,7 @@ const HeroWithButtonBetweenImagesSection = () => {
             className="w-[32.5%] h-full"
           >
             <img
-              src={style.images.imageUrl[0]}
+              src={style.images.secondImagesUrl[0] || style.images.imageUrl[0]}
               alt="image 1"
               className="w-full h-full object-cover"
             />
@@ -76,7 +79,10 @@ const HeroWithButtonBetweenImagesSection = () => {
               </div>
             </div>
             <div className="w-full flex flex-row justify-center mt-6">
-               <StoreLayoutButton style={style.midDiv.button} onClick={() => {}}/>
+              <StoreLayoutButton 
+                style={style.midDiv.button} 
+                onClick={() => {}}
+              />
             </div>
           </motion.div>
 
@@ -101,7 +107,11 @@ const HeroWithButtonBetweenImagesSection = () => {
         {/* Top div */}
         {style.topDiv.display && (
           <div style={{...getBackgroundStyles(style.topDiv.background, colors)}} className="h-[10vh] w-full flex flex-col justify-center text-center">
-            <UnderlinedText style={style.topDiv.text.style} />
+            <StoreTextTag style={style.topDiv.text.style} 
+              input={style.topDiv.text.style.input?.trim() === ""
+                ? store?.name
+                : style.topDiv.text.style.input}
+            />
           </div>
         )}
 

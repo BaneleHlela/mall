@@ -77,7 +77,7 @@ const TheMallTopbar = () => {
               style={{ fontFamily: "Bebas Neue" }}
               className="font-bold text-[5vh] text-gray-900 dar:text-white"
             >
-              The Mall
+              Mall
             </p>
           </div>
 
@@ -213,7 +213,7 @@ const TheMallTopbar = () => {
                 style={{ fontFamily: "Bebas Neue" }}
                 className="font-bold text-[3.5vh] ml-1 text-gray-900 dar:text-white"
               >
-                The Mall
+                Mall
               </p>
             </div>
 

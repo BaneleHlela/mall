@@ -17,13 +17,15 @@ const StoreTextTag: React.FC<StoreTextTagProps> = ({style, input, className}) =>
             ${style.textAlign === 'start' && 'justify-start'}
             ${style.textAlign === 'end' && 'justify-end'} `}
         >
-            <p 
-                style={{
-                    ...getTextStyles(style, fonts, colors),
-                }}
-                className={`relative ${style.animation} ${className || ''}`}
-            >
-                {input || style.input}
+            <div className={`relative`}>
+                <p 
+                    style={{
+                        ...getTextStyles(style, fonts, colors),
+                    }}
+                    className={`${style.animation} ${className || ''}`}
+                    dangerouslySetInnerHTML={{ __html: input || style.input }}
+                />
+
                 {style.underline?.show && (
                     <div
                         style={{
@@ -31,14 +33,14 @@ const StoreTextTag: React.FC<StoreTextTagProps> = ({style, input, className}) =>
                             height: style.underline?.height || "",
                             marginTop: style.underline?.marginTop || "",
                             backgroundColor: colors[style.underline?.color as keyof typeof colors],
-                            left: (window.innerWidth < 1024 ? style.underline?.left?.mobile : style.underline?.left?.desktop) || ""
+                            left: (window.innerWidth < 1024 
+                                ? style.underline?.left?.mobile 
+                                : style.underline?.left?.desktop) || ""
                         }} 
-                        className="absolute w-[50%] h-1 bg-black">
-
-                    </div>
+                        className="absolute w-[50%] h-1 bg-black"
+                    />
                 )}
-                
-            </p>
+            </div>
         </div>
         
     )

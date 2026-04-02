@@ -6,14 +6,14 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { addToCart } from '../../../../features/cart/cartSlice';
 import { fetchProductBySlug } from '../../../../features/products/productsSlice';
+import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice';
 import { getBackgroundStyles, getTextStyles } from '../../../../utils/stylingFunctions';
 import UnderlinedText from '../../extras/text/UnderlinedText';
 import { formatPriceWithSpaces } from '../search_results/shared_search_results_components/BasicSearchProductCard';
 import VariationDropdown from './supporting/VariationDropdown';
-import toast, { Toaster } from 'react-hot-toast';
+import { mockLayout } from '../../../../major_updates/mockLayout';
 
 
-// ts errors
 // Handle Add  To Cart. (Sometimes it's gotta say "please select a variation first")
 // We gotta add toggle to next/previous product functionality.'
 
@@ -47,6 +47,16 @@ const SingleStoreProductSection = () => {
             dispatch(fetchProductBySlug(productSlug))
         }
     }, [dispatch, productSlug])
+
+    useEffect(() => {
+        if (!settings) {
+            dispatch(updateSetting({
+                field: 'sections.singleProduct',
+                value: mockLayout.sections.singleProduct,
+            }));
+        }
+    }, [settings, dispatch]);
+
     // Set the first variation as the default selected variation
     useEffect(() => {
         if (product?.variations && product.variations.length > 0) {
@@ -56,6 +66,13 @@ const SingleStoreProductSection = () => {
 
     if (isLoading) return <div>Loading...</div>
     if (!product) return <div>Error loading product</div>
+    if (!settings) {
+        return (
+            <div className="flex items-center justify-center w-full min-h-[50vh]">
+                <span className="text-[2vh]">Loading...</span>
+            </div>
+        );
+    }
 
     // --- Handle price logic (schema update) ---
     const hasVariations = Array.isArray(product.variations) && product.variations.length > 0;

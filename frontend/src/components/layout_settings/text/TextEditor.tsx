@@ -159,12 +159,17 @@ const TextEditor: React.FC<EditorProps> = ({
                   }
                 />
               ) : useTextarea ? (
-                <TextareaHandler
-                  label="Custom Text"
+                <RichTextEditor
+                  label=""
                   value={getSetting("input", settings, objectPath)}
                   onChange={(newValue) =>
                     handleChange("input")({
                       target: { value: newValue },
+                    } as React.ChangeEvent<HTMLInputElement>)
+                  }
+                  onFontFamilyChange={(fontFamily) =>
+                    handleChange("fontFamily")({
+                      target: { value: fontFamily }
                     } as React.ChangeEvent<HTMLInputElement>)
                   }
                 />
@@ -793,7 +798,7 @@ const TextEditor: React.FC<EditorProps> = ({
               <OptionsToggler
                 label="Position"
                 options={["start", "center", "end"]}
-                value={getSetting("underline.position", settings, objectPath) ? "Yes" : "No"}
+                value={getSetting("underline.position", settings, objectPath)}
                 onChange={(newValue) =>
                   handleSettingChange(`${objectPath}.underline.position`, newValue)
                 }

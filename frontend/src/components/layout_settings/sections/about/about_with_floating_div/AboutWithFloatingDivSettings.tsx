@@ -90,7 +90,7 @@ const AboutWithFloatingDivSettings = () => {
                                         objectPath={`${objectPath}.heading`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={["input", "fontFamily", "fontSize", "color", "weight", "textAlign"]}
+                                        allow={["input", "fontFamily", "fontSize", "color", "weight", "textAlign", "textTransform", "textDecoration", "underline"]}
                                         responsiveSize
                                     />
                                 </div>
@@ -104,7 +104,8 @@ const AboutWithFloatingDivSettings = () => {
                                         objectPath={`${objectPath}.heading.background`}
                                         settings={settings}
                                         handleSettingChange={handleSettingChange}
-                                        allow={["color", "width", "height", "border"]}
+                                        allow={["color", "width", "height", "border", "padding"]}
+                                        responsivePadding
                                         responsiveSize
                                         widthUnit="%"
                                         heightUnit="%"

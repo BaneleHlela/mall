@@ -10,6 +10,7 @@ import OptionsToggler from "../../../supporting/OptionsToggler";
 import TextEditor from "../../../text/TextEditor";
 import SlidingPanel from "../../../supporting/SlidingPanel";
 import { AnimatePresence } from "framer-motion";
+import StoreLayoutButtonSettings from "../../../extras/StoreLayoutButtonSettings";
 
 interface HeroWithButtonBetweenImagesSettingsProps {
     settings: any;
@@ -17,7 +18,8 @@ interface HeroWithButtonBetweenImagesSettingsProps {
 }
 
 const HeroWithButtonBetweenImagesSettings: React.FC<HeroWithButtonBetweenImagesSettingsProps> = ({ settings, handleSettingChange }) => {
-  const images = settings.sections.hero.images.imageUrl;  
+  const images = settings.sections.hero.images.imageUrl; 
+  const secondImages = settings.sections.hero.images.secondImagesUrl || []; 
   const objectPath = "sections.hero";
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const closePanel = () => setActivePanel(null);
@@ -40,12 +42,12 @@ const HeroWithButtonBetweenImagesSettings: React.FC<HeroWithButtonBetweenImagesS
             
             {/* Top Div */}
             <FirstOrderSubSettingsContainer
-              name="Top Part"
+              name="Top Text"
               onClick={() => setActivePanel("top_part")}
             />
             {/* Top Div */}
             <FirstOrderSubSettingsContainer
-              name="bottom Part"
+              name="Bottom Section"
               onClick={() => setActivePanel("bottom_part")}
             />
             
@@ -89,7 +91,7 @@ const HeroWithButtonBetweenImagesSettings: React.FC<HeroWithButtonBetweenImagesS
                           objectPath={`${objectPath}.topDiv.text.style`}
                           settings={settings}
                           handleSettingChange={handleSettingChange}
-                          allow={["input", "fontFamily", "fontSize", "color", "weight", "textDecoration", "lineHeight"]}
+                          allow={["input", "fontFamily", "textAlign", "textDecoration", "fontSize", "color", "weight", "textDecoration", "lineHeight"]}
                           responsiveSize={true}
                         />
                       }
@@ -133,12 +135,18 @@ const HeroWithButtonBetweenImagesSettings: React.FC<HeroWithButtonBetweenImagesS
                                 max={2} 
                                 images={images}            
                               />
+                              <MultipleLayoutImagesHandler
+                                objectPath={`${objectPath}.images.secondImagesUrl`}
+                                min={0}
+                                max={2} 
+                                images={secondImages}            
+                              />
                             </>
                         }
                       />
                       {/* Middle Section*/}
                       <FirstOrderSubSettingsContainer
-                        name="Middle Section"
+                        name="Text & Button"
                         onClick={() => setActivePanel("middle_section")}
                       />
                   </>
@@ -203,10 +211,11 @@ const HeroWithButtonBetweenImagesSettings: React.FC<HeroWithButtonBetweenImagesS
                   title="Hero Button Settings"
                   key="hero_button"
                 >
-                  <StoreButtonSettings
+                  <StoreLayoutButtonSettings
                     objectPath={`${objectPath}.midDiv.button`}
                     settings={settings}
                     allowFunction
+                    responsiveBackground
                   />
                 </SlidingPanel>
               )}

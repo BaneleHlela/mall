@@ -8,6 +8,7 @@ import MultipleLayoutImagesHandler from "../../../supporting/MultipleLayoutImage
 import TextEditor from "../../../text/TextEditor";
 import FirstOrderSubSettingsContainer from "../../../FirstOrderSubSettingsContainer";
 import SlidingPanel from "../../../supporting/SlidingPanel";
+import StoreLayoutButtonSettings from "../../../extras/StoreLayoutButtonSettings";
 
 interface DoctorAboutSettingsProps {
   settings: any;
@@ -96,6 +97,9 @@ const DoctorAboutSettings: React.FC<DoctorAboutSettingsProps> = ({
                         "letterSpacing",
                         "textDecoration",
                         "padding",
+                        "textAlign",
+                        "textTransform",
+                        "underline"
                       ]}
                       responsiveSize
                       responsivePadding
@@ -121,6 +125,7 @@ const DoctorAboutSettings: React.FC<DoctorAboutSettingsProps> = ({
                         "lineHeight",
                         "letterSpacing",
                         "textDecoration",
+                        "textAlign",
                       ]}
                       responsiveSize
                       useTextarea
@@ -156,6 +161,9 @@ const DoctorAboutSettings: React.FC<DoctorAboutSettingsProps> = ({
                         "fontFamily",
                         "fontSize",
                         "padding",
+                        "textAlign",
+                        "textTransform",
+                        "underline"
                       ]}
                       responsiveSize
                       responsivePadding
@@ -180,6 +188,8 @@ const DoctorAboutSettings: React.FC<DoctorAboutSettingsProps> = ({
                         "fontSize",
                         "lineHeight",
                         "letterSpacing",
+                        "textAlign",
+                        "textTransform",
                       ]}
                       responsiveSize
                       useTextarea
@@ -199,7 +209,13 @@ const DoctorAboutSettings: React.FC<DoctorAboutSettingsProps> = ({
             onClose={closePanel}
             title="Button"
           >
-            <div className="space-y-[.5vh]">
+            <StoreLayoutButtonSettings
+              objectPath={`${objectPath}.button`}
+              settings={settings}
+              allowFunction
+              responsiveBackground
+            />
+            {/* <div className="space-y-[.5vh]">
               <SubSettingsContainer
                 name="Button Text"
                 SettingsComponent={
@@ -235,7 +251,7 @@ const DoctorAboutSettings: React.FC<DoctorAboutSettingsProps> = ({
                 name="Button Function"
                 SettingsComponent={
                   <div className="px-[.5vh] py-1">
-                    <StoreButtonSettings
+                    <StoreLayoutButtonSettings
                       objectPath={`${objectPath}.button`}
                       settings={settings}
                       allowFunction
@@ -243,7 +259,7 @@ const DoctorAboutSettings: React.FC<DoctorAboutSettingsProps> = ({
                   </div>
                 }
               />
-            </div>
+            </div> */}
           </SlidingPanel>
         )}
       </AnimatePresence>

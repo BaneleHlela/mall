@@ -42,6 +42,7 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
   const storeSlug = propStoreSlug || paramStoreSlug
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showStoreStateBadge, setShowStoreStateBadge] = useState(false);
+  const [showFloatingElements, setShowFloatingElements] = useState(true);
   const isCartRoute = location.pathname.includes('/cart'); // Check if the current route is "/cart"
   const { hideNavbar, showNavbar } = useNavbar(); 
 
@@ -52,14 +53,16 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
     }
   }, [storeSlug, navigate]);
 
-  // Hide Navbar if scrolling down, show if scrolling up
+  // Hide Navbar and floating elements if scrolling down, show if scrolling up
     useEffect(() => {
       let lastScrollY = window.scrollY;
       const handleScroll = () => {
         if (window.scrollY > lastScrollY) {
           hideNavbar();
+          setShowFloatingElements(false);
         } else {
           showNavbar();
+          setShowFloatingElements(true);
         }
         lastScrollY = window.scrollY;
       };
@@ -337,12 +340,12 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
             </Routes>
             {/* Floating Icons */}
             <ErrorBoundary>
-              {settings?.floats?.floatingIcons?.show && !isCartRoute && (
-                <div className={`fixed z-50 
-                  ${settings.floats.floatingIcons.position === "left-1/2" && "left-2 top-1/2"} 
-                  ${settings.floats.floatingIcons.position === "left-1/4" && "left-2 top-1/4"} 
-                  ${settings.floats.floatingIcons.position === "right-1/2" && "right-2 top-1/2"} 
-                  ${settings.floats.floatingIcons.position === "right-1/4" && "right-2 top-1/4"} 
+              {settings?.floats?.floatingIcons?.show && !isCartRoute && showFloatingElements && (
+                <div className={`fixed z-50
+                  ${settings.floats.floatingIcons.position === "left-1/2" && "left-2 top-1/2"}
+                  ${settings.floats.floatingIcons.position === "left-1/4" && "left-2 top-1/4"}
+                  ${settings.floats.floatingIcons.position === "right-1/2" && "right-2 top-1/2"}
+                  ${settings.floats.floatingIcons.position === "right-1/4" && "right-2 top-1/4"}
                 `}>
                   <StoreMenubarIcons
                     style={settings.floats.floatingIcons.icons}
@@ -352,7 +355,7 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
               )}
             </ErrorBoundary>
             {/* Floating Button */}
-            {settings?.floats?.floatingButton && settings.floats.floatingButton.show !== "none" && !isCartRoute && (
+            {settings?.floats?.floatingButton && settings.floats.floatingButton.show !== "none" && !isCartRoute && showFloatingElements && (
               <div className={`fixed z-5
                 ${settings.floats.floatingButton?.position === "left" ? "bottom-2 left-2" : "bottom-2 right-2"}`}
               >

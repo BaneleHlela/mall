@@ -891,7 +891,7 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
                 <MultipleLayoutImagesHandler
                   objectPath={`${objectPath}.floatingImage.imageUrl`}
                   min={0}
-                  max={1}
+                  max={2}
                   images={getSetting("floatingImage.imageUrl", settings, objectPath)}
                 />
               </div>

@@ -92,8 +92,7 @@ const PopularStoreMenuSection = () => {
                     slidesPerView={visibleCount}
                     spaceBetween={parseFloat(getResponsiveDimension(settings.grid.gap))}
                     grabCursor={true}
-                    pagination={false}
-                    navigation={true}
+                    pagination={true}
                     autoplay={{
                       delay: 4000, 
                       disableOnInteraction: false, 
@@ -135,8 +134,8 @@ const PopularStoreMenuSection = () => {
               slidesPerView={visibleCount}
               spaceBetween={parseFloat(getResponsiveDimension(settings.grid.gap))}
               grabCursor={true}
-              pagination={false}
-              navigation={true}
+              pagination={true}
+              navigation={false}
               autoplay={{
                 delay: 4000, 
                 disableOnInteraction: false, 

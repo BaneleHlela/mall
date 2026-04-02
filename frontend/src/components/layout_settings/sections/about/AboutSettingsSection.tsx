@@ -9,6 +9,7 @@ import ShortAboutSettings from "./short_about/ShortAboutSettings";
 import AboutWithLineAndImageSettings from "./with_line_and_image/AboutWithLineAndImageSettings";
 import AboutWithFloatingDivSettings from "./about_with_floating_div/AboutWithFloatingDivSettings";
 import AboutWithDivAndImageSettings from "./about_with_div_and_image/AboutWithImageAndDivSettings";
+import SectionPositionMover from "../../supporting/SectionPositionMover";
 
 const AboutSettingsSection = () => {
     const dispatch = useAppDispatch();
@@ -91,7 +92,10 @@ const AboutSettingsSection = () => {
                 )
             case "aboutWithLineAndImage":
                 return (
-                    <AboutWithLineAndImageSettings />
+                    <>
+                        <SectionPositionMover section="about" />
+                        <AboutWithLineAndImageSettings />
+                    </>
                 )
             case "aboutWithFloatingDiv":
                 return (

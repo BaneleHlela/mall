@@ -30,7 +30,7 @@ interface DemoMenubarSelectorProps {
 const DemoMenubarSelector: React.FC<DemoMenubarSelectorProps> = ({ isOpen, onClose }) => {
   const dispatch = useAppDispatch();
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const layouts = useAppSelector((state) => state.layout.layouts);
+  const selectedLayout = useAppSelector((state) => state.layoutSettings);
   const store = useAppSelector((state) => state.storeAdmin.store);
   const demoMenubars = useAppSelector((state) => state.layout.demoMenubars);
   const isLoading = useAppSelector((state) => state.layout.isLoading);
@@ -52,15 +52,14 @@ const DemoMenubarSelector: React.FC<DemoMenubarSelectorProps> = ({ isOpen, onClo
     // Update in Redux (local state)
     dispatch(updateSetting({ 
       field: 'menubar', 
-      value: demoMenubar.menubar 
+      value: demoMenubar.menubar, 
     }));
 
     // Save to database
-    const userLayout = layouts[0];
-    if (userLayout?._id) {
+    if (selectedLayout?._id) {
       try {
         await dispatch(editLayout({
-          layoutId: userLayout._id,
+          layoutId: selectedLayout._id,
           layoutConfig: { menubar: demoMenubar.menubar } as any
         })).unwrap();
 

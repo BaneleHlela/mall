@@ -5,6 +5,26 @@ import { editStore } from "../../../features/store_admin/storeAdminSlice";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import Swal from "sweetalert2";
 import { FiPlus, FiCheck } from "react-icons/fi";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import type { DragEndEvent } from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import {
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { MdDragIndicator } from "react-icons/md";
 
 
 interface DashboardFilterByCategoryProps {
@@ -13,6 +33,64 @@ interface DashboardFilterByCategoryProps {
   onChange: (category: string) => void;
   categoryType?: 'products' | 'services' | 'packages' | 'rentals' | 'donations';
 }
+
+// Sortable category item component
+const SortableCategoryItem: React.FC<{
+  category: string;
+  value: string;
+  onSelect: (category: string) => void;
+  onDelete: (e: React.MouseEvent, category: string) => void;
+  reorderMode: boolean;
+  isLoading: boolean;
+}> = ({ category, value, onSelect, onDelete, reorderMode, isLoading }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: category });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      onClick={() => onSelect(category)}
+      className={`flex items-center justify-between px-4 py-2.5 cursor-pointer transition-all duration-150 ${
+        value === category
+          ? "bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700"
+          : "hover:bg-slate-50 text-slate-700"
+      } ${reorderMode ? 'cursor-move' : ''}`}
+    >
+      <div className="flex items-center gap-2">
+        {reorderMode && (
+          <MdDragIndicator
+            {...attributes}
+            {...listeners}
+            className="text-slate-400 hover:text-slate-600 cursor-move"
+          />
+        )}
+        {value === category && (
+          <FiCheck className="text-purple-500 text-xs" />
+        )}
+        <span className="text-sm">{category}</span>
+      </div>
+      {!isLoading && (
+        <MdDeleteOutline
+          onClick={(e) => onDelete(e, category)}
+          className="text-slate-400 hover:text-red-500 transition-colors"
+        />
+      )}
+    </div>
+  );
+};
 
 const DashboardFilterByCategory: React.FC<DashboardFilterByCategoryProps> = ({
   categories,
@@ -24,8 +102,17 @@ const DashboardFilterByCategory: React.FC<DashboardFilterByCategoryProps> = ({
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [addingCategory, setAddingCategory] = useState(false);
+  const [reorderMode, setReorderMode] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [newCategory, setNewCategory] = useState(""); 
+  const [newCategory, setNewCategory] = useState("");
+
+  // DnD sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  ); 
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -104,7 +191,29 @@ const DashboardFilterByCategory: React.FC<DashboardFilterByCategoryProps> = ({
       }
     });
   };
-  
+
+
+  // Handle drag end for reordering
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = categories.indexOf(active.id as string);
+      const newIndex = categories.indexOf(over.id as string);
+
+      const reorderedCategories = arrayMove(categories, oldIndex, newIndex);
+
+      // Update the store with new order
+      dispatch(editStore({
+        storeSlug: store?.slug as string, // @ts-ignore
+        updatedStore: {
+          categories: {
+            [categoryType]: reorderedCategories,
+          }
+        }
+      }));
+    }
+  };
 
   const handleSelect = (category: string) => {
     onChange(category);
@@ -140,52 +249,73 @@ const DashboardFilterByCategory: React.FC<DashboardFilterByCategoryProps> = ({
             className="absolute mt-2 w-full min-w-[180px] bg-white rounded-xl shadow-lg border border-slate-200 z-20 overflow-hidden"
           >
             <div className="max-h-[280px] overflow-y-auto">
-              {[categories.length > 0 ? { label: "All Categories", value: "" }: {label: "", value: ""}, ...categories.map(cat => ({ label: cat, value: cat }))].map(
-                (option) => (
-                  <div
-                    key={option.value}
-                    onClick={() => handleSelect(option.value)}
-                    className={`flex items-center justify-between px-4 py-2.5 cursor-pointer transition-all duration-150 ${
-                      value === option.value 
-                        ? "bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700" 
-                        : "hover:bg-slate-50 text-slate-700"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      {value === option.value && (
-                        <FiCheck className="text-purple-500 text-xs" />
-                      )}
-                      <span className="text-sm">{option.label}</span>
-                    </div>
-                    {option.value && (
-                      <>
-                        {isLoading ? 
-                          ( <div className="w-4 h-4 border-2 border-purple-200 border-t-purple-500 rounded-full animate-spin" /> ) 
-                          : 
-                          (
-                          <MdDeleteOutline
-                            onClick={(e) => handleDelete(e, option.value)}
-                            className="text-slate-400 hover:text-red-500 transition-colors"
-                          />
-                          )
-                        }
-                      </>
+              {/* All Categories option - not draggable */}
+              {categories.length > 0 && (
+                <div
+                  onClick={() => handleSelect("")}
+                  className={`flex items-center justify-between px-4 py-2.5 cursor-pointer transition-all duration-150 ${
+                    value === ""
+                      ? "bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700"
+                      : "hover:bg-slate-50 text-slate-700"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    {value === "" && (
+                      <FiCheck className="text-purple-500 text-xs" />
                     )}
+                    <span className="text-sm">All Categories</span>
                   </div>
-                )
+                </div>
               )}
+
+              {/* Categories list with drag and drop */}
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={categories}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {categories.map((category) => (
+                    <SortableCategoryItem
+                      key={category}
+                      category={category}
+                      value={value || ""}
+                      onSelect={handleSelect}
+                      onDelete={handleDelete}
+                      reorderMode={reorderMode}
+                      isLoading={isLoading}
+                    />
+                  ))}
+                </SortableContext>
+              </DndContext>
             </div>
             
-            {/* Add Category Section */}
+            {/* Add Category / Reorder Section */}
             <div className="border-t border-slate-100">
               {!addingCategory && !isLoading ? (
-                <button
-                  onClick={() => setAddingCategory(true)} 
-                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 text-sm font-medium text-purple-600 hover:bg-purple-50 transition-colors"
-                >
-                  <FiPlus className="text-sm" />
-                  Add Category
-                </button>
+                <div className="flex">
+                  <button
+                    onClick={() => setReorderMode(!reorderMode)}
+                    className={`flex items-center justify-center gap-2 flex-1 px-4 py-2.5 text-sm font-medium transition-colors ${
+                      reorderMode
+                        ? 'text-orange-600 hover:bg-orange-50'
+                        : 'text-purple-600 hover:bg-purple-50'
+                    }`}
+                  >
+                    <MdDragIndicator className="text-sm" />
+                    {reorderMode ? 'Done' : 'Reorder'}
+                  </button>
+                  <button
+                    onClick={() => setAddingCategory(true)}
+                    className="flex items-center justify-center gap-2 flex-1 px-4 py-2.5 text-sm font-medium text-purple-600 hover:bg-purple-50 transition-colors border-l border-slate-100"
+                  >
+                    <FiPlus className="text-sm" />
+                    Add
+                  </button>
+                </div>
               ) : (
                 <div className="p-2">
                   <input

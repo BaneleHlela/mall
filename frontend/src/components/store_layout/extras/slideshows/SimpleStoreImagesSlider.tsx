@@ -1,8 +1,13 @@
-// SimpleStoreImagesSlideshow.tsx
-
-import React, { useState, useEffect, useRef } from 'react';
-import { getBackgroundStyles, getBorderStyles } from '../../../../utils/stylingFunctions';
+import React from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay, A11y } from 'swiper/modules';
+import { getBackgroundStyles } from '../../../../utils/stylingFunctions';
 import { useAppSelector } from '../../../../app/hooks';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 export interface SlideshowProps {
   images: string[];
@@ -20,33 +25,21 @@ export interface SlideshowProps {
 
 const SimpleStoreImagesSlider: React.FC<SlideshowProps> = ({ images, height = "50vh", width = "50vw", style }) => {
   const colors = useAppSelector((state) => state.layoutSettings.colors);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const trackRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (trackRef.current) {
-        trackRef.current.style.transition = "transform 1s ease-in-out";
-        trackRef.current.style.transform = `translateX(-${(currentIndex + 1) * 100}%)`;
-
-        setTimeout(() => {
-          setCurrentIndex((prevIndex) => {
-            const newIndex = (prevIndex + 1) % images.length;
-
-            // Reset position if looping
-            if (newIndex === 0 && trackRef.current) {
-              trackRef.current.style.transition = "none";
-              trackRef.current.style.transform = `translateX(0%)`;
-            }
-
-            return newIndex;
-          });
-        }, 1000); // Match transition duration
-      }
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [currentIndex, images.length]);
+  if (!images || images.length === 0) {
+    return (
+      <div 
+        style={{
+          height: height,
+          width: width,
+          ...getBackgroundStyles(style || {}, colors),
+        }}
+        className="relative overflow-hidden bg-gray-200 flex items-center justify-center"
+      >
+        <span className="text-gray-500">No images available</span>
+      </div>
+    );
+  }
 
   return (
     <div 
@@ -57,20 +50,29 @@ const SimpleStoreImagesSlider: React.FC<SlideshowProps> = ({ images, height = "5
       }}
       className="relative overflow-hidden"
     >
-      <div
-        ref={trackRef}
-        className="flex w-full h-full"
-        style={{ transform: "translateX(0%)" }}
+      <Swiper
+        modules={[Navigation, Pagination, Autoplay, A11y]}
+        spaceBetween={0}
+        slidesPerView={1}
+        navigation={false}
+        pagination={false}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
+        loop={images.length > 1}
+        className="w-full h-full"
       >
-        {[...images, images[0]].map((src, idx) => (
-          <img
-            key={idx}
-            src={src}
-            alt={`Slide ${idx}`}
-            className="w-full h-full object-cover flex-shrink-0"
-          />
+        {images.map((src, idx) => (
+          <SwiperSlide key={idx}>
+            <img
+              src={src}
+              alt={`Slide ${idx + 1}`}
+              className="w-full h-full object-cover"
+            />
+          </SwiperSlide>
         ))}
-      </div>
+      </Swiper>
     </div>
   );
 };

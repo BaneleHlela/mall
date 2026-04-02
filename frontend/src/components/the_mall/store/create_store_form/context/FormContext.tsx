@@ -89,7 +89,8 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const nextStep = () => {
     setDirection(1);
-    setStep(prev => Math.min(prev + 1, 6));
+    const maxStep = form.trades.includes('products') ? 5 : 4;
+    setStep(prev => Math.min(prev + 1, maxStep));
     setNextClicked(false); // Reset nextClicked when moving to next step
   };
 

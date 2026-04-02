@@ -105,7 +105,7 @@ const BasicSearchProductCard: React.FC<StoreProductCardProps> = ({
           style={{
             ...getTextStyles(style.details.price)
           }} 
-          className={`text-start`}
+          className={`text-start line-clamp-1`}
         >
           {displayPrice()}
         </p>

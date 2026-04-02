@@ -31,10 +31,11 @@ const StoreSearchResultsSectionSettings = () => {
                         objectPath={`${objectPath}.background`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["color", "padding"]}
-                        widthUnit="vw"
+                        allow={["color", "padding", "width"]}
+                        widthUnit="%"
                         heightUnit="vh"
                         responsivePadding
+                        responsiveSize
                     />
                 </div>
                 }
@@ -48,7 +49,7 @@ const StoreSearchResultsSectionSettings = () => {
                         objectPath={`${objectPath}.text.header`}
                         settings={settings}
                         handleSettingChange={handleSettingChange}
-                        allow={["input", "color", "fontFamily", "fontSize", "weight", "padding"]}
+                        allow={["input", "color", "textAlign", "textTransform", "underline", "textDecoration", "fontFamily", "fontSize", "weight", "padding"]}
                         responsiveSize
                         responsivePadding
                     />

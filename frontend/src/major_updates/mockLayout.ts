@@ -902,356 +902,447 @@ export const mockLayout = {
         searchResults: {
             variation: "basicSearchResults",
             background: {
-                color: "primary",
+                color: "quad",
                 padding: {
-                    x: {
-                        mobile: "1vh",
-                        desktop: "5vh"
-                    },
-                    y: {
-                        mobile: "3vh",
-                        desktop: "0vh"
-                    },
-                }
+                x: {
+                    mobile: "1vh",
+                    desktop: "2.6vh",
+                },
+                y: {
+                    mobile: "3vh",
+                    desktop: "0vh",
+                },
+                },
+                width: {
+                desktop: "100%",
+                },
             },
             text: {
                 header: {
-                    input: "Search Results",
-                    color: "secondary",
-                    fontFamily: "tertiary",
-                    fontSize: {
-                        mobile: "4vh",
-                        desktop: "5vh"
+                input: "Search Results",
+                color: "pent",
+                fontFamily: "secondary",
+                fontSize: {
+                    mobile: "3.9vh",
+                    desktop: "5vh",
+                },
+                weight: "500",
+                padding: {
+                    x: {
+                    mobile: "1vh",
+                    desktop: "0vh",
                     },
-                    weight: "600",
-                    padding: {
-                        x: {
-                            mobile: "1vh",
-                            desktop: "0vh"
-                        },
-                        y: {
-                            mobile: "1vh",
-                            desktop: "2vh"
-                        },
-                    }
+                    y: {
+                    mobile: "1vh",
+                    desktop: "2vh",
+                    },
+                },
+                textAlign: "left",
                 },
             },
             sort: {
                 text: {
-                    fontFamily: "secondary",
-                    color: "secondary"
+                fontFamily: "secondary",
+                color: "secondary",
                 },
                 background: {
-                    color: "primary",
-                    border: {
-                        width: "1px",
-                        style: "solid",
-                        color: "accent",
-                    }
-                }
+                color: "primary",
+                border: {
+                    width: "1px",
+                    style: "solid",
+                    color: "accent",
+                },
+                },
             },
             card: {
                 background: {
-                    border: {
-                        width: "0px",
-                        style: "solid",
-                    }
+                border: {
+                    width: "0px",
+                    style: "solid",
+                },
                 },
                 image: {
-                    background: {
-                        border: {
-                            width: "0px",
-                            style: "solid",
-                            radius: "0px"
-                        }
-                    }
+                background: {
+                    border: {
+                    width: "0px",
+                    style: "solid",
+                    radius: "0px",
+                    },
+                },
                 },
                 details: {
-                    price: {
-                        color: "secondary",
-                        weight: "normal",
-                        fontSize: {
-                            mobile: "2.2vh",
-                            desktop: "2.2vh"
-                        },
+                price: {
+                    color: "secondary",
+                    weight: "normal",
+                    fontSize: {
+                    mobile: "2.2vh",
+                    desktop: "2.2vh",
                     },
-                    name: {
-                        textDecoration: "underline",
-                        color: "secondary",
-                        weight: "normal",
-                        fontSize: {
-                            mobile: "3vh",
-                            desktop: "4vh"
-                        },
-                    }
+                },
+                name: {
+                    textDecoration: "underline",
+                    color: "secondary",
+                    weight: "normal",
+                    fontSize: {
+                    mobile: "3vh",
+                    desktop: "4vh",
+                    },
+                },
                 },
                 button: {
-                    text: {
-                        color: 'primary',
-                        weight: "600",
-                        input: 'Add to cart'
+                text: {
+                    color: "primary",
+                    weight: "600",
+                    input: "Add to cart",
+                },
+                background: {
+                    color: "secondary",
+                    padding: {
+                    x: {
+                        mobile: "2vh",
+                        desktop: "2vh",
                     },
-                    background: {
-                        color: 'secondary',
-                        padding: {
-                            x: {
-                                mobile: "2vh",
-                                desktop: "2vh"
-                            },
-                            y: {
-                                mobile: "1vh",
-                                desktop: "1vh"
-                            },
-                        },
-                        width: "100%",
-                        border: {
-                            width: '1px',
-                            style: 'solid',
-                            color: 'secondary',
-                            radius: '0px',
-                        },
+                    y: {
+                        mobile: "1vh",
+                        desktop: "1vh",
                     },
-                }
+                    },
+                    width: "100%",
+                    border: {
+                    width: "1px",
+                    style: "solid",
+                    color: "secondary",
+                    radius: "0px",
+                    },
+                },
+                },
             },
             filters: {
                 text: {
-                    color: "secondary",
+                color: "secondary",
+                fontFamily: "secondary",
+                title: {
+                    input: "Filter by",
+                    fontSize: {
+                    mobile: "3.2vh",
+                    desktop: "4vh",
+                    },
+                    weight: "bold",
+                },
+                categories: {
                     fontFamily: "secondary",
-                    title: {
-                        input: "Filter by",
-                        fontSize: {
-                            mobile: "3.2vh",
-                            desktop: "4vh"
-                        },
-                        weight: "bold"
-                    },
-                    categories: {
-                        fontFamily: "secondary",
-                        weight: "600",
-                        fontSize: {
-                            mobile: "2.3vh",
-                            desktop: "2.5vh"
-                        },
-                    },
-                    category: {
-                        fontFamily: "secondary",
-                        weight: "600",
-                        fontSize: {
-                            mobile: "2.2vh",
-                            desktop: "2.3vh"
-                        },
+                    weight: "600",
+                    fontSize: {
+                    mobile: "2.3vh",
+                    desktop: "2.5vh",
                     },
                 },
+                category: {
+                    fontFamily: "secondary",
+                    weight: "600",
+                    fontSize: {
+                    mobile: "2.2vh",
+                    desktop: "2.3vh",
+                    },
+                },
+                },
                 checkbox: {
-                    border: {
-                        color: "secondary",
-                        width: "1px",
-                        radius: "0px"
-                    }
-                }
+                border: {
+                    color: "secondary",
+                    width: "1px",
+                    radius: "0px",
+                },
+                },
             },
         },
         singleProduct: {
-            variation: "firstSingleProductSection",
+            variation: "secondSingleProductSection",
             background: {
-              color: "primary",
-              width: {
+                color: "primary",
+                width: {
                 mobile: "100%",
                 desktop: "80%",
-              },
-              padding: {
-                x: { mobile: "1vh", desktop: "0vh" },
-                y: { mobile: "3vh", desktop: "5vh" }
-              }
+                },
+                padding: {
+                x: {
+                    mobile: "1vh",
+                    desktop: "0vh",
+                },
+                y: {
+                    mobile: "3vh",
+                    desktop: "6.4vh",
+                },
+                },
             },
             text: {
-              exit: {
+                exit: {
                 background: {
-                  padding: {
-                    y: { desktop: "2vh", mobile: "0.6vh" },
-                    border: {
-
-                    }
-                  }
+                    padding: {
+                    y: "0vh",
+                    },
                 },
                 color: "secondary",
-                fontSize: { mobile: "2.3vh", desktop: "2.5vh" }
-              }
+                fontSize: {
+                    mobile: "2.3vh",
+                    desktop: "2.5vh",
+                },
+                },
             },
-          
             images: {
-              background: {
+                background: {
                 color: "secondary",
-                width: { mobile: "100%", desktop: "100%" },
-                height: { mobile: "50vh", desktop: "100%" }
-              },
-              toggleButton: {
+                width: {
+                    mobile: "100%",
+                    desktop: "86%",
+                },
+                height: {
+                    mobile: "50vh",
+                    desktop: "79vh",
+                },
+                border: {
+                    style: "solid",
+                    color: "secondary",
+                    width: "0.30000000000000016vh",
+                },
+                },
+                toggleButton: {
                 text: {
-                  fontSize: "4.6vh",
-                  color: "primary"
+                    fontSize: "4.999999999999998vh",
+                    color: "secondary",
                 },
                 background: {
-                    
-                  padding: { y: "0.4vh", x: "0.4vh" }
-                }
-              }
+                    padding: {
+                    y: "0.4vh",
+                    x: "0.4vh",
+                    },
+                },
+                },
             },
             details: {
-              background: {
-                color: "primary",
-                height: { mobile: "", desktop: "80vh" },
-                padding: {
-                  x: { desktop: "4vh", mobile: "1vh" },
-                  y: { mobile: "2vh", desktop: "0.1vh" }
-                }
-              },
-              text: {
-                labels: {
-                  color: "secondary",
-                  position: "center",
-                  fontSize: "2vh"
-                }
-              },
-          
-              nameAndPrice: {
                 background: {
-                  height: { mobile: "0%", desktop: "0%" },
-                  position: "center",
-                  padding: {
-                    y: { mobile: "0.1vh", desktop: "0.1vh" },
-                    x: { mobile: "0.1vh", desktop: "0.1vh" }
-                  },
-                  border: { width: "0vh" }
+                color: "primary",
+                height: {
+                    mobile: "",
+                    desktop: "80vh",
+                },
+                padding: {
+                    x: {
+                    desktop: "4vh",
+                    mobile: "1vh",
+                    },
+                    y: {
+                    mobile: "2vh",
+                    desktop: "0.1vh",
+                    },
+                },
+                },
+                text: {
+                labels: {
+                    color: "secondary",
+                    position: "center",
+                    fontSize: "2vh",
+                },
+                },
+                nameAndPrice: {
+                background: {
+                    height: {
+                    mobile: "0%",
+                    desktop: "0%",
+                    },
+                    position: "center",
+                    padding: {
+                    y: {
+                        mobile: "0.1vh",
+                        desktop: "0.1vh",
+                    },
+                    x: {
+                        mobile: "0.1vh",
+                        desktop: "0.1vh",
+                    },
+                    },
+                    border: {
+                    width: "0vh",
+                    },
                 },
                 name: {
-                  fontFamily: "secondary",
-                  fontSize: { mobile: "3vh", desktop: "4.7vh" },
-                  underline: {
+                    fontFamily: "secondary",
+                    fontSize: {
+                    mobile: "3vh",
+                    desktop: "4.7vh",
+                    },
+                    underline: {
                     show: false,
                     color: "secondary",
                     width: "50%",
                     style: "solid",
                     thickness: "10px",
-                    marginTop: "10px"
-                  },
-                  color: "secondary",
-                  position: "center",
-                  weight: "bold"
+                    marginTop: "10px",
+                    },
+                    color: "secondary",
+                    position: "center",
+                    weight: "bold",
                 },
-          
                 price: {
-                  fontFamily: "secondary",
-                  fontSize: { mobile: "3.1vh", desktop: "4.5vh" },
-                  underline: {
+                    fontFamily: "secondary",
+                    fontSize: {
+                    mobile: "3.1vh",
+                    desktop: "4.5vh",
+                    },
+                    underline: {
                     show: false,
                     color: "secondary",
                     width: "50%",
                     style: "solid",
                     thickness: "10px",
-                    marginTop: "10px"
-                  },
-                  color: "secondary",
-                  position: "center",
-                  padding: {
-                    y: { mobile: "2.3vh", desktop: "3.5vh" }
-                  }
-                }
+                    marginTop: "10px",
+                    },
+                    color: "secondary",
+                    position: "center",
+                    padding: {
+                    y: {
+                        mobile: "2.3vh",
+                        desktop: "3.5vh",
+                    },
+                    },
+                },
                 },
                 variationSelector: {
-                    text: {
-                      label: { input: "Color" },
-                      dropdown: { color: "secondary" }
+                text: {
+                    label: {
+                    input: "Color",
                     },
-                    background: {
-                      container: {
-                        padding: {
-                          x: { desktop: "0px", mobile: "0px" },
-                          y: { mobile: "10px", desktop: "10px" }
-                        }
-                      },
-                      button: { color: "primary" },
-                      dropdown: { color: "primary" }
-                    }
-                  },
-                
-                  messageBox: {
-                    show: false,
-                    text: { color: "secondary" },
-                    titleInput: { input: "Special Request" },
-                    placeholder: { textArea: "Let us know if you have any special requests" },
-                    background: {
-                      container: {
-                        padding: {
-                          x: { desktop: "0px", mobile: "0px" },
-                          y: { mobile: "10px", desktop: "10px" }
-                        }
-                      },
-                      box: {
-                        border: {
-                          width: "2px",
-                          style: "solid",
-                          color: "secondary"
-                        }
-                      }
-                    }
-                  },
-                  quantityUpdater: {
-                    text: {
-                      color: "secondary",
-                      fontSize: "2.5vh"
+                    dropdown: {
+                    color: "secondary",
                     },
-                    background: {
-                      container: {
-                        position: "center",
-                        padding: {
-                          x: { desktop: "0.1vh", mobile: "0.1vh" },
-                          y: { mobile: "0.1vh", desktop: "0.1vh" }
-                        }
-                      },
-                      button: {
-                        padding: { x: "10px", y: "0.6vh" },
-                        width: { mobile: "39%", desktop: "18%" },
-                        border: {
-                          style: "solid",
-                          width: ".2vh",
-                          color: "secondary",
-                        }
-                      }
-                    }
                 },
-                
-                addToCartBtn: {
-                    position: "center",
-                    style: {
-                      background: {
-                        color: "secondary",
-                        width: {
-                            mobile: "100%",
-                            desktop: "80%",
+                background: {
+                    container: {
+                    padding: {
+                        x: {
+                        desktop: "0px",
+                        mobile: "0px",
                         },
-                        padding: { x: "10px", y: "10px" }
-                      },
-                      text: {
-                        fontSize: "2.5vh",
-                        weight: "500",
-                        color: "primary",
-                        fontFamily: "secondary"
-                      }
-                    }
+                        y: {
+                        mobile: "10px",
+                        desktop: "10px",
+                        },
+                    },
+                    },
+                    button: {
+                    color: "primary",
+                    },
+                    dropdown: {
+                    color: "primary",
+                    },
                 },
-                
-                description: {
-                    background: { color: "secondary" },
-                    text: { 
+                },
+                messageBox: {
+                show: false,
+                text: {
+                    color: "secondary",
+                },
+                titleInput: {
+                    input: "Special Request",
+                },
+                placeholder: {
+                    textArea: "Let us know if you have any special requests",
+                },
+                background: {
+                    container: {
+                    padding: {
+                        x: {
+                        desktop: "0px",
+                        mobile: "0px",
+                        },
+                        y: {
+                        mobile: "10px",
+                        desktop: "10px",
+                        },
+                    },
+                    },
+                    box: {
+                    border: {
+                        width: "2px",
+                        style: "solid",
                         color: "secondary",
-                        fontSize: {
-                        desktop: "2.5vh",
-                        mobile: "2vh",
-                    } }
-                }
+                    },
+                    },
+                },
+                },
+                quantityUpdater: {
+                text: {
+                    color: "secondary",
+                    fontSize: "2.5vh",
+                },
+                background: {
+                    container: {
+                    position: "center",
+                    padding: {
+                        x: {
+                        desktop: "0.1vh",
+                        mobile: "0.1vh",
+                        },
+                        y: {
+                        mobile: "0.1vh",
+                        desktop: "0.1vh",
+                        },
+                    },
+                    },
+                    button: {
+                    padding: {
+                        x: "10px",
+                        y: "0.6vh",
+                    },
+                    width: {
+                        mobile: "39%",
+                        desktop: "18%",
+                    },
+                    border: {
+                        style: "solid",
+                        width: ".2vh",
+                        color: "secondary",
+                    },
+                    },
+                },
+                },
+                addToCartBtn: {
+                position: "center",
+                style: {
+                    background: {
+                    color: "secondary",
+                    width: {
+                        mobile: "100%",
+                        desktop: "80%",
+                    },
+                    padding: {
+                        x: "10px",
+                        y: "10px",
+                    },
+                    },
+                    text: {
+                    fontSize: "2.5vh",
+                    weight: "500",
+                    color: "primary",
+                    fontFamily: "secondary",
+                    },
+                },
+                background: {
+                    color: "secondary",
+                },
+                },
+                description: {
+                background: {
+                    color: "secondary",
+                },
+                text: {
+                    color: "secondary",
+                    fontSize: {
+                    desktop: "2.2vh",
+                    mobile: "2vh",
+                    },
+                },
+                },
             },
-          
-            
         },
         footer: {
             variation: "footerWithSocialsAndEmail",

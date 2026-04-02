@@ -7,7 +7,6 @@ import {
   FaClock, 
   FaPhone, 
   FaShareAlt, 
-  FaInfoCircle, 
   FaImage, 
   FaTrash,
   FaStore,
@@ -94,15 +93,14 @@ const StoreSettings = () => {
       linkTo: `/dashboard/${storeSlug}/settings/socials`,
       color: 'from-indigo-500 to-blue-500'
     },
-    { 
-      id: 'about', 
-      label: 'About', 
-      description: 'Your store story',
-      icon: FaInfoCircle, 
-      linkTo: `/dashboard/${storeSlug}/settings/about`,
-      color: 'from-teal-500 to-cyan-500'
-    },
   ];
+
+  const filteredSettingsOptions = settingsOptions.filter(option => {
+    if (option.id === 'delivery') {
+      return store?.categories?.products?.length > 0 || store?.tradeOptions?.includes('products');
+    }
+    return true;
+  });
 
   const handleDeleteStore = async () => {
     const result = await mysweetalert.fire({
@@ -211,7 +209,7 @@ const StoreSettings = () => {
 
         {/* Settings Grid */}
         <div className="grid gap-1">
-          {settingsOptions.map((option) => {
+          {filteredSettingsOptions.map((option) => {
             const IconComponent = option.icon;
             return (
               <button

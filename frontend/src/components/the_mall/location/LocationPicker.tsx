@@ -62,12 +62,7 @@ export default function LocationPicker({ onLocationSelect }: any) {
         }
       });
 
-      // Trigger initial location selection for user's location
-      if (initialLocation !== centerFallback) {
-        reverseGeocode(initialLocation.lat, initialLocation.lng).then((address) => {
-          onLocationSelect({ ...initialLocation, address });
-        });
-      }
+
     };
 
     // Try to get user's location
@@ -79,6 +74,9 @@ export default function LocationPicker({ onLocationSelect }: any) {
             lng: position.coords.longitude,
           };
           setLocation(userCoords);
+          reverseGeocode(userCoords.lat, userCoords.lng).then((address) => {
+            onLocationSelect({ ...userCoords, address });
+          });
           initMap(userCoords);
         },
         (error) => {

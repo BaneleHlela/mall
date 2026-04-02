@@ -76,7 +76,7 @@ const StepTrade: React.FC = () => {
       </div>
 
       {/* Trade Options */}
-      <div className="space-y-3 w-full flex-1 overflow-y-auto pr-1">
+      <div className="space-y-1.5 w-full flex-1 overflow-y-auto pr-1">
         {tradeOptions.map((option) => {
           const selected = form.trades.includes(option.key);
           const Icon = option.icon;
@@ -87,7 +87,7 @@ const StepTrade: React.FC = () => {
               htmlFor={option.key}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`flex items-center w-full gap-4 border-2 rounded-xl p-4 cursor-pointer transition-all duration-200 
+              className={`flex items-center w-full gap-4 border-2 rounded-xl px-2 py-1 cursor-pointer transition-all duration-200 
                 ${selected 
                   ? 'border-indigo-500 bg-indigo-50' 
                   : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}`}
@@ -97,7 +97,7 @@ const StepTrade: React.FC = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <span className="text-sm font-semibold text-gray-800 block">{option.label}</span>
-                <span className="text-xs text-gray-500 line-clamp-1">{option.description}</span>
+                <span className="text-xs text-gray-500 line-clamp-2">{option.description}</span>
               </div>
               <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200
                 ${selected ? 'border-indigo-500 bg-indigo-500' : 'border-gray-300'}`}
