@@ -940,7 +940,7 @@ export const NotReadyForCustomers = () => {
             </p>
             <p className="mb-2">This approach allows us to:</p>
             <ul className="list-disc pl-5 space-y-1">
-              <li>Attract real customer traffic from the start.</li>
+              <li>Attract decent customer traffic from the start.</li>
               <li>Give vendors time to prepare their stores and inventory.</li>
               <li>Launch together with impact — not haphazardly.</li>
             </ul>
@@ -952,7 +952,7 @@ export const NotReadyForCustomers = () => {
           </div>
 
           {/* CTA */}
-          <p className="text-sm text-stone-600">
+          <p className="text-sm text-center text-stone-600">
             👉 Visit the <strong className="text-stone-900">Get Started</strong> page to track the percentage of stores signed up in your area — and watch us get closer to launch.
           </p>
         </div>
