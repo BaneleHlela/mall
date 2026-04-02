@@ -14,7 +14,7 @@ import BasicStorePost from '../../components/the_mall/basic_store_post/BasicStor
 import TipsAndUpdates from '../../components/the_mall/home/TipsAndUpdates';
 import { FaTools } from 'react-icons/fa';
 import StorePostJSX from '../../components/the_mall/home/StorePostJSX';
-import { LaunchDate, LookOutForRedFlags, WelcomeToTheMall, WhatIsECommerce, WhatIsMVP, YouCanInvest, MallMVPAnnouncement, Branding, MostImportantPoster, NoAyikhoPoster, VariousPosters, ListOfSuppliersByChioma, FourFirstTimeSmallBusinessMistakes, HowToStartBusinessWhiteLabeling, BusinessAdviceForSmallBusiness, YCStartingCompanyKeyTerms, YCSalesPlaybook, YCStartupIdeas, YCCoFounderRelationships, SBDBusinessPlan, SBDBusinessStrategy } from '../../components/the_mall/home/posts/SimplePosts';
+import { LaunchDate, LookOutForRedFlags, WelcomeToTheMall, WhatIsECommerce, WhatIsMVP, YouCanInvest, MallMVPAnnouncement, Branding, MostImportantPoster, NoAyikhoPoster, VariousPosters, ListOfSuppliersByChioma, FourFirstTimeSmallBusinessMistakes, HowToStartBusinessWhiteLabeling, BusinessAdviceForSmallBusiness, YCStartingCompanyKeyTerms, YCSalesPlaybook, YCStartupIdeas, YCCoFounderRelationships, SBDBusinessPlan, SBDBusinessStrategy, NotReadyForCustomers, OurRecommendedBook, LoansAndLaybuys, StoreServiceBidding, DoubleTapLikeButtonForReviews, AddYourOwnDomain, CustomersCanReviewEverything } from '../../components/the_mall/home/posts/SimplePosts';
 import MultipleLayoutsPost from '../../components/the_mall/home/posts/MultipleLayoutsPost';
 import FreePikPosters from '../../components/the_mall/home/posts/FreePikPosters';
 import SupplyChain from '../../components/the_mall/home/posts/SupplyChain';
@@ -343,6 +343,76 @@ const HomePage = () => {
             isFeedbackPost
             storeSlug='themall'
           />
+          {/* Not ready for customers */}
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
+              <NotReadyForCustomers />
+            }
+            onModalOpen={setIsReviewsModalOpen}
+            isFeedbackPost
+            storeSlug='themall'
+          />
+          {/* Customers Can Review Everything */}
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
+              <CustomersCanReviewEverything />
+            }
+            onModalOpen={setIsReviewsModalOpen}
+            isFeedbackPost
+            storeSlug='themall'
+          />
+          {/* Loans & Laybuys */}
+          <StorePostJSX
+            tipFor='Upcoming Features'
+            jsx={
+              <LoansAndLaybuys />
+            }
+            onModalOpen={setIsReviewsModalOpen}
+            isFeedbackPost
+            storeSlug='themall'
+          />
+          {/* Store Service Bidding */}
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
+              <StoreServiceBidding />
+            }
+            onModalOpen={setIsReviewsModalOpen}
+            isFeedbackPost
+            storeSlug='themall'
+          />
+          {/* Double Tap for Reviews */}
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
+              <DoubleTapLikeButtonForReviews />
+            }
+            onModalOpen={setIsReviewsModalOpen}
+            isFeedbackPost
+            storeSlug='themall'
+          />
+          {/* Add Your Own Domain */}
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
+              <AddYourOwnDomain />
+            }
+            onModalOpen={setIsReviewsModalOpen}
+            isFeedbackPost
+            storeSlug='themall'
+          />
+          {/* Our Recommended Book */}
+          <StorePostJSX
+            tipFor='Tips And Updates'
+            jsx={
+              <OurRecommendedBook />
+            }
+            isFeedbackPost
+            onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
+          />
           {/* List of Suppliers By Chioma */}
           <StorePostJSX
             tipFor='Tips and Updates'
@@ -383,6 +453,7 @@ const HomePage = () => {
             onModalOpen={setIsReviewsModalOpen}
             storeSlug='themall'
           />
+          
           {/* Y Combinator Videos */}
           <StorePostJSX
             tipFor='Tips for Founders'

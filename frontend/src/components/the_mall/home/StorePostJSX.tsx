@@ -168,9 +168,9 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
             <div
                 style={{
                 fontFamily: "Momo Trust Sans",
-                lineHeight: "1.1",
+                lineHeight: "1.3",
                 }}
-                className="w-full text-[2vh] lg:text-[2.2vh] my-1 py-1 font-[500] px-[.6vh] "
+                className="w-full text-[2.1vh] lg:text-[2.2vh] my-1 py-1 font-[500] px-[.6vh] "
             >
                 {jsx}
             </div>

@@ -3,10 +3,14 @@ import React from 'react'
 interface FramedPosterProps {
     imageUrl: string;
     color?: string;
+    smallText?: string;
+    largeText?: string;
 }
 const FramedPoster: React.FC<FramedPosterProps> = ({
     imageUrl,
-    color = "#000"
+    color = "#000",
+    smallText,
+    largeText
 }) => {
   return (
     <div 
@@ -18,7 +22,7 @@ const FramedPoster: React.FC<FramedPosterProps> = ({
         <div className="h-[4%] w-[60%] flex items-center justify-between px-[.6vh]">
             <div className="h-full w-[.1vh] bg-gray-700"></div>
                 <div className="h-[.1vh] w-[35%] bg-gray-700"></div>
-                <p className="text-[1.3vh]">px</p>
+                <p className="text-[1.3vh]">{smallText || "px"}</p>
                 <div className="h-[.1vh] w-[35%] bg-gray-700"></div>
             <div className="h-full w-[.1vh] bg-gray-700"></div>
         </div>
@@ -33,7 +37,7 @@ const FramedPoster: React.FC<FramedPosterProps> = ({
             alt="Poster Frame"
             className='absolute inset-0 w-full h-full object-cover pointer-events-none opacity-5'
         />
-        <p className="scale-80 text-gray-800">PHYSICAL POSTER</p>
+        <p className="scale-80 text-gray-800">{largeText || "PHYSICAL POSTER"}</p>
     </div>
   )
 }

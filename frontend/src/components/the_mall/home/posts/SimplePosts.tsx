@@ -42,6 +42,17 @@ export const POST_IDS = {
     // Small Business Development Videos
     SBD_BUSINESS_PLAN: "sbd-business-plan",
     SBD_BUSINESS_STRATEGY: "sbd-business-strategy",
+    // More
+    NOT_READY_FOR_CUSTOMERS: "not-ready-for-customers",
+    SIMPLE_POST: "simple-post",
+    OUR_RECOMMENDED_BOOK: "our-recommended-book",
+    LOANS_AND_LAYBUYS: "loans-and-laybuys",
+    STORE_SERVICE_BIDDING: "store-service-bidding",
+    DOUBLE_TAP_FOR_REVIEWS: "double-tap-for-reviews",
+    COLLABORATE_OR_LEARN: "collaborate-or-learn",
+    BUILD_A_BRAND_WITH_READY_TEMPLATES_OR_AI: "build-a-brand-with-ready-templates-or-ai",
+    ADD_YOUR_OWN_DOMAIN: "add-your-own-domain",
+    CUSTOMERS_CAN_REVIEW_EVERYTHING: "customers-can-review-everything",
 } as const;
 
 interface WelcomeToTheMallProps {
@@ -877,5 +888,239 @@ export const SBDBusinessStrategy = () => {
     </PostInteraction>
   );
 };
-  
-// Bundle all together
+
+export const NotReadyForCustomers = () => {
+  return (
+    <PostInteraction postIdentifier={POST_IDS.NOT_READY_FOR_CUSTOMERS} postTitle="Why The Mall hasn't launched yet">
+      <div className="relative w-full max-w-2xl mx-auto bg-white border shadow-md font-serif">
+
+        {/* Masthead */}
+        <div  className="border-b-4 border-double border-stone-800 px-7 pt-5 pb-3 text-center">
+          <p className="text-xs tracking-widest uppercase text-stone-500 mb-2">
+            The Mall ARTICLES · Official Notice
+          </p>
+          <h1 style={{fontFamily: "Playfair Display"}} className="text-3xl font-black leading-tight text-stone-900 tracking-tight">
+            Why The Mall Hasn't Launched Yet
+          </h1>
+          <p className="text-xs tracking-wide text-stone-500 mt-2">
+            A statement from The Mall team
+          </p>
+        </div>
+
+        {/* Thin divider */}
+        <div className="mx-7 border-t border-stone-300" />
+
+        {/* Body */}
+        <div style={{lineHeight: "1.2"}} className="px-7 pt-5 pb-6 text-stone-900 text-[15px] z-1">
+
+          {/* Opening with drop cap */}
+          <p className="mb-4">
+            <span className="float-left text-6xl font-black leading-none mr-1 -mt-2 text-stone-900">T</span>
+            <span className="mt-1">he Mall is not yet live to customers — let's explain why.
+              We are currently in the early stages of development — an MVP. 
+              Key pages are being finalized and the experience is being refined to ensure things run smoothly from day one (launch day).
+            </span>
+          </p>
+
+          {/* Section I */}
+          {/* <div className="border-t border-stone-300 pt-3 mb-4">
+            <p className="text-[10px] tracking-widest uppercase text-stone-500 mb-1">§ I</p>
+            <h2 className="font-bold text-base mb-2">We're still building</h2>
+            <p>
+              We are currently in the early stages of development — an MVP. Key pages are being finalized and the experience is being refined to ensure everything works smoothly from day one.
+            </p>
+          </div> */}
+
+          {/* Section II */}
+          <div className="border-t border-stone-300 pt-3 mb-4">
+            <p className="text-[10px] tracking-widest uppercase text-stone-500 mb-1">§ II</p>
+            <p className="mb-3">
+              Also, as the name suggests, <strong>it is a mall</strong> — a collection of different stores under one roof, or in this case, under one digital space. 
+              We are onboarding businesses and working toward a sufficient number of stores in each area before opening to the public.
+            </p>
+            <p className="mb-2">This approach allows us to:</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Attract real customer traffic from the start.</li>
+              <li>Give vendors time to prepare their stores and inventory.</li>
+              <li>Launch together with impact — not haphazardly.</li>
+            </ul>
+          </div>
+
+          {/* Pull quote */}
+          <div className="border-t-2 border-b-2 border-stone-800 my-5 py-3 text-center italic text-lg text-stone-800 leading-snug">
+            Let's build something worth showing up for.
+          </div>
+
+          {/* CTA */}
+          <p className="text-sm text-stone-600">
+            👉 Visit the <strong className="text-stone-900">Get Started</strong> page to track the percentage of stores signed up in your area — and watch us get closer to launch.
+          </p>
+        </div>
+
+        {/* Footer */}
+        <div className="border-t-4 border-double border-stone-800 px-7 py-2 text-center text-[10px] tracking-widest uppercase text-stone-500">
+          The Mall
+        </div>
+        {/* Background Image */}
+        <div className="absolute inset-0 w-full h-full">
+          <img src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/the-mall.png" alt="Background" className="w-full h-full object-cover opacity-20" />
+        </div>
+      </div>
+    </PostInteraction>
+  );
+};
+
+export const OurRecommendedBook = () => {
+  const posterImages = [
+    {
+      url: "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/eric-ries.jpg",
+      color: "#fef3c71a",
+    }
+  ]
+
+  return (
+    <PostInteraction postIdentifier={POST_IDS.OUR_RECOMMENDED_BOOK} postTitle="Our Recommended Book">
+      <div className="w-full">
+        
+        <p className="font-normal py-[1vh] leading-[2.8vh]">
+          <strong>Recommended Read:</strong> If you're interested in building something that scales, <em>The Lean Startup</em> is worth your time. <br/>It gives you a practical way to grow a business without burning through resources — test your ideas fast, learn from real customers, and make decisions based on what's actually happening rather than what you <em>hope</em> is happening. It's become something of a bible in startup circles for good reason.
+        </p>
+
+        {/* Poster Images mapped using swiper */}
+        <div className="w-full aspect-square overflow-hidden">
+          <Swiper
+            modules={[Pagination, Navigation, Autoplay]}
+            autoplay={{
+              delay: 4000, 
+              disableOnInteraction: true, 
+              pauseOnMouseEnter: true, 
+            }}
+            className="w-full h-fit"
+            loop={true}
+          >
+            {posterImages.map((src, index) => (
+              <SwiperSlide key={index} className="w-full h-full">
+                <FramedPoster
+                  imageUrl={src.url}
+                  color={src.color}
+                  smallText=""
+                  largeText="THE LEAN STARTUP"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+
+      </div>
+    </PostInteraction>
+  )
+};
+
+export const LoansAndLaybuys = () => {
+
+  return (
+    <PostInteraction postIdentifier={POST_IDS.LOANS_AND_LAYBUYS} postTitle="Loans and Lay-buys">
+      <div className="w-full">
+        <p className="font-normal py-[1vh]">
+          You can offer loans and lay-buys that are linked to customers’ credit scores, 
+          allowing them to improve their scores while you benefit from increased sales and customer loyalty. It’s a win-win!
+        </p>
+      </div>
+    </PostInteraction>
+  )
+};
+
+export const StoreServiceBidding = () => {
+
+  return (
+    <PostInteraction postIdentifier={POST_IDS.STORE_SERVICE_BIDDING} postTitle="Store Service Bidding">
+      <div className="w-full">
+        
+        <p  className="font-normal py-[1vh]">
+          Customers can place bids for your service when demand is high.
+        </p>
+
+      </div>
+    </PostInteraction>
+  )
+};
+
+export const DoubleTapLikeButtonForReviews = () => {
+
+  return (
+    <PostInteraction postIdentifier={POST_IDS.DOUBLE_TAP_FOR_REVIEWS} postTitle="Double Tap Like Button for Reviews">
+      <div className="w-full">
+        
+        <p  className="font-normal py-[1vh]">
+          Double-tap the like button at the top of every store page (in the menubar) 
+          to see what other customers are saying or to add your own review.
+        </p>
+
+      </div>
+    </PostInteraction>
+  )
+};
+
+
+export const CollaborateOrLearn = () => {
+  return (
+    <PostInteraction postIdentifier={POST_IDS.COLLABORATE_OR_LEARN} postTitle="Collaborate or Learn">
+      <div className="w-full">
+        <p  className="font-normal py-[1vh]">
+          The mall offers an opportunity to collaborate with other businesses or learn from them by seeing how they operate, 
+          what they offer, and how customers respond. You can gain insights into market trends, customer preferences, 
+          and effective strategies by observing and interacting with other entrepreneurs.
+        </p>
+      </div>
+    </PostInteraction>
+  )
+};
+
+
+export const BuildABrandWithReadyTemplatesOrAI = () => {
+  return (
+    <PostInteraction postIdentifier={POST_IDS.BUILD_A_BRAND_WITH_READY_TEMPLATES_OR_AI} postTitle="Build a Brand with Ready Templates or AI">
+      <div className="w-full">
+        <p  className="font-normal py-[1vh]">
+          Build a brand with ready templates or AI. The Mall provides tools and resources to help you create a unique brand identity, even if you don't have design experience. You can choose from a variety of templates or use AI-powered features to customize your store's appearance and create a memorable brand that resonates with customers.
+        </p>
+      </div>
+    </PostInteraction>
+  )
+};
+
+export const AddYourOwnDomain = () => {
+  return (
+    <PostInteraction 
+      postIdentifier={POST_IDS.ADD_YOUR_OWN_DOMAIN} 
+      postTitle="Add Your Own Domain"
+    >
+      <div className="w-full">
+        <p className="font-normal py-[1vh]">
+          Add your own domain to your store so users can reach it directly. You can purchase domains from platforms like{' '}
+          <a href="https://www.godaddy.com" target="_blank" className="text-blue-600 underline">GoDaddy</a>,{' '}
+          <a href="https://www.namecheap.com" target="_blank" className="text-blue-600 underline">Namecheap</a>,{' '}
+          <a href="https://www.hostinger.com" target="_blank" className="text-blue-600 underline">Hostinger</a>, or{' '}
+          <a href="https://www.hostafrica.co.za" target="_blank" className="text-blue-600 underline">HOSTAFRICA</a>
+        </p>
+      </div>
+    </PostInteraction>
+  )
+};
+
+export const CustomersCanReviewEverything = () => {
+  return (
+    <PostInteraction 
+      postIdentifier={POST_IDS.CUSTOMERS_CAN_REVIEW_EVERYTHING} 
+      postTitle="Customer Can Review Everything"
+    >
+      <div className="w-full">
+        <p className="font-normal py-[1vh]">
+          Customers can favorite or review everything — stores, products, services, projects, delivery, etc! 
+          Feedback from customers is one of the most important tools for learning and improving, 
+          helping you understand what’s working and what’s not so you can continuously enhance your offerings and customer experience.
+        </p>
+      </div>
+    </PostInteraction>
+  )
+};

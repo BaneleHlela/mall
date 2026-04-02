@@ -8,6 +8,7 @@ import { getPostStats, togglePostLike } from '../../../../features/posts/postSli
 import { CiShare2 } from 'react-icons/ci';
 import { IoShareSocialOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 interface PostInteractionProps {
     postIdentifier: string;
@@ -38,8 +39,15 @@ const PostInteraction: React.FC<PostInteractionProps> = ({
 
     const handleLike = () => {
         if (!user) {
-            alert('Please log in to like posts.');
-            return;
+            toast.error(`Please log in to manage favorites`, {
+                style: {
+                  background: '#fef2f2',
+                  color: '#991b1b',
+                  fontFamily: 'Outfit',
+                },
+                icon: '❌',
+            });
+          return;
         }
         dispatch(togglePostLike(postIdentifier));
     };
@@ -93,6 +101,7 @@ const PostInteraction: React.FC<PostInteractionProps> = ({
                     <div className="flex items-center space-x-1">
                         <button
                             onClick={handleLike}
+                            onDoubleClick={handleReviewsClick}
                             disabled={loading}
                             className="focus:outline-none"
                         >
