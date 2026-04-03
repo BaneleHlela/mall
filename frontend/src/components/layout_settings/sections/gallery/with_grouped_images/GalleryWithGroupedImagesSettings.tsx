@@ -86,7 +86,7 @@ const GalleryWithGroupedImagesSettings: React.FC<SectionSettingsProps>  = ({
                                 objectPath={`${objectPath}.text.heading`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                allow={["fontFamily", "animation", "fontStyle", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
+                                allow={["fontFamily", "animation", "fontStyle", "textDecoration", "textTransform", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                                 responsiveSize
                                 useTextarea
                                 responsivePadding
@@ -101,7 +101,7 @@ const GalleryWithGroupedImagesSettings: React.FC<SectionSettingsProps>  = ({
                                 objectPath={`${objectPath}.text.subheading`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
+                                allow={["fontFamily", "animation", "fontStyle", "textDecoration", "textTransform", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                                 responsiveSize
                                 useTextarea
                                 responsivePadding

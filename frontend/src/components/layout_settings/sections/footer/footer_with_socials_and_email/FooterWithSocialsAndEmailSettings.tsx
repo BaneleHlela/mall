@@ -36,7 +36,9 @@ const FooterWithSocialsAndEmailSettings: React.FC<SectionEditorProps> = ({
               objectPath={`${objectPath}.background`}
               settings={settings}
               handleSettingChange={handleSettingChange}
-              allow={["opacity", "color"]}
+              allow={["opacity", "color", "placement", "width", "height", "floatingImage"]}
+              responsiveSize
+              widthUnit='%'
             />
           </div>
         }

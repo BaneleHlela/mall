@@ -20,7 +20,7 @@ const StoreProductsSection = () => {
   }
 
   return (
-    <FirstStoreProductsSection ></FirstStoreProductsSection>
+    <>No products section matching {variation}</>
   )
 }
 

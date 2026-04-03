@@ -50,7 +50,7 @@ const StoreDivTag = ({ style = {}, jsx }: Props) => {
     <div
       style={{
         ...getBackgroundStyles(style || {}, colors),
-        minHeight: "fit-content"
+        minHeight: "fit-content",
       }}
       className={`flex items-center w-full h-full min-h-fit overflow-y-scroll hide-scrollbar`}
     >
@@ -69,6 +69,7 @@ const StoreDivTag = ({ style = {}, jsx }: Props) => {
           ${itemsPositionY === "center" && "justify-center"}
           ${itemsPositionY === "end" && "justify-end"}`}>
           {jsx}
+          
         </div>
 
         {/* Background image (only render if exists) */}
@@ -88,6 +89,16 @@ const StoreDivTag = ({ style = {}, jsx }: Props) => {
             className="absolute object-cover z-10"
           />
         )}
+        {/* Opacity adjuster */}
+          {style?.opacity !== undefined && (
+            <div 
+              style={{ 
+                backgroundColor: colors[style.color as keyof typeof colors], 
+                opacity: style.opacity,
+              }}
+              className="absolute inset-0 z-0 w-full h-full border-inherit"
+            />
+          )}
       </div>
     </div>
   )

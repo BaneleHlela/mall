@@ -154,16 +154,6 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
             />
           </div>
         )}
-        {isAllowed("backgroundmage") && (
-          <div className="bg-white rounded-xl shadow-sm border border-stone-100 px-[1vh]">
-            <MultipleLayoutImagesHandler
-                objectPath={`${objectPath}.backgroundImage.imageUrl`}
-                min={0}
-                max={2}
-                images={getSetting("backgroundImage.imageUrl", settings, objectPath)}
-            />
-          </div>
-        )}
        
         {/* Animation Section */}
         {isAllowed("animation") && (
@@ -395,7 +385,7 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
       )}
       
       {/* Opacity Section */}
-      {isAllowed("opacity") && (
+      {/* {isAllowed("opacity") && (
         <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100">
           <SettingsSlider
             label="Opacity"
@@ -407,7 +397,7 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
             onChange={createSliderChangeHandler("opacity", "%")}
           />
         </div>
-      )}
+      )} */}
 
       {/* Placement Section */}
       {isAllowed("placement") && (
@@ -683,6 +673,18 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
                 />
               </div>
 
+              {/* Opacity */}
+              <div className="bg-white rounded-xl px-[1vh] shadow-sm border border-stone-100">
+                <SettingsSlider
+                  label="Opacity"
+                  value={parseInt(getSetting("opacity", settings, objectPath) || "100")}
+                  unit="%"
+                  min={0}
+                  max={100}
+                  step={1}
+                  onChange={createSliderChangeHandler("opacity", "%")}
+                />
+              </div>
               {/* Height Settings (hidden) */}
               <div className="hidden bg-stone-50 rounded-lg p-[1vh] border border-stone-200">
                 <h4 className="text-[1.4vh] font-semibold text-stone-500 uppercase tracking-wide mb-[1vh]">Height</h4>
@@ -749,7 +751,7 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
                 />
               </div>
               {/* Opacity */}
-              <div className=" bg-stone-50 rounded-lg p-[1vh] border border-stone-200 space-y-[1vh]">
+              {/* <div className=" bg-stone-50 rounded-lg p-[1vh] border border-stone-200 space-y-[1vh]">
                 <SettingsSlider
                   label="Opacity"
                   value={parseFloat(getSetting("backgroundImage.opacity", settings, objectPath) || "0")}
@@ -761,7 +763,7 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
                     handleSettingChange(`${objectPath}.backgroundImage.opacity`, `${newVal}%`);
                   }}
                 />
-              </div>
+              </div> */}
               {/* Position Settings (hidden) */}
               <div className="hidden bg-stone-50 rounded-lg p-[1vh] border border-stone-200 space-y-[1vh]">
                 <h4 className="text-[1.4vh] font-semibold text-stone-500 uppercase tracking-wide">Position</h4>

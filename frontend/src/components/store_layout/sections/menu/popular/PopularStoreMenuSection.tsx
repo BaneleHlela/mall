@@ -18,6 +18,7 @@ const PopularStoreMenuSection = () => {
   const store = useAppSelector((state) => state.stores.currentStore);
   const colors = useAppSelector((state) => state.layoutSettings.colors);
   const fonts = useAppSelector((state) => state.layoutSettings.fonts);
+  const selectedCategory = useAppSelector((state) => state.categories.selectedCategory);
   const navigate = useNavigate();
 
 
@@ -63,8 +64,10 @@ const PopularStoreMenuSection = () => {
       {isHorizontal ? (
         settings.categoryDivider?.show && store?.categories?.products ? (
           // Horizontal Swiper with Category Dividers
-          store?.categories?.products?.map((category) => {
-            const categoryProducts = products.filter(product => product.category === category);
+          ((selectedCategory && selectedCategory !== 'all') ? [selectedCategory] : store?.categories?.products || [])?.map((category) => {
+            const categoryProducts = selectedCategory && selectedCategory !== 'all'
+              ? products.filter(product => product.category === selectedCategory)
+              : products.filter(product => product.category === category);
             if (categoryProducts.length === 0) return null;
 
             const categoryDividerStyle = getTextStyles(settings.categoryDivider, fonts, colors);
@@ -143,7 +146,7 @@ const PopularStoreMenuSection = () => {
               }}
               className="my-3"
             >
-              {products.map((product) => (
+              {(selectedCategory && selectedCategory !== 'all' ? products.filter(product => product.category === selectedCategory) : products).map((product) => (
                 <SwiperSlide key={product._id}>
                   <PopularStoreMenuCard
                     title={product.name}
@@ -161,8 +164,10 @@ const PopularStoreMenuSection = () => {
         )
       ) : settings.categoryDivider?.show && store?.categories?.products ? (
         // Vertical Grid with Category Dividers
-        store?.categories?.products?.map((category) => {
-          const categoryProducts = products.filter(product => product.category === category);
+        ((selectedCategory && selectedCategory !== 'all') ? [selectedCategory] : store?.categories?.products || [])?.map((category) => {
+          const categoryProducts = selectedCategory && selectedCategory !== 'all'
+            ? products.filter(product => product.category === selectedCategory)
+            : products.filter(product => product.category === category);
           if (categoryProducts.length === 0) return null;
 
           const categoryDividerStyle = getTextStyles(settings.categoryDivider, fonts, colors);
@@ -234,9 +239,9 @@ const PopularStoreMenuSection = () => {
               mobile: settings.grid.columns.mobile,
               desktop: settings.grid.columns.desktop,
             })}`}
-          >
-            {products.map((product) => (
-              <PopularStoreMenuCard
+            >
+              {(selectedCategory && selectedCategory !== 'all' ? products.filter(product => product.category === selectedCategory) : products).map((product) => (
+                <PopularStoreMenuCard
                 key={product._id}
                 title={product.name}
                 imageUrl={product.images[0]}

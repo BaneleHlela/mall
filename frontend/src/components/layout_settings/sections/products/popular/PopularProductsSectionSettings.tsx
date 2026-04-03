@@ -17,6 +17,7 @@ import UnderlinedTextSettings from '../../../extras/text/UnderlinedTextSettings'
 import ColorPicker from '../../../supporting/ColorPicker';
 import AcceptingOrdersButtonSettings from '../shared/AcceptingOrdersButtonSettings';
 import PickupOrDeliverySettings from '../shared/PickupOrDeliverySettings';
+import SettingsSlider from '../../../supporting/SettingsSlider';
 
 
 const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
@@ -107,7 +108,7 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                                 objectPath={`${objectPath}.text.heading`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                allow={["fontFamily", "animation", "weight", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
+                                allow={["fontFamily", "animation", "weight", "textDecoration", "textTransform", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                                 responsiveSize
                                 useTextarea
                                 responsivePadding
@@ -118,12 +119,14 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                 {activePanel === "subheading" && (
                     <SlidingPanel key="subheading" isOpen={true} onClose={() => setActivePanel("Text")} title="subheading Settings">
                         <div className="space-y-[.3vh]">
-                            <UnderlinedTextSettings
+                            <TextEditor
+                                objectPath={`${objectPath}.text.subheading`}
                                 settings={settings}
                                 handleSettingChange={handleSettingChange}
-                                objectPath={`${objectPath}.text.subheading`}
-                                allowInput
+                                allow={["fontFamily", "animation", "weight", "textDecoration", "textTransform", "input", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
                                 responsiveSize
+                                useTextarea
+                                responsivePadding
                             />
                         </div>
                     </SlidingPanel>
@@ -261,6 +264,32 @@ const PopularProductsSectionSettings: React.FC<SectionEditorProps> = ({
                                                 desktop: { min: 0, max: 100 }
                                             }}
                                         />
+                                        {/* Check if mobile is horizontal before showing mobile slider */}
+                                        {settings.sections.products?.stack?.mobile === 'horizontal' && (
+                                            <div className="pt-2">
+                                                <SettingsSlider
+                                                    label="Mobile Swiper Offset"
+                                                    value={getSetting("grid.swiperOffset.mobile", settings, objectPath) ?? 0.1}
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.05}
+                                                    onChange={(value) => handleSettingChange(`${objectPath}.grid.swiperOffset.mobile`, value)}
+                                                />
+                                            </div>
+                                        )}
+                                        {/* Check if desktop is horizontal before showing desktop slider */}
+                                        {settings.sections.products?.stack?.desktop === 'horizontal' && (
+                                            <div className="pt-2">
+                                                <SettingsSlider
+                                                    label="Desktop Swiper Offset"
+                                                    value={getSetting("grid.swiperOffset.desktop", settings, objectPath) ?? 0.1}
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.05}
+                                                    onChange={(value) => handleSettingChange(`${objectPath}.grid.swiperOffset.desktop`, value)}
+                                                />
+                                            </div>
+                                        )}
                                     </> 
                                 }
                             />

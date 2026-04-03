@@ -35,8 +35,8 @@ const HeroWithButtonImageAndTextSettings: React.FC<HeroWithButtonImageAndTextSet
               objectPath={`${objectPath}.background`}
               settings={settings}
               handleSettingChange={handleSettingChange}
-              allow={["opacity", "backgroundImage", "floatingImage", "color", "height"]}
-              widthUnit="vw"
+              allow={["opacity", "backgroundImage", "floatingImage", "color", "height", "placement", "width"]}
+              widthUnit="%"
               heightUnit="vh"
               responsiveSize
             />

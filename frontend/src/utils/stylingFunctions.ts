@@ -276,7 +276,7 @@ export const getBackgroundStyles = (bg: BackgroundSettings = {}, colors?: any) =
     }
   }
   // opacity
-  if (bg.opacity !== undefined) styles.opacity = bg.opacity;
+  //if (bg.opacity !== undefined) styles.opacity = bg.opacity;
 
   if (bg.border) {
     if (bg.border.width) styles.borderWidth = bg.border.width;

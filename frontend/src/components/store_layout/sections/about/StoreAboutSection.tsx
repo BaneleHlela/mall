@@ -11,11 +11,11 @@ import AboutWithLineAndImage from "./with_line_and_image/AboutWithLineAndImage";
 const StoreAboutSection = ({id}: SectionProps) => {
   const variation = useAppSelector((state) => state.layoutSettings.sections.about.variation);
 
-  if (variation === "aboutWithImageNextToText") {
-    return (
-      <AboutWithImageNextToText />
-    )
-  }
+  // if (variation === "aboutWithImageNextToText") {
+  //   return (
+  //     <AboutWithImageNextToText />
+  //   )
+  // }
 
   if ( variation === "shortAbout" ) {
     return <ShortAbout />

@@ -148,7 +148,7 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                             objectPath={`${objectPath}.text.groupName`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={["fontFamily", "animation", "weight", "hide", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
+                            allow={["fontFamily", "animation", "weight", "hide", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "textDecoration", "textTransform", "fontStyle", "textAlign", "textMaxWidth", "underline" ]}
                             responsiveSize
                             useTextarea
                             responsivePadding
@@ -169,7 +169,7 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                             objectPath={`${objectPath}.text.groupDescription`}
                             settings={settings}
                             handleSettingChange={handleSettingChange}
-                            allow={["fontFamily", "animation", "weight", "hide", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "placement", "textAlign", "textMaxWidth", "underline" ]}
+                            allow={["fontFamily", "animation", "weight", "hide", "width", "fontSize", "lineHeight", "letterSpacing", "color", "padding", "border", "textDecoration", "textTransform", "fontStyle", "textAlign", "textMaxWidth", "underline" ]}
                             responsiveSize
                             useTextarea
                             responsivePadding

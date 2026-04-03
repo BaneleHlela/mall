@@ -1,6 +1,8 @@
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks'
 import PopularStoreMenuSectionSettings from './popular/PopularStoreMenuSectionSettings';
 import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice';
+import AddToMenuBarToggler from '../../extras/AddToMenubarToggler';
+import SectionPositionMover from '../../supporting/SectionPositionMover';
 
 const StoreMenuSectionSettings = () => {
     const dispatch = useAppDispatch();
@@ -10,18 +12,16 @@ const StoreMenuSectionSettings = () => {
     const handleSettingChange = (field: string, value: any) => {
         dispatch(updateSetting({ field, value }));
     };
-  
-    if (variation === "popularMenu") {
-        <PopularStoreMenuSectionSettings
-            settings={settings}
-            handleSettingChange={handleSettingChange}
-        />
-    }
+
     return (
-        <PopularStoreMenuSectionSettings
-            settings={settings}
-            handleSettingChange={handleSettingChange}
-        />
+        <>
+            <SectionPositionMover section="menu" />
+            <AddToMenuBarToggler section='menu' />
+            <PopularStoreMenuSectionSettings
+                settings={settings}
+                handleSettingChange={handleSettingChange}
+            />
+        </>
     )
  }
 

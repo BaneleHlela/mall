@@ -21,14 +21,14 @@ const StoreHeroSection = () => {
     case 'stylishHero':
       return <StylishHero />;
 
-    case 'heroWithImagePatternAndBox':
-      return <HeroWithImagePatternAndBox />;
+    // case 'heroWithImagePatternAndBox':
+    //   return <HeroWithImagePatternAndBox />;
 
     case 'heroWithReviewCardAndEmailForm':
       return <HeroWithReviewCardAndEmailForm />;
 
-    case 'heroWithBox':
-      return <HeroWithBox />;
+    // case 'heroWithBox':
+    //   return <HeroWithBox />;
 
     case 'heroWithDivAndImage':
       return <HeroWithDivAndImage />;
