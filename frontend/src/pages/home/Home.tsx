@@ -14,10 +14,9 @@ import BasicStorePost from '../../components/the_mall/basic_store_post/BasicStor
 import TipsAndUpdates from '../../components/the_mall/home/TipsAndUpdates';
 import { FaTools } from 'react-icons/fa';
 import StorePostJSX from '../../components/the_mall/home/StorePostJSX';
-import { LaunchDate, LookOutForRedFlags, WelcomeToTheMall, WhatIsECommerce, WhatIsMVP, YouCanInvest, MallMVPAnnouncement, Branding, MostImportantPoster, NoAyikhoPoster, VariousPosters, ListOfSuppliersByChioma, FourFirstTimeSmallBusinessMistakes, HowToStartBusinessWhiteLabeling, BusinessAdviceForSmallBusiness, YCStartingCompanyKeyTerms, YCSalesPlaybook, YCStartupIdeas, YCCoFounderRelationships, SBDBusinessPlan, SBDBusinessStrategy, NotReadyForCustomers, OurRecommendedBook, LoansAndLaybuys, StoreServiceBidding, DoubleTapLikeButtonForReviews, AddYourOwnDomain, CustomersCanReviewEverything } from '../../components/the_mall/home/posts/SimplePosts';
+import { SupplyChain, LaunchDate, LookOutForRedFlags, WelcomeToTheMall, WhatIsECommerce, WhatIsMVP, YouCanInvest, MallMVPAnnouncement, Branding, MostImportantPoster, NoAyikhoPoster, VariousPosters, ListOfSuppliersByChioma, FourFirstTimeSmallBusinessMistakes, HowToStartBusinessWhiteLabeling, BusinessAdviceForSmallBusiness, YCStartingCompanyKeyTerms, YCSalesPlaybook, YCStartupIdeas, YCCoFounderRelationships, SBDBusinessPlan, SBDBusinessStrategy, NotReadyForCustomers, OurRecommendedBook, LoansAndLaybuys, StoreServiceBidding, DoubleTapLikeButtonForReviews, AddYourOwnDomain, CustomersCanReviewEverything, Scalability, HireABrandDesigner, AccountingVsEconomicProfit } from '../../components/the_mall/home/posts/SimplePosts';
 import MultipleLayoutsPost from '../../components/the_mall/home/posts/MultipleLayoutsPost';
 import FreePikPosters from '../../components/the_mall/home/posts/FreePikPosters';
-import SupplyChain from '../../components/the_mall/home/posts/SupplyChain';
 import { MdAdd } from 'react-icons/md';
 import { IoStorefrontOutline } from 'react-icons/io5';
 import toast from 'react-hot-toast';
@@ -363,11 +362,59 @@ const HomePage = () => {
             isFeedbackPost
             storeSlug='themall'
           />
+          {/* Branding */}
+          <StorePostJSX
+            tipFor='Tips for Vendors'
+            jsx={<Branding />}
+            onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
+            isFeedbackPost
+          />
+          {/* Supply Chain */}
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
+              <SupplyChain />
+            }
+            color="text-orange-400"
+            onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
+          />
+          {/* Scalability */}
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
+              <Scalability />
+            }
+            color="text-green-500"
+            onModalOpen={setIsReviewsModalOpen}
+            storeSlug='themall'
+          />
+          {/* Hire a brand designer on the mall */}
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
+              <HireABrandDesigner />
+            }
+            onModalOpen={setIsReviewsModalOpen}
+            isFeedbackPost
+            storeSlug='themall'
+          />
           {/* Loans & Laybuys */}
           <StorePostJSX
             tipFor='Upcoming Features'
             jsx={
               <LoansAndLaybuys />
+            }
+            onModalOpen={setIsReviewsModalOpen}
+            isFeedbackPost
+            storeSlug='themall'
+          />
+          {/* Accounting vs Economic Profit */}
+          <StorePostJSX
+            tipFor='Tips and Updates'
+            jsx={
+              <AccountingVsEconomicProfit />
             }
             onModalOpen={setIsReviewsModalOpen}
             isFeedbackPost
@@ -423,6 +470,7 @@ const HomePage = () => {
             isFeedbackPost
             storeSlug='themall'
           />
+          
           {/* Four First-Time Small Business Mistakes */}
           <StorePostJSX
             tipFor='Tips And Updates'
@@ -495,6 +543,8 @@ const HomePage = () => {
             storeSlug='small-business-development'
             isFeedbackPost
           />
+          
+          {/* SBD Business Strategy */}
           <StorePostJSX
             tipFor='Tips for Vendors'
             jsx={<SBDBusinessStrategy />}
@@ -556,13 +606,7 @@ const HomePage = () => {
             onModalOpen={setIsReviewsModalOpen}
             storeSlug='themall'
           />
-          <StorePostJSX
-            tipFor='Tips for Vendors'
-            jsx={<Branding />}
-            color="text-orange-400"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-          />
+          
           <StorePostJSX
             tipFor='Tips and Updates'
             jsx={
@@ -572,15 +616,7 @@ const HomePage = () => {
             storeSlug='themall'
           />
           
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <SupplyChain />
-            }
-            color="text-orange-400"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-          />
+          
           <StorePostJSX
             tipFor='Tips and Updates'
             jsx={
