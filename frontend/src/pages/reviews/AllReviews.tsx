@@ -1,28 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { IoIosStar, IoIosStarOutline } from "react-icons/io";
-import { IoArrowBack } from "react-icons/io5";
+import { IoArrowBack, IoSend, IoClose } from "react-icons/io5";
 import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
 import HomePageReview from "../../components/the_mall/home/HomePageReview";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getStoreReviews, createReview, clearReviewError, clearReviewMessage } from "../../features/reviews/reviewSlice";
-import { getPostReviews, createPostReview } from "../../features/posts/postSlice";
+import { getPostReviews, createPostReview, getPostStats, setPostReviewModalOpen } from "../../features/posts/postSlice";
 import { fetchStoreBySlug } from "../../features/stores/storeSlice";
 import axios from "axios";
+import ReviewsSummaryCard from "../../components/the_mall/reviews/ReviewsSummaryCard";
 
-const AllReviews: React.FC = () => {
+interface AllReviewsProps {
+  isOpen: boolean;
+  onClose: () => void;
+  postIdentifier?: string;
+  storeSlug?: string;
+  isMall?: boolean;
+}
+
+const AllReviews: React.FC<AllReviewsProps> = ({
+  isOpen,
+  onClose,
+  postIdentifier,
+  storeSlug,
+  isMall = false
+}) => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  
-  // Get parameters from URL
-  const postIdentifier = searchParams.get("post");
-  const storeSlug = searchParams.get("store");
-  const mallParam = searchParams.get("mall");
   
   // Determine what we're showing reviews for
-  const isMall = mallParam === "true" || (!postIdentifier && !storeSlug);
   const isPost = !!postIdentifier;
   const isStore = !!storeSlug && !isMall;
   
@@ -41,19 +47,9 @@ const AllReviews: React.FC = () => {
   const user = useAppSelector((state) => state.user.user);
   const { isLoading: reviewLoading, error, message } = useAppSelector((state) => state.reviews);
 
-  // Handle back navigation
-  const handleBack = () => {
-    if (isPost && targetPost) {
-      // Go back to home with the post visible
-      //navigate(`/?post=${postIdentifier}`);
-      navigate(-1)
-    } else if (isStore && storeSlug) {
-      // Go back to the store page
-      navigate(`/stores/${storeSlug}`);
-    } else {
-      // Go back to home
-      navigate("/");
-    }
+  // Handle close modal
+  const handleClose = () => {
+    onClose();
   };
 
   // Fetch reviews based on URL params
@@ -117,8 +113,10 @@ const AllReviews: React.FC = () => {
       }
     };
     
-    fetchReviews();
-  }, [dispatch, isPost, postIdentifier, isStore, storeSlug, isMall]);
+    if (isOpen) {
+      fetchReviews();
+    }
+  }, [dispatch, isPost, postIdentifier, isStore, storeSlug, isMall, isOpen]);
 
   // Clear Redux messages when unmounting
   useEffect(() => {
@@ -127,6 +125,21 @@ const AllReviews: React.FC = () => {
       dispatch(clearReviewMessage());
     };
   }, [dispatch]);
+
+  // Update post review modal state and fetch stats when modal opens for a post
+  useEffect(() => {
+    if (isOpen && isPost && postIdentifier) {
+      dispatch(setPostReviewModalOpen(true));
+      dispatch(getPostStats(postIdentifier));
+    }
+  }, [dispatch, isOpen, isPost, postIdentifier]);
+
+  // Reset post review modal state when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      dispatch(setPostReviewModalOpen(false));
+    }
+  }, [dispatch, isOpen]);
 
   // Submit review for store (themall or specific store)
   const handleStoreReviewSubmit = async (e: React.FormEvent) => {
@@ -173,17 +186,26 @@ const AllReviews: React.FC = () => {
   };
 
   // Calculate average rating
-  const avgRating = reviews.length > 0 
-    ? reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length 
+  const avgRating = reviews.length > 0
+    ? reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length
     : 0;
+
+  // Calculate rating distribution [5-star count, 4-star count, ..., 1-star count]
+  const ratingDistribution = [0, 0, 0, 0, 0];
+  reviews.forEach(review => {
+    const rating = Math.floor(review.rating || 0);
+    if (rating >= 1 && rating <= 5) {
+      ratingDistribution[5 - rating]++; // 5 stars at index 0, 1 star at index 4
+    }
+  });
 
   // Get title based on what's being viewed
   const getTitle = () => {
     if (isPost && targetPost) {
-      return targetPost.title || "Post Reviews";
+      return "Post Reviews";
     }
     if (isStore && targetStore) {
-      return targetStore.name || "Store Reviews";
+      return "Store Reviews";
     }
     if (isMall) {
       return "The Mall Reviews";
@@ -192,40 +214,63 @@ const AllReviews: React.FC = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-stone-100 flex flex-col items-center py-4">
-      {/* Header with Back Button */}
-      <div className="w-full max-w-4xl px-4 mb-4 flex items-center">
-        <button
-          onClick={handleBack}
-          className="flex items-center text-black hover:text-amber-600 transition-colors"
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ y: "100%" }}
+          animate={{ y: 0 }}
+          exit={{ y: "100%" }}
+          transition={{ type: "spring", damping: 30, stiffness: 300 }}
+          className="fixed inset-x-0 bottom-0 z-50 bg-white rounded-t-2xl shadow-2xl h-[85vh] max-h-[85vh] overflow-hidden flex flex-col max-w-[400px] lg:left-10"
         >
-          <IoArrowBack className="text-[3vh] mr-2" />
-          <span className="text-[2vh]">Back</span>
-        </button>
-      </div>
+          {/* Header with Close Button */}
+          <div className="relative w-full max-w-4xl p-2 mb-4 flex items-center justify-center shadow">
+            <button
+              onClick={handleClose}
+              className="absolute left-2 flex items-center text-black hover:text-amber-600 transition-colors"
+            >
+              <IoClose className="text-[3vh] mr-2" />
+            </button>
 
-      {/* Title */}
-      <div className="w-full max-w-4xl px-4 mb-4">
-        <h1 className="text-[3vh] font-bold text-center">{getTitle()}</h1>
-        <p className="text-center text-gray-500 text-[2vh]">Reviews & Feedback</p>
+            <p className="text-[2.2vh] font-[500]">{getTitle()}</p>
+          </div>
+
+      {/* Reviews Summary Component */}
+      <div className="p-2 w-full">
+        <ReviewsSummaryCard
+          averageRating={avgRating}
+          totalReviews={reviews.length}
+          ratingDistribution={ratingDistribution}
+        />
       </div>
 
       {/* Content */}
-      <div className="w-full max-w-4xl px-4">
+      <div className="w-full max-w-4xl px-3">
         {/* Overview */}
-        <div className="w-full bg-black text-white rounded-[1vh] py-[1vh] px-[1.5vh] mb-4">
+        {/* <div className="w-full bg-black text-white rounded-[1vh] py-[1vh] px-[1.5vh] mb-4">
           <p className="font-semibold space-x-1 flex items-center">
-            <span>AI Overview</span>
+            <span>MayI Overview</span>
             <TipsAndUpdatesIcon className="text-white ml-1" style={{ fontSize: "2.5vh" }} />
           </p>
           <p className="text-[2vh] py-1">
-            Average rating: <strong>{avgRating > 0 ? avgRating.toFixed(1) : "N/A"}/5</strong>.
-            Based on <strong>{reviews.length}</strong> reviews.
+            Hi there! I'm MayI, the mall's AI agent. Here to help you with all your AI needs, including giving you a quick summary of the reviews for this &nbsp;
+            {isPost ? "post" : isStore ? "store" : "mall"}! I'll start cooking as soon as the comments start rolling.
           </p>
-        </div>
+        </div> */}
 
         {/* Reviews List */}
         {loading ? (
+          <p className="text-center text-gray-500 py-3">Loading reviews...</p>
+        ) : reviews.length ? (
+          <div className="space-y-2 mb-4 mt-2">
+            {reviews.map((review, i) => (
+              <HomePageReview key={i} review={review} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-500 py-3 mb-4">No reviews yet. Be the first to review!</p>
+        )}
+        {/* {loading ? (
           <p className="text-center text-gray-500 py-3">Loading reviews...</p>
         ) : reviews.length ? (
           <div className="space-y-2 mb-4">
@@ -235,73 +280,65 @@ const AllReviews: React.FC = () => {
           </div>
         ) : (
           <p className="text-center text-gray-500 py-3 mb-4">No reviews yet. Be the first to review!</p>
-        )}
-
+        )} */}
         {/* Review Form */}
         {(isPost || isMall || isStore) && (
-          <form 
-            onSubmit={isPost ? handlePostReviewSubmit : handleStoreReviewSubmit} 
-            className="mt-4 bg-white rounded-lg p-4 shadow"
+          <form
+            onSubmit={isPost ? handlePostReviewSubmit : handleStoreReviewSubmit}
+            className="absolute bottom-0 left-0 w-full bg-white border-t border-gray-200 rounded-t px-3.5 py-2.5 flex flex-col gap-2 shadow-md"
           >
-            <p className="font-semibold mb-2">Leave a Review</p>
-            
-            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-            {message && <p className="text-green-500 text-sm text-center">{message}</p>}
+            {error && <p className="text-red-500 text-xs text-center -mb-1">{error}</p>}
+            {message && <p className="text-green-500 text-xs text-center -mb-1">{message}</p>}
+            <p className="text-[14px] font-medium text-gray-500 whitespace-nowrap text-center">Leave a review</p>
 
-            <div className="flex flex-col space-y-3">
-              {/* Star rating */}
-              <div className="flex justify-center gap-2">
+            {/* Row 1: label + stars + anon */}
+            <div className="flex items-center gap-2.5">
+
+              <div className="flex gap-0.5 items-center">
                 {[1, 2, 3, 4, 5].map((star) =>
                   star <= rating ? (
-                    <IoIosStar
-                      key={star}
-                      onClick={() => setRating(star)}
-                      className="text-[3vh] text-amber-500 cursor-pointer"
-                    />
+                    <IoIosStar key={star} onClick={() => setRating(star)} className="text-[20px] text-amber-400 cursor-pointer" />
                   ) : (
-                    <IoIosStarOutline
-                      key={star}
-                      onClick={() => setRating(star)}
-                      className="text-[3vh] text-gray-400 cursor-pointer"
-                    />
+                    <IoIosStarOutline key={star} onClick={() => setRating(star)} className="text-[20px] text-gray-300 cursor-pointer" />
                   )
                 )}
               </div>
-              
-              {/* Comment input */}
-              <input
-                type="text"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                className="w-full h-[4.5vh] rounded-full border border-gray-500 px-[1.5vh]"
-                placeholder="Leave a review..."
-              />
 
-              {/* Anonymous option */}
-              <label className="flex justify-center items-center text-sm gap-2">
+              <label className="flex items-center gap-1 text-[14px] text-gray-500 whitespace-nowrap ml-auto cursor-pointer">
                 <input
                   type="checkbox"
                   checked={anonymous}
                   onChange={(e) => setAnonymous(e.target.checked)}
+                  className="w-3 h-3"
                 />
-                Post anonymously
+                Anonymous
               </label>
+            </div>
 
-              {/* Submit */}
+            {/* Row 2: input + send button inside */}
+            <div className="relative flex items-center">
+              <input
+                type="text"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Write a review..."
+                className="w-full h-[38px] rounded-full border border-gray-300 bg-gray-50 pl-3.5 pr-11 text-sm focus:outline-none focus:border-amber-400"
+              />
               <button
                 type="submit"
                 disabled={isSubmitting || !comment || rating === 0}
-                className={`w-full bg-amber-500 text-white rounded-full py-2 font-semibold ${
-                  isSubmitting || !comment || rating === 0 ? "opacity-60 cursor-not-allowed" : "hover:bg-amber-600"
-                }`}
+                className={`absolute right-1.5 w-[30px] h-[30px] rounded-full bg-amber-400 flex items-center justify-center transition-opacity
+                  ${isSubmitting || !comment || rating === 0 ? "opacity-40 cursor-not-allowed" : "hover:bg-amber-500 cursor-pointer"}`}
               >
-                {isSubmitting ? "Submitting..." : "Submit Review"}
+                <IoSend className="text-white text-[13px]" />
               </button>
             </div>
           </form>
         )}
       </div>
-    </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

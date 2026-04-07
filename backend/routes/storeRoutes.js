@@ -40,7 +40,7 @@ router.get("/my-stores", protectRoute, getStoresByOwner);
 router.get('/nearby', getStoresNearby);
 router.get('/', getStores);
 router.get("/:storeSlug", getStore);
-router.put('/edit/:storeSlug', /*protectRoute,*/ editStore);
+router.put('/edit/:storeSlug', protectRoute, editStore);
 
 // Team Member Routes
 router.post('/:storeSlug/team', uploadTeamMemberImage, addTeamMember);

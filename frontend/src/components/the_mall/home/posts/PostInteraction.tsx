@@ -4,11 +4,12 @@ import { LiaShareSolid } from 'react-icons/lia';
 import { BsDoorOpen } from 'react-icons/bs';
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { getPostStats, togglePostLike } from '../../../../features/posts/postSlice';
+import { togglePostLike } from '../../../../features/posts/postSlice';
 import { CiShare2 } from 'react-icons/ci';
 import { IoShareSocialOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useReviewsModal } from '../../../../App';
 
 interface PostInteractionProps {
     postIdentifier: string;
@@ -28,14 +29,13 @@ const PostInteraction: React.FC<PostInteractionProps> = ({
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const user = useAppSelector((state) => state.user.user);
+    const { openReviewsModal } = useReviewsModal();
 
     const postData = useAppSelector((state) => state.posts.posts[postIdentifier]);
     const loading = useAppSelector((state) => state.posts.isLoading);
 
-    useEffect(() => {
-        // Fetch post stats on mount
-        dispatch(getPostStats(postIdentifier));
-    }, [dispatch, postIdentifier]);
+    // Note: getPostStats is now called only when reviews modal opens for this post
+    // This prevents unnecessary API calls for all posts on the page
 
     const handleLike = () => {
         if (!user) {
@@ -53,7 +53,7 @@ const PostInteraction: React.FC<PostInteractionProps> = ({
     };
 
     const handleReviewsClick = () => {
-        navigate(`/reviews?post=${postIdentifier}`);
+        openReviewsModal(postIdentifier, '', false);
     };
 
     // Handle share functionality

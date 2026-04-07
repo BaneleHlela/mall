@@ -1,3 +1,4 @@
+
 import { useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../../../app/hooks";
 import type { RootState } from "../../../../app/store";
@@ -23,6 +24,7 @@ const StoreDashboardLayouts = () => {
   const layouts = useAppSelector((state) => state.layout.layouts);
   const activeLayout = useAppSelector((state) => state.layout.activeLayout);
   const isLoading = useAppSelector((state) => state.layout.isLoading);
+  const loading = useAppSelector((state) => state.storeAdmin.isLoading);
   const [editingLayout, setEditingLayout] = useState<string | null>(null);
   const [showNewLayoutModal, setShowNewLayoutModal] = useState(false);
   const [externalLink, setExternalLink] = useState("");
@@ -79,9 +81,9 @@ const StoreDashboardLayouts = () => {
     );
   }
 
-  if (isLoading && !store) {
+  if (isLoading) {
     return (
-      <div className="p-4 lg:p-6 h-full">
+      <div className="p-4 lg:p-6 h-full w-full">
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-full flex items-center justify-center">
           <div className="animate-pulse flex flex-col items-center gap-3">
             <div className="w-10 h-10 bg-slate-200 rounded-full animate-spin"></div>
@@ -435,7 +437,11 @@ const StoreDashboardLayouts = () => {
                             onClick={handleSaveExternalLink}
                             className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-white bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl hover:from-purple-600 hover:to-purple-700 transition-colors font-medium"
                           >
-                            <FaCheck className="w-4 h-4" />
+                            {loading ? (
+                              <TbLoader3 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <FaCheck className="w-4 h-4" />
+                            )}
                             Save Link
                           </button>
                         </div>
@@ -486,7 +492,7 @@ const StoreDashboardLayouts = () => {
                       _id: layout._id || '',
                       store: storeId,
                       name: layout.name,
-                      screenshot: layout.screenshot,
+                      screenshot: layout.screenshot || store?.thumbnails.reely,
                       source: layout.source
                     }}
                     onSelect={() => handleEdit(layout._id || '')}

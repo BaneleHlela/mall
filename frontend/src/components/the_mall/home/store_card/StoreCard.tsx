@@ -26,6 +26,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
 
   const user = useAppSelector((state) => state.user.user)
   const mysweetalert = withReactContent(Swal);
+  const storeNotReadyThumbnail = "https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/store_not_ready_thumbnail.jpg"
 
   // Check if store has a website
   const hasWebsite = store.website && (
@@ -100,7 +101,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
       
       {/* Image */}
       <div className={`relative ${mini ? "h-[65%]": "h-[72%]"} `}>
-        <img src={store.thumbnails.storeCard || store.thumbnail} alt="store-thumbnail" className="w-full h-full object-cover -z-1" />
+        <img src={hasWebsite ? store.thumbnails.storeCard : storeNotReadyThumbnail } alt="store-thumbnail" className="w-full h-full object-cover -z-1" />
         <div className="absolute top-0 w-full h-full bg-[#00000000]"></div>
         {/* Favorite toggle button
         <button

@@ -737,7 +737,7 @@ const HomePage = () => {
         )} */}
       </div>
       {/* Add post button */}
-      {!isReviewsModalOpen && !isPostReviewModalOpen && (
+      {!isPostReviewModalOpen && (
         <button 
           onClick={handleAddPostClick}
           className='fixed bottom-[6vh] right-2 p-[1.2vh] bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-full z-100 shadow-lg hover:shadow-xl hover:scale-110 active:scale-95 transition-all duration-200 ease-out'

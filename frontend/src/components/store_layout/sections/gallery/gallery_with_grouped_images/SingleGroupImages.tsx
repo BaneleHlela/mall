@@ -115,8 +115,16 @@ const SingleGroupImages: React.FC<SingleGroupImagesProps> = ({
                             )}
                         </div>
                     </div>
-                    <StoreTextTag style={textStyle} input={groupName} />
-                    <StoreTextTag style={descriptionTextStyle} input={groupDescrition} />
+                    {/* Group Name & Description (Div Tag for placement) */}
+                    <StoreDivTag
+                        style={{ ...style.background.textContainer, height: "fit-content" }}
+                        jsx={
+                            <>
+                                <StoreTextTag style={textStyle} input={groupName} />
+                                <StoreTextTag style={descriptionTextStyle} input={groupDescrition} />
+                            </>
+                        }
+                    />
                     {showGrid && style.addModal && createPortal(
                         <div
                             style={{

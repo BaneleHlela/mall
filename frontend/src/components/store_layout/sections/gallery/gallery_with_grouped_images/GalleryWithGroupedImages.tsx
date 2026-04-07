@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
 import SingleGroupImages, { getGridColumnClasses } from './SingleGroupImages';
-import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../../../../../utils/stylingFunctions';
+import { getBackgroundStyles, getResponsiveDimension } from '../../../../../utils/stylingFunctions';
 import { Swiper, SwiperSlide, type SwiperRef } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import UnderlinedText from '../../../extras/text/UnderlinedText';

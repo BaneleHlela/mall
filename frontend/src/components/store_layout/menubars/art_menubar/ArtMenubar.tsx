@@ -8,6 +8,7 @@ import StoreMenubarSearchbar from "../shared_menubar_components/StoreMenubarSear
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../../../app/hooks";
+import { useReviewsModal } from "../../../../App";
 import { useStoreButtonClickHandler } from "../../extras/buttons/useStoreButtonClickHandler";
 import StoreLayoutButton from "../../shared_layout_components/StoreLayoutButton";
 import BlueSidebar from "../menubar_with_searchbar/BlueSidebar";
@@ -24,6 +25,7 @@ const ArtMenubar = () => {
   const storeSlug = store?.slug as string;
   const handleButtonClick = useStoreButtonClickHandler();
   const navigate = useNavigate();
+  const { openReviewsModal } = useReviewsModal();
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -121,7 +123,7 @@ const ArtMenubar = () => {
                     <StoreMenubarHeart
                         size={layout.menubar.topbar.cart.size || "4vh"}
                         color={colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors]}
-                        onDoubleClick={() => store && navigate(`/reviews?store=${storeSlug}`)}
+                        onDoubleClick={() => store && openReviewsModal('', storeSlug, false)}
                     />
                 </div>
                 {/* Logo */}
@@ -223,7 +225,7 @@ const ArtMenubar = () => {
                     <StoreMenubarHeart
                         size={layout.menubar.topbar.cart.size || "4vh"}
                         color={colors[layout.menubar.topbar.cart.color as keyof typeof colors] || colors[layout.colors.secondary as keyof typeof colors]}
-                        onDoubleClick={() => store && navigate(`/reviews?store=${storeSlug}`)}
+                        onDoubleClick={() => store && openReviewsModal('', storeSlug, false)}
                     />
                 </div>
             </div>

@@ -7,6 +7,7 @@ import StoreMenubarHamburger from "../shared_menubar_components/StoreMenubarHamb
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../../../app/hooks";
+import { useReviewsModal } from "../../../../App";
 import { useStoreButtonClickHandler } from "../../extras/buttons/useStoreButtonClickHandler";
 import StoreLayoutButton from "../../shared_layout_components/StoreLayoutButton";
 import { mockLayout } from "../../../../major_updates/mockLayout";
@@ -25,6 +26,7 @@ const RestuarantMenubar = () => {
   const storeSlug = store?.slug as string;
     const location = useLocation();
     const navigate = useNavigate();
+    const { openReviewsModal } = useReviewsModal();
     const isPreviewMode = location.pathname.startsWith(`/layouts/${layout._id}/preview`);
     const basePath = isPreviewMode ? `/layouts/${layout._id}/preview` : `/stores/${storeSlug}`;
     const isHomePage = location.pathname === basePath;
@@ -144,7 +146,7 @@ const RestuarantMenubar = () => {
                                 <StoreMenubarHeart
                                     size={layout.menubar.topbar.cart.size}
                                     color={colors[layout.menubar.topbar.cart.color as keyof typeof colors]}
-                                    onDoubleClick={() => store && navigate(`/reviews?store=${storeSlug}`)}
+                                    onDoubleClick={() => store && openReviewsModal('', storeSlug, false)}
                                 />
                             </div>
                         )}
@@ -219,7 +221,7 @@ const RestuarantMenubar = () => {
                     <StoreMenubarHeart
                         size={layout.menubar.topbar.cart.size}
                         color={colors[layout.menubar.topbar.cart.color as keyof typeof colors]}
-                        onDoubleClick={() => store && navigate(`/reviews?store=${storeSlug}`)}
+                        onDoubleClick={() => store && openReviewsModal('', storeSlug, false)}
                     />
                 </div>
             </div>

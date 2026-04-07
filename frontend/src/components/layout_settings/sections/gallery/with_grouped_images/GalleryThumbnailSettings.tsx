@@ -137,6 +137,21 @@ const GalleryThumbnailSettings: React.FC<SupportingSettingsProps> = ({
                             name="Group Description"
                             onClick={() => setActivePanel("group_description")}
                         />
+                        <SubSettingsContainer
+                            name="Text Background"
+                            SettingsComponent={
+                            <div className="px-2 space-y-2">
+                                <BackgroundEditor
+                                    objectPath={`${objectPath}.imagesModal.background.textContainer`}
+                                    settings={settings}
+                                    handleSettingChange={handleSettingChange}
+                                    allow={["placement"]}
+                                    heightUnit='vh'
+                                    responsiveSize
+                                />
+                            </div>
+                            }
+                        />
                     </div>
                     
                 </SlidingPanel>

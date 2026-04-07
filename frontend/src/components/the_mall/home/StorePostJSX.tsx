@@ -11,6 +11,7 @@ import { fetchStoreBySlug, setLoading } from '../../../features/stores/storeSlic
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { updateUser } from '../../../features/user/userSlice';
+import { useReviewsModal } from '../../../App';
 import { Store } from 'lucide-react';
 
 interface StorePostJSXProps {
@@ -26,6 +27,7 @@ interface StorePostJSXProps {
 const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors", jsx, storeSlug, color = "text-orange-400", showTipsIcon = true, onModalOpen, isFeedbackPost = false }) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const { openReviewsModal } = useReviewsModal();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [store, setStore] = useState<any>(null);
     const { hideNavbar, showNavbar } = useNavbar();
@@ -76,9 +78,9 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
         return null;
     }
 
-    // Navigate to reviews page
+    // Open reviews modal
     const handleReviewsClick = () => {
-        navigate('/reviews?mall=true');
+        openReviewsModal('', '', true);
     };
 
     // Handle share functionality

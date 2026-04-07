@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, createContext, useContext } from "react";
 import { Route, BrowserRouter as Router, Routes, useNavigate } from "react-router-dom";
 import Home from "./pages/home/Home";
 import authRoutes from "./routes/authRoutes";
@@ -33,9 +33,32 @@ import DataDeletion from "./pages/DataDeletion";
 import AllReviews from "./pages/reviews/AllReviews";
 import { checkAuth } from "./features/user/userSlice";
 
+// Reviews Modal Context
+interface ReviewsModalContextType {
+  openReviewsModal: (postIdentifier?: string, storeSlug?: string, isMall?: boolean) => void;
+}
+
+const ReviewsModalContext = createContext<ReviewsModalContextType | undefined>(undefined);
+
+export const useReviewsModal = () => {
+  const context = useContext(ReviewsModalContext);
+  if (!context) {
+    throw new Error('useReviewsModal must be used within ReviewsModalProvider');
+  }
+  return context;
+};
+
 const AppContent: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Reviews modal state
+  const [reviewsModal, setReviewsModal] = useState({
+    isOpen: false,
+    postIdentifier: '',
+    storeSlug: '',
+    isMall: false
+  });
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
@@ -63,11 +86,45 @@ const AppContent: React.FC = () => {
     dispatch(checkAuth() as any);
   }, [dispatch]);
 
-  
+  // Reviews modal handlers
+  const openReviewsModal = (postIdentifier = '', storeSlug = '', isMall = false) => {
+    setReviewsModal({
+      isOpen: true,
+      postIdentifier,
+      storeSlug,
+      isMall
+    });
+  };
+
+  const closeReviewsModal = () => {
+    setReviewsModal({
+      isOpen: false,
+      postIdentifier: '',
+      storeSlug: '',
+      isMall: false
+    });
+  };
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (reviewsModal.isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [reviewsModal.isOpen]);
+
+
   return (
-    <div className="relative font-[Outfit] text-[2vh] bg-stone-100 h-fit w-screen max-w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar">  
-      <Menubar /> 
-      <Routes>
+    <ReviewsModalContext.Provider value={{ openReviewsModal }}>
+      <div className={`relative font-[Outfit] text-[2vh] bg-stone-100 h-fit w-screen max-w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar ${reviewsModal.isOpen ? 'overflow-hidden' : ''}`}>
+        {!reviewsModal.isOpen && <Menubar />}
+        <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<MallSearchPage />} />
         <Route
@@ -153,16 +210,26 @@ const AppContent: React.FC = () => {
           path="/data-deletion"
           element={<DataDeletion />}
         />
-        <Route path="/reviews" element={<AllReviews />} />
+
         <Route
           path="/payment/*"
           element={<PayFastPage />}
         />
         
-        
+
         {authRoutes}
       </Routes>
-    </div>
+
+      {/* Reviews Modal */}
+        <AllReviews
+          isOpen={reviewsModal.isOpen}
+          onClose={closeReviewsModal}
+          postIdentifier={reviewsModal.postIdentifier}
+          storeSlug={reviewsModal.storeSlug}
+          isMall={reviewsModal.isMall}
+        />
+      </div>
+    </ReviewsModalContext.Provider>
   );
 };
 
