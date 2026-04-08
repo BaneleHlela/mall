@@ -91,65 +91,159 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
         })
     );
   };
+
+  // Get status color classes for mobile
+  const getStatusColorClasses = () => {
+    switch (storeStatus.color) {
+      case 'green':
+        return 'bg-emerald-500';
+      case 'red':
+        return 'bg-rose-500';
+      case 'orange':
+        return 'bg-amber-500';
+      default:
+        return 'bg-gray-500';
+    }
+  };
   
   return (
     <div
         onClick={handleClick}
         onDoubleClick={handleFavoriteClick}
-        className={`relative aspect-4/3 border-1 border-gray-200  overflow-hidden ${allowShadow && "shadow-[0px_0px_12px_0px_rgba(0,_0,_0,_0.1)]"} absolute inset-0 bg-white/10 backdrop-blur-md transition-transform transform hover:-translate-y-1 z-0 rounded-[1.2vh] lg:rounded-[1.7vh] overflow-hidden`}
+        className={`group relative w-full max-w-[200px] cursor-pointer transition-all duration-300 ease-out hover:scale-[1.02] hover:-translate-y-1 lg:relative lg:aspect-4/3 lg:border-1 lg:border-gray-200 lg:overflow-hidden ${allowShadow && "lg:shadow-[0px_0px_12px_0px_rgba(0,_0,_0,_0.1)]"} lg:absolute lg:inset-0 lg:bg-white/10 lg:backdrop-blur-md lg:transition-transform lg:transform lg:hover:-translate-y-1 lg:z-0 lg:rounded-[1.2vh] lg:rounded-[1.7vh] lg:overflow-hidden`}
     >
-      
-      {/* Image */}
-      <div className={`relative ${mini ? "h-[65%]": "h-[72%]"} `}>
-        <img src={hasWebsite ? store.thumbnails.storeCard : storeNotReadyThumbnail } alt="store-thumbnail" className="w-full h-full object-cover -z-1" />
-        <div className="absolute top-0 w-full h-full bg-[#00000000]"></div>
-        {/* Favorite toggle button
-        <button
-          onClick={handleFavoriteClick}
-          className="absolute bottom-[1%] left-[1%] flex items-center justify-evenly w-[20%] scale-90 space-x-[.6vh] bg-[#0000005d] px-[.3vh] border-[.3vh] border-white rounded-[.3vh] shadow "
-        >
-          <p style={{lineHeight: "1"}} className="text-white text-[3.4vh] font-light">{store.likes.count}</p>
-          {isFavorite ? (
-            <GoHeartFill className="text-[3.5vh] text-red-400" />
-          ) : (
-            <GoHeart className="text-[3.5vh] text-white" />
-          )}
-          
-          
-        </button> */}
-        {/* Distance */}
-        <p 
-          className={`absolute left-[1%] bg-white 
-            ${mini ? 'text-[1.3vh] rounded-xs bottom-0' : 'text-[1.8vh] rounded bottom-[2%] '} text-center text-black min-w-[15%] px-[1%]`}>{distanceText}</p>
-        {/* Store State */}
-        {store.storeState && (
-          <p className={`absolute right-[1%] ${
-                (store as any).storeState === 'demo' ? 'bg-red-500 text-white' : 
-                (store as any).storeState === 'idle' ? 'bg-yellow-500 text-white' : 
-                (store as any).storeState === 'live' ? 'bg-green-500 text-white' : ''
-              }
-              round
-            ${mini ? 'text-[1.3vh] rounded-xs bottom-0' : 'text-[1.8vh] rounded bottom-[2%]'}
-            text-center text-black min-w-[15%] px-[1%] capitalize`}>
-            {store.storeState}
-          </p>
-        )}
-        {/* Red flag */}
-        {/* <div className="absolute top-1/2 left-1/2 text-red">
-          <button className="text-red-600 z-10 h-full">
-            <BsFlagFill className='h-full'/>
-          </button>
-        </div> */}
-        {/* verification status */}
-        <div className="">
+      {/* Card Container - Mobile */}
+      <div className="relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow duration-300 lg:hidden">
+
+      {/* Image Section - Portrait aspect ratio on mobile */}
+      <div className={`relative aspect-[4/3] overflow-hidden lg:relative lg:${mini ? "h-[65%]": "h-[72%]"} `}>
+        <img src={hasWebsite ? store.thumbnails.storeCard : storeNotReadyThumbnail } alt="store-thumbnail" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 -z-1" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent lg:absolute lg:top-0 lg:w-full lg:h-full lg:bg-[#00000000]"></div>
+        {/* Top Badges */}
+        <div className="absolute top-2 left-2 right-2 flex justify-between items-start lg:hidden">
+          {/* Status Badge */}
+          <span className={`px-2 py-1 rounded-full text-xs font-semibold text-white ${getStatusColorClasses()} shadow-lg`}>
+            {storeStatus.isOpen ? 'Open' : 'Closed'}
+          </span>
+
+          {/* Verified Badge */}
           {store.isVerified && (
-            <button className="absolute top-[.5vh] right-[.5vh] text-[2.5vh] text-blue-600">
-              <MdVerified />
-            </button>
+            <div className="bg-white/90 backdrop-blur-sm rounded-full p-1 shadow-lg">
+              <MdVerified className="text-blue-500 text-sm" />
+            </div>
           )}
         </div>
+
+        {/* Distance Badge */}
+        <div className="absolute bottom-2 left-2 lg:hidden">
+          <span className="bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-medium text-gray-700 shadow-lg">
+            {distanceText}
+          </span>
+        </div>
+
+        {/* Favorite Button */}
+        <button
+          onClick={handleFavoriteClick}
+          className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg transition-all duration-200 hover:bg-white hover:scale-110 lg:hidden"
+        >
+          {isFavorite ? (
+            <GoHeartFill className="text-rose-500 text-lg" />
+          ) : (
+            <GoHeart className="text-gray-600 text-lg" />
+          )}
+        </button>
+
+        {/* Desktop badges */}
+        <div className="hidden lg:block">
+          {/* Favorite toggle button
+          <button
+            onClick={handleFavoriteClick}
+            className="absolute bottom-[1%] left-[1%] flex items-center justify-evenly w-[20%] scale-90 space-x-[.6vh] bg-[#0000005d] px-[.3vh] border-[.3vh] border-white rounded-[.3vh] shadow "
+          >
+            <p style={{lineHeight: "1"}} className="text-white text-[3.4vh] font-light">{store.likes.count}</p>
+            {isFavorite ? (
+              <GoHeartFill className="text-[3.5vh] text-red-400" />
+            ) : (
+              <GoHeart className="text-[3.5vh] text-white" />
+            )}
+          </button> */}
+          {/* Distance */}
+          <p
+            className={`absolute left-[1%] bg-white
+              ${mini ? 'text-[1.3vh] rounded-xs bottom-0' : 'text-[1.8vh] rounded bottom-[2%] '} text-center text-black min-w-[15%] px-[1%]`}>{distanceText}</p>
+          {/* Store State */}
+          {store.storeState && (
+            <p className={`absolute right-[1%] ${
+                  (store as any).storeState === 'demo' ? 'bg-red-500 text-white' :
+                  (store as any).storeState === 'idle' ? 'bg-yellow-500 text-white' :
+                  (store as any).storeState === 'live' ? 'bg-green-500 text-white' : ''
+                }
+                round
+              ${mini ? 'text-[1.3vh] rounded-xs bottom-0' : 'text-[1.8vh] rounded bottom-[2%]'}
+              text-center text-black min-w-[15%] px-[1%] capitalize`}>
+              {store.storeState}
+            </p>
+          )}
+          {/* verification status */}
+          <div className="">
+            {store.isVerified && (
+              <button className="absolute top-[.5vh] right-[.5vh] text-[2.5vh] text-blue-600">
+                <MdVerified />
+              </button>
+            )}
+          </div>
+        </div>
       </div>
-      <div className={`flex flex-col justify-center ${mini ? "h-[40%]" : "h-[28%]"} shadow-md z-1 `}>
+
+      {/* Content Section - Mobile */}
+      <div className="p-2 bg-white lg:hidden">
+        {/* Store Name */}
+        <h3 className="font-bold text-gray-900 text-base line-clamp-1  group-hover:text-indigo-600 transition-colors">
+          {store.nickname || store.name}
+        </h3>
+
+        {/* Slogan */}
+        <p className="text-gray-500 text-xs line-clamp-1 mb-1">
+          {store.slogan.length === 0 ? "Your Slogan Here": store.slogan}
+        </p>
+
+        {/* Rating and Status Row */}
+        <div className="flex items-center justify-between">
+          <RatingDisplay rating={store.rating} className="text-sm" />
+
+          {/* Status Text */}
+          <span className={`text-xs font-medium ${
+            storeStatus.color === 'green' ? 'text-emerald-600' :
+            storeStatus.color === 'red' ? 'text-rose-600' :
+            'text-amber-600'
+          }`}>
+            {storeStatus.message}
+          </span>
+        </div>
+
+        {/* Departments Tags */}
+        {store.departments && store.departments.length > 5 && (
+          <div className="flex flex-wrap gap-1 mt-3">
+            {store.departments.slice(0, 2).map((dept, index) => (
+              <span
+                key={index}
+                className="px-2 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-medium rounded-full"
+              >
+                {dept}
+              </span>
+            ))}
+            {store.departments.length > 2 && (
+              <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-medium rounded-full">
+                +{store.departments.length - 2}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+      </div> {/* End Card Container - Mobile */}
+
+      {/* Desktop Content Section */}
+      <div className={`hidden lg:flex lg:flex-col lg:justify-center ${mini ? "h-[40%]" : "h-[28%]"} shadow-md z-1 `}>
         {/* Store name */}
         <h3 className={`text-center font-semibold text-gray-900
           ${mini ? "text-[1.5vh]": "text-[90%]"} line-clamp-1`}>{store.nickname || store.name}</h3>
@@ -166,7 +260,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, allowShadow, onFavoriteCli
               <GoHeart className={`${mini ? "text-[2vh]" : "text-[3.8vh]"} text-gray-700`} />
             )}
           </button>
-          
+
           {/* Open Status */}
           <span className={`${statusClasses} line-clamp-1 max-w-[60%]`}>
             {storeStatus.message}
