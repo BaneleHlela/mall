@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { HiLightBulb, HiOutlineLightBulb } from 'react-icons/hi2';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import { BiDotsHorizontalRounded } from 'react-icons/bi';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
@@ -7,12 +6,11 @@ import { LiaShareSolid } from 'react-icons/lia';
 import { BsDoorOpen } from 'react-icons/bs';
 import StorePosterRatingStars from '../basic_store_post/StorePosterRatingStars';
 import { useNavbar } from '../../../utils/context/NavbarContext';
-import { fetchStoreBySlug, setLoading } from '../../../features/stores/storeSlice';
+import { fetchStoreBySlug, selectStoreBySlug } from '../../../features/stores/storeSlice';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { updateUser } from '../../../features/user/userSlice';
 import { useReviewsModal } from '../../../App';
-import { Store } from 'lucide-react';
 
 interface StorePostJSXProps {
     tipFor?: string;
@@ -29,34 +27,19 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
     const dispatch = useAppDispatch();
     const { openReviewsModal } = useReviewsModal();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [store, setStore] = useState<any>(null);
     const { hideNavbar, showNavbar } = useNavbar();
-    const [loading, setLoading] = useState(true);
+    const store = useAppSelector(selectStoreBySlug(storeSlug || '')) || null;
+
     
     const user = useAppSelector((state) => state.user.user);
 
 
     useEffect(() => {
-        const getStore = async () => {
-        try {
-            setLoading(true);
-            const resultAction = await dispatch(fetchStoreBySlug("themall"));
-            if (fetchStoreBySlug.fulfilled.match(resultAction)) {
-            setStore(resultAction.payload);
-            } else {
-            console.error('Failed to fetch store:', resultAction);
-            }
-        } catch (error) {
-            console.error('Error fetching store:', error);
-        } finally {
-            setLoading(false);
+        if (!store && storeSlug) {
+            dispatch(fetchStoreBySlug(storeSlug));
         }
-        };
-        // @ts-ignore-next-line
-        if ("themall") getStore();
-    }, [dispatch, "themall"]);
+    }, [dispatch, store, storeSlug]);
 
-    console.log(store)
 
     useEffect(() => {
         if (isModalOpen && !isFeedbackPost) {
@@ -89,9 +72,9 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
 
         // Construct share data
         const shareData = {
-        title: store?.name || "Store on The Mall",
-        text: `Check out ${store?.name} on The Mall!`,
-        url: `${window.location.origin}/stores/${store?._id}`,
+            title: store?.name || "Store on The Mall",
+            text: `Check out ${store?.name} on The Mall!`,
+            url: `${window.location.origin}/stores/${store?._id}`,
         };
 
         // Share API logic
@@ -112,7 +95,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
         }
     };
 
-    const isFavorite = store && user?.favourites?.stores?.includes(store._id);
+    const isFavorite = store && user?.favourites?.stores?.includes(store?._id as string);
 
     const handleFavoriteClick = (e: React.MouseEvent) => {
         e.stopPropagation(); // Prevent navigating when clicking the heart
@@ -198,7 +181,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
                         {/* Visits */}
                         <div className="flex items-center space-x-1">
                             <BsDoorOpen className="text-[3vh] text-black" />
-                            <p className="font-[500]">{store?.visits} visits</p>
+                            <p className="font-[500]">{`${store?.visits ?? 0} visits`}</p>
                         </div>
                     </div>
                     {/* Share */}

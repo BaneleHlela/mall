@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/tool
 import axios from 'axios';
 import type { Store } from '../../types/storeTypes';
 import { API_URL } from '../context';
+import type { RootState } from '../../app/store';
 
 const STORE_API_URL = `${API_URL}/api/stores`; // Adjust this based on your setup
 
@@ -9,11 +10,11 @@ const STORE_API_URL = `${API_URL}/api/stores`; // Adjust this based on your setu
 export interface StoresState {
   currentStore: Store  | null;
 
-  storesById: Record<string, Store>;
-  storeIds: string[];
+  storesBySlug: Record<string, Store>;
+  storeSlugs: string[];
 
-  myStoresById: Record<string, Store>;
-  myStoreIds: string[];
+  myStoresBySlug: Record<string, Store>;
+  myStoreSlugs: string[];
 
   isLoading: boolean;
   error: string | null;
@@ -23,11 +24,11 @@ export interface StoresState {
 const initialState: StoresState = {
   currentStore: null,
 
-  storesById: {},
-  storeIds: [],
+  storesBySlug: {},
+  storeSlugs: [],
 
-  myStoresById: {},
-  myStoreIds: [],
+  myStoresBySlug: {},
+  myStoreSlugs: [],
 
   isLoading: false,
   error: null,
@@ -225,21 +226,21 @@ const storeSlice = createSlice({
 
         const store = action.payload;
 
-        if (!store._id) return;
+        if (!store.slug) return;
 
         // Set as current store
         state.currentStore = store;
 
         // Add to all stores list
-        state.storesById[store._id] = store;
-        if (!state.storeIds.includes(store._id)) {
-          state.storeIds.push(store._id);
+        state.storesBySlug[store.slug] = store;
+        if (!state.storeSlugs.includes(store.slug)) {
+          state.storeSlugs.push(store.slug);
         }
 
         // Add to "my stores" list
-        state.myStoresById[store._id] = store;
-        if (!state.myStoreIds.includes(store._id)) {
-          state.myStoreIds.push(store._id);
+        state.myStoresBySlug[store.slug] = store;
+        if (!state.myStoreSlugs.includes(store.slug)) {
+          state.myStoreSlugs.push(store.slug);
         }
       })
       .addCase(createStore.rejected, (state, action) => {
@@ -255,18 +256,18 @@ const storeSlice = createSlice({
       .addCase(fetchStores.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        const newStoresById: Record<string, Store> = {};
-        const newStoreIds: string[] = [];
+        const newStoresBySlug: Record<string, Store> = {};
+        const newStoreSlugs: string[] = [];
 
         for (const store of action.payload) {
-          if (store._id) {
-            newStoresById[store._id] = store;
-            newStoreIds.push(store._id);
+          if (store.slug) {
+            newStoresBySlug[store.slug] = store;
+            newStoreSlugs.push(store.slug);
           }
         }
 
-        state.storesById = newStoresById;
-        state.storeIds = newStoreIds;
+        state.storesBySlug = newStoresBySlug;
+        state.storeSlugs = newStoreSlugs;
       })
       .addCase(fetchStores.rejected, (state, action) => {
         state.isLoading = false;
@@ -280,18 +281,18 @@ const storeSlice = createSlice({
       .addCase(fetchStoresByOwner.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        const newMyStoresById: Record<string, Store> = {};
-        const newMyStoreIds: string[] = [];
+        const newMyStoresBySlug: Record<string, Store> = {};
+        const newMyStoreSlugs: string[] = [];
 
         for (const store of action.payload) {
-          if (store._id) {
-            newMyStoresById[store._id] = store;
-            newMyStoreIds.push(store._id);
+          if (store.slug) {
+            newMyStoresBySlug[store.slug] = store;
+            newMyStoreSlugs.push(store.slug);
           }
         }
 
-        state.myStoresById = newMyStoresById;
-        state.myStoreIds = newMyStoreIds;
+        state.myStoresBySlug = newMyStoresBySlug;
+        state.myStoreSlugs = newMyStoreSlugs;
       })
       .addCase(fetchStoresByOwner.rejected, (state, action) => {
         state.isLoading = false;
@@ -306,18 +307,18 @@ const storeSlice = createSlice({
       .addCase(fetchStoresInRange.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        const newStoresById: Record<string, Store> = {};
-        const newStoreIds: string[] = [];
+        const newStoresBySlug: Record<string, Store> = {};
+        const newStoreSlugs: string[] = [];
 
         for (const store of action.payload) {
-          if (store._id) {
-            newStoresById[store._id] = store;
-            newStoreIds.push(store._id);
+          if (store.slug) {
+            newStoresBySlug[store.slug] = store;
+            newStoreSlugs.push(store.slug);
           }
         }
 
-        state.storesById = newStoresById;
-        state.storeIds = newStoreIds;
+        state.storesBySlug = newStoresBySlug;
+        state.storeSlugs = newStoreSlugs;
       })
       .addCase(fetchStoresInRange.rejected, (state, action) => {
         state.isLoading = false;
@@ -327,16 +328,17 @@ const storeSlice = createSlice({
       // Delete gallery image
       .addCase(deleteStoreGalleryImage.fulfilled, (state, action) => {
         const imageUrl = action.payload;
-        const storeId = state.currentStore?._id;
+        // Assuming the thunk payload includes storeSlug, but since it's imageUrl, and action.meta.arg has storeSlug
+        const { storeSlug } = action.meta.arg as { storeSlug: string };
 
         const removeImage = (store: Store) => {
           store.images = store.images?.filter(img => img.url !== imageUrl) || [];
         };
 
-        if (storeId && state.myStoresById[storeId]) {
-          removeImage(state.myStoresById[storeId]);
+        if (state.myStoresBySlug[storeSlug]) {
+          removeImage(state.myStoresBySlug[storeSlug]);
         }
-        if (storeId && state.currentStore) {
+        if (state.currentStore && state.currentStore.slug === storeSlug) {
           removeImage(state.currentStore);
         }
       })
@@ -347,21 +349,21 @@ const storeSlice = createSlice({
         const { storeSlug, images, hasMore } = action.payload;
 
         // Append the new images to the existing images in the store
-        if (state.storesById[storeSlug]) {
-          state.storesById[storeSlug].images = [
-            ...(state.storesById[storeSlug].images || []),  // Existing images (or an empty array if none)
-            ...images.filter(img => !state.storesById[storeSlug].images?.some(existingImg => existingImg.url === img.url)),  // Only append new images
+        if (state.storesBySlug[storeSlug]) {
+          state.storesBySlug[storeSlug].images = [
+            ...(state.storesBySlug[storeSlug].images || []),  // Existing images (or an empty array if none)
+            ...images.filter(img => !state.storesBySlug[storeSlug].images?.some(existingImg => existingImg.url === img.url)),  // Only append new images
           ];
         }
 
-        if (state.myStoresById[storeSlug]) {
-          state.myStoresById[storeSlug].images = [
-            ...(state.myStoresById[storeSlug].images || []),
-            ...images.filter(img => !state.myStoresById[storeSlug].images?.some(existingImg => existingImg.url === img.url)), // Prevent duplicates
+        if (state.myStoresBySlug[storeSlug]) {
+          state.myStoresBySlug[storeSlug].images = [
+            ...(state.myStoresBySlug[storeSlug].images || []),
+            ...images.filter(img => !state.myStoresBySlug[storeSlug].images?.some(existingImg => existingImg.url === img.url)), // Prevent duplicates
           ];
         }
 
-        if (state.currentStore && state.currentStore._id === storeSlug) {
+        if (state.currentStore && state.currentStore.slug === storeSlug) {
           state.currentStore.images = [
             ...(state.currentStore.images || []),
             ...images.filter(img => !state.currentStore.images?.some(existingImg => existingImg.url === img.url)), // Prevent duplicates
@@ -379,13 +381,13 @@ const storeSlice = createSlice({
         state.isLoading = false;
         const updatedStore = action.payload;
 
-        if (updatedStore._id) {
+        if (updatedStore.slug) {
           // Update in all stores list
-          state.storesById[updatedStore._id] = updatedStore;
+          state.storesBySlug[updatedStore.slug] = updatedStore;
           // Update in my stores list
-          state.myStoresById[updatedStore._id] = updatedStore;
+          state.myStoresBySlug[updatedStore.slug] = updatedStore;
           // Update current store if it's the same
-          if (state.currentStore?._id === updatedStore._id) {
+          if (state.currentStore?.slug === updatedStore.slug) {
             state.currentStore = updatedStore;
           }
         }
@@ -403,17 +405,17 @@ const storeSlice = createSlice({
         state.isLoading = false;
         const clonedStore = action.payload;
 
-        if (clonedStore._id) {
+        if (clonedStore.slug) {
           // Add to all stores list
-          state.storesById[clonedStore._id] = clonedStore;
-          if (!state.storeIds.includes(clonedStore._id)) {
-            state.storeIds.push(clonedStore._id);
+          state.storesBySlug[clonedStore.slug] = clonedStore;
+          if (!state.storeSlugs.includes(clonedStore.slug)) {
+            state.storeSlugs.push(clonedStore.slug);
           }
 
           // Add to "my stores" list
-          state.myStoresById[clonedStore._id] = clonedStore;
-          if (!state.myStoreIds.includes(clonedStore._id)) {
-            state.myStoreIds.push(clonedStore._id);
+          state.myStoresBySlug[clonedStore.slug] = clonedStore;
+          if (!state.myStoreSlugs.includes(clonedStore.slug)) {
+            state.myStoreSlugs.push(clonedStore.slug);
           }
         }
       })
@@ -421,9 +423,33 @@ const storeSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message || 'Failed to clone store';
       })
+
+      // Fetch Store By Slug
+      .addCase(fetchStoreBySlug.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchStoreBySlug.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const store = action.payload;
+        if (store.slug) {
+          state.storesBySlug[store.slug] = store;
+          if (!state.storeSlugs.includes(store.slug)) {
+            state.storeSlugs.push(store.slug);
+          }
+        }
+      })
+      .addCase(fetchStoreBySlug.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to fetch store';
+      })
   },
 });
 
 export const { setLoading, setError, setCurrentStore, clearError } = storeSlice.actions;
+
+export const selectStoreBySlug = (slug: string) => (state: RootState): Store | undefined => {
+  return state.stores.storesBySlug[slug];
+};
 
 export default storeSlice.reducer;

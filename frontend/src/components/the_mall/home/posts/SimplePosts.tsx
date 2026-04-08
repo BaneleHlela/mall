@@ -57,6 +57,8 @@ export const POST_IDS = {
     SCALABILITY: "scalability",
     HIRE_A_BRAND_DESIGNER: "hire-a-brand-designer",
     ACCOUNTING_VS_ECONOMIC_PROFIT: "accounting-vs-economic-profit",
+    IMAGE_CONSENT_NOTICE: "image-consent-notice",
+
 } as const;
 
 interface WelcomeToTheMallProps {
@@ -317,104 +319,118 @@ export const VariousPosters = () => {
 
 export const WhatIsMVP = () => {
   return (
-      <div className="w-full bg-white font-normal">
-          <p className="py-[1vh]">
-              <strong className="mb-1">What is an MVP?</strong><br/><br/>
-                An MVP (Minimum Viable Product) is the most basic version of a product 
-                that allows a team to collect the maximum amount of validated learning 
-                about customers with the least effort.
-          </p>
-          
-          {/* YouTube Video Embed */}
-          <div className="w-full aspect-video rounded-lg overflow-hidden mt-2">
-              <iframe
-                  src="https://www.youtube.com/embed/OUStxocWTso"
-                  title="What is an MVP?"
-                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  scrolling="no"
-                  className="w-full h-full"
-              />
-          </div>
-      </div>
+      <PostInteraction postIdentifier={POST_IDS.WHAT_IS_MVP} postTitle="What is an MVP?">
+        <div className="w-full bg-white font-normal">
+            <p className="py-[1vh]">
+                <strong className="mb-1">What is an MVP?</strong><br/><br/>
+                  An MVP (Minimum Viable Product) is the most basic version of a product
+                  that allows a team to collect the maximum amount of validated learning
+                  about customers with the least effort.
+            </p>
+
+            {/* YouTube Video Embed */}
+            <div className="w-full aspect-video rounded-lg overflow-hidden mt-2">
+                <iframe
+                    src="https://www.youtube.com/embed/OUStxocWTso"
+                    title="What is an MVP?"
+                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    scrolling="no"
+                    className="w-full h-full"
+                />
+            </div>
+        </div>
+      </PostInteraction>
   );
 };
 
 
 export const MallStillBeta = () => {
     return (
-      <div className="w-full bg-white">
-        <p>
-          This is the first version of The Mall, so it may still be limited and
-          buggy, with missing features such as in-store chat and video support.
-          Please report any issues you encounter to help us improve the
-          experience.
-        </p>
-      </div>
+      <PostInteraction postIdentifier={POST_IDS.MALL_BETA} postTitle="Mall Still Beta">
+        <div className="w-full bg-white">
+          <p>
+            This is the first version of The Mall, so it may still be limited and
+            buggy, with missing features such as in-store chat and video support.
+            Please report any issues you encounter to help us improve the
+            experience.
+          </p>
+        </div>
+      </PostInteraction>
     );
 };
   
 
 export const YouCanInvest = () => {
     return (
-      <div className="w-full bg-white font-normal">
-        <p>
-          You can invest in some of the stores on The Mall. Just look for the 
-          invest{" "}
-          <span className="inline-flex items-center">
-            (<FaCircleDollarToSlot className="text-green-500" />)
-          </span>{" "}
-          icon on the store's page. Invest responsibly! 
-        </p>
-      </div>
+      <PostInteraction postIdentifier={POST_IDS.YOU_CAN_INVEST} postTitle="You Can Invest">
+        <div className="w-full bg-white font-normal">
+          <p>
+            You can invest in some of the stores on The Mall. Just look for the
+            invest{" "}
+            <span className="inline-flex items-center">
+              (<FaCircleDollarToSlot className="text-green-500" />)
+            </span>{" "}
+            icon on the store's page. Invest responsibly!
+          </p>
+        </div>
+      </PostInteraction>
     );
 };
   
 
 export const LookOutForRedFlags = () => {
     return (
-      <div className="w-full bg-white">
-        <p>
-          Look out for the red flag{" "}
-          <span className="inline-flex items-center">
-            (<IoIosFlag className="text-red-600"/>)
-          </span>{" "}
-          icon when buying from stores. It helps indicate if a store may be
-          selling counterfeit items, offering unrealistic terms, or showing
-          other warning signs.
-        </p>
-      </div>
+      <PostInteraction postIdentifier={POST_IDS.RED_FLAGS} postTitle="Look Out For Red Flags">
+        <div className="w-full bg-white">
+          <p>
+            Look out for the red flag{" "}
+            <span className="inline-flex items-center">
+              (<IoIosFlag className="text-red-600"/>)
+            </span>{" "}
+            icon when buying from stores. It helps indicate if a store may be
+            selling counterfeit items, offering unrealistic terms, or showing
+            other warning signs.
+          </p>
+        </div>
+      </PostInteraction>
     );
 };
 
 export const Diversify = () => {
     return (
+      <PostInteraction postIdentifier={POST_IDS.DIVERSIFY} postTitle="Diversify">
         <div className="w-full bg-white">
             <p>
                 Diversify your portfolio by investing in multiple stores. This can help reduce risk and increase potential returns. It's statistically the best way to earn returns! As opposed to putting all your eggs in one basket and hoping it doesn't break, or gambling.
             </p>
         </div>
+      </PostInteraction>
     )
 }
 
 export const WhyInvest = () => {
     return (
+      <PostInteraction postIdentifier={POST_IDS.WHY_INVEST} postTitle="Diversify">
         <div className="w-full bg-white">
             <p>
-                Investing in stores on The Mall can be a great way to support local businesses and potentially earn a return on your investment.
+                Investing in stores on The Mall can be a great way to support local businesses and potentially earn a return on your investment. 
             </p>
         </div>
-    )
+      </PostInteraction>
+    ) 
 }
 
 
 export const ImageConsentNotice = () => {
     return (
-      <div className="w-full bg-white font-normal">
-        <p>
-            Respect individuals' rights by using photos of people only with their consent, particularly when promoting your product.
-        </p>
-      </div>
+      <PostInteraction postIdentifier={POST_IDS.IMAGE_CONSENT_NOTICE} postTitle="Image Consent Notice" >
+        <div className="w-full bg-white font-normal">
+          <p>
+              Respect individuals' rights by using photos of people only with their consent, particularly when promoting your product.
+          </p>
+        </div>
+      </PostInteraction> 
     );
 };
 
@@ -427,25 +443,27 @@ interface TimeLeft {
 
 export const MallMVPAnnouncement = () => {
   return (
-    <div className="w-full bg-white font-normal">
-      <p className="py-[1vh]">
-        <strong className="mb-1">Introducing The Mall MVP</strong><br/><br/>
-        This is the first release of The Mall — our Minimum Viable Product (MVP). 
-        As such, it has some limitations and is missing certain features like 
-        video support and in-app payments (for security reasons). However, 
-        we're confident that the current feature set is robust enough for 
-        any business to thrive.
-      </p>
-      
-      {/* MVP Image */}
-      <div className="w-full min-h-[40px] mt-2">
-        <img 
-          src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/1722031525-how-to-build-a-minimal-viable-product-mvp.avif" 
-          alt="The Mall MVP Announcement" 
-          className="w-full h-full object-contain rounded-lg" 
-        />
+    <PostInteraction postIdentifier={POST_IDS.MVP_ANNOUNCEMENT} postTitle="Mall MVP Announcement">
+      <div className="w-full bg-white font-normal">
+        <p className="py-[1vh]">
+          <strong className="mb-1">Introducing The Mall MVP</strong><br/><br/>
+          This is the first release of The Mall — our Minimum Viable Product (MVP).
+          As such, it has some limitations and is missing certain features like
+          video support and more. However,
+          we're confident that the current feature set is robust enough for
+          any business to thrive.
+        </p>
+
+        {/* MVP Image */}
+        <div className="w-full min-h-[40px] mt-2">
+          <img
+            src="https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/1722031525-how-to-build-a-minimal-viable-product-mvp.avif"
+            alt="The Mall MVP Announcement"
+            className="w-full h-full object-contain rounded-lg"
+          />
+        </div>
       </div>
-    </div>
+    </PostInteraction>
   );
 };
 
@@ -486,13 +504,14 @@ export const LaunchDate = () => {
   }, []);
 
   return (
-    <div className="w-full">
-      <p className="font-normal py-[1vh]">
-        Important announcement about The Mall's availability.
-      </p>
-      
-      {/* Main Poster Container */}
-      <div className="relative flex flex-col items-center justify-center text-center w-full aspect-[3/4] md:aspect-[4/5] rounded-lg overflow-hidden shadow-2xl">
+    <PostInteraction postIdentifier={POST_IDS.LAUNCH_DATE} postTitle="Launch Date">
+      <div className="w-full">
+        <p className="font-normal py-[1vh]">
+          Important announcement about The Mall's availability.
+        </p>
+
+        {/* Main Poster Container */}
+        <div className="relative flex flex-col items-center justify-center text-center w-full aspect-[3/4] md:aspect-[4/5] rounded-lg overflow-hidden shadow-2xl">
         {/* Gradient Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900"></div>
         
@@ -618,8 +637,9 @@ export const LaunchDate = () => {
         <div className="absolute top-4 right-4 w-10 h-10 border-r-2 border-t-2 border-white/20 rounded-tr-lg"></div>
         <div className="absolute bottom-4 left-4 w-10 h-10 border-l-2 border-b-2 border-white/20 rounded-bl-lg"></div>
         <div className="absolute bottom-4 right-4 w-10 h-10 border-r-2 border-b-2 border-white/20 rounded-br-lg"></div>
+        </div>
       </div>
-    </div>
+    </PostInteraction>
   );
 };
 

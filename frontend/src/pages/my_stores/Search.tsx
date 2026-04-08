@@ -12,22 +12,38 @@ const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
   const dispatch = useAppDispatch();
-  const { isLoading, error, storeIds, storesById } = useAppSelector(
+  const { isLoading, error, storeSlugs, storesBySlug } = useAppSelector(
     (state: RootState) => state.stores
   );
+
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
 
+  // Read from URL on load + when URL changes
   useEffect(() => {
+    const departmentFromUrl = searchParams.get("department");
+    setSelectedDepartment(departmentFromUrl);
+    console.log(selectedDepartment)
+  }, [searchParams]);
+  
+  // Fetch stores when query or department changes
+  useEffect(() => {
+
     if (query || selectedDepartment) {
       dispatch(fetchStores({
         search: query,
-        department: selectedDepartment || undefined
+        department: selectedDepartment|| undefined
       }));
     }
-  }, [dispatch, query, selectedDepartment]);
+  }, [dispatch, query, searchParams]);
 
+  // Update URL (search + department)
   const handleSearch = (term: string) => {
-    setSearchParams({ q: term });
+    const departmentFromUrl = searchParams.get("department");
+
+    setSearchParams({
+      ...(term && { q: term }),
+      ...(departmentFromUrl && { department: departmentFromUrl })
+    });
   };
 
   const handleDepartmentFilter = (deptKey: string) => {
@@ -43,7 +59,7 @@ const Search = () => {
   };
 
   // We don't need to filter here anymore since the backend handles it
-  const filteredStoreIds = storeIds;
+  const filteredStoreSlugs = storeSlugs;
 
   return (
     <div className="min-h-screen w-full bg-stone-50 flex flex-col">
@@ -100,15 +116,15 @@ const Search = () => {
           </div>
         ) : error ? (
           <div className="text-red-500 py-4">{error}</div>
-        ) : filteredStoreIds.length === 0 ? (
+        ) : filteredStoreSlugs.length === 0 ? (
           <div className="py-8 text-center">
             <p className="text-gray-500">No results found for "{query}"</p>
             <p className="text-gray-400 mt-2">Try different keywords or check your spelling</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredStoreIds.map((id) => (
-              <StoreCard key={id} store={storesById[id]} />
+            {filteredStoreSlugs.map((slug) => (
+              <StoreCard key={slug} store={storesBySlug[slug]} />
             ))}
           </div>
         )}

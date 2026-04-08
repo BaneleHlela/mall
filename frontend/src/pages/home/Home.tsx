@@ -1,35 +1,91 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { fetchStores } from '../../features/stores/storeSlice';
 import { selectIsPostReviewModalOpen } from '../../features/posts/postSlice';
-import type { RootState } from '../../app/store';
 import TheMallTopbar from '../../components/the_mall/topbar/TheMallTopbar';
-import { departments, StoreHomePosters } from '../../utils/helperObjects';
-import { ChevronLeft, ChevronRight, Store } from 'lucide-react';
+import { departments } from '../../utils/helperObjects';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React from 'react';
 import DepartmentSelectorWithImages from './supporting/DepartmentSelectorWithImages';
 import { useNavigate } from 'react-router-dom';
 import { FiPlus } from 'react-icons/fi';
-import BasicStorePost from '../../components/the_mall/basic_store_post/BasicStorePost';
-import TipsAndUpdates from '../../components/the_mall/home/TipsAndUpdates';
 import { FaTools } from 'react-icons/fa';
 import StorePostJSX from '../../components/the_mall/home/StorePostJSX';
-import { SupplyChain, LaunchDate, LookOutForRedFlags, WelcomeToTheMall, WhatIsECommerce, WhatIsMVP, YouCanInvest, MallMVPAnnouncement, Branding, MostImportantPoster, NoAyikhoPoster, VariousPosters, ListOfSuppliersByChioma, FourFirstTimeSmallBusinessMistakes, HowToStartBusinessWhiteLabeling, BusinessAdviceForSmallBusiness, YCStartingCompanyKeyTerms, YCSalesPlaybook, YCStartupIdeas, YCCoFounderRelationships, SBDBusinessPlan, SBDBusinessStrategy, NotReadyForCustomers, OurRecommendedBook, LoansAndLaybuys, StoreServiceBidding, DoubleTapLikeButtonForReviews, AddYourOwnDomain, CustomersCanReviewEverything, Scalability, HireABrandDesigner, AccountingVsEconomicProfit } from '../../components/the_mall/home/posts/SimplePosts';
-import MultipleLayoutsPost from '../../components/the_mall/home/posts/MultipleLayoutsPost';
-import FreePikPosters from '../../components/the_mall/home/posts/FreePikPosters';
+import { selectPostsForHome } from '../../utils/postSelector';
 import { MdAdd } from 'react-icons/md';
 import { IoStorefrontOutline } from 'react-icons/io5';
 import toast from 'react-hot-toast';
-import { POST_IDS } from '../../components/the_mall/home/posts/SimplePosts';
 import TheMallStoreFooterSection from '../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStoreFooterSection';
 
+// Helper functions for dynamic post rendering
+const getTipFor = (postData: any): string => {
+  const tipMap: { [key: string]: string } = {
+    'welcome-to-mall': 'Tips and Updates',
+    'not-ready-for-customers': 'Tips and Updates',
+    'customers-can-review-everything': 'Tips and Updates',
+    'branding': 'Tips for Vendors',
+    'supply-chain': 'Tips and Updates',
+    'scalability': 'Tips and Updates',
+    'hire-a-brand-designer': 'Tips and Updates',
+    'loans-and-laybuys': 'Upcoming Features',
+    'accounting-vs-economic-profit': 'Tips and Updates',
+    'add-your-own-domain': 'Tips and Updates',
+    'our-recommended-book': 'Tips And Updates',
+    'list-of-suppliers-by-chioma': 'Tips and Updates',
+    'four-first-time-small-business-mistakes': 'Tips And Updates',
+    'how-to-start-business-white-labeling': 'Tips And Updates',
+    'business-advice-for-small-business': 'Tips And Updates',
+    'yc-starting-company-key-terms': 'Tips for Founders',
+    'yc-sales-playbook': 'Tips for Founders',
+    'yc-startup-ideas': 'Tips for Founders',
+    'yc-cofounder-relationships': 'Tips for Founders',
+    'sbd-business-plan': 'Tips for Vendors',
+    'sbd-business-strategy': 'Tips for Vendors',
+    'most-important-poster': 'Tips And Updates',
+    'no-ayikho-poster': 'Tips And Updates',
+    'various-posters': 'Tips And Updates',
+    'mvp-announcement': 'Announcement',
+    'what-is-ecommerce': 'Tips and Updates',
+    'what-is-mvp': 'Tips for Vendors',
+    'launch-date': 'Tips and Updates',
+    'you-can-invest': 'Announcement',
+    'look-out-for-red-flags': 'Announcement',
+    'diversify': 'Announcement',
+    'why-invest': 'Announcement',
+    'mall-still-beta': 'Tips and Updates',
+    'image-consent': 'Tips and Updates',
+    'store-service-bidding': 'Tips and Updates',
+    'double-tap-for-reviews': 'Tips and Updates',
+    'collaborate-or-learn': 'Tips and Updates',
+    'build-a-brand-with-ready-templates-or-ai': 'Tips and Updates',
+    'free-pik-posters': 'Tips and Updates',
+    'multiple-layouts-post': 'Tips for Vendors',
+    'personalized-websites-announcement': 'Announcement',
+  };
+  return tipMap[postData.id] || 'Tips and Updates';
+};
+
+const isFeedbackPost = (postData: any): boolean => {
+  // Most posts are feedback posts, only a few aren't
+  const nonFeedbackPosts = [
+    'there-are-currently-no-non-feedback-posts',
+  ];
+  return !nonFeedbackPosts.includes(postData.id);
+};
 
 const HomePage = () => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate(); // Initialize the navigate function
   const user = useAppSelector((state) => state.user.user);
   const isPostReviewModalOpen = useAppSelector(selectIsPostReviewModalOpen);
   const departmentRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+
+  // Dynamic post selection
+  const selectedPosts = useMemo(() =>
+    selectPostsForHome({
+      maxPosts: 100, // Configurable limit
+      userId: user?._id as string
+    }),
+    [user?._id]
+  );
 
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -44,12 +100,12 @@ const HomePage = () => {
   const dragScrollLeftRef = useRef<number>(0);
 
   // Fetch stores when department changes
-  useEffect(() => {
-    dispatch(fetchStores({
-      search: searchTerm,
-      department: selectedDepartment || undefined
-    }));
-  }, [dispatch, searchTerm, selectedDepartment]);
+  // useEffect(() => {
+  //   dispatch(fetchStores({
+  //     search: searchTerm,
+  //     department: selectedDepartment || undefined
+  //   }));
+  // }, [dispatch, searchTerm, selectedDepartment]);
   //Scroll to Selected Button on Change
   useEffect(() => {
     if (selectedDepartment && departmentRefs.current[selectedDepartment]) {
@@ -333,365 +389,16 @@ const HomePage = () => {
         )}
         {/* Feed  */}
         <div className="space-y-[.6vh]">
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <WelcomeToTheMall />
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            isFeedbackPost
-            storeSlug='themall'
-          />
-          {/* Not ready for customers */}
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <NotReadyForCustomers />
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            isFeedbackPost
-            storeSlug='themall'
-          />
-          {/* Customers Can Review Everything */}
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <CustomersCanReviewEverything />
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            isFeedbackPost
-            storeSlug='themall'
-          />
-          {/* Branding */}
-          <StorePostJSX
-            tipFor='Tips for Vendors'
-            jsx={<Branding />}
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-            isFeedbackPost
-          />
-          {/* Supply Chain */}
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <SupplyChain />
-            }
-            color="text-orange-400"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-          />
-          {/* Scalability */}
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <Scalability />
-            }
-            color="text-green-500"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-          />
-          {/* Hire a brand designer on the mall */}
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <HireABrandDesigner />
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            isFeedbackPost
-            storeSlug='themall'
-          />
-          {/* Loans & Laybuys */}
-          <StorePostJSX
-            tipFor='Upcoming Features'
-            jsx={
-              <LoansAndLaybuys />
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            isFeedbackPost
-            storeSlug='themall'
-          />
-          {/* Accounting vs Economic Profit */}
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <AccountingVsEconomicProfit />
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            isFeedbackPost
-            storeSlug='themall'
-          />
-          {/* Store Service Bidding */}
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <StoreServiceBidding />
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            isFeedbackPost
-            storeSlug='themall'
-          />
-          {/* Double Tap for Reviews */}
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <DoubleTapLikeButtonForReviews />
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            isFeedbackPost
-            storeSlug='themall'
-          />
-          {/* Add Your Own Domain */}
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <AddYourOwnDomain />
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            isFeedbackPost
-            storeSlug='themall'
-          />
-          {/* Our Recommended Book */}
-          <StorePostJSX
-            tipFor='Tips And Updates'
-            jsx={
-              <OurRecommendedBook />
-            }
-            isFeedbackPost
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-          />
-          {/* List of Suppliers By Chioma */}
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <ListOfSuppliersByChioma />
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            isFeedbackPost
-            storeSlug='themall'
-          />
-          
-          {/* Four First-Time Small Business Mistakes */}
-          <StorePostJSX
-            tipFor='Tips And Updates'
-            jsx={
-              <FourFirstTimeSmallBusinessMistakes />
-            }
-            isFeedbackPost
-            storeSlug='themall'
-            onModalOpen={setIsReviewsModalOpen}
-          />
-          {/* How to Start a Business Through white labelling */}
-          <StorePostJSX
-            tipFor='Tips And Updates'
-            jsx={
-              <HowToStartBusinessWhiteLabeling />
-            }
-            isFeedbackPost
-            storeSlug='themall'
-            onModalOpen={setIsReviewsModalOpen}
-          />
-          {/* Business Advice for Small Businesses */}
-          <StorePostJSX
-            tipFor='Tips And Updates'
-            jsx={
-              <BusinessAdviceForSmallBusiness />
-            }
-            isFeedbackPost
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-          />
-          
-          {/* Y Combinator Videos */}
-          <StorePostJSX
-            tipFor='Tips for Founders'
-            jsx={<YCStartingCompanyKeyTerms />}
-            color="text-red-500"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='y-combinator'
-            isFeedbackPost
-          />
-          <StorePostJSX
-            tipFor='Tips for Founders'
-            jsx={<YCSalesPlaybook />}
-            color="text-red-500"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='y-combinator'
-            isFeedbackPost
-          />
-          <StorePostJSX
-            tipFor='Tips for Founders'
-            jsx={<YCStartupIdeas />}
-            color="text-red-500"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='y-combinator'
-            isFeedbackPost
-          />
-          <StorePostJSX
-            tipFor='Tips for Founders'
-            jsx={<YCCoFounderRelationships />}
-            color="text-red-500"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='y-combinator'
-            isFeedbackPost
-          />
-          {/* Small Business Development Videos */}
-          <StorePostJSX
-            tipFor='Tips for Vendors'
-            jsx={<SBDBusinessPlan />}
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='small-business-development'
-            isFeedbackPost
-          />
-          
-          {/* SBD Business Strategy */}
-          <StorePostJSX
-            tipFor='Tips for Vendors'
-            jsx={<SBDBusinessStrategy />}
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='small-business-development'
-            isFeedbackPost
-          />
-
-          {/* Most Important Poster */}
-          <StorePostJSX
-            tipFor='Tips And Updates'
-            jsx={
-              <MostImportantPoster />
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            isFeedbackPost
-            storeSlug='mall-designs'
-          />
-          <StorePostJSX
-            tipFor='Tips And Updates'
-            jsx={
-              <NoAyikhoPoster />
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            isFeedbackPost
-            storeSlug='mall-designs'
-          />
-          <StorePostJSX
-            tipFor='Tips And Updates'
-            jsx={
-              <VariousPosters />
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            isFeedbackPost
-            storeSlug='mall-designs'
-          />
-
-          <StorePostJSX
-            tipFor='Announcement'
-            jsx={
-              <MallMVPAnnouncement />
-            }
-            color="text-green-500"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='mall-designs'
-          />
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <WhatIsECommerce />
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-          />
-          <StorePostJSX
-            tipFor='Tips for Vendors'
-            jsx={<WhatIsMVP />}
-            color="text-orange-400"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-          />
-          
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <LaunchDate/>
-            }
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-          />
-          
-          
-          <StorePostJSX
-            tipFor='Tips and Updates'
-            jsx={
-              <FreePikPosters />
-            }
-            color="text-orange-400"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-          />
-          <StorePostJSX
-            tipFor='Tips for Vendors'
-            jsx={
-              <MultipleLayoutsPost />
-            }
-            color="text-orange-400"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-          />
-          <StorePostJSX
-            tipFor='Announcement'
-            jsx={
-              <YouCanInvest />
-            }
-            color="text-blue-500"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-          />
-          <StorePostJSX
-            tipFor='Announcement'
-            jsx={
-              <LookOutForRedFlags />
-            }
-            color="text-blue-500"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-          />
-          <StorePostJSX 
-            tipFor='Announcement'
-            jsx={
-              <>
-                <p>We're excited to announce that The Mall is launching a new feature that allows vendors to create their own personalized websites!</p>
-                <br/>
-                <p>This means that in addition to having a store within The Mall, vendors can now showcase their products and brand on a dedicated website, giving them even more visibility and reach.</p>
-                <br/>
-                <p>Best of all, this feature is available at no additional cost to our vendors. We believe that by empowering our vendors with more tools and resources, we can help them grow their businesses and succeed in the competitive online marketplace.</p>
-                <br/>
-                <p>Stay tuned for more updates as we roll out this exciting new feature!</p>
-              </>
-            }
-            color="text-blue-500"
-            onModalOpen={setIsReviewsModalOpen}
-            storeSlug='themall'
-          />
-          {/* {StoreHomePosters.map((post, index) => (
-            <BasicStorePost key={index} {...post} />
-          ))} */}
-          <TipsAndUpdates 
-            tipFor='Tips for Vendors'
-            message='The mall lets you create a website for R0!'
-            color="text-orange-400"
-            onModalOpen={setIsReviewsModalOpen}
-          />
-          <TipsAndUpdates 
-            tipFor='Tips for Vendors'
-            message='The mall lets you create a website for R0!'
-            color="text-orange-400"
-            onModalOpen={setIsReviewsModalOpen}
-          />
-          {/* <BasicStorePost 
-            storeSlug={"ennock-m-art"}
-            status={"Just finished this painting for a client! What do you think?"}
-            poster={{
-              images: ["https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/495371485_1238922361482703_9008209704576564623_n.jpg"],
-            }}
-          /> */}
+          {selectedPosts.map((postData) => (
+            <StorePostJSX
+              key={postData.id}
+              tipFor={getTipFor(postData)}
+              jsx={<postData.component />}
+              onModalOpen={setIsReviewsModalOpen}
+              isFeedbackPost={isFeedbackPost(postData)}
+              storeSlug={postData.storeSlug}
+            />
+          ))}
         </div>
         <TheMallStoreFooterSection/>
         {/* Placeholder divs */}
@@ -726,12 +433,12 @@ const HomePage = () => {
           <p className="text-center text-gray-500">Loading stores...</p>
         ) : error ? (
           <p className="text-center text-red-500">Error: {error}</p>
-        ) : storeIds.length === 0 ? (
+        ) : storeSlugs.length === 0 ? (
           <p className="text-center text-gray-500">No stores found.</p>
         ) : (
           <div className="px-[.6vh] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-[2vh]">
-            {storeIds.map((id) => (
-              <StoreCard key={id} store={storesById[id]} user={user}/>
+            {storeSlugs.map((slug) => (
+              <StoreCard key={slug} store={storesBySlug[slug]} user={user}/>
             ))}
           </div>
         )} */}

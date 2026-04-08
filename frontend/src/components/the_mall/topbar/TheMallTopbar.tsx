@@ -22,7 +22,7 @@ const TheMallTopbar = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { storeIds, storesById, isLoading } = useAppSelector(
+  const { storeSlugs, storesBySlug, isLoading } = useAppSelector(
     (state: RootState) => state.stores
   );
   const user = useAppSelector((state: RootState) => state.user.user);
@@ -56,7 +56,7 @@ const TheMallTopbar = () => {
     }
   };
 
-  const limitedResults = storeIds.slice(0, 4);
+  const limitedResults = storeSlugs.slice(0, 4);
 
   return (
     <div
@@ -117,7 +117,7 @@ const TheMallTopbar = () => {
                       ) : (
                         <div className="grid grid-cols-2 gap-3">
                           {limitedResults.map((id) => (
-                            <StoreCard key={id} store={storesById[id]} user={user} mini={true} />
+                            <StoreCard key={id} store={storesBySlug[id]} user={user} mini={true} />
                           ))}
                         </div>
                       )}
@@ -160,7 +160,7 @@ const TheMallTopbar = () => {
                       </div>
                     </div>
                   </div>
-                  {storeIds.length > 0 && (
+                  {storeSlugs.length > 0 && (
                     <button
                       onClick={() => navigate(`/search?query=${encodeURIComponent(searchTerm)}`)}
                       className="w-full mt-3 py-2 text-sm font-semibold text-white bg-gray-900 rounded hover:bg-gray-800"
@@ -280,11 +280,11 @@ const TheMallTopbar = () => {
                 ) : (
                   <div className="grid grid-cols-2 gap-3 w-full">
                     {limitedResults.map((id) => (
-                      <StoreCard key={id} store={storesById[id]} user={user} mini={true} />
+                      <StoreCard key={id} store={storesBySlug[id]} user={user} mini={true} />
                     ))}
                   </div>
                 )}
-                {storeIds.length > 0 && (
+                {storeSlugs.length > 0 && (
                   <button
                     onClick={() => navigate(`/search?query=${encodeURIComponent(searchTerm)}`)}
                     className="w-full mt-3 py-2 text-sm font-semibold text-white bg-gray-900 rounded hover:bg-gray-800"

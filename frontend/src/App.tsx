@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createContext, useContext } from "react";
 import { Route, BrowserRouter as Router, Routes, useNavigate } from "react-router-dom";
+import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/home/Home";
 import authRoutes from "./routes/authRoutes";
 import Scribbler from "./components/Scibbler";
@@ -122,6 +123,7 @@ const AppContent: React.FC = () => {
 
   return (
     <ReviewsModalContext.Provider value={{ openReviewsModal }}>
+      <ScrollToTop />
       <div className={`relative font-[Outfit] text-[2vh] bg-stone-100 h-fit w-screen max-w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar ${reviewsModal.isOpen ? 'overflow-hidden' : ''}`}>
         {!reviewsModal.isOpen && <Menubar />}
         <Routes>

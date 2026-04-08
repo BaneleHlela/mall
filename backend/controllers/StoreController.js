@@ -102,7 +102,7 @@ export const getStores = expressAsyncHandler(async (req, res) => {
   if (department) {
     searchFilter = {
       ...searchFilter,
-      departments: department
+      departments: { $in: [department] }
     };
   }
 

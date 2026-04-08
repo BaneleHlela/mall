@@ -8,23 +8,23 @@ import { GoHeart } from "react-icons/go";
 const FavoriteStores = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
-  const stores = useAppSelector((state) => state.stores.storesById);
-  const storeIds = useAppSelector((state) => state.stores.storeIds);
+  const stores = useAppSelector((state) => state.stores.storesBySlug);
+  const storeSlugs = useAppSelector((state) => state.stores.storeSlugs);
   const isLoading = useAppSelector((state) => state.stores.isLoading);
 
   // Fetch stores if not in memory
   useEffect(() => {
-    if (storeIds.length === 0 && !isLoading) {
+    if (storeSlugs.length === 0 && !isLoading) {
       dispatch(fetchStores());
     }
-  }, [storeIds.length, isLoading, dispatch]);
+  }, [storeSlugs.length, isLoading, dispatch]);
 
   // Extract favorite stores
   const favoriteStores = useMemo(() => {
     if (!user?.favourites?.stores || !stores) return [];
 
     return user.favourites.stores
-      .map((id) => stores[id.toString()])
+      .map((id) => Object.values(stores).find(store => store._id === id.toString()))
       .filter((store): store is Store => !!store);
   }, [user, stores]);
 
@@ -157,7 +157,7 @@ const FavoriteStores = () => {
       {/* Content Section */}
       <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
         {/* Loading State */}
-        {isLoading && storeIds.length === 0 ? (
+        {isLoading && storeSlugs.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4">
             <div className="animate-spin rounded-full h-12 w-12 border-4 border-indigo-200 border-t-indigo-600 mb-4" />
             <p className="text-gray-500">Loading stores...</p>

@@ -24,7 +24,7 @@ const relevanceOptions = [
 const MallSearchPage = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const { isLoading, error, storeIds, storesById } = useAppSelector(
+  const { isLoading, error, storeSlugs, storesBySlug } = useAppSelector(
     (state: RootState) => state.stores
   );
   const user = useAppSelector((state: RootState) => state.user.user);
@@ -178,7 +178,7 @@ const MallSearchPage = () => {
             <div className="flex flex-col">
               {searchTerm ? (
                 <p className="text-gray-600 text-[1.8vh]">
-                  <span className="font-semibold text-gray-900">{storeIds.length}</span>
+                  <span className="font-semibold text-gray-900">{storeSlugs.length}</span>
                   {' '}results for{' '}
                   <span className="font-semibold text-gray-900">"{searchTerm}"</span>
                   {selectedDepartment && (
@@ -189,13 +189,13 @@ const MallSearchPage = () => {
                 </p>
               ) : selectedDepartment ? (
                 <p className="text-gray-600 text-[1.8vh]">
-                  <span className="font-semibold text-gray-900">{storeIds.length}</span>
+                  <span className="font-semibold text-gray-900">{storeSlugs.length}</span>
                   {' '}stores in{' '}
                   <span className="font-semibold text-gray-900">{departments[selectedDepartment as keyof typeof departments]?.full}</span>
                 </p>
               ) : (
                 <p className="text-gray-600 text-[1.8vh]">
-                  <span className="font-semibold text-gray-900">{storeIds.length}</span>
+                  <span className="font-semibold text-gray-900">{storeSlugs.length}</span>
                   {' '}stores found
                 </p>
               )}
@@ -290,7 +290,7 @@ const MallSearchPage = () => {
               <p className="text-red-500 text-[1.8vh] font-medium">Error loading stores</p>
               <p className="text-gray-500 text-[1.4vh] mt-[.5vh]">{error}</p>
             </div>
-          ) : storeIds.length === 0 ? (
+          ) : storeSlugs.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-[10vh]">
               <div className="w-[10vh] h-[10vh] bg-gray-100 rounded-full flex items-center justify-center mb-[2vh]">
                 <span className="text-[4vh]">🏪</span>
@@ -308,10 +308,10 @@ const MallSearchPage = () => {
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[1.5vh]">
-              {storeIds.map(id => (
+              {storeSlugs.map(slug => (
                 <StoreCard
-                  key={id}
-                  store={storesById[id]}
+                  key={slug}
+                  store={storesBySlug[slug]}
                   user={user}
                   allowShadow
                   mini={window.innerWidth < 640}
