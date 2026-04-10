@@ -77,9 +77,9 @@ const Help: React.FC<HelpProps> = ({ onBack }) => {
       id: 'messenger',
       label: 'Messenger',
       icon: FaFacebookMessenger,
-      value: '@themallmvp',
+      value: '@themallbeta',
       description: 'Message us on Facebook',
-      action: () => window.open('https://m.me/themallmvp'),
+      action: () => window.open('https://m.me/themallbeta'),
       gradient: 'from-violet-500 to-purple-600',
       shadowColor: 'shadow-violet-200/50'
     }
