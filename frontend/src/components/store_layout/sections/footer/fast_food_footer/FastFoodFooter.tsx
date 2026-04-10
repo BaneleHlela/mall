@@ -36,7 +36,7 @@ const FastFoodFooter = () => {
                                 },
                                 background: config.logo?.style.background,
                             }}
-                            position='end'
+                            position='center'
                         />
                     </div>
 
