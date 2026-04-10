@@ -8,6 +8,8 @@ import { useNavbar } from "../../../utils/context/NavbarContext";
 import { useState, useEffect, useRef } from "react";
 import { CiChat2, CiHeart, CiHome, CiSearch, CiShoppingCart, CiUser } from "react-icons/ci";
 import { PiUserCircleDashedThin } from "react-icons/pi";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../../app/store";
 
 const shouldHideNav = (hiddenRoutes: string[], currentPath: string): boolean => {
   return hiddenRoutes.some((route) => currentPath.includes(route));
@@ -16,6 +18,7 @@ const shouldHideNav = (hiddenRoutes: string[], currentPath: string): boolean => 
 const Menubar = () => {
   const location = useLocation();
   const { isNavbarHidden } = useNavbar();
+  const { isDarkMode } = useSelector((state: RootState) => state.theme);
 
   const [isScrollHidden, setIsScrollHidden] = useState(false);
   const lastScrollY = useRef(0);
@@ -66,7 +69,7 @@ const Menubar = () => {
         damping: 25,
       }}
       className={`
-        ${isHidden ?  "hidden" : "fixed"} z-100 bg-white shadow-md
+        ${isHidden ?  "hidden" : "fixed"} z-100 ${isDarkMode ? 'bg-gray-800 shadow-gray-900' : 'bg-white shadow-md'}
         flex items-center justify-evenly space-x-1
         h-[5vh] w-full bottom-0 lg:px-[3vh]
         lg:top-0 lg:bottom-auto lg:left-0 lg:h-screen lg:w-[5vh]

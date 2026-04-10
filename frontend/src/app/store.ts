@@ -19,6 +19,7 @@ import rentalReducer from "../features/rentals/rentalSlice.ts";
 import donationReducer from "../features/donations/donationsSlice.ts";
 import rangeReducer from "../features/rangeSlice.ts";
 import postReducer from "../features/posts/postSlice.ts";
+import themeReducer from "../features/theme/themeSlice.ts";
 
 // Type for the stores reducer
 type StoresReducerType = typeof storeReducer;
@@ -45,6 +46,7 @@ export const store = configureStore({
         donations: donationReducer,
         range: rangeReducer,
         posts: postReducer,
+        theme: themeReducer,
     },
 });
 

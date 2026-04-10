@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../app/store';
+import { toggleDarkMode } from '../../features/theme/themeSlice';
 import { logout, getProfile } from '../../features/user/userSlice';
 import { 
   FaUser, 
@@ -37,6 +38,7 @@ const Account: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, isAuthenticated, isLoading } = useSelector((state: RootState) => state.user);
+  const { isDarkMode } = useSelector((state: RootState) => state.theme);
   const [currentSection, setCurrentSection] = useState<AccountSection>('main');
   const [showEditAvatarModal, setShowEditAvatarModal] = useState(false);
 
@@ -129,119 +131,109 @@ const Account: React.FC = () => {
   }
 
   return (
-    <div className="h-screen w-full max-w-md mx-auto bg-gradient-to-br from-slate-50 via-white to-slate-50 flex flex-col">
-      {/* Header Section with Gradient Background */}
-      <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-10 pb-15 px-6 overflow-hidden">
-        {/* Decorative Elements */}
-        <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-white/5 to-transparent rounded-full -translate-y-1/2 translate-x-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-1/2 -translate-x-1/2"></div>
-        
-        {/* Avatar Section */}
-        <div className="flex flex-col items-center relative z-10">
-          <div 
-            className="relative cursor-pointer group"
-            onClick={handleAvatarClick}
-          >
-            {/* Avatar Ring */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 rounded-full opacity-75 group-hover:opacity-100 blur-sm transition-opacity duration-300"></div>
-            
-            <div className="relative w-[12vh] h-[12vh] rounded-full overflow-hidden border-4 border-white/20 backdrop-blur-sm">
-              {user?.avatar ? (
-                <img 
-                  src={user.avatar} 
-                  alt="User Avatar"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center">
-                  <FaUser className="text-white/80 text-3xl" />
-                </div>
-              )}
-              
-              {/* Edit Overlay */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <FaPencil className='text-white text-lg'/>
-              </div>
-            </div>
-          </div>
-          
-          {/* User Name */}
-          <h2 className="mt-[.6vh] text-xl font-semibold text-white tracking-tight">
-            {user?.firstName && user?.lastName ? user?.username : user?.username || 'Guest User'}
-          </h2>
-          
-          {/* Member Badge */}
-          {isAuthenticated && (
-            <span className="mt-[.6vh] px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-xs text-white/80 font-medium">
-              Member
-            </span>
-          )}
-        </div>
+    <div className={`h-screen w-full max-w-md mx-auto dark:bg-orange-50 ${isDarkMode ? 'dark:bg-gray-900 text-white' : 'bg-gradient-to-br from-slate-50 via-white to-slate-50'} flex flex-col`}>
+      {/* Profile Header */}
+      <div className="pt-10 pb-6 px-6">
+
+        <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+          {user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : 'Guest User'}
+        </h1>
+        <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          @{user?.username || 'guest'}
+        </p>
       </div>
 
-      {/* Location Card - Floating */}
-      <div className="px-4 -mt-8 relative z-20">
+      {/* Account Settings */}
+      <div className="px-4 pb-4">
         <button
           onClick={handleLocationClick}
-          className="w-full bg-white rounded-2xl shadow-lg shadow-gray-200/50 p-4 flex items-center gap-3 hover:shadow-xl hover:shadow-gray-200/60 transition-all duration-300 border border-gray-100"
+          className={`w-full ${isDarkMode ? 'bg-gray-800 text-white border-gray-700' : 'bg-white text-gray-900 border-gray-100'} rounded-2xl p-4 flex items-center justify-between hover:shadow-lg transition-all duration-300 border`}
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center flex-shrink-0">
-            <FaMapMarkerAlt className="text-white text-sm" />
-          </div>
-          <div className="flex-1 text-left min-w-0">
-            <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Delivery Location</p>
-            <p className='text-sm font-semibold text-gray-800 truncate'>
-              {user?.locations && user.locations.length > 0 
-                ? `${user.locations[0].nickname} • ${user.locations[0].address}` 
-                : 'No location set'
-              }
-            </p>
-          </div>
-          <IoMdArrowDropdown className='text-gray-400 text-xl flex-shrink-0'/>
+          <span className="font-medium">Addresses</span>
+          <IoMdArrowDropdown className={`${isDarkMode ? 'text-gray-400' : 'text-gray-400'} text-xl`} />
         </button>
-      </div>
-
-      {/* Account Options Section */}
-      <div className="flex-1 px-4 py-6">
-        <div className="space-y-1">
-          {accountOptions.map((option, index) => {
-            const IconComponent = option.icon;
-            return (
-              <button
-                key={option.id}
-                onClick={() => setCurrentSection(option.id as AccountSection)}
-                className="w-full group bg-white rounded-2xl p-3 flex items-center gap-4 hover:shadow-lg hover:shadow-gray-100 transition-all duration-300 border border-gray-100 hover:border-gray-200 active:scale-[0.98]"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                {/* Icon Container */}
-                <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${option.color} flex items-center justify-center shadow-lg shadow-gray-200/50 group-hover:scale-110 transition-transform duration-300`}>
-                  <IconComponent className="text-white text-lg" />
-                </div>
-                
-                {/* Label */}
-                <span className="flex-1 text-left text-gray-700 font-medium group-hover:text-gray-900 transition-colors">
-                  {option.label}
-                </span>
-                
-                {/* Arrow */}
-                <div className="w-8 h-8 rounded-full bg-gray-50 group-hover:bg-gray-100 flex items-center justify-center transition-colors">
-                  <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-600 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
-              </button>
-            );
-          })}
+        <div className={`w-full ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'} rounded-2xl p-4 mt-2 flex items-center justify-between border`}>
+          <span className="font-medium">Dark Mode</span>
+          <button
+            onClick={() => dispatch(toggleDarkMode())}
+            className={`w-12 h-6 rounded-full ${isDarkMode ? 'bg-blue-600' : 'bg-gray-300'} relative transition-colors duration-300`}
+          >
+            <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${isDarkMode ? 'translate-x-6' : 'translate-x-0.5'}`}></div>
+          </button>
         </div>
       </div>
 
-      {/* Sign In/Out Section */}
-      <div className="px-4 pb-8 lg:pb-8 mb-10 lg:mb-0">
+      {/* Activity */}
+      <div className="px-4 pb-4">
+        <div className="space-y-2">
+          <button
+            onClick={() => setCurrentSection('purchases')}
+            className={`w-full ${isDarkMode ? 'bg-gray-800 text-white border-gray-700 hover:bg-gray-700' : 'bg-white text-gray-900 border-gray-100 hover:bg-gray-50'} rounded-2xl p-4 flex items-center justify-between transition-all duration-300 border`}
+          >
+            <span className="font-medium">Orders</span>
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+          <button
+            onClick={() => setCurrentSection('bookings')}
+            className={`w-full ${isDarkMode ? 'bg-gray-800 text-white border-gray-700 hover:bg-gray-700' : 'bg-white text-gray-900 border-gray-100 hover:bg-gray-50'} rounded-2xl p-4 flex items-center justify-between transition-all duration-300 border`}
+          >
+            <span className="font-medium">Bookings</span>
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+          <button
+            className={`w-full ${isDarkMode ? 'bg-gray-800 text-white border-gray-700 hover:bg-gray-700' : 'bg-white text-gray-900 border-gray-100 hover:bg-gray-50'} rounded-2xl p-4 flex items-center justify-between transition-all duration-300 border opacity-50 cursor-not-allowed`}
+          >
+            <span className="font-medium">Rentals</span>
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+          <button
+            className={`w-full ${isDarkMode ? 'bg-gray-800 text-white border-gray-700 hover:bg-gray-700' : 'bg-white text-gray-900 border-gray-100 hover:bg-gray-50'} rounded-2xl p-4 flex items-center justify-between transition-all duration-300 border opacity-50 cursor-not-allowed`}
+          >
+            <span className="font-medium">Subscriptions</span>
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Extras */}
+      <div className="px-4 pb-4">
+        <div className="space-y-2">
+          <button
+            onClick={() => setCurrentSection('offers')}
+            className={`w-full ${isDarkMode ? 'bg-gray-800 text-white border-gray-700 hover:bg-gray-700' : 'bg-white text-gray-900 border-gray-100 hover:bg-gray-50'} rounded-2xl p-4 flex items-center justify-between transition-all duration-300 border`}
+          >
+            <span className="font-medium">Offers & Discounts</span>
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+          <button
+            onClick={() => setCurrentSection('help')}
+            className={`w-full ${isDarkMode ? 'bg-gray-800 text-white border-gray-700 hover:bg-gray-700' : 'bg-white text-gray-900 border-gray-100 hover:bg-gray-50'} rounded-2xl p-4 flex items-center justify-between transition-all duration-300 border`}
+          >
+            <span className="font-medium">Help & Support</span>
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Sign In/Out */}
+      <div className="px-4 pb-8 mt-auto">
         {isAuthenticated ? (
           <button
             onClick={handleLogout}
             disabled={isLoading}
-            className="w-full bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 disabled:from-red-400 disabled:to-rose-500 text-white font-semibold py-4 px-6 rounded-2xl flex items-center justify-center gap-3 shadow-lg shadow-red-200/50 hover:shadow-xl hover:shadow-red-200/60 transition-all duration-300 active:scale-[0.98]"
+            className="w-full bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 disabled:from-red-400 disabled:to-rose-500 text-white font-semibold py-4 px-6 rounded-2xl flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
           >
             <FaSignOutAlt className="text-lg" />
             <span>{isLoading ? 'Signing out...' : 'Sign out'}</span>
@@ -249,7 +241,7 @@ const Account: React.FC = () => {
         ) : (
           <button
             onClick={() => window.location.href = '/login'}
-            className="w-full bg-gradient-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700 text-white font-semibold py-4 px-6 rounded-2xl flex items-center justify-center gap-3 shadow-lg shadow-gray-300/50 hover:shadow-xl hover:shadow-gray-300/60 transition-all duration-300 active:scale-[0.98]"
+            className="w-full bg-gradient-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700 text-white font-semibold py-4 px-6 rounded-2xl flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
           >
             <FaSignInAlt className="text-lg" />
             <span>Sign in</span>
@@ -259,7 +251,7 @@ const Account: React.FC = () => {
 
       {/* Edit Avatar Modal */}
       {showEditAvatarModal && (
-        <EditAvatarModal 
+        <EditAvatarModal
           isOpen={showEditAvatarModal}
           onClose={() => setShowEditAvatarModal(false)}
         />

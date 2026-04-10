@@ -33,6 +33,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import DataDeletion from "./pages/DataDeletion";
 import AllReviews from "./pages/reviews/AllReviews";
 import { checkAuth } from "./features/user/userSlice";
+import { useSelector } from "react-redux";
+import type { RootState } from "./app/store";
 
 // Reviews Modal Context
 interface ReviewsModalContextType {
@@ -52,6 +54,7 @@ export const useReviewsModal = () => {
 const AppContent: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isDarkMode } = useSelector((state: RootState) => state.theme);
 
   // Reviews modal state
   const [reviewsModal, setReviewsModal] = useState({
@@ -124,7 +127,7 @@ const AppContent: React.FC = () => {
   return (
     <ReviewsModalContext.Provider value={{ openReviewsModal }}>
       <ScrollToTop />
-      <div className={`relative font-[Outfit] text-[2vh] bg-stone-100 h-fit w-screen max-w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar ${reviewsModal.isOpen ? 'overflow-hidden' : ''}`}>
+      <div className={`relative font-[Outfit] text-[2vh] ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-stone-100'} h-fit w-screen max-w-screen flex justify-center items-center overflow-x-clip overflow-y-scroll hide-scrollbar ${reviewsModal.isOpen ? 'overflow-hidden' : ''}`}>
         {!reviewsModal.isOpen && <Menubar />}
         <Routes>
         <Route path="/" element={<Home />} />

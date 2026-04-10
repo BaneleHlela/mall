@@ -21,8 +21,9 @@ const LoginPage = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
-	const dispatch = useDispatch<AppDispatch>();
-	const { isLoading, error, isAuthenticated, isCheckingAuth } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch<AppDispatch>();
+  const { isLoading, error, isAuthenticated, isCheckingAuth } = useSelector((state: RootState) => state.user);
+  const { isDarkMode } = useSelector((state: RootState) => state.theme);
 
 	// Redirect already authenticated users away from login page
 	useEffect(() => {
@@ -61,7 +62,7 @@ const LoginPage = () => {
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.5 }}
-			className='max-w-[60vh] bg-white w-full h-screen lg:h-screen flex flex-col justify-between backdrop-filter backdrop-blur-xl lg:rounded-[1vh] shadow-xl overflow-hidden px-[2vh] py-[4vh]'
+			className={`max-w-[60vh] ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white'} w-full h-screen lg:h-screen flex flex-col justify-between backdrop-filter backdrop-blur-xl lg:rounded-[1vh] shadow-xl overflow-hidden px-[2vh] py-[4vh]`}
 		>
 			<div className="w-full h-[20%]">
 				<img 

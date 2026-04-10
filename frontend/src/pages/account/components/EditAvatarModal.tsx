@@ -14,6 +14,7 @@ interface EditAvatarModalProps {
 const EditAvatarModal: React.FC<EditAvatarModalProps> = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   const { user, isLoading } = useSelector((state: RootState) => state.user);
+  const { isDarkMode } = useSelector((state: RootState) => state.theme);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -53,10 +54,10 @@ const EditAvatarModal: React.FC<EditAvatarModalProps> = ({ isOpen, onClose }) =>
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-white/10 backdrop-blur-md flex items-center justify-center z-50 p-4 ">
-      <div className="bg-white rounded-lg max-w-md w-full p-[2.5vh] shadow">
+    <div className={`fixed inset-0 ${isDarkMode ? 'bg-black/50' : 'bg-white/10'} backdrop-blur-md flex items-center justify-center z-50 p-4 `}>
+      <div className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white'} rounded-lg max-w-md w-full p-[2.5vh] shadow`}>
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-stone-800">Edit Avatar</h2>
+          <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-stone-800'}`}>Edit Avatar</h2>
           <button
             onClick={onClose}
             className=" hover:text-stone-600 transition-colors"
@@ -68,7 +69,7 @@ const EditAvatarModal: React.FC<EditAvatarModalProps> = ({ isOpen, onClose }) =>
         <div className="flex flex-col items-center space-y-6">
           {/* Current/Preview Avatar */}
           <div className="relative">
-            <div className="w-[14vh] h-[14vh] rounded-full overflow-hidden border-4 border-stone-200">
+            <div className={`w-[14vh] h-[14vh] rounded-full overflow-hidden border-4 ${isDarkMode ? 'border-gray-600' : 'border-stone-200'}`}>
               <img
                 src={previewUrl || user?.avatar || '/default-avatar.png'}
                 alt="Avatar Preview"
@@ -95,7 +96,7 @@ const EditAvatarModal: React.FC<EditAvatarModalProps> = ({ isOpen, onClose }) =>
           {/* Upload Button */}
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center space-x-2 bg-stone-100 hover:bg-stone-200 text-stone-700 px-4 py-2 rounded-lg transition-colors"
+            className={`flex items-center space-x-2 ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' : 'bg-stone-100 hover:bg-stone-200 text-stone-700'} px-4 py-2 rounded-lg transition-colors`}
           >
             <FaUpload />
             <span>Choose Photo</span>

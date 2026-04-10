@@ -6,6 +6,7 @@ import { updateUser } from "../../../features/user/userSlice";
 import { IoChevronBackOutline } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { TbLoader3 } from "react-icons/tb";
+import type { RootState } from "../../../app/store";
 
 interface AddUserAddressPageProps {
   show?: boolean;
@@ -16,6 +17,7 @@ const AddUserAddressPage: React.FC<AddUserAddressPageProps> = ({show = false}) =
   const navigate = useNavigate();
   const { error, user } = useAppSelector((state) => state.user);
   const isLoading = useAppSelector((state) => state.user.isLoading);
+  const { isDarkMode } = useAppSelector((state: RootState) => state.theme);
   const [nickname, setNickname] = useState("");
   const [locationData, setLocationData] = useState<{
     lat: number;
@@ -113,7 +115,7 @@ const AddUserAddressPage: React.FC<AddUserAddressPageProps> = ({show = false}) =
   if (!show) return null;
 
   return (
-    <div className="w-full min-h-screen bg-white/10 backdrop-blur-md py-[2.3vh] px-[.8vh]">
+    <div className={`w-full min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white/10 backdrop-blur-md'} py-[2.3vh] px-[.8vh]`}>
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-[1vh]">
@@ -124,21 +126,21 @@ const AddUserAddressPage: React.FC<AddUserAddressPageProps> = ({show = false}) =
             >
                 <IoChevronBackOutline className='text-[2.5vh]'/>
             </button>
-            <h1 className="text-2xl font-semibold text-stone-800">Add User Address</h1>
+            <h1 className={`text-2xl font-semibold ${isDarkMode ? 'text-white' : 'text-stone-800'}`}>Add User Address</h1>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-sm p-6`}>
           <div className="space-y-6">
             {/* Nickname Input */}
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">
+              <label className={`block text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-stone-700'} mb-2`}>
                 Address Nickname
               </label>
               <input
                 type="text"
                 placeholder="e.g. Home, Work, Gym"
-                className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full px-3 py-2 border ${isDarkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-stone-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
               />
@@ -146,13 +148,13 @@ const AddUserAddressPage: React.FC<AddUserAddressPageProps> = ({show = false}) =
 
             {/* Location Picker */}
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">
+              <label className={`block text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-stone-700'} mb-2`}>
                 Select Location
               </label>
               <LocationPicker onLocationSelect={handleLocationSelect} />
               {locationData && (
-                <div className="mt-3 p-3 bg-stone-50 rounded-lg">
-                  <p className="text-sm text-stone-600 line-clamp-1">
+                <div className={`mt-3 p-3 ${isDarkMode ? 'bg-gray-700' : 'bg-stone-50'} rounded-lg`}>
+                  <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-stone-600'} line-clamp-1`}>
                     <strong>Selected Address:</strong> {locationData.address}
                   </p>
                   {/* <p className="text-xs text-stone-500 mt-1">
