@@ -2,7 +2,7 @@ import React from 'react'
 import { getBackgroundStyles, getTextStyles } from '../../../utils/stylingFunctions';
 import StoreDivTag from './StoreDivTag';
 import { useAppSelector } from '../../../app/hooks';
-import StoreTextTag from '../extras/text/StoreTextTag';
+import StoreTextTag from './StoreTextTag';
 
 interface StoreButtonProps {
     onClick: () => void;

@@ -15,7 +15,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import AcceptingOrdersButton from '../../../extras/buttons/AcceptingOrdersButton';
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
-import StoreTextTag from '../../../extras/text/StoreTextTag';
+import StoreTextTag from '../../../shared_layout_components/StoreTextTag';
 
 const PopularProductsSection = () => {
   const swiperRef = useRef<SwiperRef | null>(null);

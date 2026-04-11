@@ -7,7 +7,7 @@ import {
 } from "../../../../../utils/stylingFunctions";
 import StoreLayoutButton from "../../../shared_layout_components/StoreLayoutButton";
 import UnderlinedText from "../../../extras/text/UnderlinedText";
-import StoreTextTag from "../../../extras/text/StoreTextTag";
+import StoreTextTag from "../../../shared_layout_components/StoreTextTag";
 import { useStoreButtonClickHandler } from "../../../extras/buttons/useStoreButtonClickHandler";
 
 const HeroWithButtonBetweenImagesSection = () => {

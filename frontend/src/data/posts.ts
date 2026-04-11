@@ -286,8 +286,8 @@ export const POSTS_REGISTRY: PostData[] = [
   {
     id: 'no-ayikho-poster',
     component: NoAyikhoPoster,
-    priority: 3,
-    pinned: false,
+    priority: 9,
+    pinned: true,
     storeSlug: 'mall-designs'
   },
   {

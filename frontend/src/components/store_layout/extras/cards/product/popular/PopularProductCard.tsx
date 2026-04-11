@@ -7,7 +7,7 @@ import { SlArrowDown, SlArrowUp } from 'react-icons/sl';
 import { IoIosHeart, IoIosHeartEmpty } from 'react-icons/io';
 import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
 import { addToCart } from '../../../../../../features/cart/cartSlice';
-import StoreTextTag from '../../../text/StoreTextTag';
+import StoreTextTag from '../../../../shared_layout_components/StoreTextTag';
 
 interface PriceVariation {
   variation: string;

@@ -17,7 +17,10 @@ const StoreTextTag: React.FC<StoreTextTagProps> = ({style, input, className}) =>
             ${style.textAlign === 'start' && 'justify-start'}
             ${style.textAlign === 'end' && 'justify-end'} `}
         >
-            <div className={`relative`}>
+            <div className={`relative flex items-center 
+                ${style.textAlign === 'center' && 'justify-center'}
+                ${style.textAlign === 'start' && 'justify-start'}
+                ${style.textAlign === 'end' && 'justify-end'} `}>
                 <p 
                     style={{
                         ...getTextStyles(style, fonts, colors),

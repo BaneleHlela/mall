@@ -4,7 +4,7 @@ import { mockLayout } from '../../../../../major_updates/mockLayout';
 import { getBackgroundStyles, getTextStyles } from '../../../../../utils/stylingFunctions';
 import StoreLayoutButton from '../../../shared_layout_components/StoreLayoutButton';
 import { useStoreButtonClickHandler } from '../../../extras/buttons/useStoreButtonClickHandler';
-import StoreTextTag from '../../../extras/text/StoreTextTag';
+import StoreTextTag from '../../../shared_layout_components/StoreTextTag';
 
 const DoctorAbout = () => {
     const { colors, fonts, routes } = useAppSelector(state => state.layoutSettings);

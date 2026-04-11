@@ -6,7 +6,7 @@ import { getBackgroundStyles, getResponsiveDimension, getTextStyles } from '../.
 import { IoMdClose, IoIosHeart, IoIosHeartEmpty } from 'react-icons/io';
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
 import UnderlinedText from '../../../extras/text/UnderlinedText';
-import StoreTextTag from '../../../extras/text/StoreTextTag';
+import StoreTextTag from '../../../shared_layout_components/StoreTextTag';
 import StoreDivTag from '../../../shared_layout_components/StoreDivTag';
 
 interface SingleGroupImagesProps {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { getBackgroundStyles, getTextStyles } from '../../../../../../utils/stylingFunctions';
 import StoreButton from '../../../buttons/StoreButton';
-import StoreTextTag from '../../../text/StoreTextTag';
+import StoreTextTag from '../../../../shared_layout_components/StoreTextTag';
 import StoreLayoutButton from '../../../../shared_layout_components/StoreLayoutButton';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';

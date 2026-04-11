@@ -12,8 +12,8 @@ const MyStores = () => {
   const navigate = useNavigate();
   const { isLoading, error } = useAppSelector((state) => state.stores);
   const userId = useAppSelector((state) => state.user.user?._id);
-  const myStoreIds = useAppSelector((state) => state.stores.myStoreIds);
-  const myStoresById = useAppSelector((state) => state.stores.myStoresById);
+  const myStoreIds = useAppSelector((state) => state.stores.myStoreSlugs);
+  const myStoresById = useAppSelector((state) => state.stores.myStoresBySlug);
 
   useEffect(() => {
     if (userId) {

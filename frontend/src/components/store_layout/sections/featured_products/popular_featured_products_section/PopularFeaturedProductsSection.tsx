@@ -17,7 +17,7 @@ import "swiper/css/navigation";
 import AcceptingOrdersButton from '../../../extras/buttons/AcceptingOrdersButton';
 import StoreLayoutButton from '../../../shared_layout_components/StoreLayoutButton';
 import { useStoreButtonClickHandler } from '../../../extras/buttons/useStoreButtonClickHandler';
-import StoreTextTag from '../../../extras/text/StoreTextTag';
+import StoreTextTag from '../../../shared_layout_components/StoreTextTag';
 import StoreDivTag from '../../../shared_layout_components/StoreDivTag';
 
 const PopularFeaturedProductsSection = () => {
