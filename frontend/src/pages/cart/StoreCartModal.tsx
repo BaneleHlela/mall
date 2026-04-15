@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { HiArrowLeftEndOnRectangle } from "react-icons/hi2";
@@ -20,8 +20,10 @@ const StoreCartModal = () => {
   const routes = useAppSelector((state) => state.layoutSettings.routes);
   const { isDarkMode } = useAppSelector((state) => state.theme);
   const isLoading = useAppSelector((state) => state.cart.isLoading);
+  const isStoreLoading = useAppSelector((state) => state.stores.isLoading);
   const [isDelivery, setIsDelivery] = useState(true);
   const [showPaymentOptions, setShowPaymentOptions] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   // Fetch store if not in Redux
   useEffect(() => {
@@ -39,8 +41,23 @@ const StoreCartModal = () => {
       }
     }
   }, [user, storeSlug, storesBySlug, dispatch]);
-  
+
+  // Scroll to bottom on mount
+  useEffect(() => {
+    if (modalRef.current) {
+      modalRef.current.scrollTo(0, modalRef.current.scrollHeight);
+    }
+  }, []);
+
   const store = storeSlug ? storesBySlug[storeSlug] : null;
+
+  if (isLoading || isStoreLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className={`animate-spin rounded-full h-8 w-8 border-2 ${isDarkMode ? 'border-gray-600 border-t-white' : 'border-gray-200 border-t-gray-800'}`} />
+      </div>
+    );
+  }
 
   if (!store) {
     return <>Store not found...</>;
@@ -185,7 +202,7 @@ const StoreCartModal = () => {
   };  
 
   return (
-    <div className={`flex flex-col relative item-center w-full h-screen overflow-y-scroll lg:w-[80%] max-w-md py-[2vh] ${isDarkMode ? 'bg-black text-white' : 'bg-gradient-to-br from-slate-50 via-white to-slate-50'} hide-scrollbar pb-8`}>
+    <div ref={modalRef} className={`flex flex-col relative item-center w-full h-screen overflow-y-scroll lg:w-[80%] max-w-md py-[2vh] ${isDarkMode ? 'bg-black text-white' : 'bg-gradient-to-br from-slate-50 via-white to-slate-50'} hide-scrollbar pb-8`}>
       {/* Back Button & Header */}
       <div className="relative flex items-center justify-center w-full">
         <BiArrowBack onClick={() => navigate(-1)} className={`absolute left-3 rounded-full ${isDarkMode ? ' bg-[#1f1f23] border-gray-800' : 'bg-gray-100 border-gray-200 text-gray-900'} p-2 text-[35px]`}/>
