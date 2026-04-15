@@ -1,5 +1,8 @@
+import type { Store } from "./storeTypes";
+
 // Define types for cart items and cart state
 export interface CartItem {
+    _id: string | null | undefined;
     product: {
       _id: string;
       name: string;
@@ -12,7 +15,7 @@ export interface CartItem {
 export  interface Cart {
     _id: string;
     user: string;
-    store: string;
+    store: Partial<Store>;
     items: CartItem[];
     totalPrice: number;
 }

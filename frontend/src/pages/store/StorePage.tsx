@@ -26,13 +26,14 @@ import StoreMenubarIcons from "../../components/store_layout/menubars/supporting
 import StoreFloatingButton from "../../components/store_layout/extras/buttons/StoreFloatingButton";
 import { IoMdClose } from "react-icons/io";
 import { FaTools } from "react-icons/fa";
-import StoreCartModal from "../cart/StoreCartModal";
+
 import StoreMenubar from "../../components/store_layout/menubars/StoreMenubar";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { fetchStoreRentals } from "../../features/rentals/rentalSlice";
 import { fetchStoreDonations } from "../../features/donations/donationsSlice";
 import ProtectedRoute from "../../components/the_mall/authorization/ProtectedRoute";
 import { useNavbar } from "../../utils/context/NavbarContext";
+import { trackVisit } from "../../features/visits/visitSlice";
 
 const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
   const location = useLocation();
@@ -43,9 +44,13 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showStoreStateBadge, setShowStoreStateBadge] = useState(false);
   const [showFloatingElements, setShowFloatingElements] = useState(true);
-  const isCartRoute = location.pathname.includes('/cart'); // Check if the current route is "/cart"
-  const { hideNavbar, showNavbar } = useNavbar(); 
+  const storeFromRedux = useAppSelector((state) => 
+    state.stores.myStoresBySlug[storeSlug as string] || 
+    state.stores.storesBySlug[storeSlug as string] ||
+    (state.stores.currentStore?.slug === storeSlug ? state.stores.currentStore : null)
+  );
 
+  const { hideNavbar, showNavbar } = useNavbar(); 
   // Navigate to get-started page if no storeSlug provided or storeSlug = "themall"
   useEffect(() => {
     if (!storeSlug || storeSlug === "themall") {
@@ -89,13 +94,14 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
     }
   }, [settings.fonts]);
 
-  // Fetch store by ID
+  // Fetch store by Slug
   useEffect(() => {
     const fetchStore = async () => {
       if (storeSlug) {
         try {
           setLoading(true);
-          const result = await dispatch(fetchStoreBySlug(storeSlug)).unwrap(); // Fetch store and unwrap the result
+          const result = storeFromRedux || await dispatch(fetchStoreBySlug(storeSlug)).unwrap(); // Fetch store and unwrap the result
+          dispatch(trackVisit({ storeId: result._id as string}));
           setStore(result); // Set the fetched store in local state
           dispatch(setCurrentStore(result)); // Update the global store state
 
@@ -112,9 +118,7 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
             }
           } else if (result?.layouts[0] && !location.pathname.includes("layouts")) {
             // Fallback to old logic if website object not set
-            console.log("Fetching layout from store page (fallback).")
             const layoutResult = await dispatch(getLayout(result.layouts[0] as string)).unwrap(); // Fetch layout and unwrap the result
-            console.log(layoutResult);
             dispatch(setInitialLayout(layoutResult)); // Update the global layout state if available
           }
         } catch (error) {
@@ -127,7 +131,14 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
     };
 
     fetchStore();
+
   }, [storeSlug, dispatch]);
+
+  // Track Visit
+  // useEffect(() => {
+  //   if (!store?._id) return;
+  //   dispatch(trackVisit({ storeId: store._id }));
+  // }, [store?._id, dispatch]);
 
   // Fetch store services if applicable
   useEffect(() => {
@@ -152,9 +163,9 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
 
   // Fetch store services if applicable
   useEffect(() => {
-  if (store?.trades.includes("services") && storeSlug) {
-    dispatch(fetchStoreServices({ storeSlug, activeOnly: true })); // Fetch services if needed
-  }
+    if (store?.trades.includes("services") && storeSlug) {
+      dispatch(fetchStoreServices({ storeSlug, activeOnly: true })); // Fetch services if needed
+    }
   }, [store, storeSlug, dispatch]);
 
   // Fetch store donations if applicable
@@ -262,19 +273,19 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
 
 
   const routeComponents: { [key: string]: React.ReactNode } = {
-   "/": <StoreHomePage />,
-   "/about": <StoreAboutPage />,
-   "/menu": <StoreMenuPage />,
-   "/order-online": <StoreOrderOnlinePage />,
-   "/contact": <StoreContactPage />,
-   "/reviews": <StoreReviewsPage />,
-   "/products": <StoreProductsPage />,
-   "/packages": <StorePackagesPage />,
-   "/services": <StoreServicesPage />,
-   "/events": <StoreEventsPage />,
-   "/gallery": <StoreGalleryPage />,
-   "/book": <StoreBookPage />,
- };
+    "/": <StoreHomePage />,
+    "/about": <StoreAboutPage />,
+    "/menu": <StoreMenuPage />,
+    "/order-online": <StoreOrderOnlinePage />,
+    "/contact": <StoreContactPage />,
+    "/reviews": <StoreReviewsPage />,
+    "/products": <StoreProductsPage />,
+    "/packages": <StorePackagesPage />,
+    "/services": <StoreServicesPage />,
+    "/events": <StoreEventsPage />,
+    "/gallery": <StoreGalleryPage />,
+    "/book": <StoreBookPage />,
+};
 
 
   return (
@@ -290,15 +301,13 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
           // width: window.innerWidth >= 1024 ? settings.background?.width?.desktop : settings.background?.width?.mobile, // Apply width for large screens
         }}
         className={`relative w-screen h-full overflow-y-scroll hide-scrollbar overflow-x-clip`}>
-            {!isCartRoute && (
-              <>
-                {/* Store Menubar */}
-                <ErrorBoundary>
-                  <StoreMenubar />
-                </ErrorBoundary>
-                {/* <ArtMenubar /> */}
-              </>
-            )}
+            <>
+              {/* Store Menubar */}
+              <ErrorBoundary>
+                <StoreMenubar />
+              </ErrorBoundary>
+              {/* <ArtMenubar /> */}
+            </>
             {/* Static div for mobile, so alert div can appear */}
             <div  
               style={{
@@ -324,23 +333,13 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
                 />
               ))}
               {store?.trades.includes("products") && <Route path="/product/:productSlug" element={<SingleStoreProductPage />} />}
-              {store?.trades.includes("products") && 
-                <Route 
-                  path="/cart" 
-                  element={
-                    <ProtectedRoute>
-                      <div className="flex justify-center w-full">
-                        <StoreCartModal />
-                      </div>
-                    </ProtectedRoute> 
-                  } 
-                />}
+
               {store?.trades.includes("services") && <Route path="/service/:serviceSlug" element={<StoreBookServicePage />} />}
               <Route path="/search" element={<BasicStoreSearchResultsPage />} />
             </Routes>
             {/* Floating Icons */}
             <ErrorBoundary>
-              {settings?.floats?.floatingIcons?.show && !isCartRoute && showFloatingElements && (
+              {settings?.floats?.floatingIcons?.show && showFloatingElements && (
                 <div className={`fixed z-50
                   ${settings.floats.floatingIcons.position === "left-1/2" && "left-2 top-1/2"}
                   ${settings.floats.floatingIcons.position === "left-1/4" && "left-2 top-1/4"}
@@ -355,7 +354,7 @@ const StorePage = ({ storeSlug: propStoreSlug }: { storeSlug?: string }) => {
               )}
             </ErrorBoundary>
             {/* Floating Button */}
-            {settings?.floats?.floatingButton && settings.floats.floatingButton.show !== "none" && !isCartRoute && showFloatingElements && (
+            {settings?.floats?.floatingButton && settings.floats.floatingButton.show !== "none" && showFloatingElements && (
               <div className={`fixed z-5
                 ${settings.floats.floatingButton?.position === "left" ? "bottom-2 left-2" : "bottom-2 right-2"}`}
               >

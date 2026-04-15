@@ -25,9 +25,7 @@ import AddStorePage from "./pages/store/AddStorePage";
 import AddUserAddressPage from "./pages/profile/address/AddUserAddressPage";
 import GetStartedPage from "./pages/store/get_started_page/GetStartedPage";
 import PayFastPage from "./pages/payments/PayFastPage";
-import ComingSoon from "./components/the_mall/ComingSoon";
 import MallCartPage from "./pages/cart/MallCartPage";
-import { HiOutlineChatAlt2 } from "react-icons/hi";
 import "./features/api/axiosInstance"; // Initialize axios interceptors
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import DataDeletion from "./pages/DataDeletion";
@@ -35,6 +33,7 @@ import AllReviews from "./pages/reviews/AllReviews";
 import { checkAuth } from "./features/user/userSlice";
 import { useSelector } from "react-redux";
 import type { RootState } from "./app/store";
+import ChatLandingPage from "./pages/chat/ChatLandingPage";
 
 // Reviews Modal Context
 interface ReviewsModalContextType {
@@ -135,15 +134,16 @@ const AppContent: React.FC = () => {
         <Route
           path="/chat"
           element={
-            <ComingSoon 
-              title="Chat Coming Soon"
-              message="Soon you'll be able to chat directly with vendors and other users right here! We're building a seamless messaging experience to help you connect, ask questions, and get support."
-              targetDate={new Date("2026-04-01")}
-              icon={<HiOutlineChatAlt2 className="w-[3vh] h-[3vh] text-white" />}
-            />
+            <ProtectedRoute>
+              <ChatLandingPage/>
+            </ProtectedRoute>
           }
         />
-        <Route path="/cart" element={<MallCartPage />} />
+        <Route path="/cart" element={
+          <ProtectedRoute>
+            <MallCartPage />
+          </ProtectedRoute>
+          } />
         <Route path="/stores/:storeSlug/*" element={<StorePage />} />
         <Route path="/my-stores" element={
           <ProtectedRoute>

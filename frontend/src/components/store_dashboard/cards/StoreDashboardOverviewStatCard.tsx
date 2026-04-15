@@ -8,7 +8,7 @@ export interface StoreDashboardOverviewStatCardProps {
   trend?: "up" | "down";
 
   timeframe: "today" | "week" | "month";
-  onTimeframeChange?: (newTimeframe: "today" | "week" | "month") => void;
+  onTimeframeChange?: () => void;
 
   showPercentage: boolean;
   onValueToggle?: (showPercentage: boolean) => void;
@@ -45,7 +45,7 @@ export const StoreDashboardOverviewStatCard = ({
             </div>
           )}
           <button
-            onClick={() => onTimeframeChange?.(timeframe)}
+            onClick={() => onTimeframeChange?.()}
             className="text-xs font-medium text-slate-500 hover:text-slate-700 transition-colors"
           >
             {title}
@@ -84,7 +84,9 @@ export const StoreDashboardOverviewStatCard = ({
         </div>
       </div>
       {/* Lock */}
-      <div className="absolute inset-0 backdrop-blur-sm z-2 w-full h-full rounded-lg"></div>
+      {title === "Revenue" || title === "Orders Completed" ? (
+        <div className="absolute inset-0 backdrop-blur-sm z-2 w-full h-full rounded-lg"></div>
+      ) : null}
     </div>
   );
 };

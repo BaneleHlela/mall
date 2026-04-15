@@ -1,6 +1,6 @@
 import express from "express";
 
-import { 
+import {
     protectRoute,
 } from "../middlewares/authMiddleware.js";
 import {
@@ -30,6 +30,7 @@ import {
     captureReelyAuto,
     cloneStore
 } from "../controllers/StoreController.js";
+import { getBillingStats } from "../controllers/BillingController.js";
 import { uploadSingleFile, uploadTeamMemberImage } from "../middlewares/uploadMiddleware.js";
 
 const router = express.Router();
@@ -75,6 +76,9 @@ router.post('/initialize-websites', initializeStoreWebsites);
 
 // Clone store for multi-location
 router.post('/:storeId/clone', protectRoute, cloneStore);
+
+// Billing stats
+router.get('/:storeId/billing/stats', getBillingStats);
 
 
 

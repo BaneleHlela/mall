@@ -67,6 +67,15 @@ const storeSchema = new mongoose.Schema(
         default: 25.00,
       },
     },
+    bill: {
+      total: { // in cents
+        type: Number,
+        default: 0
+      },
+      visits: {
+        
+      },
+    },
     slogan: {
       type: String,
       default: ""

@@ -220,7 +220,8 @@ const SingleStoreProductSection = () => {
                         />
                         <UnderlinedText 
                             style={settings.details.nameAndPrice.price}
-                            input={`R${formatPriceWithSpaces(selectedPrice)}`}
+                           // input={`R${formatPriceWithSpaces(selectedPrice)}`}
+                           input={`R${selectedPrice.toFixed(2)}`}
                         />
                     </div>
 

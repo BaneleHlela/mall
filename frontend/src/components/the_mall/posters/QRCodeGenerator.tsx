@@ -3,7 +3,7 @@ import QRCode from "qrcode";
 
 const QRCodeGenerator = ({storeSlug}: {storeSlug: string}) => {
     const [dataUrl, setDataUrl] = useState<string>('');
-    const storeUrl = `https://themallbeta.com/stores/${storeSlug}`;
+    const storeUrl = `https://themallbeta.com`;
 
     useEffect(() => {
         const generateQRCode = async () => {
@@ -27,13 +27,13 @@ const QRCodeGenerator = ({storeSlug}: {storeSlug: string}) => {
             />
             <p 
                 style={{ 
-                    fontFamily: "Bebas Neue", 
+                    //fontFamily: "Bebas Neue", 
                     lineHeight: "1" ,
                     letterSpacing: "5px"
                 }} 
-                className="font-bold text-[12vh] mt-1"
+                className="font-bold text-[4.5vh] mt-1 py-1"
             >
-                THE MALL
+                themallbeta.com
             </p>
         </div>
     )

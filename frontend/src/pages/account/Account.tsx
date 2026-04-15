@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import { toggleDarkMode } from '../../features/theme/themeSlice';
 import { logout, getProfile } from '../../features/user/userSlice';
 import { 
@@ -35,15 +36,18 @@ import { SlArrowRight } from 'react-icons/sl';
 import { PiAddressBookThin, PiMoonLight, PiSignIn, PiSignOut } from 'react-icons/pi';
 import { BiArrowBack } from 'react-icons/bi';
 import { useAppSelector } from '../../app/hooks';
+import { IoNotificationsOutline } from 'react-icons/io5';
 
 type AccountSection = 'main' | 'manage-account' | 'addresses' | 'purchases' | 'bookings' | 'payment-methods' | 'credit-history' | 'offers' | 'help';
 
 const Account: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const { user, isAuthenticated, isLoading } = useAppSelector((state) => state.user);
   const { isDarkMode } = useAppSelector((state) => state.theme);
-  const [currentSection, setCurrentSection] = useState<AccountSection>('main');
+  const sectionParam = searchParams.get('section') as AccountSection | null;
+  const [currentSection, setCurrentSection] = useState<AccountSection>(sectionParam || 'main');
   const [showEditAvatarModal, setShowEditAvatarModal] = useState(false);
 
   useEffect(() => {
@@ -153,7 +157,7 @@ const Account: React.FC = () => {
             `https://ui-avatars.com/api/?name=${user?.firstName || "Guest"}+${user?.lastName || ""}&background=E5E7EB&color=111827`
           }
           alt="profile-picture"
-          className="w-[16%] aspect-square rounded-full object-cover"
+          className="w-[16%] overflow-hidden aspect-square rounded-full object-cover"
         />
         <div className={`flex items-center justify-between w-[84%] ${isDarkMode ? 'dark:text-white ' : 'text-gray-900'} px-1`}>
           {/* Name and User Name */}
@@ -170,10 +174,10 @@ const Account: React.FC = () => {
       </div>
 
       {/* Account Settings */}
-      <div className={`w-full border ${isDarkMode ? 'text-white bg-[#1f1f23] border-gray-800' : 'border-gray-200 text-gray-900'} rounded-[20px] text-[15px] py-1 overflow-hidden min-h-fit`}>
+      <div className={`w-full border ${isDarkMode ? 'text-white bg-[#1f1f23] border-gray-800' : 'border-gray-200 text-gray-900'} rounded-[20px] text-[15px] py-1 overflow-hidden min-h-fit lg:py-0`}>
         <button
           onClick={handleLocationClick}
-          className={`w-full ${isDarkMode ? ' text-white border-slate-600' : 'bg-white text-gray-900 border-gray-100'} p-3 flex items-center justify-between hover:shadow-lg transition-all duration-300 border-b`}
+          className={`w-full ${isDarkMode ? ' text-white border-slate-600' : 'bg-white text-gray-900 border-gray-100'} p-3 flex items-center justify-between hover:shadow-lg transition-all duration-300`}
         >
           <div className="flex items-center space-x-2">
             <PiAddressBookThin className='text-gray-400 text-[18px]'/>
@@ -195,10 +199,24 @@ const Account: React.FC = () => {
             <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${isDarkMode ? 'translate-x-6' : 'translate-x-0.5'}`}></div>
           </button>
         </div>
+        <div 
+          className={`w-full ${isDarkMode ? ' text-white border-slate-600' : 'bg-white text-gray-900 border-gray-100'} p-3 flex items-center justify-between hover:shadow-lg transition-all duration-300`}
+        >
+          <div className="flex items-center space-x-2">
+            <IoNotificationsOutline className='text-gray-400 text-[18px]'/>
+            <span className="">Notifications</span>
+          </div>
+          <button
+            //onClick={() => dispatch(toggleDarkMode())}
+            className={`w-12 h-6 rounded-full ${isDarkMode ? 'bg-[#ceff00]' : 'bg-gray-300'} relative transition-colors duration-300`}
+          >
+            <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${isDarkMode ? 'translate-x-6' : 'translate-x-0.5'}`}></div>
+          </button>
+        </div>
       </div>
 
       {/* Activity */}
-      <div className={`w-full border ${isDarkMode ? 'text-white bg-[#1f1f23] border-gray-800' : 'border-gray-200 text-gray-900'} rounded-[20px] text-[15px] py-1 overflow-hidden min-h-fit`}>
+      <div className={`w-full border ${isDarkMode ? 'text-white bg-[#1f1f23] border-gray-800' : 'border-gray-200 text-gray-900'} rounded-[20px] text-[15px] py-1 overflow-hidden min-h-fit lg:py-0`}>
         
         <button
           //onClick={() => setCurrentSection('purchases')}
@@ -241,7 +259,7 @@ const Account: React.FC = () => {
       </div>
 
       {/* Extras */}
-      <div className={`w-full border ${isDarkMode ? 'text-white bg-[#1f1f23] border-gray-800' : 'border-gray-200 text-gray-900'} rounded-[20px] text-[15px] py-1 overflow-hidden min-h-fit`}>
+      <div className={`w-full border ${isDarkMode ? 'text-white bg-[#1f1f23] border-gray-800' : 'border-gray-200 text-gray-900'} rounded-[20px] text-[15px] py-1 overflow-hidden min-h-fit lg:py-0`}>
         
         <button
           onClick={() => setCurrentSection('offers')}
@@ -284,7 +302,7 @@ const Account: React.FC = () => {
           <button
             onClick={handleLogout}
             disabled={isLoading}
-            className="w-full bg-white hover:from-red-600 hover:to-rose-700 disabled:from-red-400 disabled:to-rose-500 text-red-600 py-3 px-6 rounded-full flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
+            className="w-full bg-white hover:from-red-600 hover:to-rose-700 disabled:from-red-400 disabled:to-rose-500 text-red-600 py-3 px-6 rounded-full flex items-center justify-center gap-3 shadow-xs hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
           >
             <PiSignOut className="text-lg text-red-600" />
             <span>{isLoading ? 'Signing out...' : 'Sign out'}</span>
@@ -292,7 +310,7 @@ const Account: React.FC = () => {
         ) : (
           <button
             onClick={() => window.location.href = '/login'}
-              className="w-full bg-white hover:from-gray-800 hover:to-gray-700 text-blue-600 py-3 px-6 rounded-full flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
+              className="w-full bg-white hover:from-gray-800 hover:to-gray-700 text-blue-600 py-3 px-6 rounded-full flex items-center justify-center gap-3 shadow-xs hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
           >
             <PiSignIn className="text-lg" />
             <span>Sign in</span>

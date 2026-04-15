@@ -17,9 +17,12 @@ import sectionReducer from "../features/sections/sectionSlice.ts";
 import posterReducer from "../features/posters/posterSlice.ts";
 import rentalReducer from "../features/rentals/rentalSlice.ts";
 import donationReducer from "../features/donations/donationsSlice.ts";
+import orderReducer from "../features/orders/orderSlice.ts";
 import rangeReducer from "../features/rangeSlice.ts";
 import postReducer from "../features/posts/postSlice.ts";
 import themeReducer from "../features/theme/themeSlice.ts";
+import visitReducer from "../features/visits/visitSlice.ts";
+import billingReducer from "../features/billing/billingSlice.ts";
 
 // Type for the stores reducer
 type StoresReducerType = typeof storeReducer;
@@ -44,9 +47,12 @@ export const store = configureStore({
         posters: posterReducer,
         rentals: rentalReducer,
         donations: donationReducer,
+        orders: orderReducer,
         range: rangeReducer,
         posts: postReducer,
         theme: themeReducer,
+        visits: visitReducer,
+        billing: billingReducer,
     },
 });
 

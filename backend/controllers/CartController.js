@@ -95,11 +95,15 @@ export const getUserCart = async (req, res) => {
     const query = { user: userId };
     if (storeId) query.store = storeId;
 
-    // ✅ Fetch and populate product details
+    // ✅ Fetch and populate product details and store info
     const carts = await Cart.find(query)
       .populate({
         path: "items.product",
         select: "name images price prices", // only essential fields
+      })
+      .populate({
+        path: "store",
+        select: "slug name thumbnail", // essential store fields for cart display
       });
 
     if (!carts || carts.length === 0) {
@@ -126,7 +130,7 @@ export const getUserCart = async (req, res) => {
 
 
 export const updateCart = async (req, res) => {
-  const { storeId, productId, quantity, specialRequest } = req.body;
+  const { storeId, productId, quantity, variation, specialRequest } = req.body;
   const userId = req.user._id;
 
   try {
@@ -139,7 +143,7 @@ export const updateCart = async (req, res) => {
     }
 
     const productInCart = cart.items.find(
-      (item) => item.product.toString() === productId
+      (item) => item.product.toString() === productId && item.variation === variation
     );
 
     if (!productInCart) {
@@ -156,21 +160,17 @@ export const updateCart = async (req, res) => {
     // Remove items with zero quantity (optional)
     cart.items = cart.items.filter((item) => item.quantity > 0);
 
-    // ✅ Recalculate total safely
-    const updatedItems = await Promise.all(
-      cart.items.map(async (item) => {
-        const product = await mongoose.model("Product").findById(item.product);
-        const price = product?.price || 0;
-        return item.quantity * price;
-      })
+    // ✅ Recalculate total price based on stored item prices
+    cart.totalPrice = cart.items.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
     );
 
-    cart.totalPrice = updatedItems
-      .filter((v) => !isNaN(v))
-      .reduce((acc, price) => acc + price, 0);
+    console.log(cart)
 
     await cart.save();
     await cart.populate("items.product");
+    await cart.populate("store", "slug name thumbnail");
 
     return res.status(200).json({
       success: true,

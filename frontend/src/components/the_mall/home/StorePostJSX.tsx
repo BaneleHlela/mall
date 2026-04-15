@@ -176,7 +176,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
                                     <GoHeart className="text-[3.5vh] text-black" />
                                 )}
                             </button>
-                            <p className="font-[500]">{store?.likes?.count + Math.floor(Math.random() * 100) + 10} likes</p>
+                            <p className="font-[500]">{store?.likes?.count + 4} likes</p>
                         </div>
                         {/* Visits */}
                         <div className="flex items-center space-x-1">

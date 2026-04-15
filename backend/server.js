@@ -21,6 +21,7 @@ import packageRoutes from "./routes/packageRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import donationRoutes from "./routes/donationRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import emailRoutes from "./routes/emailRoutes.js";
 import sectionRoutes from "./routes/sectionRoutes.js";
@@ -28,6 +29,9 @@ import posterRoutes from "./routes/posterRoutes.js"
 import rentalRoutes from "./routes/rentalRoutes.js";
 import payfastRoutes from "./routes/payfastRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
+import visitRoutes from "./routes/visitRoutes.js";
+import { visitorMiddleware } from "./middlewares/visitorMiddleware.js";
+import whatsappRoutes from './routes/whatsappRoutes.js';
 import "./config/passportConfig.js";
 
 
@@ -60,6 +64,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(visitorMiddleware);
 
 //routes
 app.use("/api/user", userRoutes);
@@ -73,6 +78,7 @@ app.use("/api/packages", packageRoutes);
 app.use('/api/products', productRoutes);
 app.use("/api/donations", donationRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/email", emailRoutes);
 app.use("/api/sections", sectionRoutes);
@@ -80,7 +86,8 @@ app.use('/api/posters', posterRoutes);
 app.use('/api/rentals', rentalRoutes);
 app.use("/api/payments/payfast", payfastRoutes);
 app.use("/api/posts", postRoutes);
-
+app.use("/api/visits", visitRoutes);
+app.use('/api/whatsapp', whatsappRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

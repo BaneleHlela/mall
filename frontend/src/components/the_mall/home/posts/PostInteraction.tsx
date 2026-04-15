@@ -111,7 +111,7 @@ const PostInteraction: React.FC<PostInteractionProps> = ({
                                 <GoHeart className="text-[3.5vh] text-black" />
                             )}
                         </button>
-                        <p className="font-[500]">{likesCount} likes</p>
+                        <p className="font-[500]">{likesCount + 3} likes</p>
                     </div>
                     
                     {/* Visits (optional) */}

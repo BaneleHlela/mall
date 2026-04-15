@@ -47,8 +47,8 @@ const AddTeamMemberModal: React.FC<AddTeamMemberModalProps> = ({ open, onClose }
   }, [username]);
 
   const handleFormSubmit = async () => {
-    if (!store?.slug || !selectedUser || !position || !about || !imageFile) {
-      setError('All fields are required');
+    if (!store?.slug || !selectedUser || !position || !imageFile) {
+      setError('Missing Required fields');
       return;
     }
     try {

@@ -98,7 +98,7 @@ const StoreMenubarCart: React.FC<StoreMenubarCartProps> = ({ style }) => {
         border: `${style.background?.border.width} ${style.background?.border.style} ${style.background?.border.color}`,
         borderRadius: style.background?.border.radius,
       }}
-      onClick = {() => navigate(`/stores/${storeSlug}/cart`)}
+      onClick = {() => navigate(`/cart?store=${storeSlug}`)}
       className={ `relative cursor-pointer w-fit`}
     >
       {renderIcon()}

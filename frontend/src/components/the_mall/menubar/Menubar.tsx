@@ -69,7 +69,7 @@ const Menubar = () => {
         damping: 25,
       }}
       className={`
-        ${isHidden ?  "hidden" : "fixed"} z-100 ${isDarkMode ? 'bg-gray-800 shadow-gray-900' : 'bg-white shadow-md'}
+        ${isHidden ?  "hidden" : "fixed"} z-100 ${isDarkMode ? 'bg-black border border-gray-500' : 'bg-white shadow-md'}
         flex items-center justify-evenly space-x-1
         h-[5vh] w-full bottom-0 lg:px-[3vh]
         lg:top-0 lg:bottom-auto lg:left-0 lg:h-screen lg:w-[5vh]

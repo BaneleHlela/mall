@@ -51,7 +51,7 @@ export const searchUsersByUsername = createAsyncThunk<
   'store_admin/searchUsersByUsername',
   async (username: string, thunkAPI) => {
     try {
-      const response = await axios.get(`${STORE_API_URL}/api/user/search-users?q=${username}`);
+      const response = await axios.get(`${API_URL}/api/user/search-users?q=${username}`);
       return response.data;
     } catch (error) {
       console.error('User search failed:', error);

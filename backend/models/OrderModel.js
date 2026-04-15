@@ -11,12 +11,25 @@ const orderSchema = new mongoose.Schema({
         ref: "store",
         required: true
     },
+    orderId: {
+        type: String,
+        required: true,
+        unique: true
+    },
     items: [
         {
             product: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Product',
                 required: true,
+            },
+            variation: {
+                type: String,
+                required: false,
+            },
+            specialRequest: {
+                type: String,
+                required: false,
             },
             quantity: {
                 type: Number,
@@ -42,7 +55,7 @@ const orderSchema = new mongoose.Schema({
     paymentMethod: {
         type: String,
         required: true,
-        enum: ['Paystack'],
+        enum: ['cash', 'online', 'card'],
     },
     deliveryStatus: {
         type: String,
@@ -56,11 +69,10 @@ const orderSchema = new mongoose.Schema({
         default: 'Delivery',
     },
     shippingAddress: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Address',
-        required: function () {
-            return this.deliveryOption === 'Delivery';
-        },
+        nickname: {type: String},
+        lat: Number,
+        lng: Number,
+        address: String,
     }
 }, { timestamps: true });
 
