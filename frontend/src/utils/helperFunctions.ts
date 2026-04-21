@@ -1,3 +1,4 @@
+import type { ResponsiveValue } from "../types/layoutSettingsType";
 
 export const getSetting = (key: string, settings: any, objectPath: string) => {
   try {
@@ -281,6 +282,15 @@ export const formatNumber = (num: number): string => {
   }
 };
 
+export const formatPrice = (num: number): string => {
+  const fixed = num.toFixed(2); // always 2 decimals
+  const [whole, decimal] = fixed.split(".");
+
+  const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+  return `R${formattedWhole}.${decimal}`;
+};
+
 export const getPositionStyle = (position: Number) => {
   switch (position) {
       case 1:
@@ -368,4 +378,52 @@ export const getZoomScaleClass = (zoom: number) => {
   return 'scale-[1]';
 };
 
+type VariationPrice = {
+  variation: string;
+  amount: number;
+};
 
+type ProductPrice = {
+  prices?: VariationPrice[];
+  price?: number;
+};
+
+export const displayPrice = (
+  prices: VariationPrice[],
+  priceData: ProductPrice
+): string => {
+  if (prices && prices.length > 0) {
+    const amounts = prices.map((p) => p.amount);
+    const minPrice = Math.min(...amounts);
+    const maxPrice = Math.max(...amounts);
+
+    // If all variation prices are the same
+    if (minPrice === maxPrice) {
+      return `${formatPrice(minPrice)}`;
+    }
+
+    return `${formatPrice(minPrice)}+`;
+  }
+
+  if (typeof priceData.price === "number") {
+    return `${formatPrice(priceData.price)}`;
+  }
+
+  return "";
+};
+
+export const responsiveDimensionControl = (
+  isViewingMobileOnEditor?: boolean,
+  responsiveValues?: ResponsiveValue
+) => {
+  if (!responsiveValues) return undefined;
+
+  const mobile = responsiveValues.mobile;
+  const desktop = responsiveValues.desktop;
+
+  if (isViewingMobileOnEditor || window.innerWidth < 768) {
+    return mobile ?? desktop;
+  }
+
+  return desktop ?? mobile;
+};

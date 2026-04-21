@@ -42,6 +42,7 @@ const PopularProductCard: React.FC<StoreProductCardProps> = ({
   const { fonts, colors } = useAppSelector((state) => state.layoutSettings);
   const user = useAppSelector((state) => state.user.user);
   const dispatch = useAppDispatch();
+  
   // --- Determine what price to show ---
   const displayPrice = () => {
     if (prices && prices.length > 0) {

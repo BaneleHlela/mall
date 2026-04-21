@@ -5,6 +5,7 @@ import {
   getUserOrders,
   getOrderById,
   updateOrderStatus,
+  updateOrder,
   cancelOrder,
   getStoreOrders,
   getOrderAnalytics
@@ -16,6 +17,7 @@ const router = express.Router();
 router.post("/", protectRoute, createOrder);
 router.get("/", protectRoute, getUserOrders);
 router.get("/:orderId", protectRoute, getOrderById);
+router.put("/:orderId", protectRoute, updateOrder);
 router.put("/:orderId/status", protectRoute, updateOrderStatus);
 router.put("/:orderId/cancel", protectRoute, cancelOrder);
 

@@ -1,4 +1,5 @@
 import Product from '../models/ProductModel.js';
+import Store from '../models/StoreModel.js';
 import asyncHandler from 'express-async-handler'; 
 import mongoose from 'mongoose';
 import { uploadToUploads, deleteFromUploads } from '../config/gcsClient.js';
@@ -200,15 +201,46 @@ export const updateProduct = asyncHandler(async (req, res) => {
   res.status(200).json(updatedProduct);
 });
 
-// Get product by ID
-export const getProductById = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  if (!product) throw new Error('Product not found');
-  res.status(200).json(product);
+// Get products for search posts
+export const getSearchPostProducts = asyncHandler(async (req, res) => {
+  try {
+    const { type } = req.params;
+
+    if (type === "top-rated-on-the-mall") {
+      const products = await Product.find({ isDeleted: { $ne: true }, isActive: true })
+        .sort({ 'stats.ratingSummary.averageRating': -1 })
+        .limit(5)
+        .populate('store', "_id name slug slogan");
+
+      res.status(200).json(products);
+    }
+    
+    if (type.includes("store-most-viewed-products")) {
+      const storeSlug = type.replace("-store-most-viewed-products", "");
+      const store = await Store.findOne({ slug: storeSlug, isDeleted: { $ne: true } });
+      if (!store) {
+        return res.status(404).json({ message: 'Store not found' });
+      }
+      const products = await Product.find({ store: store._id, isDeleted: { $ne: true }, isActive: true })
+        .sort({ 'stats.views': -1 })
+        .limit(5)
+        .populate('store', "_id name slug slogan");
+      
+        res.status(200).json(products);
+    }
+    
+    else {
+      return res.status(400).json({ message: 'Invalid search post type' });
+    }
+  } catch (error) {
+    console.error('Error fetching search post products:', error);
+    res.status(500).json({ message: 'Server error while fetching search post products' });
+  }
 });
 
+
 // Get store products with optional category filter
-export const getStoreProducts =asyncHandler(async (req, res) => {
+export const getStoreProducts=asyncHandler(async (req, res) => {
   const { storeId } = req.params;
   const { category, activeOnly } = req.query;
 
@@ -239,7 +271,7 @@ export const getStoreProducts =asyncHandler(async (req, res) => {
   console.log(query);
   try {
     // Fetch products based on the query
-    const products = await Product.find(query);
+    const products = await Product.find(query).populate('store', '_id name slug');
 
     res.status(200).json(products);
   } catch (error) {
@@ -250,7 +282,7 @@ export const getStoreProducts =asyncHandler(async (req, res) => {
 
 // Get product by slug
 export const getProductBySlug = asyncHandler(async (req, res) => {
-  const product = await Product.findOne({ slug: req.params.slug }).populate('store');
+  const product = await Product.findOne({ slug: req.params.slug }).populate('store', '_id name slug');
   if (!product) throw new Error('Product not found');
   res.status(200).json(product);
 });
@@ -304,7 +336,7 @@ export const getAllProducts = asyncHandler(async (req, res) => {
   const skip = (page - 1) * limit;
 
   const products = await Product.find(query)
-    .populate('store', 'name') // optionally populate store name
+    .populate('store', '_id name slug') // populate store id, name and slug
     //.populate('ratings') // optionally populate reviews
     .sort({ createdAt: -1 }) // newest first
     .skip(skip)
@@ -374,6 +406,48 @@ export const updateIsActive = asyncHandler(async (req, res) => {
   // Update and save
   product.isActive = isActive;
   const updatedProduct = await product.save();
+
+  res.status(200).json(updatedProduct);
+});
+
+export const updateProductStats = asyncHandler(async (req, res) => {
+  const { productId } = req.params;
+  const { views, purchases, averageRating, numberOfRatings } = req.body;
+
+  // Validate input
+  if (!productId) {
+    res.status(400);
+    throw new Error('Product ID is required.');
+  }
+
+  // Find product
+  const product = await Product.findById(productId);
+  if (!product) {
+    res.status(404);
+    throw new Error('Product not found.');
+  }
+
+  // Prepare update object
+  const updateObj = {};
+  if (views !== undefined) {
+    updateObj['stats.views'] = (product.stats.views || 0) + (product.stats.views + views || 0);
+  }
+  if (purchases !== undefined) {
+    updateObj['stats.purchases'] = (product.stats.purchases || 0) + (purchases || 0);
+  }
+  if (averageRating !== undefined) {
+    updateObj['stats.ratingSummary.averageRating'] = averageRating;
+  }
+  if (numberOfRatings !== undefined) {
+    updateObj['stats.ratingSummary.numberOfRatings'] = numberOfRatings;
+  }
+
+  // Update product
+  const updatedProduct = await Product.findByIdAndUpdate(productId, updateObj, { new: true });
+  if (!updatedProduct) {
+    res.status(500);
+    throw new Error('Failed to update product stats.');
+  }
 
   res.status(200).json(updatedProduct);
 });

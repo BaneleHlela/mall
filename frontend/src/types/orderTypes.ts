@@ -2,6 +2,7 @@ export interface OrderItem {
   product: {
     _id: string;
     name: string;
+    slug?: string;
     images?: string[];
     price?: number;
     prices?: { amount: number; label?: string }[];
@@ -26,7 +27,12 @@ export interface Order {
     name: string;
     email: string;
   }; // Populated user
-  store: string; // Store ID
+  store: string | {
+    _id: string;
+    name: string;
+    slug: string;
+    thumbnails: any;
+  }; // Store ID
   orderId: string;
   items: OrderItem[];
   totalPrice: number;
@@ -46,8 +52,17 @@ export interface OrdersState {
     totalOrderedItems: number;
     completedOrders: number;
     returnedOrders: number;
+    cancelledOrders: number;
+    percentages?: {
+      totalOrders: number;
+      totalOrderedItems: number;
+      completedOrders: number;
+      cancelledOrders: number;
+    };
   };
   isLoading: boolean;
   error: string | null;
   selectedOrder: Order | null;
 }
+
+export type TimeframeType = 'today' | 'week' | 'month' | 'all-time';

@@ -6,7 +6,7 @@ import { LuShoppingCart } from "react-icons/lu";
 import { HiOutlineChatAlt2 } from "react-icons/hi";
 import { useNavbar } from "../../../utils/context/NavbarContext";
 import { useState, useEffect, useRef } from "react";
-import { CiChat2, CiHeart, CiHome, CiSearch, CiShoppingCart, CiUser } from "react-icons/ci";
+import { CiChat2, CiHeart, CiHome, CiSearch, CiShop, CiShoppingCart, CiUser } from "react-icons/ci";
 import { PiUserCircleDashedThin } from "react-icons/pi";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../app/store";
@@ -90,14 +90,14 @@ const Menubar = () => {
       )}
 
       <Link to="/search#search-content" className="p-[1vh]">
-        <CiSearch size="3.1vh" />
+        <CiShop size="3.1vh" />
       </Link>
 
-      <Link to="/chat" className="p-[1vh]">
+      <Link to="/chat" className="p-[1vh] text-center">
         <CiChat2 size="3.1vh" />
       </Link>
 
-      <Link to="/cart" className="p-[1vh]">
+      <Link to="/cart" className="p-[1vh] text-center">
         <CiShoppingCart size="3.1vh" />
       </Link>
 

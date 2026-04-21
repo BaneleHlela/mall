@@ -71,7 +71,7 @@ export function calculateDistanceToStore(user: User, store: Store): number | nul
  */
 export function formatDistance(distance: number | null): string {
     if (distance === null) {
-      return '? km';
+      return '?? km';
     }
   
     if (distance > 100) {

@@ -7,7 +7,7 @@ export interface StoreDashboardOverviewStatCardProps {
   percentage: number;
   trend?: "up" | "down";
 
-  timeframe: "today" | "week" | "month";
+  timeframe: "today" | "week" | "month" | "all-time";
   onTimeframeChange?: () => void;
 
   showPercentage: boolean;
@@ -53,10 +53,11 @@ export const StoreDashboardOverviewStatCard = ({
         </div>
         
         {/* Timeframe badge */}
-        <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">
+        <span onClick={() => onTimeframeChange?.()} className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">
           {timeframe === "today" && "Today"}
           {timeframe === "week" && "7 days"}
           {timeframe === "month" && "30 days"}
+          {timeframe === "all-time" && "All Time"}
         </span>
       </div>
 

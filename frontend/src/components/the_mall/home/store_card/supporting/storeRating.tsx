@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaStar } from 'react-icons/fa';
 import { IoIosStar } from 'react-icons/io';
 
 export interface StoreRating {
@@ -61,17 +62,18 @@ export function RatingDisplay({
   if (!rating || rating.numberOfRatings === 0) {
     return (
       <div className={`flex items-center gap-[1px] ${className}`}>
-        <IoIosStar className={`w-4 h-4 ${starColor}`} />
+        <FaStar className={`w-4 h-4 ${starColor}`} />
         <span className="text-gray-500">(0)</span>
       </div>
     );
   }
   
   return (
-    <div className={`flex items-center gap-[1px] ${className}`}>
-      <IoIosStar className={`text-[1.8vh] ${starColor}`} />
+    <div className={`flex items-center gap-[2px] ${className}`}>
+      <span className="text-gray-800 font-semibold">{rating.averageRating} </span>
+      <FaStar className={`text-[1.8vh] ${starColor}`} />
       <span className="text-gray-800">
-        {rating.averageRating} ({rating.numberOfRatings})
+        ({rating.numberOfRatings})
       </span>
     </div>
   );

@@ -7,6 +7,8 @@ import { FaChartArea, FaStore, FaCrown } from "react-icons/fa";
 import { RiVipCrown2Fill } from "react-icons/ri";
 import CreatorsDashboardOverview from "./supporting/CreatorsDashboardOverview";
 import CreatorsDashboardStores from "./supporting/CreatorsDashboardStores";
+import SearchPostsDashboard from "./supporting/SearchPostsDashboard";
+
 import UserDisplay from "../../components/store_dashboard/menubar/UserDisplay";
 
 const CreatorsDashboard = () => {
@@ -119,6 +121,21 @@ const CreatorsDashboard = () => {
               <FaStore className="text-lg" />
               <span className="font-medium">Stores</span>
             </button>
+
+            <button
+              onClick={() => {
+                handleLinkClick();
+                navigate("/creators-dashboard/search-posts");
+              }}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                isActive("/creators-dashboard/search-posts")
+                  ? "bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white border border-purple-500/30"
+                  : "text-white/70 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              <span className="text-lg">🔍</span>
+              <span className="font-medium">Search Posts</span>
+            </button>
           </nav>
 
           {/* Bottom Actions */}
@@ -220,6 +237,7 @@ const CreatorsDashboard = () => {
           <Routes>
             <Route path="/" element={<CreatorsDashboardOverview />} />
             <Route path="/stores" element={<CreatorsDashboardStores searchQuery={searchQuery} />} />
+            <Route path="/search-posts" element={<SearchPostsDashboard />} />
           </Routes>
         </main>
       </div>

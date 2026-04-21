@@ -53,8 +53,8 @@ export interface EditorProps {
 }
 
 export interface ResponsiveValue {
-  mobile: string;
-  desktop: string;
+  mobile: string | number;
+  desktop: string | number;
 }
 
 interface PaddingValue {

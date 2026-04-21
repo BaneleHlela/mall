@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createContext, useContext } from "react";
 import { Route, BrowserRouter as Router, Routes, useNavigate } from "react-router-dom";
+import { DeviceProvider } from "./utils/DeviceContext";
 import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/home/Home";
 import authRoutes from "./routes/authRoutes";
@@ -17,7 +18,7 @@ import CreatorsDashboard from "./pages/creators_dashboard/CreatorsDashboard";
 import ProtectedRoute from "./components/the_mall/authorization/ProtectedRoute";
 import LayoutCreator from "./pages/store_dashboard/supporting_pages/layouts/supporting/LayoutCreator";
 import MallSearchPage from "./pages/search/MallSearchPage";
-import FavoriteStores from "./pages/favorites/FavoriteStores";
+import Favorites from "./pages/favorites/Favorites";
 import BusinessPlan from "./components/the_mall/home/BusinessPlan";
 import ForCreators from "./components/the_mall/home/ForCreators";
 import CaptureHomePoster from "./components/the_mall/basic_store_post/CaptureHomePoster";
@@ -26,7 +27,7 @@ import AddUserAddressPage from "./pages/profile/address/AddUserAddressPage";
 import GetStartedPage from "./pages/store/get_started_page/GetStartedPage";
 import PayFastPage from "./pages/payments/PayFastPage";
 import MallCartPage from "./pages/cart/MallCartPage";
-import "./features/api/axiosInstance"; // Initialize axios interceptors
+import "./features/api/axiosInstance";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import DataDeletion from "./pages/DataDeletion";
 import AllReviews from "./pages/reviews/AllReviews";
@@ -34,6 +35,7 @@ import { checkAuth } from "./features/user/userSlice";
 import { useSelector } from "react-redux";
 import type { RootState } from "./app/store";
 import ChatLandingPage from "./pages/chat/ChatLandingPage";
+import SearchPostsEditor from "./pages/creators_dashboard/supporting/SearchPostsEditor";
 
 // Reviews Modal Context
 interface ReviewsModalContextType {
@@ -157,13 +159,13 @@ const AppContent: React.FC = () => {
           } 
         /> */}
         
-        <Route 
-          path="/favorites" 
+        <Route
+          path="/favorites"
           element={
             <ProtectedRoute>
-              <FavoriteStores />
+              <Favorites />
             </ProtectedRoute>
-            } 
+            }
           />
         
         <Route path="/scribbler/*" element={<Scribbler />} />
@@ -189,6 +191,22 @@ const AppContent: React.FC = () => {
         <Route path="/layouts/my-layouts" element={<MyLayouts />} />
         <Route path="/layouts/create" element={<LayoutCreator />} />
         <Route path="/creators-dashboard/*" element={<CreatorsDashboard />} />
+        <Route
+          path="/search-posts/create"
+          element={
+            <ProtectedRoute>
+              <SearchPostsEditor />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/search-posts/edit/:postId"
+          element={
+            <ProtectedRoute>
+              <SearchPostsEditor />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/business-plan" element={<BusinessPlan />} />
         <Route path="/creators" element={<ForCreators />} />
         <Route
@@ -240,9 +258,11 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <DeviceProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </DeviceProvider>
   );
 };
 

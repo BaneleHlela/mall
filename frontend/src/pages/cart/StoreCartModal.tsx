@@ -3,11 +3,12 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { HiArrowLeftEndOnRectangle } from "react-icons/hi2";
 import CartItemCard from "../../components/the_mall/store/cart/CartItemCard";
-import { getUserCart } from "../../features/cart/cartSlice";
-import { fetchStoreBySlug } from "../../features/stores/storeSlice";
-import { createOrder, updateOrderStatus } from "../../features/orders/orderSlice";
+import { getUserCart, clearCartForStore } from "../../features/cart/cartSlice";
+import { fetchStoreBySlug, setCurrentStore } from "../../features/stores/storeSlice";
+import { createOrder, updateOrderStatus, clearOrderError } from "../../features/orders/orderSlice";
 import LoadingButton from "../../components/the_mall/buttons/LoadingButton";
 import { BiArrowBack } from "react-icons/bi";
+import { TbLoader3 } from "react-icons/tb";
 
 const StoreCartModal = () => {
   const navigate = useNavigate();
@@ -20,9 +21,12 @@ const StoreCartModal = () => {
   const routes = useAppSelector((state) => state.layoutSettings.routes);
   const { isDarkMode } = useAppSelector((state) => state.theme);
   const isLoading = useAppSelector((state) => state.cart.isLoading);
+  const isOrderLoading = useAppSelector((state) => state.orders.isLoading);
   const isStoreLoading = useAppSelector((state) => state.stores.isLoading);
+  const isOrderError = useAppSelector((state) => state.orders.error);
   const [isDelivery, setIsDelivery] = useState(true);
   const [showPaymentOptions, setShowPaymentOptions] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Fetch store if not in Redux
@@ -51,7 +55,14 @@ const StoreCartModal = () => {
 
   const store = storeSlug ? storesBySlug[storeSlug] : null;
 
-  if (isLoading || isStoreLoading) {
+  // Set store as current store
+  useEffect(() => {
+    if (store) {
+      dispatch(setCurrentStore(store));
+    }
+  }, [store, dispatch]);
+
+  if (isStoreLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className={`animate-spin rounded-full h-8 w-8 border-2 ${isDarkMode ? 'border-gray-600 border-t-white' : 'border-gray-200 border-t-gray-800'}`} />
@@ -66,10 +77,6 @@ const StoreCartModal = () => {
   // Find the cart for the current store
   const storeCart = carts?.find((c) => c.store._id === store._id);
 
-  // --- Handle "Back to home" navigation ---
-  const handleBackToHome = () => {
-    navigate(-1); // Navigate back to mall cart page
-  };
 
   const handleCheckout = () => {
     if (!user) {
@@ -105,11 +112,11 @@ const StoreCartModal = () => {
   };
 
   const handlePayment = async ({method}: {method: string}) => {
-    if (method === "cash") {
+    setSelectedPaymentMethod(method);
+    
+    if (method === "cash" || method === "card") {
       // Create Order
       try {
-
-        console.log("paying with cash")
         const shippingAddress = isDelivery && user?.locations?.length ? {
           nickname: user.locations[0].nickname,
           lat: user.locations[0].lat,
@@ -121,24 +128,34 @@ const StoreCartModal = () => {
           window.alert("Please add shipping address");
         }
 
+        dispatch(clearOrderError()); // Clear any previous errors
+
         const order = await dispatch(createOrder({
           storeId: store._id as string,
-          paymentMethod: 'cash',
+          paymentMethod: method,
           deliveryOption: isDelivery ? 'Delivery' : 'Pick Up',
           shippingAddress,
         })).unwrap();
 
-        // For cash, mark as paid since payment is immediate
-        await dispatch(updateOrderStatus({
-          orderId: order._id,
-          paymentStatus: 'Paid',
-        }));
+        // For cash/card on delivery, mark as paid since payment is immediate
+        // await dispatch(updateOrderStatus({
+        //   orderId: order._id,
+        //   paymentStatus: 'Paid',
+        // }));
 
-        // Notify vendor
-        await notifyVendor(order, store);
+        
+        if (!isOrderError) {
+          // Clear store cart in Redux
+          dispatch(clearCartForStore(store._id as string));
+          // Notify vendor
+          await notifyVendor(order, store);
+        }
+        
+        
 
         // Close payment options
         setShowPaymentOptions(false);
+        setSelectedPaymentMethod(null);
 
         // Navigate back or to order confirmation
         navigate(-1); // Go back to mall cart page
@@ -170,6 +187,15 @@ const StoreCartModal = () => {
       </div>
     );
   }
+
+  const paymentOptions = store.payment?.cash.card?.onDelivery ? [
+    { label: 'Pay with Cash', method: 'cash', color: 'bg-green-500' },
+    { label: 'Pay with Card', method: 'card', color: 'bg-blue-500' },
+    { label: 'Pay Online', method: 'online', color: 'bg-purple-500' }
+  ] : [
+    { label: 'Pay with Cash', method: 'cash', color: 'bg-green-500' },
+    { label: 'Pay Online', method: 'online', color: 'bg-blue-500' }
+  ];
 
   const payWithPayFast = async () => {
     const res = await fetch(`${import.meta.env.VITE_API_URL}/api/payments/payfast/create`, {
@@ -298,7 +324,7 @@ const StoreCartModal = () => {
           />
         ))}
       </div>
-      <div className={`absolute bottom-[7vh] flex flex-col items-center justify-center w-full px-3 pt-1 border-t border-dotted
+      <div className={`fixed bottom-[7vh] flex flex-col items-center justify-center w-full px-3 pt-1 border-t border-dotted
           ${ isDarkMode
             ? 'bg-gray-900 border-gray-700 text-white hover:bg-gray-800'
             : 'bg-white border-gray-200 text-gray-900 hover:bg-blue-50 hover:border-blue-300'}
@@ -320,9 +346,14 @@ const StoreCartModal = () => {
         <div className="absolute inset-0 bg-black/25 flex items-end pb-[5vh] lg:pb-0 justify-center z-50 transition-opacity duration-300 opacity-100">
           <div className={`bg-white rounded-t-3xl p-6 w-full max-w-md transform transition-transform duration-300 ease-out ${showPaymentOptions ? 'translate-y-0' : 'translate-y-full'}`}>
             <h2 className="text-center text-lg font-semibold mb-4">Choose Payment Method</h2>
-            <button onClick={() => handlePayment({method: "cash"})} className="w-full bg-green-500 text-white py-3 rounded-full mb-2">Pay with Cash | {(storeCart.totalPrice + 40).toFixed(2)}</button>
-            <button onClick={() => handlePayment({method: "online"})} className="w-full bg-blue-500 text-white py-3 rounded-full mb-2">Pay Online | {(storeCart.totalPrice + 40).toFixed(2)}</button>
-            <button onClick={() => setShowPaymentOptions(false)} className="w-full text-gray-600 py-2">Cancel</button>
+            {isDelivery && store.payment?.cash.card?.onDelivery && <p className="text-center text-sm text-gray-600 mb-4">Store accepts card payment on delivery</p>}
+            {paymentOptions.map(option => (
+              <button key={option.method} onClick={() => handlePayment({method: option.method})} className={`flex items-center justify-center w-full ${option.color} text-white py-3 rounded-full mb-2`}>{selectedPaymentMethod === option.method && isOrderLoading ? <TbLoader3 className="text-lg animate-spin" /> : option.label} | R{(storeCart.totalPrice + 40).toFixed(2)}</button>
+            ))}
+            <button onClick={() => {
+              setShowPaymentOptions(false);
+              setSelectedPaymentMethod(null);
+            }} className="w-full text-gray-600 py-2">Cancel</button>
           </div>
         </div>
       )}

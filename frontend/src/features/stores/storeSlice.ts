@@ -205,6 +205,14 @@ export const cloneStore = createAsyncThunk<Store, { storeId: string; data: Clone
   }
 );
 
+export const fetchSearchPostStores = createAsyncThunk<Store[], string>(
+  'stores/fetchSearchPostStores',
+  async (type) => {
+    const response = await axios.get(`${STORE_API_URL}/search-posts/${type}`);
+    return response.data;
+  }
+);
+
 
 
 
@@ -215,7 +223,7 @@ const storeSlice = createSlice({
   initialState,
   reducers: {
     setCurrentStore: (state, action: PayloadAction<Store | null>) => {
-        state.currentStore = action.payload as any;
+      state.currentStore = action.payload as any;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
@@ -489,6 +497,32 @@ const storeSlice = createSlice({
       .addCase(fetchStoreById.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || 'Failed to fetch store';
+      })
+
+      // Fetch Search Post Stores
+      .addCase(fetchSearchPostStores.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchSearchPostStores.fulfilled, (state, action) => {
+        state.isLoading = false;
+
+        const newStoresBySlug: Record<string, Store> = {};
+        const newStoreSlugs: string[] = [];
+
+        for (const store of action.payload) {
+          if (store.slug) {
+            newStoresBySlug[store.slug] = store;
+            newStoreSlugs.push(store.slug);
+          }
+        }
+
+        state.storesBySlug = newStoresBySlug as any;
+        state.storeSlugs = newStoreSlugs;
+      })
+      .addCase(fetchSearchPostStores.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to fetch search post stores';
       })
   },
 });

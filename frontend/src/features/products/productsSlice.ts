@@ -7,6 +7,7 @@ const API_BASE = `${API_URL}/api/products`;
 
 const initialState: ProductsState = {
   products: [],
+  productsByStoreSlug: {},
   isLoading: false,
   error: null,
   selectedProduct: null,
@@ -20,7 +21,7 @@ export const fetchAllProducts = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const res = await axios.get(API_BASE);
-      return res.data as Product[];
+      return res.data; // Returns { total, page, pages, count, products }
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to fetch products');
     }
@@ -132,6 +133,14 @@ export const fetchStoreProducts = createAsyncThunk(
   }
 );
 
+export const fetchSearchPostProducts = createAsyncThunk<Product[], string>(
+  'products/fetchSearchPostProducts',
+  async (type) => {
+    const response = await axios.get(`${API_BASE}/search-posts/${type}`);
+    return response.data;
+  }
+);
+
 // Toggle or update product isActive status
 export const updateProductIsActive = createAsyncThunk(
   'products/updateIsActive',
@@ -141,6 +150,19 @@ export const updateProductIsActive = createAsyncThunk(
       return res.data as Product;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to update product status');
+    }
+  }
+);
+
+// Update product stats
+export const updateProductStats = createAsyncThunk(
+  'products/updateStats',
+  async ({ productId, stats }: { productId: string; stats: Partial<Product['stats']> }, thunkAPI) => {
+    try {
+      const res = await axios.patch(`${API_BASE}/stats/${productId}`, stats);
+      return res.data as Product;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to update product stats');
     }
   }
 );
@@ -166,9 +188,9 @@ const productSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchAllProducts.fulfilled, (state, action: PayloadAction<Product[]>) => {
+      .addCase(fetchAllProducts.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
-        state.products = action.payload;
+        state.products = Array.isArray(action.payload.products) ? action.payload.products : [];
       })
       .addCase(fetchAllProducts.rejected, (state, action) => {
         state.isLoading = false;
@@ -274,10 +296,43 @@ const productSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchStoreProducts.fulfilled, (state, action: PayloadAction<Product[]>) => {
-        state.isLoading = false;
-        state.products = action.payload;
+        state.isLoading = false; // @ts-ignore-next-line
+        const storeSlug = action.meta.arg.storeSlug;
+        state.productsByStoreSlug[storeSlug] = action.payload;
+        // Ensure state.products is an array
+        if (!Array.isArray(state.products)) {
+          state.products = [];
+        }
+        // Push new products to the general products array if not already present
+        action.payload.forEach(product => {
+          if (!state.products.find(p => p._id === product._id)) {
+            state.products.push(product);
+          }
+        });
       })
       .addCase(fetchStoreProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+
+      // Fetch Search Post Products
+      .addCase(fetchSearchPostProducts.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchSearchPostProducts.fulfilled, (state, action: PayloadAction<Product[]>) => {
+        state.isLoading = false;
+        // Add to general products array
+        if (!Array.isArray(state.products)) {
+          state.products = [];
+        }
+        action.payload.forEach(product => {
+          if (!state.products.find(p => p._id === product._id)) {
+            state.products.push(product);
+          }
+        });
+      })
+      .addCase(fetchSearchPostProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })
@@ -299,6 +354,27 @@ const productSlice = createSlice({
         }
       })
       .addCase(updateProductIsActive.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+
+      // Update product stats
+      .addCase(updateProductStats.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateProductStats.fulfilled, (state, action: PayloadAction<Product>) => {
+        state.isLoading = false;
+        const index = state.products.findIndex(p => p._id === action.payload._id);
+        if (index !== -1) {
+          state.products[index] = action.payload;
+        }
+        // If the currently selected product is this one, update it too
+        if (state.selectedProduct?._id === action.payload._id) {
+          state.selectedProduct = action.payload;
+        }
+      })
+      .addCase(updateProductStats.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

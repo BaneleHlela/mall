@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import passport from "passport";
 import cors from "cors";
 
+
 import { dbConnect } from "./config/dbConnect.js";
 import path from "path";
 import cookieParser from "cookie-parser";
@@ -29,6 +30,7 @@ import posterRoutes from "./routes/posterRoutes.js"
 import rentalRoutes from "./routes/rentalRoutes.js";
 import payfastRoutes from "./routes/payfastRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
+import searchPostRoutes from "./routes/searchPostRoutes.js";
 import visitRoutes from "./routes/visitRoutes.js";
 import { visitorMiddleware } from "./middlewares/visitorMiddleware.js";
 import whatsappRoutes from './routes/whatsappRoutes.js';
@@ -86,6 +88,7 @@ app.use('/api/posters', posterRoutes);
 app.use('/api/rentals', rentalRoutes);
 app.use("/api/payments/payfast", payfastRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/search-posts", searchPostRoutes);
 app.use("/api/visits", visitRoutes);
 app.use('/api/whatsapp', whatsappRoutes);
 

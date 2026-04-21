@@ -21,7 +21,6 @@ import {
 import Swal from 'sweetalert2';
 import EditAvatarModal from './components/EditAvatarModal';
 import MyAddresses from './components/MyAddresses';
-import MyPurchases from './components/MyPurchases';
 import PaymentMethods from './components/PaymentMethods';
 import CreditHistory from './components/CreditHistory';
 import OffersDiscounts from './components/OffersDiscounts';
@@ -37,6 +36,7 @@ import { PiAddressBookThin, PiMoonLight, PiSignIn, PiSignOut } from 'react-icons
 import { BiArrowBack } from 'react-icons/bi';
 import { useAppSelector } from '../../app/hooks';
 import { IoNotificationsOutline } from 'react-icons/io5';
+import UserOrders from './components/UserOrders';
 
 type AccountSection = 'main' | 'manage-account' | 'addresses' | 'purchases' | 'bookings' | 'payment-methods' | 'credit-history' | 'offers' | 'help';
 
@@ -111,7 +111,7 @@ const Account: React.FC = () => {
         case 'addresses':
           return <MyAddresses onBack={() => setCurrentSection('main')} />;
         case 'purchases':
-          return <MyPurchases onBack={() => setCurrentSection('main')} />;
+          return <UserOrders onBack={() => setCurrentSection('main')} />;
         case 'payment-methods':
           return <PaymentMethods onBack={() => setCurrentSection('main')} />;
         case 'bookings':
@@ -142,7 +142,7 @@ const Account: React.FC = () => {
     <div className={`h-screen w-full max-w-md mx-auto ${isDarkMode ? 'bg-black text-white' : 'bg-gradient-to-br from-slate-50 via-white to-slate-50'} flex flex-col p-6 space-y-2`}>
       {/* Back Button & Header */}
       <div className="relative flex items-center justify-center w-full">
-        <BiArrowBack className={`absolute left-0 rounded-full ${isDarkMode ? ' bg-[#1f1f23] border-gray-800' : 'bg-gray-100 border-gray-200 text-gray-900'} p-2 text-[35px]`}/>
+        <BiArrowBack onClick={() => navigate('/')} className={`absolute left-0 rounded-full ${isDarkMode ? ' bg-[#1f1f23] border-gray-800' : 'bg-gray-100 border-gray-200 text-gray-900'} p-2 text-[35px]`}/>
         <span className="text-lg">Settings</span>
       </div>
       {/* Profile Header */}
@@ -219,8 +219,8 @@ const Account: React.FC = () => {
       <div className={`w-full border ${isDarkMode ? 'text-white bg-[#1f1f23] border-gray-800' : 'border-gray-200 text-gray-900'} rounded-[20px] text-[15px] py-1 overflow-hidden min-h-fit lg:py-0`}>
         
         <button
-          //onClick={() => setCurrentSection('purchases')}
-          className={`w-full p-3 flex items-center justify-between border-b ${isDarkMode ? 'border-gray-800' : 'border-gray-200'} opacity-50`}
+          onClick={() => setCurrentSection('purchases')}
+          className={`w-full p-3 flex items-center justify-between border-b ${isDarkMode ? 'border-gray-800' : 'border-gray-200'}`}
         >
           <div className="flex items-center space-x-2">
             <FaShoppingBag className="text-gray-400 text-[16px]" />
@@ -297,7 +297,7 @@ const Account: React.FC = () => {
       </div>
 
       {/* Sign In/Out */}
-      <div className="px-4 pb-8 mt-auto">
+      <div className="fixed bottom-[7vh] left-0 w-full px-6">
         {isAuthenticated ? (
           <button
             onClick={handleLogout}
@@ -310,7 +310,7 @@ const Account: React.FC = () => {
         ) : (
           <button
             onClick={() => window.location.href = '/login'}
-              className="w-full bg-white hover:from-gray-800 hover:to-gray-700 text-blue-600 py-3 px-6 rounded-full flex items-center justify-center gap-3 shadow-xs hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
+              className="w-full bg-white boohover:from-gray-800 hover:to-gray-700 text-blue-600 py-3 px-6 rounded-full flex items-center justify-center gap-3 shadow-xs hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
           >
             <PiSignIn className="text-lg" />
             <span>Sign in</span>

@@ -28,7 +28,8 @@ import {
     deleteStoreThumbnail,
     captureStoreCardAuto,
     captureReelyAuto,
-    cloneStore
+    cloneStore,
+    getSearchPostStores
 } from "../controllers/StoreController.js";
 import { getBillingStats } from "../controllers/BillingController.js";
 import { uploadSingleFile, uploadTeamMemberImage } from "../middlewares/uploadMiddleware.js";
@@ -79,6 +80,9 @@ router.post('/:storeId/clone', protectRoute, cloneStore);
 
 // Billing stats
 router.get('/:storeId/billing/stats', getBillingStats);
+
+// Search post stores
+router.get('/search-posts/:type', getSearchPostStores);
 
 
 

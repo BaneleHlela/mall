@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { fetchStores } from '../../features/stores/storeSlice';
-import GlobalSearch from '../../components/the_mall/search/GlobalSearch';
 import StoreCard from '../../components/the_mall/home/store_card/StoreCard';
 import TheMallTopbar from '../../components/the_mall/topbar/TheMallTopbar';
 import { departments } from '../../utils/helperObjects';
 import type { RootState } from '../../app/store';
+import GlobalSearch from '../../components/the_mall/search_old/GlobalSearch';
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();

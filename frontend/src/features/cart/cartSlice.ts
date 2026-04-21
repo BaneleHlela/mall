@@ -91,6 +91,9 @@ const cartSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    clearCartForStore: (state, action) => {
+      state.cart = state.cart.filter(cart => cart.store._id !== action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -164,4 +167,4 @@ const cartSlice = createSlice({
 });
 
 export default cartSlice.reducer;
-export const { clearError } = cartSlice.actions;
+export const { clearError, clearCartForStore } = cartSlice.actions;

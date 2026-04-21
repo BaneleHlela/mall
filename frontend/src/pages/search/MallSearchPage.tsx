@@ -11,6 +11,14 @@ import React from 'react';
 import { MdFilterList, MdClose } from 'react-icons/md';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import TheMallStoreFooterSection from '../../components/store_layout/custom_store_layout_components/themall_layout_components/TheMallStoreFooterSection';
+import { divide } from 'lodash';
+import { BackgroundColor } from '@tiptap/extension-text-style';
+import BasicProductCarousel from '../../components/the_mall/search/search_carousels/BasicProductCarousel.tsx';
+import SimpleStoreBundleCarousel from '../../components/the_mall/search/search_carousels/SimpleStoreBundleCarousel.tsx';
+import StoreBundleCarousel from '../../components/the_mall/search/search_carousels/StoreBundleCarousel.tsx';
+import StoreCarouselWithJSXAndProducts from '../../components/the_mall/search/search_carousels/StoreCarouselWithJSXAndProducts.tsx';
+import SearchPostsFeed from '../../components/the_mall/search/SearchPostsFeed.tsx';
+import { fetchSearchPosts } from '../../features/searchPosts/searchPostSlice.ts';
 
 const relevanceOptions = [
   { key: 'relevance', label: 'Relevance' },
@@ -59,6 +67,11 @@ const MallSearchPage = () => {
       })
     );
   }, [dispatch, searchTerm, selectedDepartment, selectedRelevance]);
+
+  // Fetch Search Posts (carousels, banners, etc.)
+  useEffect(() => {
+      dispatch(fetchSearchPosts());
+  }, [dispatch]);
 
   // Scroll to selected department button on change
   useEffect(() => {
@@ -111,7 +124,7 @@ const MallSearchPage = () => {
         id="search-content" 
         className="w-full lg:w-[80%] overflow-x-hidden hide-scrollbar flex flex-col">
         {/* Department Selector */}
-        <div className="sticky top-0] lg:top-0 z-10 bg-white shadow-sm">
+        <div className="sticky top-0 lg:top-0 z-10 bg-white shadow-sm">
           <div className="relative flex items-center h-[7vh] min-h-[7vh] w-full">
             {/* Left scroll button */}
             <button
@@ -171,90 +184,94 @@ const MallSearchPage = () => {
           </div>
         </div>
 
-        {/* Search Header & Filters */}
-        <div className="bg-white border-b border-gray-200 px-[1vh] lg:px-[2vh] py-[2vh]">
-          <div className="w-full  flex flex-row justify-between items-center lg:items-center gap-[1.5vh]">
-            {/* Search info */}
-            <div className="flex flex-col">
-              {searchTerm ? (
-                <p className="text-gray-600 text-[1.8vh]">
-                  <span className="font-semibold text-gray-900">{storeSlugs.length}</span>
-                  {' '}results for{' '}
-                  <span className="font-semibold text-gray-900">"{searchTerm}"</span>
-                  {selectedDepartment && (
-                    <span className="text-gray-500">
-                      {' '}in <span className="font-medium">{departments[selectedDepartment as keyof typeof departments]?.full}</span>
-                    </span>
+        {searchTerm && (
+          <>
+            {/* Search Header & Filters */}
+            <div className="bg-white border-b border-gray-200 px-[1vh] lg:px-[2vh] py-[2vh]">
+              <div className="w-full  flex flex-row justify-between items-center lg:items-center gap-[1.5vh]">
+                {/* Search info */}
+                <div className="flex flex-col">
+                  {searchTerm ? (
+                    <p className="text-gray-600 text-[1.8vh]">
+                      <span className="font-semibold text-gray-900">{storeSlugs.length}</span>
+                      {' '}results for{' '}
+                      <span className="font-semibold text-gray-900">"{searchTerm}"</span>
+                      {selectedDepartment && (
+                        <span className="text-gray-500">
+                          {' '}in <span className="font-medium">{departments[selectedDepartment as keyof typeof departments]?.full}</span>
+                        </span>
+                      )}
+                    </p>
+                  ) : selectedDepartment ? (
+                    <p className="text-gray-600 text-[1.8vh]">
+                      <span className="font-semibold text-gray-900">{storeSlugs.length}</span>
+                      {' '}stores in{' '}
+                      <span className="font-semibold text-gray-900">{departments[selectedDepartment as keyof typeof departments]?.full}</span>
+                    </p>
+                  ) : (
+                    <p className="text-gray-600 text-[1.8vh]">
+                      <span className="font-semibold text-gray-900">{storeSlugs.length}</span>
+                      {' '}stores found
+                    </p>
                   )}
-                </p>
-              ) : selectedDepartment ? (
-                <p className="text-gray-600 text-[1.8vh]">
-                  <span className="font-semibold text-gray-900">{storeSlugs.length}</span>
-                  {' '}stores in{' '}
-                  <span className="font-semibold text-gray-900">{departments[selectedDepartment as keyof typeof departments]?.full}</span>
-                </p>
-              ) : (
-                <p className="text-gray-600 text-[1.8vh]">
-                  <span className="font-semibold text-gray-900">{storeSlugs.length}</span>
-                  {' '}stores found
-                </p>
-              )}
-            </div>
-
-            {/* Filters row */}
-            <div className="flex flex-row items-center justify-end gap-[1.5vh] w-full lg:w-auto">
-              {/* Relevance dropdown */}
-              <div className="relative">
-                <div
-                  onClick={() => setShowDropdown(prev => !prev)}
-                  className="flex justify-between w-[22vh] cursor-pointer items-center space-x-[1vh] py-[1vh] border border-gray-300 rounded-lg px-[1.5vh] bg-white hover:bg-gray-50 transition-colors"
-                >
-                  <p className="font-medium text-[1.5vh] text-gray-700">
-                    {selectedRelevance.label}
-                  </p>
-                  <IoMdArrowDropdown 
-                    className={`text-gray-500 transition-transform text-[2vh] ${showDropdown ? 'rotate-180' : ''}`} 
-                  />
                 </div>
 
-                {showDropdown && (
-                  <div className="absolute right-0 w-[22vh] bg-white border border-gray-200 rounded-lg shadow-lg z-20 overflow-hidden mt-1">
-                    {relevanceOptions.map(option => (
-                      <div
-                        key={option.key}
-                        onClick={() => handleSelectRelevance(option)}
-                        className={`px-[1.5vh] py-[1.2vh] text-[1.5vh] cursor-pointer transition-colors ${
-                          selectedRelevance.key === option.key 
-                            ? 'bg-gray-100 font-medium text-gray-900' 
-                            : 'text-gray-600 hover:bg-gray-50'
-                        }`}
-                      >
-                        {option.label}
+                {/* Filters row */}
+                <div className="flex flex-row items-center justify-end gap-[1.5vh] w-full lg:w-auto">
+                  {/* Relevance dropdown */}
+                  <div className="relative">
+                    <div
+                      onClick={() => setShowDropdown(prev => !prev)}
+                      className="flex justify-between w-[22vh] cursor-pointer items-center space-x-[1vh] py-[1vh] border border-gray-300 rounded-lg px-[1.5vh] bg-white hover:bg-gray-50 transition-colors"
+                    >
+                      <p className="font-medium text-[1.5vh] text-gray-700">
+                        {selectedRelevance.label}
+                      </p>
+                      <IoMdArrowDropdown 
+                        className={`text-gray-500 transition-transform text-[2vh] ${showDropdown ? 'rotate-180' : ''}`} 
+                      />
+                    </div>
+
+                    {showDropdown && (
+                      <div className="absolute right-0 w-[22vh] bg-white border border-gray-200 rounded-lg shadow-lg z-20 overflow-hidden mt-1">
+                        {relevanceOptions.map(option => (
+                          <div
+                            key={option.key}
+                            onClick={() => handleSelectRelevance(option)}
+                            className={`px-[1.5vh] py-[1.2vh] text-[1.5vh] cursor-pointer transition-colors ${
+                              selectedRelevance.key === option.key 
+                                ? 'bg-gray-100 font-medium text-gray-900' 
+                                : 'text-gray-600 hover:bg-gray-50'
+                            }`}
+                          >
+                            {option.label}
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
-                )}
+
+                  {/* Filter button */}
+                  <button className="flex items-center gap-[.8vh] px-[1.5vh] py-[1vh] border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors">
+                    <MdFilterList className="text-gray-600 text-[2vh]" />
+                    <span className="text-[1.5vh] font-medium text-gray-700">Filters</span>
+                  </button>
+
+                  {/* Clear filters button */}
+                  {hasActiveFilters && (
+                    <button
+                      onClick={clearFilters}
+                      className="flex items-center gap-[.5vh] px-[1.2vh] py-[1vh] text-[1.4vh] text-gray-500 hover:text-gray-700 transition-colors"
+                    >
+                      <MdClose className="text-[1.8vh]" />
+                      <span>Clear</span>
+                    </button>
+                  )}
+                </div>
               </div>
-
-              {/* Filter button */}
-              <button className="flex items-center gap-[.8vh] px-[1.5vh] py-[1vh] border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors">
-                <MdFilterList className="text-gray-600 text-[2vh]" />
-                <span className="text-[1.5vh] font-medium text-gray-700">Filters</span>
-              </button>
-
-              {/* Clear filters button */}
-              {hasActiveFilters && (
-                <button
-                  onClick={clearFilters}
-                  className="flex items-center gap-[.5vh] px-[1.2vh] py-[1vh] text-[1.4vh] text-gray-500 hover:text-gray-700 transition-colors"
-                >
-                  <MdClose className="text-[1.8vh]" />
-                  <span>Clear</span>
-                </button>
-              )}
             </div>
-          </div>
-        </div>
+          </>
+        )}
 
         {/* Selected Department Banner */}
         {selectedDepartment && (
@@ -274,6 +291,11 @@ const MallSearchPage = () => {
             </button>
           </div>
         )}
+
+        {/* Feed */}
+        <div className="w-full">
+          <SearchPostsFeed />
+        </div>
 
         {/* Store Results */}
         <div className="flex-1 px-[1vh] py-[2vh]">

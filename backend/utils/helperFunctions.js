@@ -196,3 +196,34 @@ export const pfValidSignature = (pfData, pfParamString, pfPassphrase = null ) =>
   const signature = crypto.createHash("md5").update(pfParamString).digest("hex");
   return pfData['signature'] === signature;
 };
+
+// Utility function to sort search posts probabilistically by likelihoodIndex
+export function sortSearchPostsByLikelihood(searchPosts) {
+    if (!searchPosts || searchPosts.length === 0) return [];
+
+    // Create a shallow copy to avoid mutating the original array
+    const posts = [...searchPosts];
+    const sortedPosts = [];
+    let totalLikelihood = posts.reduce((sum, post) => sum + (post.stats?.likelihoodIndex || 1), 0);
+
+    while (posts.length > 0) {
+        // Generate a random number between 0 and totalLikelihood
+        const randomValue = Math.random() * totalLikelihood;
+        let cumulative = 0;
+
+        // Find the item where the random value falls within its probability range
+        for (let i = 0; i < posts.length; i++) {
+            const likelihood = posts[i].stats?.likelihoodIndex || 1;
+            cumulative += likelihood;
+            if (randomValue < cumulative) {
+                // Select this item, add to result, remove from pool
+                sortedPosts.push(posts[i]);
+                totalLikelihood -= likelihood; // Update remaining total
+                posts.splice(i, 1); // Remove from pool
+                break;
+            }
+        }
+    }
+
+    return sortedPosts;
+}

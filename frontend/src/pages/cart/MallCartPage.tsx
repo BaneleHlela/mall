@@ -23,7 +23,7 @@ const MallCartPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="flex items-center justify-center min-h-screen">
         <div className={`animate-spin rounded-full h-8 w-8 border-2 ${isDarkMode ? 'border-gray-600 border-t-white' : 'border-gray-200 border-t-gray-800'}`} />
       </div>
     )

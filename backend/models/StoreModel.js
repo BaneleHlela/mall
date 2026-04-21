@@ -28,6 +28,26 @@ const storeSchema = new mongoose.Schema(
       },
     },
     payment: {
+      cash: {
+        inStore: {
+            type: Boolean,
+            default: false,
+        },
+        onDelivery: {
+          type: Boolean,
+          default: false,
+        },
+        card: {
+          inStore: {
+            type: Boolean,
+            default: false,
+          },
+          onDelivery: {
+            type: Boolean,
+            default: false,
+          },
+        }
+      },
       provider: {
         type: String,
         enum: ['payfast', 'paypal', 'stripe', 'razorpay', 'none'],

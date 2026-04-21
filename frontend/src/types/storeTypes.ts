@@ -78,6 +78,7 @@ export interface Store {
   };
   about: string;
   team: TeamMember[];
+  createdAt?: Date;
   updatedAt?: Date;
   socials?: Socials[];
   contact: {
@@ -117,6 +118,16 @@ export interface Store {
     range: number;
   };
   storeState?: 'demo' | 'idle' | 'live';
+  payment?: {
+    cash: {
+      inStore: boolean;
+      onDelivery: boolean;
+      card: {
+        inStore: boolean;
+        onDelivery: boolean;
+      }
+    };
+  };
 }
 
 export interface OperationTimes {

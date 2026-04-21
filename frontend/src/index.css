@@ -611,4 +611,14 @@
   animation-range: entry 0;
 } 
 
+.swiper-scrollbar {
+    background: #d1d5db !important;
+    height: 2px !important;
+    border-radius: 0 !important;
+}
 
+.swiper-scrollbar-drag {
+    background: #000000 !important;
+    border-radius: 0 !important;
+    height: 100% !important;
+}

@@ -199,7 +199,7 @@ const StorePostJSX: React.FC<StorePostJSXProps> = ({ tipFor = "Tips for Vendors"
                         Reviews & Feedback
                     </div>
                     <div className="absolute right-[1.5vh] px-[.5vh]">
-                    <StorePosterRatingStars rating={store?.rating?.averageRating || 0} color='text-white'/>
+                        <StorePosterRatingStars rating={store?.rating?.averageRating || 0} color='text-white'/>
                     </div>
                 </div>
             </div>

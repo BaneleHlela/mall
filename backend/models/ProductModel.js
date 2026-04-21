@@ -56,10 +56,44 @@ const productSchema = new mongoose.Schema({
   category: {
     type:  String,
   },
+  stats: {
+    views: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    purchases: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    ratingSummary: {
+      averageRating: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 5,
+      },
+      numberOfRatings: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
+      reviews: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Review',
+      }],
+    },
+  },
   ratings: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Review',
   }],
+  visits: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
   isActive: {
     type: Boolean,
     default: false,

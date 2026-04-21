@@ -23,7 +23,8 @@ import postReducer from "../features/posts/postSlice.ts";
 import themeReducer from "../features/theme/themeSlice.ts";
 import visitReducer from "../features/visits/visitSlice.ts";
 import billingReducer from "../features/billing/billingSlice.ts";
-
+import searchPostReducer from "../features/searchPosts/searchPostSlice.ts";
+import searchPostSettingsReducer from "../features/searchPosts/searchPostSettingsSlice.ts";
 // Type for the stores reducer
 type StoresReducerType = typeof storeReducer;
 
@@ -53,6 +54,8 @@ export const store = configureStore({
         theme: themeReducer,
         visits: visitReducer,
         billing: billingReducer,
+        searchPosts: searchPostReducer,
+        searchPostSettings: searchPostSettingsReducer,
     },
 });
 

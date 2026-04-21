@@ -1172,6 +1172,38 @@ export const captureReelyAuto = expressAsyncHandler(async (req, res) => {
   }
 });
 
+// Get stores for search posts
+export const getSearchPostStores = expressAsyncHandler(async (req, res) => {
+  try {
+    const { type } = req.params;
+
+    if (type === "top-rated-on-the-mall") {
+      const stores = await Store.find({ isDeleted: { $ne: true } })
+        .sort({ 'rating.averageRating': -1 })
+        .limit(5)
+        .populate('team.member');
+      res.status(200).json(stores);
+    } 
+    if (type === "highest-rated-in-food") {
+      const stores = await Store.find({
+        departments: 'food',
+        isDeleted: { $ne: true }
+      })
+        .sort({ 'rating.averageRating': -1 })
+        .limit(5)
+        .populate('team.member');
+
+      res.status(200).json(stores);
+    }
+    else {
+      return res.status(400).json({ message: 'Invalid search post type' });
+    }
+  } catch (error) {
+    console.error('Error fetching search post stores:', error);
+    res.status(500).json({ message: 'Server error while fetching search post stores' });
+  }
+});
+
 // Clone store for multi-location businesses
 export const cloneStore = expressAsyncHandler(async (req, res) => {
   try {

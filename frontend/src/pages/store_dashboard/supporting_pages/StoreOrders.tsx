@@ -15,6 +15,9 @@ import { FaShoppingCart, FaBoxOpen, FaCheckCircle, FaTimesCircle } from 'react-i
 import type { Order } from '../../../types/orderTypes';
 import { Autoplay } from 'swiper/modules';
 
+type CardType = 'totalOrders' | 'totalOrderedItems' | 'completedOrders' | 'cancelledOrders';
+type TimeframeValue = 'today' | 'week' | 'month' | 'all-time';
+
 const StoreOrders = () => {
   const dispatch = useAppDispatch();
   const { orders, orderAnalytics, isLoading, error } = useAppSelector(state => state.orders);
@@ -26,11 +29,28 @@ const StoreOrders = () => {
   const [selectedDeliveryOption, setSelectedDeliveryOption] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [cardTimeframes, setCardTimeframes] = useState<Record<CardType, TimeframeValue>>({
+    totalOrders: 'all-time',
+    totalOrderedItems: 'all-time',
+    completedOrders: 'all-time',
+    cancelledOrders: 'all-time',
+  });
+
+  const cycleTimeframe = (current: TimeframeValue): TimeframeValue =>
+    current === 'all-time' ? 'today' : current === 'today' ? 'week' : current === 'week' ? 'month' : 'all-time';
+
+  const handleTimeframeChange = (cardType: CardType) => {
+    const newTimeframe = cycleTimeframe(cardTimeframes[cardType]);
+    setCardTimeframes(prev => ({ ...prev, [cardType]: newTimeframe }));
+    if (store?._id) {
+      dispatch(fetchOrderAnalytics({ storeId: store._id, timeframe: newTimeframe }));
+    }
+  };
 
   useEffect(() => {
     if (store?._id) {
       dispatch(fetchStoreOrders(store._id));
-      dispatch(fetchOrderAnalytics(store._id));
+      dispatch(fetchOrderAnalytics({ storeId: store._id, timeframe: 'all-time' }));
     }
   }, [store?._id, dispatch]);
 
@@ -55,38 +75,39 @@ const StoreOrders = () => {
     return paymentStatusMatch && deliveryStatusMatch && paymentMethodMatch && deliveryOptionMatch;
   });
 
+
   const statCards = [
     {
       title: 'Total Orders',
-      value: orderAnalytics.totalOrders.toString(),
-      percentage: 0, // Placeholder
+      value: orderAnalytics.totalOrders?.toString(),
+      percentage: orderAnalytics.percentages?.totalOrders || 0,
       color: '#3b82f6',
       icon: FaShoppingCart,
-      timeframe: 'today' as const,
+      cardType: 'totalOrders' as CardType,
     },
     {
       title: 'Total Ordered Items',
-      value: orderAnalytics.totalOrderedItems.toString(),
-      percentage: 0, // Placeholder
+      value: orderAnalytics.totalOrderedItems?.toString(),
+      percentage: orderAnalytics.percentages?.totalOrderedItems || 0,
       color: '#10b981',
       icon: FaBoxOpen,
-      timeframe: 'today' as const,
+      cardType: 'totalOrderedItems' as CardType,
     },
     {
       title: 'Completed Orders',
-      value: orderAnalytics.completedOrders.toString(),
-      percentage: 0, // Placeholder
+      value: orderAnalytics.completedOrders?.toString(),
+      percentage: orderAnalytics.percentages?.completedOrders || 0,
       color: '#059669',
       icon: FaCheckCircle,
-      timeframe: 'today' as const,
+      cardType: 'completedOrders' as CardType,
     },
     {
-      title: 'Returned Orders',
-      value: orderAnalytics.returnedOrders.toString(),
-      percentage: 0, // Placeholder
+      title: 'Cancelled Orders',
+      value: orderAnalytics.cancelledOrders?.toString(),
+      percentage: orderAnalytics.percentages?.cancelledOrders || 0,
       color: '#ef4444',
       icon: FaTimesCircle,
-      timeframe: 'today' as const,
+      cardType: 'cancelledOrders' as CardType,
     },
   ];
 
@@ -115,7 +136,8 @@ const StoreOrders = () => {
                   title={card.title}
                   value={card.value}
                   percentage={card.percentage}
-                  timeframe={card.timeframe}
+                  timeframe={cardTimeframes[card.cardType]}
+                  onTimeframeChange={() => handleTimeframeChange(card.cardType)}
                   showPercentage={false}
                   icon={card.icon}
                   color={card.color}
@@ -124,7 +146,7 @@ const StoreOrders = () => {
             ))}
           </div>
 
-          <div className="w-full my-5">
+          <div className="w-full my-5 lg:hidden">
             <Swiper
               modules={[Autoplay]}
               autoplay={{ delay: 3000, disableOnInteraction: true }}
@@ -141,7 +163,8 @@ const StoreOrders = () => {
                         title={card.title}
                         value={card.value}
                         percentage={card.percentage}
-                        timeframe={card.timeframe}
+                        timeframe={cardTimeframes[card.cardType]}
+                        onTimeframeChange={() => handleTimeframeChange(card.cardType)}
                         showPercentage={false}
                         icon={card.icon}
                         color={card.color}

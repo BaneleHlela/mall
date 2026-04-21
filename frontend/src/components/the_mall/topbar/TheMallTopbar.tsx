@@ -53,6 +53,7 @@ const TheMallTopbar = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchTerm.trim()) {
       navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
+      setSearchTerm('');
     }
   };
 
@@ -162,7 +163,10 @@ const TheMallTopbar = () => {
                   </div>
                   {storeSlugs.length > 0 && (
                     <button
-                      onClick={() => navigate(`/search?query=${encodeURIComponent(searchTerm)}`)}
+                      onClick={() => { 
+                        navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
+                        setSearchTerm('');
+                      }}
                       className="w-full mt-3 py-2 text-sm font-semibold text-white bg-gray-900 rounded hover:bg-gray-800"
                     >
                       View All Results

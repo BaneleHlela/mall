@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX, FiMapPin, FiCreditCard, FiTruck, FiPackage, FiMessageSquare } from 'react-icons/fi';
+import { FiX, FiMapPin, FiPackage, FiMessageSquare } from 'react-icons/fi';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { updateOrder } from '../../../features/orders/orderSlice';
 import type { Order } from '../../../types/orderTypes';
+import { formatPrice } from '../../../utils/helperFunctions';
 
 interface OrderModalProps {
   order: Order | null;
@@ -10,6 +13,65 @@ interface OrderModalProps {
 }
 
 const OrderModal: React.FC<OrderModalProps> = ({ order, isOpen, onClose }) => {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const [isMapLoading, setIsMapLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  const isUpdating = useAppSelector((state) => state.orders.isLoading);
+  const [selectedPaymentStatus, setSelectedPaymentStatus] = useState<Order['paymentStatus']>(order?.paymentStatus ?? 'Pending');
+  const [selectedDeliveryStatus, setSelectedDeliveryStatus] = useState<Order['deliveryStatus']>(order?.deliveryStatus ?? 'Pending');
+
+  useEffect(() => {
+    if (!isOpen || !order?.shippingAddress?.lat || !order?.shippingAddress?.lng || !window.google || !mapRef.current) {
+      setIsMapLoading(true);
+      return;
+    }
+
+    const map = new window.google.maps.Map(mapRef.current, {
+      center: { lat: order.shippingAddress.lat, lng: order.shippingAddress.lng },
+      zoom: 15,
+      zoomControl: true,
+      streetViewControl: false,
+      mapTypeControl: false,
+      fullscreenControl: false,
+    });
+
+    new window.google.maps.Marker({
+      position: { lat: order.shippingAddress.lat, lng: order.shippingAddress.lng },
+      map,
+    });
+
+    setIsMapLoading(false);
+  }, [isOpen, order?.shippingAddress?.lat, order?.shippingAddress?.lng]);
+
+  useEffect(() => {
+    if (order) {
+      setSelectedPaymentStatus(order.paymentStatus);
+      setSelectedDeliveryStatus(order.deliveryStatus);
+    }
+  }, [order]);
+
+  const getOverallStatus = (paymentStatus: Order['paymentStatus'], deliveryStatus: Order['deliveryStatus']) => {
+    if (paymentStatus === 'Failed' || deliveryStatus === 'Cancelled') return 'Cancelled';
+    if (paymentStatus === 'Paid' && deliveryStatus === 'Delivered') return 'Complete';
+    if (paymentStatus === 'Pending') return 'Not Paid';
+    if (deliveryStatus === 'Pending') return 'Not Delivered';
+    return 'In Progress';
+  };
+
+  const handleSaveStatus = async () => {
+    if (!order) return;
+
+    try {
+      await dispatch(updateOrder({
+        orderId: order._id,
+        paymentStatus: selectedPaymentStatus,
+        deliveryStatus: selectedDeliveryStatus,
+      })).unwrap();
+    } catch (error) {
+      console.error('Unable to update order:', error);
+    }
+  };
+
   if (!order) return null;
 
   const getStatusColor = (status: string) => {
@@ -28,14 +90,42 @@ const OrderModal: React.FC<OrderModalProps> = ({ order, isOpen, onClose }) => {
         return 'bg-green-100 text-green-800';
       case 'Failed':
         return 'bg-red-100 text-red-800';
+      case 'Complete':
+        return 'bg-green-100 text-green-800';
+      case 'Not Paid':
+      case 'Not Delivered':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'In Progress':
+        return 'bg-blue-100 text-blue-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
   };
 
+  const getStatusBg = (status: string) => {
+    switch (status) {
+      case 'Pending':
+        return 'bg-yellow-100';
+      case 'Paid':
+        return 'bg-green-100';
+      case 'Failed':
+        return 'bg-red-100';
+      case 'Shipped':
+        return 'bg-blue-100';
+      case 'Delivered':
+        return 'bg-green-100';
+      case 'Cancelled':
+        return 'bg-red-100';
+      case 'Collected':
+        return 'bg-purple-100';
+      default:
+        return 'bg-gray-100';
+    }
+  };
+
   return (
     <AnimatePresence>
-      {isOpen && (
+        {isOpen && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -70,28 +160,53 @@ const OrderModal: React.FC<OrderModalProps> = ({ order, isOpen, onClose }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm font-medium text-gray-500">Payment Status</label>
-                    <div className="mt-1">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.paymentStatus)}`}>
-                        {order.paymentStatus}
-                      </span>
-                    </div>
+                    <select
+                      value={selectedPaymentStatus}
+                      onChange={(e) => setSelectedPaymentStatus(e.target.value as Order['paymentStatus'])}
+                      className={`mt-1 w-full rounded-xl border-gray-300 px-3 py-2 pr-8 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 appearance-none bg-[url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E")] bg-no-repeat bg-[right_12px_center] ${getStatusBg(selectedPaymentStatus)}`}
+                    >
+                      {['Pending', 'Paid', 'Failed'].map((status) => (
+                        <option key={status} value={status}>{status}</option>
+                      ))}
+                    </select>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-gray-500">Delivery Status</label>
-                    <div className="mt-1">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.deliveryStatus)}`}>
-                        {order.deliveryStatus}
-                      </span>
-                    </div>
+                    <select
+                      value={selectedDeliveryStatus}
+                      onChange={(e) => setSelectedDeliveryStatus(e.target.value as Order['deliveryStatus'])}
+                      className={`mt-1 w-full rounded-xl border-gray-300 px-3 py-2 pr-8 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 appearance-none bg-[url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E")] bg-no-repeat bg-[right_12px_center] ${getStatusBg(selectedDeliveryStatus)}`}
+                    >
+                      {['Pending', 'Shipped', 'Delivered', 'Cancelled', 'Collected'].map((status) => (
+                        <option key={status} value={status}>{status}</option>
+                      ))}
+                      
+                    </select>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Payment Method</label>
-                    <p className="mt-1 text-sm text-gray-900 capitalize">{order.paymentMethod}</p>
+                    <label className="text-sm font-medium text-gray-500">Status</label>
+                    <div className="mt-1">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(getOverallStatus(selectedPaymentStatus, selectedDeliveryStatus))}`}>
+                        {getOverallStatus(selectedPaymentStatus, selectedDeliveryStatus)}
+                      </span>
+                    </div>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-gray-500">Delivery Option</label>
                     <p className="mt-1 text-sm text-gray-900">{order.deliveryOption}</p>
                   </div>
+                </div>
+                <div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-end">
+                  <button
+                    onClick={handleSaveStatus}
+                    disabled={
+                      isUpdating ||
+                      (selectedPaymentStatus === order.paymentStatus && selectedDeliveryStatus === order.deliveryStatus)
+                    }
+                    className="inline-flex items-center justify-center rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                  >
+                    {isUpdating ? 'Saving...' : 'Save Status'}
+                  </button>
                 </div>
               </div>
 
@@ -117,16 +232,16 @@ const OrderModal: React.FC<OrderModalProps> = ({ order, isOpen, onClose }) => {
                         <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
                         {item.specialRequest && (
                           <div className="mt-2">
-                            <p className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                            <p className="text-sm font-medium text-green-600 flex items-center gap-1">
                               <FiMessageSquare className="w-4 h-4" />
                               Special Request:
                             </p>
-                            <p className="text-sm text-gray-600 mt-1">{item.specialRequest}</p>
+                            <p style={{ lineHeight: "1.05"}} className="text-sm text-green-600 mt-1">{item.specialRequest}</p>
                           </div>
                         )}
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold text-gray-900">R{item.price}</p>
+                        <p className="font-semibold text-gray-900">{formatPrice(item.price)}</p>
                       </div>
                     </div>
                   ))}
@@ -134,7 +249,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ order, isOpen, onClose }) => {
                 <div className="mt-4 pt-4 border-t border-gray-200">
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-semibold text-gray-900">Total:</span>
-                    <span className="text-lg font-bold text-gray-900">R{order.totalPrice}</span>
+                    <span className="text-lg font-bold text-gray-900">{formatPrice(order.totalPrice)}</span>
                   </div>
                 </div>
               </div>
@@ -152,9 +267,18 @@ const OrderModal: React.FC<OrderModalProps> = ({ order, isOpen, onClose }) => {
                     )}
                     <p className="text-gray-700 mt-1">{order.shippingAddress.address}</p>
                     {order.shippingAddress.lat && order.shippingAddress.lng && (
-                      <p className="text-sm text-gray-600 mt-2">
-                        Coordinates: {order.shippingAddress.lat}, {order.shippingAddress.lng}
-                      </p>
+                      <div className="mt-4 w-full aspect-square rounded-lg overflow-hidden relative">
+                        {isMapLoading && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                            <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+                          </div>
+                        )}
+                        <div
+                          ref={mapRef}
+                          className="w-full h-full"
+                          style={{ opacity: isMapLoading ? 0 : 1, transition: 'opacity 0.3s ease-in-out' }}
+                        />
+                      </div>
                     )}
                   </div>
                 </div>
