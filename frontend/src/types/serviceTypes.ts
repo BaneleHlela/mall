@@ -16,6 +16,7 @@ export interface Service {
 
 export interface ServicesState {
     services: Service[];
+    searchResults: Service[];
     isLoading: boolean;
     error: string | null;
     selectedService?: Service | null;

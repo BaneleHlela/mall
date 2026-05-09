@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 
 const TheMallTopbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchType, setSearchType] = useState<'all' | 'stores' | 'products' | 'services'>('all');
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
@@ -29,10 +30,10 @@ const TheMallTopbar = () => {
   const { isOpen: isRangeModalOpen } = useAppSelector((state: RootState) => state.range);
 
   useEffect(() => {
-    if (searchTerm.trim().length > 0) {
+    if (searchTerm.trim().length > 0 && (searchType === 'all' || searchType === 'stores')) {
       dispatch(fetchStores({ search: searchTerm }));
     }
-  }, [dispatch, searchTerm]);
+  }, [dispatch, searchTerm, searchType]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,7 +53,7 @@ const TheMallTopbar = () => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchTerm.trim()) {
-      navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
+      navigate(`/search?query=${encodeURIComponent(searchTerm)}&type=${searchType}`);
       setSearchTerm('');
     }
   };
@@ -84,6 +85,18 @@ const TheMallTopbar = () => {
 
           {/* Searchbar, Location and Range */}
           <div className="flex flex-row w-[60%] h-full justify-end items-center space-x-[.6vh]">
+            <div className="flex items-center space-x-2">
+              <select
+                value={searchType}
+                onChange={(e) => setSearchType(e.target.value as 'all' | 'stores' | 'products' | 'services')}
+                className="h-[55%] rounded-lg border border-gray-300 bg-white px-3 text-[1.4vh] text-gray-700 outline-none transition-colors duration-200 hover:border-gray-400"
+              >
+                <option value="all">All</option>
+                <option value="stores">Stores</option>
+                <option value="products">Products</option>
+                <option value="services">Services</option>
+              </select>
+            </div>
             {/* Searchbar */}
             <div className="relative w-[80%] h-[55%]">
               <input
@@ -111,15 +124,21 @@ const TheMallTopbar = () => {
                 >
                   <div className="w-full flex">
                     <div className="w-[60%]">
-                      {isLoading ? (
-                        <p className="text-gray-500 text-sm px-2">Loading...</p>
-                      ) : limitedResults.length === 0 ? (
-                        <p className="text-gray-500 text-sm px-2">No results found</p>
+                      {(searchType === 'all' || searchType === 'stores') ? (
+                        isLoading ? (
+                          <p className="text-gray-500 text-sm px-2">Loading...</p>
+                        ) : limitedResults.length === 0 ? (
+                          <p className="text-gray-500 text-sm px-2">No results found</p>
+                        ) : (
+                          <div className="grid grid-cols-2 gap-3">
+                            {limitedResults.map((id) => (
+                              <StoreCard key={id} store={storesBySlug[id]} user={user} mini={true} />
+                            ))}
+                          </div>
+                        )
                       ) : (
-                        <div className="grid grid-cols-2 gap-3">
-                          {limitedResults.map((id) => (
-                            <StoreCard key={id} store={storesBySlug[id]} user={user} mini={true} />
-                          ))}
+                        <div className="p-4 text-sm text-gray-600">
+                          Search preview is available for stores only. Press Enter to view {searchType} results.
                         </div>
                       )}
                     </div>
@@ -161,17 +180,15 @@ const TheMallTopbar = () => {
                       </div>
                     </div>
                   </div>
-                  {storeSlugs.length > 0 && (
-                    <button
-                      onClick={() => { 
-                        navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
-                        setSearchTerm('');
-                      }}
-                      className="w-full mt-3 py-2 text-sm font-semibold text-white bg-gray-900 rounded hover:bg-gray-800"
-                    >
-                      View All Results
-                    </button>
-                  )}
+                  <button
+                    onClick={() => {
+                      navigate(`/search?query=${encodeURIComponent(searchTerm)}&type=${searchType}`);
+                      setSearchTerm('');
+                    }}
+                    className="w-full mt-3 py-2 text-sm font-semibold text-white bg-gray-900 rounded hover:bg-gray-800"
+                  >
+                    View All Results
+                  </button>
                 </div>
               )}
             </div>

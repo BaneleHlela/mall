@@ -46,6 +46,7 @@ export interface  StockUpdatePayload {
 export interface ProductsState {
     products: Product[];
     productsByStoreSlug: { [storeSlug: string]: Product[] };
+    searchResults: Product[];
     isLoading: boolean;
     error: string | null;
     selectedProduct: Product | null;

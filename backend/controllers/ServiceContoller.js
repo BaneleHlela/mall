@@ -242,6 +242,42 @@ export const getServiceById = async (req, res) => {
   }
 };
 
+export const getAllServices = asyncHandler(async (req, res) => {
+  const { search, page = 1, limit = 20, category, store, activeOnly } = req.query;
+  const query = {};
+
+  if (search) {
+    query.name = { $regex: search.toString(), $options: 'i' };
+  }
+
+  if (category) {
+    query.category = category;
+  }
+
+  if (store) {
+    query.store = store;
+  }
+
+  if (activeOnly === 'true') {
+    query.isActive = true;
+  }
+
+  const skip = (Number(page) - 1) * Number(limit);
+  const services = await Service.find(query)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(Number(limit));
+  const total = await Service.countDocuments(query);
+
+  res.status(200).json({
+    total,
+    page: Number(page),
+    pages: Math.ceil(total / Number(limit)),
+    count: services.length,
+    services,
+  });
+});
+
 export const getStoreServices = asyncHandler(async (req, res) => {
   const { storeId } = req.params;
   const { category, activeOnly } = req.query;

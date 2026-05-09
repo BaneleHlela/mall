@@ -7,6 +7,7 @@ import { API_URL } from '../context';
 
 const initialState: ServicesState = {
   services: [],
+  searchResults: [],
   selectedService: null,
   isLoading: false,
   error: null,
@@ -80,6 +81,25 @@ export const createService = createAsyncThunk(
   }
 );
 
+export const fetchServicesBySearch = createAsyncThunk<
+  { services: Service[]; total: number; page: number; pages: number; count: number },
+  { search: string; page?: number; limit?: number }
+>(
+  'services/fetchBySearch',
+  async ({ search, page = 1, limit = 20 }, thunkAPI) => {
+    try {
+      const params = new URLSearchParams();
+      if (search) params.append('search', search);
+      params.append('page', page.toString());
+      params.append('limit', limit.toString());
+      const res = await axios.get(`${API_BASE}?${params.toString()}`);
+      return res.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to search services');
+    }
+  }
+);
+
 export const updateService = createAsyncThunk(
   'services/updateService',
   async ({ id, data }: { id: string; data: Partial<Service> | FormData }, thunkAPI) => {
@@ -140,6 +160,20 @@ const servicesSlice = createSlice({
         state.services = action.payload;
       })
       .addCase(fetchStoreServices.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+
+      // Search services
+      .addCase(fetchServicesBySearch.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchServicesBySearch.fulfilled, (state, action: PayloadAction<{ services: Service[]; total: number; page: number; pages: number; count: number }>) => {
+        state.isLoading = false;
+        state.searchResults = action.payload.services;
+      })
+      .addCase(fetchServicesBySearch.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

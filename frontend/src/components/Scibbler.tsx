@@ -4,6 +4,7 @@ import QRCodePosterExample from "./the_mall/basic_store_post/QRCodePosterExample
 import QRCodeGenerator from "./the_mall/posters/QRCodeGenerator";
 import FramedPoster from "./the_mall/posters/FramedPoster";
 import AddPostModal from "./the_mall/home/modals/AddPostModal";
+import MallDeliveryPage from "../pages/mall_delievery/MallDeliveryPage";
 
 const Scribbler: React.FC = () => {
   const mainRef = useRef<HTMLElement | null>(null);
@@ -26,7 +27,7 @@ const Scribbler: React.FC = () => {
   }, []);
 
   return (
-    <div className="h-screen w-full max-w-md flex items-center justify-center">
+    <div className="h-screen w-full flex items-center justify-center">
       {/* <QRCodeGenerator storeSlug="yo-solution" /> */}
       {/* <FramedPoster
         imageUrl="https://storage.googleapis.com/the-mall-uploads-giza/stores/mall-designs/images/Black%20And%20White%20Vintage%20Bold%20Party%20Celebration%20Birthday%20Newspaper%20Flyer.png"
@@ -35,9 +36,8 @@ const Scribbler: React.FC = () => {
       {/* <div className="w-full h-[50%] bg-white">
         <div className="w-full h-[60%] bg-black"></div>
       </div> */}
-      <AddPostModal />
+      <MallDeliveryPage />
     </div>
-    
   );
 };
 

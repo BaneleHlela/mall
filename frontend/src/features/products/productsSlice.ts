@@ -8,6 +8,7 @@ const API_BASE = `${API_URL}/api/products`;
 const initialState: ProductsState = {
   products: [],
   productsByStoreSlug: {},
+  searchResults: [],
   isLoading: false,
   error: null,
   selectedProduct: null,
@@ -129,6 +130,25 @@ export const fetchStoreProducts = createAsyncThunk(
       return res.data as Product[];
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to fetch store products');
+    }
+  }
+);
+
+export const fetchProductsBySearch = createAsyncThunk<
+  { products: Product[]; total: number; page: number; pages: number; count: number },
+  { search: string; page?: number; limit?: number }
+>(
+  'products/fetchBySearch',
+  async ({ search, page = 1, limit = 20 }, thunkAPI) => {
+    try {
+      const params = new URLSearchParams();
+      if (search) params.append('search', search);
+      params.append('page', page.toString());
+      params.append('limit', limit.toString());
+      const res = await axios.get(`${API_BASE}?${params.toString()}`);
+      return res.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to search products');
     }
   }
 );
@@ -311,6 +331,20 @@ const productSlice = createSlice({
         });
       })
       .addCase(fetchStoreProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+
+      // Fetch products by search
+      .addCase(fetchProductsBySearch.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchProductsBySearch.fulfilled, (state, action: PayloadAction<{ products: Product[]; total: number; page: number; pages: number; count: number }>) => {
+        state.isLoading = false;
+        state.searchResults = action.payload.products;
+      })
+      .addCase(fetchProductsBySearch.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

@@ -3,7 +3,6 @@ import expressAsyncHandler from "express-async-handler";
 import { captureScreenshot } from "../config/puppeteerConfig.js";
 import { uploadToUploads, deleteFromUploads } from "../config/gcsClient.js";
 import { captureStoreLayoutScreenshot } from "../utils/helperFunctions.js";
-import _ from "lodash";
 
 const CLIENT_URL = process.env.CLIENT_URL
 

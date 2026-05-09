@@ -262,7 +262,20 @@ export const departments = {
       reelyThumbnail: "https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/pexels-pixabay-433333.jpg",
       profilyThumbnail: "https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/pexels-pixabay-433333.jpg",
     }]
-  } 
+  },
+  transport: {
+    short: "Transport",
+    full: "Transport & Delivery",
+    description: "Taxis, School Transport, courier services, logistics, deliveries, moving services, and transport solutions.",
+    thumbnails: [
+      "https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/pexels-tima-miroshnichenko-6169668.jpg"
+    ],
+    content: [{
+      storeSlug: "Example Store",
+      reelyThumbnail: "https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/pexels-tima-miroshnichenko-6169668.jpg",
+      profilyThumbnail: "https://storage.googleapis.com/the-mall-uploads-giza/mall/department%20images/pexels-tima-miroshnichenko-6169668.jpg",
+    }]
+  }, 
 };
 
 export const colorPalettes = {
