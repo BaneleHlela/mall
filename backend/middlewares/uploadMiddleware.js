@@ -19,3 +19,11 @@ export const uploadRentalImages = upload.array("images", 3);
 export const uploadDonationImages = upload.array("images", 5);
 
 export const uploadTeamMemberImage = uploadSingleFile('image');
+export const uploadVehicleImages = upload.array("vehicleImages", 5);
+export const uploadDriverDocumentsMiddleware = upload.fields([
+  { name: 'vehicleImages', maxCount: 5 },
+  { name: 'idOrPassport', maxCount: 1 },
+  { name: 'criminalClearance', maxCount: 1 },
+  { name: 'driversLicence', maxCount: 1 },
+  { name: 'vehicleRegistration', maxCount: 1 }
+]);

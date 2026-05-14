@@ -1,3 +1,4 @@
+
 import express from "express";
 import dotenv from "dotenv";
 import passport from "passport";
@@ -34,6 +35,7 @@ import searchPostRoutes from "./routes/searchPostRoutes.js";
 import visitRoutes from "./routes/visitRoutes.js";
 import { visitorMiddleware } from "./middlewares/visitorMiddleware.js";
 import whatsappRoutes from './routes/whatsappRoutes.js';
+import driverRoutes from './routes/driverRoutes.js';
 import "./config/passportConfig.js";
 
 
@@ -91,6 +93,7 @@ app.use("/api/posts", postRoutes);
 app.use("/api/search-posts", searchPostRoutes);
 app.use("/api/visits", visitRoutes);
 app.use('/api/whatsapp', whatsappRoutes);
+app.use('/api/driver', driverRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

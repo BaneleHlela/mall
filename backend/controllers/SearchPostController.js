@@ -5,6 +5,7 @@ import { sortSearchPostsByLikelihood } from "../utils/helperFunctions.js";
 
 // Create a new search post
 export const createSearchPost = asyncHandler(async (req, res) => {
+    console.log(req.body);
     const { variation, type, departments, stores, products, services, style, likelihoodIndex } = req.body;
 
     const searchPost = new SearchPost({

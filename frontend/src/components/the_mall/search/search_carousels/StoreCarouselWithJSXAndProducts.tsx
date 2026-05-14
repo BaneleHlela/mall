@@ -65,6 +65,11 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
     // Type effects
     useEffect(() => {
         const fetchProducts = async () => {
+            // Return top 6 products if variation is "new-carousel-with-jsx-and-products"
+            if (searchPost && searchPost.type === "new-carousel-with-jsx-and-products") {
+                const results = await dispatch(fetchSearchPostProducts(searchPost.type));
+                setProducts((results.payload as Product[]).slice(0, 6));
+            }
             if (searchPost && searchPost.type === "top-rated-on-the-mall") {
                 setViewAllRoute("/search?sort=top-rated");
                 const results = await dispatch(fetchSearchPostProducts(searchPost.type));

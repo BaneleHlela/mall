@@ -190,7 +190,11 @@ const AppContent: React.FC = () => {
         <Route path="/get-started" element={<GetStartedPage />} />
         <Route path="/layouts/my-layouts" element={<MyLayouts />} />
         <Route path="/layouts/create" element={<LayoutCreator />} />
-        <Route path="/creators-dashboard/*" element={<CreatorsDashboard />} />
+        <Route path="/creators-dashboard/*" element={
+          <ProtectedRoute>
+            <CreatorsDashboard />
+          </ProtectedRoute>
+          } />
         <Route
           path="/search-posts/create"
           element={

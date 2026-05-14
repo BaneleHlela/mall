@@ -48,6 +48,11 @@ const SimpleStoreBundleCarousel: React.FC<SimpleStoreBundleCarouselProps> = ({
   // Type effects
   useEffect(() => {
     const fetchStores = async () => {
+      // Return top 6 stores if variation is "new-simple-store-carousel"
+      if (searchPost && searchPost.type === "new-simple-store-carousel") {
+        const results = await dispatch(fetchSearchPostStores(searchPost.type));
+        setStores((results.payload as Store[]).slice(0, 6));
+      }
       if (searchPost && searchPost.type === "highest-rated-in-food") {
         setViewAllRoute("/search?sort=top-rated&dep=food");
         // Fetch post stores and set them as local stores

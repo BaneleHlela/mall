@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { fetchSearchPosts, deleteSearchPost } from '../../../features/searchPosts/searchPostSlice';
+import { fetchSearchPosts, deleteSearchPost, createSearchPost } from '../../../features/searchPosts/searchPostSlice';
 import { motion } from 'framer-motion';
 import { FiEdit, FiTrash2, FiPlus } from 'react-icons/fi';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import SelectVariationModal from '../../../components/creators_dashboard/modals/SelectVariationModal';
 import type { SearchPost } from '../../../types/searchPostTypes';
+import {
+  dedaultBasicStoreCarousel,
+  defaultSimpleStoreCarousel,
+  defaultCarouselWithJSXAndProducts,
+  defaultBasicProductCarousel
+} from '../../../utils/defaults/defaultSearchPosts';
 
 const SearchPostsDashboard = () => {
   const dispatch = useAppDispatch();
@@ -60,8 +66,32 @@ const SearchPostsDashboard = () => {
 
   const totalPages = Math.ceil(sortedPosts.length / itemsPerPage);
 
-  const handleAddPost = (variation: string) => {
-    window.open(`/search-posts/create?variation=${variation}`, '_blank');
+  const handleAddPost = async (variation: string) => {
+    let defaultPost: Omit<SearchPost, '_id'>;
+    switch (variation) {
+      case 'basicStoreCarousel':
+        defaultPost = dedaultBasicStoreCarousel;
+        break;
+      case 'simpleStoreCarousel':
+        defaultPost = defaultSimpleStoreCarousel;
+        break;
+      case 'carouselWithJSXAndProducts':
+        defaultPost = defaultCarouselWithJSXAndProducts;
+        break;
+      case 'basicProductCarousel':
+        defaultPost = defaultBasicProductCarousel;
+        break;
+      default:
+        toast.error('Invalid variation selected');
+        return;
+    }
+
+    try {
+      const result = await dispatch(createSearchPost(defaultPost)).unwrap();
+      window.open(`/search-posts/edit/${result._id}`, '_blank');
+    } catch (error: any) {
+      toast.error(error || 'Failed to create search post');
+    }
   };
 
   const handleEditPost = (post: SearchPost) => {

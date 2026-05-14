@@ -16,7 +16,6 @@ const SearchPostsPreview: React.FC<SearchPostsPreviewProps> = ({
   currentSearchPost
 }) => {
   const allSearchPosts = useAppSelector((state) => state.searchPosts.searchPostsByTypes);
-  const searchPostOrder = ["top-rated-on-the-mall", "highest-rated-in-food", "ekasibite-store-most-viewed-products", "ekasibite-store-new-arrivals", "deneo-mphuthi-bakes-store-most-viewed-products"];
 
   // Get device dimensions
   const getDeviceDimensions = () => {
@@ -34,11 +33,18 @@ const SearchPostsPreview: React.FC<SearchPostsPreviewProps> = ({
 
   const { width, height } = getDeviceDimensions();
 
-  // Order search posts based on the defined order
-  const orderedSearchPosts = searchPostOrder.map(type => allSearchPosts[type]).filter(Boolean) as SearchPost[];
+  // Get all search posts
+  const allPosts = Object.values(allSearchPosts) as SearchPost[];
+
+  // Sort so the one being edited is on top
+  const sortedPosts = [...allPosts].sort((a, b) => {
+    if (a._id === currentSearchPost._id) return -1;
+    if (b._id === currentSearchPost._id) return 1;
+    return 0;
+  });
 
   // Replace the post being edited with the current settings
-  const previewSearchPosts = orderedSearchPosts.map(post => {
+  const previewSearchPosts = sortedPosts.map(post => {
     if (post._id === currentSearchPost._id) {
       return { ...currentSearchPost };
     }

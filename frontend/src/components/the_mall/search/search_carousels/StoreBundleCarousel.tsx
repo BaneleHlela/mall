@@ -52,6 +52,11 @@ const StoreBundleCarousel: React.FC<StoreBundleCarouselProps> = ({
   // Type effects
   useEffect(() => {
     const fetchStores = async () => {
+      // Return top 6 stores if variation is "new-basic-store-carousel"
+      if (searchPost && searchPost.type === "new-basic-store-carousel") {
+        const results = await dispatch(fetchSearchPostStores(searchPost.type));
+        setStores((results.payload as Store[]).slice(0, 6));
+      }
       if (searchPost && searchPost.type === "top-rated-on-the-mall") {
         setViewAllRoute("/search?sort=top-rated");
         setHeaderRoute("/search?sort=top-rated");

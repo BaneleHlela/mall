@@ -26,11 +26,6 @@ const userSchema = new mongoose.Schema(
 			required:true,
 			index:true,
 		},
-		lastName:{
-			type:String,
-			required:true,
-			index:true,
-		},
 		lastLogin: {
 			type: Date,
 			default: Date.now,

@@ -452,3 +452,4 @@ export const updateProductStats = asyncHandler(async (req, res) => {
   res.status(200).json(updatedProduct);
 });
 
+

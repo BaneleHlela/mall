@@ -1183,8 +1183,8 @@ export const getSearchPostStores = expressAsyncHandler(async (req, res) => {
         .limit(5)
         .populate('team.member');
       res.status(200).json(stores);
-    } 
-    if (type === "highest-rated-in-food") {
+    }
+    else if (type === "highest-rated-in-food") {
       const stores = await Store.find({
         departments: 'food',
         isDeleted: { $ne: true }

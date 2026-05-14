@@ -226,6 +226,9 @@ const MallSearchPage = () => {
           </div>
         </div>
 
+        {/* Search Posts Feed */}
+        <SearchPostsFeed />
+
         {searchTerm && (
           <div className="bg-white border-b border-gray-200 px-[1vh] lg:px-[2vh] py-[2vh] space-y-4">
             <div className="w-full flex flex-col gap-[1.5vh] lg:flex-row lg:justify-between lg:items-center">

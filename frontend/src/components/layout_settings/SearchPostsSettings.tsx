@@ -121,7 +121,7 @@ const SearchPostsSettings: React.FC<SearchPostsSettingsProps> = ({
                 //onHomeClick={() => onPanelClose?.()}
               >
                 <div className="space-y-1.5">
-                  <SubSettingsContainer
+                  {/* <SubSettingsContainer
                     name="Variation"
                     SettingsComponent={
                       <div className="px-1.5 space-y-1.5">
@@ -140,7 +140,7 @@ const SearchPostsSettings: React.FC<SearchPostsSettingsProps> = ({
                         />
                       </div>
                     }
-                  />
+                  /> */}
 
                   <SubSettingsContainer
                     name="Type"

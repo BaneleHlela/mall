@@ -52,6 +52,11 @@ const BasicProductCarousel: React.FC<BasicProductCarouselProps> = ({
     // Type effects
     useEffect(() => {
         const fetchProducts = async () => {
+            // Return top 6 products if variation is "new-basic-product-carousel"
+            if (searchPost && searchPost.type === "new-basic-product-carousel") {
+                const results = await dispatch(fetchSearchPostProducts(searchPost.type));
+                setProducts((results.payload as Product[]).slice(0, 6));
+            }
             if (searchPost && searchPost.type === "top-rated-on-the-mall") {
                 setViewAllRoute("/search?sort=top-rated");
                 const results = await dispatch(fetchSearchPostProducts(searchPost.type));

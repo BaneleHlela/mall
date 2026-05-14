@@ -1,6 +1,13 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const MallDeliveryHeroSection = () => {
+  const navigate = useNavigate()
+
+  const handleStartDriving = () => {
+    navigate('/driver-signup')
+  }
+
   return (
     <div
       id="mall-delivery-hero"
@@ -19,12 +26,13 @@ const MallDeliveryHeroSection = () => {
         </div>
         <div className="flex flex-col items-start justify-between w-[70%] h-full text-[1.9vh] px-2">
           <p style={{lineHeight: "1.1"}} 
-            className="text-[1.7vh]"
-          >Mall Delivery helps businesses of all sizes deliver products conveniently using local drivers and transport providers</p>
+            className="text-[1.9vh]"
+          >The Mall Delivers is a delivery and logistics platform built to help businesses on The Mall
+            deliver products to customers conveniently and affordably</p>
           {/* Get Started and Start Driving Button */}
           <div className="flex space-x-2 w-full text-[1.8vh]">
             <button className="border rounded px-2 py-1 underline">Get Started</button>
-            <button className="rounded px-2 py-1 bg-white underline">Start Driving</button>
+            <button className="rounded px-2 py-1 bg-white underline" onClick={handleStartDriving}>Start Driving</button>
           </div>
         </div>
       </div>

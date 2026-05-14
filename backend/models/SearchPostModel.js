@@ -7,8 +7,7 @@ const SearchPostSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        required: true,
-        enum: ["custom"]
+        required: [true, "Type is required"],
     },
     departments: [{
         type: String,

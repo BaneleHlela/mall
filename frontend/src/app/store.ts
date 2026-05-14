@@ -25,6 +25,7 @@ import visitReducer from "../features/visits/visitSlice.ts";
 import billingReducer from "../features/billing/billingSlice.ts";
 import searchPostReducer from "../features/searchPosts/searchPostSlice.ts";
 import searchPostSettingsReducer from "../features/searchPosts/searchPostSettingsSlice.ts";
+import driverReducer from "../features/driver/driverSlice.ts";
 // Type for the stores reducer
 type StoresReducerType = typeof storeReducer;
 
@@ -56,6 +57,7 @@ export const store = configureStore({
         billing: billingReducer,
         searchPosts: searchPostReducer,
         searchPostSettings: searchPostSettingsReducer,
+        driver: driverReducer,
     },
 });
 
