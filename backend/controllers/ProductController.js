@@ -208,7 +208,7 @@ export const getSearchPostProducts = asyncHandler(async (req, res) => {
 
     if (type === "top-rated-on-the-mall") {
       const products = await Product.find({ isDeleted: { $ne: true }, isActive: true })
-        .sort({ 'stats.ratingSummary.averageRating': -1 })
+        .sort({ 'perfomanceStats.ratingSummary.averageRating': -1 })
         .limit(5)
         .populate('store', "_id name slug slogan");
 
@@ -222,7 +222,7 @@ export const getSearchPostProducts = asyncHandler(async (req, res) => {
         return res.status(404).json({ message: 'Store not found' });
       }
       const products = await Product.find({ store: store._id, isDeleted: { $ne: true }, isActive: true })
-        .sort({ 'stats.views': -1 })
+        .sort({ 'perfomanceStats.views': -1 })
         .limit(5)
         .populate('store', "_id name slug slogan");
       
@@ -430,16 +430,16 @@ export const updateProductStats = asyncHandler(async (req, res) => {
   // Prepare update object
   const updateObj = {};
   if (views !== undefined) {
-    updateObj['stats.views'] = (product.stats.views || 0) + (product.stats.views + views || 0);
+    updateObj['perfomanceStats.views'] = (product.perfomanceStats?.views || 0) + (views || 0);
   }
   if (purchases !== undefined) {
-    updateObj['stats.purchases'] = (product.stats.purchases || 0) + (purchases || 0);
+    updateObj['perfomanceStats.purchases'] = (product.perfomanceStats?.purchases || 0) + (purchases || 0);
   }
   if (averageRating !== undefined) {
-    updateObj['stats.ratingSummary.averageRating'] = averageRating;
+    updateObj['perfomanceStats.ratingSummary.averageRating'] = averageRating;
   }
   if (numberOfRatings !== undefined) {
-    updateObj['stats.ratingSummary.numberOfRatings'] = numberOfRatings;
+    updateObj['perfomanceStats.ratingSummary.numberOfRatings'] = numberOfRatings;
   }
 
   // Update product

@@ -254,7 +254,7 @@ const SearchPostsDashboard = () => {
                     <td className="px-6 py-4 text-slate-900 font-medium">{post.type}</td>
                     <td className="px-6 py-4">
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
-                        {post.likelihoodIndex}
+                        {post.stats.likelihoodIndex}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-slate-600">{post.stats?.clicks || 0}</td>

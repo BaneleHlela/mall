@@ -71,7 +71,20 @@ const BasicProductCarousel: React.FC<BasicProductCarouselProps> = ({
                 //setSearchPostProducts(results.payload);
                 setViewAllRoute(`/store/${storeSlug}?sort=top-rated`);
             }
-            if (searchPost && searchPost.type.includes("store-most-viewed-products")) {
+            if (searchPost && searchPost.type.includes("store-most-viewed-products") || searchPost.type.includes("kasi-foods")) {
+                const storeSlug = searchPost.type.replace("-store-most-viewed-products", "");
+                const results = await dispatch(fetchStoreProducts({ storeSlug, activeOnly: true}));
+                setProducts(results.payload as Product[]);
+                const fetchedStore = await dispatch(fetchStoreBySlug(storeSlug));
+                //setSearchPostProducts(results.payload);
+                setPostText((prev) => ({ 
+                    ...prev, // @ts-ignore-next-line
+                    heading: searchPost.style.text?.heading?.input || `${results.payload[0].store.name} Most Viewed` || '', //@ts-ignore-next-line
+                    subheading: searchPost.style.text?.subheading?.input || `${results.payload[0]?.store?.slogan ? results.payload[0].store.slogan : 'Shop from the best'}` || '',
+                }));
+                setViewAllRoute(`/store/${storeSlug}?sort=top-rated`);
+            }
+            if (searchPost && searchPost.type.includes("kasi-foods")) {
                 const storeSlug = searchPost.type.replace("-store-most-viewed-products", "");
                 const results = await dispatch(fetchStoreProducts({ storeSlug, activeOnly: true}));
                 setProducts(results.payload as Product[]);

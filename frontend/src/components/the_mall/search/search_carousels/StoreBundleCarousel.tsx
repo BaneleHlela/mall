@@ -55,6 +55,12 @@ const StoreBundleCarousel: React.FC<StoreBundleCarouselProps> = ({
       // Return top 6 stores if variation is "new-basic-store-carousel"
       if (searchPost && searchPost.type === "new-basic-store-carousel") {
         const results = await dispatch(fetchSearchPostStores(searchPost.type));
+        console.log(results)
+        setStores((results.payload as Store[]).slice(0, 6));
+      }
+      if (searchPost && searchPost.type === "most-viewed-in-food") {
+        const results = await dispatch(fetchSearchPostStores(searchPost.type));
+        console.log(results)
         setStores((results.payload as Store[]).slice(0, 6));
       }
       if (searchPost && searchPost.type === "top-rated-on-the-mall") {
@@ -116,7 +122,9 @@ const StoreBundleCarousel: React.FC<StoreBundleCarouselProps> = ({
   }
 
   return (
-    <div className="w-full pl-3 py-3 border-b-2 border-gray-200">
+    <div 
+      style={{ backgroundColor: searchPost.style?.colors?.backgroundColor }} 
+      className="w-full pl-3 py-3 border-b-2 border-gray-200">
       {/* Heading */}
       <div onClick={handleHeaderClick} className="flex w-full items-center justify-between pl-0 p-2">
         <h2 className="text-[22px] font-semibold text-gray-800">

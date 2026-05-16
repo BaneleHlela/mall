@@ -65,6 +65,8 @@ export const createDriver = expressAsyncHandler(async (req, res) => {
           uploadedAt: new Date(),
           verified: false
         };
+
+        console.log(documentUrl);
       } catch (error) {
         console.error(`Error uploading ${field}:`, error);
         res.status(500);
@@ -119,10 +121,10 @@ export const createDriver = expressAsyncHandler(async (req, res) => {
     operationTimes: parsedOperationTimes,
     alcoholDelivery: alcoholDelivery === 'true' || alcoholDelivery === true,
     documents: {
-      idOrPassport: documents.idOrPassport || null,
-      criminalClearance: documents.criminalClearance || null,
-      driversLicence: documents.driversLicence || null,
-      vehicleRegistration: documents.vehicleRegistration || null,
+      ...(documents.idOrPassport && { idOrPassport: documents.idOrPassport }),
+      ...(documents.criminalClearance && { criminalClearance: documents.criminalClearance }),
+      ...(documents.driversLicence && { driversLicence: documents.driversLicence }),
+      ...(documents.vehicleRegistration && { vehicleRegistration: documents.vehicleRegistration }),
     },
     // Set default zones (can be updated later by admin or driver)
     collectionZones: [],
@@ -148,6 +150,7 @@ export const createDriver = expressAsyncHandler(async (req, res) => {
 // Get driver profile
 export const getDriverProfile = expressAsyncHandler(async (req, res) => {
   const userId = req.user._id;
+  console.log(userId)
 
   const driver = await Driver.findOne({ userId })
     .populate('userId', 'firstName lastName email username');

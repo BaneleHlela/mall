@@ -57,7 +57,6 @@ export const ZoneSchema = new mongoose.Schema(
 
 // ─────────────────────────────────────────────
 // Required documents uploaded by the driver during onboarding.
-// Stores file URLs (e.g. S3 / Cloudinary links) and verification status.
 // ─────────────────────────────────────────────
 export const DocumentSchema = new mongoose.Schema(
   {

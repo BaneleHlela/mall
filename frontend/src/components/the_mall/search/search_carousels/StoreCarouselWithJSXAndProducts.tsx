@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDevice } from '../../../../utils/DeviceContext';
 import { GoArrowRight } from 'react-icons/go';
@@ -13,6 +13,9 @@ import type { SearchPost } from '../../../../types/searchPostTypes.ts';
 import { fetchStoreBySlug } from '../../../../features/stores/storeSlice.ts';
 import type { Product } from '../../../../types/productTypes.ts';
 import { responsiveDimensionControl } from '../../../../utils/helperFunctions.ts';
+import { IoIosArrowRoundForward } from 'react-icons/io';
+import { MdVerified } from 'react-icons/md';
+import { updateSearchPostStats } from '../../../../features/searchPosts/searchPostSlice.ts';
 
 interface StoreCarouselWithJSXAndProductsProps {
     // store: Store;
@@ -33,6 +36,7 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { isMobileOrTablet } = useDevice();
+    const [isDesktop, setIsDesktop] = useState(false);
     const store= useAppSelector(state => state.stores.storesBySlug[searchPost.type.replace("-store-top-products", "")]);
     const [ products, setProducts ] = React.useState<Product[]>([]);
     const [buttonContent, setButtonContent] = React.useState<{
@@ -102,10 +106,37 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
         fetchProducts();
     }, [searchPost, dispatch]);
 
+    // Update post stats  
+    const updatePostStats = () => {
+    dispatch(updateSearchPostStats({
+        searchPostId: searchPost._id, 
+        stats: {
+        ...searchPost.stats,
+        clicks: 1, 
+        likelihoodIndex: 1, 
+        }}
+    ))
+    }
+
     // Handle Button Click
     const handleButtonClick = (storeSlug: string) => {
+        updatePostStats();
         navigate(`/stores/${storeSlug}`);
     };
+
+    // View All Button Click
+    const handleViewAllButtonClick = () => {
+        if (viewAllRoute) {
+            // Update post stats
+            updatePostStats()
+            navigate(viewAllRoute);
+        }
+    };
+
+    const handleImageClick = () => {
+        updatePostStats()
+    }
+    
 
     return (
         <div
@@ -114,7 +145,7 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
             className='w-full items-end py-6 ' 
         >
             {/* JSX content for the store carousel */}
-            <div onClick={() => {}} className="w-full px-3">
+            <div onClick={handleImageClick} className="w-full px-3">
                 <img
                     style={{
                         borderRadius: searchPost.style.content?.largeImage?.borderRadius ? `${searchPost.style.content.largeImage.borderRadius}` : '0px',
@@ -125,51 +156,78 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
                     className="w-full object-cover rounded-lg cursor-pointer"
                 />
             </div>
-            {/* Store slug */}
-            <p 
-                style={{
-                    backgroundColor: searchPost.style?.colors?.accentColor || 'transparent'
-                }}
-                className={`w-fit text-md px-1 text-white-500 my-4 ml-3`}>@{postText.storeSlug}</p>
-            {/* Text */}
-            <div className="ml-3">
-                <p className="font-semibold text-2xl">{postText.heading}</p>
-                <p className="text-semibold text-lg">{postText.subheading}</p>
-            </div>
-            {/* Button */}
-            <button
-                onClick={() => handleButtonClick(postText.storeSlug)}
-                className={`flex items-center justify-between space-x-2 my-4 mb-8 px-4 py-3 rounded bg-black text-white font-semibold hover:bg-opacity-90 transition-colors ml-3`}
-            >
-                <span className="">View Store</span> <GoArrowRight className='text-xl'/>
-            </button>
-            {/* Products */}
-            <Swiper
-                modules={[FreeMode, Scrollbar]}
-                freeMode={false}
-                scrollbar={{ draggable: true }}
-                spaceBetween={15} 
-                slidesPerView={Number(responsiveDimensionControl(isMobileOrTablet, searchPost.style.content?.carousel?.slidesPerView))}
-                speed={700}
-                className="px-2 pb-2 mt-4 pl-3"
-                style={{
-                    backgroundColor: searchPost.style?.colors?.carouselBackgroundColor || 'transparent',
-                }}
-            >
-                {products.map((product) => (
-                    <SwiperSlide key={product._id} className="pl-3 py-2">
-                        <ProductCardForStoreCarouselWithJSXAndProducts 
-                            product={product} 
-                            style={{
-                                accentColor: searchPost.style?.colors?.accentColor,
-                                aspectRatio: searchPost.style.content?.carousel?.imagesAspectRatio,
-                                borderRadius: searchPost.style.content?.carousel?.borderRadius,
-                            }}/>
+            {/* Details */}
+            <div className="">
+                {/* Store slug */}
+                <p 
+                    style={{
+                        backgroundColor: searchPost.style?.colors?.accentColor || 'transparent'
+                    }}
+                    className={`flex items-center w-fit text-md px-1 text-white-500 my-4 ml-3 font-semibold`}>
+                        @{postText.storeSlug}
+                        <span className="">
+                            {store?.isVerified && (
+                                <div className="">
+                                <MdVerified className="text-blue-500 text-sm ml-1" />
+                                </div>
+                            )}
+                        </span>
+                </p>
+                {/* Text */}
+                <div className="ml-3">
+                    <p className="font-semibold text-2xl">{postText.heading}</p>
+                    <p className="text-semibold text-lg">{postText.subheading}</p>
+                </div>
+                {/* Button */}
+                <button
+                    onClick={() => handleButtonClick(postText.storeSlug)}
+                    className={`flex items-center justify-between space-x-2 my-4 mb-8 px-4 py-3 rounded bg-black text-white font-semibold hover:bg-opacity-90 transition-colors ml-3`}
+                >
+                    <span className="">View Store</span> <GoArrowRight className='text-xl'/>
+                </button>
+                {/* Products */}
+                <Swiper
+                    modules={[FreeMode, Scrollbar]}
+                    freeMode={false}
+                    scrollbar={{ draggable: true }}
+                    spaceBetween={5} 
+                    slidesPerView={Number(responsiveDimensionControl(isMobileOrTablet, searchPost.style.content?.carousel?.slidesPerView))}
+                    speed={700}
+                    className="px-2 pb-2 mt-4 pl-3"
+                    style={{
+                        backgroundColor: searchPost.style?.colors?.carouselBackgroundColor || 'transparent',
+                    }}
+                >
+                    {products.map((product) => (
+                        <SwiperSlide key={product._id} className="pl-3 py-2">
+                            <ProductCardForStoreCarouselWithJSXAndProducts 
+                                product={product} 
+                                style={{
+                                    accentColor: searchPost.style?.colors?.accentColor,
+                                    aspectRatio: searchPost.style.content?.carousel?.imagesAspectRatio,
+                                    borderRadius: searchPost.style.content?.carousel?.borderRadius,
+                                }}/>
+                        </SwiperSlide>
+                    ))}
+                    {/* View All Button */}
+                    <SwiperSlide className="py-2">
+                        <div
+                        onClick={handleViewAllButtonClick}
+                        className="flex items-center justify-center w-full  space-x-3 bg-black/30 opacity-80 border border-gray-300"
+                        style={{
+                            aspectRatio: isDesktop
+                            ? (searchPost?.style?.content?.carousel?.imagesAspectRatio?.desktop || searchPost?.style?.content?.carousel?.imagesAspectRatio?.mobile || '5/3')
+                            : (searchPost?.style?.content?.carousel?.imagesAspectRatio?.mobile || '5/3')
+                        }}
+                        >
+                        <span className="text-xl font-semibold">View All</span><IoIosArrowRoundForward className="text-4xl" />
+                        </div>
                     </SwiperSlide>
-                ))}
-            </Swiper>
+                </Swiper>
+            </div>
         </div>
     )
 }
 
 export default StoreCarouselWithJSXAndProducts
+

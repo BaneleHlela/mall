@@ -11,6 +11,7 @@ import Menubar from "./components/the_mall/menubar/Menubar";
 import MyStores from "./pages/my_stores/MyStores";
 import Account from "./pages/account/Account";
 import StoreDashboard from "./pages/store_dashboard/StoreDashboard";
+import DriverDashboard from "./pages/driver_dashboard/DriverDashboard";
 import MyLayouts from "./pages/store_dashboard/supporting_pages/layouts/StoreDashboardLayouts";
 import { useDispatch } from "react-redux";
 import { setInitialLayout } from "./features/layouts/layoutSettingsSlice";
@@ -184,6 +185,14 @@ const AppContent: React.FC = () => {
           element={ 
             <ProtectedRoute>
               <StoreDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/driver-dashboard/*" 
+          element={ 
+            <ProtectedRoute>
+              <DriverDashboard />
             </ProtectedRoute>
           } 
         />

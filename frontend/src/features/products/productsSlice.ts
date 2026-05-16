@@ -177,7 +177,7 @@ export const updateProductIsActive = createAsyncThunk(
 // Update product stats
 export const updateProductStats = createAsyncThunk(
   'products/updateStats',
-  async ({ productId, stats }: { productId: string; stats: Partial<Product['stats']> }, thunkAPI) => {
+  async ({ productId, stats }: { productId: string; stats: Partial<Product['perfomanceStats']> }, thunkAPI) => {
     try {
       const res = await axios.patch(`${API_BASE}/stats/${productId}`, stats);
       return res.data as Product;

@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { HiArrowLeftEndOnRectangle, HiOutlineMinus, HiOutlinePlus } from 'react-icons/hi2';
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md';
 import { TbLoader3 } from 'react-icons/tb';
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { addToCart } from '../../../../features/cart/cartSlice';
-import { fetchProductBySlug } from '../../../../features/products/productsSlice';
+import { fetchProductBySlug, updateProductStats } from '../../../../features/products/productsSlice';
 import { updateSetting } from '../../../../features/layouts/layoutSettingsSlice';
 import { getBackgroundStyles, getTextStyles } from '../../../../utils/stylingFunctions';
 import UnderlinedText from '../../extras/text/UnderlinedText';
@@ -37,6 +37,7 @@ const SingleStoreProductSection = () => {
     const [specialRequest, setSpecialRequest] = useState("");
     const [quantity, setQuantity] = useState(1);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const hasUpdatedView = useRef(false);
     
     useEffect(() => {
         setQuantity(1);
@@ -44,9 +45,16 @@ const SingleStoreProductSection = () => {
         
     useEffect(() => {
         if (productSlug) {
-            dispatch(fetchProductBySlug(productSlug))
+            dispatch(fetchProductBySlug(productSlug));
         }
     }, [dispatch, productSlug])
+
+    useEffect(() => {
+        if (product?._id && !hasUpdatedView.current) {
+            hasUpdatedView.current = true;
+            dispatch(updateProductStats({ productId: product._id, stats: { views: 1 } }));
+        }
+    }, [product?._id, dispatch])
 
     useEffect(() => {
         if (!settings) {

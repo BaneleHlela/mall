@@ -1,11 +1,13 @@
-import { motion } from "framer-motion";
-import { Car, Clock, MapPin, Truck, Bike, ChevronLeft, ChevronRight, FileText, Upload } from "lucide-react";
-import { useState, useEffect, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Input from "../../components/the_mall/authentication/components/Input";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { createDriver } from "../../features/driver/driverSlice";
-import { TbLoader3 } from "react-icons/tb";
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { createDriver } from '../../features/driver/driverSlice';
+import { TbLoader3 } from 'react-icons/tb';
+import { IoClose, IoAlertCircle } from 'react-icons/io5';
+import { FaCheck, FaCar, FaTruck, FaMotorcycle, FaBicycle } from 'react-icons/fa';
+import LocationPicker from '../../components/the_mall/location/LocationPicker';
+import SetOperatingHours from '../../components/the_mall/shared_mall_components/SetOperatingHours';
 
 interface VehicleForm {
   type: 'bicycle' | 'motorbike' | 'car' | 'van' | 'truck';
@@ -32,20 +34,34 @@ interface DocumentsForm {
   vehicleRegistration: File | null;
 }
 
+interface Zone {
+  location: { lat: number; lng: number; address: string } | null;
+  radius: number;
+}
+
 interface DriverForm {
   vehicle: VehicleForm;
   operationTimes: OperationHours;
   alcoholDelivery: boolean;
   documents: DocumentsForm;
+  collectionZone: Zone;
+  deliveryZone: Zone;
 }
+
+const steps = ['Vehicle', 'Operating Hours', 'Collection Zone', 'Delivery Zone', 'Documents', 'Preferences'];
+const stepTitles = ['Vehicle Information', 'Operating Hours', 'Collection Zone', 'Delivery Zone', 'Verification Documents', 'Delivery Preferences'];
 
 const DriverSignUpPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector((state: any) => state.driver || { isLoading: false, error: null });
 
-  const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 4;
+  const [step, setStep] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
+  const [nextClicked, setNextClicked] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState<DriverForm>({
     vehicle: {
@@ -69,109 +85,163 @@ const DriverSignUpPage = () => {
       criminalClearance: null,
       driversLicence: null,
       vehicleRegistration: null,
-    }
+    },
+    collectionZone: { location: null, radius: 5 },
+    deliveryZone: { location: null, radius: 10 }
   });
 
+  const handleChange = (path: string, value: any) => {
+    if (path.startsWith('operationTimes.')) {
+      const key = path.replace('operationTimes.', '');
+      setFormData(prev => ({
+        ...prev,
+        operationTimes: { ...prev.operationTimes, [key]: value }
+      }));
+    } else {
+      const keys = path.split('.');
+      setFormData(prev => {
+        let current: any = { ...prev };
+        let obj = current;
+        for (let i = 0; i < keys.length - 1; i++) {
+          obj[keys[i]] = { ...obj[keys[i]] };
+          obj = obj[keys[i]];
+        }
+        obj[keys[keys.length - 1]] = value;
+        return current;
+      });
+    }
+  };
+
   const updateFormData = (section: keyof DriverForm, data: any) => {
-    setFormData(prev => ({
-      ...prev,
-      [section]: { ...prev[section], ...data }
-    }));
+    setFormData(prev => ({ ...prev, [section]: { ...prev[section], ...data } }));
   };
 
   const nextStep = () => {
-    // Validation for documents step
-    if (currentStep === 3) {
+    setNextClicked(true);
+    setSubmitError(null);
+
+    // Simple validation for documents
+    if (step === 4) {
       const requiredDocs = ['idOrPassport', 'criminalClearance'];
       if (formData.vehicle.type !== 'bicycle') {
         requiredDocs.push('driversLicence', 'vehicleRegistration');
       }
-
       const missingDocs = requiredDocs.filter(doc => !formData.documents[doc as keyof typeof formData.documents]);
-
       if (missingDocs.length > 0) {
-        alert(`Please upload the following required documents: ${missingDocs.join(', ')}`);
+        setSubmitError(`Please upload: ${missingDocs.join(', ')}`);
         return;
       }
     }
 
-    if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1);
+    if (step < steps.length - 1) {
+      setDirection(1);
+      setCompletedSteps(prev => new Set(prev).add(step));
+      setStep(step + 1);
+      setNextClicked(false);
     }
   };
 
   const prevStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
+    setSubmitError(null);
+    if (step > 0) {
+      setDirection(-1);
+      setStep(step - 1);
     }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(null);
+    setIsSubmitting(true);
     try {
       const resultAction = await dispatch(createDriver(formData));
       if (createDriver.fulfilled.match(resultAction)) {
-        // Navigate to success page or show success message
         console.log('Driver account created successfully');
       }
     } catch (err) {
-      console.error("Driver signup failed", err);
+      setSubmitError('Failed to create driver account');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const renderStepIndicator = () => (
-    <div className="flex justify-center mb-8">
-      {Array.from({ length: totalSteps }, (_, i) => (
-        <div key={i} className="flex items-center">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-            i + 1 === currentStep
-              ? 'bg-blue-600 text-white'
-              : i + 1 < currentStep
-                ? 'bg-green-600 text-white'
-                : 'bg-gray-300 text-gray-600'
-          }`}>
-            {i + 1}
-          </div>
-          {i < totalSteps - 1 && (
-            <div className={`w-12 h-1 mx-2 ${
-              i + 1 < currentStep ? 'bg-green-600' : 'bg-gray-300'
-            }`} />
-          )}
-        </div>
-      ))}
+  const handleClose = () => {
+    if (window.confirm('Are you sure you want to close?')) {
+      navigate(-1);
+    }
+  };
+
+  const handleNextStep = () => {
+    nextStep();
+  };
+
+  const StepProgress = () => (
+    <div className="w-full mb-4">
+      <div className="flex items-center justify-between relative">
+        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-[.4vh] bg-gray-200 rounded"></div>
+        <div 
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 h-[.4vh] bg-indigo-600 rounded transition-all duration-300"
+          style={{ width: `${(step / (steps.length - 1)) * 100}%` }}
+        ></div>
+        {steps.map((_, index) => {
+          const isCompleted = completedSteps.has(index) || index < step;
+          const isCurrent = index === step;
+          return (
+            <div key={index} className="relative z-10 flex flex-col items-center">
+              <button
+                type="button"
+                onClick={() => {
+                  if (index < step || completedSteps.has(index)) {
+                    setDirection(index < step ? -1 : 1);
+                    setStep(index);
+                  }
+                }}
+                disabled={index > step && !completedSteps.has(index)}
+                className={`w-[3vh] h-[3vh] rounded-full flex items-center justify-center text-[1.8vh] font-medium transition-all duration-200 
+                  ${isCompleted 
+                    ? 'bg-indigo-600 text-white hover:bg-indigo-700' 
+                    : isCurrent 
+                      ? 'bg-indigo-600 text-white ring-4 ring-indigo-200' 
+                      : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}
+                  ${index > step && !completedSteps.has(index) ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+              >
+                {isCompleted ? <FaCheck size={12} /> : index + 1}
+              </button>
+              <span className={`text-[1.4vh] mt-1 hidden sm:block ${isCurrent ? 'text-indigo-600 font-medium' : 'text-gray-500'}`}>
+                {steps[index].split(' ')[0]}
+              </span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 
   const renderVehicleStep = () => (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="space-y-6"
-    >
-      <div className="text-center mb-6">
-        <Car className="w-12 h-12 mx-auto mb-4 text-blue-600" />
-        <h3 className="text-2xl font-semibold">Vehicle Information</h3>
-        <p className="text-gray-600">Tell us about your delivery vehicle</p>
+    <div className="space-y-6">
+      <div className="text-center mb-4">
+        <FaCar className="w-12 h-12 mx-auto mb-2 text-indigo-600" />
+        <h3 className="text-lg font-semibold text-gray-800">Vehicle Information</h3>
+        <p className="text-xs text-gray-500">Tell us about your delivery vehicle</p>
       </div>
 
       <div>
-        <label className="text-lg font-medium mb-3 block">Vehicle Type</label>
+        <label className="text-sm font-semibold text-gray-700 mb-3 block">Vehicle Type</label>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {[
-            { value: 'bicycle', label: 'Bicycle', icon: Bike },
-            { value: 'motorbike', label: 'Motorbike', icon: Bike },
-            { value: 'car', label: 'Car', icon: Car },
-            { value: 'van', label: 'Van', icon: Truck },
-            { value: 'truck', label: 'Truck', icon: Truck }
+            { value: 'bicycle', label: 'Bicycle', icon: FaBicycle },
+            { value: 'motorbike', label: 'Motorbike', icon: FaMotorcycle },
+            { value: 'car', label: 'Car', icon: FaCar },
+            { value: 'van', label: 'Van', icon: FaTruck },
+            { value: 'truck', label: 'Truck', icon: FaTruck }
           ].map(({ value, label, icon: Icon }) => (
             <button
               key={value}
               type="button"
               onClick={() => updateFormData('vehicle', { type: value })}
-              className={`p-4 border-2 rounded-lg flex flex-col items-center space-y-2 transition-all ${
+              className={`p-4 border-2 rounded-xl flex flex-col items-center space-y-2 transition-all ${
                 formData.vehicle.type === value
-                  ? 'border-blue-600 bg-blue-50'
+                  ? 'border-indigo-600 bg-indigo-50'
                   : 'border-gray-300 hover:border-gray-400'
               }`}
             >
@@ -184,21 +254,21 @@ const DriverSignUpPage = () => {
 
       {formData.vehicle.type === 'truck' && (
         <div>
-          <label className="text-lg font-medium mb-3 block">Truck Category</label>
+          <label className="text-sm font-semibold text-gray-700 mb-2 block">Truck Category</label>
           <div className="space-y-2">
             {[
               { value: 'sand_and_blocks', label: 'Sand & Construction Materials' },
               { value: 'general', label: 'General Goods (Furniture, Appliances)' },
               { value: 'both', label: 'Both Categories' }
             ].map(({ value, label }) => (
-              <label key={value} className="flex items-center space-x-3">
+              <label key={value} className="flex items-center space-x-3 p-2">
                 <input
                   type="radio"
                   name="truckCategory"
                   value={value}
                   checked={formData.vehicle.truckCategory === value}
                   onChange={(e) => updateFormData('vehicle', { truckCategory: e.target.value })}
-                  className="w-4 h-4 text-blue-600"
+                  className="w-4 h-4 text-indigo-600"
                 />
                 <span className="text-sm">{label}</span>
               </label>
@@ -209,19 +279,19 @@ const DriverSignUpPage = () => {
 
       {formData.vehicle.type !== 'bicycle' && (
         <div>
-          <label className="text-lg font-medium mb-2 block">Registration Number (Optional)</label>
-          <Input
-            icon={Car}
+          <label className="text-sm font-semibold text-gray-700 mb-2 block">Registration Number (Optional)</label>
+          <input
             type="text"
             placeholder="Enter registration number"
-            value={formData.vehicle.registrationNumber}
+            value={formData.vehicle.registrationNumber || ''}
             onChange={(e) => updateFormData('vehicle', { registrationNumber: e.target.value })}
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-200"
           />
         </div>
       )}
 
       <div>
-        <label className="text-lg font-medium mb-2 block">Vehicle Images</label>
+        <label className="text-sm font-semibold text-gray-700 mb-2 block">Vehicle Images</label>
         <input
           type="file"
           multiple
@@ -232,306 +302,208 @@ const DriverSignUpPage = () => {
           }}
           className="w-full p-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 transition-colors"
         />
-        <p className="text-sm text-gray-500 mt-1">Upload clear photos of your vehicle (max 5 images)</p>
+        <p className="text-xs text-gray-500 mt-1">Upload clear photos of your vehicle</p>
       </div>
-    </motion.div>
+    </div>
   );
 
   const renderOperationHoursStep = () => (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="space-y-6"
-    >
-      <div className="text-center mb-6">
-        <Clock className="w-12 h-12 mx-auto mb-4 text-blue-600" />
-        <h3 className="text-2xl font-semibold">Operation Hours</h3>
-        <p className="text-gray-600">Set your availability for deliveries</p>
+    <SetOperatingHours 
+      operationTimes={formData.operationTimes} 
+      onChange={handleChange}
+      nextClicked={nextClicked}
+    />
+  );
+
+  const renderCollectionZoneStep = () => (
+    <div className="space-y-6">
+      <div className="text-center mb-4">
+        <p className="text-md text-gray-500 font-semibold">Set your pickup area and radius</p>
       </div>
-
-      <div className="flex items-center space-x-3 mb-6">
-        <input
-          type="checkbox"
-          id="alwaysOpen"
-          checked={formData.operationTimes.alwaysOpen}
-          onChange={(e) => updateFormData('operationTimes', { alwaysOpen: e.target.checked })}
-          className="w-5 h-5 text-blue-600"
-        />
-        <label htmlFor="alwaysOpen" className="text-lg font-medium">Always Open (24/7)</label>
-      </div>
-
-      {!formData.operationTimes.alwaysOpen && (
-        <div className="space-y-4">
-          {Object.entries(formData.operationTimes).map(([day, hours]) => {
-            if (day === 'alwaysOpen' || typeof hours !== 'object') return null;
-            const dayHours = hours as { start: string; end: string; closed: boolean };
-
-            return (
-              <div key={day} className="flex items-center space-x-4 p-4 border rounded-lg">
-                <div className="w-24 font-medium capitalize">{day}</div>
-                <input
-                  type="checkbox"
-                  checked={dayHours.closed}
-                  onChange={(e) => updateFormData('operationTimes', {
-                    [day]: { ...dayHours, closed: e.target.checked }
-                  })}
-                  className="w-4 h-4"
-                />
-                <span className="text-sm">Closed</span>
-                {!dayHours.closed && (
-                  <>
-                    <input
-                      type="time"
-                      value={dayHours.start}
-                      onChange={(e) => updateFormData('operationTimes', {
-                        [day]: { ...dayHours, start: e.target.value }
-                      })}
-                      className="px-3 py-1 border rounded"
-                    />
-                    <span>to</span>
-                    <input
-                      type="time"
-                      value={dayHours.end}
-                      onChange={(e) => updateFormData('operationTimes', {
-                        [day]: { ...dayHours, end: e.target.value }
-                      })}
-                      className="px-3 py-1 border rounded"
-                    />
-                  </>
-                )}
-              </div>
-            );
-          })}
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm space-y-6">
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Collection Location</label>
+          <div className="rounded-xl overflow-hidden border">
+            <LocationPicker radius={formData.collectionZone.radius} onLocationSelect={(loc: any) => updateFormData('collectionZone', { location: loc })} />
+          </div>
         </div>
-      )}
-    </motion.div>
+        <div>
+          <div className="flex justify-between items-center mb-2">
+            <label className="text-sm font-semibold text-gray-700">Radius (km)</label>
+            <span className="text-indigo-600 font-medium text-lg">{formData.collectionZone.radius}</span>
+          </div>
+          <input type="range" min="1" max="50" value={formData.collectionZone.radius} onChange={(e) => updateFormData('collectionZone', { radius: parseInt(e.target.value) })} className="w-full accent-indigo-600" />
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderDeliveryZoneStep = () => (
+    <div className="space-y-6">
+      <div className="text-center mb-4">
+        <p className="text-md font-semibold text-gray-500">Set your delivery area and radius</p>
+      </div>
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm space-y-6">
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Delivery Location</label>
+          <div className="rounded-xl overflow-hidden border">
+            <LocationPicker radius={formData.deliveryZone.radius} onLocationSelect={(loc: any) => updateFormData('deliveryZone', { location: loc })} />
+          </div>
+        </div>
+        <div>
+          <div className="flex justify-between items-center mb-2">
+            <label className="text-sm font-semibold text-gray-700">Radius (km)</label>
+            <span className="text-emerald-600 font-medium text-lg">{formData.deliveryZone.radius}</span>
+          </div>
+          <input type="range" min="1" max="50" step={0.5} value={formData.deliveryZone.radius} onChange={(e) => updateFormData('deliveryZone', { radius: parseInt(e.target.value) })} className="w-full accent-emerald-600" />
+        </div>
+      </div>
+    </div>
   );
 
   const renderDocumentsStep = () => (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="space-y-6"
-    >
-      <div className="text-center mb-6">
-        <FileText className="w-12 h-12 mx-auto mb-4 text-blue-600" />
-        <h3 className="text-2xl font-semibold">Verification Documents</h3>
-        <p className="text-gray-600">Upload required documents for verification</p>
+    <div className="space-y-4">
+      <div className="text-center mb-4">
+        <h3 className="text-lg font-semibold text-gray-800">Verification Documents</h3>
+        <p className="text-xs text-gray-500">Upload required documents</p>
       </div>
-
-      <div className="space-y-4">
-        {/* ID or Passport - Required */}
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            ID or Passport <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="file"
-            accept="image/*,.pdf"
-            onChange={(e) => {
-              const file = e.target.files?.[0] || null;
-              updateFormData('documents', { ...formData.documents, idOrPassport: file });
-            }}
-            className="w-full"
-          />
-          <p className="text-xs text-gray-500 mt-1">Upload a clear photo or scan of your ID or passport</p>
-          {formData.documents.idOrPassport && (
-            <p className="text-sm text-green-600 mt-1">✓ {formData.documents.idOrPassport.name}</p>
-          )}
-        </div>
-
-        {/* Criminal Clearance - Required */}
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Criminal Clearance Certificate <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="file"
-            accept="image/*,.pdf"
-            onChange={(e) => {
-              const file = e.target.files?.[0] || null;
-              updateFormData('documents', { ...formData.documents, criminalClearance: file });
-            }}
-            className="w-full"
-          />
-          <p className="text-xs text-gray-500 mt-1">Upload your criminal clearance certificate</p>
-          {formData.documents.criminalClearance && (
-            <p className="text-sm text-green-600 mt-1">✓ {formData.documents.criminalClearance.name}</p>
-          )}
-        </div>
-
-        {/* Driver's Licence - Required for non-bicycle */}
-        {formData.vehicle.type !== 'bicycle' && (
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+      {/* Document uploads - kept similar but styled lightly */}
+      <div className="space-y-3 text-sm">
+        {[
+          { key: 'idOrPassport', label: 'ID or Passport', required: true },
+          { key: 'criminalClearance', label: 'Criminal Clearance', required: true },
+          ...(formData.vehicle.type !== 'bicycle' ? [
+            { key: 'driversLicence', label: "Driver's Licence", required: true },
+            { key: 'vehicleRegistration', label: 'Vehicle Registration', required: true }
+          ] : [])
+        ].map(({ key, label, required }) => (
+          <div key={key} className="border-2 border-dashed border-gray-300 rounded-lg p-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Driver's Licence <span className="text-red-500">*</span>
+              {label} {required && <span className="text-red-500">*</span>}
             </label>
             <input
               type="file"
               accept="image/*,.pdf"
               onChange={(e) => {
                 const file = e.target.files?.[0] || null;
-                updateFormData('documents', { ...formData.documents, driversLicence: file });
+                updateFormData('documents', { [key]: file });
               }}
               className="w-full"
             />
-            <p className="text-xs text-gray-500 mt-1">Upload a photo of your driver's licence</p>
-            {formData.documents.driversLicence && (
-              <p className="text-sm text-green-600 mt-1">✓ {formData.documents.driversLicence.name}</p>
+            {formData.documents[key as keyof DocumentsForm] && (
+              <p className="text-sm text-green-600 mt-1">✓ {(formData.documents[key as keyof DocumentsForm] as File).name}</p>
             )}
           </div>
-        )}
-
-        {/* Vehicle Registration - Required for non-bicycle */}
-        {formData.vehicle.type !== 'bicycle' && (
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Vehicle Registration <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="file"
-              accept="image/*,.pdf"
-              onChange={(e) => {
-                const file = e.target.files?.[0] || null;
-                updateFormData('documents', { ...formData.documents, vehicleRegistration: file });
-              }}
-              className="w-full"
-            />
-            <p className="text-xs text-gray-500 mt-1">Upload your vehicle registration document</p>
-            {formData.documents.vehicleRegistration && (
-              <p className="text-sm text-green-600 mt-1">✓ {formData.documents.vehicleRegistration.name}</p>
-            )}
-          </div>
-        )}
+        ))}
       </div>
-
-      <div className="bg-yellow-50 p-4 rounded-lg">
-        <h4 className="font-medium mb-2 text-yellow-800">Important Notes:</h4>
-        <ul className="text-sm text-yellow-700 space-y-1">
-          <li>• All documents will be reviewed by our admin team</li>
-          <li>• Your account will remain in "pending" status until documents are verified</li>
-          <li>• You can update documents later if needed</li>
-          <li>• Only PDF and image files are accepted</li>
-        </ul>
-      </div>
-    </motion.div>
+    </div>
   );
 
   const renderPreferencesStep = () => (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="space-y-6"
-    >
-      <div className="text-center mb-6">
-        <MapPin className="w-12 h-12 mx-auto mb-4 text-blue-600" />
-        <h3 className="text-2xl font-semibold">Delivery Preferences</h3>
-        <p className="text-gray-600">Configure your delivery preferences</p>
+    <div className="space-y-6">
+      <div className="text-center mb-4">
+        <h3 className="text-lg font-semibold text-gray-800">Delivery Preferences</h3>
       </div>
-
-      <div className="space-y-4">
-        <div className="flex items-center space-x-3">
-          <input
-            type="checkbox"
-            id="alcoholDelivery"
-            checked={formData.alcoholDelivery}
-            onChange={(e) => updateFormData('alcoholDelivery', e.target.checked)}
-            className="w-5 h-5 text-blue-600"
-          />
-          <label htmlFor="alcoholDelivery" className="text-lg font-medium">
-            Accept alcohol deliveries
-          </label>
-        </div>
-        <p className="text-sm text-gray-500 ml-8">
-          Check this if you're willing to deliver orders containing alcohol
-        </p>
+      <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl">
+        <input type="checkbox" id="alcohol" checked={formData.alcoholDelivery} onChange={(e) => updateFormData('alcoholDelivery', e.target.checked)} className="w-5 h-5" />
+        <label htmlFor="alcohol" className="font-medium">Accept alcohol deliveries</label>
       </div>
-
-      <div className="bg-blue-50 p-4 rounded-lg">
-        <h4 className="font-medium mb-2">What's Next?</h4>
-        <ul className="text-sm text-gray-600 space-y-1">
-          <li>• Your account will be created with "pending" status</li>
-          <li>• Your documents will be reviewed by our admin team</li>
-          <li>• An admin will verify your documents and activate your account</li>
-          <li>• Once approved, you can start accepting deliveries</li>
+      <div className="bg-blue-50 p-4 rounded-lg text-sm">
+        <p className="font-medium mb-1">Next steps after submission:</p>
+        <ul className="text-gray-600 space-y-1 text-xs">
+          <li>• Account created with "pending" status</li>
+          <li>• Documents reviewed by admin</li>
+          <li>• Activated once verified</li>
         </ul>
       </div>
-    </motion.div>
+    </div>
   );
 
   const renderCurrentStep = () => {
-    switch (currentStep) {
-      case 1: return renderVehicleStep();
-      case 2: return renderOperationHoursStep();
-      case 3: return renderDocumentsStep();
-      case 4: return renderPreferencesStep();
+    switch (step) {
+      case 0: return renderVehicleStep();
+      case 1: return renderOperationHoursStep();
+      case 2: return renderCollectionZoneStep();
+      case 3: return renderDeliveryZoneStep();
+      case 4: return renderDocumentsStep();
+      case 5: return renderPreferencesStep();
       default: return null;
     }
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="max-w-4xl w-full min-h-screen flex flex-col p-6"
-    >
-      <div className="mb-8">
-        <Link to="/" className="text-blue-600 hover:underline flex items-center">
-          <ChevronLeft className="w-4 h-4 mr-1" />
-          Back to Home
-        </Link>
+    <div className="relative flex flex-col w-full h-full lg:max-w-[55vh] mx-auto p-4 bg-white shadow-xl rounded-2xl border border-gray-100 min-h-screen">
+      <div className="relative flex items-center justify-center w-full text-center h-16 mb-2">
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/70 to-purple-900/70 rounded-xl"></div>
+        <p className="font-[Lato] text-white text-[3.5vh] z-10 font-semibold drop-shadow-lg">Driver Sign Up</p>
       </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center">
-        <div className="w-full max-w-2xl">
-          {renderStepIndicator()}
+      <StepProgress />
 
-          <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8">
-            {renderCurrentStep()}
+      <div className="text-center mb-[1.2vh]">
+        <h2 className="text-lg font-semibold text-gray-800">{stepTitles[step]}</h2>
+        <p className="text-xs text-gray-500">Step {step + 1} of {steps.length}</p>
+      </div>
 
-            {error && <p className="text-red-500 font-semibold mt-4 text-center">{error}</p>}
+      <AnimatePresence custom={direction} mode="wait">
+        <motion.div
+          key={step}
+          custom={direction}
+          variants={{
+            enter: (dir: number) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
+            center: { x: 0, opacity: 1 },
+            exit: (dir: number) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0 }),
+          }}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: 0.3 }}
+          className="flex-1 overflow-y-auto min-h-0"
+        >
+          {renderCurrentStep()}
+        </motion.div>
+      </AnimatePresence>
 
-            <div className="flex justify-between mt-8">
-              <button
-                type="button"
-                onClick={prevStep}
-                disabled={currentStep === 1}
-                className="flex items-center px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                <ChevronLeft className="w-4 h-4 mr-2" />
-                Previous
-              </button>
-
-              {currentStep < totalSteps ? (
-                <button
-                  type="button"
-                  onClick={nextStep}
-                  className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  Next
-                  <ChevronRight className="w-4 h-4 ml-2" />
-                </button>
-              ) : (
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors"
-                >
-                  {isLoading ? (
-                    <TbLoader3 className="w-5 h-5 animate-spin mr-2" />
-                  ) : null}
-                  Create Driver Account
-                </button>
-              )}
-            </div>
-          </form>
+      {(submitError || error) && (
+        <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 p-3 rounded-lg border border-red-200 mb-3">
+          <IoAlertCircle size={18} />
+          <span>{submitError || error}</span>
         </div>
+      )}
+
+      <div className="flex flex-row justify-between items-center pt-3 border-t border-gray-100 mt-auto">
+        <button
+          type="button"
+          onClick={step === 0 ? handleClose : prevStep}
+          className="px-[1.6vh] py-[1vh] text-[1.8vh] font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2"
+        >
+          {step === 0 ? <><IoClose size={18} /> Close</> : 'Back'}
+        </button>
+
+        {step === steps.length - 1 ? (
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={isLoading || isSubmitting}
+            className="px-[2.2vh] py-[1vh] text-[1.8vh] font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-md disabled:bg-gray-400"
+          >
+            {isLoading || isSubmitting ? <TbLoader3 className="w-4 h-4 animate-spin" /> : <FaCheck size={14} />}
+            Create Driver Account
+          </button>
+        ) : (
+          <button
+            onClick={handleNextStep}
+            className="px-[2.2vh] py-[1vh] text-[1.8vh] font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-md"
+          >
+            Next
+          </button>
+        )}
       </div>
-    </motion.div>
+
+      <div className="absolute z-0 top-20 left-4 w-48 opacity-5 pointer-events-none">
+        <FaCar size={200} className="text-indigo-900" />
+      </div>
+    </div>
   );
 };
 

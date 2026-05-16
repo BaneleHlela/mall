@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { IoIosHeart, IoIosHeartEmpty } from 'react-icons/io';
 import type { Product } from '../../../../types/productTypes.ts';
 import { displayPrice } from '../../../../utils/helperFunctions.ts';
 import type { ResponsiveValue } from '../../../../types/layoutSettingsType.ts';
+import { toggleLike } from '../../../../features/user/userSlice.ts';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks.ts';
 
 interface StoreCarouselWithJSXAndProductsProps {
     product: Product;
@@ -15,8 +17,11 @@ interface StoreCarouselWithJSXAndProductsProps {
 }
 
 const ProductCardForStoreCarouselWithJSXAndProducts = ({ product, style }: StoreCarouselWithJSXAndProductsProps) => {
-    const [isLiked, setIsLiked] = useState(false);
+    const dispatch = useAppDispatch();
+    const user = useAppSelector(state => state.user.user);
     const navigate = useNavigate();
+
+    const isLiked = !!user?.favourites?.products?.some((id: any) => id.toString() === product._id.toString());
 
     const handleClick = () => {
         const storeSlug = typeof product.store === 'string' ? undefined : product.store.slug;
@@ -24,6 +29,14 @@ const ProductCardForStoreCarouselWithJSXAndProducts = ({ product, style }: Store
         navigate(`/stores/${storeSlug}/product/${product.slug}`);
     }
 
+    const handleLike = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!user) {
+            navigate('/login');
+            return;
+        }
+        dispatch(toggleLike({ targetType: 'Product', targetId: product._id }));
+    }
 
     return (
     <div className='w-full' onClick={handleClick}>
@@ -45,10 +58,7 @@ const ProductCardForStoreCarouselWithJSXAndProducts = ({ product, style }: Store
             )}
             {/* Favorite */}
             <div
-                onClick={(e) => { 
-                    e.stopPropagation(); 
-                    setIsLiked(prev => !prev); 
-                }} 
+                onClick={handleLike} 
                 className="absolute bottom-2 right-2">
                 {isLiked ? (
                     <IoIosHeart className={`text-[3vh] fill`}/>

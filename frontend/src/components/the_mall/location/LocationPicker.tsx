@@ -5,10 +5,11 @@ const centerFallback = {
   lng: 30.070856, // Johannesburg fallback
 };
 
-export default function LocationPicker({ onLocationSelect }: any) {
+export default function LocationPicker({ onLocationSelect, radius }: { onLocationSelect: (loc: any) => void; radius?: number }) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<any>(null);
+  const circleRef = useRef<google.maps.Circle | null>(null);
   const autocompleteInputRef = useRef<HTMLInputElement | null>(null);
   const [location, setLocation] = useState(centerFallback);
 
@@ -30,6 +31,19 @@ export default function LocationPicker({ onLocationSelect }: any) {
         position: initialLocation,
         map: mapInstance.current,
       });
+
+      // Init Circle if radius provided
+      if (radius && radius > 0) {
+        circleRef.current = new google.maps.Circle({
+          map: mapInstance.current,
+          center: initialLocation,
+          radius: radius * 1000,
+          fillColor: '#6366f1',
+          fillOpacity: 0.2,
+          strokeColor: '#6366f1',
+          strokeWeight: 2,
+        });
+      }
 
       // Init Autocomplete
       const autocomplete = new Autocomplete(autocompleteInputRef.current!);
@@ -90,6 +104,14 @@ export default function LocationPicker({ onLocationSelect }: any) {
       initMap(centerFallback);
     }
   }, []);
+
+  // Update circle when radius or location changes
+  useEffect(() => {
+    if (circleRef.current && location && radius && radius > 0) {
+      circleRef.current.setCenter(location);
+      circleRef.current.setRadius(radius * 1000);
+    }
+  }, [radius, location]);
 
   const reverseGeocode = async (lat: number, lng: number) => {
     const res = await fetch(

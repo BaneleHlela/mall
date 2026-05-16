@@ -2,7 +2,7 @@ export const dedaultBasicStoreCarousel = {
   style: {
     text: {
       heading: {
-        input: "New Basic Store Carousel"
+        input: "New Store Carousel"
       }
     },
     content: {

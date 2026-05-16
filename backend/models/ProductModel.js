@@ -56,7 +56,7 @@ const productSchema = new mongoose.Schema({
   category: {
     type:  String,
   },
-  stats: {
+  perfomanceStats: {
     views: {
       type: Number,
       default: 0,
@@ -79,11 +79,15 @@ const productSchema = new mongoose.Schema({
         default: 0,
         min: 0,
       },
-      reviews: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Review',
-      }],
     },
+    likes: {
+      count: { type: Number, default: 0, min: 0 },
+      users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    },
+    reviews: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Review',
+    }],
   },
   ratings: [{
     type: mongoose.Schema.Types.ObjectId,

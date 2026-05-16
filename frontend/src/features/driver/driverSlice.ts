@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/tool
 import api from "../api/axiosInstance";
 import { type Driver, type DriverState } from "../../types/driverTypes";
 import { API_URL } from "../context";
+import axios from 'axios';
 
 const DRIVER_API_URL = `${API_URL}/api/driver`;
 
@@ -45,7 +46,7 @@ export const createDriver = createAsyncThunk(
       }
 
       // Add vehicle images
-      driverData.vehicle.images.forEach((image, index) => {
+      driverData.vehicle.images.forEach((image) => {
         formData.append('vehicleImages', image);
       });
 
@@ -82,6 +83,32 @@ export const createDriver = createAsyncThunk(
   }
 );
 
+// Fetch driver profile
+export const fetchDriverProfile = createAsyncThunk(
+  'driver/fetchProfile',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get('/api/drivers/profile');
+      return response.data.driver;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch profile');
+    }
+  }
+);
+
+// Toggle live status
+export const toggleDriverLive = createAsyncThunk(
+  'driver/toggleLive',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/api/drivers/toggle-live');
+      return response.data.driver;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to toggle live status');
+    }
+  }
+);
+
 // --- Slice ---
 const driverSlice = createSlice({
   name: "driver",
@@ -102,6 +129,7 @@ const driverSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // createDriver
       .addCase(createDriver.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -114,6 +142,25 @@ const driverSlice = createSlice({
       .addCase(createDriver.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+      // fetchProfile
+      .addCase(fetchDriverProfile.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchDriverProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.driver = action.payload;
+      })
+      .addCase(fetchDriverProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // toggleLive
+      .addCase(toggleDriverLive.fulfilled, (state, action) => {
+        if (state.driver) {
+          state.driver.isLive = action.payload.isLive;
+        }
       });
   },
 });

@@ -122,7 +122,6 @@ const DriverSchema = new mongoose.Schema(
         message: "A driver cannot have more than 10 delivery zones.",
       },
     },
-
     // ── Documents ─────────────────────────────
     documents: {
       idOrPassport: {
@@ -142,7 +141,6 @@ const DriverSchema = new mongoose.Schema(
         default: null, // not required for bicycle drivers
       },
     },
-
     // ── Ratings ───────────────────────────────
     rating: {
       average: {
@@ -163,7 +161,6 @@ const DriverSchema = new mongoose.Schema(
       type: EarningsSchema,
       default: () => ({}),
     },
-
     // ── Soft Delete ───────────────────────────
     deletedAt: {
       type: Date,

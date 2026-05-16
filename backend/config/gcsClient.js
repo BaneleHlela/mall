@@ -18,11 +18,12 @@ export const uploadToUploads = async (fileBuffer, destFileName) => {
         },
       });
       console.log(`${destFileName} uploaded to ${uploadsBucket.name}`);
+      return `https://storage.googleapis.com/${uploadsBucket.name}/${destFileName}`;
     } catch (error) {
       console.error('Error uploading to the bucket:', error);
       throw new Error('Error uploading file');
     }
-};
+  };
 
 export const deleteFromUploads = async (filePath) => {
   await uploadsBucket.file(filePath).delete();

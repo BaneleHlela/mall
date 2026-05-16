@@ -284,6 +284,34 @@ const storeSchema = new mongoose.Schema(
       enum: ['demo', 'idle', 'live'],
       default: 'idle',
     },
+    perfomanceStats: {
+      visits: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
+      reviews: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Review',
+      }],
+      ratingSummary: {
+        averageRating: {
+          type: Number,
+          default: 0,
+          min: 0,
+          max: 5,
+        },
+        numberOfRatings: {
+          type: Number,
+          default: 0,
+          min: 0,
+        },
+      },
+      likes: {
+        count: { type: Number, default: 0, min: 0 },
+        users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+      },
+    },
     rating: {
       averageRating: {
         type: Number,

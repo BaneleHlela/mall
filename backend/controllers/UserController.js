@@ -508,3 +508,74 @@ export const refreshAccessToken = async (req, res) => {
 		res.status(500).json({ message: "Server error", error: error.message });
 	}
 };
+
+// Like / unlike handler for stores, products, etc.
+export const toggleLike = expressAsyncHandler(async (req, res) => {
+  const { targetType, targetId } = req.body;
+  const userId = req.user?._id;
+
+  if (!userId || !targetType || !targetId) {
+    res.status(400);
+    throw new Error('Missing required fields');
+  }
+
+  let Model;
+  switch (targetType) {
+    case 'Store': Model = (await import('../models/StoreModel.js')).default; break;
+    case 'Product': Model = (await import('../models/ProductModel.js')).default; break;
+    case 'Service': Model = (await import('../models/ServiceModel.js')).default; break;
+    case 'Rental': Model = (await import('../models/RentalModel.js')).default; break;
+    case 'Package': Model = (await import('../models/PackageModel.js')).default; break;
+    case 'Donation': Model = (await import('../models/DonationModel.js')).default; break;
+    default:
+      res.status(400);
+      throw new Error('Invalid targetType');
+  }
+
+  const doc = await Model.findById(targetId);
+  if (!doc) {
+    res.status(404);
+    throw new Error('Target not found');
+  }
+
+  const likes = doc.perfomanceStats.likes || { count: 0, users: [] };
+  const alreadyLiked = likes.users.some(id => id.toString() === userId.toString());
+
+  if (alreadyLiked) {
+    likes.users = likes.users.filter(id => id.toString() !== userId.toString());
+    likes.count = likes.users.length;
+  } else {
+    likes.users.push(userId);
+    likes.count = likes.users.length;
+  }
+
+  doc.perfomanceStats.likes = likes;
+  await doc.save();
+
+  // Also update user's favourites
+  const user = await User.findById(userId);
+  if (user) {
+    let favKey;
+    switch (targetType) {
+      case 'Store': favKey = 'stores'; break;
+      case 'Product': favKey = 'products'; break;
+      case 'Service': favKey = 'services'; break;
+      case 'Rental': favKey = 'rentals'; break;
+      case 'Package': favKey = 'packages'; break;
+      case 'Donation': favKey = 'donations'; break;
+    }
+    if (favKey) {
+      const favs = user.favourites[favKey] || [];
+      const idx = favs.findIndex(id => id.toString() === targetId.toString());
+      if (idx !== -1) {
+        favs.splice(idx, 1);
+      } else {
+        favs.push(targetId);
+      }
+      user.favourites[favKey] = favs;
+      await user.save();
+    }
+  }
+
+  res.status(200).json({ success: true, likes: doc.perfomanceStats.likes });
+});

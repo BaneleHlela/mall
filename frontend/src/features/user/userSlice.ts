@@ -247,6 +247,19 @@ export const unlikePackage = createAsyncThunk(
   }
 );
 
+// Toggle Like (Store/Product/Service/Rental/Package/Donation)
+export const toggleLike = createAsyncThunk(
+  "user/toggleLike",
+  async ({ targetType, targetId }: { targetType: string; targetId: string }, thunkAPI) => {
+    try {
+      const response = await api.post(`${USER_API_URL}/toggle-like`, { targetType, targetId });
+      return response.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to toggle like");
+    }
+  }
+);
+
 
 // --- Slice ---
 const userSlice = createSlice({
@@ -443,6 +456,40 @@ const userSlice = createSlice({
         }
       })
       .addCase(unlikePackage.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+
+      // Toggle Like (Store/Product/Service/Rental/Package/Donation)
+      .addCase(toggleLike.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(toggleLike.fulfilled, (state, action) => {
+        state.isLoading = false;
+        if (state.user) {
+          const { targetType, targetId } = action.meta.arg;
+          let favKey: keyof typeof state.user.favourites | undefined;
+          switch (targetType) {
+            case 'Store': favKey = 'stores'; break;
+            case 'Product': favKey = 'products'; break;
+            case 'Service': favKey = 'services'; break;
+            case 'Rental': favKey = 'rentals'; break;
+            case 'Package': favKey = 'packages'; break;
+            case 'Donation': favKey = 'donations'; break;
+          }
+          if (favKey) {
+            const favs = (state.user.favourites as any)[favKey] || [];
+            const idx = favs.findIndex((id: any) => id.toString() === targetId.toString());
+            if (idx !== -1) {
+              (state.user.favourites as any)[favKey] = favs.filter((_: any, i: number) => i !== idx);
+            } else {
+              (state.user.favourites as any)[favKey] = [...favs, targetId];
+            }
+          }
+        }
+      })
+      .addCase(toggleLike.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

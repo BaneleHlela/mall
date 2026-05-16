@@ -6,7 +6,7 @@ import { signup, login, logout,
     getProfile, getAddresses, userLoginStatus, updateUser,
     deleteUser, blockUser, unblockUser,
     verifyEmail, checkAuth, refreshAccessToken,
-    searchUsersByUsername, manageAvatar
+    searchUsersByUsername, manageAvatar, toggleLike
 } from "../controllers/UserController.js";
 import { checkBlocked, isAdmin, protectRoute } from "../middlewares/authMiddleware.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
@@ -37,5 +37,7 @@ router.put("/unblock-user/:id", protectRoute, isAdmin, unblockUser);
 
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
+
+router.post("/toggle-like", protectRoute, toggleLike);
 
 export default router

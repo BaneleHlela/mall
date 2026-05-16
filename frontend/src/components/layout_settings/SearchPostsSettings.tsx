@@ -12,6 +12,7 @@ import SettingsSlider from "./supporting/SettingsSlider";
 import ColorPicker from "./supporting/ColorPicker";
 import { useAppDispatch } from "../../app/hooks";
 import { updateSetting } from "../../features/searchPosts/searchPostSettingsSlice";
+import { departments } from "../../utils/helperObjects";
 
 interface SearchPostsSettingsProps {
   isOpen: boolean;
@@ -176,10 +177,10 @@ const SearchPostsSettings: React.FC<SearchPostsSettingsProps> = ({
                             type="number"
                             min={1}
                             max={100}
-                            value={searchPostSettings.likelihoodIndex}
+                            value={searchPostSettings.stats.likelihoodIndex}
                             onChange={(e) =>
                               dispatch(
-                                updateSetting({ field: 'likelihoodIndex', value: parseInt(e.target.value) })
+                                updateSetting({ field: 'stats.likelihoodIndex', value: parseInt(e.target.value) })
                               )
                             }
                             className="w-full px-1.5 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -206,40 +207,87 @@ const SearchPostsSettings: React.FC<SearchPostsSettingsProps> = ({
                          />
                        </div>
                      }
-                   />
-
-                   <SubSettingsContainer
-                     name="Colors"
-                     SettingsComponent={
-                       <div className="w-full space-y-3 p-2 overflow-y-scroll hide-scrollbar">
-                         {[
-                           { key: 'backgroundColor', label: 'Background' },
-                           { key: 'accentColor', label: 'Accent' },
-                           { key: 'carouselBackgroundColor', label: 'Carousel Background' },
-                         ].map(({ key, label }) => (
-                           <div
-                             key={key}
-                             className="flex flex-row justify-between items-center bg-white rounded-lg p-2 shadow-sm border border-stone-100"
-                           >
-                             <div className="flex items-center gap-2">
-                               <div
-                                 className="w-6 h-6 rounded-full border-2 border-stone-200 shadow-sm"
-                                 style={{
-                                   backgroundColor: searchPostSettings.style?.colors?.[key as keyof typeof searchPostSettings.style.colors] || '#000000'
-                                 }}
-                               />
-                               <span className="text-xs font-medium text-stone-600">{label}</span>
-                             </div>
-                             <ColorPicker
-                               label=""
-                               value={searchPostSettings.style?.colors?.[key as keyof typeof searchPostSettings.style.colors] || '#000000'}
-                               onChange={(e) => dispatch(updateSetting({ field: `style.colors.${key}`, value: e.target.value }))}
-                             />
-                           </div>
-                         ))}
-                       </div>
-                     }
-                   />
+                    />
+                    <SubSettingsContainer
+                      name="Departments"
+                      SettingsComponent={
+                        <div className="px-1.5 space-y-1.5">
+                          <div className="flex flex-wrap gap-1 mb-2">
+                            {(searchPostSettings.departments || []).map((dept: string) => (
+                              <span key={dept} className="inline-flex items-center px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                {departments[dept as keyof typeof departments]?.short || dept}
+                                <button
+                                  onClick={() =>
+                                    dispatch(updateSetting({
+                                      field: 'departments',
+                                      value: (searchPostSettings.departments || []).filter((d: string) => d !== dept)
+                                    }))
+                                  }
+                                  className="ml-1 text-blue-600 hover:text-blue-800"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            ))}
+                          </div>
+                          <select
+                            value=""
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (val && !(searchPostSettings.departments || []).includes(val)) {
+                                dispatch(updateSetting({
+                                  field: 'departments',
+                                  value: [...(searchPostSettings.departments || []), val]
+                                }));
+                              }
+                            }}
+                            className="w-full px-2 py-1 border border-slate-300 rounded text-sm"
+                          >
+                            <option value="">Add department...</option>
+                            {Object.keys(departments).filter(key => !(searchPostSettings.departments || []).includes(key)).map(key => (
+                              <option key={key} value={key}>
+                                {departments[key as keyof typeof departments].short}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      }
+                    />
+                     {searchPostSettings.variation === "carouselWithJSXAndProducts" && (
+                      <SubSettingsContainer
+                        name="Colors"
+                        SettingsComponent={
+                          <div className="w-full space-y-3 p-2 overflow-y-scroll hide-scrollbar">
+                            {[
+                              { key: 'backgroundColor', label: 'Background' },
+                              { key: 'accentColor', label: 'Accent' },
+                              { key: 'carouselBackgroundColor', label: 'Carousel Background' },
+                            ].map(({ key, label }) => (
+                              <div
+                                key={key}
+                                className="flex flex-row justify-between items-center bg-white rounded-lg p-2 shadow-sm border border-stone-100"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <div
+                                    className="w-6 h-6 rounded-full border-2 border-stone-200 shadow-sm"
+                                    style={{
+                                      backgroundColor: searchPostSettings.style?.colors?.[key as keyof typeof searchPostSettings.style.colors] || '#000000'
+                                    }}
+                                  />
+                                  <span className="text-xs font-medium text-stone-600">{label}</span>
+                                </div>
+                                <ColorPicker
+                                  label=""
+                                  value={searchPostSettings.style?.colors?.[key as keyof typeof searchPostSettings.style.colors] || '#000000'}
+                                  onChange={(e) => dispatch(updateSetting({ field: `style.colors.${key}`, value: e.target.value }))}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        }
+                      />
+                    )}
+                   
                  </div>
               </SlidingPanel>
             )}
@@ -441,29 +489,80 @@ const SearchPostsSettings: React.FC<SearchPostsSettingsProps> = ({
                        </div>
                      }
                    />
-                   <SubSettingsContainer
-                     name="Border Radius"
-                     SettingsComponent={
-                       <div className="px-1.5 space-y-1.5">
-                         <SettingsSlider
-                           label="Border Radius"
-                           value={parseFloat(searchPostSettings.style?.content?.carousel?.borderRadius || '0')}
-                           min={0}
-                           max={50}
-                           step={1}
-                           unit="px"
-                           onChange={(value) =>
-                             dispatch(
-                               updateSetting({
-                                 field: 'style.content.carousel.borderRadius',
-                                 value: `${value}px`,
-                               })
-                             )
-                           }
-                         />
-                       </div>
-                     }
-                   />
+                    <SubSettingsContainer
+                      name="Aspect Ratio"
+                      SettingsComponent={
+                        <div className="px-1.5 space-y-1.5">
+                          <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-2">
+                              Mobile Aspect Ratio
+                            </label>
+                            <input
+                              type="text"
+                              value={
+                                searchPostSettings.style?.content?.carousel?.imagesAspectRatio?.mobile ||
+                                '5/3'
+                              }
+                              onChange={(e) =>
+                                dispatch(
+                                  updateSetting({
+                                    field: 'style.content.carousel.imagesAspectRatio.mobile',
+                                    value: e.target.value,
+                                  })
+                                )
+                              }
+                              placeholder="e.g., 5/3"
+                              className="w-full px-1.5 py-2 border border-slate-300 rounded-lg"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-2">
+                              Desktop Aspect Ratio
+                            </label>
+                            <input
+                              type="text"
+                              value={
+                                searchPostSettings.style?.content?.carousel?.imagesAspectRatio?.desktop ||
+                                '5/3'
+                              }
+                              onChange={(e) =>
+                                dispatch(
+                                  updateSetting({
+                                    field: 'style.content.carousel.imagesAspectRatio.desktop',
+                                    value: e.target.value,
+                                  })
+                                )
+                              }
+                              placeholder="e.g., 5/3"
+                              className="w-full px-1.5 py-2 border border-slate-300 rounded-lg"
+                            />
+                          </div>
+                        </div>
+                      }
+                    />
+                    <SubSettingsContainer
+                      name="Border Radius"
+                      SettingsComponent={
+                        <div className="px-1.5 space-y-1.5">
+                          <SettingsSlider
+                            label="Border Radius"
+                            value={parseFloat(searchPostSettings.style?.content?.carousel?.borderRadius || '0')}
+                            min={0}
+                            max={50}
+                            step={1}
+                            unit="px"
+                            onChange={(value) =>
+                              dispatch(
+                                updateSetting({
+                                  field: 'style.content.carousel.borderRadius',
+                                  value: `${value}px`,
+                                })
+                              )
+                            }
+                          />
+                        </div>
+                      }
+                    />
                   <SubSettingsContainer
                     name="View All Button"
                     SettingsComponent={

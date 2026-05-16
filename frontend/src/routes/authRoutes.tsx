@@ -7,6 +7,7 @@ import ResetPasswordPage from "../pages/auth/ResetPasswordPage";
 import DriverSignUpPage from "../pages/auth/DriverSignUpPage";
 import RedirectAuthenticatedUser from "../components/the_mall/authorization/RedirectAuthenticatedUser";
 import OAuthCallback from "../components/the_mall/authorization/OAuthCallback";
+import ProtectedRoute from "../components/the_mall/authorization/ProtectedRoute";
 
 const authRoutes = [
   <Route key="signup" path="/signup" element={<SignUpPage />} />,
@@ -38,7 +39,13 @@ const authRoutes = [
       </RedirectAuthenticatedUser>
     }
   />,
-  <Route key="driver-signup" path="/driver-signup" element={<DriverSignUpPage />} />,
+  <Route key="driver-signup" path="/driver-signup" 
+    element={
+      <ProtectedRoute>
+        <DriverSignUpPage />
+      </ProtectedRoute>
+    } 
+    />,
   <Route path="/oauth-callback" element={<OAuthCallback />} />
 ];
 

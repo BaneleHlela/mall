@@ -1184,6 +1184,20 @@ export const getSearchPostStores = expressAsyncHandler(async (req, res) => {
         .populate('team.member');
       res.status(200).json(stores);
     }
+    if (type === "new-basic-store-carousel") {
+      const stores = await Store.find({ isDeleted: { $ne: true } })
+        .sort({ 'rating.averageRating': -1 })
+        .limit(5)
+        .populate('team.member');
+      res.status(200).json(stores);
+    }
+    if (type === "most-viewed-in-food") {
+      const stores = await Store.find({ isDeleted: { $ne: true } })
+        .sort({ 'rating.averageRating': -1 })
+        .limit(5)
+        .populate('team.member');
+      res.status(200).json(stores);
+    }
     else if (type === "highest-rated-in-food") {
       const stores = await Store.find({
         departments: 'food',

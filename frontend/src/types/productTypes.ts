@@ -33,7 +33,7 @@ export interface Product {
     category?: string;
     isActive?: boolean;
     tags?: string[];
-    stats: ProductStats;
+    perfomanceStats: ProductStats;
     ratings: string[];
     visits: number;
 }
