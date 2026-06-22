@@ -130,7 +130,15 @@ const MallSearchPage = () => {
   };
 
   const handleDepartmentSelect = (deptKey: string) => {
-    setSelectedDepartment(deptKey === selectedDepartment ? null : deptKey);
+    const newDept = deptKey === selectedDepartment ? null : deptKey;
+    setSelectedDepartment(newDept);
+    const params = new URLSearchParams(location.search);
+    if (newDept) {
+      params.set('department', newDept);
+    } else {
+      params.delete('department');
+    }
+    navigate(`/search?${params.toString()}`);
   };
 
   const handleSelectRelevance = (option: { key: string; label: string }) => {
@@ -187,7 +195,12 @@ const MallSearchPage = () => {
               className="flex items-center overflow-x-auto hide-scrollbar space-x-1 lg:space-x-2 w-full h-full px-[6vh] relative"
             >
               <button
-                onClick={() => setSelectedDepartment(null)}
+                onClick={() => {
+                  setSelectedDepartment(null);
+                  const params = new URLSearchParams(location.search);
+                  params.delete('department');
+                  navigate(`/search?${params.toString()}`);
+                }}
                 className={`whitespace-nowrap px-[1.4vh] py-[.6vh] text-[1.6vh] transition-all ${
                   selectedDepartment === null
                     ? 'bg-gray-900 text-white rounded-full'
@@ -321,7 +334,12 @@ const MallSearchPage = () => {
               </div>
             </div>
             <button
-              onClick={() => setSelectedDepartment(null)}
+              onClick={() => {
+                setSelectedDepartment(null);
+                const params = new URLSearchParams(location.search);
+                params.delete('department');
+                navigate(`/search?${params.toString()}`);
+              }}
               className="p-[1vh] hover:bg-white/10 rounded-full transition-colors"
             >
               <MdClose className="text-[2.2vh]" />

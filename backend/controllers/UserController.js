@@ -348,8 +348,8 @@ export const updateUser = expressAsyncHandler(async (req, res) => {
         await Store.findByIdAndUpdate(
           storeId,
           {
-            $inc: { "likes.count": 1 },
-            $addToSet: { "likes.users": userId } // prevents duplicates
+            $inc: { "performanceStats.likes.count": 1 },
+            $addToSet: { "performanceStats.likes.users": userId } // prevents duplicates
           },
           { new: true }
         );
@@ -363,8 +363,8 @@ export const updateUser = expressAsyncHandler(async (req, res) => {
         await Store.findByIdAndUpdate(
           storeId,
           {
-            $inc: { "likes.count": -1 },
-            $pull: { "likes.users": userId }
+            $inc: { "performanceStats.likes.count": -1 },
+            $pull: { "performanceStats.likes.users": userId }
           },
           { new: true }
         );

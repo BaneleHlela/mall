@@ -5,12 +5,13 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
+  service: "gmail",
   secure: true,
   host: process.env.SMTP_HOST,
   port: 465,
   auth: {
     user: process.env.SMTP_USER,
-    pass: process.env.NEO_EMAIL_PASSWORD,
+    pass: process.env.GMAIL_APP_PASSWORD,
   },
 });
 

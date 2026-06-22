@@ -42,7 +42,7 @@ const StoreBundleCarouselCard: React.FC<StoreBundleCarouselCardProps> = ({ store
     e.stopPropagation();
     
     if (!user) {
-      alert('Please log in to manage favorites.');
+      navigate('redirect=%2Fsearch');
       return;
     }
 
@@ -104,8 +104,8 @@ const StoreBundleCarouselCard: React.FC<StoreBundleCarouselCardProps> = ({ store
             
             {/* Verified Badge */}
             {store.isVerified && (
-              <div className="bg-white/90 backdrop-blur-sm rounded-full p-1 shadow-lg">
-                <MdVerified className="text-blue-500 text-sm" />
+              <div className="rounded-full shadow-lg">
+                <MdVerified className="text-blue-500 text-lg" />
               </div>
             )}
           </div>
@@ -120,12 +120,12 @@ const StoreBundleCarouselCard: React.FC<StoreBundleCarouselCardProps> = ({ store
           {/* Favorite Button */}
           <button
             onClick={handleFavoriteClick}
-            className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg transition-all duration-200 hover:bg-white hover:scale-110"
+            className="absolute bottom-2 right-2 rounded-full p-1 shadow-lg transition-all duration-200 hover:bg-white hover:scale-110"
           >
             {isFavorite ? (
-              <GoHeartFill className="text-rose-500 text-lg" />
+              <GoHeartFill className="text-rose-500 text-2xl" />
             ) : (
-              <GoHeart className="text-gray-600 text-lg" />
+              <GoHeart className="text-white text-2xl" />
             )}
           </button>
         </div>

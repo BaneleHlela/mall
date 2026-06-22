@@ -49,30 +49,36 @@ const StoreBundleCarousel: React.FC<StoreBundleCarouselProps> = ({
     return () => window.removeEventListener('resize', checkIsDesktop);
   }, []);
 
+  // Define config object - cleaner and maintainable
+  const carouselConfig: Record<string, { limit?: number; viewAllRoute?: string }> = {
+    "new-basic-store-carousel": { limit: 5 },
+    "most-viewed-in-food": { 
+      limit: 5,  
+      viewAllRoute: "/search?department=food&sort=most-viewed"
+    },
+    "top-rated-on-the-mall": { viewAllRoute: "/search?sort=top-rated" }
+  };
+
   // Type effects
   useEffect(() => {
-    const fetchStores = async () => {
-      // Return top 6 stores if variation is "new-basic-store-carousel"
-      if (searchPost && searchPost.type === "new-basic-store-carousel") {
-        const results = await dispatch(fetchSearchPostStores(searchPost.type));
-        console.log(results)
-        setStores((results.payload as Store[]).slice(0, 6));
+    if (!searchPost) return;
+
+    const config = carouselConfig[searchPost.type];
+    if (!config) return;
+
+    const fetchData = async () => {
+      const results = await dispatch(fetchSearchPostStores(searchPost.type));
+      const stores = results.payload as Store[];
+      
+      setStores(config.limit ? stores.slice(0, config.limit) : stores);
+      if (config.viewAllRoute) {
+        setViewAllRoute(config.viewAllRoute);
+        setHeaderRoute(config.viewAllRoute);
       }
-      if (searchPost && searchPost.type === "most-viewed-in-food") {
-        const results = await dispatch(fetchSearchPostStores(searchPost.type));
-        console.log(results)
-        setStores((results.payload as Store[]).slice(0, 6));
-      }
-      if (searchPost && searchPost.type === "top-rated-on-the-mall") {
-        setViewAllRoute("/search?sort=top-rated");
-        setHeaderRoute("/search?sort=top-rated");
-        // Fetch post stores and set them as local stores
-        const results = await dispatch(fetchSearchPostStores(searchPost.type));
-        setStores(results.payload as Store[]);
-      }
-    }
-    fetchStores();
-  }, [searchPost]);
+    };
+
+    fetchData();
+  }, [searchPost, dispatch]);
   
   // Style effects
   useEffect(() => {
@@ -127,11 +133,13 @@ const StoreBundleCarousel: React.FC<StoreBundleCarouselProps> = ({
       className="w-full pl-3 py-3 border-b-2 border-gray-200">
       {/* Heading */}
       <div onClick={handleHeaderClick} className="flex w-full items-center justify-between pl-0 p-2">
-        <h2 className="text-[22px] font-semibold text-gray-800">
+        <h2 className="text-[22px] font-semibold text-gray-800 capitalize">
           {postText.heading}
         </h2>
 
-        <button className="rounded-full bg-gray-100 p-2 transition hover:bg-gray-200">
+        <button 
+          onClick={handleHeaderClick}
+          className="rounded-full bg-gray-100 p-2 transition hover:bg-gray-200">
           <FiArrowRight className="text-lg text-black" />
         </button>
       </div>
