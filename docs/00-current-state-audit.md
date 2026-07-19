@@ -13,7 +13,7 @@ Edits a `StoreLayout` document. Shell: `TopBar` (exit/save/undo/redo/device-sele
 - **Preview sync**: the parent posts the *entire* `layoutSettings` Redux state into the iframe on every change (`iframe.contentWindow.postMessage({ layoutSettings: settings }, "*")`, see `Layouts.tsx`). The iframe's `src` is an in-app preview route (`/layouts/:id/preview/*`) rendering the real storefront components — not a sandboxed document.
 - **Content model**: a page (`route`) is an ordered list of section keys (`routes.home.contains: ["hero","about",...]`), reorderable via `@dnd-kit`'s `SortableContext` in the settings panel. Each section key maps to a **hardcoded React component** via a `sectionMap` in `StoreHomePage.tsx` (and equivalents for other routes).
 - **Variations**: most section components branch internally on a `variation` string (e.g. About has 7: `aboutWithImageNextToText`, `aboutWithImageBehindText`, `doctorAbout`, `shortAbout`, ...). Each variation is its own hand-built render component **and** its own hand-built settings-form component, wired through two parallel `switch` statements that have to be kept in sync manually (`getSectionComponent` in the render tree, `renderSettings` in the settings panel).
-- **Defaults**: each variation has a bespoke, deeply-nested default-config file under `frontend/src/utils/defaults/sections/**` (e.g. `defaultHeroWithReviewCardAndEmailFormConfig.ts`). Separately, `frontend/src/major_updates/mockLayout.ts` is a giant mock object that several *live* section components fall back to directly when Redux state is empty — tangled into production code, not just a dev fixture, and at least one fallback is mismatched (`FastFoodFooter.tsx` falls back to `mockLayout.sections.about`).
+- **Defaults**: each variation has a bespoke, deeply-nested default-config file under `frontend/src/utils/defaults/sections/**` (e.g. `defaultHeroWithReviewCardAndEmailFormConfig.ts`). Separately, `frontend/src/major_updates/mockLayout.ts` is a giant hand-written mock object with six known importers, tangled into production code rather than kept as a dev fixture. It's not one consistent problem: `FastFoodFooter.tsx` had a mismatched fallback (fixed — see `04-phase-0-findings.md`); `EnnockHero.tsx` isn't using it as a fallback at all — it's the *only* source of that variant's styling, so that variant isn't actually editable through Redux/the settings panel today; a few other importers look like dead imports pending a closer look. Full breakdown in `04-phase-0-findings.md`.
 - **Undo/redo**: `layoutSettingsSlice.ts` keeps a `_history: Layout[]` array of full state snapshots + `_historyIndex`, pushed on every `updateSetting` call (unless `skipHistory`).
 - **Autosave**: 500ms-debounced. Dirty fields are tracked by diffing current vs. last-saved state, but only for fields explicitly listed in two hand-maintained arrays (`PARTIAL_UPDATE_FIELDS`, `SECTION_FIELDS` in `WebsiteBuilder.tsx`) — a new top-level or section field silently won't autosave until someone remembers to add it here.
 - **Screenshots**: captured via Puppeteer/Playwright against the preview route, uploaded to GCS (`captureLayoutScreenshot`), used as layout thumbnails.
@@ -36,15 +36,15 @@ Same shell pattern (TopBar/Settings/Preview/device/zoom/undo-redo), edits a sing
 
 Frontend `package.json` has some redundant/overlapping choices worth resolving as part of this work rather than around it:
 
-| Concern | Installed | Recommendation |
+| Concern | Installed | Status |
 |---|---|---|
-| Drag & drop | `@dnd-kit/*` **and** `react-dnd` + `react-dnd-html5-backend` | Standardize on `@dnd-kit` (already doing the real work); drop `react-dnd` once confirmed unused |
-| Rich text | `@tiptap/*` v3 **and** legacy `tiptap` v1 (has a Vue peer dependency — can't actually run in this React app) | Keep `@tiptap/*` v3 only |
-| UI components | MUI, Headless UI, Radix (direct), `@shadcn/ui` | Pick one foundation — see `01-website-builder-architecture.md` §3 |
-| Styling | Tailwind v4 + `sass-embedded` | Tailwind is doing the real work; confirm whether Sass is still needed anywhere |
-| State | Redux Toolkit (dominant, deeply wired) + `zustand` present | Worth a quick audit of what zustand is used for; keep new builder state in Redux Toolkit for consistency |
+| Drag & drop | `@dnd-kit/*` only | **Resolved.** `react-dnd` was in real use (`OrderDnD.tsx`), ported to `@dnd-kit`, dependency removed. See `04-phase-0-findings.md`. |
+| Rich text | `@tiptap/*` v3 only | **Resolved.** Legacy `tiptap` v1 had no real usage; removed. |
+| UI components | MUI (real: `Slider` in `SettingsSlider.tsx` + an icon in 5 files), Headless UI (real: `Listbox` in the booking flow), Radix (unused directly, kept for later), `@shadcn/ui` (removed — not real shadcn) | **Resolved.** MUI and Headless UI both stay — genuinely used. New vendor-facing primitives (Phase 2) use the shadcn pattern instead of adding to either. See `04-phase-0-findings.md`. |
+| Styling | Tailwind v4 + `sass-embedded` | **Still open.** Tailwind is doing the real work; confirm whether Sass is still needed anywhere. |
+| State | Redux Toolkit only | **Resolved.** `zustand` had no real usage found; removed. |
 
-None of this blocks the rebuild, but it's cheap to clean up alongside it (see `03-roadmap.md` Phase 0) rather than let it keep growing.
+Backend has the same "hand-maintained list that silently goes stale" pattern as the frontend's autosave field arrays: `StoreLayoutController.js`'s `updateLayoutConfig` checks each `sections.*` key individually in a long if-chain rather than assigning the object once — another thing the generic `tree` shape in `02-database-schema.md` removes by construction.
 
 ## What's already good and worth keeping
 

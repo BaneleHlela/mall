@@ -13,6 +13,7 @@ import { Toaster } from 'react-hot-toast';
 import toast from 'react-hot-toast';
 import { useNavbar } from '../../../utils/context/NavbarContext';
 import { fetchSearchPosts } from '../../../features/searchPosts/searchPostSlice';
+import { fetchStoreBySlug, setCurrentStore } from '../../../features/stores/storeSlice';
 
 
 const SearchPostsEditorContent = () => {
@@ -32,6 +33,18 @@ const SearchPostsEditorContent = () => {
   const isEditingMode = !!postId;
 
   hideNavbar();
+
+  useEffect(() => {
+    dispatch(fetchStoreBySlug("themall"))
+      .unwrap()
+      .then((store) => {
+        dispatch(setCurrentStore(store));
+      })
+      .catch((err) => {
+        console.error("Failed to fetch themall store:", err);
+      });
+  }, [dispatch]);
+
   // Update zoom when device changes
   useEffect(() => {
     setZoom(sizeMap[device].scale);

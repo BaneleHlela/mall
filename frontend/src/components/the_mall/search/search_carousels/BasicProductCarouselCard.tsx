@@ -10,9 +10,10 @@ import { updateProductStats } from '../../../../features/products/productsSlice.
 
 interface ProductsCarouselWithAddToCartButtonCardProps {
   product: Product;
+  aspectRatio?: string;
 }
 
-const BasicProductCarouselCard = ({ product }: ProductsCarouselWithAddToCartButtonCardProps) => {
+const BasicProductCarouselCard = ({ product, aspectRatio }: ProductsCarouselWithAddToCartButtonCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -29,7 +30,7 @@ const BasicProductCarouselCard = ({ product }: ProductsCarouselWithAddToCartButt
   return (
   <div className='w-full' onClick={() => handleClick({ product })}>
       {/* Image */}
-      <div className="relative w-full aspect-4/4">
+      <div className="relative w-full" style={{ aspectRatio: aspectRatio || '1/1' }}>
           {/*  */}
           <img 
               src={product.images?.[0] || ''} alt={product.name}

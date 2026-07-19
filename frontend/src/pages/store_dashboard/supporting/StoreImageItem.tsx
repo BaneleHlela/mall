@@ -35,7 +35,7 @@ const StoreImageItem: React.FC<StoreImageItemProps> = ({ img, onDelete, onUse })
       {/* Action Buttons */}
       {showOptions && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-3">
-          {(link.includes("posters") || link.includes("layouts") || link.includes('thumbnails')) && (
+          {(link.includes("posters") || link.includes("layouts") || link.includes('thumbnails')) || link.includes('search-posts') && (
             <button 
               onClick={() => onUse(img.url)}
               className="flex items-center gap-2 w-full max-w-[140px] justify-center bg-white/95 backdrop-blur-sm text-slate-700 px-3 py-2 rounded-lg hover:bg-white transition-all text-sm font-medium shadow-lg"

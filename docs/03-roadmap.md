@@ -4,14 +4,19 @@ _Last updated: 2026-07-03_
 
 Phased so each step ships something verifiable and nothing is a big-bang rewrite. Check off / annotate as we go — this file should reflect actual status, not the original plan. Update `00-current-state-audit.md` as items here land.
 
-## Phase 0 — Foundation cleanup (parallel to everything else)
-- [ ] Decide + document: `@dnd-kit` only, drop `react-dnd` (confirm nothing depends on it first)
-- [ ] Decide + document: `@tiptap/*` v3 only, drop legacy `tiptap` v1
-- [ ] Decide UI primitive foundation (recommend `@shadcn/ui` + Tailwind — see `01-website-builder-architecture.md` §3); no silent full migration, just stop growing the other three
-- [ ] Remove `backend/models/NewStoreLayout.js` (confirm truly unused first)
-- [ ] Fix or scope down `frontend/src/major_updates/mockLayout.ts` fallback usage, starting with the mismatched `FastFoodFooter` → `sections.about` fallback
+## Phase 0 — Foundation cleanup ✅ applied 2026-07-03 (parallel to everything else)
+- [x] `@dnd-kit` only, drop `react-dnd` — applied and verified via live grep (4 call sites, all `*MenubarSettings.tsx`), `npm run build` passes. Browser smoke-test of the drag-reorder UI still outstanding.
+- [x] `@tiptap/*` v3 only, drop legacy `tiptap` v1 — applied, verified via live grep.
+- [x] Decide UI primitive foundation — **corrected from the first pass**: MUI has real usage (`Slider` in `SettingsSlider.tsx`, an icon in 5 files) and is staying installed, not just "one icon" as first estimated. Headless UI also stays (booking flow). `@shadcn/ui` npm package (not real shadcn) removed. Going with the shadcn *pattern* (Radix + Tailwind + `cva`, source copied in) for the new Phase 2 vendor-facing primitives specifically — doesn't require touching MUI or Headless UI's existing usage. Reasoning: `04-phase-0-findings.md`.
+- [x] Remove `backend/models/NewStoreLayout.js` — applied, verified via live grep.
+- [x] Fix the mismatched `FastFoodFooter` → `sections.about` fallback — key fixed; a residual data-shape mismatch remains (no `logo`, wrong `text` keys) and is intentionally deferred to Phase 1.
+- [x] (bonus) `zustand` — applied, verified via live grep.
+- [x] (bonus) `@shadcn/ui` — applied, verified via live grep.
+
+**Corrections found during application** (search-based estimates vs. live-repo reality): `mockLayout.ts` has ~20 importers, not the 6 originally catalogued — full inventory deferred to Phase 1. MUI's usage was undercounted (see above). Full detail: `04-phase-0-findings.md`.
 
 ## Phase 1 — Data model + registry skeleton
+- [ ] **Complete inventory pass first** (live repo, not search-index) — full catalog of every section type + variation (render component, settings component, current default-config shape), every `mockLayout.ts` importer (~20, not the 6 in `04-phase-0-findings.md`) with its usage pattern, written to `docs/05-phase-1-inventory.md`. Phase 0 showed search-index estimates undercount real scope by ~3x — don't design the registry schema against an incomplete list.
 - [ ] Add `draftTree` / `tree`-shaped fields alongside legacy `StoreLayout` fields (additive, see `02-database-schema.md`)
 - [ ] Stand up the code-based component registry with existing section+variation pairs mapped 1:1 (no visual changes — this is re-plumbing, not a redesign)
 - [ ] Write the legacy → tree converter

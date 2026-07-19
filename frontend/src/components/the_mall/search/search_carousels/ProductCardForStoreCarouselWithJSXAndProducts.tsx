@@ -41,7 +41,7 @@ const ProductCardForStoreCarouselWithJSXAndProducts = ({ product, style }: Store
     return (
     <div className='w-full' onClick={handleClick}>
         {/* Image */}
-        <div className="relative w-full aspect-3/4">
+        <div className="relative w-full">
             {/*  */}
             <img
                 style={{

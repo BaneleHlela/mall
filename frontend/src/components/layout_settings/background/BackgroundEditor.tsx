@@ -6,6 +6,7 @@ import SettingsSlider from "../supporting/SettingsSlider";
 import SubSettingsContainer from "../extras/SubSettingsContainer";
 import BorderEditor from "./BorderEditor";
 import MultipleLayoutImagesHandler from "../supporting/MultipleLayoutImagesHandler";
+import PositionField from "../supporting/PositionField";
 
 interface BackgroundEditorProps extends EditorProps {
   responsivePadding?: boolean;
@@ -401,246 +402,174 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
 
       {/* Placement Section */}
       {isAllowed("placement") && (
-        <div className="bg-white rounded-xl p-[1.5vh] shadow-sm border border-stone-100 space-y-[1vh]">
-          <h4 className="text-[1.6vh] font-semibold text-stone-500 uppercase tracking-wide">Positioning</h4>
-          
-          {/* Absolute Positioning Toggle */}
-          <OptionsToggler
-            label="isAbsolute"
-            options={["Yes", "No"]}
-            value={getSetting("placement.isAbsolute", settings, objectPath) ? "Yes" : "No"}
-            onChange={(newValue) =>
-              handleSettingChange(`${objectPath}.placement.isAbsolute`, newValue === "Yes")
-            }
-          />
-          
-            {/* Items Positioning */}
-            {/* Items Position X */}
-            <OptionsToggler
-              label="Items Position X"
-              options={["start", "center", "end", "evenly", "between"]}
-              value={getSetting("placement.itemsPosition.x", settings, objectPath) || "center"}
-              onChange={(newValue) =>
-                handleSettingChange(`${objectPath}.placement.itemsPosition.x`, newValue)
-              }
-            />
-            {/* Items Position Y */}
-            <OptionsToggler
-              label="Items Position Y"
-              options={["start", "center", "end", "evenly", "between"]}
-              value={getSetting("placement.itemsPosition.y", settings, objectPath) || "center"}
-              onChange={(newValue) =>
-                handleSettingChange(`${objectPath}.placement.itemsPosition.y`, newValue)
-              }
-            />
-
-          {/* Show horizontalPlacement and margins when NOT absolute */}
-          {!getSetting("placement.isAbsolute", settings, objectPath) && (
-            <>
-              
-              
-            <OptionsToggler
-              label="Position"
-              options={["start", "center", "end"]}
-              value={getSetting("placement.position", settings, objectPath) || "start"}
-              onChange={(newValue) =>
-                handleSettingChange(`${objectPath}.placement.position`, newValue)
-              }
-            />
-              
-              {/* Margin Top - Mobile & Desktop */}
-              <h5 className="text-[1.4vh] font-medium text-stone-400">Margin Top</h5>
-              <SettingsSlider
-                label="Mobile"
-                value={parseFloat(getSetting("placement.marginTop.mobile", settings, objectPath) || "0")}
-                unit="vh"
-                step={0.1}
-                min={0}
-                max={20}
-                onChange={(newVal) => {
-                  const event = {
-                    target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
-                  } as React.ChangeEvent<HTMLInputElement>;
-                  handleChange("placement.marginTop.mobile")(event);
-                }}
-              />
-              <SettingsSlider
-                label="Desktop"
-                value={parseFloat(getSetting("placement.marginTop.desktop", settings, objectPath) || "0")}
-                unit="vh"
-                step={0.1}
-                min={0}
-                max={20}
-                onChange={(newVal) => {
-                  const event = {
-                    target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
-                  } as React.ChangeEvent<HTMLInputElement>;
-                  handleChange("placement.marginTop.desktop")(event);
-                }}
+        <SubSettingsContainer
+          name="Placement"
+          SettingsComponent={
+            <div className="space-y-[1vh] px-[.6vh]">
+              {/* Absolute Positioning Toggle */}
+              <OptionsToggler
+                label="isAbsolute"
+                options={["Yes", "No"]}
+                value={getSetting("placement.isAbsolute", settings, objectPath) ? "Yes" : "No"}
+                onChange={(newValue) =>
+                  handleSettingChange(`${objectPath}.placement.isAbsolute`, newValue === "Yes")
+                }
               />
 
-              {/* Margin Bottom - Mobile & Desktop */}
-              <h5 className="text-[1.4vh] font-medium text-stone-400">Margin Bottom</h5>
-              <SettingsSlider
-                label="Mobile"
-                value={parseFloat(getSetting("placement.marginBottom.mobile", settings, objectPath) || "0")}
-                unit="vh"
-                step={0.1}
-                min={0}
-                max={20}
-                onChange={(newVal) => {
-                  const event = {
-                    target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
-                  } as React.ChangeEvent<HTMLInputElement>;
-                  handleChange("placement.marginBottom.mobile")(event);
-                }}
+              {/* Items Positioning */}
+              {/* Items Position X */}
+              <OptionsToggler
+                label="Items Position X"
+                options={["start", "center", "end", "evenly", "between"]}
+                value={getSetting("placement.itemsPosition.x", settings, objectPath) || "center"}
+                onChange={(newValue) =>
+                  handleSettingChange(`${objectPath}.placement.itemsPosition.x`, newValue)
+                }
               />
-              <SettingsSlider
-                label="Desktop"
-                value={parseFloat(getSetting("placement.marginBottom.desktop", settings, objectPath) || "0")}
-                unit="vh"
-                step={0.1}
-                min={0}
-                max={20}
-                onChange={(newVal) => {
-                  const event = {
-                    target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
-                  } as React.ChangeEvent<HTMLInputElement>;
-                  handleChange("placement.marginBottom.desktop")(event);
-                }}
-              />
-            </>
-          )}
-
-          {/* Show top, left, right, bottom when IS absolute */}
-          {getSetting("placement.isAbsolute", settings, objectPath) && (
-            <>
-              {/* Top - Mobile & Desktop */}
-              <h5 className="text-[1.4vh] font-medium text-stone-400">Top</h5>
-              <SettingsSlider
-                label="Mobile"
-                value={parseFloat(getSetting("placement.top.mobile", settings, objectPath) || "0")}
-                unit="%"
-                step={1}
-                min={0}
-                max={100}
-                onChange={(newVal) => {
-                  const event = {
-                    target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
-                  } as React.ChangeEvent<HTMLInputElement>;
-                  handleChange("placement.top.mobile")(event);
-                }}
-              />
-              <SettingsSlider
-                label="Desktop"
-                value={parseFloat(getSetting("placement.top.desktop", settings, objectPath) || "0")}
-                unit="%"
-                step={1}
-                min={0}
-                max={100}
-                onChange={(newVal) => {
-                  const event = {
-                    target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
-                  } as React.ChangeEvent<HTMLInputElement>;
-                  handleChange("placement.top.desktop")(event);
-                }}
+              {/* Items Position Y */}
+              <OptionsToggler
+                label="Items Position Y"
+                options={["start", "center", "end", "evenly", "between"]}
+                value={getSetting("placement.itemsPosition.y", settings, objectPath) || "center"}
+                onChange={(newValue) =>
+                  handleSettingChange(`${objectPath}.placement.itemsPosition.y`, newValue)
+                }
               />
 
-              {/* Left - Mobile & Desktop */}
-              <h5 className="text-[1.4vh] font-medium text-stone-400">Left</h5>
-              <SettingsSlider
-                label="Mobile"
-                value={parseFloat(getSetting("placement.left.mobile", settings, objectPath) || "0")}
-                unit="%"
-                step={1}
-                min={0}
-                max={100}
-                onChange={(newVal) => {
-                  const event = {
-                    target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
-                  } as React.ChangeEvent<HTMLInputElement>;
-                  handleChange("placement.left.mobile")(event);
-                }}
-              />
-              <SettingsSlider
-                label="Desktop"
-                value={parseFloat(getSetting("placement.left.desktop", settings, objectPath) || "0")}
-                unit="%"
-                step={1}
-                min={0}
-                max={100}
-                onChange={(newVal) => {
-                  const event = {
-                    target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
-                  } as React.ChangeEvent<HTMLInputElement>;
-                  handleChange("placement.left.desktop")(event);
-                }}
+              {/* Position - also used as the horizontal fallback when Left/Right are off while absolute */}
+              <OptionsToggler
+                label="Position"
+                options={["start", "center", "end"]}
+                value={getSetting("placement.position", settings, objectPath) || "start"}
+                onChange={(newValue) =>
+                  handleSettingChange(`${objectPath}.placement.position`, newValue)
+                }
               />
 
-              {/* Right - Mobile & Desktop */}
-              <h5 className="text-[1.4vh] font-medium text-stone-400">Right</h5>
-              <SettingsSlider
-                label="Mobile"
-                value={parseFloat(getSetting("placement.right.mobile", settings, objectPath) || "0")}
-                unit="%"
-                step={1}
-                min={0}
-                max={100}
-                onChange={(newVal) => {
-                  const event = {
-                    target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
-                  } as React.ChangeEvent<HTMLInputElement>;
-                  handleChange("placement.right.mobile")(event);
-                }}
-              />
-              <SettingsSlider
-                label="Desktop"
-                value={parseFloat(getSetting("placement.right.desktop", settings, objectPath) || "0")}
-                unit="%"
-                step={1}
-                min={0}
-                max={100}
-                onChange={(newVal) => {
-                  const event = {
-                    target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
-                  } as React.ChangeEvent<HTMLInputElement>;
-                  handleChange("placement.right.desktop")(event);
-                }}
-              />
+              {/* Show margins when NOT absolute */}
+              {!getSetting("placement.isAbsolute", settings, objectPath) && (
+                <>
+                  {/* Margin Top - Mobile & Desktop */}
+                  <h5 className="text-[1.4vh] font-medium text-stone-400">Margin Top</h5>
+                  <SettingsSlider
+                    label="Mobile"
+                    value={parseFloat(getSetting("placement.marginTop.mobile", settings, objectPath) || "0")}
+                    unit="vh"
+                    step={0.1}
+                    min={0}
+                    max={20}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.marginTop.mobile")(event);
+                    }}
+                  />
+                  <SettingsSlider
+                    label="Desktop"
+                    value={parseFloat(getSetting("placement.marginTop.desktop", settings, objectPath) || "0")}
+                    unit="vh"
+                    step={0.1}
+                    min={0}
+                    max={20}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.marginTop.desktop")(event);
+                    }}
+                  />
 
-              {/* Bottom - Mobile & Desktop */}
-              <h5 className="text-[1.4vh] font-medium text-stone-400">Bottom</h5>
-              <SettingsSlider
-                label="Mobile"
-                value={parseFloat(getSetting("placement.bottom.mobile", settings, objectPath) || "0")}
-                unit="%"
-                step={1}
-                min={0}
-                max={100}
-                onChange={(newVal) => {
-                  const event = {
-                    target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
-                  } as React.ChangeEvent<HTMLInputElement>;
-                  handleChange("placement.bottom.mobile")(event);
-                }}
-              />
-              <SettingsSlider
-                label="Desktop"
-                value={parseFloat(getSetting("placement.bottom.desktop", settings, objectPath) || "0")}
-                unit="%"
-                step={1}
-                min={0}
-                max={100}
-                onChange={(newVal) => {
-                  const event = {
-                    target: Object.assign(document.createElement("input"), { value: `${newVal}%` })
-                  } as React.ChangeEvent<HTMLInputElement>;
-                  handleChange("placement.bottom.desktop")(event);
-                }}
-              />
-            </>
-          )}
-        </div>
+                  {/* Margin Bottom - Mobile & Desktop */}
+                  <h5 className="text-[1.4vh] font-medium text-stone-400">Margin Bottom</h5>
+                  <SettingsSlider
+                    label="Mobile"
+                    value={parseFloat(getSetting("placement.marginBottom.mobile", settings, objectPath) || "0")}
+                    unit="vh"
+                    step={0.1}
+                    min={0}
+                    max={20}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.marginBottom.mobile")(event);
+                    }}
+                  />
+                  <SettingsSlider
+                    label="Desktop"
+                    value={parseFloat(getSetting("placement.marginBottom.desktop", settings, objectPath) || "0")}
+                    unit="vh"
+                    step={0.1}
+                    min={0}
+                    max={20}
+                    onChange={(newVal) => {
+                      const event = {
+                        target: Object.assign(document.createElement("input"), { value: `${newVal}vh` })
+                      } as React.ChangeEvent<HTMLInputElement>;
+                      handleChange("placement.marginBottom.desktop")(event);
+                    }}
+                  />
+                </>
+              )}
+
+              {/* Show top, left, right, bottom when IS absolute - each independently disableable */}
+              {getSetting("placement.isAbsolute", settings, objectPath) && (
+                <>
+                  <h5 className="text-[1.4vh] font-medium text-stone-400">Top</h5>
+                  <PositionField
+                    label="Top"
+                    path="placement.top"
+                    settings={settings}
+                    objectPath={objectPath}
+                    handleSettingChange={handleSettingChange}
+                    unit="%"
+                    min={0}
+                    max={100}
+                  />
+
+                  <h5 className="text-[1.4vh] font-medium text-stone-400">Left</h5>
+                  <p className="text-[1.2vh] text-stone-400 -mt-[.2vh]">Leave off to use Position instead</p>
+                  <PositionField
+                    label="Left"
+                    path="placement.left"
+                    settings={settings}
+                    objectPath={objectPath}
+                    handleSettingChange={handleSettingChange}
+                    unit="%"
+                    min={0}
+                    max={100}
+                  />
+
+                  <h5 className="text-[1.4vh] font-medium text-stone-400">Right</h5>
+                  <p className="text-[1.2vh] text-stone-400 -mt-[.2vh]">Leave off to use Position instead</p>
+                  <PositionField
+                    label="Right"
+                    path="placement.right"
+                    settings={settings}
+                    objectPath={objectPath}
+                    handleSettingChange={handleSettingChange}
+                    unit="%"
+                    min={0}
+                    max={100}
+                  />
+
+                  <h5 className="text-[1.4vh] font-medium text-stone-400">Bottom</h5>
+                  <PositionField
+                    label="Bottom"
+                    path="placement.bottom"
+                    settings={settings}
+                    objectPath={objectPath}
+                    handleSettingChange={handleSettingChange}
+                    unit="%"
+                    min={0}
+                    max={100}
+                  />
+                </>
+              )}
+            </div>
+          }
+        />
       )}
       
       {/* Border Section */}
@@ -977,118 +906,45 @@ const BackgroundEditor: React.FC<BackgroundEditorProps> = ({
                   }}
                 />
               </div>
-              {/* Position Settings */}
+              {/* Position Settings - each value independently disableable */}
               <div className="bg-stone-50 rounded-lg p-[1vh] border border-stone-200 space-y-[1vh]">
                 <h4 className="text-[1.4vh] font-semibold text-stone-500 uppercase tracking-wide">Position</h4>
-                
-                {/* Top Position */}
-                <div>
-                  <h5 className="text-[1.2vh] font-medium text-stone-400 mb-[0.5vh]">Top</h5>
-                  <SettingsSlider
-                    label="Mobile"
-                    value={parseFloat(getSetting("floatingImage.position.top.mobile", settings, objectPath) || "0")}
-                    unit="%"
-                    min={0}
-                    max={100}
-                    step={1}
-                    onChange={(newVal) => {
-                      handleSettingChange(`${objectPath}.floatingImage.position.top.mobile`, `${newVal}%`);
-                    }}
-                  />
-                  <SettingsSlider
-                    label="Desktop"
-                    value={parseFloat(getSetting("floatingImage.position.top.desktop", settings, objectPath) || "0")}
-                    unit="%"
-                    min={0}
-                    max={100}
-                    step={1}
-                    onChange={(newVal) => {
-                      handleSettingChange(`${objectPath}.floatingImage.position.top.desktop`, `${newVal}%`);
-                    }}
-                  />
-                </div>
 
-                
-                {/* Left Position */}
-                <div>
-                  <h5 className="text-[1.2vh] font-medium text-stone-400 mb-[0.5vh]">Left</h5>
-                  <SettingsSlider
-                    label="Mobile"
-                    value={parseFloat(getSetting("floatingImage.position.left.mobile", settings, objectPath) || "0")}
-                    unit="%"
-                    min={0}
-                    max={100}
-                    step={1}
-                    onChange={(newVal) => {
-                      handleSettingChange(`${objectPath}.floatingImage.position.left.mobile`, `${newVal}%`);
-                    }}
-                  />
-                  <SettingsSlider
-                    label="Desktop"
-                    value={parseFloat(getSetting("floatingImage.position.left.desktop", settings, objectPath) || "0")}
-                    unit="%"
-                    min={0}
-                    max={100}
-                    step={1}
-                    onChange={(newVal) => {
-                      handleSettingChange(`${objectPath}.floatingImage.position.left.desktop`, `${newVal}%`);
-                    }}
-                  />
-                </div>
+                <h5 className="text-[1.2vh] font-medium text-stone-400">Top</h5>
+                <PositionField
+                  label="Top"
+                  path="floatingImage.position.top"
+                  settings={settings}
+                  objectPath={objectPath}
+                  handleSettingChange={handleSettingChange}
+                  unit="%"
+                  min={0}
+                  max={100}
+                />
 
-                {/* Right Position */}
-                {/* <div>
-                  <h5 className="text-[1.2vh] font-medium text-stone-400 mb-[0.5vh]">Right</h5>
-                  <SettingsSlider
-                    label="Mobile"
-                    value={parseFloat(getSetting("floatingImage.position.right.mobile", settings, objectPath) || "0")}
-                    unit="%"
-                    min={0}
-                    max={100}
-                    step={1}
-                    onChange={(newVal) => {
-                      handleSettingChange(`${objectPath}.floatingImage.position.right.mobile`, `${newVal}%`);
-                    }}
-                  />
-                  <SettingsSlider
-                    label="Desktop"
-                    value={parseFloat(getSetting("floatingImage.position.right.desktop", settings, objectPath) || "0")}
-                    unit="%"
-                    min={0}
-                    max={100}
-                    step={1}
-                    onChange={(newVal) => {
-                      handleSettingChange(`${objectPath}.floatingImage.position.right.desktop`, `${newVal}%`);
-                    }}
-                  />
-                </div> */}
+                <h5 className="text-[1.2vh] font-medium text-stone-400">Left</h5>
+                <PositionField
+                  label="Left"
+                  path="floatingImage.position.left"
+                  settings={settings}
+                  objectPath={objectPath}
+                  handleSettingChange={handleSettingChange}
+                  unit="%"
+                  min={0}
+                  max={100}
+                />
 
-                {/* Bottom Position */}
-                <div>
-                  <h5 className="text-[1.2vh] font-medium text-stone-400 mb-[0.5vh]">Bottom</h5>
-                  <SettingsSlider
-                    label="Mobile"
-                    value={parseFloat(getSetting("floatingImage.position.bottom.mobile", settings, objectPath) || "0")}
-                    unit="%"
-                    min={0}
-                    max={100}
-                    step={1}
-                    onChange={(newVal) => {
-                      handleSettingChange(`${objectPath}.floatingImage.position.bottom.mobile`, `${newVal}%`);
-                    }}
-                  />
-                  <SettingsSlider
-                    label="Desktop"
-                    value={parseFloat(getSetting("floatingImage.position.bottom.desktop", settings, objectPath) || "0")}
-                    unit="%"
-                    min={0}
-                    max={100}
-                    step={1}
-                    onChange={(newVal) => {
-                      handleSettingChange(`${objectPath}.floatingImage.position.bottom.desktop`, `${newVal}%`);
-                    }}
-                  />
-                </div>
+                <h5 className="text-[1.2vh] font-medium text-stone-400">Bottom</h5>
+                <PositionField
+                  label="Bottom"
+                  path="floatingImage.position.bottom"
+                  settings={settings}
+                  objectPath={objectPath}
+                  handleSettingChange={handleSettingChange}
+                  unit="%"
+                  min={0}
+                  max={100}
+                />
               </div>
             </div>
           }

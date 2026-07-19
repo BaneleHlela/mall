@@ -25,12 +25,25 @@ export const createSearchPost = asyncHandler(async (req, res) => {
 
 // Get search post by ID
 export const getSearchPost = asyncHandler(async (req, res) => {
-    const searchPost = await SearchPost.findById(req.params.id).populate('stores products services');
-    if (!searchPost) {
-        res.status(404);
-        throw new Error("Search post not found");
-    }
-    res.json(searchPost);
+  const searchPost = await SearchPost.findById(req.params.id)
+    .populate("stores")
+    .populate({
+      path: "products",
+      populate: {
+        path: "store",
+        select: "_id name slug thumbnails",
+      },
+    })
+    .populate("services");
+
+    console.log("Fetched search post:", searchPost.products[0]);
+
+  if (!searchPost) {
+    res.status(404);
+    throw new Error("Search post not found");
+  }
+
+  res.json(searchPost);
 });
 
 // Edit search post
@@ -60,7 +73,16 @@ export const deleteSearchPost = asyncHandler(async (req, res) => {
 
 // Fetch all active search posts
 export const fetchSearchPosts = asyncHandler(async (req, res) => {
-    const searchPosts = await SearchPost.find({ isActive: true }).populate('stores products services');
+    const searchPosts = await SearchPost.find({ isActive: true })
+    .populate("stores")
+    .populate({
+      path: "products",
+      populate: {
+        path: "store",
+        select: "_id name slug thumbnails",
+      },
+    })
+    .populate("services");
     const sortedPosts = sortSearchPostsByLikelihood(searchPosts);
     res.json(sortedPosts);
 });

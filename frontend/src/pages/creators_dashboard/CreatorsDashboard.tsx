@@ -1,5 +1,5 @@
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Fade as Hamburger } from "hamburger-react";
 import { IoNotificationsOutline, IoSearch } from "react-icons/io5";
 import { FiLogOut, FiSettings, FiHelpCircle } from "react-icons/fi";
@@ -10,8 +10,11 @@ import CreatorsDashboardStores from "./supporting/CreatorsDashboardStores";
 import SearchPostsDashboard from "./supporting/SearchPostsDashboard";
 
 import UserDisplay from "../../components/store_dashboard/menubar/UserDisplay";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { fetchStoreBySlug, setCurrentStore } from "../../features/stores/storeSlice";
 
 const CreatorsDashboard = () => {
+  const dispatch = useAppDispatch();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
@@ -24,6 +27,20 @@ const CreatorsDashboard = () => {
   };
 
   const isActive = (path: string) => location.pathname === path;
+
+  useEffect(() => {
+    if (location.pathname.startsWith("/creators-dashboard")) {
+      dispatch(setCurrentStore(null));
+      dispatch(fetchStoreBySlug("themall"))
+        .unwrap()
+        .then((store) => {
+          dispatch(setCurrentStore(store));
+        })
+        .catch((err) => {
+          console.error("Failed to fetch themall store:", err);
+        });
+    }
+  }, [location.pathname, dispatch]);
 
   return (
     <div className="min-h-screen w-screen flex flex-row bg-slate-50 overflow-hidden">

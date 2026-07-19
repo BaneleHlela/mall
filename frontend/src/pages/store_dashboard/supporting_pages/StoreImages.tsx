@@ -13,13 +13,12 @@ interface StoreImagesProps {
 const StoreImages: React.FC<StoreImagesProps> = ({onImageSelect}) => {
   const dispatch = useAppDispatch();
 
-  const currentStore = useAppSelector((state) => state.storeAdmin.store);
+  const currentStore = useAppSelector((state) => state.storeAdmin.store || state.stores.currentStore);
   const images: Image[] = currentStore?.images || [];
   const isLoading = useAppSelector((state) => state.stores.isLoading);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const limit = 5;
-
   useEffect(() => {
     if (currentStore?._id) {
       dispatch(fetchStoreImages({ storeSlug: currentStore.slug, page, limit })).then((res: any) => {

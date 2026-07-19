@@ -2,6 +2,11 @@ export interface ProductStoreInfo {
     _id: string;
     name: string;
     slug: string;
+    thumbnails: {
+        profily: string;
+        square: string;
+    };
+    slogan?: string;
 }
 
 export interface ProductStats {

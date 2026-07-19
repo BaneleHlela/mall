@@ -1,18 +1,33 @@
 import { motion, AnimatePresence } from "framer-motion";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SettingsContainer from "./SettingsContainer";
 import SlidingPanel from "./supporting/SlidingPanel";
 import { IoIosSettings } from "react-icons/io";
-import { Settings, Text, Image, Layout } from "lucide-react";
+import { Settings, Text, Image, Layout, Package, X, Plus, GripVertical } from "lucide-react";
 import SubSettingsContainer from "./extras/SubSettingsContainer";
 import TextEditor from "./text/TextEditor";
 import OptionsToggler from "./supporting/OptionsToggler";
 import MultipleLayoutImagesHandler from "./supporting/MultipleLayoutImagesHandler";
 import SettingsSlider from "./supporting/SettingsSlider";
 import ColorPicker from "./supporting/ColorPicker";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updateSetting } from "../../features/searchPosts/searchPostSettingsSlice";
 import { departments } from "../../utils/helperObjects";
+import SearchPostProductModal from "./SearchPostProductModal";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface SearchPostsSettingsProps {
   isOpen: boolean;
@@ -20,13 +35,95 @@ interface SearchPostsSettingsProps {
   searchPostSettings?: any;
 }
 
+const SortableProductItem: React.FC<{
+  product: any;
+  onRemove: (id: string) => void;
+}> = ({ product, onRemove }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: product._id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex items-center gap-2 p-2 bg-white border border-stone-200 rounded-lg shadow-sm"
+    >
+      <div
+        {...attributes}
+        {...listeners}
+        className="cursor-grab active:cursor-grabbing p-1 text-stone-400 hover:text-stone-600"
+      >
+        <GripVertical size={16} />
+      </div>
+      {product.images && product.images[0] && (
+        <img
+          src={product.images[0]}
+          alt={product.name}
+          className="w-10 h-10 object-cover rounded"
+        />
+      )}
+      <span className="flex-1 text-sm font-medium truncate text-stone-800">
+        {product.name}
+      </span>
+      <span className="text-xs text-stone-500 truncate max-w-[20vh]">
+        {product.store?.name}
+      </span>
+      <button
+        onClick={() => onRemove(product._id)}
+        className="p-1 hover:bg-red-100 rounded-full transition-colors"
+      >
+        <X size={14} className="text-red-500" />
+      </button>
+    </div>
+  );
+};
+
 const SearchPostsSettings: React.FC<SearchPostsSettingsProps> = ({
   isOpen,
   onClose,
   searchPostSettings,
 }) => {
   const dispatch = useAppDispatch();
+  const allProducts = useAppSelector((state) => (state.products as any).products || []);
   const [activePanel, setActivePanel] = useState<string | null>(null);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+
+  const selectedProductIds = (searchPostSettings?.products || []) as string[];
+  const selectedProducts = selectedProductIds
+    .map((id: string) => allProducts.find((p: any) => p._id === id))
+    .filter(Boolean) as any[];
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const oldIndex = selectedProductIds.indexOf(active.id as string);
+      const newIndex = selectedProductIds.indexOf(over.id as string);
+      const updated = arrayMove(selectedProductIds, oldIndex, newIndex);
+      dispatch(updateSetting({ field: 'products', value: updated }));
+    }
+  };
+
+  const handleToggleProduct = (productId: string) => {
+    const isSelected = selectedProductIds.includes(productId);
+    const updated = isSelected
+      ? selectedProductIds.filter((id: string) => id !== productId)
+      : [...selectedProductIds, productId];
+    dispatch(updateSetting({ field: 'products', value: updated }));
+  };
+
+  const sensors = useSensors(useSensor(PointerSensor));
 
   const closePanel = () => {
     setActivePanel(null);
@@ -39,7 +136,10 @@ const SearchPostsSettings: React.FC<SearchPostsSettingsProps> = ({
   const settingsItems = [
     { id: "general", name: "General", icon: Settings, onClick: () => handlePanelOpen("general") },
     { id: "text", name: "Text", icon: Text, onClick: () => handlePanelOpen("text") },
-    { id: "largeImage", name: "Large Image", icon: Image, onClick: () => handlePanelOpen("largeImage") },
+    ...(searchPostSettings?.variation === "carouselWithJSXAndProducts"
+      ? [{ id: "largeImage", name: "Large Image", icon: Image, onClick: () => handlePanelOpen("largeImage") }]
+      : []),
+    { id: "products", name: "Products", icon: Package, onClick: () => handlePanelOpen("products") },
     { id: "carousel", name: "Carousel", icon: Layout, onClick: () => handlePanelOpen("carousel") },
   ];
 
@@ -337,7 +437,7 @@ const SearchPostsSettings: React.FC<SearchPostsSettingsProps> = ({
               </SlidingPanel>
             )}
 
-            {activePanel === 'largeImage' && searchPostSettings && (
+            {activePanel === 'largeImage' && searchPostSettings?.variation === "carouselWithJSXAndProducts" && (
               <SlidingPanel
                 isOpen={true}
                 onClose={closePanel}
@@ -351,10 +451,12 @@ const SearchPostsSettings: React.FC<SearchPostsSettingsProps> = ({
                     SettingsComponent={
                       <div className="px-1.5 space-y-1.5">
                         <MultipleLayoutImagesHandler
-                          objectPath="style.content.largeImage.imageUrl"
                           images={searchPostSettings.style?.content?.largeImage?.imageUrl || []}
                           min={1}
                           max={5}
+                          onChange={(newImages) =>
+                            dispatch(updateSetting({ field: 'style.content.largeImage.imageUrl', value: newImages }))
+                          }
                         />
                       </div>
                     }
@@ -437,6 +539,63 @@ const SearchPostsSettings: React.FC<SearchPostsSettingsProps> = ({
               </SlidingPanel>
             )}
 
+            {activePanel === 'products' && searchPostSettings && (
+              <SlidingPanel
+                isOpen={true}
+                onClose={closePanel}
+                title="Products Settings"
+                panelId="products"
+                onHomeClick={() => onPanelClose?.()}
+              >
+                <div className="space-y-3">
+                  <SubSettingsContainer
+                    name="Selected Products"
+                    defaultOpen={true}
+                    SettingsComponent={
+                      <div className="px-1.5 space-y-2">
+                        {selectedProductIds.length === 0 ? (
+                          <p className="text-sm text-stone-500 italic py-4 text-center">
+                            No products selected. Click "Add Products" to add products.
+                          </p>
+                        ) : (
+                          <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCenter}
+                            onDragEnd={handleDragEnd}
+                          >
+                            <SortableContext
+                              items={selectedProductIds}
+                              strategy={verticalListSortingStrategy}
+                            >
+                              <div className="space-y-2 max-h-[25vh] overflow-y-auto">
+                                {selectedProducts.map((product: any) => (
+                                  <SortableProductItem
+                                    key={product._id}
+                                    product={product}
+                                    onRemove={(id: string) => handleToggleProduct(id)}
+                                  />
+                                ))}
+                              </div>
+                            </SortableContext>
+                          </DndContext>
+                        )}
+                      </div>
+                    }
+                  />
+                  <div className="flex justify-center">
+                    <button
+                      onClick={() => setIsProductModalOpen(true)}
+                      disabled={selectedProductIds.length >= 10}
+                      className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-stone-700 to-stone-600 text-white rounded-xl hover:from-stone-600 hover:to-stone-500 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <Plus size={18} />
+                      Add Products
+                    </button>
+                  </div>
+                </div>
+              </SlidingPanel>
+            )}
+
             {activePanel === 'carousel' && searchPostSettings && (
               <SlidingPanel
                 isOpen={true}
@@ -489,131 +648,140 @@ const SearchPostsSettings: React.FC<SearchPostsSettingsProps> = ({
                        </div>
                      }
                    />
-                    <SubSettingsContainer
-                      name="Aspect Ratio"
-                      SettingsComponent={
-                        <div className="px-1.5 space-y-1.5">
-                          <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-2">
-                              Mobile Aspect Ratio
-                            </label>
-                            <input
-                              type="text"
-                              value={
-                                searchPostSettings.style?.content?.carousel?.imagesAspectRatio?.mobile ||
-                                '5/3'
-                              }
-                              onChange={(e) =>
-                                dispatch(
-                                  updateSetting({
-                                    field: 'style.content.carousel.imagesAspectRatio.mobile',
-                                    value: e.target.value,
-                                  })
-                                )
-                              }
-                              placeholder="e.g., 5/3"
-                              className="w-full px-1.5 py-2 border border-slate-300 rounded-lg"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-2">
-                              Desktop Aspect Ratio
-                            </label>
-                            <input
-                              type="text"
-                              value={
-                                searchPostSettings.style?.content?.carousel?.imagesAspectRatio?.desktop ||
-                                '5/3'
-                              }
-                              onChange={(e) =>
-                                dispatch(
-                                  updateSetting({
-                                    field: 'style.content.carousel.imagesAspectRatio.desktop',
-                                    value: e.target.value,
-                                  })
-                                )
-                              }
-                              placeholder="e.g., 5/3"
-                              className="w-full px-1.5 py-2 border border-slate-300 rounded-lg"
-                            />
-                          </div>
-                        </div>
-                      }
-                    />
-                    <SubSettingsContainer
-                      name="Border Radius"
-                      SettingsComponent={
-                        <div className="px-1.5 space-y-1.5">
-                          <SettingsSlider
-                            label="Border Radius"
-                            value={parseFloat(searchPostSettings.style?.content?.carousel?.borderRadius || '0')}
-                            min={0}
-                            max={50}
-                            step={1}
-                            unit="px"
-                            onChange={(value) =>
-                              dispatch(
-                                updateSetting({
-                                  field: 'style.content.carousel.borderRadius',
-                                  value: `${value}px`,
-                                })
-                              )
-                            }
-                          />
-                        </div>
-                      }
-                    />
-                  <SubSettingsContainer
-                    name="View All Button"
-                    SettingsComponent={
-                      <div className="px-1.5 space-y-1.5">
-                        <OptionsToggler
-                          label="Show"
-                          options={['true', 'false']}
-                          value={
-                            searchPostSettings.style?.content?.carousel?.viewAllButton?.show
-                              ? 'true'
-                              : 'false'
-                          }
-                          onChange={(value: string) =>
-                            dispatch(
-                              updateSetting({
-                                field: 'style.content.carousel.viewAllButton.show',
-                                value: value === 'true',
-                              })
-                            )
-                          }
-                        />
-                        {searchPostSettings.style?.content?.carousel?.viewAllButton?.show && (
-                          <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-2">
-                              Route
-                            </label>
-                            <input
-                              type="text"
-                              value={
-                                searchPostSettings.style?.content?.carousel?.viewAllButton?.route ||
-                                ''
-                              }
-                              onChange={(e) =>
-                                dispatch(
-                                  updateSetting({
-                                    field: 'style.content.carousel.viewAllButton.route',
-                                    value: e.target.value,
-                                  })
-                                )
-                              }
-                              placeholder="/search?sort=top-rated"
-                              className="w-full px-1.5 py-2 border border-slate-300 rounded-lg"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    }
-                  />
-                </div>
+                     <SubSettingsContainer
+                       name="Aspect Ratio"
+                       SettingsComponent={
+                         <div className="px-1.5 space-y-1.5">
+                           <div>
+                             <label className="block text-sm font-medium text-slate-700 mb-2">
+                               Mobile Aspect Ratio
+                             </label>
+                             <input
+                               type="text"
+                               value={
+                                 searchPostSettings.style?.content?.carousel?.imagesAspectRatio?.mobile ||
+                                 '5/3'
+                               }
+                               onChange={(e) =>
+                                 dispatch(
+                                   updateSetting({
+                                     field: 'style.content.carousel.imagesAspectRatio.mobile',
+                                     value: e.target.value,
+                                   })
+                                 )
+                               }
+                               placeholder="e.g., 5/3"
+                               className="w-full px-1.5 py-2 border border-slate-300 rounded-lg"
+                             />
+                           </div>
+                           <div>
+                             <label className="block text-sm font-medium text-slate-700 mb-2">
+                               Desktop Aspect Ratio
+                             </label>
+                             <input
+                               type="text"
+                               value={
+                                 searchPostSettings.style?.content?.carousel?.imagesAspectRatio?.desktop ||
+                                 '5/3'
+                               }
+                               onChange={(e) =>
+                                 dispatch(
+                                   updateSetting({
+                                     field: 'style.content.carousel.imagesAspectRatio.desktop',
+                                     value: e.target.value,
+                                   })
+                                 )
+                               }
+                               placeholder="e.g., 5/3"
+                               className="w-full px-1.5 py-2 border border-slate-300 rounded-lg"
+                             />
+                           </div>
+                         </div>
+                       }
+                     />
+                     <SubSettingsContainer
+                       name="Border Radius"
+                       SettingsComponent={
+                         <div className="px-1.5 space-y-1.5">
+                           <SettingsSlider
+                             label="Border Radius"
+                             value={parseFloat(searchPostSettings.style?.content?.carousel?.borderRadius || '0')}
+                             min={0}
+                             max={50}
+                             step={1}
+                             unit="px"
+                             onChange={(value) =>
+                               dispatch(
+                                 updateSetting({
+                                   field: 'style.content.carousel.borderRadius',
+                                   value: `${value}px`,
+                                 })
+                               )
+                             }
+                           />
+                         </div>
+                       }
+                     />
+                   <SubSettingsContainer
+                     name="View All Button"
+                     SettingsComponent={
+                       <div className="px-1.5 space-y-1.5">
+                         <OptionsToggler
+                           label="Show"
+                           options={['true', 'false']}
+                           value={
+                             searchPostSettings.style?.content?.carousel?.viewAllButton?.show
+                               ? 'true'
+                               : 'false'
+                           }
+                           onChange={(value: string) =>
+                             dispatch(
+                               updateSetting({
+                                 field: 'style.content.carousel.viewAllButton.show',
+                                 value: value === 'true',
+                               })
+                             )
+                           }
+                         />
+                         {searchPostSettings.style?.content?.carousel?.viewAllButton?.show && (
+                           <div>
+                             <label className="block text-sm font-medium text-slate-700 mb-2">
+                               Route
+                             </label>
+                             <input
+                               type="text"
+                               value={
+                                 searchPostSettings.style?.content?.carousel?.viewAllButton?.route ||
+                                 ''
+                               }
+                               onChange={(e) =>
+                                 dispatch(
+                                   updateSetting({
+                                     field: 'style.content.carousel.viewAllButton.route',
+                                     value: e.target.value,
+                                   })
+                                 )
+                               }
+                               placeholder="/search?sort=top-rated"
+                               className="w-full px-1.5 py-2 border border-slate-300 rounded-lg"
+                             />
+                           </div>
+                         )}
+                       </div>
+                     }
+                   />
+                 </div>
               </SlidingPanel>
             )}
+
+            <SearchPostProductModal
+              isOpen={isProductModalOpen}
+              onClose={() => setIsProductModalOpen(false)}
+              selectedProductIds={selectedProductIds}
+              onToggle={handleToggleProduct}
+              onDone={() => {}}
+              maxLimit={10}
+            />
           </AnimatePresence>
         </motion.div>
       )}

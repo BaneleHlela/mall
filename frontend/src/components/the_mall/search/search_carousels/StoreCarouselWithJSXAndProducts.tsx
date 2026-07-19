@@ -38,7 +38,14 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
     const { isMobileOrTablet } = useDevice();
     const [isDesktop, setIsDesktop] = useState(false);
     const store= useAppSelector(state => state.stores.storesBySlug[searchPost.type.replace("-store-top-products", "")]);
-    const [ products, setProducts ] = React.useState<Product[]>([]);
+    const hasPopulatedProducts = (searchPost.products?.length ?? 0) > 0 &&
+        typeof searchPost.products[0] === 'object' &&
+        '_id' in searchPost.products[0];
+    
+    const [ products, setProducts ] = useState<Product[]>(
+        hasPopulatedProducts ? (searchPost.products as Product[]) : []
+    );
+    
     const [buttonContent, setButtonContent] = React.useState<{
         input: string;
         function?: string;
@@ -54,8 +61,8 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
         subheading: string;
         storeSlug: string
     }>({
-        heading: '',
-        subheading: '',
+        heading: searchPost.style.text?.heading?.input || '',
+        subheading: searchPost.style.text?.subheading?.input || '',
         storeSlug: '',
     });
     
@@ -94,10 +101,23 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
                 setProducts(results.payload as Product[]);
                 const fetchedStore = await dispatch(fetchStoreBySlug(storeSlug));
                 //setSearchPostProducts(results.payload);
-                setPostText((prev) => ({ 
-                    ...prev, // @ts-ignore-next-line
-                    heading: searchPost.style.text?.heading?.input || `${results.payload[0].store.name} Most Viewed` || '', //@ts-ignore-next-line
-                    subheading: searchPost.style.text?.subheading?.input || `${results.payload[0]?.store?.slogan ? results.payload[0].store.slogan : 'Shop from the best'}` || '',
+                setPostText((prev) => ({
+                    ...prev,
+                    heading: searchPost.style.text?.heading?.input || `${results.payload[0]?.store?.name || fetchedStore.payload?.name} Most Viewed`,
+                    subheading: searchPost.style.text?.subheading?.input || `${results.payload[0]?.store?.slogan || 'Shop from the best'}`,
+                    storeSlug: storeSlug,
+                }));
+                setViewAllRoute(`/stores/${storeSlug}?sort=top-rated`);
+            }
+            // Set postText for any type that contains store-top-products
+            if (searchPost && searchPost.type.includes("store-top-products")) {
+                const storeSlug = searchPost.type.replace("-store-top-products", "");
+                const fetchedStore = await dispatch(fetchStoreBySlug(storeSlug));
+                const storeName = fetchedStore.payload?.name || store?.name || '';
+                setPostText((prev) => ({
+                    ...prev,
+                    heading: searchPost.style.text?.heading?.input || `${storeName} Top Products` || '',
+                    subheading: searchPost.style.text?.subheading?.input || `${store?.slogan || 'Shop from the best'}` || '',
                     storeSlug: storeSlug,
                 }));
                 setViewAllRoute(`/stores/${storeSlug}?sort=top-rated`);
@@ -159,22 +179,24 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
             {/* Details */}
             <div className="">
                 {/* Store slug */}
-                <p 
-                    style={{
-                        backgroundColor: searchPost.style?.colors?.accentColor || 'transparent'
-                    }}
-                    className={`flex items-center w-fit text-md px-1 text-white-500 my-4 ml-3 font-semibold`}>
-                        @{postText.storeSlug}
-                        <span className="">
-                            {store?.isVerified && (
-                                <div className="">
-                                <MdVerified className="text-blue-500 text-sm ml-1" />
-                                </div>
-                            )}
-                        </span>
-                </p>
+                {postText.storeSlug && (
+                    <p 
+                        style={{
+                            backgroundColor: searchPost.style?.colors?.accentColor || 'transparent'
+                        }}
+                        className={`flex items-center w-fit text-md px-1 text-white-500 mt-4 ml-3 font-semibold`}>
+                            @{postText.storeSlug}
+                            <span className="">
+                                {store?.isVerified && (
+                                    <div className="">
+                                    <MdVerified className="text-blue-500 text-sm ml-1" />
+                                    </div>
+                                )}
+                            </span>
+                    </p>
+                )}
                 {/* Text */}
-                <div className="ml-3">
+                <div className="ml-3 mt-4">
                     <p className="font-semibold text-2xl">{postText.heading}</p>
                     <p className="text-semibold text-lg">{postText.subheading}</p>
                 </div>

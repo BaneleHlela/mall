@@ -224,7 +224,7 @@ export const getSearchPostProducts = asyncHandler(async (req, res) => {
       const products = await Product.find({ store: store._id, isDeleted: { $ne: true }, isActive: true })
         .sort({ 'perfomanceStats.views': -1 })
         .limit(5)
-        .populate('store', "_id name slug slogan");
+        .populate('store', "_id name slug slogan thumbnails");
       
         res.status(200).json(products);
     }

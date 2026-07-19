@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { FiArrowRight } from "react-icons/fi";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
 import "swiper/css";
@@ -13,7 +12,8 @@ import type { Product } from "../../../../types/productTypes.ts";
 import type { Store } from "../../../../types/storeTypes.ts";
 import type { SearchPost } from "../../../../types/searchPostTypes.ts";
 import { fetchStoreBySlug } from "../../../../features/stores/storeSlice.ts";
-import { set } from "lodash";
+  import { useDevice } from "../../../../utils/DeviceContext.tsx";
+import { responsiveDimensionControl } from "../../../../utils/helperFunctions.ts";
 
 interface BasicProductCarouselProps {
     searchPost: SearchPost;
@@ -24,118 +24,107 @@ const BasicProductCarousel: React.FC<BasicProductCarouselProps> = ({
 }) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const store= useAppSelector(state => state.stores.storesBySlug[searchPost.type.replace("-store-top-products", "")]);
-    const cardProducts =  useAppSelector(state => state.products.productsByStoreSlug[store?.slug]) || [];
-    const [ products, setProducts ] = React.useState<Product[]>([]);
-    const [ viewAllRoute, setViewAllRoute ] = React.useState<string>('');
-    const [postText, setPostText] = React.useState<{
+    const { isMobileOrTablet } = useDevice();
+    const allProducts = useAppSelector((state: any) => (state.products as any).products || []);
+
+    const hasPopulatedProducts = (searchPost.products?.length ?? 0) > 0 &&
+      typeof searchPost.products[0] === 'object' &&
+      '_id' in searchPost.products[0];
+
+    const [ products, setProducts ] = useState<Product[]>(
+      hasPopulatedProducts ? (searchPost.products as Product[]) : []
+    );
+    const [viewAllRoute, setViewAllRoute] = useState<string>(
+      searchPost.style?.content?.carousel?.viewAllButton?.route || ''
+    );
+
+    const [postText, setPostText] = useState<{
         heading: string;
         subheading: string;
     }>({
-        heading: '',
-        subheading: '',
+        heading: searchPost.style?.text?.heading?.input || '',
+        subheading: searchPost.style?.text?.subheading?.input || '',
     });
+
+    const slidesPerView = searchPost.style?.content?.carousel?.slidesPerView || { mobile: 3.3, desktop: 5.5 };
+    const imagesAspectRatio = searchPost.style?.content?.carousel?.imagesAspectRatio || { mobile: '1/1', desktop: '1/1' };
+    const borderRadius = searchPost.style?.content?.carousel?.borderRadius || '0px';
+    const responsiveSlidesPerView = Number(responsiveDimensionControl(isMobileOrTablet, slidesPerView));
+    const responsiveAspectRatio = responsiveDimensionControl(isMobileOrTablet, imagesAspectRatio);
     
     // Fetch products for the store in the search post
     useEffect(() => {
-        if (store?.slug) {
-            dispatch(fetchStoreProducts({ storeSlug: store.slug, activeOnly: true }));
+      if (hasPopulatedProducts) return;
+
+      const fetchProducts = async () => {
+        if (searchPost && searchPost.products?.length > 0 && typeof searchPost.products[0] === 'string') {
+          const resolved = allProducts.filter((p: any) => searchPost.products.includes(p._id));
+          setProducts(resolved);
+          return;
         }
-    }, [dispatch, store]);
-    
-    const thumbUrl = 
-        store?.thumbnails.profily &&
-        store?.thumbnails.profily !== '//example.com/images/thumbnails/product5.jpg'
-        ? store?.thumbnails.profily
-        : 'https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/image%20placeholder%20(Card%20(Square)).png'
-    
-    // Type effects
-    useEffect(() => {
-        const fetchProducts = async () => {
-            // Return top 6 products if variation is "new-basic-product-carousel"
-            if (searchPost && searchPost.type === "new-basic-product-carousel") {
-                const results = await dispatch(fetchSearchPostProducts(searchPost.type));
-                setProducts((results.payload as Product[]).slice(0, 6));
-            }
-            if (searchPost && searchPost.type === "top-rated-on-the-mall") {
-                setViewAllRoute("/search?sort=top-rated");
-                const results = await dispatch(fetchSearchPostProducts(searchPost.type));
-                setProducts(results.payload as Product[]);
-            }
-            if (searchPost && searchPost.type.includes("store-top-products")) {
-                // Example type: "ekasibite-store-top-products"
-                // const results = awaits fetchSearchPostProducts(searchPost.type);
-                const storeSlug = searchPost.type.replace("-store-top-products", "");
-                const results = await dispatch(fetchStoreProducts({ storeSlug, activeOnly: true}));
-                const fetchedStore = await dispatch(fetchStoreBySlug(storeSlug));
-                //setSearchPostProducts(results.payload);
-                setViewAllRoute(`/store/${storeSlug}?sort=top-rated`);
-            }
-            if (searchPost && searchPost.type.includes("store-most-viewed-products") || searchPost.type.includes("kasi-foods")) {
-                const storeSlug = searchPost.type.replace("-store-most-viewed-products", "");
-                const results = await dispatch(fetchStoreProducts({ storeSlug, activeOnly: true}));
-                setProducts(results.payload as Product[]);
-                const fetchedStore = await dispatch(fetchStoreBySlug(storeSlug));
-                //setSearchPostProducts(results.payload);
-                setPostText((prev) => ({ 
-                    ...prev, // @ts-ignore-next-line
-                    heading: searchPost.style.text?.heading?.input || `${results.payload[0].store.name} Most Viewed` || '', //@ts-ignore-next-line
-                    subheading: searchPost.style.text?.subheading?.input || `${results.payload[0]?.store?.slogan ? results.payload[0].store.slogan : 'Shop from the best'}` || '',
-                }));
-                setViewAllRoute(`/store/${storeSlug}?sort=top-rated`);
-            }
-            if (searchPost && searchPost.type.includes("kasi-foods")) {
-                const storeSlug = searchPost.type.replace("-store-most-viewed-products", "");
-                const results = await dispatch(fetchStoreProducts({ storeSlug, activeOnly: true}));
-                setProducts(results.payload as Product[]);
-                const fetchedStore = await dispatch(fetchStoreBySlug(storeSlug));
-                //setSearchPostProducts(results.payload);
-                setPostText((prev) => ({ 
-                    ...prev, // @ts-ignore-next-line
-                    heading: searchPost.style.text?.heading?.input || `${results.payload[0].store.name} Most Viewed` || '', //@ts-ignore-next-line
-                    subheading: searchPost.style.text?.subheading?.input || `${results.payload[0]?.store?.slogan ? results.payload[0].store.slogan : 'Shop from the best'}` || '',
-                }));
-                setViewAllRoute(`/store/${storeSlug}?sort=top-rated`);
-            }
-        };
-        fetchProducts();
-    }, [searchPost, dispatch]);
+
+        if (searchPost && searchPost.type === "new-basic-product-carousel") {
+            const results = await dispatch(fetchSearchPostProducts(searchPost.type));
+            setProducts((results.payload as Product[]).slice(0, 6));
+        }
+        if (searchPost && searchPost.type === "top-rated-on-the-mall") {
+            setViewAllRoute("/search?sort=top-rated");
+            const results = await dispatch(fetchSearchPostProducts(searchPost.type));
+            setProducts(results.payload as Product[]);
+        }
+        if (searchPost && searchPost.type.includes("store-top-products")) {
+            const storeSlug = searchPost.type.replace("-store-top-products", "");
+            const results = await dispatch(fetchStoreProducts({ storeSlug, activeOnly: true }));
+            const fetchedStore = await dispatch(fetchStoreBySlug(storeSlug));
+            setViewAllRoute(`/store/${storeSlug}?sort=top-rated`);
+            setProducts(results.payload as Product[]);
+        }
+        if (searchPost && searchPost.type.includes("store-most-viewed-products") || searchPost.type.includes("kasi-foods")) {
+            const storeSlug = searchPost.type.replace("-store-most-viewed-products", "");
+            const results = await dispatch(fetchStoreProducts({ storeSlug, activeOnly: true }));
+            setProducts(results.payload as Product[]);
+            const fetchedStore = await dispatch(fetchStoreBySlug(storeSlug));
+            setPostText((prev) => ({
+                ...prev,
+                heading: postText.heading || `${results.payload[0].store.name} Most Viewed` || '',
+                subheading: postText.subheading || `${results.payload[0]?.store?.slogan ? results.payload[0].store.slogan : 'Shop from the best'}` || '',
+            }));
+            setViewAllRoute(`/store/${storeSlug}?sort=top-rated`);
+        }
+      };
+      fetchProducts();
+    }, [searchPost, dispatch, hasPopulatedProducts, allProducts]);
 
     return (
         <div className="w-full pl-3 py-3 border-b-2 border-gray-200">
             {/* Heading */}
-            <button
-                type="button"
-                onClick={() => {
-                    if (store?.slug) {
-                        navigate(`/stores/${products[0]?.store?.slug}?sort=top-rated`);
-                    }
-                }}
-                className={`w-full flex items-center justify-between gap-3  pr-3 py-4 text-left transition-colors `}
-            >
-                <div className={`relative w-12 h-12 overflow-hidden rounded-full `}>
-                    <img src={thumbUrl} alt={store?.name} className="w-full h-full object-cover" />
-                </div>
+            <div className="w-full flex items-center justify-between gap-3 pr-3 py-2">
                 <div className="flex-1">
-                    <h3 className={`text-lg font-semibold`}>{postText.heading}</h3>
-                    <p className={`text-sm mt-1`}>{postText.subheading || 'Shop from the best'}</p>
+                    <h3 className="text-lg font-semibold">{postText.heading}</h3>
+                    <p className="text-sm mt-1 text-gray-500">{postText.subheading || 'Shop from the best'}</p>
                 </div>
-                <button className="rounded-full bg-gray-100 p-2 transition hover:bg-gray-200">
-                    <FiArrowRight className="text-lg text-black" />
-                </button>
-            </button>
+                {viewAllRoute && (
+                    <button
+                        onClick={() => navigate(viewAllRoute)}
+                        className="rounded-full bg-gray-100 p-2 transition hover:bg-gray-200"
+                    >
+                        <FaArrowRight className="text-lg text-black" />
+                    </button>
+                )}
+            </div>
             {/* Swiper */}
             <Swiper
                 modules={[FreeMode]}
                 freeMode={false}
                 spaceBetween={12}
-                slidesPerView={3.2}
+                slidesPerView={responsiveSlidesPerView}
                 speed={700}
                 className="px-2 pb-2"
+                style={{ borderRadius }}
             >
                 {(products).map((product) => (
                     <SwiperSlide key={product._id} className="py-2">
-                        <BasicProductCarouselCard product={product} />
+                        <BasicProductCarouselCard product={product} aspectRatio={responsiveAspectRatio} />
                     </SwiperSlide>
                 ))}
             </Swiper>

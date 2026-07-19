@@ -8,7 +8,7 @@ import { formatPhoneNumber } from '../with_store_details_form_and_button/helpers
 import StoreDivTag from '../../../shared_layout_components/StoreDivTag';
 
 const FastFoodFooter = () => {
-    const config =  useAppSelector(state => state.layoutSettings.sections.footer)|| mockLayout.sections.about;
+    const config =  useAppSelector(state => state.layoutSettings.sections.footer)|| mockLayout.sections.footer;
     const { colors, fonts } = useAppSelector(state => state.layoutSettings) || mockLayout;
     const store = useAppSelector((state) => state.stores.currentStore);
 

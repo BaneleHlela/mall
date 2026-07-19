@@ -148,6 +148,13 @@ export const getTextStyles = (text: TextSettings, fonts?: any, colors?: any) => 
           ? getResponsiveDimension(text.placement.top)
           : text.placement.top;
       }
+      // Bottom
+      if (text.placement.bottom) {
+        styles.bottom = typeof text.placement.bottom === "object"
+          ? getResponsiveDimension(text.placement.bottom)
+          : text.placement.bottom;
+      }
+
       // Left
       if (text.placement.left) {
         styles.left = typeof text.placement.left === "object"
@@ -160,11 +167,17 @@ export const getTextStyles = (text: TextSettings, fonts?: any, colors?: any) => 
           ? getResponsiveDimension(text.placement.right)
           : text.placement.right;
       }
-      // Bottom
-      if (text.placement.bottom) {
-        styles.bottom = typeof text.placement.bottom === "object"
-          ? getResponsiveDimension(text.placement.bottom)
-          : text.placement.bottom;
+      // If both left and right are turned off, fall back to Text Align so the
+      // element can still be horizontally centered/aligned while absolutely positioned.
+      if (!text.placement.left && !text.placement.right) {
+        if (text.textAlign === "center") {
+          styles.left = "50%";
+          styles.transform = "translateX(-50%)";
+        } else if (text.textAlign === "end") {
+          styles.right = "0";
+        } else if (text.textAlign === "left") {
+          styles.left = "0";
+        }
       }
     } else {
       // Non-absolute positioning with margins
@@ -385,6 +398,19 @@ export const getBackgroundStyles = (bg: BackgroundSettings = {}, colors?: any) =
     mapPos("left");
     mapPos("right");
     mapPos("bottom");
+
+    // If both left and right are turned off, fall back to Position so the
+    // element can still be horizontally centered/aligned while absolutely positioned.
+    if (bg.placement.isAbsolute && !bg.placement.left && !bg.placement.right) {
+      if (bg.placement.position === "center") {
+        styles.left = "50%";
+        styles.transform = "translateX(-50%)";
+      } else if (bg.placement.position === "end") {
+        styles.right = "0";
+      } else if (bg.placement.position === "start") {
+        styles.left = "0";
+      }
+    }
   }
   return styles;
 };

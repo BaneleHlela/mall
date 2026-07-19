@@ -31,13 +31,11 @@ docs/          Living architecture & reference docs (added 2026-07-03)
 
 The project grew fast with minimal initial structure, so a few things are still tangled. Don't add to these — ask/flag instead:
 
-- **Two drag-and-drop libraries** are installed: `@dnd-kit/*` (actively used — section reordering in the layout settings panel) and `react-dnd` (status unclear, likely unused — confirm before removing). Default to `@dnd-kit` for anything new.
-- **Two TipTap generations** are installed: `@tiptap/*` v3 (current, used in `RichTextEditor.tsx`) and a legacy `tiptap` v1 package (Vue-oriented, almost certainly dead weight). Use `@tiptap/*` only.
-- **Four overlapping UI/component libraries** are installed: MUI, Headless UI, Radix (direct), and `@shadcn/ui`. None is fully committed to. See `docs/01-website-builder-architecture.md` for the recommended direction.
-- **`frontend/src/major_updates/mockLayout.ts`** is a large hand-written mock object that several *live* section components (`FastFoodFooter.tsx`, `SingleStoreProductSection.tsx`, others) fall back to when Redux state is empty. At least one fallback is mismatched (the footer section falls back to `mockLayout.sections.about`). Treat this file as legacy scaffolding, not a source of truth — don't extend it.
-- **`backend/models/NewStoreLayout.js`** is an incomplete, unused alternate schema — dead code from an earlier attempt, safe to remove once confirmed unreferenced.
+- **`react-dnd`, legacy `tiptap` v1, and `zustand`** were audited and removed from `package.json` (Phase 0, 2026-07-03) — `react-dnd`'s one real call site, `OrderDnD.tsx`, was ported to `@dnd-kit` first. Default to `@dnd-kit` and `@tiptap/*` v3 for anything new; don't reintroduce the others without a reason. Full trail: `docs/04-phase-0-findings.md`.
+- **UI foundation: MUI and Headless UI both stay, `@shadcn/ui` removed.** MUI turned out to have real usage (`Slider` in `SettingsSlider.tsx`, plus an icon in 5 files — the first pass undercounted this) and wasn't removed. `@headlessui/react` is genuinely used for the booking flow's dropdowns (`Listbox` in `BookDesktopUI.tsx` and friends) and also stays. The vestigial `@shadcn/ui` npm package (not real shadcn — that's a CLI, no runtime dependency) was removed. Decision for new work: the vendor-facing primitives library (Phase 2) uses the shadcn *pattern* (Radix + Tailwind + `cva`, source copied into `components/ui/`) — doesn't require touching MUI or Headless UI. See `docs/04-phase-0-findings.md`.
+- **`frontend/src/major_updates/mockLayout.ts`** is a large hand-written mock object with six known importers and more than one problem pattern — a mismatched fallback (fixed), a section (`EnnockHero`) that reads *only* from this file and isn't actually editable, and a couple of dead/unclear imports. See `docs/04-phase-0-findings.md`. Treat this file as legacy scaffolding, not a source of truth — don't extend it.
+- **`backend/models/NewStoreLayout.js`** is an incomplete, unreferenced alternate schema — flagged for deletion, see `docs/04-phase-0-findings.md` for the exact command.
 - Content fields on `StoreLayout` (`sections`, `routes`, `floats`, `background`, `menubar`) are all untyped Mongoose `Mixed` (`{}`) — no server-side validation today. Being replaced; see `docs/02-database-schema.md`.
-- `zustand` is installed alongside a deeply-integrated Redux Toolkit setup — worth a quick audit of what it's actually used for. Keep new builder state in Redux Toolkit for consistency either way.
 
 ## Current major initiative: Website Builder v2
 
