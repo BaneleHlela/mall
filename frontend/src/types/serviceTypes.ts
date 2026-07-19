@@ -17,9 +17,14 @@ export interface Service {
 export interface ServicesState {
     services: Service[];
     searchResults: Service[];
+    searchTotal: number;
+    searchPage: number;
+    searchPages: number;
     isLoading: boolean;
     error: string | null;
     selectedService?: Service | null;
+    previewResults: Service[];
+    previewLoading: boolean;
 }
 
 interface Performer {

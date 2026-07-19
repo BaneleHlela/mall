@@ -8,9 +8,14 @@ import { API_URL } from '../context';
 const initialState: ServicesState = {
   services: [],
   searchResults: [],
+  searchTotal: 0,
+  searchPage: 1,
+  searchPages: 1,
   selectedService: null,
   isLoading: false,
   error: null,
+  previewResults: [],
+  previewLoading: false,
 };
 
 const API_BASE = `${API_URL}/api/services`;
@@ -81,22 +86,34 @@ export const createService = createAsyncThunk(
   }
 );
 
+export interface FetchServicesBySearchParams {
+  query?: string;
+  sort?: string;
+  department?: string;
+  page?: number;
+  limit?: number;
+}
+
 export const fetchServicesBySearch = createAsyncThunk<
   { services: Service[]; total: number; page: number; pages: number; count: number },
-  { search: string; page?: number; limit?: number }
+  FetchServicesBySearchParams
 >(
   'services/fetchBySearch',
-  async ({ search, page = 1, limit = 20 }, thunkAPI) => {
+  async ({ query, sort, department, page = 1, limit = 20 }, thunkAPI) => {
     try {
-      const params = new URLSearchParams();
-      if (search) params.append('search', search);
-      params.append('page', page.toString());
-      params.append('limit', limit.toString());
-      const res = await axios.get(`${API_BASE}?${params.toString()}`);
+      const res = await axios.get(API_BASE, { params: { query, sort, department, page, limit } });
       return res.data;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to search services');
     }
+  }
+);
+
+export const fetchServiceSuggestions = createAsyncThunk<Service[], { query: string }>(
+  'services/fetchServiceSuggestions',
+  async ({ query }) => {
+    const res = await axios.get(API_BASE, { params: { query, limit: 4 } });
+    return res.data.services;
   }
 );
 
@@ -171,11 +188,29 @@ const servicesSlice = createSlice({
       })
       .addCase(fetchServicesBySearch.fulfilled, (state, action: PayloadAction<{ services: Service[]; total: number; page: number; pages: number; count: number }>) => {
         state.isLoading = false;
-        state.searchResults = action.payload.services;
+        const { services, total, page, pages } = action.payload;
+        state.searchResults = page > 1 ? [...state.searchResults, ...services] : services;
+        state.searchTotal = total;
+        state.searchPage = page;
+        state.searchPages = pages;
       })
       .addCase(fetchServicesBySearch.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+
+      // Fetch service suggestions for topbar preview
+      .addCase(fetchServiceSuggestions.pending, (state) => {
+        state.previewLoading = true;
+        state.previewResults = [];
+      })
+      .addCase(fetchServiceSuggestions.fulfilled, (state, action: PayloadAction<Service[]>) => {
+        state.previewLoading = false;
+        state.previewResults = action.payload;
+      })
+      .addCase(fetchServiceSuggestions.rejected, (state) => {
+        state.previewLoading = false;
+        state.previewResults = [];
       })
 
       // Create

@@ -45,8 +45,10 @@ const CreatorsDashboardStores = ({ searchQuery = "" }: Props) => {
     const fetchStores = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/stores`);
-        setStores(response.data);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/stores`, {
+          params: { limit: 50 },
+        });
+        setStores(response.data.stores);
       } catch (error) {
         console.error("Error fetching stores:", error);
         toast.error("Failed to load stores");

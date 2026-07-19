@@ -52,7 +52,12 @@ export interface ProductsState {
     products: Product[];
     productsByStoreSlug: { [storeSlug: string]: Product[] };
     searchResults: Product[];
+    searchTotal: number;
+    searchPage: number;
+    searchPages: number;
     isLoading: boolean;
     error: string | null;
     selectedProduct: Product | null;
+    previewResults: Product[];
+    previewLoading: boolean;
 }

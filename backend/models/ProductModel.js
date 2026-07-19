@@ -109,6 +109,13 @@ const productSchema = new mongoose.Schema({
   timestamps: true,
 });
 
+productSchema.index(
+  { name: 'text', tags: 'text', category: 'text' },
+  { weights: { name: 10, tags: 6, category: 3 }, name: 'ProductTextIndex' }
+);
+productSchema.index({ tags: 1 });
+productSchema.index({ category: 1 });
+productSchema.index({ store: 1 });
 
 const Product = mongoose.model('Product', productSchema);
 export default Product;

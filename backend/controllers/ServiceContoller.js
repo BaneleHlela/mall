@@ -1,7 +1,10 @@
 import Service from '../models/ServiceModel.js';
+import Store from '../models/StoreModel.js';
 import asyncHandler from 'express-async-handler';
 import mongoose from 'mongoose';
 import { uploadToUploads, deleteFromUploads } from '../config/gcsClient.js';
+import { parsePagination, resolveSort, SERVICE_SORTS } from '../utils/searchQuery.js';
+import { getOrSetCache, buildCacheKey } from '../utils/searchCache.js';
 
 export const createService = async (req, res) => {
   try {
@@ -243,39 +246,45 @@ export const getServiceById = async (req, res) => {
 };
 
 export const getAllServices = asyncHandler(async (req, res) => {
-  const { search, page = 1, limit = 20, category, store, activeOnly } = req.query;
-  const query = {};
+  const { query: searchQuery, sort, category, store, department, activeOnly, page, limit } = req.query;
+  const { page: pageNum, limit: limitNum, skip } = parsePagination({ page, limit });
 
-  if (search) {
-    query.name = { $regex: search.toString(), $options: 'i' };
+  const filter = {};
+  if (category) filter.category = category;
+  if (store) filter.store = store;
+  if (activeOnly === 'true') filter.isActive = true;
+
+  if (department && !store) {
+    const storeIds = await Store.find(
+      { departments: department, isDeleted: { $ne: true } },
+      { _id: 1 }
+    ).lean();
+    filter.store = { $in: storeIds.map((s) => s._id) };
   }
 
-  if (category) {
-    query.category = category;
+  const hasQuery = !!(searchQuery && String(searchQuery).trim());
+  if (hasQuery) {
+    filter.$text = { $search: String(searchQuery).trim() };
   }
 
-  if (store) {
-    query.store = store;
-  }
+  const cacheKey = buildCacheKey('services', { query: searchQuery, sort, category, store, department, activeOnly, page: pageNum, limit: limitNum });
+  const result = await getOrSetCache(cacheKey, async () => {
+    let sortOption = resolveSort(SERVICE_SORTS, sort, hasQuery);
+    let projection = {};
+    if (sortOption === null) {
+      projection = { score: { $meta: 'textScore' } };
+      sortOption = { score: { $meta: 'textScore' } };
+    }
 
-  if (activeOnly === 'true') {
-    query.isActive = true;
-  }
+    const [services, total] = await Promise.all([
+      Service.find(filter, projection).sort(sortOption).skip(skip).limit(limitNum),
+      Service.countDocuments(filter),
+    ]);
 
-  const skip = (Number(page) - 1) * Number(limit);
-  const services = await Service.find(query)
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(Number(limit));
-  const total = await Service.countDocuments(query);
-
-  res.status(200).json({
-    total,
-    page: Number(page),
-    pages: Math.ceil(total / Number(limit)),
-    count: services.length,
-    services,
+    return { total, page: pageNum, pages: Math.ceil(total / limitNum) || 1, count: services.length, services };
   });
+
+  res.status(200).json(result);
 });
 
 export const getStoreServices = asyncHandler(async (req, res) => {

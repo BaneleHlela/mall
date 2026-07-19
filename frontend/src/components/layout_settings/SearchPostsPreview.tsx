@@ -126,7 +126,10 @@ const SearchPostsPreview: React.FC<SearchPostsPreviewProps> = ({
         )}
 
         {/* Content */}
-        <DeviceProvider isMobileOrTabletOverride={device === 'mobile' || device === 'tablet'}>
+        <DeviceProvider
+          isMobileOrTabletOverride={device === 'mobile' || device === 'tablet'}
+          isDesktopOverride={device === 'desktop'}
+        >
           <div
             className="w-full h-full overflow-y-auto bg-white hide-scrollbar"
             style={{ borderRadius: device === 'mobile' ? '0px' : device === 'tablet' ? '0px' : '6px 6px 0px 0px' }}

@@ -1,4 +1,9 @@
-import Redis from "ioredis"
+import Redis from "ioredis";
+import dotenv from "dotenv";
 
-export const redis = new Redis("rediss://default:ATynAAIncDFlZDIwNzIyOTE5NTE0NzA0ODlkMmY2ZWY0NTVhNmU3OXAxMTU1Mjc@probable-mallard-15527.upstash.io:6379");
-await redis.set('foo', 'bar');
+// server.js's route imports (which transitively reach this module) are evaluated
+// before server.js's own dotenv.config() call, per ESM import-hoisting semantics -
+// this file must load its own env vars rather than depend on that later call.
+dotenv.config();
+
+export const redis = new Redis(process.env.REDIS_URL);

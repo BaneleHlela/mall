@@ -12,9 +12,15 @@ export interface StoresState {
 
   storesBySlug: Record<string, Store>;
   storeSlugs: string[];
+  searchTotal: number;
+  searchPage: number;
+  searchPages: number;
 
   myStoresBySlug: Record<string, Store>;
   myStoreSlugs: string[];
+
+  suggestions: Store[];
+  suggestionsLoading: boolean;
 
   isLoading: boolean;
   error: string | null;
@@ -26,9 +32,15 @@ const initialState: StoresState = {
 
   storesBySlug: {},
   storeSlugs: [],
+  searchTotal: 0,
+  searchPage: 1,
+  searchPages: 1,
 
   myStoresBySlug: {},
   myStoreSlugs: [],
+
+  suggestions: [],
+  suggestionsLoading: false,
 
   isLoading: false,
   error: null,
@@ -45,21 +57,39 @@ export const createStore = createAsyncThunk<Store, Omit<Store, 'id'>>(
 
 
 
-export const fetchStores = createAsyncThunk<
-  Store[],
-  { search?: string; department?: string; sortBy?: string } | string | undefined
->(
+export interface FetchStoresParams {
+  query?: string;
+  department?: string;
+  tags?: string;
+  sort?: string;
+  page?: number;
+  limit?: number;
+  userLat?: number;
+  userLng?: number;
+}
+
+export interface FetchStoresResult {
+  stores: Store[];
+  total: number;
+  page: number;
+  pages: number;
+  count: number;
+}
+
+export const fetchStores = createAsyncThunk<FetchStoresResult, FetchStoresParams | undefined>(
   'stores/fetchStores',
   async (params) => {
-    let queryParams: Record<string, string | undefined> = {};
+    const response = await axios.get(STORE_API_URL, { params: params || {} });
+    return response.data;
+  }
+);
 
-    if (typeof params === 'string') {
-      queryParams = { search: params };
-    } else if (params && typeof params === 'object') {
-      queryParams = params;
-    }
-
-    const response = await axios.get(STORE_API_URL, { params: queryParams });
+// Lightweight typeahead for the topbar's live-as-you-type search box - a separate
+// thunk writing to separate state, so it never clobbers the main /search results.
+export const fetchStoreSuggestions = createAsyncThunk<Store[], { query: string }>(
+  'stores/fetchStoreSuggestions',
+  async ({ query }) => {
+    const response = await axios.get(`${STORE_API_URL}/suggest`, { params: { query } });
     return response.data;
   }
 );
@@ -277,22 +307,42 @@ const storeSlice = createSlice({
       .addCase(fetchStores.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        const newStoresBySlug: Record<string, Store> = {};
-        const newStoreSlugs: string[] = [];
+        const { stores, total, page, pages } = action.payload;
+        const isAppend = (action.meta.arg?.page ?? 1) > 1;
 
-        for (const store of action.payload) {
-          if (store.slug) {
+        const newStoresBySlug: Record<string, Store> = isAppend ? { ...state.storesBySlug } : {};
+        const newStoreSlugs: string[] = isAppend ? [...state.storeSlugs] : [];
+
+        for (const store of stores) {
+          if (store.slug && !newStoresBySlug[store.slug]) {
             newStoresBySlug[store.slug] = store;
             newStoreSlugs.push(store.slug);
+          } else if (store.slug) {
+            newStoresBySlug[store.slug] = store;
           }
         }
 
         state.storesBySlug = newStoresBySlug as any;
         state.storeSlugs = newStoreSlugs;
+        state.searchTotal = total;
+        state.searchPage = page;
+        state.searchPages = pages;
       })
       .addCase(fetchStores.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || 'Failed to fetch stores';
+      })
+
+      // Fetch Store Suggestions (topbar typeahead)
+      .addCase(fetchStoreSuggestions.pending, (state) => {
+        state.suggestionsLoading = true;
+      })
+      .addCase(fetchStoreSuggestions.fulfilled, (state, action) => {
+        state.suggestionsLoading = false;
+        state.suggestions = action.payload;
+      })
+      .addCase(fetchStoreSuggestions.rejected, (state) => {
+        state.suggestionsLoading = false;
       })
       // Fetch Stores by Owner
       .addCase(fetchStoresByOwner.pending, (state) => {

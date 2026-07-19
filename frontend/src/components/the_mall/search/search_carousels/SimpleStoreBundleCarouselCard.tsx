@@ -1,68 +1,22 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks.ts';
-import { updateUser } from '../../../../features/user/userSlice.ts';
-import { calculateDistanceToStore, formatDistance } from '../../home/store_card/supporting/calculateDistance.ts';
-import { getStoreStatus } from '../../home/store_card/supporting/storeStatus.ts';
 import type { Store } from '../../../../types/storeTypes.ts';
+import { useStoreCardData } from './hooks/useStoreCardData.ts';
 
-interface StoreBundleCarouselCardProps {
+interface SimpleStoreBundleCarouselCardProps {
   store: Store;
   onRemoveFavorite?: () => void;
   handleCardClick?: () => void;
 }
 
-const StoreBundleCarouselCard: React.FC<StoreBundleCarouselCardProps> = ({ store, onRemoveFavorite, handleCardClick }) => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user.user);
-
-  const handleClick = () => {
-    navigate(`/stores/${store.slug}`);
-  };
-
-  const distance = user ? calculateDistanceToStore(user, store) : null;
-  const distanceText = formatDistance(distance);
-  const storeStatus = getStoreStatus(store.operationTimes, store.manualStatus);
-  
-  const isFavorite = user?.favourites?.stores?.includes(store._id!);
+const SimpleStoreBundleCarouselCard: React.FC<SimpleStoreBundleCarouselCardProps> = ({ store, onRemoveFavorite, handleCardClick }) => {
+  const { distanceText } =
+    useStoreCardData(store, {
+      onRemoveFavorite,
+      onNoUser: () => alert('Please log in to manage favorites.'),
+    });
 
   // Check if store is less than 2 weeks old
   const isNew = store.createdAt ? (new Date().getTime() - new Date(store.createdAt).getTime()) < (14 * 24 * 60 * 60 * 1000) : false;
-
-  const handleFavoriteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    
-    if (!user) {
-      alert('Please log in to manage favorites.');
-      return;
-    }
-
-    dispatch(
-      updateUser({ // @ts-ignore-next-line
-        user: user._id,
-        favoriteStore: store._id,
-      })
-    );
-    
-    if (onRemoveFavorite) {
-      onRemoveFavorite();
-    }
-  };
-
-  // Get status color classes
-  const getStatusColorClasses = () => {
-    switch (storeStatus.color) {
-      case 'green':
-        return 'bg-emerald-500';
-      case 'red':
-        return 'bg-rose-500';
-      case 'orange':
-        return 'bg-amber-500';
-      default:
-        return 'bg-gray-500';
-    }
-  };
 
   const thumbnail =
         store.thumbnails?.profily &&
@@ -122,4 +76,4 @@ const StoreBundleCarouselCard: React.FC<StoreBundleCarouselCardProps> = ({ store
   );
 };
 
-export default StoreBundleCarouselCard;
+export default SimpleStoreBundleCarouselCard;

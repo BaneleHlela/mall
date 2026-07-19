@@ -9,9 +9,14 @@ const initialState: ProductsState = {
   products: [],
   productsByStoreSlug: {},
   searchResults: [],
+  searchTotal: 0,
+  searchPage: 1,
+  searchPages: 1,
   isLoading: false,
   error: null,
   selectedProduct: null,
+  previewResults: [],
+  previewLoading: false,
 };
 
 // 🔁 Thunks
@@ -134,22 +139,35 @@ export const fetchStoreProducts = createAsyncThunk(
   }
 );
 
+export interface FetchProductsBySearchParams {
+  query?: string;
+  tags?: string;
+  sort?: string;
+  department?: string;
+  page?: number;
+  limit?: number;
+}
+
 export const fetchProductsBySearch = createAsyncThunk<
   { products: Product[]; total: number; page: number; pages: number; count: number },
-  { search: string; page?: number; limit?: number }
+  FetchProductsBySearchParams
 >(
   'products/fetchBySearch',
-  async ({ search, page = 1, limit = 20 }, thunkAPI) => {
+  async ({ query, tags, sort, department, page = 1, limit = 20 }, thunkAPI) => {
     try {
-      const params = new URLSearchParams();
-      if (search) params.append('search', search);
-      params.append('page', page.toString());
-      params.append('limit', limit.toString());
-      const res = await axios.get(`${API_BASE}?${params.toString()}`);
+      const res = await axios.get(API_BASE, { params: { query, tags, sort, department, page, limit } });
       return res.data;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to search products');
     }
+  }
+);
+
+export const fetchProductSuggestions = createAsyncThunk<Product[], { query: string }>(
+  'products/fetchProductSuggestions',
+  async ({ query }) => {
+    const res = await axios.get(API_BASE, { params: { query, limit: 4 } });
+    return res.data.products;
   }
 );
 
@@ -342,11 +360,29 @@ const productSlice = createSlice({
       })
       .addCase(fetchProductsBySearch.fulfilled, (state, action: PayloadAction<{ products: Product[]; total: number; page: number; pages: number; count: number }>) => {
         state.isLoading = false;
-        state.searchResults = action.payload.products;
+        const { products, total, page, pages } = action.payload;
+        state.searchResults = page > 1 ? [...state.searchResults, ...products] : products;
+        state.searchTotal = total;
+        state.searchPage = page;
+        state.searchPages = pages;
       })
       .addCase(fetchProductsBySearch.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+
+      // Fetch product suggestions for topbar preview
+      .addCase(fetchProductSuggestions.pending, (state) => {
+        state.previewLoading = true;
+        state.previewResults = [];
+      })
+      .addCase(fetchProductSuggestions.fulfilled, (state, action: PayloadAction<Product[]>) => {
+        state.previewLoading = false;
+        state.previewResults = action.payload;
+      })
+      .addCase(fetchProductSuggestions.rejected, (state) => {
+        state.previewLoading = false;
+        state.previewResults = [];
       })
 
       // Fetch Search Post Products

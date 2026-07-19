@@ -78,6 +78,12 @@ const serviceSchema = new mongoose.Schema({
   }],
 }, { timestamps: true });
 
+serviceSchema.index(
+  { name: 'text', category: 'text' },
+  { weights: { name: 10, category: 3 }, name: 'ServiceTextIndex' }
+);
+serviceSchema.index({ category: 1 });
+serviceSchema.index({ store: 1 });
 
 const Service = mongoose.model('Service', serviceSchema);
 export default Service;

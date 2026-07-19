@@ -4,6 +4,8 @@ import asyncHandler from 'express-async-handler';
 import mongoose from 'mongoose';
 import { uploadToUploads, deleteFromUploads } from '../config/gcsClient.js';
 import { ConsoleMessage } from 'puppeteer';
+import { parsePagination, parseTags, resolveSort, PRODUCT_SORTS } from '../utils/searchQuery.js';
+import { getOrSetCache, buildCacheKey } from '../utils/searchCache.js';
 
 
 export const createProduct = asyncHandler(async (req, res) => {
@@ -321,36 +323,52 @@ export const deleteProduct = asyncHandler(async (req, res) => {
 });
 
 export const getAllProducts = asyncHandler(async (req, res) => {
-  const { store, category, search, featured, page = 1, limit = 20 } = req.query;
+  const { store, category, query: searchQuery, tags, sort, department, featured, page, limit } = req.query;
+  const { page: pageNum, limit: limitNum, skip } = parsePagination({ page, limit });
 
-  const query = {};
+  const filter = {};
+  if (store) filter.store = store;
+  if (category) filter.category = category;
+  if (featured) filter.isFeatured = featured === 'true';
 
-  if (store) query.store = store;
-  if (category) query.category = category;
-  if (featured) query.isFeatured = featured === 'true';
+  const tagList = parseTags(tags);
+  if (tagList) filter.tags = { $in: tagList };
 
-  if (search) {
-    query.name = { $regex: search, $options: 'i' }; // case-insensitive search
+  if (department && !store) {
+    const storeIds = await Store.find(
+      { departments: department, isDeleted: { $ne: true } },
+      { _id: 1 }
+    ).lean();
+    filter.store = { $in: storeIds.map((s) => s._id) };
   }
 
-  const skip = (page - 1) * limit;
+  const hasQuery = !!(searchQuery && String(searchQuery).trim());
+  if (hasQuery) {
+    filter.$text = { $search: String(searchQuery).trim() };
+  }
 
-  const products = await Product.find(query)
-    .populate('store', '_id name slug') // populate store id, name and slug
-    //.populate('ratings') // optionally populate reviews
-    .sort({ createdAt: -1 }) // newest first
-    .skip(skip)
-    .limit(Number(limit));
+  const cacheKey = buildCacheKey('products', { store, category, query: searchQuery, tags, sort, department, featured, page: pageNum, limit: limitNum });
+  const result = await getOrSetCache(cacheKey, async () => {
+    let sortOption = resolveSort(PRODUCT_SORTS, sort, hasQuery);
+    let projection = {};
+    if (sortOption === null) {
+      projection = { score: { $meta: 'textScore' } };
+      sortOption = { score: { $meta: 'textScore' } };
+    }
 
-  const total = await Product.countDocuments(query);
+    const [products, total] = await Promise.all([
+      Product.find(filter, projection)
+        .populate('store', '_id name slug')
+        .sort(sortOption)
+        .skip(skip)
+        .limit(limitNum),
+      Product.countDocuments(filter),
+    ]);
 
-  res.status(200).json({
-    total,
-    page: Number(page),
-    pages: Math.ceil(total / limit),
-    count: products.length,
-    products,
+    return { total, page: pageNum, pages: Math.ceil(total / limitNum) || 1, count: products.length, products };
   });
+
+  res.status(200).json(result);
 });
 
 

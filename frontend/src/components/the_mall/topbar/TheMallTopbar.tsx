@@ -1,21 +1,34 @@
 import { MdLocationSearching } from "react-icons/md";
 import { SlLocationPin } from "react-icons/sl";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import StoreCard from "../home/store_card/StoreCard";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import type { RootState } from "../../../app/store";
-import { fetchStores } from "../../../features/stores/storeSlice";
+import { fetchStoreSuggestions } from "../../../features/stores/storeSlice";
+import { fetchProductSuggestions } from "../../../features/products/productsSlice";
+import { fetchServiceSuggestions } from "../../../features/services/servicesSlice";
 import { openRangeModal, closeRangeModal } from "../../../features/rangeSlice";
 import RangeModal from "../../modals/RangeModal";
 import ProtectedRoute from "../authorization/ProtectedRoute";
 import { PiMapPinSimpleAreaLight } from "react-icons/pi";
 import { CiLocationOn } from "react-icons/ci";
 import toast from "react-hot-toast";
+import debounce from "lodash.debounce";
+import MallSearchProductCard from "../../the_mall/search/search_results/MallSearchProductCard";
+import MallSearchServiceCard from "../../the_mall/search/search_results/MallSearchServiceCard";
 
 const TheMallTopbar = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchParams] = useSearchParams();
+  const urlQuery = (searchParams.get('query') || '').trim();
+  const [searchTerm, setSearchTerm] = useState(urlQuery);
   const [searchType, setSearchType] = useState<'all' | 'stores' | 'products' | 'services'>('all');
+  const searchTypeOptions: { key: typeof searchType; label: string }[] = [
+    { key: 'all', label: 'All' },
+    { key: 'stores', label: 'Stores' },
+    { key: 'products', label: 'Products' },
+    { key: 'services', label: 'Services' },
+  ];
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
@@ -23,16 +36,43 @@ const TheMallTopbar = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { storeSlugs, storesBySlug, isLoading } = useAppSelector(
+  const { suggestions, suggestionsLoading: isLoading } = useAppSelector(
     (state: RootState) => state.stores
+  );
+  const { previewResults: productPreviewResults, previewLoading: productsPreviewLoading } = useAppSelector(
+    (state: RootState) => state.products
+  );
+  const { previewResults: servicePreviewResults, previewLoading: servicesPreviewLoading } = useAppSelector(
+    (state: RootState) => state.services
   );
   const user = useAppSelector((state: RootState) => state.user.user);
   const { isOpen: isRangeModalOpen } = useAppSelector((state: RootState) => state.range);
 
   useEffect(() => {
-    if (searchTerm.trim().length > 0 && (searchType === 'all' || searchType === 'stores')) {
-      dispatch(fetchStores({ search: searchTerm }));
-    }
+    setSearchTerm(urlQuery);
+  }, [urlQuery]);
+
+  useEffect(() => {
+    const run = debounce(() => {
+      if (searchTerm.trim().length > 0 && (searchType === 'all' || searchType === 'stores')) {
+        dispatch(fetchStoreSuggestions({ query: searchTerm }));
+      }
+    }, 300);
+    run();
+    return () => run.cancel();
+  }, [dispatch, searchTerm, searchType]);
+
+  useEffect(() => {
+    const run = debounce(() => {
+      if (searchTerm.trim().length > 0 && (searchType === 'all' || searchType === 'products')) {
+        dispatch(fetchProductSuggestions({ query: searchTerm }));
+      }
+      if (searchTerm.trim().length > 0 && (searchType === 'all' || searchType === 'services')) {
+        dispatch(fetchServiceSuggestions({ query: searchTerm }));
+      }
+    }, 300);
+    run();
+    return () => run.cancel();
   }, [dispatch, searchTerm, searchType]);
 
   useEffect(() => {
@@ -49,7 +89,7 @@ const TheMallTopbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const showResults = searchTerm.length > 0 && (isFocused || isHovered);
+  const showResults = isFocused || isHovered;
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchTerm.trim()) {
@@ -58,7 +98,7 @@ const TheMallTopbar = () => {
     }
   };
 
-  const limitedResults = storeSlugs.slice(0, 4);
+  const limitedResults = suggestions.slice(0, 4);
 
   return (
     <div
@@ -106,7 +146,7 @@ const TheMallTopbar = () => {
                 onBlur={() => setIsFocused(false)}
                 onKeyDown={handleKeyDown}
                 type="text"
-                placeholder="Search for stores, products, or services"
+                placeholder={urlQuery || "Search for stores, products, or services"}
                 className="w-full h-full border p-[1vh] placeholder:text-[1.5vh]
                   placeholder:text-stone-400
                   bg-stone-100 dar:bg-[#3e3e3fe3]
@@ -122,24 +162,81 @@ const TheMallTopbar = () => {
                   onMouseLeave={() => setIsHovered(false)}
                   className="absolute top-[110%] bg-white w-full max-h-[350px] shadow-lg p-3 overflow-y-auto"
                 >
+                  {/* Type Buttons */}
+                  <div className="w-full flex flex-wrap gap-2 mb-3">
+                    {searchTypeOptions.map((option) => (
+                      <button
+                        key={option.key}
+                        onClick={() => setSearchType(option.key)}
+                        className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
+                          searchType === option.key
+                            ? 'bg-gray-900 text-white'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {searchTerm.trim().length > 0 && (
+                    <p className="text-xs text-gray-500 mb-2">
+                      Results for: <span className="font-medium text-gray-700">{searchTerm}</span>
+                    </p>
+                  )}
+
                   <div className="w-full flex">
                     <div className="w-[60%]">
-                      {(searchType === 'all' || searchType === 'stores') ? (
+                      {searchTerm.trim().length === 0 ? (
+                        <div className="p-4 text-sm text-gray-500">Start typing to see suggestions</div>
+                      ) : searchType === 'all' ? (
+                        <div className="grid grid-cols-2 gap-3">
+                          {[...limitedResults, ...productPreviewResults, ...servicePreviewResults].slice(0, 4).map((item) => (
+                            'store' in item ? (
+                              <StoreCard key={item._id ?? item.slug} store={item as any} user={user} mini={true} />
+                            ) : 'price' in item ? (
+                              <MallSearchProductCard key={item._id} product={item as any} />
+                            ) : (
+                              <MallSearchServiceCard key={item._id ?? (item as any).slug} service={item as any} />
+                            )
+                          ))}
+                        </div>
+                      ) : searchType === 'stores' ? (
                         isLoading ? (
                           <p className="text-gray-500 text-sm px-2">Loading...</p>
                         ) : limitedResults.length === 0 ? (
                           <p className="text-gray-500 text-sm px-2">No results found</p>
                         ) : (
                           <div className="grid grid-cols-2 gap-3">
-                            {limitedResults.map((id) => (
-                              <StoreCard key={id} store={storesBySlug[id]} user={user} mini={true} />
+                            {limitedResults.map((store) => (
+                              <StoreCard key={store._id ?? store.slug} store={store} user={user} mini={true} />
+                            ))}
+                          </div>
+                        )
+                      ) : searchType === 'products' ? (
+                        productsPreviewLoading ? (
+                          <p className="text-gray-500 text-sm px-2">Loading...</p>
+                        ) : productPreviewResults.length === 0 ? (
+                          <p className="text-gray-500 text-sm px-2">No products found</p>
+                        ) : (
+                          <div className="grid grid-cols-2 gap-3">
+                            {productPreviewResults.map((product) => (
+                              <MallSearchProductCard key={product._id} product={product} />
                             ))}
                           </div>
                         )
                       ) : (
-                        <div className="p-4 text-sm text-gray-600">
-                          Search preview is available for stores only. Press Enter to view {searchType} results.
-                        </div>
+                        servicesPreviewLoading ? (
+                          <p className="text-gray-500 text-sm px-2">Loading...</p>
+                        ) : servicePreviewResults.length === 0 ? (
+                          <p className="text-gray-500 text-sm px-2">No services found</p>
+                        ) : (
+                          <div className="grid grid-cols-2 gap-3">
+                            {servicePreviewResults.map((service) => (
+                              <MallSearchServiceCard key={service._id ?? service.slug} service={service} />
+                            ))}
+                          </div>
+                        )
                       )}
                     </div>
                     <div className="w-[40%] px-[1vh]">
@@ -278,7 +375,7 @@ const TheMallTopbar = () => {
               onBlur={() => setIsFocused(false)}
               onKeyDown={handleKeyDown}
               type="text"
-              placeholder="Search for stores, products, or services"
+              placeholder={urlQuery || "Search for stores, products, or services"}
               className="w-full h-[80%] border p-[1vh] placeholder:text-[1.5vh]
                 placeholder:text-stone-400
                 bg-stone-100 dar:bg-[#3e3e3fe3]
@@ -287,34 +384,97 @@ const TheMallTopbar = () => {
                 focus:outline-none rounded-[4px]"
             />
 
-            {/* Mobile Search Results Popup */}
-            {showResults && (
-              <div
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-                className="absolute top-[110%] left-0 bg-white w-full h-fit max-h-[50vh] shadow-lg p-3 overflow-y-auto z-50"
-              >
-                {isLoading ? (
-                  <p className="text-gray-500 text-sm px-2">Loading...</p>
-                ) : limitedResults.length === 0 ? (
-                  <p className="text-gray-500 text-sm px-2">No results found</p>
-                ) : (
-                  <div className="grid grid-cols-2 gap-3 w-full">
-                    {limitedResults.map((id) => (
-                      <StoreCard key={id} store={storesBySlug[id]} user={user} mini={true} />
-                    ))}
+             {/* Mobile Search Results Popup */}
+             {showResults && (
+               <div
+                 onMouseEnter={() => setIsHovered(true)}
+                 onMouseLeave={() => setIsHovered(false)}
+                 className="absolute top-[110%] left-0 bg-white w-full h-fit max-h-[50vh] shadow-lg p-3 overflow-y-auto z-50"
+               >
+                 {/* Type Buttons */}
+                 <div className="w-full flex flex-wrap gap-2 mb-3">
+                   {searchTypeOptions.map((option) => (
+                     <button
+                       key={option.key}
+                       onClick={() => setSearchType(option.key)}
+                       className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
+                         searchType === option.key
+                           ? 'bg-gray-900 text-white'
+                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                       }`}
+                     >
+                       {option.label}
+                     </button>
+                   ))}
                   </div>
-                )}
-                {storeSlugs.length > 0 && (
-                  <button
-                    onClick={() => navigate(`/search?query=${encodeURIComponent(searchTerm)}`)}
-                    className="w-full mt-3 py-2 text-sm font-semibold text-white bg-gray-900 rounded hover:bg-gray-800"
-                  >
-                    View All Results
-                  </button>
-                )}
-              </div>
-            )}
+
+                  {searchTerm.trim().length > 0 && (
+                    <p className="text-xs text-gray-500 mb-2">
+                      Results for: <span className="font-medium text-gray-700">{searchTerm}</span>
+                    </p>
+                  )}
+
+                  {searchTerm.trim().length === 0 ? (
+                    <div className="p-4 text-sm text-gray-500">Start typing to see suggestions</div>
+                  ) : searchType === 'all' ? (
+                    <div className="grid grid-cols-2 gap-3 w-full">
+                      {[...limitedResults, ...productPreviewResults, ...servicePreviewResults].slice(0, 4).map((item) => (
+                        'duration' in item ? (
+                          <MallSearchServiceCard key={item._id ?? (item as any).slug} service={item as any} />
+                        ) : 'stockQuantity' in item ? (
+                          <MallSearchProductCard key={item._id} product={item as any} />
+                        ) : (
+                          <StoreCard key={item._id ?? item.slug} store={item as any} user={user} mini={true} />
+                        )
+                      ))}
+                    </div>
+                  ) : searchType === 'stores' ? (
+                    isLoading ? (
+                      <p className="text-gray-500 text-sm px-2">Loading...</p>
+                    ) : limitedResults.length === 0 ? (
+                      <p className="text-gray-500 text-sm px-2">No results found</p>
+                    ) : (
+                      <div className="grid grid-cols-2 gap-3 w-full">
+                        {limitedResults.map((store) => (
+                          <StoreCard key={store._id ?? store.slug} store={store} user={user} mini={true} />
+                        ))}
+                      </div>
+                    )
+                  ) : searchType === 'products' ? (
+                    productsPreviewLoading ? (
+                      <p className="text-gray-500 text-sm px-2">Loading...</p>
+                    ) : productPreviewResults.length === 0 ? (
+                      <p className="text-gray-500 text-sm px-2">No products found</p>
+                    ) : (
+                      <div className="grid grid-cols-2 gap-3 w-full">
+                        {productPreviewResults.map((product) => (
+                          <MallSearchProductCard key={product._id} product={product} />
+                        ))}
+                      </div>
+                    )
+                  ) : (
+                    servicesPreviewLoading ? (
+                      <p className="text-gray-500 text-sm px-2">Loading...</p>
+                    ) : servicePreviewResults.length === 0 ? (
+                      <p className="text-gray-500 text-sm px-2">No services found</p>
+                    ) : (
+                      <div className="grid grid-cols-2 gap-3 w-full">
+                        {servicePreviewResults.map((service) => (
+                          <MallSearchServiceCard key={service._id ?? service.slug} service={service} />
+                        ))}
+                      </div>
+                    )
+                  )}
+                 {searchTerm.trim().length > 0 && (
+                   <button
+                     onClick={() => navigate(`/search?query=${encodeURIComponent(searchTerm)}&type=${searchType}`)}
+                     className="w-full mt-3 py-2 text-sm font-semibold text-white bg-gray-900 rounded hover:bg-gray-800"
+                   >
+                     View All Results
+                   </button>
+                 )}
+               </div>
+             )}
           </div>
         </div>
       </div>

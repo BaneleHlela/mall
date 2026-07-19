@@ -1,7 +1,4 @@
-import React, { useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { fetchSearchPosts } from '../../../features/searchPosts/searchPostSlice';
-import type { Store } from '../../../types/storeTypes';
+import React from 'react'
 import BasicProductCarousel from './search_carousels/BasicProductCarousel';
 import type { SearchPost } from '../../../types/searchPostTypes';
 import StoreBundleCarousel from './search_carousels/StoreBundleCarousel';

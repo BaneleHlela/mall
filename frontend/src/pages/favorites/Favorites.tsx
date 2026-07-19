@@ -45,7 +45,7 @@ const Favorites = () => {
   // Fetch all data on mount
   useEffect(() => {
     if (storeSlugs.length === 0 && !storeLoading) {
-      dispatch(fetchStores()); // Replace with fetchFavoriteStores
+      dispatch(fetchStores({ limit: 50 })); // Replace with fetchFavoriteStores
     }
     if (allProducts.length === 0 && !productLoading) {
       dispatch(fetchAllProducts()); // Replace with fetchFavoriteProducts

@@ -2,14 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MdVerified } from 'react-icons/md';
 import { GoHeartFill, GoHeart } from "react-icons/go";
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks.ts';
-import { updateUser } from '../../../../features/user/userSlice.ts';
-import { calculateDistanceToStore, formatDistance } from '../../home/store_card/supporting/calculateDistance.ts';
 import { RatingDisplay } from '../../home/store_card/supporting/storeRating.tsx';
-import { getStoreStatus } from '../../home/store_card/supporting/storeStatus.ts';
 import type { Store } from '../../../../types/storeTypes.ts';
 import { useDevice } from '../../../../utils/DeviceContext.tsx';
 import { responsiveDimensionControl } from '../../../../utils/helperFunctions.ts';
+import { useStoreCardData } from './hooks/useStoreCardData.ts';
 
 interface StoreBundleCarouselCardProps {
   store: Store;
@@ -23,54 +20,13 @@ interface StoreBundleCarouselCardProps {
 
 const StoreBundleCarouselCard: React.FC<StoreBundleCarouselCardProps> = ({ store, onRemoveFavorite, imagesAspectRatio, handleCardClick }) => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user.user);
   const { isMobileOrTablet } = useDevice();
 
-  const handleClick = () => {
-    if (store.slug){}
-    navigate(`/stores/${store.slug}`);
-  };
-
-  const distance = user ? calculateDistanceToStore(user, store) : null;
-  const distanceText = formatDistance(distance);
-  const storeStatus = getStoreStatus(store.operationTimes, store.manualStatus);
-  
-  const isFavorite = user?.favourites?.stores?.includes(store._id!);
-
-  const handleFavoriteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    
-    if (!user) {
-      navigate('redirect=%2Fsearch');
-      return;
-    }
-
-    dispatch(
-      updateUser({ // @ts-ignore-next-line
-        user: user._id,
-        favoriteStore: store._id,
-      })
-    );
-    
-    if (onRemoveFavorite) {
-      onRemoveFavorite();
-    }
-  };
-
-  // Get status color classes
-  const getStatusColorClasses = () => {
-    switch (storeStatus.color) {
-      case 'green':
-        return 'bg-emerald-500';
-      case 'red':
-        return 'bg-rose-500';
-      case 'orange':
-        return 'bg-amber-500';
-      default:
-        return 'bg-gray-500';
-    }
-  };
+  const { distanceText, storeStatus, statusColorClass, isFavorite, handleFavoriteClick } =
+    useStoreCardData(store, {
+      onRemoveFavorite,
+      onNoUser: () => navigate('redirect=%2Fsearch'),
+    });
 
   return (
     <div
@@ -98,7 +54,7 @@ const StoreBundleCarouselCard: React.FC<StoreBundleCarouselCardProps> = ({ store
           {/* Top Badges */}
           <div className="absolute top-2 left-2 right-2 flex justify-between items-start">
             {/* Status Badge */}
-            <span className={`px-2 py-1 rounded-full text-xs font-semibold text-white ${getStatusColorClasses()} shadow-lg`}>
+            <span className={`px-2 py-1 rounded-full text-xs font-semibold text-white ${statusColorClass} shadow-lg`}>
               {storeStatus.isOpen ? 'Open' : 'Closed'}
             </span>
             

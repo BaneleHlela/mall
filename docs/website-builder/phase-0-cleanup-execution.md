@@ -73,3 +73,5 @@ describe future-state architecture, not current state.
 Give me a summary of what you changed, what you left alone and why, and
 anything you found that contradicts what's in the findings doc.
 ```
+
+_Note (2026-07-19): the `docs/00`–`04` paths above are what this prompt actually said when it was run — left verbatim as a historical record. Those files have since moved to `docs/website-builder/00`–`04` as part of the broader docs restructure; see [`docs/README.md`](../README.md)._

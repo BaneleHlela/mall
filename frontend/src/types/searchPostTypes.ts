@@ -53,19 +53,3 @@ export interface SearchPost {
   }
   likelihoodIndex: number;
 }
-
-export type PostType =
-  | 'top-rated-in-your-area'
-  | 'top-rated-in-department'
-  | 'top-rated-the-mall'
-  | 'top-rated-stores'
-  | 'recently-viewed'
-  | 'trending-now'
-  | 'recommended-for-you'
-  | 'new-arrivals'
-  | 'best-sellers'
-  | 'on-sale'
-  | 'featured-products'
-  | 'store-top-products'
-  | 'customer-favorites'
-  | 'editors-picks';

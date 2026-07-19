@@ -29,7 +29,8 @@ import {
     captureStoreCardAuto,
     captureReelyAuto,
     cloneStore,
-    getSearchPostStores
+    getSearchPostStores,
+    getStoreSuggestions
 } from "../controllers/StoreController.js";
 import { getBillingStats } from "../controllers/BillingController.js";
 import { uploadSingleFile, uploadTeamMemberImage } from "../middlewares/uploadMiddleware.js";
@@ -40,6 +41,7 @@ const router = express.Router();
 router.post('/add', protectRoute, addStore);
 router.get("/my-stores", protectRoute, getStoresByOwner);
 router.get('/nearby', getStoresNearby);
+router.get('/suggest', getStoreSuggestions);
 router.get('/', getStores);
 router.get("/:storeSlug", getStore);
 router.put('/edit/:storeSlug', protectRoute, editStore);

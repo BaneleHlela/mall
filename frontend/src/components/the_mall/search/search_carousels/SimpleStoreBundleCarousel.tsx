@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FiArrowRight } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks.ts";
 import { fetchSearchPostStores } from "../../../../features/stores/storeSlice.ts";
 import type { Store } from "../../../../types/storeTypes.ts";
-import { updateSearchPostStats } from "../../../../features/searchPosts/searchPostSlice.ts";
+import { useSearchPostClickTracking } from "../../../../features/searchPosts/useSearchPostClickTracking.ts";
 
 interface SimpleStoreBundleCarouselProps {
   searchPost: SearchPost;
@@ -30,20 +30,7 @@ const SimpleStoreBundleCarousel: React.FC<SimpleStoreBundleCarouselProps> = ({
     heading: '',
     subheading: '',
   });
-  const [isDesktop, setIsDesktop] = useState(false);
   const [ headerRoute, setHeaderRoute ] = React.useState<string>('');
-
-  // Responsive detection
-  useEffect(() => {
-    const checkIsDesktop = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-    };
-
-    checkIsDesktop();
-    window.addEventListener('resize', checkIsDesktop);
-
-    return () => window.removeEventListener('resize', checkIsDesktop);
-  }, []);
 
   // Type effects
   useEffect(() => {
@@ -79,22 +66,12 @@ const SimpleStoreBundleCarousel: React.FC<SimpleStoreBundleCarouselProps> = ({
     }
   }, [searchPost]);
 
-  const updatePostStats = () => {
-    dispatch(updateSearchPostStats({
-      searchPostId: searchPost._id, 
-      stats: {
-        ...searchPost.stats,
-        clicks: 1, 
-        likelihoodIndex: 1, 
-      }}
-    ))
-  }
+  const trackSearchPostClick = useSearchPostClickTracking(searchPost);
 
   // View All Button Click
   const handleViewAllButtonClick = () => {
     if (viewAllRoute) {
-      // Update post stats
-      updatePostStats();
+      trackSearchPostClick();
       navigate(viewAllRoute);
     }
   };
@@ -102,7 +79,7 @@ const SimpleStoreBundleCarousel: React.FC<SimpleStoreBundleCarouselProps> = ({
   // Handle Header Click
   const handleHeaderClick = () => {
     if (headerRoute) {
-      updatePostStats();
+      trackSearchPostClick();
       navigate(headerRoute)
     }
   }
@@ -110,7 +87,7 @@ const SimpleStoreBundleCarousel: React.FC<SimpleStoreBundleCarouselProps> = ({
   // Handle Card Click
   const handleCardClick = (store: Store) => {
     if (store.slug) {
-      updatePostStats();
+      trackSearchPostClick();
       navigate(`/stores/${store.slug}`);
     }
   }

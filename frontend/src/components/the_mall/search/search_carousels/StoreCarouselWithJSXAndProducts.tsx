@@ -15,7 +15,7 @@ import type { Product } from '../../../../types/productTypes.ts';
 import { responsiveDimensionControl } from '../../../../utils/helperFunctions.ts';
 import { IoIosArrowRoundForward } from 'react-icons/io';
 import { MdVerified } from 'react-icons/md';
-import { updateSearchPostStats } from '../../../../features/searchPosts/searchPostSlice.ts';
+import { useSearchPostClickTracking } from '../../../../features/searchPosts/useSearchPostClickTracking.ts';
 
 interface StoreCarouselWithJSXAndProductsProps {
     // store: Store;
@@ -35,8 +35,7 @@ interface StoreCarouselWithJSXAndProductsProps {
 const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsProps> = ({ searchPost }) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const { isMobileOrTablet } = useDevice();
-    const [isDesktop, setIsDesktop] = useState(false);
+    const { isMobileOrTablet, isDesktop } = useDevice();
     const store= useAppSelector(state => state.stores.storesBySlug[searchPost.type.replace("-store-top-products", "")]);
     const hasPopulatedProducts = (searchPost.products?.length ?? 0) > 0 &&
         typeof searchPost.products[0] === 'object' &&
@@ -126,35 +125,24 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
         fetchProducts();
     }, [searchPost, dispatch]);
 
-    // Update post stats  
-    const updatePostStats = () => {
-    dispatch(updateSearchPostStats({
-        searchPostId: searchPost._id, 
-        stats: {
-        ...searchPost.stats,
-        clicks: 1, 
-        likelihoodIndex: 1, 
-        }}
-    ))
-    }
+    const trackSearchPostClick = useSearchPostClickTracking(searchPost);
 
     // Handle Button Click
     const handleButtonClick = (storeSlug: string) => {
-        updatePostStats();
+        trackSearchPostClick();
         navigate(`/stores/${storeSlug}`);
     };
 
     // View All Button Click
     const handleViewAllButtonClick = () => {
         if (viewAllRoute) {
-            // Update post stats
-            updatePostStats()
+            trackSearchPostClick();
             navigate(viewAllRoute);
         }
     };
 
     const handleImageClick = () => {
-        updatePostStats()
+        trackSearchPostClick();
     }
     
 

@@ -68,6 +68,7 @@ export interface Store {
   trades: string[];
   slogan: string;
   departments: string[];
+  tags?: string[];
   layouts: Types.ObjectId[] | string[];
   categories?: {
     products?: string[];

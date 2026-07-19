@@ -6,6 +6,8 @@ import mongoose from 'mongoose';
 import User from '../models/UserModel.js';
 import { generateSlug, captureStoreCardThumbnail, captureReelyThumbnail } from '../utils/helperFunctions.js';
 import { sendStoreCreatedEmail } from '../emails/email.js';
+import { escapeRegex, parsePagination, parseTags, resolveSort, STORE_SORTS } from '../utils/searchQuery.js';
+import { getOrSetCache, buildCacheKey } from '../utils/searchCache.js';
 
 const CLIENT_URL = process.env.CLIENT_URL;
 
@@ -30,9 +32,15 @@ export const addStore = expressAsyncHandler(async (req, res) => {
     const created = new Store({
         ...req.body,
         team: [{ member: _id, role: "owner" }], // Assign the creator as the owner
-        
+
         slug,
     });
+
+    if (Array.isArray(created.tags)) {
+      created.tags = created.tags
+        .map((tag) => String(tag).trim().toLowerCase())
+        .filter(Boolean);
+    }
 
     await created.save();
 
@@ -81,71 +89,98 @@ export const getStore = expressAsyncHandler(async (req, res) => {
 
 
 
+// Geo-sorted stores via $geoNear. $text and $geoNear can't be combined in one query
+// (different index entry points, and you can't rank on two orderings simultaneously
+// anyway) - free-text matching degrades to an escaped-regex name match here.
+const queryStoresNearest = async ({ filter, hasQuery, query, skip, limit, page, userLat, userLng }) => {
+  const geoFilter = { ...filter };
+  delete geoFilter.$text;
+
+  const pipeline = [{
+    $geoNear: {
+      near: { type: 'Point', coordinates: [parseFloat(userLng), parseFloat(userLat)] },
+      distanceField: 'distance',
+      spherical: true,
+      query: geoFilter,
+    },
+  }];
+  if (hasQuery) {
+    pipeline.push({ $match: { name: { $regex: escapeRegex(String(query).trim()), $options: 'i' } } });
+  }
+
+  const [countResult] = await Store.aggregate([...pipeline, { $count: 'total' }]);
+  const total = countResult ? countResult.total : 0;
+
+  const idPage = await Store.aggregate([...pipeline, { $skip: skip }, { $limit: limit }, { $project: { _id: 1 } }]);
+  const orderedIds = idPage.map((d) => d._id);
+
+  // $in doesn't preserve array order, so re-sort in JS to keep distance ordering
+  const unordered = await Store.find({ _id: { $in: orderedIds } }).populate('team.member');
+  const byId = new Map(unordered.map((s) => [String(s._id), s]));
+  const stores = orderedIds.map((id) => byId.get(String(id))).filter(Boolean);
+
+  return { stores, total, page, pages: Math.ceil(total / limit) || 1, count: stores.length };
+};
+
 export const getStores = expressAsyncHandler(async (req, res) => {
-  const { search, department, sortBy, userLat, userLng } = req.query;
+  const { query, department, tags, sort, page, limit, userLat, userLng } = req.query;
+  const { page: pageNum, limit: limitNum, skip } = parsePagination({ page, limit });
 
-  let searchFilter = { isDeleted: { $ne: true } };
-  
-  if (search) {
-    searchFilter = {
-      ...searchFilter,
-      $or: [
-        { name: { $regex: search.toString(), $options: 'i' } },
-        { slogan: { $regex: search.toString(), $options: 'i' } },
-        { about: { $regex: search.toString(), $options: 'i' } },
-        { 'categories.products': { $in: [new RegExp(search.toString(), 'i')] } },
-        { 'categories.services': { $in: [new RegExp(search.toString(), 'i')] } }
-      ]
-    };
-  }
-
+  const filter = { isDeleted: { $ne: true } };
   if (department) {
-    searchFilter = {
-      ...searchFilter,
-      departments: { $in: [department] }
-    };
+    filter.departments = { $in: [department] };
+  }
+  const tagList = parseTags(tags);
+  if (tagList) {
+    filter.tags = { $in: tagList };
+  }
+  const hasQuery = !!(query && String(query).trim());
+  if (hasQuery) {
+    filter.$text = { $search: String(query).trim() };
   }
 
-  let stores;
-
-  // Handle sorting
-  if (sortBy === 'nearest' && userLat && userLng) {
-    // ✅ requires location as a 2dsphere index
-    stores = await Store.find({
-      ...searchFilter,
-      'location.coordinates': { $exists: true },
-    }).populate('team.member').aggregate([
-      {
-        $geoNear: {
-          near: {
-            type: 'Point',
-            coordinates: [parseFloat(userLng), parseFloat(userLat)],
-          },
-          distanceField: 'distance',
-          spherical: true,
-        },
-      },
-    ]);
-  } else {
-    let sortOption = { 'rating.numberOfRatings': -1 }; // default newest first
-
-    switch (sortBy) {
-      case 'top-rated':
-        sortOption = { 'rating.averageRating': -1 };
-        break;
-      case 'newest':
-        sortOption = { createdAt: -1 };
-        break;
-      case 'oldest':
-        sortOption = { createdAt: 1 };
-        break;
-      case 'most-liked':
-        sortOption = { 'likes.count': -1 };
-        break;
+  const cacheKey = buildCacheKey('stores', { query, department, tags, sort, page: pageNum, limit: limitNum, userLat, userLng });
+  const result = await getOrSetCache(cacheKey, async () => {
+    if (sort === 'nearest' && userLat && userLng) {
+      return queryStoresNearest({ filter, hasQuery, query, skip, limit: limitNum, page: pageNum, userLat, userLng });
     }
-    stores = await Store.find(searchFilter).sort(sortOption).populate('team.member');
-  }
 
+    let sortOption = resolveSort(STORE_SORTS, sort, hasQuery);
+    let projection = {};
+    if (sortOption === null) {
+      // hasQuery is guaranteed true here (resolveSort only returns null when hasTextQuery)
+      projection = { score: { $meta: 'textScore' } };
+      sortOption = { score: { $meta: 'textScore' } };
+    }
+
+    const [stores, total] = await Promise.all([
+      Store.find(filter, projection).sort(sortOption).skip(skip).limit(limitNum).populate('team.member'),
+      Store.countDocuments(filter),
+    ]);
+
+    return { stores, total, page: pageNum, pages: Math.ceil(total / limitNum) || 1, count: stores.length };
+  });
+
+  res.status(200).json(result);
+});
+
+// Lightweight typeahead for the topbar's live-as-you-type search box. Deliberately
+// separate from getStores: no $text (needs partial-word matching mid-keystroke, which
+// $text doesn't support), no pagination envelope, no caching (per-keystroke queries are
+// near-unique, so a cache would have ~0% hit rate).
+export const getStoreSuggestions = expressAsyncHandler(async (req, res) => {
+  const { query } = req.query;
+  if (!query || !String(query).trim()) {
+    return res.status(200).json([]);
+  }
+  const safe = escapeRegex(String(query).trim());
+  // Full documents, not a slim projection: capped at 6 results, and the frontend
+  // renders these through the same StoreCard used elsewhere, which needs most of
+  // the store shape (website, operationTimes, rating, isVerified, ...).
+  const stores = await Store.find({
+    isDeleted: { $ne: true },
+    name: { $regex: safe, $options: 'i' },
+  }).limit(6);
   res.status(200).json(stores);
 });
 
@@ -320,6 +355,13 @@ export const editStore = expressAsyncHandler(async (req, res) => {
   // Update departments (admin only)
   if (req.body.departments && Array.isArray(req.body.departments)) {
     store.departments = req.body.departments;
+  }
+
+  // Update tags
+  if (req.body.tags && Array.isArray(req.body.tags)) {
+    store.tags = req.body.tags
+      .map((tag) => String(tag).trim().toLowerCase())
+      .filter(Boolean);
   }
 
   // Update flag (admin only)

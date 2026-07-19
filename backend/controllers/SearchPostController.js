@@ -3,6 +3,19 @@ import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
 import { sortSearchPostsByLikelihood } from "../utils/helperFunctions.js";
 
+// Shared populate chain used by handlers that need stores/products/services expanded
+const populateSearchPost = (query) =>
+  query
+    .populate("stores")
+    .populate({
+      path: "products",
+      populate: {
+        path: "store",
+        select: "_id name slug thumbnails",
+      },
+    })
+    .populate("services");
+
 // Create a new search post
 export const createSearchPost = asyncHandler(async (req, res) => {
     const { variation, type, departments, stores, products, services, style, likelihoodIndex } = req.body;
@@ -25,18 +38,7 @@ export const createSearchPost = asyncHandler(async (req, res) => {
 
 // Get search post by ID
 export const getSearchPost = asyncHandler(async (req, res) => {
-  const searchPost = await SearchPost.findById(req.params.id)
-    .populate("stores")
-    .populate({
-      path: "products",
-      populate: {
-        path: "store",
-        select: "_id name slug thumbnails",
-      },
-    })
-    .populate("services");
-
-    console.log("Fetched search post:", searchPost.products[0]);
+  const searchPost = await populateSearchPost(SearchPost.findById(req.params.id));
 
   if (!searchPost) {
     res.status(404);
@@ -73,16 +75,7 @@ export const deleteSearchPost = asyncHandler(async (req, res) => {
 
 // Fetch all active search posts
 export const fetchSearchPosts = asyncHandler(async (req, res) => {
-    const searchPosts = await SearchPost.find({ isActive: true })
-    .populate("stores")
-    .populate({
-      path: "products",
-      populate: {
-        path: "store",
-        select: "_id name slug thumbnails",
-      },
-    })
-    .populate("services");
+    const searchPosts = await populateSearchPost(SearchPost.find({ isActive: true }));
     const sortedPosts = sortSearchPostsByLikelihood(searchPosts);
     res.json(sortedPosts);
 });

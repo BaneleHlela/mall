@@ -29,7 +29,8 @@ const StoreBasicSettings = () => {
     nickname: '',
     slogan: '',
     contact: { phone: '', email: '' },
-    departments: [] as string[]
+    departments: [] as string[],
+    tagsInput: ''
   });
 
   const [validation, setValidation] = useState({
@@ -51,7 +52,8 @@ const StoreBasicSettings = () => {
           phone: store.contact?.phone || '',
           email: store.contact?.email || ''
         },
-        departments: store.departments || []
+        departments: store.departments || [],
+        tagsInput: (store.tags || []).join(', ')
       });
     }
   }, [store]);
@@ -148,7 +150,8 @@ const StoreBasicSettings = () => {
       nickname: form.nickname,
       slogan: form.slogan,
       contact: form.contact,
-      departments: form.departments
+      departments: form.departments,
+      tags: form.tagsInput.split(',').map(t => t.trim()).filter(Boolean)
     };
   
     try {
@@ -319,6 +322,22 @@ const StoreBasicSettings = () => {
                   Please select at least one department (max {MAX_DEPARTMENTS})
                 </p>
               )}
+            </div>
+
+            {/* Tags */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                <FaTag className="text-teal-500" />
+                Tags
+              </label>
+              <input
+                type="text"
+                value={form.tagsInput}
+                onChange={e => handleInputChange('tagsInput', e.target.value)}
+                placeholder="e.g. kota, delivery, custom orders"
+                className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-teal-500 focus:bg-white transition-colors"
+              />
+              <p className="text-slate-400 text-xs mt-2">Comma-separated keywords shoppers might search for, e.g. "kota, food, phone fix"</p>
             </div>
 
             {/* Slogan */}

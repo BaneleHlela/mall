@@ -238,6 +238,9 @@ const storeSchema = new mongoose.Schema(
     trades: [{
       type: String,
     }], // for e.g ["products", "services", "packages"] or ["none"]
+    tags: [{
+      type: String,
+    }], // free-text vendor keywords, e.g. ["kota", "food", "phone fix"] - normalized (trim+lowercase) on write
     categories: {
       products: {
         type: [String],
@@ -375,6 +378,12 @@ storeSchema.set('toJSON', {
   }
 });
 storeSchema.index({ 'location': '2dsphere' });
+storeSchema.index(
+  { name: 'text', slogan: 'text', tags: 'text', 'categories.products': 'text', 'categories.services': 'text', about: 'text' },
+  { weights: { name: 10, tags: 8, slogan: 5, 'categories.products': 4, 'categories.services': 4, about: 1 }, name: 'StoreTextIndex' }
+);
+storeSchema.index({ departments: 1 });
+storeSchema.index({ tags: 1 });
 
 
 const Store = mongoose.models.Store || mongoose.model("Store", storeSchema);

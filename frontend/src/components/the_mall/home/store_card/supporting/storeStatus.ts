@@ -244,7 +244,7 @@ export function getStoreStatus(operationTimes?: OperationTimes, manualStatus?: {
  */
 export function getStatusClasses(status: StoreStatusResult): string {
   const baseClasses = 'px-[5%] rounded-[2px] text-[1.4vh] font-medium';
-  
+
   switch (status.color) {
     case 'green':
       return `${baseClasses} bg-green-100 text-green-800`;
@@ -254,5 +254,22 @@ export function getStatusClasses(status: StoreStatusResult): string {
       return `${baseClasses} bg-orange-100 text-orange-800`;
     default:
       return `${baseClasses} bg-gray-100 text-gray-800`;
+  }
+}
+
+/**
+ * Solid background color classes for status badges overlaid on card images
+ * (distinct from getStatusClasses, which returns light chip-style classes)
+ */
+export function getStoreStatusBadgeColorClasses(status: StoreStatusResult): string {
+  switch (status.color) {
+    case 'green':
+      return 'bg-emerald-500';
+    case 'red':
+      return 'bg-rose-500';
+    case 'orange':
+      return 'bg-amber-500';
+    default:
+      return 'bg-gray-500';
   }
 }

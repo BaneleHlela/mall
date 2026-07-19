@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
 import "swiper/css";
-import StoreBundleCarouselCard from "./StoreBundleCarouselCard.tsx";
 import BasicProductCarouselCard from "./BasicProductCarouselCard.tsx";
 import { useNavigate } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa6";
