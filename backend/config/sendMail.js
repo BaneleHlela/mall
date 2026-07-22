@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   secure: true,
   host: process.env.SMTP_HOST,
-  port: 465,
+  port: process.env.SMTP_PORT,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.GMAIL_APP_PASSWORD,
@@ -24,5 +24,7 @@ export async function sendMail({ to, subject, html, from }) {
   });
 }
 
-await transporter.verify();
-console.log("SMTP ready");
+transporter.verify().then(
+  () => console.log("SMTP ready"),
+  (err) => console.error("SMTP verify failed (email sending may be unavailable):", err.message)
+);
