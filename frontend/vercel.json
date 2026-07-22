@@ -1,6 +1,6 @@
 {
     "rewrites": [
-      { "source": "/api/(.*)", "destination": "https://api.themallbeta.com/api/$1" },
+      { "source": "/api/(.*)", "destination": "https://mall-backend-4w8l.onrender.com/api/$1" },
       { "source": "/(.*)", "destination": "/" }
     ]
 }

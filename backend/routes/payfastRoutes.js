@@ -18,7 +18,7 @@ router.post("/create", async (req, res) => {
   };
 
   const FRONTEND_URL = process.env.FRONTEND_PUBLIC_URL || "https://themallbeta.com";
-  const BACKEND_URL = process.env.BACKEND_URL || "https://api.themallbeta.com";
+  const BACKEND_URL = process.env.BACKEND_URL || "https://mall-backend-4w8l.onrender.com";
 
 
   const paymentData = {
