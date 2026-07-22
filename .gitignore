@@ -20,3 +20,7 @@ yarn-error.log*
 # OS files
 .DS_Store
 Thumbs.db
+
+# IDE / AI tool config
+.idea/
+.kilo/
