@@ -74,7 +74,9 @@ const isFeedbackPost = (postData: any): boolean => {
 
 const HomePage = () => {
   const navigate = useNavigate(); // Initialize the navigate function
-  const user = useAppSelector((state) => state.user.user);
+  const userState = useAppSelector((state) => state.user);
+  const user = userState.user;
+  const isCheckingAuth = userState.isCheckingAuth;
   const isPostReviewModalOpen = useAppSelector(selectIsPostReviewModalOpen);
   const departmentRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
 
@@ -388,18 +390,27 @@ const HomePage = () => {
           </div>
         )}
         {/* Feed  */}
-        <div className="space-y-[.6vh]">
-          {selectedPosts.map((postData) => (
-            <StorePostJSX
-              key={postData.id}
-              tipFor={getTipFor(postData)}
-              jsx={<postData.component />}
-              onModalOpen={setIsReviewsModalOpen}
-              isFeedbackPost={isFeedbackPost(postData)}
-              storeSlug={postData.storeSlug}
-            />
-          ))}
-        </div>
+        {isCheckingAuth ? (
+          <div className="space-y-[.6vh] flex justify-center items-center py-[10vh]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+              <p className="text-gray-500 text-[2vh]">Loading feed...</p>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-[.6vh]">
+            {selectedPosts.map((postData) => (
+              <StorePostJSX
+                key={postData.id}
+                tipFor={getTipFor(postData)}
+                jsx={<postData.component />}
+                onModalOpen={setIsReviewsModalOpen}
+                isFeedbackPost={isFeedbackPost(postData)}
+                storeSlug={postData.storeSlug}
+              />
+            ))}
+          </div>
+        )}
         <TheMallStoreFooterSection/>
         {/* Placeholder divs */}
         <div className="flex flex-col w-full h-[48vh] lg:h-[40vh] lg:flex-row">
