@@ -161,7 +161,7 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
                     }}
                     src={searchPost.style.content?.largeImage?.imageUrl[0] || 'https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/image%20placeholder%20(Card%20(Square)).png'}
                     alt={searchPost.stores[0]?.name}
-                    className="w-full h-full lg:max-w-[50%] object-cover rounded-lg cursor-pointer"
+                    className="w-full h-full object-cover rounded-lg cursor-pointer"
                 />
             </div>
             {/* Details */}
