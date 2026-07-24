@@ -104,7 +104,9 @@ const SearchPostsEditorContent = () => {
         navigate(-1);
       }, 1000);
     } catch (error: any) {
-      toast.error(error || 'Failed to save search post');
+      const message =
+        typeof error === 'string' ? error : error?.message || 'Failed to save search post';
+      toast.error(message);
     } finally {
       setIsSaving(false);
     }

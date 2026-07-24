@@ -150,10 +150,10 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
         <div
             id={searchPost._id}
             style={{ backgroundColor: searchPost.style?.colors?.backgroundColor }}  
-            className='w-full items-end py-6 ' 
+            className='lg:flex lg:flex-row w-full items-end py-6 lg:h-[80vh]' 
         >
             {/* JSX content for the store carousel */}
-            <div onClick={handleImageClick} className="w-full px-3">
+            <div onClick={handleImageClick} className="flex items-center justify-center w-full h-full px-3">
                 <img
                     style={{
                         borderRadius: searchPost.style.content?.largeImage?.borderRadius ? `${searchPost.style.content.largeImage.borderRadius}` : '0px',
@@ -161,11 +161,11 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
                     }}
                     src={searchPost.style.content?.largeImage?.imageUrl[0] || 'https://storage.googleapis.com/the-mall-uploads-giza/stores/themall/images/image%20placeholder%20(Card%20(Square)).png'}
                     alt={searchPost.stores[0]?.name}
-                    className="w-full object-cover rounded-lg cursor-pointer"
+                    className="w-full h-full lg:max-w-[50%] object-cover rounded-lg cursor-pointer"
                 />
             </div>
             {/* Details */}
-            <div className="">
+            <div className="lg:flex lg:flex-col lg:justify-between lg:max-w-[50%] lg:h-full">
                 {/* Store slug */}
                 {postText.storeSlug && (
                     <p 
@@ -196,6 +196,7 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
                     <span className="">View Store</span> <GoArrowRight className='text-xl'/>
                 </button>
                 {/* Products */}
+                <div className="max-h-[50%]">
                 <Swiper
                     modules={[FreeMode, Scrollbar]}
                     freeMode={false}
@@ -203,7 +204,7 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
                     spaceBetween={5} 
                     slidesPerView={Number(responsiveDimensionControl(isMobileOrTablet, searchPost.style.content?.carousel?.slidesPerView))}
                     speed={700}
-                    className="px-2 pb-2 mt-4 pl-3"
+                    className="px-2 pb-2 mt-4 pl-3 max-h"
                     style={{
                         backgroundColor: searchPost.style?.colors?.carouselBackgroundColor || 'transparent',
                     }}
@@ -234,6 +235,7 @@ const StoreCarouselWithJSXAndProducts:React.FC<StoreCarouselWithJSXAndProductsPr
                         </div>
                     </SwiperSlide>
                 </Swiper>
+                </div>
             </div>
         </div>
     )
