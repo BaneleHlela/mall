@@ -1,4 +1,4 @@
-import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa";
 import { API_URL } from "../../../../features/context";
 
 const BACKEND_URL = API_URL; // Or hardcode your backend URL

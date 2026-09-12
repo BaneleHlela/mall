@@ -68,7 +68,7 @@ export const refreshAccessToken = createAsyncThunk(
     "user/refreshAccessToken",
     async (_, thunkAPI) => {
       try {
-        const response = await api.get(`${USER_API_URL}/refresh-token`);
+        const response = await api.post(`${USER_API_URL}/refresh-token`);
         return response.data.message as string;
       } catch (err: any) {
         return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to refresh token");
@@ -278,6 +278,7 @@ const userSlice = createSlice({
     },
     clearUser(state) {
       state.user = null;
+      state.isAuthenticated = false;
     },
   },
   extraReducers: (builder) => {

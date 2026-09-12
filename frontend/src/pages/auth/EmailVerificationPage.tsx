@@ -45,8 +45,15 @@ const EmailVerificationPage = () => {
 	};
 
 	const handleKeyDown = (index: number, e: KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Backspace" && !code[index] && index > 0) {
-			inputRefs.current[index - 1]?.focus();
+		if (e.key === "Backspace") {
+			const newCode = [...code];
+			if (newCode[index]) {
+				newCode[index] = "";
+			}
+			setCode(newCode);
+			if (index > 0) {
+				inputRefs.current[index - 1]?.focus();
+			}
 		}
 	};
 

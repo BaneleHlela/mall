@@ -4,7 +4,13 @@
   "main": "backend/server.js",
   "scripts": {
     "dev": "nodemon backend/server.js",
-    "start": "node backend/server.js"
+    "start": "node backend/server.js",
+    "test": "jest --config jest.backend.config.cjs",
+    "test:unit": "jest --config jest.backend.config.cjs --selectProjects unit",
+    "test:integration": "jest --config jest.backend.config.cjs --selectProjects integration",
+    "test:unit:watch": "jest --config jest.backend.config.cjs --selectProjects unit --watch",
+    "test:integration:watch": "jest --config jest.backend.config.cjs --selectProjects integration --watch",
+    "test:watch": "jest --config jest.backend.config.cjs --watch"
   },
   "keywords": [],
   "author": "",
@@ -37,6 +43,15 @@
     "twilio": "^5.13.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@types/jest": "^30.0.0",
+    "@types/supertest": "^7.2.1",
+    "babel-jest": "^30.5.1",
+    "jest": "^30.5.1",
+    "jest-mock-extended": "^4.0.1",
+    "mongodb-memory-server": "^11.2.0",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.2.2"
   }
 }

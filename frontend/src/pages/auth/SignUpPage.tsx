@@ -66,8 +66,9 @@ const SignUpPage = () => {
       </div>
 
       <form onSubmit={handleSignUp}>
-        <label className="text-[2.3vh]">First Name</label>
+        <label htmlFor="firstName" className="text-[2.3vh]">First Name</label>
         <Input
+          id="firstName"
           icon={User}
           type="text"
           placeholder="First Name"
@@ -75,8 +76,9 @@ const SignUpPage = () => {
           onChange={(e) => setFirstName(e.target.value)}
         />
 
-        <label className="text-[2.3vh]">Last Name</label>
+        <label htmlFor="lastName" className="text-[2.3vh]">Last Name</label>
         <Input
+          id="lastName"
           icon={User}
           type="text"
           placeholder="Last Name"
@@ -84,8 +86,9 @@ const SignUpPage = () => {
           onChange={(e) => setLastName(e.target.value)}
         />
 
-        <label className="text-[2.3vh]">Email</label>
+        <label htmlFor="email" className="text-[2.3vh]">Email</label>
         <Input
+          id="email"
           icon={Mail}
           type="email"
           placeholder="Email Address"
@@ -93,8 +96,9 @@ const SignUpPage = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <label className="text-[2.3vh]">Password</label>
+        <label htmlFor="password" className="text-[2.3vh]">Password</label>
         <Input
+          id="password"
           icon={Lock}
           type="password"
           placeholder="Password"

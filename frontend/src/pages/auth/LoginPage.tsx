@@ -81,18 +81,20 @@ const LoginPage = () => {
 			<div className=''>
 				<form onSubmit={handleLogin}>
 					<label htmlFor="email" className="text-[2.3vh]">Email </label>
-					<Input
-						icon={Mail}
-						type='email'
-						placeholder='Email Address'
+          <Input
+            id="email"
+            icon={Mail}
+            type='email'
+            placeholder='Email Address'
 						value={email}
 						onChange={(e: any) => setEmail(e.target.value)}
 					/>
 					<label htmlFor="password" className="text-[2.3vh]">Password </label>
-					<Input
-						icon={Lock}
-						type='password'
-						placeholder='Password'
+          <Input
+            id="password"
+            icon={Lock}
+            type='password'
+            placeholder='Password'
 						value={password}
 						onChange={(e: any) => setPassword(e.target.value)}
 					/>

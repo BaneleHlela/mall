@@ -1,9 +1,10 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-import path from 'path'
+/// <reference types="vitest" />
 
-// https://vite.dev/config/
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
+import path from 'path';
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
@@ -31,4 +32,15 @@ export default defineConfig({
     origin: "http://0.0.0.0:5173",
     allowedHosts: ["lula-slakeless-hortatively.ngrok-free.dev"],
   },
-})
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/__tests__/setupTests.ts'],
+    css: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: ['node_modules/', 'src/main.tsx', 'src/vite-env.d.ts'],
+    },
+  },
+});

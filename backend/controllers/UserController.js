@@ -18,6 +18,19 @@ import { generateUniqueUsername } from "../utils/helperFunctions.js";
 // Create a user
 export const signup = expressAsyncHandler(async (req, res) => {
     const { email, password, firstName, lastName } = req.body;
+    const missingFields = [
+      !email && 'email',
+      !password && 'password',
+      !firstName && 'firstName',
+      !lastName && 'lastName',
+    ].filter(Boolean);
+
+    if (missingFields.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: `${missingFields.join(', ')} ${missingFields.length === 1 ? 'is' : 'are'} required`,
+      });
+    }
 
     const userAlreadyExists = await User.findOne({ email });
 
@@ -51,13 +64,13 @@ export const signup = expressAsyncHandler(async (req, res) => {
     
     await sendVerificationEmail(user.email, verificationToken);
 
+    const userResponse = { ...user._doc };
+    delete userResponse.password;
+
     res.status(201).json({
       success: true,
       message: "User created successfully",
-      user: {
-        ...user._doc,
-        password: undefined,
-      },
+      user: userResponse,
     });
   
     // Exclude "verificationToken" as res
@@ -152,8 +165,11 @@ export const login = expressAsyncHandler(async (req, res) => {
         user.lastLogin = new Date();
         await user.save();
 
+        const userResponse = { ...user._doc };
+        delete userResponse.password;
+
         res.json({
-          user: { ...user._doc }
+          user: userResponse
         });
     } else {
         res.status(400).json({ message: "Invalid email or password" });
@@ -479,35 +495,49 @@ export const checkAuth = expressAsyncHandler(async (req, res) => {
 
 // refresh access token
 export const refreshAccessToken = async (req, res) => {
-	try {
-		const refreshToken = req.cookies.refreshToken;
+	const refreshToken = req.cookies?.refreshToken;
 
-		if (!refreshToken) {
-			return res.status(401).json({ message: "No refresh token provided" });
-		}
-
-		const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-		const storedToken = await redis.get(`refresh_token:${decoded.userId}`);
-
-		if (storedToken !== refreshToken) {
-			return res.status(401).json({ message: "Invalid refresh token" });
-		}
-
-		const accessToken = jwt.sign({ userId: decoded.userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
-
-		const isProduction = process.env.NODE_ENV === "production";
-		res.cookie("accessToken", accessToken, {
-			httpOnly: true,
-			secure: isProduction,
-			sameSite: isProduction ? "none" : "lax",
-			maxAge: 15 * 60 * 1000,
+	if (!refreshToken) {
+		return res.status(401).json({
+			success: false,
+			message: "No refresh token provided",
 		});
-
-		res.json({ message: "Token refreshed successfully" });
-	} catch (error) {
-		console.log("Error in refreshToken controller", error.message);
-		res.status(500).json({ message: "Server error", error: error.message });
 	}
+
+	let decoded;
+	try {
+		decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+	} catch (error) {
+		const message = error.name === "TokenExpiredError"
+			? "Refresh token expired"
+			: "Invalid refresh token";
+
+		return res.status(401).json({
+			success: false,
+			message,
+		});
+	}
+
+	const storedToken = await redis.get(`refresh_token:${decoded.userId}`);
+
+	if (storedToken !== refreshToken) {
+		return res.status(401).json({
+			success: false,
+			message: "Invalid refresh token",
+		});
+	}
+
+	const accessToken = jwt.sign({ userId: decoded.userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
+
+	const isProduction = process.env.NODE_ENV === "production";
+	res.cookie("accessToken", accessToken, {
+		httpOnly: true,
+		secure: isProduction,
+		sameSite: isProduction ? "none" : "lax",
+		maxAge: 15 * 60 * 1000,
+	});
+
+	res.json({ message: "Token refreshed successfully" });
 };
 
 // Like / unlike handler for stores, products, etc.
